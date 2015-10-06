@@ -1,0 +1,21 @@
+Package: DAPAR
+Type: Package
+Title: Tools for the Differential Analysis of Proteins Abundance with R
+Version: 0.99.2
+Date: 2015-07-29
+Author: Samuel Wieczorek <samuel.wieczorek@cea.fr> [cre,aut], Florence
+        Combes <florence.combes@cea.fr> [aut], Thomas Burger
+        <thomas.burger@cea.fr> [aut] with contributions from Cosmin
+        Lazar, Alexia Dorffer
+Maintainer: Samuel Wieczorek <samuel.wieczorek@cea.fr>
+Description: This package contains a collection of functions for the
+        visualisation and the statistical analysis of proteomic data.
+License: Artistic-2.0
+VignetteBuilder: knitr
+Depends: R (>= 3.2), MSnbase
+Suggests: BiocGenerics, testthat, BiocStyle, Prostar
+Imports: RColorBrewer,stats,preprocessCore,Cairo,png,
+        lattice,reshape2,gplots,pcaMethods,ggplot2,
+        limma,knitr,tmvtnorm,norm,impute, imputeLCMD, XLConnect
+biocViews: Proteomics, Normalization, Preprocessing, MassSpectrometry
+NeedsCompilation: no

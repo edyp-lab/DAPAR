@@ -1,0 +1,77 @@
+%\VignetteIndexEntry{UPSprotx2 dataset description}
+%\VignetteDepends{}
+%\VignetteKeywords{Quantitative proteomics analysis}
+%\VignettePackage{DAPAR}
+\documentclass[12pt,a4paper]{article}
+\usepackage{gensymb}
+\usepackage[utf8]{inputenc}
+
+\textwidth=6.2in
+\textheight=8.5in
+\oddsidemargin=0.2in
+\evensidemargin=0.2in
+\headheight=0in
+\headsep=0in
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+\title{Description of the UPSprotx2 dataset}
+\author{}
+\maketitle
+
+
+
+
+
+This dataset results from a controlled relative quantification proteomics experiment where Sigma UPS1 human proteins were spiked in a similar yeast lysate in 2 different concentrations (with a ratio of 2).
+As a consequence, it can be used to benchmark the quality of a statistical analysis: in the ideal case, after the differential analysis, only and all the human proteins should be selected.
+
+\section{Preparation and digestion of proteins and peptides}
+UPS1 was spiked in yeast extract in 8M urea, with a concentration of 10fmol 
+for one condition, and of 5fmol for the other. The solution was diluted twice 
+before 1h incubation with 10mM DTT at 37\celsius, 45min incubation with 55mM 
+iodoacetamide in the dark and at room temperature. Proteins were then 
+submitted to LysC digestion for 4 hours at 37\celsius. After dilution, proteins were 
+submitted to overnight digestion with modified trypsin (Promega, sequencing 
+grade) at 37\celsius. Digestion was stopped through acidification with
+trifluoroacetic acid. Resulting peptides were desalted using C18 MacroSpin
+columns (Harvard Apparatus).
+
+\section{Nano-LC-MS/MS analyses}
+Dried peptides were resuspended in 5% acetonitrile and 0.1% trifluoroacetic acid and analyzed by online
+nanoLC-MS/MS (Ultimate 3000, Dionex and Q-Exactive Plus, Thermo Scientific).
+Peptides were sampled on a 300 µm x 5 mm PepMap C18 precolumn and separated
+on a 75 µm x 250 mm C18 column (PepMap, Dionex). The nanoLC method consisted
+of a 120-minutes gradient at a flow rate of 300 nl/min, ranging from 5\% to 37\%
+acetronitrile in 0.1\% formic acid for 114 min, before reaching 72\%
+acetronitrile in 0.1\% formic acid for the last 6 min. MS and MS/MS data were
+acquired using Xcalibur (Thermo Scientific). Spray voltage was set at 1.6 kV;
+heated capillary was adjusted to 250\celsius. Survey full-scan MS spectra
+(m/z = 400–1600) were acquired in the Orbitrap with a resolution of 70,000
+after accumulation of 106 ions (maximum filling time 200 ms). MS/MS spectra
+were acquired for up to the ten most intense ions from the MS scan after
+higher energy collisional dissociation (accumulation of 105 ions, maximum
+filling time of 50 ms, resolution of 17,500).
+
+\section{Computational analyses}
+RAW files were processed using MaxQuant version 1.5.1.2. Spectra were searched against the Uniprot database
+(Saccharomyces cerevisiae (strain ATCC 204508 / S288c) taxonomy,
+June 2015 version), the UPS database and the frequently observed
+contaminants database embedded in MaxQuant. Trypsin was chosen as the
+enzyme and 2 missed cleavages were allowed. Precursor mass error tolerances
+were set respectively at 20 ppm and 4.5 ppm for first and main searches.
+Fragment mass error tolerance was set to 0.5 Da. Peptide modifications allowed
+during the search were: carbamidomethylation (C, fixed), acetyl
+(Protein N-ter, variable) and oxidation (M, variable). Minimum peptide length
+was set to 7 amino acids. Minimum number of peptides, razor + unique peptides
+and unique peptides were all set to 1. Maximum false discovery rates -
+calculated by employing a reverse database strategy - were set to 0.01 at
+peptide and protein levels. Raw intensity IBAQ and LFQ values were calculated
+using MaxQuant as previously described (2), from MS intensity of unique
+peptides. The resulting file was exported into the CSV format.
+
+
+
+
+
+\end{document}

@@ -1,0 +1,46 @@
+exportPattern("^[[:alpha:]]+")
+
+## Depends
+importFrom(stats, cor, p.adjust, t.test, density)
+import(MSnbase)
+
+import(RColorBrewer)
+importFrom(preprocessCore, normalize.quantiles)
+import(Cairo)
+import(png)
+import(lattice)
+import(reshape2)
+import(tmvtnorm)
+import(ggplot2)
+import(norm)
+import(impute)
+importFrom(imputeLCMD, impute.wrapper.KNN, impute.wrapper.MLE, impute.QRILC)
+import(knitr)
+importFrom(gplots,heatmap.2)
+importFrom(XLConnect, loadWorkbook, createSheet, writeWorksheet, saveWorkbook)
+importFrom(limma, lmFit, eBayes, topTable)
+importFrom(pcaMethods, completeObs, pca)
+
+
+export(
+"boxPlotD"
+,"densityPlotD"
+,"varianceDistD"
+,"writeMSnsetToExcel"
+,"createMSnset"
+,"corrMatrixD"
+,"heatmapD"
+,"mvPerLinesHisto"
+,"mvHisto"
+,"normalizeD"
+,"mvFilter"
+,"mvTypePlot"
+,"mvImage"
+
+,"diffAnaLimma"
+,"diffAnaWelch"
+,"diffAnaVolcanoplot"
+,"diffAnaSave"
+,"diffAnaComputeFDR"
+
+)
