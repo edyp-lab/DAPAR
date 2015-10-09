@@ -1,12 +1,29 @@
 Package: DAPAR
 Type: Package
 Title: Tools for the Differential Analysis of Proteins Abundance with R
-Version: 0.99.2
-Date: 2015-07-29
-Author: Samuel Wieczorek <samuel.wieczorek@cea.fr> [cre,aut], Florence
-        Combes <florence.combes@cea.fr> [aut], Thomas Burger
-        <thomas.burger@cea.fr> [aut] with contributions from Cosmin
-        Lazar, Alexia Dorffer
+Version: 0.99.3
+Date: 2015-10-01
+Authors@R: c(person(given = "Samuel", family = "Wieczorek",
+	            email = "samuel.wieczorek@cea.fr",
+ 		    role = c("aut","cre")),
+             person(given = "Florence", family ="Combes",
+	            email = "florence.combes@cea.fr",
+		    role = "aut"),
+             person(given = "Thomas", family ="Burger",
+	            email = "thomas.burger@cea.fr",
+		    role = "aut"),
+             person(given = "Vasile-Cosmin", family ="Lazar",
+	            email = "vcosminlazar@gmail.com",
+		    role = "ctb"),
+             person(given = "Alexia", family ="Dorffer",
+	            email = "alexia.dorffer@gmail.com",
+		    role = "ctb"))
+Author: 
+    Samuel Wieczorek [cre,aut],
+    Florence Combes [aut],
+    Thomas Burger [aut],
+    Cosmin Lazar [ctb],
+    Alexia Dorffer [ctb]
 Maintainer: Samuel Wieczorek <samuel.wieczorek@cea.fr>
 Description: This package contains a collection of functions for the
         visualisation and the statistical analysis of proteomic data.
