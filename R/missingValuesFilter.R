@@ -19,46 +19,98 @@ pourcentage <- 100 * round(sum(NA.count)
 return(pourcentage)
 }
 
-##' Returns the number of empty lines in the quantitative data
-##' (i.e. \code{exprs()} table).
+##' Returns the number of lines, in a given column, where content matches the prefix.
 ##' 
-##' @title Returns the number of empty lines in the data
+##' @title Number of lines with prefix
 ##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param name The name of a column.
+##' @param prefix A string
 ##' @return An integer
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' data(UPSprotx2)
-##' getNumberOfEmptyLines(UPSprotx2)
-getNumberOfEmptyLines <- function(obj){
-
-n <- sum(apply(is.na(as.matrix(exprs(obj))), 1, all))
-return (n)
+##' getNumberOf(UPSprotx2, "Potential.contaminant", "+")
+getNumberOf <- function(obj, name=NULL, prefix=NULL){
+  if (is.null(name) || is.null(prefix) || (name=="") || (prefix=="")){return(0)}
+  if (!(is.null(name) || !is.null(name=="")) && (is.null(prefix) || (prefix==""))){return(0)}
+  
+  if(nchar(prefix) > 0){
+    count <- length(which(substr(fData(obj)[,name], 0, 1) == prefix))
+  } else { count <- 0}
+  
+  return(count)
 }
 
 
-
-##' Draws a pie chart of the missing values in the quantitative data
-##' (i.e. \code{exprs()} table).
+##' Plots a barplot of proportion of contaminants and reverse
 ##' 
-##' @title Pie chart of the missing values
+##' @title Barplot of proportion of contaminants and reverse
 ##' @param obj An object of class \code{\link{MSnSet}}.
-##' @return A pie chart
+##' @param idContaminants The name of a column of Contaminants
+##' @param prefixContaminants The prefix to identify contaminants
+##' @param idReverse The name of a column of Reverse
+##' @param prefixReverse The prefix to identify Reverse
+##' @return A barplot
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' data(UPSprotx2)
-##' mvPieChart(UPSprotx2)
-mvPieChart <- function(obj){
-n <- getPourcentageOfMV(obj)
-
-slices <- c(100-n, n) 
-lbls <- c("Quant. data", "Missing values")
-pct <- c(100-n, n)
-lbls <- paste(lbls, pct) # add percents to labels 
-lbls <- paste(lbls,"%",sep="") # ad % to labels 
-pie(slices,labels = lbls)
+##' pref <- "+"
+##' proportionConRev(UPSprotx2, "Potential.contaminant", pref, "Reverse", pref)
+proportionConRev <- function(obj, idContaminants=NULL, prefixContaminants=NULL, idReverse=NULL, prefixReverse=NULL){
+  #if (is.null(prefixContaminants) && is.null(prefixReverse) ){return(NULL)}
+  if (is.null(obj) ){return(NULL)}
+  nContaminants <- nReverse <- 0
+  
+  nContaminants <- getNumberOf(obj, idContaminants, prefixContaminants)
+  nReverse <- getNumberOf(obj, idReverse, prefixReverse)
+  
+  pctContaminants <- 100 * round(nContaminants/nrow(fData(obj)),  digits=4)
+  pctReverse <- 100 * round(nReverse/nrow(fData(obj)),  digits=4)
+  
+  counts <- c(nrow(fData(obj))-nContaminants-nReverse, nContaminants, nReverse )
+  slices <- c(100-pctContaminants-pctReverse, pctContaminants, pctReverse ) 
+  lbls <- c("Quantitative data", "Contaminants", "Reverse")
+  pct <- c(100-nContaminants-nReverse, nContaminants, nReverse )
+  lbls <- paste(lbls, " : ", counts, " lines (", pct, "%)", sep="") # add percents to labels 
+  #lbls <- paste(lbls,"%",sep="") # ad % to labels 
+  
+  bp <- barplot(slices,
+          #names.arg = lbls, 
+          horiz = TRUE,
+          col=c("lightgrey", "green", "blue"),
+          axes = FALSE,
+          cex.names = 1.5)
+  
+  text(x= 20, y= bp, labels=as.character(lbls), xpd=TRUE, cex=1.5)
+  
 }
 
 
+
+
+
+##' Removes lines in the dataset where the column Contaminants is TRUE
+##' 
+##' @title xxxxxxxxx
+##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param idContaminants The name of the column that correspond to the boolean tag of contaminants
+##' @return An object of class \code{\link{MSnSet}}.
+##' @author Samuel Wieczorek
+##' @examples
+##' data(UPSpepx2)
+##' removeLines(UPSpepx2, "Contaminant")
+##' removeLines(UPSpepx2, "Reverse")
+removeLines <- function(obj, idLine2Delete=NULL, prefix=NULL){
+  if ((prefix == "") || is.null(prefix)) {
+    warning ("No change was made")
+    return (obj)}
+  t <- NULL
+  q <- paste("^",prefix, "$", sep="")
+  
+   obj <- obj[-which(regexpr(q,fData(obj)[,idLine2Delete]) == -1) ]
+
+  return(obj)
+}
 
 ##' Filters the lines of \code{exprs()} table with conditions on the number
 ##' of missing values.

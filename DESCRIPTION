@@ -1,7 +1,7 @@
 Package: DAPAR
 Type: Package
 Title: Tools for the Differential Analysis of Proteins Abundance with R
-Version: 1.1.0
+Version: 1.1.1
 Date: 2015-10-01
 Authors@R: c(person(given = "Samuel", family = "Wieczorek",
 	            email = "samuel.wieczorek@cea.fr",
@@ -18,21 +18,33 @@ Authors@R: c(person(given = "Samuel", family = "Wieczorek",
              person(given = "Alexia", family ="Dorffer",
 	            email = "alexia.dorffer@gmail.com",
 		    role = "ctb"))
-Author: 
-    Samuel Wieczorek [cre,aut],
+Author: Samuel Wieczorek [cre,aut],
     Florence Combes [aut],
     Thomas Burger [aut],
     Cosmin Lazar [ctb],
     Alexia Dorffer [ctb]
 Maintainer: Samuel Wieczorek <samuel.wieczorek@cea.fr>
 Description: This package contains a collection of functions for the
-        visualisation and the statistical analysis of proteomic data.
+    visualisation and the statistical analysis of proteomic data.
 License: Artistic-2.0
 VignetteBuilder: knitr
-Depends: R (>= 3.2), MSnbase
-Suggests: BiocGenerics, testthat, BiocStyle, Prostar
-Imports: RColorBrewer,stats,preprocessCore,Cairo,png,
-        lattice,reshape2,gplots,pcaMethods,ggplot2,
-        limma,knitr,tmvtnorm,norm,impute, imputeLCMD, XLConnect
+Depends:
+    R (>= 3.2),
+    MSnbase
+Suggests:
+    BiocGenerics,
+    testthat,
+    BiocStyle,
+    Prostar
+Imports:
+    RColorBrewer,stats,preprocessCore,Cairo,png,
+    lattice,reshape2,gplots,pcaMethods,ggplot2,
+    limma,knitr,tmvtnorm,norm,impute,
+    imputeLCMD,
+    XLConnect,
+    doParallel,
+    foreach,
+    cp4p
 biocViews: Proteomics, Normalization, Preprocessing, MassSpectrometry
 NeedsCompilation: no
+RoxygenNote: 5.0.0

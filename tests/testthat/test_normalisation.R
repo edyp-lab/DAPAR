@@ -14,9 +14,12 @@ test_that("Global Rescaling, sum by columns", {
   colnames(norm) <- c("25fmolR1","25fmolR2","25fmolR3","50fmolR1","50fmolR2","50fmolR3")
   rownames(norm) <- c("1","2","3","4","5","6","8","9","10")
   
-  funcNorm <- normalizeD(test, "Global Rescaling", "sum by columns")
-  
+  funcNorm <- wrapper.normalizeD(test, "Global Rescaling", "sum by columns")
   expect_equal(round(exprs(funcNorm),4), norm)
+  
+  labels <- pData(test)[,"Label"]
+  funcNorm <- normalizeD(exprs(test), labels, "Global Rescaling", "sum by columns")
+  expect_equal(round(funcNorm,4), norm)
 })
 
 
@@ -31,9 +34,12 @@ test_that("Global Rescaling, quantiles", {
   colnames(norm) <- c("25fmolR1","25fmolR2","25fmolR3","50fmolR1","50fmolR2","50fmolR3")
   rownames(norm) <- c("1","2","3","4","5","6","8","9","10")
   
-  funcNorm <- normalizeD(test, "Global Rescaling", "quantiles")
-  
+  funcNorm <- wrapper.normalizeD(test, "Global Rescaling", "quantiles")
   expect_equal(round(exprs(funcNorm),4), norm)
+  
+  labels <- pData(test)[,"Label"]
+  funcNorm <- normalizeD(exprs(test), labels, "Global Rescaling", "quantiles")
+  expect_equal(round(funcNorm,4), norm)
 })
 
 
@@ -49,9 +55,12 @@ test_that("Global Rescaling, sum by columns", {
   colnames(norm) <- c("25fmolR1","25fmolR2","25fmolR3","50fmolR1","50fmolR2","50fmolR3")
   rownames(norm) <- c("1","2","3","4","5","6","8","9","10")
   
-  funcNorm <- normalizeD(test, "Global Rescaling", "sum by columns")
-  
+  funcNorm <- wrapper.normalizeD(test, "Global Rescaling", "sum by columns")
   expect_equal(round(exprs(funcNorm),4), norm)
+  
+  labels <- pData(test)[,"Label"]
+  funcNorm <- normalizeD(exprs(test), labels, "Global Rescaling", "sum by columns")
+  expect_equal(round(funcNorm,4), norm)
 })
 
 
@@ -66,9 +75,12 @@ test_that("Median Centering, overall", {
   colnames(norm) <- c("25fmolR1","25fmolR2","25fmolR3","50fmolR1","50fmolR2","50fmolR3")
   rownames(norm) <- c("1","2","3","4","5","6","8","9","10")
   
-  funcNorm <- normalizeD(test, "Median Centering", "overall")
-  
+  funcNorm <- wrapper.normalizeD(test, "Median Centering", "overall")
   expect_equal(round(exprs(funcNorm),4), norm)
+  
+  labels <- pData(test)[,"Label"]
+  funcNorm <- normalizeD(exprs(test), labels, "Median Centering", "overall")
+  expect_equal(round(funcNorm,4), norm)
 })
 
 
@@ -84,9 +96,12 @@ test_that("Median Centering, within conditions", {
   colnames(norm) <- c("25fmolR1","25fmolR2","25fmolR3","50fmolR1","50fmolR2","50fmolR3")
   rownames(norm) <- c("1","2","3","4","5","6","8","9","10")
   
-  funcNorm <- normalizeD(test, "Median Centering", "within conditions")
-  
+  funcNorm <- wrapper.normalizeD(test, "Median Centering", "within conditions")
   expect_equal(round(exprs(funcNorm),4), norm)
+  
+  labels <- pData(test)[,"Label"]
+  funcNorm <- normalizeD(exprs(test), labels, "Median Centering", "within conditions")
+  expect_equal(round(funcNorm,4), norm)
 })
 
 
@@ -101,9 +116,12 @@ test_that("Mean Centering, overall", {
   colnames(norm) <- c("25fmolR1","25fmolR2","25fmolR3","50fmolR1","50fmolR2","50fmolR3")
   rownames(norm) <- c("1","2","3","4","5","6","8","9","10")
   
-  funcNorm <- normalizeD(test, "Mean Centering", "overall")
-  
+  funcNorm <- wrapper.normalizeD(test, "Mean Centering", "overall")
   expect_equal(round(exprs(funcNorm),4), norm)
+  
+  labels <- pData(test)[,"Label"]
+  funcNorm <- normalizeD(exprs(test), labels, "Mean Centering", "overall")
+  expect_equal(round(funcNorm,4), norm)
 })
 
 
@@ -118,9 +136,12 @@ test_that("Mean Centering, within conditions", {
   colnames(norm) <- c("25fmolR1","25fmolR2","25fmolR3","50fmolR1","50fmolR2","50fmolR3")
   rownames(norm) <- c("1","2","3","4","5","6","8","9","10")
   
-  funcNorm <- normalizeD(test,  "Mean Centering", "within conditions")
-  
+  funcNorm <- wrapper.normalizeD(test,  "Mean Centering", "within conditions")
   expect_equal(round(exprs(funcNorm),4), norm)
+  
+  labels <- pData(test)[,"Label"]
+  funcNorm <- normalizeD(exprs(test), labels, "Mean Centering", "within conditions")
+  expect_equal(round(funcNorm,4), norm)
 })
 
 
@@ -135,9 +156,12 @@ test_that("Mean Centering Scaling, overall", {
   colnames(norm) <- c("25fmolR1","25fmolR2","25fmolR3","50fmolR1","50fmolR2","50fmolR3")
   rownames(norm) <- c("1","2","3","4","5","6","8","9","10")
   
-  funcNorm <- normalizeD(test, "Mean Centering Scaling", "overall")
-  
+  funcNorm <- wrapper.normalizeD(test, "Mean Centering Scaling", "overall")
   expect_equal(round(exprs(funcNorm),4), norm)
+  
+  labels <- pData(test)[,"Label"]
+  funcNorm <- normalizeD(exprs(test), labels, "Mean Centering Scaling", "overall")
+  expect_equal(round(funcNorm,4), norm)
 })
 
 
@@ -152,7 +176,11 @@ test_that("Mean Centering Scaling, within conditions", {
   colnames(norm) <- c("25fmolR1","25fmolR2","25fmolR3","50fmolR1","50fmolR2","50fmolR3")
   rownames(norm) <- c("1","2","3","4","5","6","8","9","10")
   
-  funcNorm <- normalizeD(test, "Mean Centering Scaling", "within conditions")
-  
+  funcNorm <- wrapper.normalizeD(test, "Mean Centering Scaling", "within conditions")
   expect_equal(round(exprs(funcNorm),4), norm)
+  
+  labels <- pData(test)[,"Label"]
+  funcNorm <- normalizeD(exprs(test), labels, "Mean Centering Scaling", "within conditions")
+  expect_equal(round(funcNorm,4), norm)
+  
 })

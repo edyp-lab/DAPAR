@@ -21,7 +21,7 @@ test_that("Compute limma", {
                          logFC=c(1.2533,3.0767,1.0633,0.9400,0.9000, 1.6300,1.1467,1.0467,1.1100,2.2867),
                          row.names = as.character(seq(1:10)))
   
-  expect_equal(round(diffAnaLimma(testWithoutNA, "25fmol", "50fmol"),4), limmaRes)
+  expect_equal(round(wrapper.diffAnaLimma(testWithoutNA, "25fmol", "50fmol"),4), limmaRes)
 })
 
 
@@ -31,5 +31,5 @@ test_that("Compute Welch", {
                          logFC=c(1.2533,3.0767,1.0633,0.9400,0.9000, 1.6300,1.1467,1.0467,1.1100,2.2867),
                          row.names =seq(1:10))
   
-  expect_equal(round(diffAnaWelch(testWithoutNA, "25fmol", "50fmol"),4), welchRes)
+  expect_equal(round(wrapper.diffAnaWelch(testWithoutNA, "25fmol", "50fmol"),4), welchRes)
 })

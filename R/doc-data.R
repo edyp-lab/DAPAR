@@ -19,6 +19,23 @@
 #' (5fmol and 10fmol) and 2394 proteins.
 NULL
 
+
+#' UPSpepx2 dataset
+#'
+#' @name UPSpepx2
+#' @docType data
+#' @keywords data
+#' @description This dataset contains peptides which result from a controlled relative quantification
+#' proteomics experiment where the commercial Sigma mix UPS1 human proteins
+#' were spiked in a similar yeast lysate in 2 different concentrations
+#' (with a ratio of 2).
+#' @format An object of class \code{\link{MSnSet}} related to peptides
+#' quantification. It contains 6 samples divided into two conditions
+#' (25fmol and 50fmol) and 5380 peptides.
+NULL
+
+
+
 #' Test dataset
 #'
 #' @name test

@@ -32,10 +32,13 @@
 ##' indFData <- c(8:13)
 ##' indiceID <- 1
 ##' createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID)
-createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID, 
+createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL, 
                         logData=FALSE, replaceZeros=FALSE,
                         pep_prot_data=NULL){
-    data <- read.csv(file, header=TRUE, sep="\t", as.is=TRUE)
+  
+  if (!is.data.frame(file)){ #the variable is a path to a text file
+  data <- read.csv(file, header=TRUE, sep="\t", as.is=TRUE)
+  } else {data <- file}
 
     ## replace all blanks by a dot
     ##   cols <- gsub(" ","\\.",  colnames(data)[indExpData])
@@ -47,11 +50,17 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID,
     Intensity <- data.matrix(data[,indExpData])
     colnames(Intensity) <- colnames(data)[indExpData]
     ##the name of lines are the same as the data of the first column
-    rownames(Intensity) <- data[,indiceID]
+    if (is.null(indiceID)) {
+      rownames(Intensity) <- rep(paste(pep_prot_data, "_", 1:nrow(Intensity), sep=""))
+    }else{rownames(Intensity) <- data[,indiceID]}
 
     ##building fData of MSnSet file
     fd <- data.frame( data[,indFData])
-    rownames(fd) <- data[,indiceID]
+    if (is.null(indiceID)) {
+      rownames(fd) <- rep(paste(pep_prot_data, "_", 1:nrow(fd), sep=""))
+    }else{rownames(fd) <- data[,indiceID]}
+    
+    #rownames(fd) <- data[,indiceID]
     colnames(fd) <- colnames(data)[indFData]
 
     ##building pData of MSnSet file
@@ -84,7 +93,7 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID,
     }
     
     if (!is.null(pep_prot_data)) {
-        temp@experimentData@other$pep_prot_data <- pep_prot_data
+        obj@experimentData@other <- c(obj@experimentData@other, typeOfData =pep_prot_data)
     }
     
     return(obj)

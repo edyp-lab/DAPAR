@@ -38,7 +38,7 @@ DAPAR is made to guide the practitioner through the following classical steps of
     $(ii)$ median or mean centering (overall or within conditions),
     $(iii)$ mean centering and scaling (overall or within conditions).
     
-    \item \textbf{Missing values imputation}, with the following methods: $(i)$ for random occurences: $k$-nearest-neighbors, Bayesian Principal Component Analysis and Maximum Likelihood Estimation; for left censored missing values: Quantile Regression for Imputation of Left Censored data.
+    \item \textbf{Missing values imputation}, with the following methods: $(i)$ for random occurences: $k$-nearest-neighbors, Bayesian Principal Component Analysis and Maximum Likelihood Estimation; $(ii)$for left censored missing values: Quantile Regression for Imputation of Left Censored data.
     
     \item \textbf{Differential analysis}, according to a Welch $t$-test or a Limma moderated $t$-test.
    \end{itemize}
