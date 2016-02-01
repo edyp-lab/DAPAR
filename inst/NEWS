@@ -10,7 +10,7 @@ Added a function to remove contaminants
 
 
 
-* correction d'un bug dans l'analyse differentielle lorsqu'il y a plusieurs conditions
+* bug fixed in differential analysis when there are several conditions
 
 * To change the current dataset, tue user has only to select te desired one in the menu
 * it is possible to modify the gradient of colors for the correlation matrix
