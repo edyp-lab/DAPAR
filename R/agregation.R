@@ -317,6 +317,7 @@ pepAgregate <- function (obj.pep, protID, method="sum",matAdj=NULL, n=NULL){
     fd <- data.frame(protId, pep)
     
     obj <- MSnSet(exprs = log2(Mp), fData = fd, pData = pData(obj.pep))
+    obj@experimentData@other  <- list(obj@experimentData@other,typeOfData ="proteins")
     
     return(obj)
 }
