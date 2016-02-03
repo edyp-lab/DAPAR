@@ -88,13 +88,13 @@ boxPlotD <- function(qData, dataForXAxis=NULL, labels=NULL){
 ##' @examples
 ##' data(UPSprotx2)
 ##' qDataBefore <- exprs(UPSprotx2)
-##' qDataAfter <- normalizeD(qDataBefore, "Median Centering", "within conditions")
+##' labels <- pData(UPSprotx2)[,"Label"]
+##' qDataAfter <- normalizeD(qDataBefore, labels, "Median Centering", "within conditions")
 ##' types <- c("Label","Analyt.Rep")
 ##' dataForXAxis <- pData(UPSprotx2)[,types]
-##' labels <- pData(UPSprotx2)[,"Label"]
 ##' compareNormalizationD(qDataBefore, qDataAfter, dataForXAxis, labels)
 compareNormalizationD <- function(qDataBefore, qDataAfter, dataForXAxis=NULL, labels=NULL){
-  require(scales)
+  #requireNamespace(scales)
   pal <- getPaletteForLabels(labels)
   par(oma = c(2+length(colnames(dataForXAxis)), 0, 0, 0))
   

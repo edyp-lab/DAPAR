@@ -23,6 +23,7 @@ importFrom(pcaMethods, completeObs, pca)
 import(doParallel)
 import(foreach)
 import(cp4p)
+import(scales)
 
 
 export(

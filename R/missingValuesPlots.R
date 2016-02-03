@@ -380,7 +380,7 @@ wrapper.mvTypePlot <- function(obj, threshold=0){
 ##' labels <- pData(UPSprotx2)[,"Label"]
 ##' mvTypePlot(qData, labels, threshold=0)
 mvTypePlot <- function(qData, labels, threshold=0){
-  require(scales)
+  #requireNamespace(scales)
   pal <- unique(getPaletteForLabels(labels))
   color <- NULL
   col.legend <- c(1:length(pal))
