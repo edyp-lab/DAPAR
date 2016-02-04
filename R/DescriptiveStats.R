@@ -369,7 +369,6 @@ corrMatrixD <- function(qData, samplesData, indLegend=NULL, gradientRate = 5){
   plot(d)
 }
 
-
 ##' Builds a heatmap of the quantitative proteomic data of a \code{\link{MSnSet}} object.
 ##' 
 ##' @title This function is a wrapper to \code{\link{heatmap.2}} that displays 
@@ -380,13 +379,14 @@ corrMatrixD <- function(qData, samplesData, indLegend=NULL, gradientRate = 5){
 ##' the dendrogram. See \code{help(heatmap.2)}.
 ##' @param cluster the clustering algorithm used to build the dendrogram.
 ##' See \code{help(heatmap.2)}
+##' @param dendro A boolean to indicate fi the dendrogram has to be displayed
 ##' @return A heatmap
 ##' @author Alexia Dorffer
 ##' @examples data(testWithoutNA)
 ##' wrapper.heatmapD(testWithoutNA)
-wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="average"){
+wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="average", dendro = FALSE){
   qData <- exprs(obj)
-  heatmapD(qData, distance, cluster)
+  heatmapD(qData, distance, cluster, dendro)
 }
 
 
@@ -402,12 +402,13 @@ wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="average"){
 ##' the dendrogram. See \code{help(heatmap.2)}
 ##' @param cluster the clustering algorithm used to build the dendrogram.
 ##' See \code{help(heatmap.2)}
+##' @param dendro A boolean to indicate fi the dendrogram has to be displayed
 ##' @return A heatmap
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples data(testWithoutNA)
 ##' qData <- exprs(testWithoutNA)
 ##' heatmapD(qData)
-heatmapD <- function(qData, distance="euclidean", cluster="average"){
+heatmapD <- function(qData, distance="euclidean", cluster="average", dendro = FALSE){
   ##Check parameters
   paramdist <- c("euclidean", "manhattan") 
   if (!(distance %in% paramdist)){
@@ -436,7 +437,7 @@ heatmapD <- function(qData, distance="euclidean", cluster="average"){
                seq(-2, 0.5, length=100),
                seq(0.5, 6, length=100))
     heatmap.color <- colorRampPalette(c("green", "black", "red"))(n = 1000)
-    
+    if (dendro){ .dendro = "row"} else {.dendro = "none"}
     p <- heatmap.2(
       x=t(.data),
       distfun = function(x) {
@@ -447,7 +448,7 @@ heatmapD <- function(qData, distance="euclidean", cluster="average"){
         x[is.na(x)] <- -1e5
         hclust(x, method=cluster)
       },
-      dendrogram="row",
+      dendrogram =.dendro,
       Rowv=TRUE,
       col=heatmap.color ,
       density.info='none',

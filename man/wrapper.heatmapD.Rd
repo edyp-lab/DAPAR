@@ -6,7 +6,8 @@
 quantitative data in the \code{exprs()} table of an object of
 class \code{\link{MSnSet}}}
 \usage{
-wrapper.heatmapD(obj, distance = "euclidean", cluster = "average")
+wrapper.heatmapD(obj, distance = "euclidean", cluster = "average",
+  dendro = FALSE)
 }
 \arguments{
 \item{obj}{An object of class \code{\link{MSnSet}}.}
@@ -16,6 +17,8 @@ the dendrogram. See \code{help(heatmap.2)}.}
 
 \item{cluster}{the clustering algorithm used to build the dendrogram.
 See \code{help(heatmap.2)}}
+
+\item{dendro}{A boolean to indicate fi the dendrogram has to be displayed}
 }
 \value{
 A heatmap
