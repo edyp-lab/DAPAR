@@ -248,8 +248,8 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
     
     
     if (unique == TRUE){
-        X <- X[which(rowSums(X)==1),]
-        X <- X[,which(colSums(X)>0)]
+        X <- X[which(rowSums(X) == 1),]
+        X <- X[,which(colSums(X) > 0)]
     }
 
 return(X)
