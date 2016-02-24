@@ -4,13 +4,15 @@
 \alias{wrapper.boxPlotD}
 \title{Wrapper to the boxplotD function on an object \code{\link{MSnSet}}}
 \usage{
-wrapper.boxPlotD(obj, dataForXAxis = "Label")
+wrapper.boxPlotD(obj, dataForXAxis = "Label", group2Color = "Condition")
 }
 \arguments{
 \item{obj}{An object of class \code{\link{MSnSet}}.}
 
 \item{dataForXAxis}{A vector of strings containing the names of columns 
 in \code{pData()} to print labels on X-axis (Default is "Label").}
+
+\item{group2Color}{xxxxxxx}
 }
 \value{
 A boxplot

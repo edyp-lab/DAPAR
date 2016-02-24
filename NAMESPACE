@@ -4,9 +4,7 @@ exportPattern("^[[:alpha:]]+")
 import(MSnbase)
 
 import(RColorBrewer)
-importFrom(preprocessCore, normalize.quantiles)
 import(Cairo)
-import(stats)
 import(png)
 import(lattice)
 import(reshape2)
@@ -14,16 +12,20 @@ import(tmvtnorm)
 import(ggplot2)
 import(norm)
 import(impute)
-importFrom(imputeLCMD, impute.wrapper.KNN, impute.wrapper.MLE, impute.QRILC)
 import(knitr)
-importFrom(gplots,heatmap.2)
-importFrom(XLConnect, loadWorkbook, createSheet, writeWorksheet, saveWorkbook)
-importFrom(limma, lmFit, eBayes, topTable)
-importFrom(pcaMethods, completeObs, pca)
 import(doParallel)
 import(foreach)
 import(cp4p)
-import(scales)
+
+
+importFrom(stats, lowess, cor, density,pexp, t.test, dist, hclust, setNames, median, p.adjust)
+importFrom(imputeLCMD, impute.wrapper.KNN, impute.wrapper.MLE, impute.QRILC)
+importFrom(preprocessCore, normalize.quantiles)
+importFrom(gplots, heatmap.2)
+importFrom(XLConnect, loadWorkbook, createSheet, writeWorksheet, saveWorkbook)
+importFrom(limma, lmFit, eBayes, topTable)
+importFrom(pcaMethods, completeObs, pca)
+importFrom(scales, alpha)
 
 
 export(
@@ -45,7 +47,10 @@ export(
 ,"wrapper.mvImage","mvImage"
 
 ,"mvFilter"
+,"mvFilterFromIndices"
+,"mvFilterGetIndices"
 ,"removeLines"
+,"getIndicesOfLinesToRemove"
 ,"wrapper.normalizeD","normalizeD"
 ,"compareNormalizationD"
 

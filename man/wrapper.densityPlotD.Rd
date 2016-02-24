@@ -4,15 +4,18 @@
 \alias{wrapper.densityPlotD}
 \title{Builds a densityplot from an object of class \code{\link{MSnSet}}}
 \usage{
-wrapper.densityPlotD(obj, lab2Show = NULL, highLightLabel = NULL)
+wrapper.densityPlotD(obj, labelsForLegend = NULL, indData2Show = NULL,
+  group2Color = "Condition")
 }
 \arguments{
 \item{obj}{An object of class \code{\link{MSnSet}}.}
 
-\item{lab2Show}{A vector of labels to show in densityplot.}
+\item{labelsForLegend}{A vector of labels to show in densityplot.}
 
-\item{highLightLabel}{The name of the Label to highlight
+\item{indData2Show}{xxxxxxx
 in the density plot.}
+
+\item{group2Color}{xxxxx}
 }
 \value{
 A density plot

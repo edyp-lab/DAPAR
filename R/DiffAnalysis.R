@@ -11,6 +11,7 @@
 ##' distinguish between differential and non-differential data 
 ##' @param threshold_LogFC The threshold on log(Fold Change) to
 ##' distinguish between differential and non-differential data 
+##' @param pi0Method xxxx
 ##' @return The computed FDR value (floating number)
 ##' @author Alexia Dorffer, Samuel Wieczorek
 ##' @examples data(UPSprotx2)
@@ -25,10 +26,8 @@
 diffAnaComputeFDR <- function(data,threshold_PVal=0, threshold_LogFC =0, pi0Method=1){
     upItems1 <- which(-log10(data$P.Value) >= threshold_PVal)
     upItems2 <- which(abs(data$logFC) >= threshold_LogFC)
-
     selectedItems <- data[intersect(upItems1, upItems2),]$P.Value
     
-    #padj <- p.adjust(selectedItems, method="BH")
     padj <- adjust.p(selectedItems,  pi0Method)
     
     BH.fdr <- max(padj$adjp[,2])

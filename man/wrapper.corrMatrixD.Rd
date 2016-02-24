@@ -10,7 +10,7 @@ wrapper.corrMatrixD(obj, rate = 5, indLegend = NULL)
 \arguments{
 \item{obj}{An object of class \code{\link{MSnSet}}.}
 
-\item{rate}{xxxx}
+\item{rate}{A float that defines the gradient of colors.}
 
 \item{indLegend}{A vector of indices in the columns in
 the \code{pData()} table choosen for the labels in the axes.}

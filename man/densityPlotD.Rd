@@ -4,17 +4,17 @@
 \alias{densityPlotD}
 \title{Builds a densityplot from a dataframe}
 \usage{
-densityPlotD(qData, labels = NULL, lab2Show = NULL, highLightLabel = NULL)
+densityPlotD(qData, labelsForLegend = NULL, indData2Show = NULL,
+  group2Color = "Condition")
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
 
-\item{labels}{A vector of the conditions (labels) (one label per sample).}
+\item{labelsForLegend}{A vector of the conditions (labels) (one label per sample).}
 
-\item{lab2Show}{A vector of labels to show in densityplot. If NULL, then all labels are displayed.}
+\item{indData2Show}{A vector of indices to show in densityplot. If NULL, then all labels are displayed.}
 
-\item{highLightLabel}{The name of the Label to highlight
-in the density plot.}
+\item{group2Color}{xxxxx}
 }
 \value{
 A density plot
@@ -26,7 +26,7 @@ Densityplot of quantitative proteomics data over samples.
 data(UPSprotx2)
 qData <- exprs(UPSprotx2)
 labels <- lab2Show <- pData(UPSprotx2)[,"Label"]
-densityPlotD(qData, labels, lab2Show)
+densityPlotD(qData, labels)
 }
 \author{
 Florence Combes, Samuel Wieczorek

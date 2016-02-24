@@ -15,7 +15,7 @@ corrMatrixD(qData, samplesData, indLegend = NULL, gradientRate = 5)
 \item{indLegend}{A vector of indices in the columns of
 the samplesData table choosen for the labels in the axes.}
 
-\item{rate}{The rate parameter to control de exponential law for the gradient of colors}
+\item{gradientRate}{The rate parameter to control the exponential law for the gradient of colors}
 }
 \value{
 A colored correlation matrix

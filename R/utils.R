@@ -75,6 +75,24 @@ getPaletteForLabels <- function(labels){
   return (col.boxplot)
 }
 
+##' Selects colors for the plots in DAPAR based on the replicates in
+##' the dataset. The palette is derived from
+##' the brewer palette "Dark2" (see \code{\link{RColorBrewer}}).
+##' 
+##' @title Palette for plot the replicates in DAPAR
+##' @param nColors The desired number of colors
+##' @return A palette designed for the data manipulated in DAPAR
+##' @author Samuel Wieczorek
+##' @examples data(UPSprotx2)
+##' n <- nrow(pData(UPSprotx2))
+##' getPaletteForLabels(5)
+getPaletteForReplicates <- function(nColors){
+  col <- c(1:nColors)
+  getPalette <- colorRampPalette(brewer.pal(8, "Dark2"))
+  
+ # return (getPalette(nColors))
+  return(col)
+}
 
 
 

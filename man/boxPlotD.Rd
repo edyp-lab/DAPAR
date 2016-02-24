@@ -4,7 +4,8 @@
 \alias{boxPlotD}
 \title{Builds a boxplot from a dataframe}
 \usage{
-boxPlotD(qData, dataForXAxis = NULL, labels = NULL)
+boxPlotD(qData, dataForXAxis = NULL, labels = NULL,
+  group2Color = "Condition")
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
@@ -14,6 +15,8 @@ to use as X-axis. Available values are: Label, Analyt.Rep,
 Bio.Rep and Tech.Rep. Default is "Label".}
 
 \item{labels}{A vector of the conditions (labels) (one label per sample).}
+
+\item{group2Color}{xxxxxx}
 }
 \value{
 A boxplot

@@ -4,19 +4,19 @@
 \alias{compareNormalizationD}
 \title{Builds a plot from a dataframe}
 \usage{
-compareNormalizationD(qDataBefore, qDataAfter, dataForXAxis = NULL,
-  labels = NULL)
+compareNormalizationD(qDataBefore, qDataAfter, labelsForLegend = NULL,
+  indData2Show = NULL, group2Color = "Condition")
 }
 \arguments{
 \item{qDataBefore}{A dataframe that contains quantitative data before normalization.}
 
 \item{qDataAfter}{A dataframe that contains quantitative data after normalization.}
 
-\item{dataForXAxis}{A vector containing the types of replicates 
-to use as X-axis. Available values are: Label, Analyt.Rep,
-Bio.Rep and Tech.Rep. Default is "Label".}
+\item{labelsForLegend}{A vector of the conditions (labels) (one label per sample).}
 
-\item{labels}{A vector of the conditions (labels) (one label per sample).}
+\item{indData2Show}{A vector of labels to show in xxx}
+
+\item{group2Color}{xxxxxx}
 }
 \value{
 A plot
@@ -29,11 +29,9 @@ data(UPSprotx2)
 qDataBefore <- exprs(UPSprotx2)
 labels <- pData(UPSprotx2)[,"Label"]
 qDataAfter <- normalizeD(qDataBefore, labels, "Median Centering", "within conditions")
-types <- c("Label","Analyt.Rep")
-dataForXAxis <- pData(UPSprotx2)[,types]
-compareNormalizationD(qDataBefore, qDataAfter, dataForXAxis, labels)
+compareNormalizationD(qDataBefore, qDataAfter, labels)
 }
 \author{
-Florence Combes, Samuel Wieczorek
+Samuel Wieczorek
 }
 

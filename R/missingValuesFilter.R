@@ -70,7 +70,7 @@ proportionConRev <- function(obj, idContaminants=NULL, prefixContaminants=NULL, 
   counts <- c(nrow(fData(obj))-nContaminants-nReverse, nContaminants, nReverse )
   slices <- c(100-pctContaminants-pctReverse, pctContaminants, pctReverse ) 
   lbls <- c("Quantitative data", "Contaminants", "Reverse")
-  pct <- c(100-nContaminants-nReverse, nContaminants, nReverse )
+  pct <- c(100-pctContaminants-pctReverse, pctContaminants, pctReverse )
   lbls <- paste(lbls, " : ", counts, " lines (", pct, "%)", sep="") # add percents to labels 
   #lbls <- paste(lbls,"%",sep="") # ad % to labels 
   
@@ -93,7 +93,8 @@ proportionConRev <- function(obj, idContaminants=NULL, prefixContaminants=NULL, 
 ##' 
 ##' @title xxxxxxxxx
 ##' @param obj An object of class \code{\link{MSnSet}}.
-##' @param idContaminants The name of the column that correspond to the boolean tag of contaminants
+##' @param idLine2Delete The name of the column that correspond to the data to filter
+##' @param prefix A character string that is the prefix to find in the data
 ##' @return An object of class \code{\link{MSnSet}}.
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -110,6 +111,29 @@ removeLines <- function(obj, idLine2Delete=NULL, prefix=NULL){
    obj <- obj[-which(regexpr(q,fData(obj)[,idLine2Delete]) == -1) ]
 
   return(obj)
+}
+
+##' Returns the indice of the lines in the dataset xxxxxxxxxx
+##' 
+##' @title xxxxxxxxx
+##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param idLine2Delete The name of the column that correspond to the data to filter
+##' @param prefix A character string that is the prefix to find in the data
+##' @return A vector of integers.
+##' @author Samuel Wieczorek
+##' @examples
+##' data(UPSpepx2)
+##' getIndicesOfLinesToRemove(UPSpepx2, "Contaminant", prefix="+")
+getIndicesOfLinesToRemove <- function(obj, idLine2Delete=NULL, prefix=NULL)
+{
+  if ((prefix == "") || is.null(prefix)) {
+    warning ("No change was made")
+    return (NULL)}
+  t <- NULL
+  q <- paste("^",prefix, "$", sep="")
+  
+  ind <- which(regexpr(q,fData(obj)[,idLine2Delete]) == -1)
+  
 }
 
 ##' Filters the lines of \code{exprs()} table with conditions on the number
@@ -153,38 +177,119 @@ mvFilter <- function(obj,type, th, processText=NULL )
         return (NULL)
     }
 
-    keepThat <- NULL
-
-    if (type == "none"){
-        keepThat <- seq(1:dim(exprs(obj))[1])
-    } else if (type == "wholeMatrix"){
-        for (i in 1:length(rownames(exprs(obj))))
-            {
-            if(sum(!is.na(exprs(obj)[i,])) >= th)  {
-                keepThat <- c(keepThat,i) 
-                }
-            }
-        } else if (type == "atLeastOneCond" || type == "allCond"){
-        conditions <- unique(pData(obj)$Label)
-        nbCond <- length(conditions)
-        keepThat <- NULL
-        for (i in 1:length(rownames(exprs(obj))))
-            {
-            t <- (type == "allCond")
-            for (cond in 1:nbCond){
-                ind <- which( pData(obj)$Label == conditions[cond])
-                if (type == "atLeastOneCond") {
-                    t <- t || (sum(!is.na(exprs(obj)[i,ind])) >= th)
-                } else if (type == "allCond") {
-            t <- t && (sum(!is.na(exprs(obj)[i,ind])) >= th)}
-            }
-        if(t)  {keepThat <- c(keepThat,i) }
-        }
-    }
+    keepThat <- mvFilterGetIndices(obj,type, th)
 
 obj <- obj[keepThat,]
 
     obj@processingData@processing <- 
         c(obj@processingData@processing, processText)
     return(obj)
+}
+
+
+##' Filters the lines of \code{exprs()} table with conditions on the number
+##' of missing values.
+##' The user chooses the minimum amount of intensities that is acceptable and
+##' the filter delete lines that do not respect this condition.
+##' The condition may be on the whole line or condition by condition.
+##' 
+##' The different methods are :
+##' "wholeMatrix": given a threshold \code{th}, only the lines that contain
+##' at least \code{th} values are kept.
+##' "allCond": given a threshold \code{th}, only the lines which contain
+##' at least \code{th} values for each of the conditions are kept.
+##' "atLeastOneCond": given a threshold \code{th}, only the lines that contain
+##' at least \code{th} values, and for at least one condition, are kept.
+##' 
+##' @title Filter lines in the matrix of intensities w.r.t. some criteria
+##' @param obj An object of class \code{\link{MSnSet}} containing
+##' quantitative data.
+##' @param keepThat A vector of integers which are the indices of lines to delete
+##' @param processText A string to be included in the \code{\link{MSnSet}}
+##' object for log. 
+##' @return An instance of class \code{\link{MSnSet}} that have been filtered.
+##' @author Florence Combes, Samuel Wieczorek
+##' @examples data(UPSprotx2)
+##' mvFilter(UPSprotx2, c(1:10))
+mvFilterFromIndices <- function(obj,keepThat=NULL, processText=NULL )
+{
+  
+  if (is.null(keepThat)) {return(obj)}
+  
+  obj <- obj[keepThat,]
+  
+  obj@processingData@processing <- 
+    c(obj@processingData@processing, processText)
+  return(obj)
+}
+
+
+
+##' Returns the indices of the lines of \code{exprs()} table to delete w.r.t. the conditions on the number
+##' of missing values.
+##' The user chooses the minimum amount of intensities that is acceptable and
+##' the filter delete lines that do not respect this condition.
+##' The condition may be on the whole line or condition by condition.
+##' 
+##' The different methods are :
+##' "wholeMatrix": given a threshold \code{th}, only the lines that contain
+##' at least \code{th} values are kept.
+##' "allCond": given a threshold \code{th}, only the lines which contain
+##' at least \code{th} values for each of the conditions are kept.
+##' "atLeastOneCond": given a threshold \code{th}, only the lines that contain
+##' at least \code{th} values, and for at least one condition, are kept.
+##' 
+##' @title Filter lines in the matrix of intensities w.r.t. some criteria
+##' @param obj An object of class \code{\link{MSnSet}} containing
+##' quantitative data.
+##' @param type Method used to choose the lines to delete.
+##' Values are : "none", "wholeMatrix", "allCond", "atLeastOneCond"
+##' @param th An integer value of the threshold
+##' @return An vector of indices.
+##' @author Florence Combes, Samuel Wieczorek
+##' @examples data(UPSprotx2)
+##' mvFilterGetIndices(UPSprotx2, "wholeMatrix", 2)
+mvFilterGetIndices <- function(obj,type, th)
+{
+  #Check parameters
+  paramtype<-c("none", "wholeMatrix", "allCond", "atLeastOneCond") 
+  if (sum(is.na(match(type, paramtype)==TRUE))>0){
+    warning("Param type is not correct.")
+    return (NULL)
+  }
+  
+  paramth<-c(seq(0, nrow(pData(obj)), 1))
+  if (sum(is.na(match(th, paramth)==TRUE))>0){
+    warning("Param th is not correct.")
+    return (NULL)
+  }
+  
+  keepThat <- NULL
+  
+  if (type == "none"){
+    keepThat <- seq(1:nrow(exprs(obj)))
+  } else if (type == "wholeMatrix"){
+      keepThat <- which(apply(!is.na(exprs(obj)), 1, sum) >= th)
+  } else if (type == "atLeastOneCond" || type == "allCond"){
+    
+    conditions <- unique(pData(obj)$Label)
+    nbCond <- length(conditions)
+    keepThat <- NULL
+    s <- matrix(rep(0, nrow(exprs(obj))*nbCond),nrow=nrow(exprs(obj)), ncol=nbCond)
+     
+     for (c in 1:nbCond){
+       ind <- which(pData(obj)$Label == conditions[c])
+       s[,c] <- (apply(!is.na(exprs(obj)[,ind]), 1, sum) >= th)
+     }
+    
+    
+    if (type == "allCond") {
+      keepThat <- which(rowSums(s) == nbCond)
+    }
+    else if (type == "atLeastOneCond") {
+      keepThat <- which(rowSums(s) >= 1)
+    }
+   
+  }
+  return(keepThat)
 }

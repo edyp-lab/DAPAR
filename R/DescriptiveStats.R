@@ -4,6 +4,7 @@
 ##' @param obj An object of class \code{\link{MSnSet}}.
 ##' @param dataForXAxis A vector of strings containing the names of columns 
 ##' in \code{pData()} to print labels on X-axis (Default is "Label").
+##' @param group2Color xxxxxxx
 ##' @return A boxplot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{wrapper.densityPlotD}}
@@ -11,13 +12,13 @@
 ##' data(UPSprotx2)
 ##' types <- c("Label","Analyt.Rep")
 ##' wrapper.boxPlotD(UPSprotx2, types)
-wrapper.boxPlotD <- function(obj, dataForXAxis="Label"){
+wrapper.boxPlotD <- function(obj, dataForXAxis="Label", group2Color="Condition"){
   
   qData <- exprs(obj)
   dataForXAxis <- as.matrix(pData(obj)[,dataForXAxis])
   labels <- pData(obj)[,"Label"]
   
-  boxPlotD(qData, dataForXAxis, labels)
+  boxPlotD(qData, dataForXAxis, labels, group2Color)
   
 }
 
@@ -31,6 +32,7 @@ wrapper.boxPlotD <- function(obj, dataForXAxis="Label"){
 ##' to use as X-axis. Available values are: Label, Analyt.Rep,
 ##' Bio.Rep and Tech.Rep. Default is "Label".
 ##' @param labels A vector of the conditions (labels) (one label per sample).
+##' @param group2Color xxxxxx
 ##' @return A boxplot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{densityPlotD}}
@@ -41,9 +43,13 @@ wrapper.boxPlotD <- function(obj, dataForXAxis="Label"){
 ##' dataForXAxis <- pData(UPSprotx2)[,types]
 ##' labels <- pData(UPSprotx2)[,"Label"]
 ##' boxPlotD(qData, dataForXAxis, labels)
-boxPlotD <- function(qData, dataForXAxis=NULL, labels=NULL){
+boxPlotD <- function(qData, dataForXAxis=NULL, labels=NULL, group2Color="Condition"){
   
-  pal <- getPaletteForLabels(labels)
+  if (group2Color == "Condition") {
+    pal <- getPaletteForLabels(labels)
+  }else { pal <- getPaletteForReplicates(ncol(qData))}
+  
+  
   par(oma = c(2+length(colnames(dataForXAxis)), 0, 0, 0))
   
   boxplot(qData
@@ -79,33 +85,72 @@ boxPlotD <- function(qData, dataForXAxis=NULL, labels=NULL){
 ##' @title Builds a plot from a dataframe
 ##' @param qDataBefore A dataframe that contains quantitative data before normalization.
 ##' @param qDataAfter A dataframe that contains quantitative data after normalization.
-##' @param dataForXAxis A vector containing the types of replicates 
-##' to use as X-axis. Available values are: Label, Analyt.Rep,
-##' Bio.Rep and Tech.Rep. Default is "Label".
-##' @param labels A vector of the conditions (labels) (one label per sample).
+##' @param labelsForLegend A vector of the conditions (labels) (one label per sample).
+##' @param indData2Show A vector of labels to show in xxx
+##' @param group2Color xxxxxx
 ##' @return A plot
-##' @author Florence Combes, Samuel Wieczorek
+##' @author Samuel Wieczorek
 ##' @examples
 ##' data(UPSprotx2)
 ##' qDataBefore <- exprs(UPSprotx2)
 ##' labels <- pData(UPSprotx2)[,"Label"]
 ##' qDataAfter <- normalizeD(qDataBefore, labels, "Median Centering", "within conditions")
-##' types <- c("Label","Analyt.Rep")
-##' dataForXAxis <- pData(UPSprotx2)[,types]
-##' compareNormalizationD(qDataBefore, qDataAfter, dataForXAxis, labels)
-compareNormalizationD <- function(qDataBefore, qDataAfter, dataForXAxis=NULL, labels=NULL){
-  #requireNamespace(scales)
-  pal <- getPaletteForLabels(labels)
-  par(oma = c(2+length(colnames(dataForXAxis)), 0, 0, 0))
+##' compareNormalizationD(qDataBefore, qDataAfter, labels)
+compareNormalizationD <- function(qDataBefore, qDataAfter, labelsForLegend=NULL, indData2Show=NULL, group2Color="Condition"){
+ 
+  if (is.null(labels) || is.null(indData2Show)) return(NULL)
   
-  plot(qDataBefore, 
-       qDataAfter,
-          , las = 1
-          , col = alpha(pal, 0.5)
-          , cex = 0.5
-          , axes=TRUE
-       , pch = 16
+  
+  x <- qDataBefore
+  y <- qDataAfter/qDataBefore
+  
+  lim.x <- range(min(x, na.rm=TRUE), max(x, na.rm=TRUE))
+  lim.y <- range(min(y, na.rm=TRUE), max(y, na.rm=TRUE))
+  
+  
+  ##Colors definition
+  if (group2Color == "Condition") {
+    pal <- getPaletteForLabels(labelsForLegend)
+    legendColor <- unique(pal)
+    txtLegend <- unique(labelsForLegend)
+  }else { 
+    pal <- getPaletteForReplicates(ncol(x))
+    legendColor <- pal[indData2Show]
+    txtLegend <- paste("Replicate", seq(1,ncol(x)), labelsForLegend,sep=" ")
+    txtLegend <- txtLegend[indData2Show]
+  }
+  
+  
+  #par(oma = c(2+length(colnames(dataForXAxis)), 0, 0, 0))
+  
+  
+  plot(x=NULL
+      ,xlim = lim.x
+       ,ylim = lim.y
+      , cex = 1
+      , axes=TRUE
+      , xlab = "Intensities before normalization"
+      , ylab = "Intensities after normalization / Intensities before normalization"
+       ,cex.lab = 1
+       ,cex.axis = 1
+       ,cex.main = 3)
+  
+  
+  for (i in indData2Show){
+    points(x[,i], y[,i], col = pal[i], pch=16)
+  }
+  
+  legend("topleft"         
+         , legend = txtLegend
+         , col = legendColor
+         , pch = 15 
+         , bty = "n"
+         , pt.cex = 2
+         , cex = 1
+         , horiz = FALSE
+         , inset=c(0,0)
   )
+  
   
 
   palette("default")
@@ -118,18 +163,18 @@ compareNormalizationD <- function(qDataBefore, qDataAfter, dataForXAxis=NULL, la
 ##' 
 ##' @title Builds a densityplot from an object of class \code{\link{MSnSet}}
 ##' @param obj An object of class \code{\link{MSnSet}}.
-##' @param lab2Show A vector of labels to show in densityplot.
-##' @param highLightLabel The name of the Label to highlight
+##' @param labelsForLegend A vector of labels to show in densityplot.
+##' @param indData2Show xxxxxxx
 ##' in the density plot.
+##' @param group2Color xxxxx
 ##' @return A density plot
 ##' @author Alexia Dorffer
 ##' @seealso \code{\link{wrapper.boxPlotD}}, \code{\link{wrapper.varianceDistD}}
 ##' @examples data(UPSprotx2)
 ##' wrapper.densityPlotD(UPSprotx2)
-wrapper.densityPlotD <- function(obj, lab2Show=NULL,  highLightLabel=NULL){
+wrapper.densityPlotD <- function(obj, labelsForLegend=NULL,  indData2Show=NULL, group2Color = "Condition"){
   qData <- exprs(obj)
-  labels <- pData(obj)[,"Label"]
-  densityPlotD(qData, labels, lab2Show,  highLightLabel)
+  densityPlotD(qData, labelsForLegend, indData2Show,group2Color)
 }
 
 
@@ -139,51 +184,54 @@ wrapper.densityPlotD <- function(obj, lab2Show=NULL,  highLightLabel=NULL){
 ##' 
 ##' @title Builds a densityplot from a dataframe
 ##' @param qData A dataframe that contains quantitative data.
-##' @param labels A vector of the conditions (labels) (one label per sample).
-##' @param lab2Show A vector of labels to show in densityplot. If NULL, then all labels are displayed.
-##' @param highLightLabel The name of the Label to highlight
-##' in the density plot.
+##' @param labelsForLegend A vector of the conditions (labels) (one label per sample).
+##' @param indData2Show A vector of indices to show in densityplot. If NULL, then all labels are displayed.
+##' @param group2Color xxxxx
 ##' @return A density plot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{boxPlotD}}, \code{\link{varianceDistD}}
 ##' @examples data(UPSprotx2)
 ##' qData <- exprs(UPSprotx2)
 ##' labels <- lab2Show <- pData(UPSprotx2)[,"Label"]
-##' densityPlotD(qData, labels, lab2Show)
-densityPlotD <- function(qData, labels=NULL,lab2Show=NULL, highLightLabel=NULL){
+##' densityPlotD(qData, labels)
+densityPlotD <- function(qData, labelsForLegend=NULL,indData2Show=NULL,  group2Color = "Condition"){
     
-  if (is.null(lab2Show)){
-    lab2Show <- unique(labels)
-  }
+  if (is.null(labels) || is.null(indData2Show)) return(NULL)
   
-  if (is.null(labels)) return(NULL)
   
-  indices <- which(labels %in% lab2Show)
-  n <- length(indices)
-  
+  ### Range of axis definition
   axis.limits <- matrix(data = 0, nrow = 4, ncol = ncol(qData))
-  
   for (i in 1:ncol(qData)){
     dens <- density(qData[,i], na.rm = TRUE)
     axis.limits[,i] <- c(min(dens$x), max(dens$x), min(dens$y), max(dens$y))
-  }
+    }
   lim.x <- range(min(axis.limits[1,]), max(axis.limits[2,]))
   lim.y <- range(min(axis.limits[3,]), max(axis.limits[4,]))
-  
+
   ##Colors definition
-  nColors <- length(unique(labels))
-  col.density <- c(1:nColors)
-  pal <- getPaletteForLabels(labels)
+  if (group2Color == "Condition") {
+    pal <- getPaletteForLabels(labelsForLegend)
+    legendColor <- unique(pal)
+    txtLegend <- unique(labelsForLegend)
+  }else { 
+    pal <- getPaletteForReplicates(ncol(qData))
+    legendColor <- pal[indData2Show]
+    txtLegend <- paste("Replicate", seq(1,ncol(qData)), labelsForLegend,sep=" ")
+    txtLegend <- txtLegend[indData2Show]
+   }
   
-  lineWD <- NULL
-  lineWD <- c(rep(1, length(colnames(qData))))
-  if (!is.null(highLightLabel)) {
-    lineWD[which(labels == highLightLabel)] <- 3
-  }
+  ###Erase data not to show (color in white)
   
-  plot(x=NULL
+  # lineWD <- NULL
+  # lineWD <- c(rep(1, length(colnames(qData))))
+  # if (!is.null(highLightLabel)) {
+  #   lineWD[which(labels == highLightLabel)] <- 3
+  # }
+  # 
+  plot(x =NULL
        , ylab ="Density"
        , xlab = "log(intensity)"
+       , col = pal
        ,xlim = lim.x
        ,ylim = lim.y
        ,las = 1
@@ -191,15 +239,14 @@ densityPlotD <- function(qData, labels=NULL,lab2Show=NULL, highLightLabel=NULL){
        ,cex.axis = 1
        ,cex.main = 3)
   
-  for (i in indices){
-    lines(density(qData[,i], na.rm=TRUE)
-          , col = col.density[which(labels[i] == unique(labels))]
-          , lwd = lineWD[i])
+  for (i in indData2Show){
+    lines(density(qData[,i], na.rm=TRUE), col = pal[i])
   }
+
   
-  legend("topright"         
-         , legend = unique(labels)
-         , col = col.density
+   legend("topleft"         
+         , legend = txtLegend
+         , col = legendColor
          , pch = 15 
          , bty = "n"
          , pt.cex = 2
@@ -301,7 +348,7 @@ varianceDistD <- function(qData, labels=NULL){
 ##' @title Displays a correlation matrix of the quantitative data of the
 ##' \code{exprs()} table
 ##' @param obj An object of class \code{\link{MSnSet}}.
-##' @param rate xxxx
+##' @param rate A float that defines the gradient of colors.
 ##' @param indLegend A vector of indices in the columns in
 ##' the \code{pData()} table choosen for the labels in the axes.
 ##' @return A colored correlation matrix
@@ -325,7 +372,7 @@ wrapper.corrMatrixD <- function(obj, rate=5, indLegend=NULL){
 ##' @param samplesData A dataframe where lines correspond to samples and columns to the meta-data for those samples.
 ##' @param indLegend A vector of indices in the columns of
 ##' the samplesData table choosen for the labels in the axes.
-##' @param rate The rate parameter to control de exponential law for the gradient of colors
+##' @param gradientRate The rate parameter to control the exponential law for the gradient of colors
 ##' @return A colored correlation matrix
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples data(UPSprotx2)
@@ -368,6 +415,7 @@ corrMatrixD <- function(qData, samplesData, indLegend=NULL, gradientRate = 5){
     values = c(pexp(seq(0,1,0.01), rate=gradientRate),1), limits=c(0,1))
   plot(d)
 }
+
 
 ##' Builds a heatmap of the quantitative proteomic data of a \code{\link{MSnSet}} object.
 ##' 
