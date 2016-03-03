@@ -44,6 +44,7 @@ mvImputation <- function(qData, method){
   ## BPCA impute imputation at peptide level
   
   if (method == "BPCA"){
+    if (getNumberOfEmptyLines(qData) > 0) {stop("Data contains rows in which all elements are 'NA'. Remove them first")}
     ## replace all 0's by NAs
     tmp.data <- qData
     nSamples <- dim(qData)[2]
@@ -52,6 +53,7 @@ mvImputation <- function(qData, method){
     #     msg <- "Missing values imputation using bpca algorithm"
     #     obj@processingData@processing <- c(obj@processingData@processing,msg)
   } else if (method == "KNN"){
+    if (getNumberOfEmptyLines(qData) > 0) {stop("Data contains rows in which all elements are 'NA'. Remove them first")}
     exprs <- impute.wrapper.KNN(qData, 3)
     #     msg <- "Missing values imputation using KNN algorithm"
     #     obj@processingData@processing <- c(obj@processingData@processing,msg)

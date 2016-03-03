@@ -98,8 +98,8 @@ boxPlotD <- function(qData, dataForXAxis=NULL, labels=NULL, group2Color="Conditi
 ##' compareNormalizationD(qDataBefore, qDataAfter, labels)
 compareNormalizationD <- function(qDataBefore, qDataAfter, labelsForLegend=NULL, indData2Show=NULL, group2Color="Condition"){
  
-  if (is.null(labels) || is.null(indData2Show)) return(NULL)
-  
+  if (is.null(labelsForLegend)) return(NULL)
+  if (is.null(indData2Show)) {indData2Show <- c(1:ncol(qDataAfter)) }
   
   x <- qDataBefore
   y <- qDataAfter/qDataBefore
@@ -121,9 +121,6 @@ compareNormalizationD <- function(qDataBefore, qDataAfter, labelsForLegend=NULL,
   }
   
   
-  #par(oma = c(2+length(colnames(dataForXAxis)), 0, 0, 0))
-  
-  
   plot(x=NULL
       ,xlim = lim.x
        ,ylim = lim.y
@@ -137,7 +134,7 @@ compareNormalizationD <- function(qDataBefore, qDataAfter, labelsForLegend=NULL,
   
   
   for (i in indData2Show){
-    points(x[,i], y[,i], col = pal[i], pch=16)
+    points(x[,i], y[,i], col = pal[i], cex = 1,pch=16)
   }
   
   legend("topleft"         
@@ -196,8 +193,9 @@ wrapper.densityPlotD <- function(obj, labelsForLegend=NULL,  indData2Show=NULL, 
 ##' densityPlotD(qData, labels)
 densityPlotD <- function(qData, labelsForLegend=NULL,indData2Show=NULL,  group2Color = "Condition"){
     
-  if (is.null(labels) || is.null(indData2Show)) return(NULL)
+  if (is.null(labels) ) return(NULL)
   
+  if (is.null(indData2Show)) {indData2Show <- c(1:ncol(qData)) }
   
   ### Range of axis definition
   axis.limits <- matrix(data = 0, nrow = 4, ncol = ncol(qData))

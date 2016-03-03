@@ -67,15 +67,15 @@ mvPerLinesHisto <- function(qData, samplesData, indLegend="auto", showValues=FAL
                cex.axis=1.5
   )
   
-  if (showValues) {
-    text(x, 
-         nb.na2barplot[-1], 
-         labels = nb.na2barplot[-1],
-         cex= .75,
-         pos = 3,
-         col = rep("black",nb.col)) 
-    
-  }
+  # if (showValues) {
+  #   graphics::text(x, 
+  #        nb.na2barplot[-1], 
+  #        labels = nb.na2barplot[-1],
+  #        cex= .75,
+  #        pos = 3,
+  #        col = rep("black",nb.col)) 
+  #   
+  # }
 }
 
 
@@ -146,13 +146,13 @@ mvPerLinesHistoPerCondition <- function(qData, samplesData, indLegend="auto", sh
                beside=TRUE
   )
   
-  if (showValues) {
-    text(x, 
-         m, 
-         labels = m,
-         cex= .75,
-         pos = 3) 
-  }
+  # if (showValues) {
+  #   text(x, 
+  #        m, 
+  #        labels = m,
+  #        cex= .75,
+  #        pos = 3) 
+  # }
 
  
   
@@ -174,7 +174,7 @@ wrapper.mvHisto <- function(obj, indLegend="auto", showValues=FALSE){
   qData <- exprs(obj)
   samplesData <- pData(obj)
   labels <- pData(obj)[,"Label"]
-  mvHisto(qData, samplesData, labels, indLegend, showValues)
+  DAPAR::mvHisto(qData, samplesData, labels, indLegend, showValues)
 }
 
 
@@ -205,7 +205,7 @@ mvHisto <- function(qData, samplesData, labels, indLegend="auto", showValues=FAL
   colnames(qData) <- samplesData[,"Label"]
   
   coeffMax <- .1
-  pal <- getPaletteForLabels(labels)
+  pal <- DAPAR::getPaletteForLabels(labels)
   
   NbNAPerCol <- colSums(is.na(qData))
   NbNAPerRow <- rowSums(is.na(qData))
@@ -225,20 +225,20 @@ mvHisto <- function(qData, samplesData, labels, indLegend="auto", showValues=FAL
   )
   
   par(xpd = TRUE)
-  text(x, -5,
+  graphics::text(x, -5,
        labels = colnames(qData),
        srt = 45,
        adj=1,
        cex=1.4)
-
-  
-  if (showValues) {
-    text(x, 
-         NbNAPerCol, 
-         labels = NbNAPerCol, 
-         cex= .75,
-         pos = 3) 
-  }
+# 
+#   
+#   if (showValues) {
+#     graphics::text(x, 
+#          NbNAPerCol, 
+#          labels = NbNAPerCol, 
+#          cex= .75,
+#          pos = 3) 
+#   }
   
 }
 

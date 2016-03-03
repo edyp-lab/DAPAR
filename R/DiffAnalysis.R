@@ -308,7 +308,7 @@ wrapper.diffAnaWelch <- function(obj, condition1, condition2){
 diffAnaWelch <- function(qData, labels, condition1, condition2){
   
   if( sum(is.na(qData == TRUE))>0) {
-    warning("There are some missign values. Please impute before.")
+    warning("There are some missing values. Please impute before.")
     return (NULL)
   }
   if (condition1 == condition2){

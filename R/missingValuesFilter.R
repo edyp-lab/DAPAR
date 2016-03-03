@@ -81,7 +81,7 @@ proportionConRev <- function(obj, idContaminants=NULL, prefixContaminants=NULL, 
           axes = FALSE,
           cex.names = 1.5)
   
-  text(x= 20, y= bp, labels=as.character(lbls), xpd=TRUE, cex=1.5)
+  graphics::text(x= 20, y= bp, labels=as.character(lbls), xpd=TRUE, cex=1.5)
   
 }
 
