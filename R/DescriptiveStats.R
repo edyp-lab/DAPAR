@@ -168,7 +168,8 @@ compareNormalizationD <- function(qDataBefore, qDataAfter, labelsForLegend=NULL,
 ##' @author Alexia Dorffer
 ##' @seealso \code{\link{wrapper.boxPlotD}}, \code{\link{wrapper.varianceDistD}}
 ##' @examples data(UPSprotx2)
-##' wrapper.densityPlotD(UPSprotx2)
+##' labels <- pData(UPSprotx2)[,"Label"]
+##' wrapper.densityPlotD(UPSprotx2, labels)
 wrapper.densityPlotD <- function(obj, labelsForLegend=NULL,  indData2Show=NULL, group2Color = "Condition"){
   qData <- exprs(obj)
   densityPlotD(qData, labelsForLegend, indData2Show,group2Color)

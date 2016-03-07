@@ -43,7 +43,7 @@ Imports:
     imputeLCMD,
     XLConnect,
     doParallel,
-    foreach,
+    foreach,grDevices, graphics, utils,
     cp4p, scales
 biocViews: Proteomics, Normalization, Preprocessing, MassSpectrometry
 NeedsCompilation: no

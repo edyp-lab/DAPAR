@@ -18,14 +18,22 @@ import(foreach)
 import(cp4p)
 
 
-importFrom(stats, lowess, cor, density,pexp, t.test, dist, hclust, setNames, median, p.adjust)
-importFrom(imputeLCMD, impute.wrapper.KNN, impute.wrapper.MLE, impute.QRILC)
-importFrom(preprocessCore, normalize.quantiles)
-importFrom(gplots, heatmap.2)
-importFrom(XLConnect, loadWorkbook, createSheet, writeWorksheet, saveWorkbook)
-importFrom(limma, lmFit, eBayes, topTable)
-importFrom(pcaMethods, completeObs, pca)
-importFrom(scales, alpha)
+importFrom("stats", "lowess", "cor", "density","pexp", 
+           "var", "t.test", "dist", "hclust", "setNames", 
+           "median", "p.adjust")
+importFrom("imputeLCMD", "impute.wrapper.KNN", "impute.wrapper.MLE",
+           "impute.QRILC")
+importFrom("preprocessCore", "normalize.quantiles")
+importFrom("gplots", "heatmap.2")
+importFrom("XLConnect", "loadWorkbook", "createSheet", 
+           "writeWorksheet", "saveWorkbook")
+importFrom("limma", "lmFit", "eBayes", "topTable")
+importFrom("pcaMethods", "completeObs", "pca")
+importFrom("scales", "alpha")
+importFrom("grDevices", "colorRampPalette", "palette")
+importFrom("graphics", "abline", "axis", "barplot", "boxplot",
+             "legend", "lines", "mtext", "par", "points")
+importFrom("utils", "read.csv")
 
 
 export(
