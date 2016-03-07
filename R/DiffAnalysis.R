@@ -24,13 +24,14 @@
 ##' limma <- diffAnaLimma(qData,samplesData, labels, condition1, condition2)
 ##' diffAnaComputeFDR(limma)
 diffAnaComputeFDR <- function(data,threshold_PVal=0, threshold_LogFC =0, pi0Method=1){
-    upItems1 <- which(-log10(data$P.Value) >= threshold_PVal)
-    upItems2 <- which(abs(data$logFC) >= threshold_LogFC)
-    selectedItems <- data[intersect(upItems1, upItems2),]$P.Value
+   upItems <- which(abs(data$logFC) >= threshold_LogFC)
+    selectedItems <- data[upItems,]$P.Value
     
     padj <- adjust.p(selectedItems,  pi0Method)
     
-    BH.fdr <- max(padj$adjp[,2])
+    items <- which(-log10(padj$adjp[,1]) >= threshold_PVal)
+    
+    BH.fdr <- max(padj$adjp[items,2])
 
     return(BH.fdr)
 }
