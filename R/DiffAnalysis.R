@@ -11,9 +11,9 @@
 ##' distinguish between differential and non-differential data 
 ##' @param threshold_LogFC The threshold on log(Fold Change) to
 ##' distinguish between differential and non-differential data 
-##' @param pi0Method xxxx
+##' @param pi0Method The parameter pi0.method of the method adjust.p in the package \code{cp4p}
 ##' @return The computed FDR value (floating number)
-##' @author Alexia Dorffer, Samuel Wieczorek
+##' @author Samuel Wieczorek
 ##' @examples data(UPSprotx2)
 ##' obj <- wrapper.mvImputation(UPSprotx2, "QRILC")
 ##' condition1 <- '10fmol'
@@ -208,7 +208,7 @@ wrapper.diffAnaLimma <- function(obj, condition1, condition2){
 
 
 ##' Method to perform differential analysis on
-##' an MSnSet object (calls the \code{limma} package function).  
+##' an \code{\link{MSnSet}} object (calls the \code{limma} package function).  
 ##' 
 ##' @title Performs differential analysis on
 ##' an MSnSet object, calling the \code{limma} package functions 
@@ -332,9 +332,11 @@ diffAnaWelch <- function(qData, labels, condition1, condition2){
 }
 
 
-##' xxxxxxxxxxxxx
+##' This function is a wrapper to the calibration.plot method of the \code{cp4p} package for use 
+##' with \code{\link{MSnSet}} objects.
 ##' 
-##' @title xxxxxxxxxx
+##' @title Performs a calibration plot on
+##' an \code{\link{MSnSet}} object, calling the \code{cp4p} package functions. 
 ##' @param vPVal A dataframe that contains quantitative data.
 ##' @param pi0Method A vector of the conditions (labels) (one label per sample).
 ##' @return A plot

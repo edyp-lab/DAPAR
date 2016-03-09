@@ -4,7 +4,8 @@
 ##' @param obj An object of class \code{\link{MSnSet}}.
 ##' @param dataForXAxis A vector of strings containing the names of columns 
 ##' in \code{pData()} to print labels on X-axis (Default is "Label").
-##' @param group2Color xxxxxxx
+##' @param group2Color A string that indicates how to color the replicates: one color per condition (value "Condition") or one 
+##' color per replicate (value "Replicate"). Default value is by Condition.
 ##' @return A boxplot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{wrapper.densityPlotD}}
@@ -32,7 +33,8 @@ wrapper.boxPlotD <- function(obj, dataForXAxis="Label", group2Color="Condition")
 ##' to use as X-axis. Available values are: Label, Analyt.Rep,
 ##' Bio.Rep and Tech.Rep. Default is "Label".
 ##' @param labels A vector of the conditions (labels) (one label per sample).
-##' @param group2Color xxxxxx
+##' @param group2Color A string that indicates how to color the replicates: one color per condition (value "Condition") or one 
+##' color per replicate (value "Replicate"). Default value is by Condition.
 ##' @return A boxplot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{densityPlotD}}
@@ -50,7 +52,7 @@ boxPlotD <- function(qData, dataForXAxis=NULL, labels=NULL, group2Color="Conditi
   }else { pal <- getPaletteForReplicates(ncol(qData))}
   
   
-  par(oma = c(2+length(colnames(dataForXAxis)), 0, 0, 0))
+  #par(oma = c(2+length(colnames(dataForXAxis)), 0, 0, 0))
   
   boxplot(qData
           , las = 1
@@ -80,21 +82,48 @@ boxPlotD <- function(qData, dataForXAxis=NULL, labels=NULL, group2Color="Conditi
   palette("default")
 }
 
+##' Wrapper to the function that plot to compare the quantitative proteomics data before and after normalization
+##' 
+##' @title Builds a plot from a dataframe
+##' @param objBefore A dataframe that contains quantitative data before normalization.
+##' @param objAfter A dataframe that contains quantitative data after normalization.
+##' @param labelsForLegend A vector of the conditions (labels) (one label per sample).
+##' @param indData2Show A vector of the indices of the columns to show in the plot. The indices are those of indices of 
+##' the columns int the data.frame qDataBefore.
+##' @param group2Color A string that indicates how to color the replicates: one color per condition (value "Condition") or one 
+##' color per replicate (value "Replicate"). Default value is by Condition.
+##' @return A plot
+##' @author Samuel Wieczorek
+##' @examples
+##' data(UPSprotx2)
+##' labels <- pData(UPSprotx2)[,"Label"]
+##' objAfter <- wrapper.normalizeD(UPSprotx2, "Median Centering", "within conditions")
+##' wrapper.compareNormalizationD(UPSprotx2, objAfter, labels)
+wrapper.compareNormalizationD <- function(objBefore, objAfter, labelsForLegend=NULL, indData2Show=NULL, group2Color="Condition"){
+
+  qDataBefore <- exprs(objBefore)
+  qDataAfter <- exprs(objAfter)
+  
+  compareNormalizationD(qDataBefore, qDataAfter, labelsForLegend, indData2Show, group2Color)
+}
+
 ##' Plot to compare the quantitative proteomics data before and after normalization
 ##' 
 ##' @title Builds a plot from a dataframe
 ##' @param qDataBefore A dataframe that contains quantitative data before normalization.
 ##' @param qDataAfter A dataframe that contains quantitative data after normalization.
 ##' @param labelsForLegend A vector of the conditions (labels) (one label per sample).
-##' @param indData2Show A vector of labels to show in xxx
-##' @param group2Color xxxxxx
+##' @param indData2Show A vector of the indices of the columns to show in the plot. The indices are those of indices of 
+##' the columns int the data.frame qDataBefore.
+##' @param group2Color A string that indicates how to color the replicates: one color per condition (value "Condition") or one 
+##' color per replicate (value "Replicate"). Default value is by Condition.
 ##' @return A plot
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' data(UPSprotx2)
 ##' qDataBefore <- exprs(UPSprotx2)
 ##' labels <- pData(UPSprotx2)[,"Label"]
-##' qDataAfter <- normalizeD(qDataBefore, labels, "Median Centering", "within conditions")
+##' qDataAfter <- normalizeD(qDataBefore,labels,"Median Centering", "within conditions")
 ##' compareNormalizationD(qDataBefore, qDataAfter, labels)
 compareNormalizationD <- function(qDataBefore, qDataAfter, labelsForLegend=NULL, indData2Show=NULL, group2Color="Condition"){
  
@@ -161,9 +190,11 @@ compareNormalizationD <- function(qDataBefore, qDataAfter, labelsForLegend=NULL,
 ##' @title Builds a densityplot from an object of class \code{\link{MSnSet}}
 ##' @param obj An object of class \code{\link{MSnSet}}.
 ##' @param labelsForLegend A vector of labels to show in densityplot.
-##' @param indData2Show xxxxxxx
+##' @param indData2Show A vector of the indices of the columns to show in the plot. The indices are those of indices of 
+##' the columns int the data.frame qDataBefore.
 ##' in the density plot.
-##' @param group2Color xxxxx
+##' @param group2Color A string that indicates how to color the replicates: one color per condition (value "Condition") or one 
+##' color per replicate (value "Replicate"). Default value is by Condition.
 ##' @return A density plot
 ##' @author Alexia Dorffer
 ##' @seealso \code{\link{wrapper.boxPlotD}}, \code{\link{wrapper.varianceDistD}}
@@ -184,7 +215,8 @@ wrapper.densityPlotD <- function(obj, labelsForLegend=NULL,  indData2Show=NULL, 
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param labelsForLegend A vector of the conditions (labels) (one label per sample).
 ##' @param indData2Show A vector of indices to show in densityplot. If NULL, then all labels are displayed.
-##' @param group2Color xxxxx
+##' @param group2Color A string that indicates how to color the replicates: one color per condition (value "Condition") or one 
+##' color per replicate (value "Replicate"). Default value is by Condition.
 ##' @return A density plot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{boxPlotD}}, \code{\link{varianceDistD}}
@@ -305,7 +337,7 @@ varianceDistD <- function(qData, labels=NULL){
   lim.x <- range(min(axis.limits[1,]), max(axis.limits[2,]))
   lim.y <- range(min(axis.limits[3,]), max(axis.limits[4,]))
   
-  par(mar = c(5, 5, 6, 3))
+  #par(mar = c(5, 5, 6, 3))
   plot(x = NULL
        , ylab ="Density"
        , xlab = "Variance( log (intensity) )"
@@ -348,16 +380,14 @@ varianceDistD <- function(qData, labels=NULL){
 ##' \code{exprs()} table
 ##' @param obj An object of class \code{\link{MSnSet}}.
 ##' @param rate A float that defines the gradient of colors.
-##' @param indLegend A vector of indices in the columns in
-##' the \code{pData()} table choosen for the labels in the axes.
 ##' @return A colored correlation matrix
 ##' @author Alexia Dorffer
 ##' @examples data(UPSprotx2)
 ##' wrapper.corrMatrixD(UPSprotx2)
-wrapper.corrMatrixD <- function(obj, rate=5, indLegend=NULL){
+wrapper.corrMatrixD <- function(obj, rate=5){
   qData <- exprs(obj)
   samplesData <- pData(obj)
-  corrMatrixD(qData, samplesData, indLegend, rate)
+  corrMatrixD(qData, samplesData, rate)
 }
 
 
@@ -369,8 +399,6 @@ wrapper.corrMatrixD <- function(obj, rate=5, indLegend=NULL){
 ##' \code{exprs()} table.
 ##' @param qData A dataframe of quantitative data.
 ##' @param samplesData A dataframe where lines correspond to samples and columns to the meta-data for those samples.
-##' @param indLegend A vector of indices in the columns of
-##' the samplesData table choosen for the labels in the axes.
 ##' @param gradientRate The rate parameter to control the exponential law for the gradient of colors
 ##' @return A colored correlation matrix
 ##' @author Florence Combes, Samuel Wieczorek
@@ -378,20 +406,11 @@ wrapper.corrMatrixD <- function(obj, rate=5, indLegend=NULL){
 ##' qData <- exprs(UPSprotx2)
 ##' samplesData <- pData(UPSprotx2)
 ##' corrMatrixD(qData, samplesData)
-corrMatrixD <- function(qData, samplesData, indLegend=NULL, gradientRate = 5){
+corrMatrixD <- function(qData, samplesData, gradientRate = 5){
   Var1 <- Var2 <- value <- NULL
-  if (is.null(indLegend)) {indLegend <- colnames(samplesData[-1])} 
-  
-  nb <- length(colnames(qData))
-  for (j in 1:nb){
-    noms <- NULL
-    
-    for (i in indLegend){
-      #if (pData(obj)[i,j] != "_"){
-      noms <- paste(noms, samplesData[j,i], sep=" ")
-      #}     
-    }
-    colnames(qData)[j] <- noms
+ 
+  for (j in 1:length(colnames(qData))){
+    colnames(qData)[j] <- paste(as.character(samplesData[j,2:5]), collapse =" ")
   }
   
   z <- cor(qData,use = 'pairwise.complete.obs')

@@ -29,3 +29,5 @@ Add the option to display or not the dendrogram in the heatmap
 1.3.5 : add busy indicator for long time computation plots
 
 1.3.6 : fixed a bug in the mvFilter function
+
+1.3.8 : Minor bugs fixed

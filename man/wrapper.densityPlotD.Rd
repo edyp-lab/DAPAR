@@ -12,10 +12,12 @@ wrapper.densityPlotD(obj, labelsForLegend = NULL, indData2Show = NULL,
 
 \item{labelsForLegend}{A vector of labels to show in densityplot.}
 
-\item{indData2Show}{xxxxxxx
+\item{indData2Show}{A vector of the indices of the columns to show in the plot. The indices are those of indices of 
+the columns int the data.frame qDataBefore.
 in the density plot.}
 
-\item{group2Color}{xxxxx}
+\item{group2Color}{A string that indicates how to color the replicates: one color per condition (value "Condition") or one 
+color per replicate (value "Replicate"). Default value is by Condition.}
 }
 \value{
 A density plot

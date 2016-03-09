@@ -2,7 +2,7 @@
 % Please edit documentation in R/missingValuesFilter.R
 \name{getIndicesOfLinesToRemove}
 \alias{getIndicesOfLinesToRemove}
-\title{xxxxxxxxx}
+\title{Get teh indices of the lines to delete, based on a prefix string}
 \usage{
 getIndicesOfLinesToRemove(obj, idLine2Delete = NULL, prefix = NULL)
 }
@@ -17,7 +17,7 @@ getIndicesOfLinesToRemove(obj, idLine2Delete = NULL, prefix = NULL)
 A vector of integers.
 }
 \description{
-Returns the indice of the lines in the dataset xxxxxxxxxx
+This function returns the indice of the lines to delete, based on a prefix string
 }
 \examples{
 data(UPSpepx2)

@@ -25,7 +25,7 @@ A dataframe as returned by the \code{limma} package
 }
 \description{
 Method to perform differential analysis on
-an MSnSet object (calls the \code{limma} package function).
+an \code{\link{MSnSet}} object (calls the \code{limma} package function).
 }
 \examples{
 data(UPSprotx2)

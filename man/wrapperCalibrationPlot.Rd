@@ -2,7 +2,8 @@
 % Please edit documentation in R/DiffAnalysis.R
 \name{wrapperCalibrationPlot}
 \alias{wrapperCalibrationPlot}
-\title{xxxxxxxxxx}
+\title{Performs a calibration plot on
+an \code{\link{MSnSet}} object, calling the \code{cp4p} package functions.}
 \usage{
 wrapperCalibrationPlot(vPVal, pi0Method = "pounds")
 }
@@ -15,7 +16,8 @@ wrapperCalibrationPlot(vPVal, pi0Method = "pounds")
 A plot
 }
 \description{
-xxxxxxxxxxxxx
+This function is a wrapper to the calibration.plot method of the \code{cp4p} package for use 
+with \code{\link{MSnSet}} objects.
 }
 \examples{
 data(UPSprotx2)

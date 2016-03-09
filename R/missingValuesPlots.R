@@ -20,8 +20,8 @@ wrapper.mvPerLinesHisto <- function(obj, indLegend="auto", showValues=FALSE){
 ##' number of missing values (NA) per lines (ie proteins).
 ##' 
 ##' @title Bar plot of missing values per lines
-##' @param qData xxxxxxxxxxxxx
-##' @param samplesData xxxxxxxxx.
+##' @param qData A dataframe that contains the data to plot.
+##' @param samplesData A dataframe which contains informations about the replicates.
 ##' @param indLegend The indice of the column name's in \code{pData()} tab 
 ##' @param showValues A logical that indicates wether numeric values should be
 ##' drawn above the bars.
@@ -174,7 +174,7 @@ wrapper.mvHisto <- function(obj, indLegend="auto", showValues=FALSE){
   qData <- exprs(obj)
   samplesData <- pData(obj)
   labels <- pData(obj)[,"Label"]
-  DAPAR::mvHisto(qData, samplesData, labels, indLegend, showValues)
+  mvHisto(qData, samplesData, labels, indLegend, showValues)
 }
 
 
@@ -205,7 +205,7 @@ mvHisto <- function(qData, samplesData, labels, indLegend="auto", showValues=FAL
   colnames(qData) <- samplesData[,"Label"]
   
   coeffMax <- .1
-  pal <- DAPAR::getPaletteForLabels(labels)
+  pal <- getPaletteForLabels(labels)
   
   NbNAPerCol <- colSums(is.na(qData))
   NbNAPerRow <- rowSums(is.na(qData))
@@ -225,7 +225,7 @@ mvHisto <- function(qData, samplesData, labels, indLegend="auto", showValues=FAL
   )
   
   par(xpd = TRUE)
-  graphics::text(x, -5,
+  graphics::text(x, -3,
        labels = colnames(qData),
        srt = 45,
        adj=1,

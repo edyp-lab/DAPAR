@@ -16,6 +16,8 @@ import(knitr)
 import(doParallel)
 import(foreach)
 import(cp4p)
+importFrom("graphics", par, boxplot, axis, mtext, abline, points, legend, lines,  barplot, text)
+
 
 
 importFrom("stats", "lowess", "cor", "density","pexp", 
@@ -31,8 +33,6 @@ importFrom("limma", "lmFit", "eBayes", "topTable")
 importFrom("pcaMethods", "completeObs", "pca")
 importFrom("scales", "alpha")
 importFrom("grDevices", "colorRampPalette", "palette")
-importFrom("graphics", "abline", "axis", "barplot", "boxplot",
-             "legend", "lines", "mtext", "par", "points")
 importFrom("utils", "read.csv")
 
 
@@ -60,7 +60,7 @@ export(
 ,"removeLines"
 ,"getIndicesOfLinesToRemove"
 ,"wrapper.normalizeD","normalizeD"
-,"compareNormalizationD"
+,"wrapper.compareNormalizationD","compareNormalizationD"
 
 
 ,"wrapper.mvImputation","mvImputation"

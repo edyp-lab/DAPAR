@@ -2,7 +2,7 @@
 % Please edit documentation in R/missingValuesFilter.R
 \name{removeLines}
 \alias{removeLines}
-\title{xxxxxxxxx}
+\title{Removes lines in the dataset based on a prefix string.}
 \usage{
 removeLines(obj, idLine2Delete = NULL, prefix = NULL)
 }
@@ -17,7 +17,7 @@ removeLines(obj, idLine2Delete = NULL, prefix = NULL)
 An object of class \code{\link{MSnSet}}.
 }
 \description{
-Removes lines in the dataset where the column Contaminants is TRUE
+This function removes lines in the dataset based on a prefix string.
 }
 \examples{
 data(UPSpepx2)

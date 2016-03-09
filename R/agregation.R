@@ -345,7 +345,7 @@ GraphPepProt <- function(mat){
     position <- seq(1, length(tab),by=3)
     label <- names(tab)
 
-    par(mar=c(6,4,4,8) + 0.1)#, mgp=c(3,0.5,0)
+    #par(mar=c(6,4,4,8) + 0.1)#, mgp=c(3,0.5,0)
     barplot(tab, 
             xlim=c(1, length(tab)),
             xlab="Nb of peptides", ylab="Nb of proteins",
