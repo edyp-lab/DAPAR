@@ -22,6 +22,7 @@ Performs a differential analysis on an \code{\link{MSnSet}} object,
 based on \code{\link{limma}} functions.
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 qData <- exprs(UPSprotx2)
 design <- cbind(cond1=1, cond2 = rep(0,nrow(pData(UPSprotx2))))

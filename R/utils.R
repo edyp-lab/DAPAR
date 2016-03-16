@@ -5,6 +5,7 @@
 ##' @return An integer
 ##' @author Samuel Wieczorek
 ##' @examples
+##' library(DAPARdata)
 ##' data(UPSprotx2)
 ##' qData <- exprs(UPSprotx2)
 ##' getNumberOfEmptyLines(qData)
@@ -30,7 +31,9 @@ getNumberOfEmptyLines <- function(qData){
 ##' respectively the indices of samples in the \code{pData()} table of the
 ##' dataset. 
 ##' @author Florence Combes, Samuel Wieczorek
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' labels <- pData(UPSprotx2)[,"Label"]
 ##' getIndicesConditions(labels, "10fmol", "5fmol")
 getIndicesConditions <- function(labels, cond1, cond2){
@@ -58,7 +61,9 @@ getIndicesConditions <- function(labels, cond1, cond2){
 ##' @param labels A vector of labels (strings).
 ##' @return A palette designed for the data manipulated in DAPAR
 ##' @author Florence Combes, Samuel Wieczorek
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' labels <- pData(UPSprotx2)[,"Label"]
 ##' getPaletteForLabels(labels)
 getPaletteForLabels <- function(labels){
@@ -83,14 +88,15 @@ getPaletteForLabels <- function(labels){
 ##' @param nColors The desired number of colors
 ##' @return A palette designed for the data manipulated in DAPAR
 ##' @author Samuel Wieczorek
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' n <- nrow(pData(UPSprotx2))
 ##' getPaletteForLabels(5)
 getPaletteForReplicates <- function(nColors){
   col <- c(1:nColors)
   getPalette <- colorRampPalette(brewer.pal(8, "Dark2"))
   
- # return (getPalette(nColors))
   return(col)
 }
 

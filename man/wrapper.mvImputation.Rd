@@ -20,6 +20,7 @@ This method is a wrapper to the \code{imputeLCMD} package adapted to
 objects of class \code{\link{MSnSet}}.
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 wrapper.mvImputation(UPSprotx2, "QRILC")
 }

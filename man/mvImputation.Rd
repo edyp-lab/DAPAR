@@ -19,6 +19,7 @@ The matrix imputed
 This method is a wrapper to the \code{imputeLCMD} package adapted to a matrix.
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 qData <- exprs(UPSprotx2)
 mvImputation(qData, "QRILC")

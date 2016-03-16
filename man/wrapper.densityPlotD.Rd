@@ -26,6 +26,7 @@ A density plot
 This function is a wrapper for using the densityPlotD function with objects of class \code{\link{MSnSet}}
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 labels <- pData(UPSprotx2)[,"Label"]
 wrapper.densityPlotD(UPSprotx2, labels)

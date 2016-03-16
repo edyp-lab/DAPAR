@@ -43,6 +43,7 @@ This method returns a \code{\link{MSnSet}} object with the results
 of differential analysis.
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 condition1 <- '10fmol'
 condition2 <- '5fmol'

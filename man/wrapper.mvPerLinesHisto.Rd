@@ -22,6 +22,7 @@ This method is a wrapper to plots from a \code{\link{MSnSet}} object a histogram
 number of missing values (NA) per lines (ie proteins).
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 wrapper.mvPerLinesHisto(UPSprotx2)
 }

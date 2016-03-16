@@ -22,6 +22,7 @@ A boxplot
 This function is a wrapper for using the boxPlotD function with objects of class \code{\link{MSnSet}}
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 types <- c("Label","Analyt.Rep")
 wrapper.boxPlotD(UPSprotx2, types)

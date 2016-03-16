@@ -24,6 +24,7 @@ Method to perform differential analysis on
 a \code{\link{MSnSet}} object (calls the \code{limma} package function).
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 condition1 <- '10fmol'
 condition2 <- '5fmol'

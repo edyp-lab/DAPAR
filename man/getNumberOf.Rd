@@ -20,6 +20,7 @@ An integer
 Returns the number of lines, in a given column, where content matches the prefix.
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 getNumberOf(UPSprotx2, "Potential.contaminant", "+")
 }

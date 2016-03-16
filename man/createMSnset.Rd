@@ -44,8 +44,9 @@ tabulated-like quantitative proteomic data into a \code{MSnSet} object,
 including metadata.
 }
 \examples{
-exprsFile <- system.file("extdata", "prot10.txt", package="DAPAR")
-metadataFile <- system.file("extdata", "samples_prot10.txt", package="DAPAR")
+library(DAPARdata)
+exprsFile <- system.file("extdata", "prot10.txt", package="DAPARdata")
+metadataFile <- system.file("extdata", "samples_prot10.txt", package="DAPARdata")
 metadata = read.table(metadataFile, header=TRUE, sep="\\t", as.is=TRUE)
 indExpData <- c(2:7)
 indFData <- c(8:13)

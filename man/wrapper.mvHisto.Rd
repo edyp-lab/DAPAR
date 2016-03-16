@@ -21,6 +21,7 @@ A histogram
 This method plots from a \code{\link{MSnSet}} object a histogram of missing values.
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 wrapper.mvHisto(UPSprotx2, showValues=TRUE)
 }

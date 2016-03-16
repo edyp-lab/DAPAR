@@ -26,6 +26,7 @@ and metaData are respectively integrated into separate sheets in
 the Excel file).
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 writeMSnsetToExcel(UPSprotx2, "foo", 1)
 }

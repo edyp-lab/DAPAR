@@ -19,7 +19,9 @@
 ##' differential analysis.
 ##' @return A volcanoplot
 ##' @author Florence Combes, Samuel Wieczorek
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' condition1 <- '10fmol'
 ##' condition2 <- '5fmol'
 ##' data <- wrapper.diffAnaLimma(UPSprotx2, condition1, condition2)
@@ -29,9 +31,14 @@ diffAnaVolcanoplot <- function(logFC=NULL,
                                threshold_pVal=1e-60, 
                                threshold_logFC=0, 
                                conditions=NULL){
+  
+  xtitle <- paste("log2 ( mean(",conditions[2],") / mean(",conditions[1],") )", sep="")
+  
+  print(xtitle)
   if (is.null(logFC)||is.null(pVal)) {
+   
     p <- plot(-1,-1
-              , xlab = "log2 ( mean(conditions[1]) / mean(conditions[2]) )"
+              , xlab = xtitle
               , ylab="- log10 ( p-value )"
               ,xlim = range(0,1)
               , xaxt='n'
@@ -52,9 +59,10 @@ diffAnaVolcanoplot <- function(logFC=NULL,
     }
   }
   
-  p <- plot(x, y
-            , xlab = "log2 ( mean(conditions[1]) / mean(conditions[2]) )"
-            , ylab="- log10 ( p-value )"
+  p <- plot(x
+            , y
+            , xlab = xtitle
+            , ylab=  "- log10 ( p-value )"
             , xlim = c(-max(abs(x)), max(abs(x)))
             , ylim = c(0, max(y))
             , col = color

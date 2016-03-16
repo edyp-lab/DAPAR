@@ -7,7 +7,9 @@
 ##' Choices are QRILC, KNN, BPCA and MLE. 
 ##' @return The object \code{obj} which has been imputed
 ##' @author Alexia Dorffer
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' wrapper.mvImputation(UPSprotx2, "QRILC")
 wrapper.mvImputation <- function(obj, method){
   
@@ -30,7 +32,9 @@ wrapper.mvImputation <- function(obj, method){
 ##' Choices are QRILC, KNN, BPCA and MLE. 
 ##' @return The matrix imputed
 ##' @author Samuel Wieczorek
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' qData <- exprs(UPSprotx2)
 ##' mvImputation(qData, "QRILC")
 mvImputation <- function(qData, method){
@@ -41,6 +45,7 @@ mvImputation <- function(qData, method){
     return (NULL)
   }
   
+  qData <- as.matrix(qData)
   ## BPCA impute imputation at peptide level
   
   if (method == "BPCA"){

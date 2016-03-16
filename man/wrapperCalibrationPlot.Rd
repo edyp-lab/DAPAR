@@ -20,6 +20,7 @@ This function is a wrapper to the calibration.plot method of the \code{cp4p} pac
 with \code{\link{MSnSet}} objects.
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 condition1 <- '10fmol'
 condition2 <- '5fmol'

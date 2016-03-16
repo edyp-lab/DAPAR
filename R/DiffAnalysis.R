@@ -14,7 +14,9 @@
 ##' @param pi0Method The parameter pi0.method of the method adjust.p in the package \code{cp4p}
 ##' @return The computed FDR value (floating number)
 ##' @author Samuel Wieczorek
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' obj <- wrapper.mvImputation(UPSprotx2, "QRILC")
 ##' condition1 <- '10fmol'
 ##' condition2 <- '5fmol'
@@ -60,7 +62,9 @@ diffAnaComputeFDR <- function(data,threshold_PVal=0, threshold_LogFC =0, pi0Meth
 ##' @param calibrationMethod The calibration method used to compute the calibration plot
 ##' @return A MSnSet
 ##' @author Alexia Dorffer, Samuel Wieczorek
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' condition1 <- '10fmol'
 ##' condition2 <- '5fmol'
 ##' limma <- wrapper.diffAnaLimma(UPSprotx2, condition1, condition2)
@@ -73,29 +77,26 @@ diffAnaSave <- function (obj, data, method="limma", condition1, condition2,
             running differential analysis")
         return(NULL)}
     
-    temp <- obj
+   # temp <- obj
     #####################################################################
-    fData(temp)$P.Value <- data$P.Value
-    fData(temp)$logFC <- data$logFC
-    fData(temp)$Significant <- FALSE
+    fData(obj)$P.Value <- data$P.Value
+    fData(obj)$logFC <- data$logFC
+    fData(obj)$Significant <- FALSE
     
-#     temp@experimentData@other <- list(method = method,
-#                                     condition1 = condition1,
-#                                     condition2 = condition2)
-    
+ 
     text <- paste("Differential analysis with",method)
-    temp@processingData@processing <- c(temp@processingData@processing, text)
+    obj@processingData@processing <- c(obj@processingData@processing, text)
     
     
     ##setSignificant
-    x <- fData(temp)$logFC
-    y <- -log10(fData(temp)$P.Value)
+    x <- fData(obj)$logFC
+    y <- -log10(fData(obj)$P.Value)
     
     ipval <- which(y >= threshold_pVal)
     ilogfc <- which(abs(x) >= threshold_logFC)
-    fData(temp)[intersect(ipval, ilogfc),]$Significant <- TRUE
+    fData(obj)[intersect(ipval, ilogfc),]$Significant <- TRUE
     
-    temp@experimentData@other <- list(temp@experimentData@other,
+    obj@experimentData@other <- list(obj@experimentData@other,
                                       method = method,
                                         condition1 = condition1,
                                         condition2 = condition2,
@@ -109,8 +110,8 @@ diffAnaSave <- function (obj, data, method="limma", condition1, condition2,
                     ", -log10(p-value) = ", threshold_pVal,
                     ", FDR = ", fdr, sep=" ")
     
-    temp@processingData@processing <- c(temp@processingData@processing, text)
-    return(temp)
+    obj@processingData@processing <- c(obj@processingData@processing, text)
+    return(obj)
 }
 
 
@@ -122,7 +123,9 @@ diffAnaSave <- function (obj, data, method="limma", condition1, condition2,
 ##' @param obj An object of class \code{\link{MSnSet}}.
 ##' @return A MSnSet
 ##' @author Alexia Dorffer
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' condition1 <- "10fmol"
 ##' condition2 <- "5fmol"
 ##' resLimma <- wrapper.diffAnaLimma(UPSprotx2, condition1, condition2)
@@ -156,7 +159,9 @@ diffAnaGetSignificant <- function (obj){
 ##' @return A dataframe with the p-value and log(Fold Change) associated 
 ##' to each element (peptide/protein)
 ##' @author Florence Combes, Samuel Wieczorek
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' qData <- exprs(UPSprotx2)
 ##' design <- cbind(cond1=1, cond2 = rep(0,nrow(pData(UPSprotx2))))
 ##' rownames(design) <- rownames(pData(UPSprotx2))
@@ -191,7 +196,9 @@ diffAna <- function(qData, design){
 ##' considered as condition 2.
 ##' @return A dataframe as returned by the \code{limma} package
 ##' @author Alexia Dorffer
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' condition1 <- '10fmol'
 ##' condition2 <- '5fmol'
 ##' wrapper.diffAnaLimma(UPSprotx2, condition1, condition2)
@@ -221,7 +228,9 @@ wrapper.diffAnaLimma <- function(obj, condition1, condition2){
 ##' considered as condition 2
 ##' @return A dataframe as returned by the \code{limma} package
 ##' @author Florence Combes, Samuel Wieczorek
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' condition1 <- '10fmol'
 ##' condition2 <- '5fmol'
 ##' qData <- exprs(UPSprotx2)
@@ -233,10 +242,10 @@ diffAnaLimma <- function(qData, samplesData, labels, condition1, condition2){
     warning("There are some missing values. Please impute before.")
     return (NULL)
   }
-  if (condition1 == condition2){
-    warning("The two conditions are identical.")
-    return (NULL)
-  }
+  # if (condition1 == condition2){
+  #   warning("The two conditions are identical.")
+  #   return (NULL)
+  # }
   
   indices <- getIndicesConditions(labels, condition1, condition2)
   flatIndices <- unlist(indices)
@@ -269,7 +278,9 @@ diffAnaLimma <- function(qData, samplesData, labels, condition1, condition2){
 ##' @return A dataframe with two slots : P.Value (for the p-value) and logFC
 ##' (the log of the Fold Change).
 ##' @author Alexia Dorffer
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' condition1 <- '10fmol'
 ##' condition2 <- '5fmol'
 ##' wrapper.diffAnaWelch(UPSprotx2, condition1, condition2)
@@ -300,7 +311,9 @@ wrapper.diffAnaWelch <- function(obj, condition1, condition2){
 ##' @return A dataframe with two slots : P.Value (for the p-value) and logFC
 ##' (the log of the Fold Change).
 ##' @author Florence Combes, Samuel Wieczorek
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' condition1 <- '10fmol'
 ##' condition2 <- '5fmol'
 ##' qData <- exprs(UPSprotx2)
@@ -312,10 +325,10 @@ diffAnaWelch <- function(qData, labels, condition1, condition2){
     warning("There are some missing values. Please impute before.")
     return (NULL)
   }
-  if (condition1 == condition2){
-    warning("The two conditions are identical.")
-    return (NULL)
-  }
+  # if (condition1 == condition2){
+  #   warning("The two conditions are identical.")
+  #   return (NULL)
+  # }
   
   
   indices <- getIndicesConditions(labels, condition1, condition2)
@@ -341,7 +354,9 @@ diffAnaWelch <- function(qData, labels, condition1, condition2){
 ##' @param pi0Method A vector of the conditions (labels) (one label per sample).
 ##' @return A plot
 ##' @author Samuel Wieczorek
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' condition1 <- '10fmol'
 ##' condition2 <- '5fmol'
 ##' qData <- exprs(UPSprotx2)

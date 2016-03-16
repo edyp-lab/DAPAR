@@ -9,10 +9,9 @@ Added a function to remove contaminants
 
 
 
-1.3.1 : 
+CHANGES IN VERSION 1.3.1
+------------------------ 
 * correction d'un bug dans l'analyse differentielle lorsqu'il y a plusieurs conditions
-
-
 * To change the current dataset, tue user has only to select te desired one in the menu
 * it is possible to modify the gradient of colors for the correlation matrix
 A new barplot to show the proportion of contaminants and reverse. The computation of these proportions has been debugged
@@ -20,14 +19,27 @@ A new barplot to show the proportion of contaminants and reverse. The computatio
 * feature to build automatically an ID for the MSnset
 
 
-1.3.2
+CHANGES IN VERSION 1.3.2
+------------------------ 
 * in the menu "Dataset available", each line is completed with the type of data (peptide or proteins)
 
-1.3.3
+
+CHANGES IN VERSION 1.3.3
+------------------------ 
 Add the option to display or not the dendrogram in the heatmap
 
-1.3.5 : add busy indicator for long time computation plots
 
-1.3.6 : fixed a bug in the mvFilter function
+CHANGES IN VERSION 1.3.5
+------------------------ 
+add busy indicator for long time computation plots
 
-1.3.8 : Minor bugs fixed
+
+CHANGES IN VERSION 1.3.6
+------------------------ 
+fixed a bug in the mvFilter function
+
+
+CHANGES IN VERSION 1.3.8
+------------------------ 
+Minor bugs fixed
+* Bug fixed in the Xaxis title of the volcanoplot

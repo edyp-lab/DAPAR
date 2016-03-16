@@ -25,6 +25,7 @@ A histogram
 This method plots a histogram of missing values.
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 qData <- exprs(UPSprotx2)
 samplesData <- pData(UPSprotx2)

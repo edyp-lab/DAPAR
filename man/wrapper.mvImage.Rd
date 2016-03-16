@@ -21,6 +21,7 @@ The lines have been sorted in order to vizualize easily the different
 number of missing values. A white square is plotted for missing values.
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 wrapper.mvImage(UPSprotx2)
 }

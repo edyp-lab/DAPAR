@@ -38,6 +38,7 @@ at least \code{th} values for each of the conditions are kept.
 at least \code{th} values, and for at least one condition, are kept.
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 mvFilter(UPSprotx2, "wholeMatrix", 2)
 }

@@ -28,6 +28,7 @@ a MSnSet object (peptides)
 }
 \examples{
 \dontrun{
+library(DAPARdata)
 data(UPSpepx2)
 protID <- "Protein.group.IDs"
 m <- BuildAdjacencyMatrix(UPSpepx2, protID, TRUE)

@@ -27,6 +27,7 @@ A plot
 Plot to compare the quantitative proteomics data before and after normalization
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 qDataBefore <- exprs(UPSprotx2)
 labels <- pData(UPSprotx2)[,"Label"]

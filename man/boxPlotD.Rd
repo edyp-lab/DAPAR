@@ -26,6 +26,7 @@ A boxplot
 Boxplot for quantitative proteomics data
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 qData <- exprs(UPSprotx2)
 types <- c("Label","Analyt.Rep")

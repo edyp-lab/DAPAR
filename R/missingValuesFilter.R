@@ -6,6 +6,7 @@
 ##' @return A floating number
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
+##' library(DAPARdata)
 ##' data(UPSprotx2)
 ##' getPourcentageOfMV(UPSprotx2)
 getPourcentageOfMV <- function(obj){
@@ -28,6 +29,7 @@ return(pourcentage)
 ##' @return An integer
 ##' @author Samuel Wieczorek
 ##' @examples
+##' library(DAPARdata)
 ##' data(UPSprotx2)
 ##' getNumberOf(UPSprotx2, "Potential.contaminant", "+")
 getNumberOf <- function(obj, name=NULL, prefix=NULL){
@@ -53,6 +55,7 @@ getNumberOf <- function(obj, name=NULL, prefix=NULL){
 ##' @return A barplot
 ##' @author Samuel Wieczorek
 ##' @examples
+##' library(DAPARdata)
 ##' data(UPSprotx2)
 ##' pref <- "+"
 ##' proportionConRev(UPSprotx2, "Potential.contaminant", pref, "Reverse", pref)
@@ -98,6 +101,7 @@ proportionConRev <- function(obj, idContaminants=NULL, prefixContaminants=NULL, 
 ##' @return An object of class \code{\link{MSnSet}}.
 ##' @author Samuel Wieczorek
 ##' @examples
+##' library(DAPARdata)
 ##' data(UPSpepx2)
 ##' removeLines(UPSpepx2, "Contaminant")
 ##' removeLines(UPSpepx2, "Reverse")
@@ -122,6 +126,7 @@ removeLines <- function(obj, idLine2Delete=NULL, prefix=NULL){
 ##' @return A vector of integers.
 ##' @author Samuel Wieczorek
 ##' @examples
+##' library(DAPARdata)
 ##' data(UPSpepx2)
 ##' getIndicesOfLinesToRemove(UPSpepx2, "Contaminant", prefix="+")
 getIndicesOfLinesToRemove <- function(obj, idLine2Delete=NULL, prefix=NULL)
@@ -160,7 +165,9 @@ getIndicesOfLinesToRemove <- function(obj, idLine2Delete=NULL, prefix=NULL)
 ##' object for log. 
 ##' @return An instance of class \code{\link{MSnSet}} that have been filtered.
 ##' @author Florence Combes, Samuel Wieczorek
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' mvFilter(UPSprotx2, "wholeMatrix", 2)
 mvFilter <- function(obj,type, th, processText=NULL )
 {
@@ -209,7 +216,9 @@ obj <- obj[keepThat,]
 ##' object for log. 
 ##' @return An instance of class \code{\link{MSnSet}} that have been filtered.
 ##' @author Florence Combes, Samuel Wieczorek
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' mvFilter(UPSprotx2, c(1:10))
 mvFilterFromIndices <- function(obj,keepThat=NULL, processText=NULL )
 {
@@ -247,7 +256,9 @@ mvFilterFromIndices <- function(obj,keepThat=NULL, processText=NULL )
 ##' @param th An integer value of the threshold
 ##' @return An vector of indices.
 ##' @author Florence Combes, Samuel Wieczorek
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' mvFilterGetIndices(UPSprotx2, "wholeMatrix", 2)
 mvFilterGetIndices <- function(obj,type, th)
 {

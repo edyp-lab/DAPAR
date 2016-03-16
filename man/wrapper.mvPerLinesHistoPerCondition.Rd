@@ -23,6 +23,7 @@ This method is a wrapper to plots from a \code{\link{MSnSet}} object a bar plot 
 number of missing values (NA) per lines (ie proteins) and per conditions.
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 wrapper.mvPerLinesHistoPerCondition(UPSprotx2)
 }

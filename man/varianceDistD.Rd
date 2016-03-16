@@ -20,6 +20,7 @@ of a object. The variance is calculated for each condition (Label) present
 in the dataset (see the slot \code{'Label'} in the \code{pData()} table)
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 varianceDistD(UPSprotx2)
 }

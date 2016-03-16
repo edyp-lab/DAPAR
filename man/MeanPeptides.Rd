@@ -22,6 +22,7 @@ intensities of their peptides.
 }
 \examples{
 \dontrun{
+library(DAPARdata)
 data(UPSpepx2)
 protID <- "Protein.group.IDs"
 matAdj <- BuildAdjacencyMatrix(UPSpepx2, protID, FALSE)

@@ -29,6 +29,7 @@ and the considered condition.
 The data have been jittered for an easier vizualisation.
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 qData <- exprs(UPSprotx2)
 labels <- pData(UPSprotx2)[,"Label"]

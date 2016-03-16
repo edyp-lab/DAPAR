@@ -20,7 +20,9 @@
 ##' where the quantitative data in the \code{exprs()} tab
 ##' has been normalized.
 ##' @author Alexia Dorffer
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' wrapper.normalizeD(UPSprotx2, "Median Centering", "within conditions")
 wrapper.normalizeD <- function(obj, family, method){
   
@@ -56,7 +58,9 @@ wrapper.normalizeD <- function(obj, family, method){
 ##' @param method "Overall" or "within conditions".
 ##' @return A matrix normalized
 ##' @author Florence Combes, Samuel Wieczorek
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' qData <- exprs(UPSprotx2)
 ##' labels <- pData(UPSprotx2)[,"Label"]
 ##' normalizeD(qData, labels, "Median Centering", "within conditions")
@@ -108,7 +112,6 @@ normalizeD <- function(qData, labels, family, method){
       else if (method == "within conditions"){
         .temp <- sweep(.temp, 2, medianOverSamples)
         
-        #labels <- unique(Label)
         cCond <- NULL
         for (l in unique(labels))
         {
@@ -128,8 +131,6 @@ normalizeD <- function(qData, labels, family, method){
         
       } else if (method == "within conditions"){
         .temp <- sweep(.temp, 2, meanOverSamples)
-        
-        
         cCond <- NULL
         for (l in unique(labels))
         {

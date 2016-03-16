@@ -30,6 +30,7 @@ differential analysis.
 The FDR is computed with the function \code{p.adjust}\{stats\}..
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 obj <- wrapper.mvImputation(UPSprotx2, "QRILC")
 condition1 <- '10fmol'

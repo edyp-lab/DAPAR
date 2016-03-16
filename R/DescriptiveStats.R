@@ -10,6 +10,7 @@
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{wrapper.densityPlotD}}
 ##' @examples
+##' library(DAPARdata)
 ##' data(UPSprotx2)
 ##' types <- c("Label","Analyt.Rep")
 ##' wrapper.boxPlotD(UPSprotx2, types)
@@ -39,6 +40,7 @@ wrapper.boxPlotD <- function(obj, dataForXAxis="Label", group2Color="Condition")
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{densityPlotD}}
 ##' @examples
+##' library(DAPARdata)
 ##' data(UPSprotx2)
 ##' qData <- exprs(UPSprotx2)
 ##' types <- c("Label","Analyt.Rep")
@@ -95,6 +97,7 @@ boxPlotD <- function(qData, dataForXAxis=NULL, labels=NULL, group2Color="Conditi
 ##' @return A plot
 ##' @author Samuel Wieczorek
 ##' @examples
+##' library(DAPARdata)
 ##' data(UPSprotx2)
 ##' labels <- pData(UPSprotx2)[,"Label"]
 ##' objAfter <- wrapper.normalizeD(UPSprotx2, "Median Centering", "within conditions")
@@ -120,6 +123,7 @@ wrapper.compareNormalizationD <- function(objBefore, objAfter, labelsForLegend=N
 ##' @return A plot
 ##' @author Samuel Wieczorek
 ##' @examples
+##' library(DAPARdata)
 ##' data(UPSprotx2)
 ##' qDataBefore <- exprs(UPSprotx2)
 ##' labels <- pData(UPSprotx2)[,"Label"]
@@ -198,7 +202,9 @@ compareNormalizationD <- function(qDataBefore, qDataAfter, labelsForLegend=NULL,
 ##' @return A density plot
 ##' @author Alexia Dorffer
 ##' @seealso \code{\link{wrapper.boxPlotD}}, \code{\link{wrapper.varianceDistD}}
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' labels <- pData(UPSprotx2)[,"Label"]
 ##' wrapper.densityPlotD(UPSprotx2, labels)
 wrapper.densityPlotD <- function(obj, labelsForLegend=NULL,  indData2Show=NULL, group2Color = "Condition"){
@@ -220,7 +226,9 @@ wrapper.densityPlotD <- function(obj, labelsForLegend=NULL,  indData2Show=NULL, 
 ##' @return A density plot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{boxPlotD}}, \code{\link{varianceDistD}}
-##' @examples data(UPSprotx2)
+##' @examples 
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' qData <- exprs(UPSprotx2)
 ##' labels <- lab2Show <- pData(UPSprotx2)[,"Label"]
 ##' densityPlotD(qData, labels)
@@ -298,7 +306,9 @@ densityPlotD <- function(qData, labelsForLegend=NULL,indData2Show=NULL,  group2C
 ##' @return A density plot
 ##' @author Alexia Dorffer
 ##' @seealso \code{\link{wrapper.densityPlotD}}
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' wrapper.varianceDistD(UPSprotx2)
 wrapper.varianceDistD <- function(obj){
   qData <- exprs(obj)
@@ -319,7 +329,9 @@ wrapper.varianceDistD <- function(obj){
 ##' @return A density plot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{densityPlotD}}.
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' varianceDistD(UPSprotx2)
 varianceDistD <- function(qData, labels=NULL){
     
@@ -382,7 +394,9 @@ varianceDistD <- function(qData, labels=NULL){
 ##' @param rate A float that defines the gradient of colors.
 ##' @return A colored correlation matrix
 ##' @author Alexia Dorffer
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' wrapper.corrMatrixD(UPSprotx2)
 wrapper.corrMatrixD <- function(obj, rate=5){
   qData <- exprs(obj)
@@ -402,7 +416,9 @@ wrapper.corrMatrixD <- function(obj, rate=5){
 ##' @param gradientRate The rate parameter to control the exponential law for the gradient of colors
 ##' @return A colored correlation matrix
 ##' @author Florence Combes, Samuel Wieczorek
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' qData <- exprs(UPSprotx2)
 ##' samplesData <- pData(UPSprotx2)
 ##' corrMatrixD(qData, samplesData)
@@ -448,7 +464,9 @@ corrMatrixD <- function(qData, samplesData, gradientRate = 5){
 ##' @param dendro A boolean to indicate fi the dendrogram has to be displayed
 ##' @return A heatmap
 ##' @author Alexia Dorffer
-##' @examples data(testWithoutNA)
+##' @examples
+##' library(DAPARdata)
+##' data(testWithoutNA)
 ##' wrapper.heatmapD(testWithoutNA)
 wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="average", dendro = FALSE){
   qData <- exprs(obj)
@@ -471,7 +489,9 @@ wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="average", dend
 ##' @param dendro A boolean to indicate fi the dendrogram has to be displayed
 ##' @return A heatmap
 ##' @author Florence Combes, Samuel Wieczorek
-##' @examples data(testWithoutNA)
+##' @examples
+##' library(DAPARdata)
+##' data(testWithoutNA)
 ##' qData <- exprs(testWithoutNA)
 ##' heatmapD(qData)
 heatmapD <- function(qData, distance="euclidean", cluster="average", dendro = FALSE){

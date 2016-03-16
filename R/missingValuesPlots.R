@@ -8,7 +8,9 @@
 ##' drawn above the bars.
 ##' @return A histogram
 ##' @author Alexia Dorffer
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' wrapper.mvPerLinesHisto(UPSprotx2)
 wrapper.mvPerLinesHisto <- function(obj, indLegend="auto", showValues=FALSE){
   qData <- exprs(obj)
@@ -27,7 +29,9 @@ wrapper.mvPerLinesHisto <- function(obj, indLegend="auto", showValues=FALSE){
 ##' drawn above the bars.
 ##' @return A bar plot
 ##' @author Florence Combes, Samuel Wieczorek
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' qData <- exprs(UPSprotx2)
 ##' samplesData <- pData(UPSprotx2)
 ##' mvPerLinesHisto(qData, samplesData)
@@ -90,7 +94,9 @@ mvPerLinesHisto <- function(qData, samplesData, indLegend="auto", showValues=FAL
 ##' drawn above the bars.
 ##' @return A bar plot
 ##' @author Samuel Wieczorek
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' wrapper.mvPerLinesHistoPerCondition(UPSprotx2)
 wrapper.mvPerLinesHistoPerCondition <- function(obj, indLegend="auto", showValues=FALSE){
   qData <- exprs(obj)
@@ -109,7 +115,9 @@ wrapper.mvPerLinesHistoPerCondition <- function(obj, indLegend="auto", showValue
 ##' drawn above the bars.
 ##' @return A bar plot
 ##' @author Samuel Wieczorek
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' qData <- exprs(UPSprotx2)
 ##' samplesData <- pData(UPSprotx2)
 ##' mvPerLinesHistoPerCondition(qData, samplesData)
@@ -168,7 +176,9 @@ mvPerLinesHistoPerCondition <- function(qData, samplesData, indLegend="auto", sh
 ##' drawn above the bars.
 ##' @return A histogram
 ##' @author Alexia Dorffer
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' wrapper.mvHisto(UPSprotx2, showValues=TRUE)
 wrapper.mvHisto <- function(obj, indLegend="auto", showValues=FALSE){
   qData <- exprs(obj)
@@ -190,7 +200,9 @@ wrapper.mvHisto <- function(obj, indLegend="auto", showValues=FALSE){
 ##' drawn above the bars.
 ##' @return A histogram
 ##' @author Florence Combes, Samuel Wieczorek
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' qData <- exprs(UPSprotx2)
 ##' samplesData <- pData(UPSprotx2)
 ##' labels <- pData(UPSprotx2)[,"Label"]
@@ -254,7 +266,9 @@ mvHisto <- function(qData, samplesData, labels, indLegend="auto", showValues=FAL
 ##' @param obj An object of class \code{\link{MSnSet}}.
 ##' @return A heatmap
 ##' @author Alexia Dorffer
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' wrapper.mvImage(UPSprotx2)
 wrapper.mvImage <- function(obj){
   qData <- exprs(obj)
@@ -276,7 +290,9 @@ wrapper.mvImage <- function(obj){
 ##' @param labels A vector of the conditions (labels) (one label per sample).
 ##' @return A heatmap
 ##' @author Samuel Wieczorek, Thomas Burger
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' qData <- exprs(UPSprotx2)
 ##' labels <- pData(UPSprotx2)[,"Label"]
 ##' mvImage(qData, labels)
@@ -345,7 +361,9 @@ mvImage <- function(qData, labels){
 ##' MCAR missing values.
 ##' @return A scatter plot
 ##' @author Florence Combes, Samuel Wieczorek
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' wrapper.mvTypePlot(UPSprotx2)
 wrapper.mvTypePlot <- function(obj, threshold=0){
   qData <- exprs(obj)
@@ -373,7 +391,9 @@ wrapper.mvTypePlot <- function(obj, threshold=0){
 ##' MCAR missing values.
 ##' @return A scatter plot
 ##' @author Florence Combes, Samuel Wieczorek
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' qData <- exprs(UPSprotx2)
 ##' labels <- pData(UPSprotx2)[,"Label"]
 ##' mvTypePlot(qData, labels, threshold=0)

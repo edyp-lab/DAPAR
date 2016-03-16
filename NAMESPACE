@@ -17,7 +17,7 @@ import(doParallel)
 import(foreach)
 import(cp4p)
 importFrom("graphics", par, boxplot, axis, mtext, abline, points, legend, lines,  barplot, text)
-
+import(DAPARdata)
 
 
 importFrom("stats", "lowess", "cor", "density","pexp", 

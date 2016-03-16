@@ -18,6 +18,7 @@ of an object \code{\link{MSnSet}}. The variance is calculated for each condition
 in the dataset (see the slot \code{'Label'} in the \code{pData()} table).
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 wrapper.varianceDistD(UPSprotx2)
 }

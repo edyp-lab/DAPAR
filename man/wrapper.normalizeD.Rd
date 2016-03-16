@@ -34,6 +34,7 @@ For the three other families, two categories are available :
 by condition.
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 wrapper.normalizeD(UPSprotx2, "Median Centering", "within conditions")
 }

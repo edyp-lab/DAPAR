@@ -34,6 +34,7 @@ For the three other families, two categories are available :
 by condition.
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 qData <- exprs(UPSprotx2)
 labels <- pData(UPSprotx2)[,"Label"]

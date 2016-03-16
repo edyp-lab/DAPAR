@@ -18,6 +18,7 @@ Returns a MSnSet object with only proteins significant after
 differential analysis.
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 condition1 <- "10fmol"
 condition2 <- "5fmol"

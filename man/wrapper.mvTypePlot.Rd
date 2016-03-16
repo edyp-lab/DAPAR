@@ -27,6 +27,7 @@ and the considered condition.
 The data have been jittered for an easier vizualisation.
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 wrapper.mvTypePlot(UPSprotx2)
 }

@@ -25,8 +25,9 @@
 ##' @return An instance of class \code{\link{MSnSet}}.
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples 
-##' exprsFile <- system.file("extdata", "prot10.txt", package="DAPAR")
-##' metadataFile <- system.file("extdata", "samples_prot10.txt", package="DAPAR")
+##' library(DAPARdata)
+##' exprsFile <- system.file("extdata", "prot10.txt", package="DAPARdata")
+##' metadataFile <- system.file("extdata", "samples_prot10.txt", package="DAPARdata")
 ##' metadata = read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
 ##' indExpData <- c(2:7)
 ##' indFData <- c(8:13)
@@ -114,7 +115,9 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
 ##' used as an index.
 ##' @return A Excel file
 ##' @author Samuel Wieczorek
-##' @examples data(UPSprotx2)
+##' @examples
+##' library(DAPARdata)
+##' data(UPSprotx2)
 ##' writeMSnsetToExcel(UPSprotx2, "foo", 1)
 writeMSnsetToExcel <- function(obj, filename, id)
 {
@@ -123,7 +126,8 @@ writeMSnsetToExcel <- function(obj, filename, id)
     createSheet(file, "Quantitative Data")
     createSheet(file, "Feature Meta Data")
     createSheet(file, "Samples Meta Data")
-        temp.data <- cbind(fData(obj)[id],exprs(obj))
+        temp.data <- cbind(fData(obj)[id,],exprs(obj))
+        
     writeWorksheet(file, data = temp.data,
                         sheet="Quantitative Data", header=TRUE)
     writeWorksheet(file, data = fData(obj),

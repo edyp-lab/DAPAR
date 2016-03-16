@@ -35,6 +35,7 @@ the y-axis and the X-axis to visually distinguish between differential and
 non differential data.
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 condition1 <- '10fmol'
 condition2 <- '5fmol'

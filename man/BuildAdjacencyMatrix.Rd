@@ -23,6 +23,7 @@ Method to create a binary matrix with proteins in columns and peptides
 in lines on a MSnSet object (peptides)
 }
 \examples{
+library(DAPARdata)
 data(UPSpepx2) 
 BuildAdjacencyMatrix(UPSpepx2, "Protein.group.IDs")
 }

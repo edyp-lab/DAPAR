@@ -20,6 +20,7 @@ A vector of integers.
 This function returns the indice of the lines to delete, based on a prefix string
 }
 \examples{
+library(DAPARdata)
 data(UPSpepx2)
 getIndicesOfLinesToRemove(UPSpepx2, "Contaminant", prefix="+")
 }

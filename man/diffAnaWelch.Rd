@@ -28,6 +28,7 @@ an \code{\link{MSnSet}} object, using the Welch t-test
 (\code{\link{t.test}{stats}}).
 }
 \examples{
+library(DAPARdata)
 data(UPSprotx2)
 condition1 <- '10fmol'
 condition2 <- '5fmol'
