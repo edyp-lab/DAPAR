@@ -22,9 +22,9 @@ Correlation matrix based on a \code{\link{MSnSet}} object
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-qData <- exprs(UPSprotx2)
-samplesData <- pData(UPSprotx2)
+data(UPSprot25)
+qData <- exprs(UPSprot25)
+samplesData <- pData(UPSprot25)
 corrMatrixD(qData, samplesData)
 }
 \author{

@@ -24,10 +24,10 @@ This function creates a column for the protein dataset after agregation by using
 }
 \examples{
 library(DAPARdata)
-data(UPSpepx2)
+data(UPSpep25)
 protID <- "Protein.group.IDs"
-M <- BuildAdjacencyMatrix(UPSpepx2, protID, FALSE)
-data <- fData(UPSpepx2)
+M <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
+data <- fData(UPSpep25)
 name <- "organism"
 BuildColumnToProteinDataset(data, M, name )
 }

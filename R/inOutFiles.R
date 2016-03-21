@@ -26,13 +26,13 @@
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples 
 ##' library(DAPARdata)
-##' exprsFile <- system.file("extdata", "prot10.txt", package="DAPARdata")
-##' metadataFile <- system.file("extdata", "samples_prot10.txt", package="DAPARdata")
+##' exprsFile <- system.file("extdata", "UPSprot25.txt", package="DAPARdata")
+##' metadataFile <- system.file("extdata", "samples.txt", package="DAPARdata")
 ##' metadata = read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
-##' indExpData <- c(2:7)
-##' indFData <- c(8:13)
-##' indiceID <- 1
-##' createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID)
+##' indExpData <- c(49:54)
+##' indFData <- c(1:48, 55:86)
+##' indiceID <- 78
+##' createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID,pep_prot_data = "protein")
 createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL, 
                         logData=FALSE, replaceZeros=FALSE,
                         pep_prot_data=NULL){
@@ -117,8 +117,8 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' writeMSnsetToExcel(UPSprotx2, "foo", 1)
+##' data(UPSprot25)
+##' writeMSnsetToExcel(UPSprot25, "foo", 1)
 writeMSnsetToExcel <- function(obj, filename, id)
 {
     name <- paste(filename, ".xls", sep="")

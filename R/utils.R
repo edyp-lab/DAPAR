@@ -6,8 +6,8 @@
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' qData <- exprs(UPSprotx2)
+##' data(UPSpep25)
+##' qData <- exprs(UPSpep25)
 ##' getNumberOfEmptyLines(qData)
 getNumberOfEmptyLines <- function(qData){
   
@@ -33,9 +33,9 @@ getNumberOfEmptyLines <- function(qData){
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' labels <- pData(UPSprotx2)[,"Label"]
-##' getIndicesConditions(labels, "10fmol", "5fmol")
+##' data(UPSpep25)
+##' labels <- pData(UPSpep25)[,"Label"]
+##' getIndicesConditions(labels, "25fmol", "10fmol")
 getIndicesConditions <- function(labels, cond1, cond2){
   indCondition1 <- indCondition2 <- NULL
   
@@ -63,8 +63,8 @@ getIndicesConditions <- function(labels, cond1, cond2){
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' labels <- pData(UPSprotx2)[,"Label"]
+##' data(UPSpep25)
+##' labels <- pData(UPSpep25)[,"Label"]
 ##' getPaletteForLabels(labels)
 getPaletteForLabels <- function(labels){
   nColors <- 8
@@ -90,8 +90,8 @@ getPaletteForLabels <- function(labels){
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' n <- nrow(pData(UPSprotx2))
+##' data(UPSpep25)
+##' n <- nrow(pData(UPSpep25))
 ##' getPaletteForLabels(5)
 getPaletteForReplicates <- function(nColors){
   col <- c(1:nColors)

@@ -16,10 +16,10 @@
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' obj <- wrapper.mvImputation(UPSprotx2, "QRILC")
-##' condition1 <- '10fmol'
-##' condition2 <- '5fmol'
+##' data(UPSprot25)
+##' obj <- wrapper.mvImputation(UPSprot25, "QRILC")
+##' condition1 <- '25fmol'
+##' condition2 <- '10fmol'
 ##' qData <- exprs(obj)
 ##' samplesData <- pData(obj)
 ##' labels <- pData(obj)[,"Label"]
@@ -64,11 +64,11 @@ diffAnaComputeFDR <- function(data,threshold_PVal=0, threshold_LogFC =0, pi0Meth
 ##' @author Alexia Dorffer, Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' condition1 <- '10fmol'
-##' condition2 <- '5fmol'
-##' limma <- wrapper.diffAnaLimma(UPSprotx2, condition1, condition2)
-##' obj <- diffAnaSave(UPSprotx2, limma, "limma", condition1, condition2)
+##' data(UPSprot25)
+##' condition1 <- '25fmol'
+##' condition2 <- '10fmol'
+##' limma <- wrapper.diffAnaLimma(UPSprot25, condition1, condition2)
+##' obj <- diffAnaSave(UPSprot25, limma, "limma", condition1, condition2)
 diffAnaSave <- function (obj, data, method="limma", condition1, condition2, 
                         threshold_pVal=1e-60, threshold_logFC=0, fdr=0, calibrationMethod = "pounds"){
     if (is.null(data)){
@@ -125,11 +125,11 @@ diffAnaSave <- function (obj, data, method="limma", condition1, condition2,
 ##' @author Alexia Dorffer
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' condition1 <- "10fmol"
-##' condition2 <- "5fmol"
-##' resLimma <- wrapper.diffAnaLimma(UPSprotx2, condition1, condition2)
-##' obj <-diffAnaSave(UPSprotx2, resLimma, "limma", condition1, condition2)
+##' data(UPSprot25)
+##' condition1 <- "25fmol"
+##' condition2 <- "10fmol"
+##' resLimma <- wrapper.diffAnaLimma(UPSprot25, condition1, condition2)
+##' obj <-diffAnaSave(UPSprot25, resLimma, "limma", condition1, condition2)
 ##' signif <- diffAnaGetSignificant(obj)
 
 diffAnaGetSignificant <- function (obj){
@@ -161,12 +161,12 @@ diffAnaGetSignificant <- function (obj){
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' qData <- exprs(UPSprotx2)
-##' design <- cbind(cond1=1, cond2 = rep(0,nrow(pData(UPSprotx2))))
-##' rownames(design) <- rownames(pData(UPSprotx2))
-##' labels <- pData(UPSprotx2)[,"Label"]
-##' indices <- getIndicesConditions(labels, "10fmol", "5fmol")
+##' data(UPSprot25)
+##' qData <- exprs(UPSprot25)
+##' design <- cbind(cond1=1, cond2 = rep(0,nrow(pData(UPSprot25))))
+##' rownames(design) <- rownames(pData(UPSprot25))
+##' labels <- pData(UPSprot25)[,"Label"]
+##' indices <- getIndicesConditions(labels, "25fmol", "10fmol")
 ##' design[indices$iCond2,2] <- 1
 ##' diffAna(qData, design)
 diffAna <- function(qData, design){
@@ -198,10 +198,10 @@ diffAna <- function(qData, design){
 ##' @author Alexia Dorffer
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' condition1 <- '10fmol'
-##' condition2 <- '5fmol'
-##' wrapper.diffAnaLimma(UPSprotx2, condition1, condition2)
+##' data(UPSprot25)
+##' condition1 <- '25fmol'
+##' condition2 <- '10fmol'
+##' wrapper.diffAnaLimma(UPSprot25, condition1, condition2)
 wrapper.diffAnaLimma <- function(obj, condition1, condition2){
   
   qData <- exprs(obj)
@@ -230,12 +230,12 @@ wrapper.diffAnaLimma <- function(obj, condition1, condition2){
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' condition1 <- '10fmol'
-##' condition2 <- '5fmol'
-##' qData <- exprs(UPSprotx2)
-##' samplesData <- pData(UPSprotx2)
-##' labels <- pData(UPSprotx2)[,"Label"]
+##' data(UPSprot25)
+##' condition1 <- '25fmol'
+##' condition2 <- '10fmol'
+##' qData <- exprs(UPSprot25)
+##' samplesData <- pData(UPSprot25)
+##' labels <- pData(UPSprot25)[,"Label"]
 ##' diffAnaLimma(qData, samplesData, labels, condition1, condition2)
 diffAnaLimma <- function(qData, samplesData, labels, condition1, condition2){
   if( sum(is.na(qData == TRUE))>0) {
@@ -280,10 +280,10 @@ diffAnaLimma <- function(qData, samplesData, labels, condition1, condition2){
 ##' @author Alexia Dorffer
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' condition1 <- '10fmol'
-##' condition2 <- '5fmol'
-##' wrapper.diffAnaWelch(UPSprotx2, condition1, condition2)
+##' data(UPSprot25)
+##' condition1 <- '25fmol'
+##' condition2 <- '10fmol'
+##' wrapper.diffAnaWelch(UPSprot25, condition1, condition2)
 wrapper.diffAnaWelch <- function(obj, condition1, condition2){
   
   qData <- exprs(obj)
@@ -313,11 +313,11 @@ wrapper.diffAnaWelch <- function(obj, condition1, condition2){
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' condition1 <- '10fmol'
-##' condition2 <- '5fmol'
-##' qData <- exprs(UPSprotx2)
-##' labels <- pData(UPSprotx2)[,"Label"]
+##' data(UPSprot25)
+##' condition1 <- '25fmol'
+##' condition2 <- '10fmol'
+##' qData <- exprs(UPSprot25)
+##' labels <- pData(UPSprot25)[,"Label"]
 ##' diffAnaWelch(qData, labels, condition1, condition2)
 diffAnaWelch <- function(qData, labels, condition1, condition2){
   
@@ -356,11 +356,11 @@ diffAnaWelch <- function(qData, labels, condition1, condition2){
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' condition1 <- '10fmol'
-##' condition2 <- '5fmol'
-##' qData <- exprs(UPSprotx2)
-##' labels <- pData(UPSprotx2)[,"Label"]
+##' data(UPSprot25)
+##' condition1 <- '25fmol'
+##' condition2 <- '10fmol'
+##' qData <- exprs(UPSprot25)
+##' labels <- pData(UPSprot25)[,"Label"]
 ##' diffAnaWelch(qData, labels, condition1, condition2)
 wrapperCalibrationPlot <- function(vPVal, pi0Method="pounds"){
   

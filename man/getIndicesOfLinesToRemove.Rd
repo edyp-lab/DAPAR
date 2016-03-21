@@ -21,8 +21,8 @@ This function returns the indice of the lines to delete, based on a prefix strin
 }
 \examples{
 library(DAPARdata)
-data(UPSpepx2)
-getIndicesOfLinesToRemove(UPSpepx2, "Contaminant", prefix="+")
+data(UPSpep25)
+getIndicesOfLinesToRemove(UPSpep25, "Contaminant", prefix="+")
 }
 \author{
 Samuel Wieczorek

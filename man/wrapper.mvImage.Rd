@@ -22,8 +22,8 @@ number of missing values. A white square is plotted for missing values.
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-wrapper.mvImage(UPSprotx2)
+data(UPSpep25)
+wrapper.mvImage(UPSpep25)
 }
 \author{
 Alexia Dorffer

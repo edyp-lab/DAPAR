@@ -26,10 +26,10 @@ This method plots a histogram of missing values.
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-qData <- exprs(UPSprotx2)
-samplesData <- pData(UPSprotx2)
-labels <- pData(UPSprotx2)[,"Label"]
+data(UPSpep25)
+qData <- exprs(UPSpep25)
+samplesData <- pData(UPSpep25)
+labels <- pData(UPSpep25)[,"Label"]
 mvHisto(qData, samplesData, labels, indLegend="auto", showValues=TRUE)
 }
 \author{

@@ -35,9 +35,9 @@ by condition.
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-qData <- exprs(UPSprotx2)
-labels <- pData(UPSprotx2)[,"Label"]
+data(UPSpep25)
+qData <- exprs(UPSpep25)
+labels <- pData(UPSpep25)[,"Label"]
 normalizeD(qData, labels, "Median Centering", "within conditions")
 }
 \author{

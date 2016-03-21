@@ -27,9 +27,9 @@ This function is a wrapper for using the densityPlotD function with objects of c
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-labels <- pData(UPSprotx2)[,"Label"]
-wrapper.densityPlotD(UPSprotx2, labels)
+data(UPSprot25)
+labels <- pData(UPSprot25)[,"Label"]
+wrapper.densityPlotD(UPSprot25, labels)
 }
 \author{
 Alexia Dorffer

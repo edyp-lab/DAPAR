@@ -27,8 +27,8 @@ the Excel file).
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-writeMSnsetToExcel(UPSprotx2, "foo", 1)
+data(UPSprot25)
+writeMSnsetToExcel(UPSprot25, "foo", 1)
 }
 \author{
 Samuel Wieczorek

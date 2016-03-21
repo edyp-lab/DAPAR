@@ -19,8 +19,8 @@ a MSnSet object (peptides)
 }
 \examples{
 library(DAPARdata)
-data(UPSpepx2)
-mat <- BuildAdjacencyMatrix(UPSpepx2, "Protein.group.IDs")
+data(UPSpep25)
+mat <- BuildAdjacencyMatrix(UPSpep25, "Protein.group.IDs")
 GraphPepProt(mat)
 }
 \author{

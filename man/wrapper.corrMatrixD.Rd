@@ -20,8 +20,8 @@ Builds a correlation matrix based on a \code{\link{MSnSet}} object.
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-wrapper.corrMatrixD(UPSprotx2)
+data(UPSprot25)
+wrapper.corrMatrixD(UPSprot25)
 }
 \author{
 Alexia Dorffer

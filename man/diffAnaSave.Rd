@@ -44,11 +44,11 @@ of differential analysis.
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-condition1 <- '10fmol'
-condition2 <- '5fmol'
-limma <- wrapper.diffAnaLimma(UPSprotx2, condition1, condition2)
-obj <- diffAnaSave(UPSprotx2, limma, "limma", condition1, condition2)
+data(UPSprot25)
+condition1 <- '25fmol'
+condition2 <- '10fmol'
+limma <- wrapper.diffAnaLimma(UPSprot25, condition1, condition2)
+obj <- diffAnaSave(UPSprot25, limma, "limma", condition1, condition2)
 }
 \author{
 Alexia Dorffer, Samuel Wieczorek

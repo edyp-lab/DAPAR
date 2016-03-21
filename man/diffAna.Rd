@@ -23,12 +23,12 @@ based on \code{\link{limma}} functions.
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-qData <- exprs(UPSprotx2)
-design <- cbind(cond1=1, cond2 = rep(0,nrow(pData(UPSprotx2))))
-rownames(design) <- rownames(pData(UPSprotx2))
-labels <- pData(UPSprotx2)[,"Label"]
-indices <- getIndicesConditions(labels, "10fmol", "5fmol")
+data(UPSprot25)
+qData <- exprs(UPSprot25)
+design <- cbind(cond1=1, cond2 = rep(0,nrow(pData(UPSprot25))))
+rownames(design) <- rownames(pData(UPSprot25))
+labels <- pData(UPSprot25)[,"Label"]
+indices <- getIndicesConditions(labels, "25fmol", "10fmol")
 design[indices$iCond2,2] <- 1
 diffAna(qData, design)
 }

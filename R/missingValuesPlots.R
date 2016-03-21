@@ -10,8 +10,8 @@
 ##' @author Alexia Dorffer
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' wrapper.mvPerLinesHisto(UPSprotx2)
+##' data(UPSpep25)
+##' wrapper.mvPerLinesHisto(UPSpep25)
 wrapper.mvPerLinesHisto <- function(obj, indLegend="auto", showValues=FALSE){
   qData <- exprs(obj)
   samplesData <- pData(obj)
@@ -31,9 +31,9 @@ wrapper.mvPerLinesHisto <- function(obj, indLegend="auto", showValues=FALSE){
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' qData <- exprs(UPSprotx2)
-##' samplesData <- pData(UPSprotx2)
+##' data(UPSpep25)
+##' qData <- exprs(UPSpep25)
+##' samplesData <- pData(UPSpep25)
 ##' mvPerLinesHisto(qData, samplesData)
 mvPerLinesHisto <- function(qData, samplesData, indLegend="auto", showValues=FALSE){
   
@@ -96,8 +96,8 @@ mvPerLinesHisto <- function(qData, samplesData, indLegend="auto", showValues=FAL
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' wrapper.mvPerLinesHistoPerCondition(UPSprotx2)
+##' data(UPSpep25)
+##' wrapper.mvPerLinesHistoPerCondition(UPSpep25)
 wrapper.mvPerLinesHistoPerCondition <- function(obj, indLegend="auto", showValues=FALSE){
   qData <- exprs(obj)
   samplesData <- pData(obj)
@@ -117,9 +117,9 @@ wrapper.mvPerLinesHistoPerCondition <- function(obj, indLegend="auto", showValue
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' qData <- exprs(UPSprotx2)
-##' samplesData <- pData(UPSprotx2)
+##' data(UPSpep25)
+##' qData <- exprs(UPSpep25)
+##' samplesData <- pData(UPSpep25)
 ##' mvPerLinesHistoPerCondition(qData, samplesData)
 mvPerLinesHistoPerCondition <- function(qData, samplesData, indLegend="auto", showValues=FALSE){
   
@@ -178,8 +178,8 @@ mvPerLinesHistoPerCondition <- function(qData, samplesData, indLegend="auto", sh
 ##' @author Alexia Dorffer
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' wrapper.mvHisto(UPSprotx2, showValues=TRUE)
+##' data(UPSpep25)
+##' wrapper.mvHisto(UPSpep25, showValues=TRUE)
 wrapper.mvHisto <- function(obj, indLegend="auto", showValues=FALSE){
   qData <- exprs(obj)
   samplesData <- pData(obj)
@@ -202,10 +202,10 @@ wrapper.mvHisto <- function(obj, indLegend="auto", showValues=FALSE){
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' qData <- exprs(UPSprotx2)
-##' samplesData <- pData(UPSprotx2)
-##' labels <- pData(UPSprotx2)[,"Label"]
+##' data(UPSpep25)
+##' qData <- exprs(UPSpep25)
+##' samplesData <- pData(UPSpep25)
+##' labels <- pData(UPSpep25)[,"Label"]
 ##' mvHisto(qData, samplesData, labels, indLegend="auto", showValues=TRUE)
 mvHisto <- function(qData, samplesData, labels, indLegend="auto", showValues=FALSE){
   
@@ -268,8 +268,8 @@ mvHisto <- function(qData, samplesData, labels, indLegend="auto", showValues=FAL
 ##' @author Alexia Dorffer
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' wrapper.mvImage(UPSprotx2)
+##' data(UPSpep25)
+##' wrapper.mvImage(UPSpep25)
 wrapper.mvImage <- function(obj){
   qData <- exprs(obj)
   labels <- pData(obj)[,"Label"]
@@ -292,9 +292,9 @@ wrapper.mvImage <- function(obj){
 ##' @author Samuel Wieczorek, Thomas Burger
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' qData <- exprs(UPSprotx2)
-##' labels <- pData(UPSprotx2)[,"Label"]
+##' data(UPSpep25)
+##' qData <- exprs(UPSpep25)
+##' labels <- pData(UPSpep25)[,"Label"]
 ##' mvImage(qData, labels)
 mvImage <- function(qData, labels){
   ### build indices of conditions
@@ -363,8 +363,8 @@ mvImage <- function(qData, labels){
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' wrapper.mvTypePlot(UPSprotx2)
+##' data(UPSpep25)
+##' wrapper.mvTypePlot(UPSpep25)
 wrapper.mvTypePlot <- function(obj, threshold=0){
   qData <- exprs(obj)
   labels <- pData(obj)[,"Label"]
@@ -393,9 +393,9 @@ wrapper.mvTypePlot <- function(obj, threshold=0){
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' qData <- exprs(UPSprotx2)
-##' labels <- pData(UPSprotx2)[,"Label"]
+##' data(UPSpep25)
+##' qData <- exprs(UPSpep25)
+##' labels <- pData(UPSpep25)[,"Label"]
 ##' mvTypePlot(qData, labels, threshold=0)
 mvTypePlot <- function(qData, labels, threshold=0){
   #require(scales)

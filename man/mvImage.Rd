@@ -24,9 +24,9 @@ number of missing values. A white square is plotted for missing values.
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-qData <- exprs(UPSprotx2)
-labels <- pData(UPSprotx2)[,"Label"]
+data(UPSpep25)
+qData <- exprs(UPSpep25)
+labels <- pData(UPSpep25)[,"Label"]
 mvImage(qData, labels)
 }
 \author{

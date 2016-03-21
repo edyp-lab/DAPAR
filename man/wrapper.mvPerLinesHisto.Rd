@@ -23,8 +23,8 @@ number of missing values (NA) per lines (ie proteins).
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-wrapper.mvPerLinesHisto(UPSprotx2)
+data(UPSpep25)
+wrapper.mvPerLinesHisto(UPSpep25)
 }
 \author{
 Alexia Dorffer

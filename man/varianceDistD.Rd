@@ -21,8 +21,8 @@ in the dataset (see the slot \code{'Label'} in the \code{pData()} table)
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-varianceDistD(UPSprotx2)
+data(UPSprot25)
+varianceDistD(UPSprot25)
 }
 \author{
 Florence Combes, Samuel Wieczorek

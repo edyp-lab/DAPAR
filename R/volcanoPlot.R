@@ -21,10 +21,10 @@
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' condition1 <- '10fmol'
-##' condition2 <- '5fmol'
-##' data <- wrapper.diffAnaLimma(UPSprotx2, condition1, condition2)
+##' data(UPSprot25)
+##' condition1 <- '25fmol'
+##' condition2 <- '10fmol'
+##' data <- wrapper.diffAnaLimma(UPSprot25, condition1, condition2)
 ##' diffAnaVolcanoplot(data$logFC, data$P.Value)
 diffAnaVolcanoplot <- function(logFC=NULL, 
                                pVal=NULL, 

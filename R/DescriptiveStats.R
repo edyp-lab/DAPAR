@@ -11,9 +11,9 @@
 ##' @seealso \code{\link{wrapper.densityPlotD}}
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
+##' data(UPSprot25)
 ##' types <- c("Label","Analyt.Rep")
-##' wrapper.boxPlotD(UPSprotx2, types)
+##' wrapper.boxPlotD(UPSprot25, types)
 wrapper.boxPlotD <- function(obj, dataForXAxis="Label", group2Color="Condition"){
   
   qData <- exprs(obj)
@@ -41,11 +41,11 @@ wrapper.boxPlotD <- function(obj, dataForXAxis="Label", group2Color="Condition")
 ##' @seealso \code{\link{densityPlotD}}
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' qData <- exprs(UPSprotx2)
+##' data(UPSprot25)
+##' qData <- exprs(UPSprot25)
 ##' types <- c("Label","Analyt.Rep")
-##' dataForXAxis <- pData(UPSprotx2)[,types]
-##' labels <- pData(UPSprotx2)[,"Label"]
+##' dataForXAxis <- pData(UPSprot25)[,types]
+##' labels <- pData(UPSprot25)[,"Label"]
 ##' boxPlotD(qData, dataForXAxis, labels)
 boxPlotD <- function(qData, dataForXAxis=NULL, labels=NULL, group2Color="Condition"){
   
@@ -98,10 +98,10 @@ boxPlotD <- function(qData, dataForXAxis=NULL, labels=NULL, group2Color="Conditi
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' labels <- pData(UPSprotx2)[,"Label"]
-##' objAfter <- wrapper.normalizeD(UPSprotx2, "Median Centering", "within conditions")
-##' wrapper.compareNormalizationD(UPSprotx2, objAfter, labels)
+##' data(UPSprot25)
+##' labels <- pData(UPSprot25)[,"Label"]
+##' objAfter <- wrapper.normalizeD(UPSprot25, "Median Centering", "within conditions")
+##' wrapper.compareNormalizationD(UPSprot25, objAfter, labels)
 wrapper.compareNormalizationD <- function(objBefore, objAfter, labelsForLegend=NULL, indData2Show=NULL, group2Color="Condition"){
 
   qDataBefore <- exprs(objBefore)
@@ -124,9 +124,9 @@ wrapper.compareNormalizationD <- function(objBefore, objAfter, labelsForLegend=N
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' qDataBefore <- exprs(UPSprotx2)
-##' labels <- pData(UPSprotx2)[,"Label"]
+##' data(UPSprot25)
+##' qDataBefore <- exprs(UPSprot25)
+##' labels <- pData(UPSprot25)[,"Label"]
 ##' qDataAfter <- normalizeD(qDataBefore,labels,"Median Centering", "within conditions")
 ##' compareNormalizationD(qDataBefore, qDataAfter, labels)
 compareNormalizationD <- function(qDataBefore, qDataAfter, labelsForLegend=NULL, indData2Show=NULL, group2Color="Condition"){
@@ -204,9 +204,9 @@ compareNormalizationD <- function(qDataBefore, qDataAfter, labelsForLegend=NULL,
 ##' @seealso \code{\link{wrapper.boxPlotD}}, \code{\link{wrapper.varianceDistD}}
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' labels <- pData(UPSprotx2)[,"Label"]
-##' wrapper.densityPlotD(UPSprotx2, labels)
+##' data(UPSprot25)
+##' labels <- pData(UPSprot25)[,"Label"]
+##' wrapper.densityPlotD(UPSprot25, labels)
 wrapper.densityPlotD <- function(obj, labelsForLegend=NULL,  indData2Show=NULL, group2Color = "Condition"){
   qData <- exprs(obj)
   densityPlotD(qData, labelsForLegend, indData2Show,group2Color)
@@ -228,9 +228,9 @@ wrapper.densityPlotD <- function(obj, labelsForLegend=NULL,  indData2Show=NULL, 
 ##' @seealso \code{\link{boxPlotD}}, \code{\link{varianceDistD}}
 ##' @examples 
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' qData <- exprs(UPSprotx2)
-##' labels <- lab2Show <- pData(UPSprotx2)[,"Label"]
+##' data(UPSprot25)
+##' qData <- exprs(UPSprot25)
+##' labels <- lab2Show <- pData(UPSprot25)[,"Label"]
 ##' densityPlotD(qData, labels)
 densityPlotD <- function(qData, labelsForLegend=NULL,indData2Show=NULL,  group2Color = "Condition"){
     
@@ -308,8 +308,8 @@ densityPlotD <- function(qData, labelsForLegend=NULL,indData2Show=NULL,  group2C
 ##' @seealso \code{\link{wrapper.densityPlotD}}
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' wrapper.varianceDistD(UPSprotx2)
+##' data(UPSprot25)
+##' wrapper.varianceDistD(UPSprot25)
 wrapper.varianceDistD <- function(obj){
   qData <- exprs(obj)
   labels <- pData(obj)[,"Label"]
@@ -331,8 +331,8 @@ wrapper.varianceDistD <- function(obj){
 ##' @seealso \code{\link{densityPlotD}}.
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' varianceDistD(UPSprotx2)
+##' data(UPSprot25)
+##' varianceDistD(UPSprot25)
 varianceDistD <- function(qData, labels=NULL){
     
   if (is.null(labels)) {return(NULL)}
@@ -396,8 +396,8 @@ varianceDistD <- function(qData, labels=NULL){
 ##' @author Alexia Dorffer
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' wrapper.corrMatrixD(UPSprotx2)
+##' data(UPSprot25)
+##' wrapper.corrMatrixD(UPSprot25)
 wrapper.corrMatrixD <- function(obj, rate=5){
   qData <- exprs(obj)
   samplesData <- pData(obj)
@@ -418,9 +418,9 @@ wrapper.corrMatrixD <- function(obj, rate=5){
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' qData <- exprs(UPSprotx2)
-##' samplesData <- pData(UPSprotx2)
+##' data(UPSprot25)
+##' qData <- exprs(UPSprot25)
+##' samplesData <- pData(UPSprot25)
 ##' corrMatrixD(qData, samplesData)
 corrMatrixD <- function(qData, samplesData, gradientRate = 5){
   Var1 <- Var2 <- value <- NULL

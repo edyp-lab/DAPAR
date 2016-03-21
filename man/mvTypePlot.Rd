@@ -30,9 +30,9 @@ The data have been jittered for an easier vizualisation.
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-qData <- exprs(UPSprotx2)
-labels <- pData(UPSprotx2)[,"Label"]
+data(UPSpep25)
+qData <- exprs(UPSpep25)
+labels <- pData(UPSpep25)[,"Label"]
 mvTypePlot(qData, labels, threshold=0)
 }
 \author{

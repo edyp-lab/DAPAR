@@ -18,8 +18,8 @@ data (\code{exprs()} table of the dataset).
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-getPourcentageOfMV(UPSprotx2)
+data(UPSprot25)
+getPourcentageOfMV(UPSprot25)
 }
 \author{
 Florence Combes, Samuel Wieczorek

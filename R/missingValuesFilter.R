@@ -7,8 +7,8 @@
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' getPourcentageOfMV(UPSprotx2)
+##' data(UPSprot25)
+##' getPourcentageOfMV(UPSprot25)
 getPourcentageOfMV <- function(obj){
 
 NA.count<-apply(data.frame(exprs(obj)), 2, 
@@ -30,8 +30,8 @@ return(pourcentage)
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' getNumberOf(UPSprotx2, "Potential.contaminant", "+")
+##' data(UPSprot25)
+##' getNumberOf(UPSprot25, "Potential.contaminant", "+")
 getNumberOf <- function(obj, name=NULL, prefix=NULL){
   if (is.null(name) || is.null(prefix) || (name=="") || (prefix=="")){return(0)}
   if (!(is.null(name) || !is.null(name=="")) && (is.null(prefix) || (prefix==""))){return(0)}
@@ -56,9 +56,9 @@ getNumberOf <- function(obj, name=NULL, prefix=NULL){
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
+##' data(UPSprot25)
 ##' pref <- "+"
-##' proportionConRev(UPSprotx2, "Potential.contaminant", pref, "Reverse", pref)
+##' proportionConRev(UPSprot25, "Potential.contaminant", pref, "Reverse", pref)
 proportionConRev <- function(obj, idContaminants=NULL, prefixContaminants=NULL, idReverse=NULL, prefixReverse=NULL){
   #if (is.null(prefixContaminants) && is.null(prefixReverse) ){return(NULL)}
   if (is.null(obj) ){return(NULL)}
@@ -102,9 +102,9 @@ proportionConRev <- function(obj, idContaminants=NULL, prefixContaminants=NULL, 
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSpepx2)
-##' removeLines(UPSpepx2, "Contaminant")
-##' removeLines(UPSpepx2, "Reverse")
+##' data(UPSpep25)
+##' removeLines(UPSpep25, "Contaminant")
+##' removeLines(UPSpep25, "Reverse")
 removeLines <- function(obj, idLine2Delete=NULL, prefix=NULL){
   if ((prefix == "") || is.null(prefix)) {
     warning ("No change was made")
@@ -127,8 +127,8 @@ removeLines <- function(obj, idLine2Delete=NULL, prefix=NULL){
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSpepx2)
-##' getIndicesOfLinesToRemove(UPSpepx2, "Contaminant", prefix="+")
+##' data(UPSpep25)
+##' getIndicesOfLinesToRemove(UPSpep25, "Contaminant", prefix="+")
 getIndicesOfLinesToRemove <- function(obj, idLine2Delete=NULL, prefix=NULL)
 {
   if ((prefix == "") || is.null(prefix)) {
@@ -167,8 +167,8 @@ getIndicesOfLinesToRemove <- function(obj, idLine2Delete=NULL, prefix=NULL)
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' mvFilter(UPSprotx2, "wholeMatrix", 2)
+##' data(UPSprot25)
+##' mvFilter(UPSprot25, "wholeMatrix", 2)
 mvFilter <- function(obj,type, th, processText=NULL )
 {
     #Check parameters
@@ -218,8 +218,8 @@ obj <- obj[keepThat,]
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' mvFilter(UPSprotx2, c(1:10))
+##' data(UPSprot25)
+##' mvFilter(UPSprot25, c(1:10))
 mvFilterFromIndices <- function(obj,keepThat=NULL, processText=NULL )
 {
   
@@ -258,8 +258,8 @@ mvFilterFromIndices <- function(obj,keepThat=NULL, processText=NULL )
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' mvFilterGetIndices(UPSprotx2, "wholeMatrix", 2)
+##' data(UPSprot25)
+##' mvFilterGetIndices(UPSprot25, "wholeMatrix", 2)
 mvFilterGetIndices <- function(obj,type, th)
 {
   #Check parameters

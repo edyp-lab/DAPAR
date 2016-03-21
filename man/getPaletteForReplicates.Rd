@@ -19,8 +19,8 @@ the brewer palette "Dark2" (see \code{\link{RColorBrewer}}).
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-n <- nrow(pData(UPSprotx2))
+data(UPSpep25)
+n <- nrow(pData(UPSpep25))
 getPaletteForLabels(5)
 }
 \author{

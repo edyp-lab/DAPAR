@@ -25,10 +25,10 @@ a \code{\link{MSnSet}} object (calls the \code{limma} package function).
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-condition1 <- '10fmol'
-condition2 <- '5fmol'
-wrapper.diffAnaLimma(UPSprotx2, condition1, condition2)
+data(UPSprot25)
+condition1 <- '25fmol'
+condition2 <- '10fmol'
+wrapper.diffAnaLimma(UPSprot25, condition1, condition2)
 }
 \author{
 Alexia Dorffer

@@ -31,10 +31,10 @@ The FDR is computed with the function \code{p.adjust}\{stats\}..
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-obj <- wrapper.mvImputation(UPSprotx2, "QRILC")
-condition1 <- '10fmol'
-condition2 <- '5fmol'
+data(UPSprot25)
+obj <- wrapper.mvImputation(UPSprot25, "QRILC")
+condition1 <- '25fmol'
+condition2 <- '10fmol'
 qData <- exprs(obj)
 samplesData <- pData(obj)
 labels <- pData(obj)[,"Label"]

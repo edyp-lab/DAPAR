@@ -25,9 +25,9 @@ Densityplot of quantitative proteomics data over samples.
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-qData <- exprs(UPSprotx2)
-labels <- lab2Show <- pData(UPSprotx2)[,"Label"]
+data(UPSprot25)
+qData <- exprs(UPSprot25)
+labels <- lab2Show <- pData(UPSprot25)[,"Label"]
 densityPlotD(qData, labels)
 }
 \author{

@@ -21,8 +21,8 @@ objects of class \code{\link{MSnSet}}.
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-wrapper.mvImputation(UPSprotx2, "QRILC")
+data(UPSprot25)
+wrapper.mvImputation(UPSprot25, "QRILC")
 }
 \author{
 Alexia Dorffer

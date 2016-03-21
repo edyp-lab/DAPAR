@@ -26,9 +26,9 @@ for the samples
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-labels <- pData(UPSprotx2)[,"Label"]
-getIndicesConditions(labels, "10fmol", "5fmol")
+data(UPSpep25)
+labels <- pData(UPSpep25)[,"Label"]
+getIndicesConditions(labels, "25fmol", "10fmol")
 }
 \author{
 Florence Combes, Samuel Wieczorek

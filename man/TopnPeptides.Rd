@@ -25,10 +25,10 @@ intensities of their n best peptides.
 \examples{
 \dontrun{
 library(DAPARdata)
-data(UPSpepx2)
+data(UPSpep25)
 protID <- "Protein.group.IDs"
-matAdj <- BuildAdjacencyMatrix(UPSpepx2, protID, FALSE)
-topnPeptides(matAdj, exprs(UPSpepx2), 3)
+matAdj <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
+topnPeptides(matAdj, exprs(UPSpep25), 3)
 }
 }
 \author{

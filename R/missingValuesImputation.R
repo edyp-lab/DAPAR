@@ -9,8 +9,8 @@
 ##' @author Alexia Dorffer
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' wrapper.mvImputation(UPSprotx2, "QRILC")
+##' data(UPSprot25)
+##' wrapper.mvImputation(UPSprot25, "QRILC")
 wrapper.mvImputation <- function(obj, method){
   
   qData <- exprs(obj)
@@ -34,8 +34,8 @@ wrapper.mvImputation <- function(obj, method){
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' qData <- exprs(UPSprotx2)
+##' data(UPSprot25)
+##' qData <- exprs(UPSprot25)
 ##' mvImputation(qData, "QRILC")
 mvImputation <- function(qData, method){
   #Check parameters

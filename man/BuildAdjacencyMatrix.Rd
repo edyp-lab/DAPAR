@@ -24,8 +24,8 @@ in lines on a MSnSet object (peptides)
 }
 \examples{
 library(DAPARdata)
-data(UPSpepx2) 
-BuildAdjacencyMatrix(UPSpepx2, "Protein.group.IDs")
+data(UPSpep25) 
+BuildAdjacencyMatrix(UPSpep25, "Protein.group.IDs")
 }
 \author{
 Florence Combes, Samuel Wieczorek, Alexia Dorffer

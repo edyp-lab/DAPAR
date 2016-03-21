@@ -20,8 +20,8 @@ This method is a wrapper to the \code{imputeLCMD} package adapted to a matrix.
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-qData <- exprs(UPSprotx2)
+data(UPSprot25)
+qData <- exprs(UPSprot25)
 mvImputation(qData, "QRILC")
 }
 \author{

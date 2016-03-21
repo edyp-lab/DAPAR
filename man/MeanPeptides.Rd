@@ -23,10 +23,10 @@ intensities of their peptides.
 \examples{
 \dontrun{
 library(DAPARdata)
-data(UPSpepx2)
+data(UPSpep25)
 protID <- "Protein.group.IDs"
-matAdj <- BuildAdjacencyMatrix(UPSpepx2, protID, FALSE)
-meanPeptides(matAdj, exprs(UPSpepx2))
+matAdj <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
+meanPeptides(matAdj, exprs(UPSpep25))
 }
 }
 \author{

@@ -23,9 +23,9 @@ This function is a wrapper for using the boxPlotD function with objects of class
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
+data(UPSprot25)
 types <- c("Label","Analyt.Rep")
-wrapper.boxPlotD(UPSprotx2, types)
+wrapper.boxPlotD(UPSprot25, types)
 }
 \author{
 Florence Combes, Samuel Wieczorek

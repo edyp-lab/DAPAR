@@ -35,8 +35,8 @@ by condition.
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-wrapper.normalizeD(UPSprotx2, "Median Centering", "within conditions")
+data(UPSpep25)
+wrapper.normalizeD(UPSpep25, "Median Centering", "within conditions")
 }
 \author{
 Alexia Dorffer

@@ -22,8 +22,8 @@
 ##' @author Alexia Dorffer
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' wrapper.normalizeD(UPSprotx2, "Median Centering", "within conditions")
+##' data(UPSpep25)
+##' wrapper.normalizeD(UPSpep25, "Median Centering", "within conditions")
 wrapper.normalizeD <- function(obj, family, method){
   
   qData <- exprs(obj)
@@ -60,9 +60,9 @@ wrapper.normalizeD <- function(obj, family, method){
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSprotx2)
-##' qData <- exprs(UPSprotx2)
-##' labels <- pData(UPSprotx2)[,"Label"]
+##' data(UPSpep25)
+##' qData <- exprs(UPSpep25)
+##' labels <- pData(UPSpep25)[,"Label"]
 ##' normalizeD(qData, labels, "Median Centering", "within conditions")
 normalizeD <- function(qData, labels, family, method){
   #Verification des parametres

@@ -22,8 +22,8 @@ This method plots from a \code{\link{MSnSet}} object a histogram of missing valu
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-wrapper.mvHisto(UPSprotx2, showValues=TRUE)
+data(UPSpep25)
+wrapper.mvHisto(UPSpep25, showValues=TRUE)
 }
 \author{
 Alexia Dorffer

@@ -29,10 +29,10 @@ a MSnSet object (peptides)
 \examples{
 \dontrun{
 library(DAPARdata)
-data(UPSpepx2)
+data(UPSpep25)
 protID <- "Protein.group.IDs"
-m <- BuildAdjacencyMatrix(UPSpepx2, protID, TRUE)
-pepAgregate(UPSpepx2, protID, "sum")
+m <- BuildAdjacencyMatrix(UPSpep25, protID, TRUE)
+pepAgregate(UPSpep25, protID, "sum")
 }
 }
 \author{

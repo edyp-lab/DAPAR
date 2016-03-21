@@ -11,10 +11,10 @@
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSpepx2)
+##' data(UPSpep25)
 ##' protID <- "Protein.group.IDs"
-##' M <- BuildAdjacencyMatrix(UPSpepx2, protID, FALSE)
-##' data <- fData(UPSpepx2)
+##' M <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
+##' data <- fData(UPSpep25)
 ##' name <- "organism"
 ##' BuildColumnToProteinDataset(data, M, name )
 BuildColumnToProteinDataset <- function(peptideData, matAdj, columnName){
@@ -41,9 +41,9 @@ return(newCol)
 ##' @author Alexia Dorffer
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSpepx2)
+##' data(UPSpep25)
 ##' protID <- "Protein.group.IDs"
-##' M <- BuildAdjacencyMatrix(UPSpepx2, protID, FALSE)
+##' M <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
 ##' CountPep(M)
 CountPep <- function (M) {
     z <- M
@@ -65,10 +65,10 @@ CountPep <- function (M) {
 ##' @examples
 ##' \dontrun{
 ##' library(DAPARdata)
-##' data(UPSpepx2)
+##' data(UPSpep25)
 ##' protID <- "Protein.group.IDs"
-##' M <- BuildAdjacencyMatrix(UPSpepx2, protID, FALSE)
-##' sumPeptides(M, exprs(UPSpepx2))
+##' M <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
+##' sumPeptides(M, exprs(UPSpep25))
 ##' }
 SumPeptides <- function(matAdj, expr){
    # require(foreach)
@@ -120,10 +120,10 @@ SumPeptides <- function(matAdj, expr){
 ##' @examples
 ##' \dontrun{
 ##' library(DAPARdata)
-##' data(UPSpepx2)
+##' data(UPSpep25)
 ##' protID <- "Protein.group.IDs"
-##' matAdj <- BuildAdjacencyMatrix(UPSpepx2, protID, FALSE)
-##' meanPeptides(matAdj, exprs(UPSpepx2))
+##' matAdj <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
+##' meanPeptides(matAdj, exprs(UPSpep25))
 ##' }
 MeanPeptides <- function(matAdj,expr){
     #require(foreach)
@@ -173,10 +173,10 @@ MeanPeptides <- function(matAdj,expr){
 ##' @examples
 ##' \dontrun{
 ##' library(DAPARdata)
-##' data(UPSpepx2)
+##' data(UPSpep25)
 ##' protID <- "Protein.group.IDs"
-##' matAdj <- BuildAdjacencyMatrix(UPSpepx2, protID, FALSE)
-##' topnPeptides(matAdj, exprs(UPSpepx2), 3)
+##' matAdj <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
+##' topnPeptides(matAdj, exprs(UPSpep25), 3)
 ##' }
 TopnPeptides<-function(matAdj,expr,n){
     #require(foreach)
@@ -237,8 +237,8 @@ TopnPeptides<-function(matAdj,expr,n){
 ##' @author Florence Combes, Samuel Wieczorek, Alexia Dorffer
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSpepx2) 
-##' BuildAdjacencyMatrix(UPSpepx2, "Protein.group.IDs")
+##' data(UPSpep25) 
+##' BuildAdjacencyMatrix(UPSpep25, "Protein.group.IDs")
 BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
     PG <- fData(obj.pep)[,protID]
     PG.l <- strsplit(as.character(PG), split=";", fixed=TRUE)
@@ -296,10 +296,10 @@ topMaxUsingPartialSortIndices <- function(x, n) {
 ##' @examples 
 ##' \dontrun{
 ##' library(DAPARdata)
-##' data(UPSpepx2)
+##' data(UPSpep25)
 ##' protID <- "Protein.group.IDs"
-##' m <- BuildAdjacencyMatrix(UPSpepx2, protID, TRUE)
-##' pepAgregate(UPSpepx2, protID, "sum")
+##' m <- BuildAdjacencyMatrix(UPSpep25, protID, TRUE)
+##' pepAgregate(UPSpep25, protID, "sum")
 ##' }
 pepAgregate <- function (obj.pep, protID, method="sum",matAdj=NULL, n=NULL){
     #Check the validity of parameters
@@ -342,8 +342,8 @@ pepAgregate <- function (obj.pep, protID, method="sum",matAdj=NULL, n=NULL){
 ##' @author Alexia Dorffer, Samuel Wieczorek
 ##' @examples
 ##' library(DAPARdata)
-##' data(UPSpepx2)
-##' mat <- BuildAdjacencyMatrix(UPSpepx2, "Protein.group.IDs")
+##' data(UPSpep25)
+##' mat <- BuildAdjacencyMatrix(UPSpep25, "Protein.group.IDs")
 ##' GraphPepProt(mat)
 GraphPepProt <- function(mat){
     if (is.null(mat)){return (NULL)} 

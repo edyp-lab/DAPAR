@@ -25,9 +25,9 @@ number of missing values (NA) per lines (ie proteins).
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-qData <- exprs(UPSprotx2)
-samplesData <- pData(UPSprotx2)
+data(UPSpep25)
+qData <- exprs(UPSpep25)
+samplesData <- pData(UPSpep25)
 mvPerLinesHisto(qData, samplesData)
 }
 \author{

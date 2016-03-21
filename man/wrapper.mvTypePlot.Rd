@@ -28,8 +28,8 @@ The data have been jittered for an easier vizualisation.
 }
 \examples{
 library(DAPARdata)
-data(UPSprotx2)
-wrapper.mvTypePlot(UPSprotx2)
+data(UPSpep25)
+wrapper.mvTypePlot(UPSpep25)
 }
 \author{
 Florence Combes, Samuel Wieczorek
