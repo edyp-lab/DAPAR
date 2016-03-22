@@ -16,7 +16,6 @@ An integer
 Returns the number of empty lines in a matrix.
 }
 \examples{
-library(DAPARdata)
 data(UPSpep25)
 qData <- exprs(UPSpep25)
 getNumberOfEmptyLines(qData)

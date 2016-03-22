@@ -1,7 +1,0 @@
-Experiment	Label	RT	RA
-Intensity_100fmolR1	100fmolR1	1	A
-Intensity_100fmolR2	100fmolR2	2	A
-Intensity_100fmolR3	100fmolR3	3	A
-Intensity_10fmolR1	10fmolR1	1	B
-Intensity_10fmolR2	10fmolR2	2	B
-Intensity_10fmolR3	10fmolR3	3	B

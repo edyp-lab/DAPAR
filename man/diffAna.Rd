@@ -22,12 +22,11 @@ Performs a differential analysis on an \code{\link{MSnSet}} object,
 based on \code{\link{limma}} functions.
 }
 \examples{
-library(DAPARdata)
-data(UPSprot25)
-qData <- exprs(UPSprot25)
-design <- cbind(cond1=1, cond2 = rep(0,nrow(pData(UPSprot25))))
-rownames(design) <- rownames(pData(UPSprot25))
-labels <- pData(UPSprot25)[,"Label"]
+data(UPSpep25)
+qData <- exprs(UPSpep25)
+design <- cbind(cond1=1, cond2 = rep(0,nrow(pData(UPSpep25))))
+rownames(design) <- rownames(pData(UPSpep25))
+labels <- pData(UPSpep25)[,"Label"]
 indices <- getIndicesConditions(labels, "25fmol", "10fmol")
 design[indices$iCond2,2] <- 1
 diffAna(qData, design)

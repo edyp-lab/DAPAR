@@ -8,9 +8,8 @@
 ##' @return The object \code{obj} which has been imputed
 ##' @author Alexia Dorffer
 ##' @examples
-##' library(DAPARdata)
-##' data(UPSprot25)
-##' wrapper.mvImputation(UPSprot25, "QRILC")
+##' data(UPSpep25)
+##' wrapper.mvImputation(UPSpep25, "QRILC")
 wrapper.mvImputation <- function(obj, method){
   
   qData <- exprs(obj)
@@ -33,9 +32,8 @@ wrapper.mvImputation <- function(obj, method){
 ##' @return The matrix imputed
 ##' @author Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
-##' data(UPSprot25)
-##' qData <- exprs(UPSprot25)
+##' data(UPSpep25)
+##' qData <- exprs(UPSpep25)
 ##' mvImputation(qData, "QRILC")
 mvImputation <- function(qData, method){
   #Check parameters

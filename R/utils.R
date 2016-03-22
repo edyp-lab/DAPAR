@@ -5,7 +5,6 @@
 ##' @return An integer
 ##' @author Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
 ##' data(UPSpep25)
 ##' qData <- exprs(UPSpep25)
 ##' getNumberOfEmptyLines(qData)
@@ -32,7 +31,6 @@ getNumberOfEmptyLines <- function(qData){
 ##' dataset. 
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
 ##' data(UPSpep25)
 ##' labels <- pData(UPSpep25)[,"Label"]
 ##' getIndicesConditions(labels, "25fmol", "10fmol")
@@ -62,7 +60,6 @@ getIndicesConditions <- function(labels, cond1, cond2){
 ##' @return A palette designed for the data manipulated in DAPAR
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
 ##' data(UPSpep25)
 ##' labels <- pData(UPSpep25)[,"Label"]
 ##' getPaletteForLabels(labels)
@@ -89,7 +86,6 @@ getPaletteForLabels <- function(labels){
 ##' @return A palette designed for the data manipulated in DAPAR
 ##' @author Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
 ##' data(UPSpep25)
 ##' n <- nrow(pData(UPSpep25))
 ##' getPaletteForLabels(5)

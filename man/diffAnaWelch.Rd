@@ -28,12 +28,11 @@ an \code{\link{MSnSet}} object, using the Welch t-test
 (\code{\link{t.test}{stats}}).
 }
 \examples{
-library(DAPARdata)
-data(UPSprot25)
+data(UPSpep25)
 condition1 <- '25fmol'
 condition2 <- '10fmol'
-qData <- exprs(UPSprot25)
-labels <- pData(UPSprot25)[,"Label"]
+qData <- exprs(UPSpep25)
+labels <- pData(UPSpep25)[,"Label"]
 diffAnaWelch(qData, labels, condition1, condition2)
 }
 \author{

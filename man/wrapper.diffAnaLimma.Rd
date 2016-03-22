@@ -24,11 +24,10 @@ Method to perform differential analysis on
 a \code{\link{MSnSet}} object (calls the \code{limma} package function).
 }
 \examples{
-library(DAPARdata)
-data(UPSprot25)
+data(UPSpep25)
 condition1 <- '25fmol'
 condition2 <- '10fmol'
-wrapper.diffAnaLimma(UPSprot25, condition1, condition2)
+wrapper.diffAnaLimma(UPSpep25, condition1, condition2)
 }
 \author{
 Alexia Dorffer

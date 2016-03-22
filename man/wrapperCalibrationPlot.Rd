@@ -20,12 +20,11 @@ This function is a wrapper to the calibration.plot method of the \code{cp4p} pac
 with \code{\link{MSnSet}} objects.
 }
 \examples{
-library(DAPARdata)
-data(UPSprot25)
+data(UPSpep25)
 condition1 <- '25fmol'
 condition2 <- '10fmol'
-qData <- exprs(UPSprot25)
-labels <- pData(UPSprot25)[,"Label"]
+qData <- exprs(UPSpep25)
+labels <- pData(UPSpep25)[,"Label"]
 diffAnaWelch(qData, labels, condition1, condition2)
 }
 \author{

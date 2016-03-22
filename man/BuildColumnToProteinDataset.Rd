@@ -23,7 +23,6 @@ A vector
 This function creates a column for the protein dataset after agregation by using the previous peptide dataset.
 }
 \examples{
-library(DAPARdata)
 data(UPSpep25)
 protID <- "Protein.group.IDs"
 M <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)

@@ -35,9 +35,8 @@ at least \code{th} values for each of the conditions are kept.
 at least \code{th} values, and for at least one condition, are kept.
 }
 \examples{
-library(DAPARdata)
-data(UPSprot25)
-mvFilter(UPSprot25, c(1:10))
+data(UPSpep25)
+mvFilter(UPSpep25, c(1:10))
 }
 \author{
 Florence Combes, Samuel Wieczorek

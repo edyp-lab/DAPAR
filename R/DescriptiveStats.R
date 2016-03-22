@@ -10,10 +10,9 @@
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{wrapper.densityPlotD}}
 ##' @examples
-##' library(DAPARdata)
-##' data(UPSprot25)
+##' data(UPSpep25)
 ##' types <- c("Label","Analyt.Rep")
-##' wrapper.boxPlotD(UPSprot25, types)
+##' wrapper.boxPlotD(UPSpep25, types)
 wrapper.boxPlotD <- function(obj, dataForXAxis="Label", group2Color="Condition"){
   
   qData <- exprs(obj)
@@ -40,12 +39,11 @@ wrapper.boxPlotD <- function(obj, dataForXAxis="Label", group2Color="Condition")
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{densityPlotD}}
 ##' @examples
-##' library(DAPARdata)
-##' data(UPSprot25)
-##' qData <- exprs(UPSprot25)
+##' data(UPSpep25)
+##' qData <- exprs(UPSpep25)
 ##' types <- c("Label","Analyt.Rep")
-##' dataForXAxis <- pData(UPSprot25)[,types]
-##' labels <- pData(UPSprot25)[,"Label"]
+##' dataForXAxis <- pData(UPSpep25)[,types]
+##' labels <- pData(UPSpep25)[,"Label"]
 ##' boxPlotD(qData, dataForXAxis, labels)
 boxPlotD <- function(qData, dataForXAxis=NULL, labels=NULL, group2Color="Condition"){
   
@@ -97,11 +95,10 @@ boxPlotD <- function(qData, dataForXAxis=NULL, labels=NULL, group2Color="Conditi
 ##' @return A plot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
-##' data(UPSprot25)
-##' labels <- pData(UPSprot25)[,"Label"]
-##' objAfter <- wrapper.normalizeD(UPSprot25, "Median Centering", "within conditions")
-##' wrapper.compareNormalizationD(UPSprot25, objAfter, labels)
+##' data(UPSpep25)
+##' labels <- pData(UPSpep25)[,"Label"]
+##' objAfter <- wrapper.normalizeD(UPSpep25, "Median Centering", "within conditions")
+##' wrapper.compareNormalizationD(UPSpep25, objAfter, labels)
 wrapper.compareNormalizationD <- function(objBefore, objAfter, labelsForLegend=NULL, indData2Show=NULL, group2Color="Condition"){
 
   qDataBefore <- exprs(objBefore)
@@ -123,10 +120,9 @@ wrapper.compareNormalizationD <- function(objBefore, objAfter, labelsForLegend=N
 ##' @return A plot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
-##' data(UPSprot25)
-##' qDataBefore <- exprs(UPSprot25)
-##' labels <- pData(UPSprot25)[,"Label"]
+##' data(UPSpep25)
+##' qDataBefore <- exprs(UPSpep25)
+##' labels <- pData(UPSpep25)[,"Label"]
 ##' qDataAfter <- normalizeD(qDataBefore,labels,"Median Centering", "within conditions")
 ##' compareNormalizationD(qDataBefore, qDataAfter, labels)
 compareNormalizationD <- function(qDataBefore, qDataAfter, labelsForLegend=NULL, indData2Show=NULL, group2Color="Condition"){
@@ -203,10 +199,9 @@ compareNormalizationD <- function(qDataBefore, qDataAfter, labelsForLegend=NULL,
 ##' @author Alexia Dorffer
 ##' @seealso \code{\link{wrapper.boxPlotD}}, \code{\link{wrapper.varianceDistD}}
 ##' @examples
-##' library(DAPARdata)
-##' data(UPSprot25)
-##' labels <- pData(UPSprot25)[,"Label"]
-##' wrapper.densityPlotD(UPSprot25, labels)
+##' data(UPSpep25)
+##' labels <- pData(UPSpep25)[,"Label"]
+##' wrapper.densityPlotD(UPSpep25, labels)
 wrapper.densityPlotD <- function(obj, labelsForLegend=NULL,  indData2Show=NULL, group2Color = "Condition"){
   qData <- exprs(obj)
   densityPlotD(qData, labelsForLegend, indData2Show,group2Color)
@@ -227,10 +222,9 @@ wrapper.densityPlotD <- function(obj, labelsForLegend=NULL,  indData2Show=NULL, 
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{boxPlotD}}, \code{\link{varianceDistD}}
 ##' @examples 
-##' library(DAPARdata)
-##' data(UPSprot25)
-##' qData <- exprs(UPSprot25)
-##' labels <- lab2Show <- pData(UPSprot25)[,"Label"]
+##' data(UPSpep25)
+##' qData <- exprs(UPSpep25)
+##' labels <- lab2Show <- pData(UPSpep25)[,"Label"]
 ##' densityPlotD(qData, labels)
 densityPlotD <- function(qData, labelsForLegend=NULL,indData2Show=NULL,  group2Color = "Condition"){
     
@@ -307,9 +301,8 @@ densityPlotD <- function(qData, labelsForLegend=NULL,indData2Show=NULL,  group2C
 ##' @author Alexia Dorffer
 ##' @seealso \code{\link{wrapper.densityPlotD}}
 ##' @examples
-##' library(DAPARdata)
-##' data(UPSprot25)
-##' wrapper.varianceDistD(UPSprot25)
+##' data(UPSpep25)
+##' wrapper.varianceDistD(UPSpep25)
 wrapper.varianceDistD <- function(obj){
   qData <- exprs(obj)
   labels <- pData(obj)[,"Label"]
@@ -330,9 +323,8 @@ wrapper.varianceDistD <- function(obj){
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{densityPlotD}}.
 ##' @examples
-##' library(DAPARdata)
-##' data(UPSprot25)
-##' varianceDistD(UPSprot25)
+##' data(UPSpep25)
+##' varianceDistD(UPSpep25)
 varianceDistD <- function(qData, labels=NULL){
     
   if (is.null(labels)) {return(NULL)}
@@ -395,9 +387,8 @@ varianceDistD <- function(qData, labels=NULL){
 ##' @return A colored correlation matrix
 ##' @author Alexia Dorffer
 ##' @examples
-##' library(DAPARdata)
-##' data(UPSprot25)
-##' wrapper.corrMatrixD(UPSprot25)
+##' data(UPSpep25)
+##' wrapper.corrMatrixD(UPSpep25)
 wrapper.corrMatrixD <- function(obj, rate=5){
   qData <- exprs(obj)
   samplesData <- pData(obj)
@@ -417,10 +408,9 @@ wrapper.corrMatrixD <- function(obj, rate=5){
 ##' @return A colored correlation matrix
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
-##' data(UPSprot25)
-##' qData <- exprs(UPSprot25)
-##' samplesData <- pData(UPSprot25)
+##' data(UPSpep25)
+##' qData <- exprs(UPSpep25)
+##' samplesData <- pData(UPSpep25)
 ##' corrMatrixD(qData, samplesData)
 corrMatrixD <- function(qData, samplesData, gradientRate = 5){
   Var1 <- Var2 <- value <- NULL
@@ -465,7 +455,7 @@ corrMatrixD <- function(qData, samplesData, gradientRate = 5){
 ##' @return A heatmap
 ##' @author Alexia Dorffer
 ##' @examples
-##' library(DAPARdata)
+##' library(DAPAR)
 ##' data(testWithoutNA)
 ##' wrapper.heatmapD(testWithoutNA)
 wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="average", dendro = FALSE){
@@ -490,7 +480,7 @@ wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="average", dend
 ##' @return A heatmap
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
+##' library(DAPAR)
 ##' data(testWithoutNA)
 ##' qData <- exprs(testWithoutNA)
 ##' heatmapD(qData)

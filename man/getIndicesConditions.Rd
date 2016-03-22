@@ -25,7 +25,6 @@ Returns a list for the two conditions where each slot is a vector of indices
 for the samples
 }
 \examples{
-library(DAPARdata)
 data(UPSpep25)
 labels <- pData(UPSpep25)[,"Label"]
 getIndicesConditions(labels, "25fmol", "10fmol")

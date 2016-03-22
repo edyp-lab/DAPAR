@@ -6,9 +6,8 @@
 ##' @return A floating number
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
-##' data(UPSprot25)
-##' getPourcentageOfMV(UPSprot25)
+##' data(UPSpep25)
+##' getPourcentageOfMV(UPSpep25)
 getPourcentageOfMV <- function(obj){
 
 NA.count<-apply(data.frame(exprs(obj)), 2, 
@@ -29,9 +28,8 @@ return(pourcentage)
 ##' @return An integer
 ##' @author Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
-##' data(UPSprot25)
-##' getNumberOf(UPSprot25, "Potential.contaminant", "+")
+##' data(UPSpep25)
+##' getNumberOf(UPSpep25, "Potential.contaminant", "+")
 getNumberOf <- function(obj, name=NULL, prefix=NULL){
   if (is.null(name) || is.null(prefix) || (name=="") || (prefix=="")){return(0)}
   if (!(is.null(name) || !is.null(name=="")) && (is.null(prefix) || (prefix==""))){return(0)}
@@ -55,10 +53,9 @@ getNumberOf <- function(obj, name=NULL, prefix=NULL){
 ##' @return A barplot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
-##' data(UPSprot25)
+##' data(UPSpep25)
 ##' pref <- "+"
-##' proportionConRev(UPSprot25, "Potential.contaminant", pref, "Reverse", pref)
+##' proportionConRev(UPSpep25, "Potential.contaminant", pref, "Reverse", pref)
 proportionConRev <- function(obj, idContaminants=NULL, prefixContaminants=NULL, idReverse=NULL, prefixReverse=NULL){
   #if (is.null(prefixContaminants) && is.null(prefixReverse) ){return(NULL)}
   if (is.null(obj) ){return(NULL)}
@@ -101,9 +98,8 @@ proportionConRev <- function(obj, idContaminants=NULL, prefixContaminants=NULL, 
 ##' @return An object of class \code{\link{MSnSet}}.
 ##' @author Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
 ##' data(UPSpep25)
-##' removeLines(UPSpep25, "Contaminant")
+##' removeLines(UPSpep25, "Potential.contaminant")
 ##' removeLines(UPSpep25, "Reverse")
 removeLines <- function(obj, idLine2Delete=NULL, prefix=NULL){
   if ((prefix == "") || is.null(prefix)) {
@@ -126,9 +122,8 @@ removeLines <- function(obj, idLine2Delete=NULL, prefix=NULL){
 ##' @return A vector of integers.
 ##' @author Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
 ##' data(UPSpep25)
-##' getIndicesOfLinesToRemove(UPSpep25, "Contaminant", prefix="+")
+##' getIndicesOfLinesToRemove(UPSpep25, "Potential.contaminant", prefix="+")
 getIndicesOfLinesToRemove <- function(obj, idLine2Delete=NULL, prefix=NULL)
 {
   if ((prefix == "") || is.null(prefix)) {
@@ -166,9 +161,8 @@ getIndicesOfLinesToRemove <- function(obj, idLine2Delete=NULL, prefix=NULL)
 ##' @return An instance of class \code{\link{MSnSet}} that have been filtered.
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
-##' data(UPSprot25)
-##' mvFilter(UPSprot25, "wholeMatrix", 2)
+##' data(UPSpep25)
+##' mvFilter(UPSpep25, "wholeMatrix", 2)
 mvFilter <- function(obj,type, th, processText=NULL )
 {
     #Check parameters
@@ -217,9 +211,8 @@ obj <- obj[keepThat,]
 ##' @return An instance of class \code{\link{MSnSet}} that have been filtered.
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
-##' data(UPSprot25)
-##' mvFilter(UPSprot25, c(1:10))
+##' data(UPSpep25)
+##' mvFilter(UPSpep25, c(1:10))
 mvFilterFromIndices <- function(obj,keepThat=NULL, processText=NULL )
 {
   
@@ -257,9 +250,8 @@ mvFilterFromIndices <- function(obj,keepThat=NULL, processText=NULL )
 ##' @return An vector of indices.
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
-##' data(UPSprot25)
-##' mvFilterGetIndices(UPSprot25, "wholeMatrix", 2)
+##' data(UPSpep25)
+##' mvFilterGetIndices(UPSpep25, "wholeMatrix", 2)
 mvFilterGetIndices <- function(obj,type, th)
 {
   #Check parameters

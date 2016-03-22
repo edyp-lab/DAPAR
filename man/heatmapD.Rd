@@ -27,7 +27,7 @@ A heatmap
 Heatmap of the quantitative proteomic data of a \code{\link{MSnSet}} object
 }
 \examples{
-library(DAPARdata)
+library(DAPAR)
 data(testWithoutNA)
 qData <- exprs(testWithoutNA)
 heatmapD(qData)

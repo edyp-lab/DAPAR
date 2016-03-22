@@ -27,10 +27,9 @@ A plot
 Plot to compare the quantitative proteomics data before and after normalization
 }
 \examples{
-library(DAPARdata)
-data(UPSprot25)
-qDataBefore <- exprs(UPSprot25)
-labels <- pData(UPSprot25)[,"Label"]
+data(UPSpep25)
+qDataBefore <- exprs(UPSpep25)
+labels <- pData(UPSpep25)[,"Label"]
 qDataAfter <- normalizeD(qDataBefore,labels,"Median Centering", "within conditions")
 compareNormalizationD(qDataBefore, qDataAfter, labels)
 }

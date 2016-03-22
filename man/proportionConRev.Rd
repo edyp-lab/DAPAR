@@ -25,10 +25,9 @@ A barplot
 Plots a barplot of proportion of contaminants and reverse
 }
 \examples{
-library(DAPARdata)
-data(UPSprot25)
+data(UPSpep25)
 pref <- "+"
-proportionConRev(UPSprot25, "Potential.contaminant", pref, "Reverse", pref)
+proportionConRev(UPSpep25, "Potential.contaminant", pref, "Reverse", pref)
 }
 \author{
 Samuel Wieczorek

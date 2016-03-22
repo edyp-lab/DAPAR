@@ -21,10 +21,9 @@ A colored correlation matrix
 Correlation matrix based on a \code{\link{MSnSet}} object
 }
 \examples{
-library(DAPARdata)
-data(UPSprot25)
-qData <- exprs(UPSprot25)
-samplesData <- pData(UPSprot25)
+data(UPSpep25)
+qData <- exprs(UPSpep25)
+samplesData <- pData(UPSpep25)
 corrMatrixD(qData, samplesData)
 }
 \author{

@@ -27,7 +27,7 @@ A heatmap
 Builds a heatmap of the quantitative proteomic data of a \code{\link{MSnSet}} object.
 }
 \examples{
-library(DAPARdata)
+library(DAPAR)
 data(testWithoutNA)
 wrapper.heatmapD(testWithoutNA)
 }

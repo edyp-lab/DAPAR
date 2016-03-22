@@ -20,9 +20,8 @@ An object of class \code{\link{MSnSet}}.
 This function removes lines in the dataset based on a prefix string.
 }
 \examples{
-library(DAPARdata)
 data(UPSpep25)
-removeLines(UPSpep25, "Contaminant")
+removeLines(UPSpep25, "Potential.contaminant")
 removeLines(UPSpep25, "Reverse")
 }
 \author{

@@ -26,12 +26,11 @@ A boxplot
 Boxplot for quantitative proteomics data
 }
 \examples{
-library(DAPARdata)
-data(UPSprot25)
-qData <- exprs(UPSprot25)
+data(UPSpep25)
+qData <- exprs(UPSpep25)
 types <- c("Label","Analyt.Rep")
-dataForXAxis <- pData(UPSprot25)[,types]
-labels <- pData(UPSprot25)[,"Label"]
+dataForXAxis <- pData(UPSpep25)[,types]
+labels <- pData(UPSpep25)[,"Label"]
 boxPlotD(qData, dataForXAxis, labels)
 }
 \author{

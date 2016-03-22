@@ -18,12 +18,11 @@ Returns a MSnSet object with only proteins significant after
 differential analysis.
 }
 \examples{
-library(DAPARdata)
-data(UPSprot25)
+data(UPSpep25)
 condition1 <- "25fmol"
 condition2 <- "10fmol"
-resLimma <- wrapper.diffAnaLimma(UPSprot25, condition1, condition2)
-obj <-diffAnaSave(UPSprot25, resLimma, "limma", condition1, condition2)
+resLimma <- wrapper.diffAnaLimma(UPSpep25, condition1, condition2)
+obj <-diffAnaSave(UPSpep25, resLimma, "limma", condition1, condition2)
 signif <- diffAnaGetSignificant(obj)
 }
 \author{

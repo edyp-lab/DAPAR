@@ -26,11 +26,10 @@ a \code{\link{MSnSet}} object, using the Welch t-test
 (\code{\link{t.test}{stats}}).
 }
 \examples{
-library(DAPARdata)
-data(UPSprot25)
+data(UPSpep25)
 condition1 <- '25fmol'
 condition2 <- '10fmol'
-wrapper.diffAnaWelch(UPSprot25, condition1, condition2)
+wrapper.diffAnaWelch(UPSpep25, condition1, condition2)
 }
 \author{
 Alexia Dorffer

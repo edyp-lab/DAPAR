@@ -21,7 +21,6 @@
 ##' has been normalized.
 ##' @author Alexia Dorffer
 ##' @examples
-##' library(DAPARdata)
 ##' data(UPSpep25)
 ##' wrapper.normalizeD(UPSpep25, "Median Centering", "within conditions")
 wrapper.normalizeD <- function(obj, family, method){
@@ -59,7 +58,6 @@ wrapper.normalizeD <- function(obj, family, method){
 ##' @return A matrix normalized
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
 ##' data(UPSpep25)
 ##' qData <- exprs(UPSpep25)
 ##' labels <- pData(UPSpep25)[,"Label"]

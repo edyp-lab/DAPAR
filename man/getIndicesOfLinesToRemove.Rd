@@ -20,9 +20,8 @@ A vector of integers.
 This function returns the indice of the lines to delete, based on a prefix string
 }
 \examples{
-library(DAPARdata)
 data(UPSpep25)
-getIndicesOfLinesToRemove(UPSpep25, "Contaminant", prefix="+")
+getIndicesOfLinesToRemove(UPSpep25, "Potential.contaminant", prefix="+")
 }
 \author{
 Samuel Wieczorek

@@ -28,13 +28,12 @@ Method to perform differential analysis on
 an \code{\link{MSnSet}} object (calls the \code{limma} package function).
 }
 \examples{
-library(DAPARdata)
-data(UPSprot25)
+data(UPSpep25)
 condition1 <- '25fmol'
 condition2 <- '10fmol'
-qData <- exprs(UPSprot25)
-samplesData <- pData(UPSprot25)
-labels <- pData(UPSprot25)[,"Label"]
+qData <- exprs(UPSpep25)
+samplesData <- pData(UPSpep25)
+labels <- pData(UPSpep25)[,"Label"]
 diffAnaLimma(qData, samplesData, labels, condition1, condition2)
 }
 \author{

@@ -47,7 +47,7 @@ Imports:
     graphics,
     utils,
     cp4p,
-    scales, DAPARdata
+    scales
 biocViews: Proteomics, Normalization, Preprocessing, MassSpectrometry
 NeedsCompilation: no
 RoxygenNote: 5.0.1

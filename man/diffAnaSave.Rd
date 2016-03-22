@@ -43,12 +43,11 @@ This method returns a \code{\link{MSnSet}} object with the results
 of differential analysis.
 }
 \examples{
-library(DAPARdata)
-data(UPSprot25)
+data(UPSpep25)
 condition1 <- '25fmol'
 condition2 <- '10fmol'
-limma <- wrapper.diffAnaLimma(UPSprot25, condition1, condition2)
-obj <- diffAnaSave(UPSprot25, limma, "limma", condition1, condition2)
+limma <- wrapper.diffAnaLimma(UPSpep25, condition1, condition2)
+obj <- diffAnaSave(UPSpep25, limma, "limma", condition1, condition2)
 }
 \author{
 Alexia Dorffer, Samuel Wieczorek

@@ -9,7 +9,6 @@
 ##' @return A histogram
 ##' @author Alexia Dorffer
 ##' @examples
-##' library(DAPARdata)
 ##' data(UPSpep25)
 ##' wrapper.mvPerLinesHisto(UPSpep25)
 wrapper.mvPerLinesHisto <- function(obj, indLegend="auto", showValues=FALSE){
@@ -30,7 +29,6 @@ wrapper.mvPerLinesHisto <- function(obj, indLegend="auto", showValues=FALSE){
 ##' @return A bar plot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
 ##' data(UPSpep25)
 ##' qData <- exprs(UPSpep25)
 ##' samplesData <- pData(UPSpep25)
@@ -95,7 +93,6 @@ mvPerLinesHisto <- function(qData, samplesData, indLegend="auto", showValues=FAL
 ##' @return A bar plot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
 ##' data(UPSpep25)
 ##' wrapper.mvPerLinesHistoPerCondition(UPSpep25)
 wrapper.mvPerLinesHistoPerCondition <- function(obj, indLegend="auto", showValues=FALSE){
@@ -116,7 +113,6 @@ wrapper.mvPerLinesHistoPerCondition <- function(obj, indLegend="auto", showValue
 ##' @return A bar plot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
 ##' data(UPSpep25)
 ##' qData <- exprs(UPSpep25)
 ##' samplesData <- pData(UPSpep25)
@@ -177,7 +173,6 @@ mvPerLinesHistoPerCondition <- function(qData, samplesData, indLegend="auto", sh
 ##' @return A histogram
 ##' @author Alexia Dorffer
 ##' @examples
-##' library(DAPARdata)
 ##' data(UPSpep25)
 ##' wrapper.mvHisto(UPSpep25, showValues=TRUE)
 wrapper.mvHisto <- function(obj, indLegend="auto", showValues=FALSE){
@@ -201,7 +196,6 @@ wrapper.mvHisto <- function(obj, indLegend="auto", showValues=FALSE){
 ##' @return A histogram
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
 ##' data(UPSpep25)
 ##' qData <- exprs(UPSpep25)
 ##' samplesData <- pData(UPSpep25)
@@ -267,7 +261,6 @@ mvHisto <- function(qData, samplesData, labels, indLegend="auto", showValues=FAL
 ##' @return A heatmap
 ##' @author Alexia Dorffer
 ##' @examples
-##' library(DAPARdata)
 ##' data(UPSpep25)
 ##' wrapper.mvImage(UPSpep25)
 wrapper.mvImage <- function(obj){
@@ -291,7 +284,6 @@ wrapper.mvImage <- function(obj){
 ##' @return A heatmap
 ##' @author Samuel Wieczorek, Thomas Burger
 ##' @examples
-##' library(DAPARdata)
 ##' data(UPSpep25)
 ##' qData <- exprs(UPSpep25)
 ##' labels <- pData(UPSpep25)[,"Label"]
@@ -362,7 +354,6 @@ mvImage <- function(qData, labels){
 ##' @return A scatter plot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
 ##' data(UPSpep25)
 ##' wrapper.mvTypePlot(UPSpep25)
 wrapper.mvTypePlot <- function(obj, threshold=0){
@@ -392,7 +383,6 @@ wrapper.mvTypePlot <- function(obj, threshold=0){
 ##' @return A scatter plot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
 ##' data(UPSpep25)
 ##' qData <- exprs(UPSpep25)
 ##' labels <- pData(UPSpep25)[,"Label"]

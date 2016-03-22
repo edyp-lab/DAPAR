@@ -10,7 +10,6 @@
 ##' @return A vector
 ##' @author Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
 ##' data(UPSpep25)
 ##' protID <- "Protein.group.IDs"
 ##' M <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
@@ -40,7 +39,6 @@ return(newCol)
 ##' but with NA values if they exist in the intensity matrix.
 ##' @author Alexia Dorffer
 ##' @examples
-##' library(DAPARdata)
 ##' data(UPSpep25)
 ##' protID <- "Protein.group.IDs"
 ##' M <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
@@ -64,7 +62,6 @@ CountPep <- function (M) {
 ##' @author Alexia Dorffer
 ##' @examples
 ##' \dontrun{
-##' library(DAPARdata)
 ##' data(UPSpep25)
 ##' protID <- "Protein.group.IDs"
 ##' M <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
@@ -119,7 +116,6 @@ SumPeptides <- function(matAdj, expr){
 ##' @author Alexia Dorffer
 ##' @examples
 ##' \dontrun{
-##' library(DAPARdata)
 ##' data(UPSpep25)
 ##' protID <- "Protein.group.IDs"
 ##' matAdj <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
@@ -172,7 +168,6 @@ MeanPeptides <- function(matAdj,expr){
 ##' @author Alexia Dorffer
 ##' @examples
 ##' \dontrun{
-##' library(DAPARdata)
 ##' data(UPSpep25)
 ##' protID <- "Protein.group.IDs"
 ##' matAdj <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
@@ -236,7 +231,6 @@ TopnPeptides<-function(matAdj,expr,n){
 ##' @return A binary matrix  
 ##' @author Florence Combes, Samuel Wieczorek, Alexia Dorffer
 ##' @examples
-##' library(DAPARdata)
 ##' data(UPSpep25) 
 ##' BuildAdjacencyMatrix(UPSpep25, "Protein.group.IDs")
 BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
@@ -295,7 +289,6 @@ topMaxUsingPartialSortIndices <- function(x, n) {
 ##' @author Alexia Dorffer, Samuel Wieczorek
 ##' @examples 
 ##' \dontrun{
-##' library(DAPARdata)
 ##' data(UPSpep25)
 ##' protID <- "Protein.group.IDs"
 ##' m <- BuildAdjacencyMatrix(UPSpep25, protID, TRUE)
@@ -341,7 +334,6 @@ pepAgregate <- function (obj.pep, protID, method="sum",matAdj=NULL, n=NULL){
 ##' @return A histogram  
 ##' @author Alexia Dorffer, Samuel Wieczorek
 ##' @examples
-##' library(DAPARdata)
 ##' data(UPSpep25)
 ##' mat <- BuildAdjacencyMatrix(UPSpep25, "Protein.group.IDs")
 ##' GraphPepProt(mat)

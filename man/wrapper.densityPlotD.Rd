@@ -26,10 +26,9 @@ A density plot
 This function is a wrapper for using the densityPlotD function with objects of class \code{\link{MSnSet}}
 }
 \examples{
-library(DAPARdata)
-data(UPSprot25)
-labels <- pData(UPSprot25)[,"Label"]
-wrapper.densityPlotD(UPSprot25, labels)
+data(UPSpep25)
+labels <- pData(UPSpep25)[,"Label"]
+wrapper.densityPlotD(UPSpep25, labels)
 }
 \author{
 Alexia Dorffer

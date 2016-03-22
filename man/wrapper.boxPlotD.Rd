@@ -22,10 +22,9 @@ A boxplot
 This function is a wrapper for using the boxPlotD function with objects of class \code{\link{MSnSet}}
 }
 \examples{
-library(DAPARdata)
-data(UPSprot25)
+data(UPSpep25)
 types <- c("Label","Analyt.Rep")
-wrapper.boxPlotD(UPSprot25, types)
+wrapper.boxPlotD(UPSpep25, types)
 }
 \author{
 Florence Combes, Samuel Wieczorek

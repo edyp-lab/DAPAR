@@ -25,7 +25,6 @@ This method plots a bar plot which represents the distribution of the
 number of missing values (NA) per lines (ie proteins) and per conditions.
 }
 \examples{
-library(DAPARdata)
 data(UPSpep25)
 qData <- exprs(UPSpep25)
 samplesData <- pData(UPSpep25)

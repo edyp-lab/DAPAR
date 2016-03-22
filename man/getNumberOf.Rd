@@ -20,9 +20,8 @@ An integer
 Returns the number of lines, in a given column, where content matches the prefix.
 }
 \examples{
-library(DAPARdata)
-data(UPSprot25)
-getNumberOf(UPSprot25, "Potential.contaminant", "+")
+data(UPSpep25)
+getNumberOf(UPSpep25, "Potential.contaminant", "+")
 }
 \author{
 Samuel Wieczorek

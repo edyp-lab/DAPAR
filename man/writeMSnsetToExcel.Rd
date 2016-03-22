@@ -26,9 +26,8 @@ and metaData are respectively integrated into separate sheets in
 the Excel file).
 }
 \examples{
-library(DAPARdata)
-data(UPSprot25)
-writeMSnsetToExcel(UPSprot25, "foo", 1)
+data(UPSpep25)
+writeMSnsetToExcel(UPSpep25, "foo", 1)
 }
 \author{
 Samuel Wieczorek

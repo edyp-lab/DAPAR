@@ -44,14 +44,13 @@ tabulated-like quantitative proteomic data into a \code{MSnSet} object,
 including metadata.
 }
 \examples{
-library(DAPARdata)
-exprsFile <- system.file("extdata", "UPSprot25.txt", package="DAPARdata")
-metadataFile <- system.file("extdata", "samples.txt", package="DAPARdata")
+exprsFile <- system.file("extdata", "UPSpep25.txt", package="DAPAR")
+metadataFile <- system.file("extdata", "samples.txt", package="DAPAR")
 metadata = read.table(metadataFile, header=TRUE, sep="\\t", as.is=TRUE)
-indExpData <- c(49:54)
-indFData <- c(1:48, 55:86)
-indiceID <- 78
-createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID,pep_prot_data = "protein")
+indExpData <- c(56:61)
+indFData <- c(1:55,62:71)
+indiceID <- 64
+createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID,pep_prot_data = "peptide")
 }
 \author{
 Florence Combes, Samuel Wieczorek

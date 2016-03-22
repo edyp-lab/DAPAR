@@ -18,7 +18,6 @@ the dataset. The palette is derived from
 the brewer palette "Dark2" (see \code{\link{RColorBrewer}}).
 }
 \examples{
-library(DAPARdata)
 data(UPSpep25)
 n <- nrow(pData(UPSpep25))
 getPaletteForLabels(5)
