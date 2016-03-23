@@ -15,9 +15,9 @@
 ##' wrapper.boxPlotD(UPSpep25, types)
 wrapper.boxPlotD <- function(obj, dataForXAxis="Label", group2Color="Condition"){
   
-  qData <- exprs(obj)
-  dataForXAxis <- as.matrix(pData(obj)[,dataForXAxis])
-  labels <- pData(obj)[,"Label"]
+  qData <- Biobase::exprs(obj)
+  dataForXAxis <- as.matrix(Biobase::pData(obj)[,dataForXAxis])
+  labels <- Biobase::pData(obj)[,"Label"]
   
   boxPlotD(qData, dataForXAxis, labels, group2Color)
   
@@ -101,8 +101,8 @@ boxPlotD <- function(qData, dataForXAxis=NULL, labels=NULL, group2Color="Conditi
 ##' wrapper.compareNormalizationD(UPSpep25, objAfter, labels)
 wrapper.compareNormalizationD <- function(objBefore, objAfter, labelsForLegend=NULL, indData2Show=NULL, group2Color="Condition"){
 
-  qDataBefore <- exprs(objBefore)
-  qDataAfter <- exprs(objAfter)
+  qDataBefore <- Biobase::exprs(objBefore)
+  qDataAfter <- Biobase::exprs(objAfter)
   
   compareNormalizationD(qDataBefore, qDataAfter, labelsForLegend, indData2Show, group2Color)
 }
@@ -203,7 +203,7 @@ compareNormalizationD <- function(qDataBefore, qDataAfter, labelsForLegend=NULL,
 ##' labels <- pData(UPSpep25)[,"Label"]
 ##' wrapper.densityPlotD(UPSpep25, labels)
 wrapper.densityPlotD <- function(obj, labelsForLegend=NULL,  indData2Show=NULL, group2Color = "Condition"){
-  qData <- exprs(obj)
+  qData <- Biobase::exprs(obj)
   densityPlotD(qData, labelsForLegend, indData2Show,group2Color)
 }
 
@@ -304,8 +304,8 @@ densityPlotD <- function(qData, labelsForLegend=NULL,indData2Show=NULL,  group2C
 ##' data(UPSpep25)
 ##' wrapper.varianceDistD(UPSpep25)
 wrapper.varianceDistD <- function(obj){
-  qData <- exprs(obj)
-  labels <- pData(obj)[,"Label"]
+  qData <- Biobase::exprs(obj)
+  labels <- Biobase::pData(obj)[,"Label"]
   varianceDistD(qData, labels)
 }
 
@@ -390,8 +390,8 @@ varianceDistD <- function(qData, labels=NULL){
 ##' data(UPSpep25)
 ##' wrapper.corrMatrixD(UPSpep25)
 wrapper.corrMatrixD <- function(obj, rate=5){
-  qData <- exprs(obj)
-  samplesData <- pData(obj)
+  qData <- Biobase::exprs(obj)
+  samplesData <- Biobase::pData(obj)
   corrMatrixD(qData, samplesData, rate)
 }
 
@@ -455,11 +455,10 @@ corrMatrixD <- function(qData, samplesData, gradientRate = 5){
 ##' @return A heatmap
 ##' @author Alexia Dorffer
 ##' @examples
-##' library(DAPAR)
 ##' data(testWithoutNA)
 ##' wrapper.heatmapD(testWithoutNA)
 wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="average", dendro = FALSE){
-  qData <- exprs(obj)
+  qData <- Biobase::exprs(obj)
   heatmapD(qData, distance, cluster, dendro)
 }
 
@@ -480,7 +479,6 @@ wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="average", dend
 ##' @return A heatmap
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' library(DAPAR)
 ##' data(testWithoutNA)
 ##' qData <- exprs(testWithoutNA)
 ##' heatmapD(qData)

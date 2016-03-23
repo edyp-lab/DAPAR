@@ -172,7 +172,7 @@ mvFilter <- function(obj,type, th, processText=NULL )
         return (NULL)
     }
 
-    paramth<-c(seq(0, nrow(pData(obj)), 1))
+    paramth<-c(seq(0, nrow(Biobase::pData(obj)), 1))
     if (sum(is.na(match(th, paramth)==TRUE))>0){
         warning("Param th is not correct.")
         return (NULL)

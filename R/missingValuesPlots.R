@@ -12,8 +12,8 @@
 ##' data(UPSpep25)
 ##' wrapper.mvPerLinesHisto(UPSpep25)
 wrapper.mvPerLinesHisto <- function(obj, indLegend="auto", showValues=FALSE){
-  qData <- exprs(obj)
-  samplesData <- pData(obj)
+  qData <- Biobase::exprs(obj)
+  samplesData <- Biobase::pData(obj)
   mvPerLinesHisto(qData, samplesData, indLegend, showValues)
 }
 
@@ -96,8 +96,8 @@ mvPerLinesHisto <- function(qData, samplesData, indLegend="auto", showValues=FAL
 ##' data(UPSpep25)
 ##' wrapper.mvPerLinesHistoPerCondition(UPSpep25)
 wrapper.mvPerLinesHistoPerCondition <- function(obj, indLegend="auto", showValues=FALSE){
-  qData <- exprs(obj)
-  samplesData <- pData(obj)
+  qData <- Biobase::exprs(obj)
+  samplesData <- Biobase::pData(obj)
   mvPerLinesHistoPerCondition(qData, samplesData, indLegend, showValues)
 }
 
@@ -176,9 +176,9 @@ mvPerLinesHistoPerCondition <- function(qData, samplesData, indLegend="auto", sh
 ##' data(UPSpep25)
 ##' wrapper.mvHisto(UPSpep25, showValues=TRUE)
 wrapper.mvHisto <- function(obj, indLegend="auto", showValues=FALSE){
-  qData <- exprs(obj)
-  samplesData <- pData(obj)
-  labels <- pData(obj)[,"Label"]
+  qData <- Biobase::exprs(obj)
+  samplesData <- Biobase::pData(obj)
+  labels <- samplesData[,"Label"]
   mvHisto(qData, samplesData, labels, indLegend, showValues)
 }
 
@@ -264,8 +264,8 @@ mvHisto <- function(qData, samplesData, labels, indLegend="auto", showValues=FAL
 ##' data(UPSpep25)
 ##' wrapper.mvImage(UPSpep25)
 wrapper.mvImage <- function(obj){
-  qData <- exprs(obj)
-  labels <- pData(obj)[,"Label"]
+  qData <- Biobase::exprs(obj)
+  labels <- Biobase::pData(obj)[,"Label"]
   mvImage(qData, labels)
 }
 
@@ -357,8 +357,8 @@ mvImage <- function(qData, labels){
 ##' data(UPSpep25)
 ##' wrapper.mvTypePlot(UPSpep25)
 wrapper.mvTypePlot <- function(obj, threshold=0){
-  qData <- exprs(obj)
-  labels <- pData(obj)[,"Label"]
+  qData <- Biobase::exprs(obj)
+  labels <- Biobase::pData(obj)[,"Label"]
   mvTypePlot(qData, labels, threshold)
 }
 

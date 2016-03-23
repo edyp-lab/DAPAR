@@ -70,8 +70,9 @@ CountPep <- function (M) {
 SumPeptides <- function(matAdj, expr){
    # require(foreach)
     #register for use of parallel foreach
-    registerDoParallel(cores = detectCores())
-    
+    cores <- detectCores()
+    registerDoParallel(cores)
+    j <- NULL
     ############### parallel #################
     t <- foreach (j=1:ncol(expr), .combine='cbind') %dopar% {  
             M <- matAdj * expr[rownames(matAdj),j]
@@ -124,10 +125,11 @@ SumPeptides <- function(matAdj, expr){
 MeanPeptides <- function(matAdj,expr){
     #require(foreach)
     ##register for use of parallel foreach
-    registerDoParallel(cores = detectCores())
+  cores <- detectCores()
+  registerDoParallel(cores)
 
     ############## Parallel Version ################
-    z <- NULL
+    z <- j <- NULL
     t <- foreach (j=1:ncol(expr), .combine='cbind') %dopar% {  
             M <- matAdj * expr[rownames(matAdj),j]
             z <- CountPep(M)
@@ -176,14 +178,15 @@ MeanPeptides <- function(matAdj,expr){
 TopnPeptides<-function(matAdj,expr,n){
     #require(foreach)
     ##register for use of parallel foreach
-    registerDoParallel(cores = detectCores())
+  cores <- detectCores()
+  registerDoParallel(cores)
 
     #Get the n indices of peptides with the best median
     med <- apply(expr[rownames(matAdj),], 1, median)
     xmed <- matAdj * med
     
     k <- apply(xmed, 2, function (x) topMaxUsingPartialSortIndices(x, n)) 
-    
+    j <- NULL
     t <- foreach (j=1:ncol(expr), .combine='cbind') %dopar% {   
         p <- mapply(function(x, y){x[y]}, as.data.frame(matAdj*expr[rownames(matAdj),j]), as.data.frame(k))
         z <- CountPep(p)
@@ -234,16 +237,18 @@ TopnPeptides<-function(matAdj,expr,n){
 ##' data(UPSpep25) 
 ##' BuildAdjacencyMatrix(UPSpep25, "Protein.group.IDs")
 BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
+  
+  data <- Biobase::exprs(obj.pep)
     PG <- fData(obj.pep)[,protID]
     PG.l <- strsplit(as.character(PG), split=";", fixed=TRUE)
 
     X <- matrix(c(rep(0)), 
-                nrow = nrow(exprs(obj.pep)), 
+                nrow = nrow(data), 
                 ncol = length(unique(unlist(PG.l))),
-                dimnames=list(rownames(exprs(obj.pep)),unique(unlist(PG.l))))
+                dimnames=list(rownames(data),unique(unlist(PG.l))))
     
     
-    for (i in 1:nrow(exprs(obj.pep))){
+    for (i in 1:nrow(data)){
       X[i, as.character(PG.l[[i]])] <- 1
     }
     
@@ -304,9 +309,9 @@ pepAgregate <- function (obj.pep, protID, method="sum",matAdj=NULL, n=NULL){
     if (!is.na(match(method, "sum on top n")) && is.null(n)){warning("With the top n method, the parameter n must not be NULL.")
       return (NULL)}
     
-    condname <- pData(obj.pep)$Experiment
-    condition <- pData(obj.pep)
-    expr <- 2^(exprs(obj.pep))
+    condname <- Biobase::pData(obj.pep)$Experiment
+    condition <- Biobase::pData(obj.pep)
+    expr <- 2^(Biobase::exprs(obj.pep))
 
     if(method == "sum overall"){ res <- SumPeptides(matAdj, expr)}
     else if  (method == "mean"){ res <- MeanPeptides(matAdj, expr)}

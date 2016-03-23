@@ -1,6 +1,5 @@
 exportPattern("^[[:alpha:]]+")
 
-## Depends
 import(MSnbase)
 
 import(RColorBrewer)
@@ -13,12 +12,12 @@ import(ggplot2)
 import(norm)
 import(impute)
 import(knitr)
-import(doParallel)
-import(foreach)
+importFrom("doParallel", "registerDoParallel")
+importFrom("foreach", "foreach", "%dopar%")
+importFrom("parallel", "detectCores")
 import(cp4p)
-importFrom("graphics", par, boxplot, axis, mtext, abline, points, legend, lines,  barplot, text)
-
-
+importFrom("graphics", "par", "boxplot", "axis", "mtext", "abline", "points", "legend", "lines",  "barplot", "text")
+import(Biobase)
 
 importFrom("stats", "lowess", "cor", "density","pexp", 
            "var", "t.test", "dist", "hclust", "setNames", 

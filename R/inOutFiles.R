@@ -79,15 +79,15 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
     obj <- MSnSet(exprs = Intensity, fData = fd, pData = pd)
 
     if (logData) {
-        exprs(obj) <- log2(exprs(obj))
+      Biobase::exprs(obj) <- log2(Biobase::exprs(obj))
         obj@processingData@processing <- 
             c(obj@processingData@processing, "Log2 tranformed data")
     }
     
     if (replaceZeros) {
-        exprs(obj)[exprs(obj) == 0] <- NA
-        exprs(obj)[is.nan(exprs(obj))] <- NA
-        exprs(obj)[is.infinite(exprs(obj))] <-NA
+      Biobase::exprs(obj)[exprs(obj) == 0] <- NA
+      Biobase::exprs(obj)[is.nan(exprs(obj))] <- NA
+      Biobase::exprs(obj)[is.infinite(exprs(obj))] <-NA
         obj@processingData@processing <- c(obj@processingData@processing, 
                                             "All zeros were replaced by NA")
     }
@@ -124,13 +124,13 @@ writeMSnsetToExcel <- function(obj, filename, id)
     createSheet(file, "Quantitative Data")
     createSheet(file, "Feature Meta Data")
     createSheet(file, "Samples Meta Data")
-        temp.data <- cbind(fData(obj)[id,],exprs(obj))
+        temp.data <- cbind(Biobase::fData(obj)[id,],Biobase::exprs(obj))
         
     writeWorksheet(file, data = temp.data,
                         sheet="Quantitative Data", header=TRUE)
-    writeWorksheet(file, data = fData(obj),
+    writeWorksheet(file, data = Biobase::fData(obj),
                         sheet="Feature Meta Data", header=TRUE)
-    writeWorksheet(file, data = pData(obj),
+    writeWorksheet(file, data = Biobase::pData(obj),
                         sheet="Samples Meta Data", header=TRUE)
     saveWorkbook(file)
     return(name)

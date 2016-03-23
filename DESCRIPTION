@@ -37,12 +37,12 @@ Suggests:
     BiocStyle,
     Prostar
 Imports:
-    RColorBrewer,stats,preprocessCore,Cairo,png,
+    Biobase,RColorBrewer,stats,preprocessCore,Cairo,png,
     lattice,reshape2,gplots,pcaMethods,ggplot2,
     limma,knitr,tmvtnorm,norm,impute,
     imputeLCMD,
     XLConnect,
-    doParallel,
+    doParallel, parallel,
     foreach,grDevices,
     graphics,
     utils,

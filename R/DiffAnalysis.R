@@ -199,8 +199,8 @@ diffAna <- function(qData, design){
 ##' wrapper.diffAnaLimma(UPSpep25, condition1, condition2)
 wrapper.diffAnaLimma <- function(obj, condition1, condition2){
   
-  qData <- exprs(obj)
-  samplesData <- pData(obj)
+  qData <- Biobase::exprs(obj)
+  samplesData <- Biobase::pData(obj)
   labels <- pData(obj)[,"Label"]
   p <- diffAnaLimma(qData, samplesData, labels, condition1, condition2)
   return(p)
@@ -279,8 +279,8 @@ diffAnaLimma <- function(qData, samplesData, labels, condition1, condition2){
 ##' wrapper.diffAnaWelch(UPSpep25, condition1, condition2)
 wrapper.diffAnaWelch <- function(obj, condition1, condition2){
   
-  qData <- exprs(obj)
-  labels <- pData(obj)[,"Label"]
+  qData <- Biobase::exprs(obj)
+  labels <- Biobase::pData(obj)[,"Label"]
   p <- diffAnaWelch(qData, labels, condition1, condition2)
   return(p)
 }

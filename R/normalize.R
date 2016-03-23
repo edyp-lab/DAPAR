@@ -25,9 +25,9 @@
 ##' wrapper.normalizeD(UPSpep25, "Median Centering", "within conditions")
 wrapper.normalizeD <- function(obj, family, method){
   
-  qData <- exprs(obj)
-  labels <- pData(obj)[,"Label"]
-  exprs(obj) <- normalizeD(qData, labels, family, method)
+  qData <- Biobase::exprs(obj)
+  labels <- Biobase::pData(obj)[,"Label"]
+  Biobase::exprs(obj) <- normalizeD(qData, labels, family, method)
   msg <- paste("Normalisation using family ", family,  sep="")
   msg2 <- paste("With method ", method,  sep="")
   obj@processingData@processing <- c(obj@processingData@processing,
