@@ -8,19 +8,20 @@
 BuildColumnToProteinDataset(peptideData, matAdj, columnName)
 }
 \arguments{
-\item{peptideData}{A data.frame of meta data of peptides. It is the fData of the 
-MSnset object.}
+\item{peptideData}{A data.frame of meta data of peptides. It is the fData 
+of the MSnset object.}
 
 \item{matAdj}{The adjacency matrix used to agregate the peptides data.}
 
-\item{columnName}{The name of the column in fData(peptides_MSnset) that the user
-wants to keep in the new protein data.frame.}
+\item{columnName}{The name of the column in fData(peptides_MSnset) that 
+the user wants to keep in the new protein data.frame.}
 }
 \value{
 A vector
 }
 \description{
-This function creates a column for the protein dataset after agregation by using the previous peptide dataset.
+This function creates a column for the protein dataset after agregation 
+by using the previous peptide dataset.
 }
 \examples{
 data(UPSpep25)

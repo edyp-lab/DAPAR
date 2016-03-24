@@ -11,9 +11,9 @@ pepAgregate(obj.pep, protID, method = "sum", matAdj = NULL, n = NULL)
 
 \item{protID}{The name of proteins ID column}
 
-\item{method}{The method used to aggregate the peptides into proteins. Values are "sum", "mean" or "sum on top n" : do the sum / mean of intensity
- on all peptides 
-belonging to proteins. Default is "sum"}
+\item{method}{The method used to aggregate the peptides into proteins. 
+Values are "sum", "mean" or "sum on top n" : do the sum / mean of intensity
+ on all peptides belonging to proteins. Default is "sum"}
 
 \item{matAdj}{An adjacency matrix}
 
@@ -27,12 +27,10 @@ Method to agregate with a method peptides to proteins on
 a MSnSet object (peptides)
 }
 \examples{
-\dontrun{
 data(UPSpep25)
 protID <- "Protein.group.IDs"
 m <- BuildAdjacencyMatrix(UPSpep25, protID, TRUE)
 pepAgregate(UPSpep25, protID, "sum")
-}
 }
 \author{
 Alexia Dorffer, Samuel Wieczorek

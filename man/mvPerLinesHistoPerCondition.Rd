@@ -10,7 +10,8 @@ mvPerLinesHistoPerCondition(qData, samplesData, indLegend = "auto",
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
 
-\item{samplesData}{A dataframe where lines correspond to samples and columns to the meta-data for those samples.}
+\item{samplesData}{A dataframe where lines correspond to samples and 
+columns to the meta-data for those samples.}
 
 \item{indLegend}{The indice of the column name's in \code{pData()} tab}
 

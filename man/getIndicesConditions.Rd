@@ -2,12 +2,13 @@
 % Please edit documentation in R/utils.R
 \name{getIndicesConditions}
 \alias{getIndicesConditions}
-\title{Gets the conditions indices}
+\title{Gets the conditions indices.}
 \usage{
 getIndicesConditions(labels, cond1, cond2)
 }
 \arguments{
-\item{labels}{A vector of strings containing the column "Label" of the \code{pData()}.}
+\item{labels}{A vector of strings containing the column "Label" of 
+the \code{pData()}.}
 
 \item{cond1}{A vector of Labels (a slot in the \code{pData()} table) for
 the condition 1.}
@@ -21,8 +22,8 @@ respectively the indices of samples in the \code{pData()} table of the
 dataset.
 }
 \description{
-Returns a list for the two conditions where each slot is a vector of indices
-for the samples
+Returns a list for the two conditions where each slot is a vector of 
+indices for the samples.
 }
 \examples{
 data(UPSpep25)

@@ -16,7 +16,8 @@ Bio.Rep and Tech.Rep. Default is "Label".}
 
 \item{labels}{A vector of the conditions (labels) (one label per sample).}
 
-\item{group2Color}{A string that indicates how to color the replicates: one color per condition (value "Condition") or one 
+\item{group2Color}{A string that indicates how to color the replicates: 
+one color per condition (value "Condition") or one 
 color per replicate (value "Replicate"). Default value is by Condition.}
 }
 \value{

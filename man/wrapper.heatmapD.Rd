@@ -24,7 +24,8 @@ See \code{help(heatmap.2)}}
 A heatmap
 }
 \description{
-Builds a heatmap of the quantitative proteomic data of a \code{\link{MSnSet}} object.
+Builds a heatmap of the quantitative proteomic data of a 
+\code{\link{MSnSet}} object.
 }
 \examples{
 data(testWithoutNA)

@@ -9,7 +9,8 @@ mvPerLinesHisto(qData, samplesData, indLegend = "auto", showValues = FALSE)
 \arguments{
 \item{qData}{A dataframe that contains the data to plot.}
 
-\item{samplesData}{A dataframe which contains informations about the replicates.}
+\item{samplesData}{A dataframe which contains informations about 
+the replicates.}
 
 \item{indLegend}{The indice of the column name's in \code{pData()} tab}
 

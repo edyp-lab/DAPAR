@@ -2,7 +2,8 @@
 % Please edit documentation in R/missingValuesPlots.R
 \name{wrapper.mvPerLinesHistoPerCondition}
 \alias{wrapper.mvPerLinesHistoPerCondition}
-\title{Bar plot of missing values per lines and per conditions from an object \code{\link{MSnSet}}}
+\title{Bar plot of missing values per lines and per conditions from an 
+object \code{\link{MSnSet}}}
 \usage{
 wrapper.mvPerLinesHistoPerCondition(obj, indLegend = "auto",
   showValues = FALSE)
@@ -19,7 +20,8 @@ drawn above the bars.}
 A bar plot
 }
 \description{
-This method is a wrapper to plots from a \code{\link{MSnSet}} object a bar plot which represents the distribution of the 
+This method is a wrapper to plots from a \code{\link{MSnSet}} object a 
+bar plot which represents the distribution of the 
 number of missing values (NA) per lines (ie proteins) and per conditions.
 }
 \examples{

@@ -21,12 +21,10 @@ This function computes the intensity of proteins based on the sum of the
 intensities of their peptides.
 }
 \examples{
-\dontrun{
 data(UPSpep25)
 protID <- "Protein.group.IDs"
 M <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
-sumPeptides(M, exprs(UPSpep25))
-}
+SumPeptides(M, exprs(UPSpep25))
 }
 \author{
 Alexia Dorffer

@@ -16,7 +16,8 @@ Choices are QRILC, KNN, BPCA and MLE.}
 The matrix imputed
 }
 \description{
-This method is a wrapper to the \code{imputeLCMD} package adapted to a matrix.
+This method is a wrapper to the \code{imputeLCMD} package adapted to 
+a matrix.
 }
 \examples{
 data(UPSpep25)

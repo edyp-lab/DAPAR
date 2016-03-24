@@ -2,7 +2,8 @@
 % Please edit documentation in R/missingValuesPlots.R
 \name{wrapper.mvPerLinesHisto}
 \alias{wrapper.mvPerLinesHisto}
-\title{Histogram of missing values per lines from an object \code{\link{MSnSet}}}
+\title{Histogram of missing values per lines from an object 
+\code{\link{MSnSet}}}
 \usage{
 wrapper.mvPerLinesHisto(obj, indLegend = "auto", showValues = FALSE)
 }
@@ -18,7 +19,8 @@ drawn above the bars.}
 A histogram
 }
 \description{
-This method is a wrapper to plots from a \code{\link{MSnSet}} object a histogram which represents the distribution of the 
+This method is a wrapper to plots from a \code{\link{MSnSet}} object a 
+histogram which represents the distribution of the 
 number of missing values (NA) per lines (ie proteins).
 }
 \examples{

@@ -31,14 +31,15 @@
 ##' indExpData <- c(56:61)
 ##' indFData <- c(1:55,62:71)
 ##' indiceID <- 64
-##' createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID,pep_prot_data = "peptide")
+##' createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID,
+##' pep_prot_data = "peptide")
 createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL, 
                         logData=FALSE, replaceZeros=FALSE,
                         pep_prot_data=NULL){
-  
-  if (!is.data.frame(file)){ #the variable is a path to a text file
-  data <- read.csv(file, header=TRUE, sep="\t", as.is=TRUE)
-  } else {data <- file}
+
+if (!is.data.frame(file)){ #the variable is a path to a text file
+data <- read.csv(file, header=TRUE, sep="\t", as.is=TRUE)
+} else {data <- file}
 
     ## replace all blanks by a dot
     ##   cols <- gsub(" ","\\.",  colnames(data)[indExpData])
@@ -51,13 +52,14 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
     colnames(Intensity) <- colnames(data)[indExpData]
     ##the name of lines are the same as the data of the first column
     if (is.null(indiceID)) {
-      rownames(Intensity) <- rep(paste(pep_prot_data, "_", 1:nrow(Intensity), sep=""))
+    rownames(Intensity) <- rep(paste(pep_prot_data, "_", 1:nrow(Intensity), 
+                                    sep=""))
     }else{rownames(Intensity) <- data[,indiceID]}
 
     ##building fData of MSnSet file
     fd <- data.frame( data[,indFData])
     if (is.null(indiceID)) {
-      rownames(fd) <- rep(paste(pep_prot_data, "_", 1:nrow(fd), sep=""))
+    rownames(fd) <- rep(paste(pep_prot_data, "_", 1:nrow(fd), sep=""))
     }else{rownames(fd) <- data[,indiceID]}
     
     #rownames(fd) <- data[,indiceID]
@@ -79,21 +81,22 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
     obj <- MSnSet(exprs = Intensity, fData = fd, pData = pd)
 
     if (logData) {
-      Biobase::exprs(obj) <- log2(Biobase::exprs(obj))
+    Biobase::exprs(obj) <- log2(Biobase::exprs(obj))
         obj@processingData@processing <- 
             c(obj@processingData@processing, "Log2 tranformed data")
     }
     
     if (replaceZeros) {
-      Biobase::exprs(obj)[exprs(obj) == 0] <- NA
-      Biobase::exprs(obj)[is.nan(exprs(obj))] <- NA
-      Biobase::exprs(obj)[is.infinite(exprs(obj))] <-NA
+    Biobase::exprs(obj)[exprs(obj) == 0] <- NA
+    Biobase::exprs(obj)[is.nan(exprs(obj))] <- NA
+    Biobase::exprs(obj)[is.infinite(exprs(obj))] <-NA
         obj@processingData@processing <- c(obj@processingData@processing, 
                                             "All zeros were replaced by NA")
     }
     
     if (!is.null(pep_prot_data)) {
-        obj@experimentData@other <- c(obj@experimentData@other, typeOfData =pep_prot_data)
+        obj@experimentData@other <- c(obj@experimentData@other, 
+                                    typeOfData =pep_prot_data)
     }
     
     return(obj)

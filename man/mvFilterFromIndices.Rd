@@ -10,7 +10,8 @@ mvFilterFromIndices(obj, keepThat = NULL, processText = NULL)
 \item{obj}{An object of class \code{\link{MSnSet}} containing
 quantitative data.}
 
-\item{keepThat}{A vector of integers which are the indices of lines to delete}
+\item{keepThat}{A vector of integers which are the indices of lines to 
+delete}
 
 \item{processText}{A string to be included in the \code{\link{MSnSet}}
 object for log.}

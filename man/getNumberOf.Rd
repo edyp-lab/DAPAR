@@ -17,7 +17,8 @@ getNumberOf(obj, name = NULL, prefix = NULL)
 An integer
 }
 \description{
-Returns the number of lines, in a given column, where content matches the prefix.
+Returns the number of lines, in a given column, where content matches 
+the prefix.
 }
 \examples{
 data(UPSpep25)

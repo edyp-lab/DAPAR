@@ -18,7 +18,8 @@ distinguish between differential and non-differential data}
 \item{threshold_LogFC}{The threshold on log(Fold Change) to
 distinguish between differential and non-differential data}
 
-\item{pi0Method}{The parameter pi0.method of the method adjust.p in the package \code{cp4p}}
+\item{pi0Method}{The parameter pi0.method of the method adjust.p 
+in the package \code{cp4p}}
 }
 \value{
 The computed FDR value (floating number)

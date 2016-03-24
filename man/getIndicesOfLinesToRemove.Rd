@@ -9,7 +9,8 @@ getIndicesOfLinesToRemove(obj, idLine2Delete = NULL, prefix = NULL)
 \arguments{
 \item{obj}{An object of class \code{\link{MSnSet}}.}
 
-\item{idLine2Delete}{The name of the column that correspond to the data to filter}
+\item{idLine2Delete}{The name of the column that correspond to the data 
+to filter}
 
 \item{prefix}{A character string that is the prefix to find in the data}
 }
@@ -17,7 +18,8 @@ getIndicesOfLinesToRemove(obj, idLine2Delete = NULL, prefix = NULL)
 A vector of integers.
 }
 \description{
-This function returns the indice of the lines to delete, based on a prefix string
+This function returns the indice of the lines to delete, based on a 
+prefix string
 }
 \examples{
 data(UPSpep25)

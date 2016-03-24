@@ -10,14 +10,15 @@ wrapperCalibrationPlot(vPVal, pi0Method = "pounds")
 \arguments{
 \item{vPVal}{A dataframe that contains quantitative data.}
 
-\item{pi0Method}{A vector of the conditions (labels) (one label per sample).}
+\item{pi0Method}{A vector of the conditions (labels) (one label 
+per sample).}
 }
 \value{
 A plot
 }
 \description{
-This function is a wrapper to the calibration.plot method of the \code{cp4p} package for use 
-with \code{\link{MSnSet}} objects.
+This function is a wrapper to the calibration.plot method of the 
+\code{cp4p} package for use with \code{\link{MSnSet}} objects.
 }
 \examples{
 data(UPSpep25)

@@ -9,7 +9,8 @@ normalizeD(qData, labels, family, method)
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
 
-\item{labels}{A vector of strings containing the column "Label" of the \code{pData()}.}
+\item{labels}{A vector of strings containing the column "Label" of 
+the \code{pData()}.}
 
 \item{family}{One of the following : Global Rescaling, 
 Median Centering, Mean Centering, Mean Centering Scaling.}

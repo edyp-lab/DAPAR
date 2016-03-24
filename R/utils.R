@@ -1,3 +1,17 @@
+##' Returns the contains of the slot processing  of an object of class MSnSet.
+##' 
+##' @title Returns the contains of the slot processing  of an object of 
+##' class MSnSet
+##' @param  obj An object (peptides) of class \code{\link{MSnbase}}.
+##' @return The slot processing of obj@processingData
+##' @author Samuel Wieczorek
+##' @examples
+##' data(UPSpep25)
+##' getProcessingInfo(UPSpep25)
+getProcessingInfo <- function(obj){
+return(obj@processingData@processing)
+}
+
 ##' Returns the number of empty lines in a matrix.
 ##' 
 ##' @title Returns the number of empty lines in the data
@@ -9,19 +23,19 @@
 ##' qData <- exprs(UPSpep25)
 ##' getNumberOfEmptyLines(qData)
 getNumberOfEmptyLines <- function(qData){
-  
-  n <- sum(apply(is.na(as.matrix(qData)), 1, all))
-  return (n)
+n <- sum(apply(is.na(as.matrix(qData)), 1, all))
+return (n)
 }
 
 
 
 
-##' Returns a list for the two conditions where each slot is a vector of indices
-##' for the samples
+##' Returns a list for the two conditions where each slot is a vector of 
+##' indices for the samples.
 ##' 
-##' @title Gets the conditions indices
-##' @param labels A vector of strings containing the column "Label" of the \code{pData()}.
+##' @title Gets the conditions indices.
+##' @param labels A vector of strings containing the column "Label" of 
+##' the \code{pData()}.
 ##' @param cond1 A vector of Labels (a slot in the \code{pData()} table) for
 ##' the condition 1.
 ##' @param cond2 A vector of Labels (a slot in the \code{pData()} table) for
@@ -35,18 +49,18 @@ getNumberOfEmptyLines <- function(qData){
 ##' labels <- pData(UPSpep25)[,"Label"]
 ##' getIndicesConditions(labels, "25fmol", "10fmol")
 getIndicesConditions <- function(labels, cond1, cond2){
-  indCondition1 <- indCondition2 <- NULL
-  
-  for(i in 1:length(cond1)){
+indCondition1 <- indCondition2 <- NULL
+
+for(i in 1:length(cond1)){
     indCondition1 <- c(indCondition1,
-                       which(labels == cond1[i]))
-  }
-  for(i in 1:length(cond2)){
+                        which(labels == cond1[i]))
+}
+for(i in 1:length(cond2)){
     indCondition2 <- c(indCondition2,
-                       which(labels == cond2[i]))
-  }
-  
-  return(list(iCond1 = indCondition1, iCond2 = indCondition2))
+                        which(labels == cond2[i]))
+}
+
+return(list(iCond1 = indCondition1, iCond2 = indCondition2))
 }
 
 
@@ -64,17 +78,17 @@ getIndicesConditions <- function(labels, cond1, cond2){
 ##' labels <- pData(UPSpep25)[,"Label"]
 ##' getPaletteForLabels(labels)
 getPaletteForLabels <- function(labels){
-  nColors <- 8
-  col <- c(1:nColors)
-  palette(brewer.pal(nColors,"Dark2"))
-  
-  ## Define one color per label/condition
-  col.boxplot <- NULL
-  for (i in 1:length(labels)){
+nColors <- 8
+col <- c(1:nColors)
+palette(brewer.pal(nColors,"Dark2"))
+
+## Define one color per label/condition
+col.boxplot <- NULL
+for (i in 1:length(labels)){
     col.boxplot[which(labels == unique(labels)[i])] <- col[i]
-  }
-  
-  return (col.boxplot)
+}
+
+return (col.boxplot)
 }
 
 ##' Selects colors for the plots in DAPAR based on the replicates in
@@ -90,10 +104,9 @@ getPaletteForLabels <- function(labels){
 ##' n <- nrow(pData(UPSpep25))
 ##' getPaletteForLabels(5)
 getPaletteForReplicates <- function(nColors){
-  col <- c(1:nColors)
-  getPalette <- colorRampPalette(brewer.pal(8, "Dark2"))
-  
-  return(col)
+col <- c(1:nColors)
+getPalette <- colorRampPalette(brewer.pal(8, "Dark2"))
+return(col)
 }
 
 

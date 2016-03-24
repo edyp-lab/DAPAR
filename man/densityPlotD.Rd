@@ -10,11 +10,14 @@ densityPlotD(qData, labelsForLegend = NULL, indData2Show = NULL,
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
 
-\item{labelsForLegend}{A vector of the conditions (labels) (one label per sample).}
+\item{labelsForLegend}{A vector of the conditions (labels) (one label 
+per sample).}
 
-\item{indData2Show}{A vector of indices to show in densityplot. If NULL, then all labels are displayed.}
+\item{indData2Show}{A vector of indices to show in densityplot. If NULL, 
+then all labels are displayed.}
 
-\item{group2Color}{A string that indicates how to color the replicates: one color per condition (value "Condition") or one 
+\item{group2Color}{A string that indicates how to color the replicates: 
+one color per condition (value "Condition") or one 
 color per replicate (value "Replicate"). Default value is by Condition.}
 }
 \value{

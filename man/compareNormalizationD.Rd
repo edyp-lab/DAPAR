@@ -8,29 +8,36 @@ compareNormalizationD(qDataBefore, qDataAfter, labelsForLegend = NULL,
   indData2Show = NULL, group2Color = "Condition")
 }
 \arguments{
-\item{qDataBefore}{A dataframe that contains quantitative data before normalization.}
+\item{qDataBefore}{A dataframe that contains quantitative data before 
+normalization.}
 
-\item{qDataAfter}{A dataframe that contains quantitative data after normalization.}
+\item{qDataAfter}{A dataframe that contains quantitative data after 
+normalization.}
 
-\item{labelsForLegend}{A vector of the conditions (labels) (one label per sample).}
+\item{labelsForLegend}{A vector of the conditions (labels) (one label 
+per sample).}
 
-\item{indData2Show}{A vector of the indices of the columns to show in the plot. The indices are those of indices of 
+\item{indData2Show}{A vector of the indices of the columns to show in 
+the plot. The indices are those of indices of 
 the columns int the data.frame qDataBefore.}
 
-\item{group2Color}{A string that indicates how to color the replicates: one color per condition (value "Condition") or one 
+\item{group2Color}{A string that indicates how to color the replicates: 
+one color per condition (value "Condition") or one 
 color per replicate (value "Replicate"). Default value is by Condition.}
 }
 \value{
 A plot
 }
 \description{
-Plot to compare the quantitative proteomics data before and after normalization
+Plot to compare the quantitative proteomics data before and after 
+normalization
 }
 \examples{
 data(UPSpep25)
 qDataBefore <- exprs(UPSpep25)
 labels <- pData(UPSpep25)[,"Label"]
-qDataAfter <- normalizeD(qDataBefore,labels,"Median Centering", "within conditions")
+qDataAfter <- normalizeD(qDataBefore,labels,"Median Centering", 
+"within conditions")
 compareNormalizationD(qDataBefore, qDataAfter, labels)
 }
 \author{

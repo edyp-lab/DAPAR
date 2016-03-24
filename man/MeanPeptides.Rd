@@ -21,12 +21,10 @@ This function computes the intensity of proteins as the mean of the
 intensities of their peptides.
 }
 \examples{
-\dontrun{
 data(UPSpep25)
 protID <- "Protein.group.IDs"
 matAdj <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
-meanPeptides(matAdj, exprs(UPSpep25))
-}
+MeanPeptides(matAdj, exprs(UPSpep25))
 }
 \author{
 Alexia Dorffer

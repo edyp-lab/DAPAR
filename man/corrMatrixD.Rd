@@ -10,9 +10,11 @@ corrMatrixD(qData, samplesData, gradientRate = 5)
 \arguments{
 \item{qData}{A dataframe of quantitative data.}
 
-\item{samplesData}{A dataframe where lines correspond to samples and columns to the meta-data for those samples.}
+\item{samplesData}{A dataframe where lines correspond to samples and 
+columns to the meta-data for those samples.}
 
-\item{gradientRate}{The rate parameter to control the exponential law for the gradient of colors}
+\item{gradientRate}{The rate parameter to control the exponential law for 
+the gradient of colors}
 }
 \value{
 A colored correlation matrix

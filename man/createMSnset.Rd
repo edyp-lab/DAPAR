@@ -50,7 +50,8 @@ metadata = read.table(metadataFile, header=TRUE, sep="\\t", as.is=TRUE)
 indExpData <- c(56:61)
 indFData <- c(1:55,62:71)
 indiceID <- 64
-createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID,pep_prot_data = "peptide")
+createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID,
+pep_prot_data = "peptide")
 }
 \author{
 Florence Combes, Samuel Wieczorek

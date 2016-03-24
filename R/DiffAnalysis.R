@@ -11,7 +11,8 @@
 ##' distinguish between differential and non-differential data 
 ##' @param threshold_LogFC The threshold on log(Fold Change) to
 ##' distinguish between differential and non-differential data 
-##' @param pi0Method The parameter pi0.method of the method adjust.p in the package \code{cp4p}
+##' @param pi0Method The parameter pi0.method of the method adjust.p 
+##' in the package \code{cp4p}
 ##' @return The computed FDR value (floating number)
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -24,8 +25,9 @@
 ##' labels <- pData(obj)[,"Label"]
 ##' limma <- diffAnaLimma(qData,samplesData, labels, condition1, condition2)
 ##' diffAnaComputeFDR(limma)
-diffAnaComputeFDR <- function(data,threshold_PVal=0, threshold_LogFC =0, pi0Method=1){
-   upItems <- which(abs(data$logFC) >= threshold_LogFC)
+diffAnaComputeFDR <- function(data,threshold_PVal=0, threshold_LogFC =0, 
+                            pi0Method=1){
+    upItems <- which(abs(data$logFC) >= threshold_LogFC)
     selectedItems <- data[upItems,]$P.Value
     
     padj <- adjust.p(selectedItems,  pi0Method)
@@ -58,7 +60,8 @@ diffAnaComputeFDR <- function(data,threshold_PVal=0, threshold_LogFC =0, pi0Meth
 ##' log(Fold Change) to discriminatedifferential proteins.
 ##' @param fdr The FDR based on the values of threshold_pVal and 
 ##' threshold_logFC
-##' @param calibrationMethod The calibration method used to compute the calibration plot
+##' @param calibrationMethod The calibration method used to compute the 
+##' calibration plot
 ##' @return A MSnSet
 ##' @author Alexia Dorffer, Samuel Wieczorek
 ##' @examples
@@ -68,20 +71,20 @@ diffAnaComputeFDR <- function(data,threshold_PVal=0, threshold_LogFC =0, pi0Meth
 ##' limma <- wrapper.diffAnaLimma(UPSpep25, condition1, condition2)
 ##' obj <- diffAnaSave(UPSpep25, limma, "limma", condition1, condition2)
 diffAnaSave <- function (obj, data, method="limma", condition1, condition2, 
-                        threshold_pVal=1e-60, threshold_logFC=0, fdr=0, calibrationMethod = "pounds"){
+                        threshold_pVal=1e-60, threshold_logFC=0, fdr=0, 
+                        calibrationMethod = "pounds"){
     if (is.null(data)){
         warning("The differential analysis has not been completed. Maybe there 
             are some missing values in the dataset. If so, please impute before
             running differential analysis")
         return(NULL)}
     
-   # temp <- obj
+    # temp <- obj
     #####################################################################
     fData(obj)$P.Value <- data$P.Value
     fData(obj)$logFC <- data$logFC
     fData(obj)$Significant <- FALSE
-    
- 
+
     text <- paste("Differential analysis with",method)
     obj@processingData@processing <- c(obj@processingData@processing, text)
     
@@ -95,13 +98,13 @@ diffAnaSave <- function (obj, data, method="limma", condition1, condition2,
     fData(obj)[intersect(ipval, ilogfc),]$Significant <- TRUE
     
     obj@experimentData@other <- list(obj@experimentData@other,
-                                      method = method,
+                                    method = method,
                                         condition1 = condition1,
                                         condition2 = condition2,
                                         threshold.p.value = threshold_pVal,
                                         threshold.logFC = threshold_logFC,
                                         fdr = fdr,
-                                      calibrationMethod = calibrationMethod)
+                                    calibrationMethod = calibrationMethod)
     
     text <- paste("Differential analysis : Selection with the following 
                     threshold values :logFC =",threshold_logFC,
@@ -198,12 +201,12 @@ diffAna <- function(qData, design){
 ##' condition2 <- '10fmol'
 ##' wrapper.diffAnaLimma(UPSpep25, condition1, condition2)
 wrapper.diffAnaLimma <- function(obj, condition1, condition2){
-  
-  qData <- Biobase::exprs(obj)
-  samplesData <- Biobase::pData(obj)
-  labels <- pData(obj)[,"Label"]
-  p <- diffAnaLimma(qData, samplesData, labels, condition1, condition2)
-  return(p)
+
+qData <- Biobase::exprs(obj)
+samplesData <- Biobase::pData(obj)
+labels <- pData(obj)[,"Label"]
+p <- diffAnaLimma(qData, samplesData, labels, condition1, condition2)
+return(p)
 }
 
 
@@ -215,7 +218,8 @@ wrapper.diffAnaLimma <- function(obj, condition1, condition2){
 ##' @title Performs differential analysis on
 ##' an MSnSet object, calling the \code{limma} package functions 
 ##' @param qData A dataframe that contains quantitative data.
-##' @param samplesData A dataframe where lines correspond to samples and columns to the meta-data for those samples.
+##' @param samplesData A dataframe where lines correspond to samples and 
+##' columns to the meta-data for those samples.
 ##' @param labels A vector of the conditions (labels) (one label per sample).
 ##' @param condition1 A vector that contains the names of the conditions 
 ##' considered as condition 1
@@ -232,29 +236,29 @@ wrapper.diffAnaLimma <- function(obj, condition1, condition2){
 ##' labels <- pData(UPSpep25)[,"Label"]
 ##' diffAnaLimma(qData, samplesData, labels, condition1, condition2)
 diffAnaLimma <- function(qData, samplesData, labels, condition1, condition2){
-  if( sum(is.na(qData == TRUE))>0) {
+if( sum(is.na(qData == TRUE))>0) {
     warning("There are some missing values. Please impute before.")
     return (NULL)
-  }
-  # if (condition1 == condition2){
-  #   warning("The two conditions are identical.")
-  #   return (NULL)
-  # }
-  
-  indices <- getIndicesConditions(labels, condition1, condition2)
-  flatIndices <- unlist(indices)
-  
-  tempexprs <- qData[,flatIndices]
-  design <- cbind(cond1=1, cond2 = rep(0,length(flatIndices)))
-  
-  rownames(design) <- rownames(samplesData[flatIndices,])
-  design[flatIndices == indices$iCond2,2] <- 1
-  res <- diffAna(tempexprs, design)
-  p <- data.frame(P.Value = res$P.Value, 
-                  logFC = res$logFC,
-                  row.names = rownames(qData))
-  
-  return(p)
+}
+# if (condition1 == condition2){
+#   warning("The two conditions are identical.")
+#   return (NULL)
+# }
+
+indices <- getIndicesConditions(labels, condition1, condition2)
+flatIndices <- unlist(indices)
+
+tempexprs <- qData[,flatIndices]
+design <- cbind(cond1=1, cond2 = rep(0,length(flatIndices)))
+
+rownames(design) <- rownames(samplesData[flatIndices,])
+design[flatIndices == indices$iCond2,2] <- 1
+res <- diffAna(tempexprs, design)
+p <- data.frame(P.Value = res$P.Value, 
+                logFC = res$logFC,
+                row.names = rownames(qData))
+
+return(p)
 }
 
 
@@ -278,11 +282,11 @@ diffAnaLimma <- function(qData, samplesData, labels, condition1, condition2){
 ##' condition2 <- '10fmol'
 ##' wrapper.diffAnaWelch(UPSpep25, condition1, condition2)
 wrapper.diffAnaWelch <- function(obj, condition1, condition2){
-  
-  qData <- Biobase::exprs(obj)
-  labels <- Biobase::pData(obj)[,"Label"]
-  p <- diffAnaWelch(qData, labels, condition1, condition2)
-  return(p)
+
+qData <- Biobase::exprs(obj)
+labels <- Biobase::pData(obj)[,"Label"]
+p <- diffAnaWelch(qData, labels, condition1, condition2)
+return(p)
 }
 
 
@@ -312,38 +316,39 @@ wrapper.diffAnaWelch <- function(obj, condition1, condition2){
 ##' labels <- pData(UPSpep25)[,"Label"]
 ##' diffAnaWelch(qData, labels, condition1, condition2)
 diffAnaWelch <- function(qData, labels, condition1, condition2){
-  
-  if( sum(is.na(qData == TRUE))>0) {
+
+if( sum(is.na(qData == TRUE))>0) {
     warning("There are some missing values. Please impute before.")
     return (NULL)
-  }
-  # if (condition1 == condition2){
-  #   warning("The two conditions are identical.")
-  #   return (NULL)
-  # }
-  
-  
-  indices <- getIndicesConditions(labels, condition1, condition2)
-  t <- NULL
-  logRatio <- NULL
-  for (i in 1:nrow(qData)){
+}
+# if (condition1 == condition2){
+#   warning("The two conditions are identical.")
+#   return (NULL)
+# }
+
+
+indices <- getIndicesConditions(labels, condition1, condition2)
+t <- NULL
+logRatio <- NULL
+for (i in 1:nrow(qData)){
     res <- t.test(x=qData[i,indices$iCond1],
-                  y=qData[i,indices$iCond2])
+                y=qData[i,indices$iCond2])
     t <- c(t,res$p.value)
     logRatio <- c(logRatio, (res$estimate[2] - res$estimate[1]))
-  }
-  p <- data.frame(P.Value=t, logFC = logRatio)
-  return(p)
+}
+p <- data.frame(P.Value=t, logFC = logRatio)
+return(p)
 }
 
 
-##' This function is a wrapper to the calibration.plot method of the \code{cp4p} package for use 
-##' with \code{\link{MSnSet}} objects.
-##' 
+##' This function is a wrapper to the calibration.plot method of the 
+##' \code{cp4p} package for use with \code{\link{MSnSet}} objects.
+##'
 ##' @title Performs a calibration plot on
 ##' an \code{\link{MSnSet}} object, calling the \code{cp4p} package functions. 
 ##' @param vPVal A dataframe that contains quantitative data.
-##' @param pi0Method A vector of the conditions (labels) (one label per sample).
+##' @param pi0Method A vector of the conditions (labels) (one label 
+##' per sample).
 ##' @return A plot
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -354,10 +359,10 @@ diffAnaWelch <- function(qData, labels, condition1, condition2){
 ##' labels <- pData(UPSpep25)[,"Label"]
 ##' diffAnaWelch(qData, labels, condition1, condition2)
 wrapperCalibrationPlot <- function(vPVal, pi0Method="pounds"){
-  
-  if (is.null(vPVal)){return(NULL)}
-  
-  p <- calibration.plot(vPVal, pi0.method=pi0Method)
-  
-  return(p)
+
+if (is.null(vPVal)){return(NULL)}
+
+p <- calibration.plot(vPVal, pi0.method=pi0Method)
+
+return(p)
 }

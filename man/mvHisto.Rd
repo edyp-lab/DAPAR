@@ -9,7 +9,8 @@ mvHisto(qData, samplesData, labels, indLegend = "auto", showValues = FALSE)
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
 
-\item{samplesData}{A dataframe where lines correspond to samples and columns to the meta-data for those samples.}
+\item{samplesData}{A dataframe where lines correspond to samples and 
+columns to the meta-data for those samples.}
 
 \item{labels}{A vector of the conditions (labels) (one label per sample).}
 

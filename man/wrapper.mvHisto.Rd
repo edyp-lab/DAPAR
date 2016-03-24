@@ -18,7 +18,8 @@ drawn above the bars.}
 A histogram
 }
 \description{
-This method plots from a \code{\link{MSnSet}} object a histogram of missing values.
+This method plots from a \code{\link{MSnSet}} object a histogram of 
+missing values.
 }
 \examples{
 data(UPSpep25)

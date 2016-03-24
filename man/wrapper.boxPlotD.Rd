@@ -12,14 +12,16 @@ wrapper.boxPlotD(obj, dataForXAxis = "Label", group2Color = "Condition")
 \item{dataForXAxis}{A vector of strings containing the names of columns 
 in \code{pData()} to print labels on X-axis (Default is "Label").}
 
-\item{group2Color}{A string that indicates how to color the replicates: one color per condition (value "Condition") or one 
+\item{group2Color}{A string that indicates how to color the replicates: one
+color per condition (value "Condition") or one 
 color per replicate (value "Replicate"). Default value is by Condition.}
 }
 \value{
 A boxplot
 }
 \description{
-This function is a wrapper for using the boxPlotD function with objects of class \code{\link{MSnSet}}
+This function is a wrapper for using the boxPlotD function with objects of 
+class \code{\link{MSnSet}}
 }
 \examples{
 data(UPSpep25)

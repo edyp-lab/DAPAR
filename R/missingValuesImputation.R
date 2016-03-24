@@ -11,19 +11,18 @@
 ##' data(UPSpep25)
 ##' wrapper.mvImputation(UPSpep25, "QRILC")
 wrapper.mvImputation <- function(obj, method){
-  
-  qData <- Biobase::exprs(obj)
-  exprs(obj) <- mvImputation(qData, method)
-  msg <- paste("Missing values imputation using ", method,  sep="")
-  obj@processingData@processing <- c(obj@processingData@processing,msg)
-  return(obj)
-  
+qData <- Biobase::exprs(obj)
+exprs(obj) <- mvImputation(qData, method)
+msg <- paste("Missing values imputation using ", method,  sep="")
+obj@processingData@processing <- c(obj@processingData@processing,msg)
+return(obj)
 }
 
 
 
 
-##' This method is a wrapper to the \code{imputeLCMD} package adapted to a matrix.
+##' This method is a wrapper to the \code{imputeLCMD} package adapted to 
+##' a matrix.
 ##' 
 ##' @title Missing values imputation from a matrix
 ##' @param qData A dataframe that contains quantitative data.
@@ -36,18 +35,20 @@ wrapper.mvImputation <- function(obj, method){
 ##' qData <- exprs(UPSpep25)
 ##' mvImputation(qData, "QRILC")
 mvImputation <- function(qData, method){
-  #Check parameters
-  param<-c("BPCA", "KNN", "MLE", "QRILC")
-  if (sum(is.na(match(method, param)==TRUE))>0){
+#Check parameters
+param<-c("BPCA", "KNN", "MLE", "QRILC")
+if (sum(is.na(match(method, param)==TRUE))>0){
     warning("Param method is not correct.")
     return (NULL)
-  }
-  
-  qData <- as.matrix(qData)
-  ## BPCA impute imputation at peptide level
-  
-  if (method == "BPCA"){
-    if (getNumberOfEmptyLines(qData) > 0) {stop("Data contains rows in which all elements are 'NA'. Remove them first")}
+}
+
+qData <- as.matrix(qData)
+## BPCA impute imputation at peptide level
+
+if (method == "BPCA"){
+    if (getNumberOfEmptyLines(qData) > 0) {
+        stop("Data contains rows in which 
+                all elements are 'NA'. Remove them first")}
     ## replace all 0's by NAs
     tmp.data <- qData
     nSamples <- dim(qData)[2]
@@ -55,19 +56,21 @@ mvImputation <- function(qData, method){
     exprs <- completeObs(resultBPCA)
     #     msg <- "Missing values imputation using bpca algorithm"
     #     obj@processingData@processing <- c(obj@processingData@processing,msg)
-  } else if (method == "KNN"){
-    if (getNumberOfEmptyLines(qData) > 0) {stop("Data contains rows in which all elements are 'NA'. Remove them first")}
+} else if (method == "KNN"){
+    if (getNumberOfEmptyLines(qData) > 0) {
+        stop("Data contains rows in which all elements are 'NA'. 
+            Remove them first")}
     exprs <- impute.wrapper.KNN(qData, 3)
     #     msg <- "Missing values imputation using KNN algorithm"
     #     obj@processingData@processing <- c(obj@processingData@processing,msg)
-  } else if (method == "MLE"){
+} else if (method == "MLE"){
     exprs <- impute.wrapper.MLE(qData)
     #     msg <- "Missing values imputation using MLE algorithm"
     #     obj@processingData@processing <- c(obj@processingData@processing,msg)
-  } else if (method == "QRILC"){
+} else if (method == "QRILC"){
     exprs <- impute.QRILC(qData)[[1]]
     #     msg <- "Missing values imputation using QRILC algorithm"
     #     obj@processingData@processing <- c(obj@processingData@processing,msg)
-  }
-  return (exprs)
+}
+return (exprs)
 }

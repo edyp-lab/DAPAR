@@ -19,7 +19,8 @@ Values are : "none", "wholeMatrix", "allCond", "atLeastOneCond"}
 An vector of indices.
 }
 \description{
-Returns the indices of the lines of \code{exprs()} table to delete w.r.t. the conditions on the number
+Returns the indices of the lines of \code{exprs()} table to delete w.r.t. 
+the conditions on the number
 of missing values.
 The user chooses the minimum amount of intensities that is acceptable and
 the filter delete lines that do not respect this condition.

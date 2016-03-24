@@ -1,12 +1,13 @@
-##' This function creates a column for the protein dataset after agregation by using the previous peptide dataset.
+##' This function creates a column for the protein dataset after agregation 
+##' by using the previous peptide dataset.
 ##' 
 ##' @title creates a column for the protein dataset after agregation by
 ##'  using the previous peptide dataset.
-##' @param peptideData A data.frame of meta data of peptides. It is the fData of the 
-##' MSnset object.
+##' @param peptideData A data.frame of meta data of peptides. It is the fData 
+##' of the MSnset object.
 ##' @param matAdj The adjacency matrix used to agregate the peptides data.
-##' @param columnName The name of the column in fData(peptides_MSnset) that the user
-##' wants to keep in the new protein data.frame.
+##' @param columnName The name of the column in fData(peptides_MSnset) that 
+##' the user wants to keep in the new protein data.frame.
 ##' @return A vector
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -17,14 +18,14 @@
 ##' name <- "organism"
 ##' BuildColumnToProteinDataset(data, M, name )
 BuildColumnToProteinDataset <- function(peptideData, matAdj, columnName){
-  nbProt <- ncol(matAdj)
-  newCol <- rep("", nbProt)
-  
-  for (p in 1:nbProt){
+nbProt <- ncol(matAdj)
+newCol <- rep("", nbProt)
+
+for (p in 1:nbProt){
     listeIndicePeptides <- which(matAdj[,p] == 1)
     listeData <- unique(peptideData[listeIndicePeptides,columnName])
     newCol[p] <- paste(listeData, collapse = ",")
-  }
+}
 return(newCol)
 }
 
@@ -61,14 +62,12 @@ CountPep <- function (M) {
 ##' @return A matrix of intensities of proteins
 ##' @author Alexia Dorffer
 ##' @examples
-##' \dontrun{
 ##' data(UPSpep25)
 ##' protID <- "Protein.group.IDs"
 ##' M <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
-##' sumPeptides(M, exprs(UPSpep25))
-##' }
+##' SumPeptides(M, exprs(UPSpep25))
 SumPeptides <- function(matAdj, expr){
-   # require(foreach)
+    # require(foreach)
     #register for use of parallel foreach
     cores <- detectCores()
     registerDoParallel(cores)
@@ -116,17 +115,15 @@ SumPeptides <- function(matAdj, expr){
 ##' @return A matrix of intensities of proteins
 ##' @author Alexia Dorffer
 ##' @examples
-##' \dontrun{
 ##' data(UPSpep25)
 ##' protID <- "Protein.group.IDs"
 ##' matAdj <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
-##' meanPeptides(matAdj, exprs(UPSpep25))
-##' }
+##' MeanPeptides(matAdj, exprs(UPSpep25))
 MeanPeptides <- function(matAdj,expr){
     #require(foreach)
     ##register for use of parallel foreach
-  cores <- detectCores()
-  registerDoParallel(cores)
+cores <- detectCores()
+registerDoParallel(cores)
 
     ############## Parallel Version ################
     z <- j <- NULL
@@ -169,17 +166,15 @@ MeanPeptides <- function(matAdj,expr){
 ##' @return A matrix of intensities of proteins
 ##' @author Alexia Dorffer
 ##' @examples
-##' \dontrun{
 ##' data(UPSpep25)
 ##' protID <- "Protein.group.IDs"
 ##' matAdj <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
-##' topnPeptides(matAdj, exprs(UPSpep25), 3)
-##' }
+##' TopnPeptides(matAdj, exprs(UPSpep25), 3)
 TopnPeptides<-function(matAdj,expr,n){
     #require(foreach)
     ##register for use of parallel foreach
-  cores <- detectCores()
-  registerDoParallel(cores)
+cores <- detectCores()
+registerDoParallel(cores)
 
     #Get the n indices of peptides with the best median
     med <- apply(expr[rownames(matAdj),], 1, median)
@@ -188,7 +183,9 @@ TopnPeptides<-function(matAdj,expr,n){
     k <- apply(xmed, 2, function (x) topMaxUsingPartialSortIndices(x, n)) 
     j <- NULL
     t <- foreach (j=1:ncol(expr), .combine='cbind') %dopar% {   
-        p <- mapply(function(x, y){x[y]}, as.data.frame(matAdj*expr[rownames(matAdj),j]), as.data.frame(k))
+        p <- mapply(function(x, y){x[y]}, 
+                    as.data.frame(matAdj*expr[rownames(matAdj),j]), 
+                    as.data.frame(k))
         z <- CountPep(p)
         c(colSums(p, na.rm=TRUE), colSums(z, na.rm=TRUE))
     }
@@ -237,8 +234,8 @@ TopnPeptides<-function(matAdj,expr,n){
 ##' data(UPSpep25) 
 ##' BuildAdjacencyMatrix(UPSpep25, "Protein.group.IDs")
 BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
-  
-  data <- Biobase::exprs(obj.pep)
+
+data <- Biobase::exprs(obj.pep)
     PG <- fData(obj.pep)[,protID]
     PG.l <- strsplit(as.character(PG), split=";", fixed=TRUE)
 
@@ -249,7 +246,7 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
     
     
     for (i in 1:nrow(data)){
-      X[i, as.character(PG.l[[i]])] <- 1
+    X[i, as.character(PG.l[[i]])] <- 1
     }
     
     
@@ -270,8 +267,6 @@ return(X)
 ##' @author Alexia Dorffer
 ##' @examples topMaxUsingPartialSortIndices(c(1:10), 3)
 topMaxUsingPartialSortIndices <- function(x, n) {
-   # v <- matrix(rep(0,3)
-    #n <-  min( n,length(which(x != 0)))
     v <- order(x,decreasing=TRUE)[1:n]
     return(v)
 }
@@ -285,20 +280,18 @@ topMaxUsingPartialSortIndices <- function(x, n) {
 ##' @title  Function agregate peptides to proteins 
 ##' @param  obj.pep An object (peptides) of class \code{\link{MSnbase}}.
 ##' @param  protID The name of proteins ID column 
-##' @param  method The method used to aggregate the peptides into proteins. Values are "sum", "mean" or "sum on top n" : do the sum / mean of intensity
-##'  on all peptides 
-##' belonging to proteins. Default is "sum"
+##' @param  method The method used to aggregate the peptides into proteins. 
+##' Values are "sum", "mean" or "sum on top n" : do the sum / mean of intensity
+##'  on all peptides belonging to proteins. Default is "sum"
 ##' @param  matAdj An adjacency matrix
 ##' @param n The number of peptides considered for the aggregation.
 ##' @return An object of class \code{\link{MSnbase}} with proteins  
 ##' @author Alexia Dorffer, Samuel Wieczorek
 ##' @examples 
-##' \dontrun{
 ##' data(UPSpep25)
 ##' protID <- "Protein.group.IDs"
 ##' m <- BuildAdjacencyMatrix(UPSpep25, protID, TRUE)
 ##' pepAgregate(UPSpep25, protID, "sum")
-##' }
 pepAgregate <- function (obj.pep, protID, method="sum",matAdj=NULL, n=NULL){
     #Check the validity of parameters
     parammethod <- c("sum overall", "mean", "sum on top n") 
@@ -306,8 +299,9 @@ pepAgregate <- function (obj.pep, protID, method="sum",matAdj=NULL, n=NULL){
     if (is.null(matAdj)){warning("Adjacency matrix is missing.")
                             return (NULL)}
 
-    if (!is.na(match(method, "sum on top n")) && is.null(n)){warning("With the top n method, the parameter n must not be NULL.")
-      return (NULL)}
+    if (!is.na(match(method, "sum on top n")) && is.null(n)){
+        warning("With the top n method, the parameter n must not be NULL.")
+    return (NULL)}
     
     condname <- Biobase::pData(obj.pep)$Experiment
     condition <- Biobase::pData(obj.pep)
@@ -323,7 +317,8 @@ pepAgregate <- function (obj.pep, protID, method="sum",matAdj=NULL, n=NULL){
     fd <- data.frame(protId, pep)
     
     obj <- MSnSet(exprs = log2(Mp), fData = fd, pData = pData(obj.pep))
-    obj@experimentData@other  <- list(obj@experimentData@other,typeOfData ="proteins")
+    obj@experimentData@other  <- list(obj@experimentData@other,
+                                    typeOfData ="proteins")
     
     return(obj)
 }
@@ -344,7 +339,7 @@ pepAgregate <- function (obj.pep, protID, method="sum",matAdj=NULL, n=NULL){
 ##' GraphPepProt(mat)
 GraphPepProt <- function(mat){
     if (is.null(mat)){return (NULL)} 
-    
+
     #mat <- as.matrix(mat)
     t <- t(mat)
     t <- apply(mat, 2, sum, na.rm=TRUE)

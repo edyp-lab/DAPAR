@@ -14,7 +14,8 @@ A density plot
 }
 \description{
 Builds a densityplot of the variance of entities in the exprs() table
-of an object \code{\link{MSnSet}}. The variance is calculated for each condition (Label) present
+of an object \code{\link{MSnSet}}. The variance is calculated for each 
+condition (Label) present
 in the dataset (see the slot \code{'Label'} in the \code{pData()} table).
 }
 \examples{

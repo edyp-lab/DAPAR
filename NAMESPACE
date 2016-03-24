@@ -16,7 +16,8 @@ importFrom("doParallel", "registerDoParallel")
 importFrom("foreach", "foreach", "%dopar%")
 importFrom("parallel", "detectCores")
 import(cp4p)
-importFrom("graphics", "par", "boxplot", "axis", "mtext", "abline", "points", "legend", "lines",  "barplot", "text")
+importFrom("graphics", "par", "boxplot", "axis", "mtext", "abline", "points", 
+           "legend", "lines",  "barplot", "text")
 import(Biobase)
 
 importFrom("stats", "lowess", "cor", "density","pexp", 
@@ -77,5 +78,7 @@ export(
 ,"diffAnaSave"
 ,"diffAnaComputeFDR"
 ,"wrapperCalibrationPlot"
+
+,"getProcessingInfo"
 
 )

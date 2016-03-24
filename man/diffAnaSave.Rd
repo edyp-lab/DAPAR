@@ -33,7 +33,8 @@ log(Fold Change) to discriminatedifferential proteins.}
 \item{fdr}{The FDR based on the values of threshold_pVal and 
 threshold_logFC}
 
-\item{calibrationMethod}{The calibration method used to compute the calibration plot}
+\item{calibrationMethod}{The calibration method used to compute the 
+calibration plot}
 }
 \value{
 A MSnSet

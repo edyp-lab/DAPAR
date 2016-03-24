@@ -2,7 +2,8 @@
 % Please edit documentation in R/missingValuesPlots.R
 \name{wrapper.mvTypePlot}
 \alias{wrapper.mvTypePlot}
-\title{Distribution of missing values with respect to intensity values from a \code{\link{MSnSet}} object}
+\title{Distribution of missing values with respect to intensity values 
+from a \code{\link{MSnSet}} object}
 \usage{
 wrapper.mvTypePlot(obj, threshold = 0)
 }
