@@ -15,7 +15,7 @@
 ##' @param indFData The name of column in \code{file} that will be the name of
 ##' rows for the \code{exprs()} and \code{fData()} tables
 ##' @param indiceID The indice of the column containing the ID of entities 
-##' (peptides or proteins) 
+##' (peptides or proteins)
 ##' @param logData A boolean value to indicate if the data have to be
 ##' log-transformed (Default is FALSE)
 ##' @param replaceZeros A boolean value to indicate if the 0 and NaN values of

@@ -5,7 +5,7 @@
 \title{Builds a plot from a dataframe}
 \usage{
 compareNormalizationD(qDataBefore, qDataAfter, labelsForLegend = NULL,
-  indData2Show = NULL, group2Color = "Condition")
+indData2Show = NULL, group2Color = "Condition")
 }
 \arguments{
 \item{qDataBefore}{A dataframe that contains quantitative data before 
@@ -21,7 +21,7 @@ per sample).}
 the plot. The indices are those of indices of 
 the columns int the data.frame qDataBefore.}
 
-\item{group2Color}{A string that indicates how to color the replicates: 
+\item{group2Color}{A string that indicates how to color the replicates:
 one color per condition (value "Condition") or one 
 color per replicate (value "Replicate"). Default value is by Condition.}
 }
@@ -36,7 +36,7 @@ normalization
 data(UPSpep25)
 qDataBefore <- exprs(UPSpep25)
 labels <- pData(UPSpep25)[,"Label"]
-qDataAfter <- normalizeD(qDataBefore,labels,"Median Centering", 
+qDataAfter <- normalizeD(qDataBefore,labels,"Median Centering",
 "within conditions")
 compareNormalizationD(qDataBefore, qDataAfter, labels)
 }

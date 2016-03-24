@@ -5,7 +5,7 @@
 \title{Barplot of proportion of contaminants and reverse}
 \usage{
 proportionConRev(obj, idContaminants = NULL, prefixContaminants = NULL,
-  idReverse = NULL, prefixReverse = NULL)
+idReverse = NULL, prefixReverse = NULL)
 }
 \arguments{
 \item{obj}{An object of class \code{\link{MSnSet}}.}

@@ -17,18 +17,18 @@ importFrom("foreach", "foreach", "%dopar%")
 importFrom("parallel", "detectCores")
 import(cp4p)
 importFrom("graphics", "par", "boxplot", "axis", "mtext", "abline", "points", 
-           "legend", "lines",  "barplot", "text")
+            "legend", "lines",  "barplot", "text")
 import(Biobase)
 
 importFrom("stats", "lowess", "cor", "density","pexp", 
-           "var", "t.test", "dist", "hclust", "setNames", 
-           "median", "p.adjust")
+            "var", "t.test", "dist", "hclust", "setNames", 
+            "median", "p.adjust")
 importFrom("imputeLCMD", "impute.wrapper.KNN", "impute.wrapper.MLE",
-           "impute.QRILC")
+            "impute.QRILC")
 importFrom("preprocessCore", "normalize.quantiles")
 importFrom("gplots", "heatmap.2")
 importFrom("XLConnect", "loadWorkbook", "createSheet", 
-           "writeWorksheet", "saveWorkbook")
+            "writeWorksheet", "saveWorkbook")
 importFrom("limma", "lmFit", "eBayes", "topTable")
 importFrom("pcaMethods", "completeObs", "pca")
 importFrom("scales", "alpha")

@@ -5,7 +5,7 @@
 \title{Builds a densityplot from a dataframe}
 \usage{
 densityPlotD(qData, labelsForLegend = NULL, indData2Show = NULL,
-  group2Color = "Condition")
+group2Color = "Condition")
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
