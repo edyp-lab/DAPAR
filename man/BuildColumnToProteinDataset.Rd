@@ -2,7 +2,7 @@
 % Please edit documentation in R/agregation.R
 \name{BuildColumnToProteinDataset}
 \alias{BuildColumnToProteinDataset}
-\title{creates a column for the protein dataset after agregation by 
+\title{creates a column for the protein dataset after agregation by
 using the previous peptide dataset.}
 \usage{
 BuildColumnToProteinDataset(peptideData, matAdj, columnName)

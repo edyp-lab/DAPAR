@@ -48,6 +48,7 @@ Imports:
     utils,
     cp4p,
     scales
-biocViews: Proteomics, Normalization, Preprocessing, MassSpectrometry
+biocViews: Proteomics, Normalization, Preprocessing, MassSpectrometry,
+    QualityControl, DataImport
 NeedsCompilation: no
 RoxygenNote: 5.0.1
