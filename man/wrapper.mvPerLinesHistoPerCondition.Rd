@@ -6,7 +6,7 @@
 object \code{\link{MSnSet}}}
 \usage{
 wrapper.mvPerLinesHistoPerCondition(obj, indLegend = "auto",
-showValues = FALSE)
+  showValues = FALSE)
 }
 \arguments{
 \item{obj}{An object of class \code{\link{MSnSet}}.}

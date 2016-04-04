@@ -97,14 +97,24 @@ diffAnaSave <- function (obj, data, method="limma", condition1, condition2,
     ilogfc <- which(abs(x) >= threshold_logFC)
     fData(obj)[intersect(ipval, ilogfc),]$Significant <- TRUE
     
-    obj@experimentData@other <- list(obj@experimentData@other,
-                                    method = method,
-                                        condition1 = condition1,
-                                        condition2 = condition2,
-                                        threshold.p.value = threshold_pVal,
-                                        threshold.logFC = threshold_logFC,
-                                        fdr = fdr,
-                                    calibrationMethod = calibrationMethod)
+    # obj@experimentData@other <- list(obj@experimentData@other,
+    #                                 method = method,
+    #                                     condition1 = condition1,
+    #                                     condition2 = condition2,
+    #                                     threshold.p.value = threshold_pVal,
+    #                                     threshold.logFC = threshold_logFC,
+    #                                     fdr = fdr,
+    #                                 calibrationMethod = calibrationMethod)
+    # 
+    
+    obj@experimentData@other$method = method
+    obj@experimentData@other$condition1 = condition1
+    obj@experimentData@other$condition2 = condition2
+    obj@experimentData@other$threshold.p.value = threshold_pVal
+    obj@experimentData@other$threshold.logFC = threshold_logFC
+    obj@experimentData@other$fdr = fdr
+    obj@experimentData@other$calibrationMethod = calibrationMethod
+    
     
     text <- paste("Differential analysis : Selection with the following 
                     threshold values :logFC =",threshold_logFC,

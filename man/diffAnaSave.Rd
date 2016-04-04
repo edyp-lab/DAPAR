@@ -6,8 +6,8 @@
 the differential analysis performed with \code{\link{limma}} package.}
 \usage{
 diffAnaSave(obj, data, method = "limma", condition1, condition2,
-threshold_pVal = 1e-60, threshold_logFC = 0, fdr = 0,
-calibrationMethod = "pounds")
+  threshold_pVal = 1e-60, threshold_logFC = 0, fdr = 0,
+  calibrationMethod = "pounds")
 }
 \arguments{
 \item{obj}{An object of class \code{\link{MSnSet}}.}

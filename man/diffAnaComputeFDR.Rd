@@ -6,7 +6,7 @@
 differential analysis using}
 \usage{
 diffAnaComputeFDR(data, threshold_PVal = 0, threshold_LogFC = 0,
-pi0Method = 1)
+  pi0Method = 1)
 }
 \arguments{
 \item{data}{The result of the differential analysis processed 

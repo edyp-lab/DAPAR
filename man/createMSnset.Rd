@@ -5,7 +5,7 @@
 \title{Creates an object of class \code{\link{MSnSet}} from text file}
 \usage{
 createMSnset(file, metadata = NULL, indExpData, indFData, indiceID = NULL,
-logData = FALSE, replaceZeros = FALSE, pep_prot_data = NULL)
+  logData = FALSE, replaceZeros = FALSE, pep_prot_data = NULL)
 }
 \arguments{
 \item{file}{The name of a tab-separated file that contains the data.}

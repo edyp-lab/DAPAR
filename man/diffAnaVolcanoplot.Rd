@@ -5,7 +5,7 @@
 \title{Volcanoplot of the differential analysis}
 \usage{
 diffAnaVolcanoplot(logFC = NULL, pVal = NULL, threshold_pVal = 1e-60,
-threshold_logFC = 0, conditions = NULL)
+  threshold_logFC = 0, conditions = NULL)
 }
 \arguments{
 \item{logFC}{A vector of the log(fold change) values of the differential

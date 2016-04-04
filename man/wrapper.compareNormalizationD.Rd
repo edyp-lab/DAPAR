@@ -5,7 +5,7 @@
 \title{Builds a plot from a dataframe}
 \usage{
 wrapper.compareNormalizationD(objBefore, objAfter, labelsForLegend = NULL,
-indData2Show = NULL, group2Color = "Condition")
+  indData2Show = NULL, group2Color = "Condition")
 }
 \arguments{
 \item{objBefore}{A dataframe that contains quantitative data before 

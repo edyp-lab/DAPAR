@@ -5,7 +5,7 @@
 \title{Builds a plot from a dataframe}
 \usage{
 compareNormalizationD(qDataBefore, qDataAfter, labelsForLegend = NULL,
-indData2Show = NULL, group2Color = "Condition")
+  indData2Show = NULL, group2Color = "Condition")
 }
 \arguments{
 \item{qDataBefore}{A dataframe that contains quantitative data before 

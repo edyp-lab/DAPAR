@@ -5,7 +5,7 @@
 \title{Builds a densityplot from an object of class \code{\link{MSnSet}}}
 \usage{
 wrapper.densityPlotD(obj, labelsForLegend = NULL, indData2Show = NULL,
-group2Color = "Condition")
+  group2Color = "Condition")
 }
 \arguments{
 \item{obj}{An object of class \code{\link{MSnSet}}.}

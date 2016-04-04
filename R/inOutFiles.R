@@ -95,8 +95,7 @@ data <- read.csv(file, header=TRUE, sep="\t", as.is=TRUE)
     }
     
     if (!is.null(pep_prot_data)) {
-        obj@experimentData@other <- c(obj@experimentData@other, 
-                                    typeOfData =pep_prot_data)
+        obj@experimentData@other$typeOfData <- pep_prot_data
     }
     
     return(obj)

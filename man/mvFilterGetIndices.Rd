@@ -16,12 +16,11 @@ Values are : "none", "wholeMatrix", "allCond", "atLeastOneCond"}
 \item{th}{An integer value of the threshold}
 }
 \value{
-An vector of indices.
+An vector of indices that correspond to the lines to keep.
 }
 \description{
 Returns the indices of the lines of \code{exprs()} table to delete w.r.t. 
-the conditions on the number
-of missing values.
+the conditions on the number of missing values.
 The user chooses the minimum amount of intensities that is acceptable and
 the filter delete lines that do not respect this condition.
 The condition may be on the whole line or condition by condition.

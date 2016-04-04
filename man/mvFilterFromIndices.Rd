@@ -11,7 +11,7 @@ mvFilterFromIndices(obj, keepThat = NULL, processText = NULL)
 quantitative data.}
 
 \item{keepThat}{A vector of integers which are the indices of lines to 
-delete}
+keep.}
 
 \item{processText}{A string to be included in the \code{\link{MSnSet}}
 object for log.}

@@ -7,7 +7,7 @@ quantitative data in the \code{exprs()} table of an object of
 class \code{\link{MSnSet}}}
 \usage{
 wrapper.heatmapD(obj, distance = "euclidean", cluster = "average",
-dendro = FALSE)
+  dendro = FALSE)
 }
 \arguments{
 \item{obj}{An object of class \code{\link{MSnSet}}.}

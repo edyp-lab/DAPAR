@@ -215,7 +215,7 @@ obj <- obj[keepThat,]
 ##' @param obj An object of class \code{\link{MSnSet}} containing
 ##' quantitative data.
 ##' @param keepThat A vector of integers which are the indices of lines to 
-##' delete
+##' keep.
 ##' @param processText A string to be included in the \code{\link{MSnSet}}
 ##' object for log. 
 ##' @return An instance of class \code{\link{MSnSet}} that have been filtered.
@@ -233,11 +233,34 @@ obj@processingData@processing <-
 return(obj)
 }
 
+##' Delete the lines of \code{exprs()} table identified by their indice.
+##' 
+##' @title Delete the lines in the matrix of intensities and the metadata table
+##' given their indice.
+##' @param obj An object of class \code{\link{MSnSet}} containing
+##' quantitative data.
+##' @param deleteThat A vector of integers which are the indices of lines to 
+##' delete.
+##' @param processText A string to be included in the \code{\link{MSnSet}}
+##' object for log. 
+##' @return An instance of class \code{\link{MSnSet}} that have been filtered.
+##' @author Florence Combes, Samuel Wieczorek
+##' @examples
+##' data(UPSpep25)
+##' mvFilter(UPSpep25, c(1:10))
+deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText=NULL )
+{
+    
+    if (is.null(deleteThat)) {return(obj)}
+    obj <- obj[-deleteThat,]
+    obj@processingData@processing <- 
+        c(obj@processingData@processing, processText)
+    return(obj)
+}
 
 
 ##' Returns the indices of the lines of \code{exprs()} table to delete w.r.t. 
-##' the conditions on the number
-##' of missing values.
+##' the conditions on the number of missing values.
 ##' The user chooses the minimum amount of intensities that is acceptable and
 ##' the filter delete lines that do not respect this condition.
 ##' The condition may be on the whole line or condition by condition.
@@ -256,7 +279,7 @@ return(obj)
 ##' @param type Method used to choose the lines to delete.
 ##' Values are : "none", "wholeMatrix", "allCond", "atLeastOneCond"
 ##' @param th An integer value of the threshold
-##' @return An vector of indices.
+##' @return An vector of indices that correspond to the lines to keep.
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' data(UPSpep25)

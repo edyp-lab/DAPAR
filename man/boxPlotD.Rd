@@ -5,7 +5,7 @@
 \title{Builds a boxplot from a dataframe}
 \usage{
 boxPlotD(qData, dataForXAxis = NULL, labels = NULL,
-group2Color = "Condition")
+  group2Color = "Condition")
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
