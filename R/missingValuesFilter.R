@@ -230,6 +230,10 @@ if (is.null(keepThat)) {return(obj)}
 obj <- obj[keepThat,]
 obj@processingData@processing <- 
     c(obj@processingData@processing, processText)
+
+txt <- unlist(strsplit(processText, split=" "))
+obj@experimentData@other$mvFilter.method <- txt[3]
+obj@experimentData@other$mvFilter.threshold <- txt[6]
 return(obj)
 }
 
@@ -255,6 +259,12 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText=NULL )
     obj <- obj[-deleteThat,]
     obj@processingData@processing <- 
         c(obj@processingData@processing, processText)
+    txt <- unlist(strsplit(processText, split=" "))
+    if (txt[2] == "contaminants"){
+    obj@experimentData@other$contaminantsRemoved <- TRUE
+    } else if (txt[2] == "reverse"){
+        obj@experimentData@other$reverseRemoved <- TRUE
+    }
     return(obj)
 }
 

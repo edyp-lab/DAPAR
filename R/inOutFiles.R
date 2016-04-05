@@ -97,6 +97,13 @@ data <- read.csv(file, header=TRUE, sep="\t", as.is=TRUE)
     if (!is.null(pep_prot_data)) {
         obj@experimentData@other$typeOfData <- pep_prot_data
     }
+    obj@experimentData@other$contaminantsRemoved <- FALSE
+    obj@experimentData@other$reverseRemoved <- FALSE
+    obj@experimentData@other$normalizationFamily <- NULL
+    obj@experimentData@other$normalizationMethod <- NULL
+    obj@experimentData@other$mvFilter.method <- NULL
+    obj@experimentData@other$mvFilter.threshold <-NULL
+    obj@experimentData@other$imputation.method <-NULL
     
     return(obj)
 }

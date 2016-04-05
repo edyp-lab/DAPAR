@@ -32,6 +32,11 @@ msg <- paste("Normalisation using family ", family,  sep="")
 msg2 <- paste("With method ", method,  sep="")
 obj@processingData@processing <- c(obj@processingData@processing,
                                     msg, msg2)
+
+obj@experimentData@other$normalizationFamily <- family
+obj@experimentData@other$normalizationMethod <- method
+
+
 return(obj)
 }
 
@@ -166,7 +171,9 @@ if (!is.null(.temp)){
     }
     }
     
-    #     msg <- paste("Normalisation using ", method,  sep="")
+    
+    
+        #     msg <- paste("Normalisation using ", method,  sep="")
     #     .temp@processingData@processing <- c(.temp@processingData@processing,
     #                                          msg)
 }

@@ -15,6 +15,8 @@ qData <- Biobase::exprs(obj)
 exprs(obj) <- mvImputation(qData, method)
 msg <- paste("Missing values imputation using ", method,  sep="")
 obj@processingData@processing <- c(obj@processingData@processing,msg)
+
+obj@experimentData@other$imputation.method <- method
 return(obj)
 }
 
@@ -72,5 +74,7 @@ if (method == "BPCA"){
     #     msg <- "Missing values imputation using QRILC algorithm"
     #     obj@processingData@processing <- c(obj@processingData@processing,msg)
 }
+
+
 return (exprs)
 }
