@@ -17,7 +17,8 @@ importFrom("foreach", "foreach", "%dopar%")
 importFrom("parallel", "detectCores")
 import(cp4p)
 importFrom("graphics", "par", "boxplot", "axis", "mtext", "abline", "points", 
-            "legend", "lines",  "barplot", "text")
+            "legend", "lines",  "barplot", "text",
+           "layout", "plot.new", "strheight", "strwidth", "title")
 import(Biobase)
 
 importFrom("stats", "lowess", "cor", "density","pexp", 
@@ -32,7 +33,7 @@ importFrom("XLConnect", "loadWorkbook", "createSheet",
 importFrom("limma", "lmFit", "eBayes", "topTable")
 importFrom("pcaMethods", "completeObs", "pca")
 importFrom("scales", "alpha")
-importFrom("grDevices", "colorRampPalette", "palette")
+importFrom("grDevices", "colorRampPalette", "palette", "heat.colors")
 importFrom("utils", "read.csv")
 
 
@@ -53,6 +54,7 @@ export(
 
 ,"wrapper.mvTypePlot","mvTypePlot"
 ,"wrapper.mvImage","mvImage"
+,"heatmap.DAPAR"
 
 ,"mvFilter"
 ,"mvFilterFromIndices"

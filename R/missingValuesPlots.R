@@ -39,7 +39,8 @@ mvPerLinesHisto(qData, samplesData, indLegend, showValues)
 mvPerLinesHisto <- function(qData, samplesData, indLegend="auto", 
                         showValues=FALSE){
 
-if (indLegend == "auto") { indLegend <- c(2:length(colnames(samplesData)))}
+if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
+    
 for (j in 1:length(colnames(qData))){
     noms <- NULL
     for (i in 1:length(indLegend)){
@@ -129,7 +130,7 @@ mvPerLinesHistoPerCondition <- function(qData, samplesData, indLegend="auto",
                                         showValues=FALSE){
 
 pal <- getPaletteForLabels(samplesData[,"Label"])
-if (indLegend == "auto") { indLegend <- c(2:length(colnames(samplesData)))}
+if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
 
 nbLabels <- length(unique(samplesData[,"Label"]))
 
@@ -214,7 +215,7 @@ mvHisto(qData, samplesData, labels, indLegend, showValues)
 mvHisto <- function(qData, samplesData, labels, indLegend="auto", 
                     showValues=FALSE){
 
-if (indLegend == "auto") { 
+if (identical(indLegend,"auto")) { 
     indLegend <- c(2:length(colnames(samplesData)))
 }
 
@@ -328,18 +329,11 @@ for (i in 1:nrow(exprso)){
 
 colfunc <- colorRampPalette(c("yellow", "red"))
 
-q <- heatmap.2(exprso,
-                dendrogram = "none",
-                Rowv=FALSE,
-                Colv = FALSE,
+heatmap.DAPAR(exprso,
                 col = colfunc(100),
-                density.info='none',
                 key=TRUE,
-                trace="none",
-                scale="none",
                 srtCol= 0,
                 labCol=labels,
-                labRow = "",
                 ylab = "Peptides / proteins",
                 main = "Missing values heatmap"
 ) 

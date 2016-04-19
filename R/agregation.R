@@ -197,6 +197,8 @@ registerDoParallel(cores)
     colnames(pep) <- paste("nb.pep.used.", colnames(expr), sep="")
     rownames(pep) <- colnames(matAdj)
     
+    
+    
     ##       Mp <- matrix(c(rep(NA)), ncol=nrow(condition), nrow=ncol(M2), 
     ##dimnames=c(list(prot, condname)))
 
@@ -312,13 +314,19 @@ pepAgregate <- function (obj.pep, protID, method="sum",matAdj=NULL, n=NULL){
     else if (method == "sum on top n"){ res <- TopnPeptides(matAdj, expr, n) }
     
     Mp <- res$matfin
+    Mp[Mp == 0] <- NA
+    Mp[is.nan(Mp)] <- NA
+    Mp[is.infinite(Mp)] <-NA
+    
+    
+    
     pep <- res$nbpep
     protId <- res$idprot
     fd <- data.frame(protId, pep)
     
     obj <- MSnSet(exprs = log2(Mp), fData = fd, pData = pData(obj.pep))
     obj@experimentData@other  <- list(obj@experimentData@other,
-                                    typeOfData ="proteins")
+                                    typeOfData ="protein")
     
     return(obj)
 }
