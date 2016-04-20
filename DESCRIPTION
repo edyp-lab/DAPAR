@@ -27,7 +27,7 @@ Maintainer: Samuel Wieczorek <samuel.wieczorek@cea.fr>
 Description: This package contains a collection of functions for the
     visualisation and the statistical analysis of proteomic data.
 License: Artistic-2.0
-VignetteBuilder: knitr
+VignetteBuilder: knitr, R.rsp
 Depends:
     R (>= 3.3),
     MSnbase
@@ -35,6 +35,7 @@ Suggests:
     BiocGenerics,
     testthat,
     BiocStyle,
+    R.rsp,
     Prostar
 Imports:
     Biobase,RColorBrewer,stats,preprocessCore,Cairo,png,
