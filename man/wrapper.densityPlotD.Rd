@@ -29,7 +29,7 @@ objects of class \code{\link{MSnSet}}
 }
 \examples{
 data(UPSpep25)
-labels <- pData(UPSpep25)[,"Label"]
+labels <- Biobase::pData(UPSpep25)[,"Label"]
 wrapper.densityPlotD(UPSpep25, labels)
 }
 \author{

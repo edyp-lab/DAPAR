@@ -27,7 +27,7 @@ by using the previous peptide dataset.
 data(UPSpep25)
 protID <- "Protein.group.IDs"
 M <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
-data <- fData(UPSpep25)
+data <- Biobase::fData(UPSpep25)
 name <- "organism"
 BuildColumnToProteinDataset(data, M, name )
 }

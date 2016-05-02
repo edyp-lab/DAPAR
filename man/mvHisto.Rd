@@ -27,9 +27,9 @@ This method plots a histogram of missing values.
 }
 \examples{
 data(UPSpep25)
-qData <- exprs(UPSpep25)
-samplesData <- pData(UPSpep25)
-labels <- pData(UPSpep25)[,"Label"]
+qData <- Biobase::exprs(UPSpep25)
+samplesData <- Biobase::pData(UPSpep25)
+labels <- Biobase::pData(UPSpep25)[,"Label"]
 mvHisto(qData, samplesData, labels, indLegend="auto", showValues=TRUE)
 }
 \author{

@@ -27,8 +27,8 @@ number of missing values (NA) per lines (ie proteins) and per conditions.
 }
 \examples{
 data(UPSpep25)
-qData <- exprs(UPSpep25)
-samplesData <- pData(UPSpep25)
+qData <- Biobase::exprs(UPSpep25)
+samplesData <- Biobase::pData(UPSpep25)
 mvPerLinesHistoPerCondition(qData, samplesData)
 }
 \author{

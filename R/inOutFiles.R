@@ -87,9 +87,9 @@ data <- read.csv(file, header=TRUE, sep="\t", as.is=TRUE)
     }
     
     if (replaceZeros) {
-    Biobase::exprs(obj)[exprs(obj) == 0] <- NA
-    Biobase::exprs(obj)[is.nan(exprs(obj))] <- NA
-    Biobase::exprs(obj)[is.infinite(exprs(obj))] <-NA
+    Biobase::exprs(obj)[Biobase::exprs(obj) == 0] <- NA
+    Biobase::exprs(obj)[is.nan(Biobase::exprs(obj))] <- NA
+    Biobase::exprs(obj)[is.infinite(Biobase::exprs(obj))] <-NA
         obj@processingData@processing <- c(obj@processingData@processing, 
                                             "All zeros were replaced by NA")
     }

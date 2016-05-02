@@ -45,10 +45,10 @@ boxPlotD(qData, dataForXAxis, labels, group2Color)
 ##' @seealso \code{\link{densityPlotD}}
 ##' @examples
 ##' data(UPSpep25)
-##' qData <- exprs(UPSpep25)
+##' qData <- Biobase::exprs(UPSpep25)
 ##' types <- c("Label","Analyt.Rep")
-##' dataForXAxis <- pData(UPSpep25)[,types]
-##' labels <- pData(UPSpep25)[,"Label"]
+##' dataForXAxis <- Biobase::pData(UPSpep25)[,types]
+##' labels <- Biobase::pData(UPSpep25)[,"Label"]
 ##' boxPlotD(qData, dataForXAxis, labels)
 boxPlotD <- function(qData, 
                     dataForXAxis=NULL, 
@@ -59,7 +59,8 @@ if (group2Color == "Condition") {
     pal <- getPaletteForLabels(labels)
     }else { pal <- getPaletteForReplicates(ncol(qData))}
 
-
+print("boxplot")
+print(pal)
 boxplot(qData
         ,las = 1
         , col = pal
@@ -111,7 +112,7 @@ palette("default")
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' data(UPSpep25)
-##' labels <- pData(UPSpep25)[,"Label"]
+##' labels <- Biobase::pData(UPSpep25)[,"Label"]
 ##' objAfter <- wrapper.normalizeD(UPSpep25, "Median Centering", 
 ##' "within conditions")
 ##' wrapper.compareNormalizationD(UPSpep25, objAfter, labels)
@@ -147,8 +148,8 @@ compareNormalizationD(qDataBefore, qDataAfter, labelsForLegend, indData2Show,
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' data(UPSpep25)
-##' qDataBefore <- exprs(UPSpep25)
-##' labels <- pData(UPSpep25)[,"Label"]
+##' qDataBefore <- Biobase::exprs(UPSpep25)
+##' labels <- Biobase::pData(UPSpep25)[,"Label"]
 ##' qDataAfter <- normalizeD(qDataBefore,labels,"Median Centering",
 ##' "within conditions")
 ##' compareNormalizationD(qDataBefore, qDataAfter, labels)
@@ -234,7 +235,7 @@ palette("default")
 ##' \code{\link{wrapper.varianceDistD}}
 ##' @examples
 ##' data(UPSpep25)
-##' labels <- pData(UPSpep25)[,"Label"]
+##' labels <- Biobase::pData(UPSpep25)[,"Label"]
 ##' wrapper.densityPlotD(UPSpep25, labels)
 wrapper.densityPlotD <- function(obj, labelsForLegend=NULL,  indData2Show=NULL,
                                 group2Color = "Condition"){
@@ -261,8 +262,8 @@ densityPlotD(qData, labelsForLegend, indData2Show,group2Color)
 ##' @seealso \code{\link{boxPlotD}}, \code{\link{varianceDistD}}
 ##' @examples 
 ##' data(UPSpep25)
-##' qData <- exprs(UPSpep25)
-##' labels <- lab2Show <- pData(UPSpep25)[,"Label"]
+##' qData <- Biobase::exprs(UPSpep25)
+##' labels <- lab2Show <- Biobase::pData(UPSpep25)[,"Label"]
 ##' densityPlotD(qData, labels)
 densityPlotD <- function(qData, labelsForLegend=NULL,indData2Show=NULL,
                         group2Color = "Condition"){
@@ -280,6 +281,7 @@ for (i in 1:ncol(qData)){
 lim.x <- range(min(axis.limits[1,]), max(axis.limits[2,]))
 lim.y <- range(min(axis.limits[3,]), max(axis.limits[4,]))
 
+
 ##Colors definition
 if (group2Color == "Condition") {
     pal <- getPaletteForLabels(labelsForLegend)
@@ -292,9 +294,10 @@ if (group2Color == "Condition") {
                         labelsForLegend,sep=" ")
     txtLegend <- txtLegend[indData2Show]
 }
+print("densiyplot")
+print(pal)
 
 ###Erase data not to show (color in white)
-
 # lineWD <- NULL
 # lineWD <- c(rep(1, length(colnames(qData))))
 # if (!is.null(highLightLabel)) {
@@ -452,8 +455,8 @@ corrMatrixD(qData, samplesData, rate)
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' data(UPSpep25)
-##' qData <- exprs(UPSpep25)
-##' samplesData <- pData(UPSpep25)
+##' qData <- Biobase::exprs(UPSpep25)
+##' samplesData <- Biobase::pData(UPSpep25)
 ##' corrMatrixD(qData, samplesData)
 corrMatrixD <- function(qData, samplesData, gradientRate = 5){
 Var1 <- Var2 <- value <- NULL
@@ -528,7 +531,7 @@ heatmapD(qData, distance, cluster, dendro)
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' data(testWithoutNA)
-##' qData <- exprs(testWithoutNA)
+##' qData <- Biobase::exprs(testWithoutNA)
 ##' heatmapD(qData)
 heatmapD <- function(qData, distance="euclidean", cluster="average", 
                     dendro = FALSE){
@@ -609,7 +612,7 @@ if (!(cluster %in%  paramcluster)){
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' data(testWithoutNA)
-##' qData <- exprs(testWithoutNA)
+##' qData <- Biobase::exprs(testWithoutNA)
 ##' heatmapD(qData)
 heatmap.DAPAR <- 
     function (x, 

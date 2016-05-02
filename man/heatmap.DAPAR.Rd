@@ -39,7 +39,7 @@ Heatmap inspired by the heatmap.2 function.
 }
 \examples{
 data(testWithoutNA)
-qData <- exprs(testWithoutNA)
+qData <- Biobase::exprs(testWithoutNA)
 heatmapD(qData)
 }
 \author{

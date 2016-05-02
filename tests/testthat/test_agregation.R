@@ -51,7 +51,7 @@ peptSharedUsed <- matrix(c( 2,2,2,2,2,2,
                                         "nb.pep.used.50fmolR3")))
 
 
-sumOfMatShared <- SumPeptides(computedMShared, exprs(testWithoutNA))
+sumOfMatShared <- SumPeptides(computedMShared, Biobase::exprs(testWithoutNA))
 expect_equal(sumShared, 
             sumOfMatShared$matfin[sort(rownames(sumOfMatShared$matfin)),])
 expect_equal(peptSharedUsed,
@@ -84,7 +84,7 @@ peptUniqueUsed <- matrix(c( 2,2,2,2,2,2,
                                                 "nb.pep.used.50fmolR3")))
 
 
-sumOfMatUnique <- SumPeptides(computedMUnique, exprs(testWithoutNA))
+sumOfMatUnique <- SumPeptides(computedMUnique, Biobase::exprs(testWithoutNA))
 expect_equal(sumUnique, 
                 sumOfMatUnique$matfin[sort(rownames(sumOfMatUnique$matfin)),])
 expect_equal(peptUniqueUsed,
@@ -153,7 +153,7 @@ peptSharedUsed <- matrix(c( 2,2,2,2,2,2,
                                                 "nb.pep.used.50fmolR1", 
                                                 "nb.pep.used.50fmolR2", 
                                                 "nb.pep.used.50fmolR3")))
-meanOfMatShared <- MeanPeptides(computedMShared, exprs(testWithoutNA))
+meanOfMatShared <- MeanPeptides(computedMShared, Biobase::exprs(testWithoutNA))
 expect_equal(meanShared, 
             meanOfMatShared$matfin[sort(rownames(meanOfMatShared$matfin)),]
             , tolerance=1e-5)
@@ -194,7 +194,7 @@ peptSharedUsed <- matrix(c( 2,2,2,2,2,2,
                                                 "nb.pep.used.50fmolR3")))
 
 
-topnOfMatShared <- TopnPeptides(computedMShared, exprs(testWithoutNA), n)
+topnOfMatShared <- TopnPeptides(computedMShared, Biobase::exprs(testWithoutNA), n)
 expect_equal(topnShared, 
             topnOfMatShared$matfin[sort(rownames(topnOfMatShared$matfin)),]
             , tolerance=1e-5)
@@ -228,7 +228,7 @@ peptUniqueUsed <- matrix(rep(2,18),byrow=TRUE, 3,6,
                                                 "nb.pep.used.50fmolR3")))
 
 
-topnOfMatUnique <- TopnPeptides(computedMUnique, exprs(testWithoutNA), n)
+topnOfMatUnique <- TopnPeptides(computedMUnique, Biobase::exprs(testWithoutNA), n)
 expect_equal(topnUnique, 
             topnOfMatUnique$matfin[sort(rownames(topnOfMatUnique$matfin)),]
                 , tolerance=1e-5)

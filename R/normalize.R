@@ -65,8 +65,8 @@ return(obj)
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' data(UPSpep25)
-##' qData <- exprs(UPSpep25)
-##' labels <- pData(UPSpep25)[,"Label"]
+##' qData <- Biobase::exprs(UPSpep25)
+##' labels <- Biobase::pData(UPSpep25)[,"Label"]
 ##' normalizeD(qData, labels, "Median Centering", "within conditions")
 normalizeD <- function(qData, labels, family, method){
 #Verification des parametres

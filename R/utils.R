@@ -20,7 +20,7 @@ return(obj@processingData@processing)
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' data(UPSpep25)
-##' qData <- exprs(UPSpep25)
+##' qData <- Biobase::exprs(UPSpep25)
 ##' getNumberOfEmptyLines(qData)
 getNumberOfEmptyLines <- function(qData){
 n <- sum(apply(is.na(as.matrix(qData)), 1, all))
@@ -46,7 +46,7 @@ return (n)
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' data(UPSpep25)
-##' labels <- pData(UPSpep25)[,"Label"]
+##' labels <- Biobase::pData(UPSpep25)[,"Label"]
 ##' getIndicesConditions(labels, "25fmol", "10fmol")
 getIndicesConditions <- function(labels, cond1, cond2){
 indCondition1 <- indCondition2 <- NULL
@@ -75,7 +75,7 @@ return(list(iCond1 = indCondition1, iCond2 = indCondition2))
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' data(UPSpep25)
-##' labels <- pData(UPSpep25)[,"Label"]
+##' labels <- Biobase::pData(UPSpep25)[,"Label"]
 ##' getPaletteForLabels(labels)
 getPaletteForLabels <- function(labels){
 nColors <- 8
@@ -101,7 +101,7 @@ return (col.boxplot)
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' data(UPSpep25)
-##' n <- nrow(pData(UPSpep25))
+##' n <- nrow(Biobase::pData(UPSpep25))
 ##' getPaletteForLabels(5)
 getPaletteForReplicates <- function(nColors){
 col <- c(1:nColors)

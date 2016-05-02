@@ -28,10 +28,10 @@ Boxplot for quantitative proteomics data
 }
 \examples{
 data(UPSpep25)
-qData <- exprs(UPSpep25)
+qData <- Biobase::exprs(UPSpep25)
 types <- c("Label","Analyt.Rep")
-dataForXAxis <- pData(UPSpep25)[,types]
-labels <- pData(UPSpep25)[,"Label"]
+dataForXAxis <- Biobase::pData(UPSpep25)[,types]
+labels <- Biobase::pData(UPSpep25)[,"Label"]
 boxPlotD(qData, dataForXAxis, labels)
 }
 \author{

@@ -35,9 +35,9 @@ data(UPSpep25)
 obj <- wrapper.mvImputation(UPSpep25, "QRILC")
 condition1 <- '25fmol'
 condition2 <- '10fmol'
-qData <- exprs(obj)
-samplesData <- pData(obj)
-labels <- pData(obj)[,"Label"]
+qData <- Biobase::exprs(obj)
+samplesData <- Biobase::pData(obj)
+labels <- Biobase::pData(obj)[,"Label"]
 limma <- diffAnaLimma(qData,samplesData, labels, condition1, condition2)
 diffAnaComputeFDR(limma)
 }

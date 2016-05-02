@@ -32,9 +32,9 @@ an \code{\link{MSnSet}} object (calls the \code{limma} package function).
 data(UPSpep25)
 condition1 <- '25fmol'
 condition2 <- '10fmol'
-qData <- exprs(UPSpep25)
-samplesData <- pData(UPSpep25)
-labels <- pData(UPSpep25)[,"Label"]
+qData <- Biobase::exprs(UPSpep25)
+samplesData <- Biobase::pData(UPSpep25)
+labels <- Biobase::pData(UPSpep25)[,"Label"]
 diffAnaLimma(qData, samplesData, labels, condition1, condition2)
 }
 \author{

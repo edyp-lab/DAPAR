@@ -26,7 +26,7 @@ intensities of their n best peptides.
 data(UPSpep25)
 protID <- "Protein.group.IDs"
 matAdj <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
-TopnPeptides(matAdj, exprs(UPSpep25), 3)
+TopnPeptides(matAdj, Biobase::exprs(UPSpep25), 3)
 }
 \author{
 Alexia Dorffer

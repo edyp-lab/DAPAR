@@ -30,8 +30,8 @@ The data have been jittered for an easier vizualisation.
 }
 \examples{
 data(UPSpep25)
-qData <- exprs(UPSpep25)
-labels <- pData(UPSpep25)[,"Label"]
+qData <- Biobase::exprs(UPSpep25)
+labels <- Biobase::pData(UPSpep25)[,"Label"]
 mvTypePlot(qData, labels, threshold=0)
 }
 \author{

@@ -19,7 +19,7 @@ the brewer palette "Dark2" (see \code{\link{RColorBrewer}}).
 }
 \examples{
 data(UPSpep25)
-n <- nrow(pData(UPSpep25))
+n <- nrow(Biobase::pData(UPSpep25))
 getPaletteForLabels(5)
 }
 \author{

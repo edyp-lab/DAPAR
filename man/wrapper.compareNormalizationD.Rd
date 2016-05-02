@@ -34,7 +34,7 @@ data before and after normalization
 }
 \examples{
 data(UPSpep25)
-labels <- pData(UPSpep25)[,"Label"]
+labels <- Biobase::pData(UPSpep25)[,"Label"]
 objAfter <- wrapper.normalizeD(UPSpep25, "Median Centering", 
 "within conditions")
 wrapper.compareNormalizationD(UPSpep25, objAfter, labels)

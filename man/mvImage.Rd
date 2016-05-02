@@ -24,8 +24,8 @@ number of missing values. A white square is plotted for missing values.
 }
 \examples{
 data(UPSpep25)
-qData <- exprs(UPSpep25)
-labels <- pData(UPSpep25)[,"Label"]
+qData <- Biobase::exprs(UPSpep25)
+labels <- Biobase::pData(UPSpep25)[,"Label"]
 mvImage(qData, labels)
 }
 \author{

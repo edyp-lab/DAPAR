@@ -14,7 +14,7 @@
 ##' data(UPSpep25)
 ##' protID <- "Protein.group.IDs"
 ##' M <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
-##' data <- fData(UPSpep25)
+##' data <- Biobase::fData(UPSpep25)
 ##' name <- "organism"
 ##' BuildColumnToProteinDataset(data, M, name )
 BuildColumnToProteinDataset <- function(peptideData, matAdj, columnName){
@@ -65,7 +65,7 @@ CountPep <- function (M) {
 ##' data(UPSpep25)
 ##' protID <- "Protein.group.IDs"
 ##' M <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
-##' SumPeptides(M, exprs(UPSpep25))
+##' SumPeptides(M, Biobase::exprs(UPSpep25))
 SumPeptides <- function(matAdj, expr){
     # require(foreach)
     #register for use of parallel foreach
@@ -118,7 +118,7 @@ SumPeptides <- function(matAdj, expr){
 ##' data(UPSpep25)
 ##' protID <- "Protein.group.IDs"
 ##' matAdj <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
-##' MeanPeptides(matAdj, exprs(UPSpep25))
+##' MeanPeptides(matAdj, Biobase::exprs(UPSpep25))
 MeanPeptides <- function(matAdj,expr){
     #require(foreach)
     ##register for use of parallel foreach
@@ -169,7 +169,7 @@ registerDoParallel(cores)
 ##' data(UPSpep25)
 ##' protID <- "Protein.group.IDs"
 ##' matAdj <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
-##' TopnPeptides(matAdj, exprs(UPSpep25), 3)
+##' TopnPeptides(matAdj, Biobase::exprs(UPSpep25), 3)
 TopnPeptides<-function(matAdj,expr,n){
     #require(foreach)
     ##register for use of parallel foreach
@@ -238,7 +238,7 @@ registerDoParallel(cores)
 BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
 
 data <- Biobase::exprs(obj.pep)
-    PG <- fData(obj.pep)[,protID]
+    PG <- Biobase::fData(obj.pep)[,protID]
     PG.l <- strsplit(as.character(PG), split=";", fixed=TRUE)
 
     X <- matrix(c(rep(0)), 
@@ -324,7 +324,7 @@ pepAgregate <- function (obj.pep, protID, method="sum",matAdj=NULL, n=NULL){
     protId <- res$idprot
     fd <- data.frame(protId, pep)
     
-    obj <- MSnSet(exprs = log2(Mp), fData = fd, pData = pData(obj.pep))
+    obj <- MSnSet(exprs = log2(Mp), fData = fd, pData = Biobase::pData(obj.pep))
     obj@experimentData@other  <- list(obj@experimentData@other,
                                     typeOfData ="protein")
     

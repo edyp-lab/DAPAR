@@ -21,7 +21,7 @@ a matrix.
 }
 \examples{
 data(UPSpep25)
-qData <- exprs(UPSpep25)
+qData <- Biobase::exprs(UPSpep25)
 mvImputation(qData, "QRILC")
 }
 \author{

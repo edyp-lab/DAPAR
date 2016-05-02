@@ -24,7 +24,7 @@ intensities of their peptides.
 data(UPSpep25)
 protID <- "Protein.group.IDs"
 M <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
-SumPeptides(M, exprs(UPSpep25))
+SumPeptides(M, Biobase::exprs(UPSpep25))
 }
 \author{
 Alexia Dorffer

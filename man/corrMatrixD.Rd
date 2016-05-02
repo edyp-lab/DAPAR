@@ -24,8 +24,8 @@ Correlation matrix based on a \code{\link{MSnSet}} object
 }
 \examples{
 data(UPSpep25)
-qData <- exprs(UPSpep25)
-samplesData <- pData(UPSpep25)
+qData <- Biobase::exprs(UPSpep25)
+samplesData <- Biobase::pData(UPSpep25)
 corrMatrixD(qData, samplesData)
 }
 \author{

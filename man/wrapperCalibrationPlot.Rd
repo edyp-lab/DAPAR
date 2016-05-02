@@ -24,8 +24,8 @@ This function is a wrapper to the calibration.plot method of the
 data(UPSpep25)
 condition1 <- '25fmol'
 condition2 <- '10fmol'
-qData <- exprs(UPSpep25)
-labels <- pData(UPSpep25)[,"Label"]
+qData <- Biobase::exprs(UPSpep25)
+labels <- Biobase::pData(UPSpep25)[,"Label"]
 diffAnaWelch(qData, labels, condition1, condition2)
 }
 \author{

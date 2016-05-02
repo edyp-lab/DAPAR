@@ -28,7 +28,7 @@ Heatmap of the quantitative proteomic data of a \code{\link{MSnSet}} object
 }
 \examples{
 data(testWithoutNA)
-qData <- exprs(testWithoutNA)
+qData <- Biobase::exprs(testWithoutNA)
 heatmapD(qData)
 }
 \author{

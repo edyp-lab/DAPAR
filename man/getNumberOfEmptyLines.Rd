@@ -17,7 +17,7 @@ Returns the number of empty lines in a matrix.
 }
 \examples{
 data(UPSpep25)
-qData <- exprs(UPSpep25)
+qData <- Biobase::exprs(UPSpep25)
 getNumberOfEmptyLines(qData)
 }
 \author{

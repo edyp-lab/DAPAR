@@ -20,9 +20,9 @@
 ##' obj <- wrapper.mvImputation(UPSpep25, "QRILC")
 ##' condition1 <- '25fmol'
 ##' condition2 <- '10fmol'
-##' qData <- exprs(obj)
-##' samplesData <- pData(obj)
-##' labels <- pData(obj)[,"Label"]
+##' qData <- Biobase::exprs(obj)
+##' samplesData <- Biobase::pData(obj)
+##' labels <- Biobase::pData(obj)[,"Label"]
 ##' limma <- diffAnaLimma(qData,samplesData, labels, condition1, condition2)
 ##' diffAnaComputeFDR(limma)
 diffAnaComputeFDR <- function(data,threshold_PVal=0, threshold_LogFC =0, 
@@ -81,21 +81,21 @@ diffAnaSave <- function (obj, data, method="limma", condition1, condition2,
     
     # temp <- obj
     #####################################################################
-    fData(obj)$P.Value <- data$P.Value
-    fData(obj)$logFC <- data$logFC
-    fData(obj)$Significant <- FALSE
+    Biobase::fData(obj)$P.Value <- data$P.Value
+    Biobase::fData(obj)$logFC <- data$logFC
+    Biobase::fData(obj)$Significant <- FALSE
 
     text <- paste("Differential analysis with",method)
     obj@processingData@processing <- c(obj@processingData@processing, text)
     
     
     ##setSignificant
-    x <- fData(obj)$logFC
-    y <- -log10(fData(obj)$P.Value)
+    x <- Biobase::fData(obj)$logFC
+    y <- -log10(Biobase::fData(obj)$P.Value)
     
     ipval <- which(y >= threshold_pVal)
     ilogfc <- which(abs(x) >= threshold_logFC)
-    fData(obj)[intersect(ipval, ilogfc),]$Significant <- TRUE
+    Biobase::fData(obj)[intersect(ipval, ilogfc),]$Significant <- TRUE
     
     # obj@experimentData@other <- list(obj@experimentData@other,
     #                                 method = method,
@@ -147,12 +147,12 @@ diffAnaGetSignificant <- function (obj){
         warning("The dataset contains no data")
         return(NULL)
     }
-    if (!("Significant" %in% colnames(fData(obj)))) {
+    if (!("Significant" %in% colnames(Biobase::fData(obj)))) {
         warning ("Please Set Significant data before")
         return(NULL)
     }
     temp <- obj
-    signif <- which(fData(temp)$Significant == TRUE)
+    signif <- which(Biobase::fData(temp)$Significant == TRUE)
     return (temp[signif,])
 }
 
@@ -171,10 +171,10 @@ diffAnaGetSignificant <- function (obj){
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' data(UPSpep25)
-##' qData <- exprs(UPSpep25)
-##' design <- cbind(cond1=1, cond2 = rep(0,nrow(pData(UPSpep25))))
-##' rownames(design) <- rownames(pData(UPSpep25))
-##' labels <- pData(UPSpep25)[,"Label"]
+##' qData <- Biobase::exprs(UPSpep25)
+##' design <- cbind(cond1=1, cond2 = rep(0,nrow(Biobase::pData(UPSpep25))))
+##' rownames(design) <- rownames(Biobase::pData(UPSpep25))
+##' labels <- Biobase::pData(UPSpep25)[,"Label"]
 ##' indices <- getIndicesConditions(labels, "25fmol", "10fmol")
 ##' design[indices$iCond2,2] <- 1
 ##' diffAna(qData, design)
@@ -214,7 +214,7 @@ wrapper.diffAnaLimma <- function(obj, condition1, condition2){
 
 qData <- Biobase::exprs(obj)
 samplesData <- Biobase::pData(obj)
-labels <- pData(obj)[,"Label"]
+labels <- Biobase::pData(obj)[,"Label"]
 p <- diffAnaLimma(qData, samplesData, labels, condition1, condition2)
 return(p)
 }
@@ -241,9 +241,9 @@ return(p)
 ##' data(UPSpep25)
 ##' condition1 <- '25fmol'
 ##' condition2 <- '10fmol'
-##' qData <- exprs(UPSpep25)
-##' samplesData <- pData(UPSpep25)
-##' labels <- pData(UPSpep25)[,"Label"]
+##' qData <- Biobase::exprs(UPSpep25)
+##' samplesData <- Biobase::pData(UPSpep25)
+##' labels <- Biobase::pData(UPSpep25)[,"Label"]
 ##' diffAnaLimma(qData, samplesData, labels, condition1, condition2)
 diffAnaLimma <- function(qData, samplesData, labels, condition1, condition2){
 if( sum(is.na(qData == TRUE))>0) {
@@ -322,8 +322,8 @@ return(p)
 ##' data(UPSpep25)
 ##' condition1 <- '25fmol'
 ##' condition2 <- '10fmol'
-##' qData <- exprs(UPSpep25)
-##' labels <- pData(UPSpep25)[,"Label"]
+##' qData <- Biobase::exprs(UPSpep25)
+##' labels <- Biobase::pData(UPSpep25)[,"Label"]
 ##' diffAnaWelch(qData, labels, condition1, condition2)
 diffAnaWelch <- function(qData, labels, condition1, condition2){
 
@@ -365,8 +365,8 @@ return(p)
 ##' data(UPSpep25)
 ##' condition1 <- '25fmol'
 ##' condition2 <- '10fmol'
-##' qData <- exprs(UPSpep25)
-##' labels <- pData(UPSpep25)[,"Label"]
+##' qData <- Biobase::exprs(UPSpep25)
+##' labels <- Biobase::pData(UPSpep25)[,"Label"]
 ##' diffAnaWelch(qData, labels, condition1, condition2)
 wrapperCalibrationPlot <- function(vPVal, pi0Method="pounds"){
 

@@ -12,7 +12,7 @@
 ##' wrapper.mvImputation(UPSpep25, "QRILC")
 wrapper.mvImputation <- function(obj, method){
 qData <- Biobase::exprs(obj)
-exprs(obj) <- mvImputation(qData, method)
+Biobase::exprs(obj) <- mvImputation(qData, method)
 msg <- paste("Missing values imputation using ", method,  sep="")
 obj@processingData@processing <- c(obj@processingData@processing,msg)
 
@@ -34,7 +34,7 @@ return(obj)
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' data(UPSpep25)
-##' qData <- exprs(UPSpep25)
+##' qData <- Biobase::exprs(UPSpep25)
 ##' mvImputation(qData, "QRILC")
 mvImputation <- function(qData, method){
 #Check parameters

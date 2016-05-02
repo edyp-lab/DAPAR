@@ -28,8 +28,8 @@ Densityplot of quantitative proteomics data over samples.
 }
 \examples{
 data(UPSpep25)
-qData <- exprs(UPSpep25)
-labels <- lab2Show <- pData(UPSpep25)[,"Label"]
+qData <- Biobase::exprs(UPSpep25)
+labels <- lab2Show <- Biobase::pData(UPSpep25)[,"Label"]
 densityPlotD(qData, labels)
 }
 \author{

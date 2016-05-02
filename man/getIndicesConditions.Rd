@@ -27,7 +27,7 @@ indices for the samples.
 }
 \examples{
 data(UPSpep25)
-labels <- pData(UPSpep25)[,"Label"]
+labels <- Biobase::pData(UPSpep25)[,"Label"]
 getIndicesConditions(labels, "25fmol", "10fmol")
 }
 \author{

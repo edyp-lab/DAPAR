@@ -33,8 +33,8 @@ mvPerLinesHisto(qData, samplesData, indLegend, showValues)
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' data(UPSpep25)
-##' qData <- exprs(UPSpep25)
-##' samplesData <- pData(UPSpep25)
+##' qData <- Biobase::exprs(UPSpep25)
+##' samplesData <- Biobase::pData(UPSpep25)
 ##' mvPerLinesHisto(qData, samplesData)
 mvPerLinesHisto <- function(qData, samplesData, indLegend="auto", 
                         showValues=FALSE){
@@ -123,8 +123,8 @@ mvPerLinesHistoPerCondition(qData, samplesData, indLegend, showValues)
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' data(UPSpep25)
-##' qData <- exprs(UPSpep25)
-##' samplesData <- pData(UPSpep25)
+##' qData <- Biobase::exprs(UPSpep25)
+##' samplesData <- Biobase::pData(UPSpep25)
 ##' mvPerLinesHistoPerCondition(qData, samplesData)
 mvPerLinesHistoPerCondition <- function(qData, samplesData, indLegend="auto", 
                                         showValues=FALSE){
@@ -208,9 +208,9 @@ mvHisto(qData, samplesData, labels, indLegend, showValues)
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' data(UPSpep25)
-##' qData <- exprs(UPSpep25)
-##' samplesData <- pData(UPSpep25)
-##' labels <- pData(UPSpep25)[,"Label"]
+##' qData <- Biobase::exprs(UPSpep25)
+##' samplesData <- Biobase::pData(UPSpep25)
+##' labels <- Biobase::pData(UPSpep25)[,"Label"]
 ##' mvHisto(qData, samplesData, labels, indLegend="auto", showValues=TRUE)
 mvHisto <- function(qData, samplesData, labels, indLegend="auto", 
                     showValues=FALSE){
@@ -297,8 +297,8 @@ mvImage(qData, labels)
 ##' @author Samuel Wieczorek, Thomas Burger
 ##' @examples
 ##' data(UPSpep25)
-##' qData <- exprs(UPSpep25)
-##' labels <- pData(UPSpep25)[,"Label"]
+##' qData <- Biobase::exprs(UPSpep25)
+##' labels <- Biobase::pData(UPSpep25)[,"Label"]
 ##' mvImage(qData, labels)
 mvImage <- function(qData, labels){
 ### build indices of conditions
@@ -390,8 +390,8 @@ mvTypePlot(qData, labels, threshold)
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' data(UPSpep25)
-##' qData <- exprs(UPSpep25)
-##' labels <- pData(UPSpep25)[,"Label"]
+##' qData <- Biobase::exprs(UPSpep25)
+##' labels <- Biobase::pData(UPSpep25)[,"Label"]
 ##' mvTypePlot(qData, labels, threshold=0)
 mvTypePlot <- function(qData, labels, threshold=0){
 #require(scales)

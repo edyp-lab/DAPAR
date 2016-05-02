@@ -29,15 +29,14 @@ Description: This package contains a collection of functions for the
 License: Artistic-2.0
 VignetteBuilder: knitr
 Depends:
-    R (>= 3.3),
-    MSnbase
+    R (>= 3.3)
 Suggests:
     BiocGenerics,
     testthat,
     BiocStyle,
     Prostar
 Imports:
-    Biobase,RColorBrewer,stats,preprocessCore,Cairo,png,
+    Biobase, MSnbase, RColorBrewer,stats,preprocessCore,Cairo,png,
     lattice,reshape2,gplots,pcaMethods,ggplot2,
     limma,knitr,tmvtnorm,norm,impute,
     imputeLCMD,

@@ -10,10 +10,10 @@
 ##' getPourcentageOfMV(UPSpep25)
 getPourcentageOfMV <- function(obj){
 
-NA.count<-apply(data.frame(exprs(obj)), 2, 
+NA.count<-apply(data.frame(Biobase::exprs(obj)), 2, 
                 function(x) length(which(is.na(data.frame(x))==TRUE)) )
 pourcentage <- 100 * round(sum(NA.count)
-                            /(dim(exprs(obj))[1]*dim(exprs(obj))[2]), 
+                            /(dim(Biobase::exprs(obj))[1]*dim(Biobase::exprs(obj))[2]), 
                             digits=4)
 
 return(pourcentage)
@@ -38,7 +38,7 @@ if (!(is.null(name) || !is.null(name==""))
     && (is.null(prefix) || (prefix==""))){return(0)}
 
 if(nchar(prefix) > 0){
-    count <- length(which(substr(fData(obj)[,name], 0, 1) == prefix))
+    count <- length(which(substr(Biobase::fData(obj)[,name], 0, 1) == prefix))
 } else { count <- 0}
 
 return(count)
@@ -69,10 +69,10 @@ nContaminants <- nReverse <- 0
 nContaminants <- getNumberOf(obj, idContaminants, prefixContaminants)
 nReverse <- getNumberOf(obj, idReverse, prefixReverse)
 
-pctContaminants <- 100 * round(nContaminants/nrow(fData(obj)),  digits=4)
-pctReverse <- 100 * round(nReverse/nrow(fData(obj)),  digits=4)
+pctContaminants <- 100 * round(nContaminants/nrow(Biobase::fData(obj)),  digits=4)
+pctReverse <- 100 * round(nReverse/nrow(Biobase::fData(obj)),  digits=4)
 
-counts <- c(nrow(fData(obj))-nContaminants-nReverse, nContaminants, 
+counts <- c(nrow(Biobase::fData(obj))-nContaminants-nReverse, nContaminants, 
             nReverse )
 slices <- c(100-pctContaminants-pctReverse, pctContaminants, pctReverse ) 
 lbls <- c("Quantitative data", "Contaminants", "Reverse")
@@ -115,7 +115,7 @@ if ((prefix == "") || is.null(prefix)) {
 t <- NULL
 q <- paste("^",prefix, "$", sep="")
 
-    obj <- obj[-which(regexpr(q,fData(obj)[,idLine2Delete]) == -1) ]
+    obj <- obj[-which(regexpr(q,Biobase::fData(obj)[,idLine2Delete]) == -1) ]
 
 return(obj)
 }
@@ -141,7 +141,7 @@ if ((prefix == "") || is.null(prefix)) {
 t <- NULL
 q <- paste("^",prefix, "$", sep="")
 
-ind <- which(regexpr(q,fData(obj)[,idLine2Delete]) == -1)
+ind <- which(regexpr(q,Biobase::fData(obj)[,idLine2Delete]) == -1)
 
 }
 
@@ -303,7 +303,7 @@ if (sum(is.na(match(type, paramtype)==TRUE))>0){
     return (NULL)
 }
 
-paramth<-c(seq(0, nrow(pData(obj)), 1))
+paramth<-c(seq(0, nrow(Biobase::pData(obj)), 1))
 if (sum(is.na(match(th, paramth)==TRUE))>0){
     warning("Param th is not correct.")
     return (NULL)
@@ -312,20 +312,20 @@ if (sum(is.na(match(th, paramth)==TRUE))>0){
 keepThat <- NULL
 
 if (type == "none"){
-    keepThat <- seq(1:nrow(exprs(obj)))
+    keepThat <- seq(1:nrow(Biobase::exprs(obj)))
 } else if (type == "wholeMatrix"){
-    keepThat <- which(apply(!is.na(exprs(obj)), 1, sum) >= th)
+    keepThat <- which(apply(!is.na(Biobase::exprs(obj)), 1, sum) >= th)
 } else if (type == "atLeastOneCond" || type == "allCond"){
     
-    conditions <- unique(pData(obj)$Label)
+    conditions <- unique(Biobase::pData(obj)$Label)
     nbCond <- length(conditions)
     keepThat <- NULL
-    s <- matrix(rep(0, nrow(exprs(obj))*nbCond),nrow=nrow(exprs(obj)), 
+    s <- matrix(rep(0, nrow(Biobase::exprs(obj))*nbCond),nrow=nrow(Biobase::exprs(obj)), 
                 ncol=nbCond)
     
     for (c in 1:nbCond){
-        ind <- which(pData(obj)$Label == conditions[c])
-        s[,c] <- (apply(!is.na(exprs(obj)[,ind]), 1, sum) >= th)
+        ind <- which(Biobase::pData(obj)$Label == conditions[c])
+        s[,c] <- (apply(!is.na(Biobase::exprs(obj)[,ind]), 1, sum) >= th)
     }
     
     

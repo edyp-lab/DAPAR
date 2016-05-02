@@ -18,10 +18,10 @@ colnames(norm) <- c("25fmolR1","25fmolR2","25fmolR3",
 rownames(norm) <- c("1","2","3","4","5","6","8","9","10")
 
 funcNorm <- wrapper.normalizeD(test, "Global Rescaling", "sum by columns")
-expect_equal(round(exprs(funcNorm),4), norm)
+expect_equal(round(Biobase::exprs(funcNorm),4), norm)
 
-labels <- pData(test)[,"Label"]
-funcNorm <- normalizeD(exprs(test), labels, 
+labels <- Biobase::pData(test)[,"Label"]
+funcNorm <- normalizeD(Biobase::exprs(test), labels, 
                         "Global Rescaling", 
                         "sum by columns")
 expect_equal(round(funcNorm,4), norm)
@@ -41,10 +41,10 @@ colnames(norm) <- c("25fmolR1","25fmolR2","25fmolR3",
 rownames(norm) <- c("1","2","3","4","5","6","8","9","10")
 
 funcNorm <- wrapper.normalizeD(test, "Global Rescaling", "quantiles")
-expect_equal(round(exprs(funcNorm),4), norm)
+expect_equal(round(Biobase::exprs(funcNorm),4), norm)
 
-labels <- pData(test)[,"Label"]
-funcNorm <- normalizeD(exprs(test), labels, "Global Rescaling", "quantiles")
+labels <- Biobase::pData(test)[,"Label"]
+funcNorm <- normalizeD(Biobase::exprs(test), labels, "Global Rescaling", "quantiles")
 expect_equal(round(funcNorm,4), norm)
 })
 
@@ -63,10 +63,10 @@ colnames(norm) <- c("25fmolR1","25fmolR2","25fmolR3",
 rownames(norm) <- c("1","2","3","4","5","6","8","9","10")
 
 funcNorm <- wrapper.normalizeD(test, "Global Rescaling", "sum by columns")
-expect_equal(round(exprs(funcNorm),4), norm)
+expect_equal(round(Biobase::exprs(funcNorm),4), norm)
 
-labels <- pData(test)[,"Label"]
-funcNorm <- normalizeD(exprs(test), labels, 
+labels <- Biobase::pData(test)[,"Label"]
+funcNorm <- normalizeD(Biobase::exprs(test), labels, 
                         "Global Rescaling", 
                         "sum by columns")
 expect_equal(round(funcNorm,4), norm)
@@ -86,10 +86,10 @@ colnames(norm) <- c("25fmolR1","25fmolR2","25fmolR3",
 rownames(norm) <- c("1","2","3","4","5","6","8","9","10")
 
 funcNorm <- wrapper.normalizeD(test, "Median Centering", "overall")
-expect_equal(round(exprs(funcNorm),4), norm)
+expect_equal(round(Biobase::exprs(funcNorm),4), norm)
 
-labels <- pData(test)[,"Label"]
-funcNorm <- normalizeD(exprs(test), labels, "Median Centering", "overall")
+labels <- Biobase::pData(test)[,"Label"]
+funcNorm <- normalizeD(Biobase::exprs(test), labels, "Median Centering", "overall")
 expect_equal(round(funcNorm,4), norm)
 })
 
@@ -108,10 +108,10 @@ colnames(norm) <- c("25fmolR1","25fmolR2","25fmolR3",
 rownames(norm) <- c("1","2","3","4","5","6","8","9","10")
 
 funcNorm <- wrapper.normalizeD(test, "Median Centering", "within conditions")
-expect_equal(round(exprs(funcNorm),4), norm)
+expect_equal(round(Biobase::exprs(funcNorm),4), norm)
 
-labels <- pData(test)[,"Label"]
-funcNorm <- normalizeD(exprs(test), labels,
+labels <- Biobase::pData(test)[,"Label"]
+funcNorm <- normalizeD(Biobase::exprs(test), labels,
                         "Median Centering", 
                         "within conditions")
 expect_equal(round(funcNorm,4), norm)
@@ -131,10 +131,10 @@ colnames(norm) <- c("25fmolR1","25fmolR2","25fmolR3",
 rownames(norm) <- c("1","2","3","4","5","6","8","9","10")
 
 funcNorm <- wrapper.normalizeD(test, "Mean Centering", "overall")
-expect_equal(round(exprs(funcNorm),4), norm)
+expect_equal(round(Biobase::exprs(funcNorm),4), norm)
 
-labels <- pData(test)[,"Label"]
-funcNorm <- normalizeD(exprs(test), labels, "Mean Centering", "overall")
+labels <- Biobase::pData(test)[,"Label"]
+funcNorm <- normalizeD(Biobase::exprs(test), labels, "Mean Centering", "overall")
 expect_equal(round(funcNorm,4), norm)
 })
 
@@ -152,10 +152,10 @@ colnames(norm) <- c("25fmolR1","25fmolR2","25fmolR3",
 rownames(norm) <- c("1","2","3","4","5","6","8","9","10")
 
 funcNorm <- wrapper.normalizeD(test,  "Mean Centering", "within conditions")
-expect_equal(round(exprs(funcNorm),4), norm)
+expect_equal(round(Biobase::exprs(funcNorm),4), norm)
 
-labels <- pData(test)[,"Label"]
-funcNorm <- normalizeD(exprs(test), labels, 
+labels <- Biobase::pData(test)[,"Label"]
+funcNorm <- normalizeD(Biobase::exprs(test), labels, 
                         "Mean Centering",
                         "within conditions")
 expect_equal(round(funcNorm,4), norm)
@@ -175,10 +175,10 @@ colnames(norm) <- c("25fmolR1","25fmolR2","25fmolR3",
 rownames(norm) <- c("1","2","3","4","5","6","8","9","10")
 
 funcNorm <- wrapper.normalizeD(test, "Mean Centering Scaling", "overall")
-expect_equal(round(exprs(funcNorm),4), norm)
+expect_equal(round(Biobase::exprs(funcNorm),4), norm)
 
-labels <- pData(test)[,"Label"]
-funcNorm <- normalizeD(exprs(test), labels, 
+labels <- Biobase::pData(test)[,"Label"]
+funcNorm <- normalizeD(Biobase::exprs(test), labels, 
                         "Mean Centering Scaling", 
                         "overall")
 expect_equal(round(funcNorm,4), norm)
@@ -200,10 +200,10 @@ rownames(norm) <- c("1","2","3","4","5","6","8","9","10")
 funcNorm <- wrapper.normalizeD(test, 
                                 "Mean Centering Scaling", 
                                 "within conditions")
-expect_equal(round(exprs(funcNorm),4), norm)
+expect_equal(round(Biobase::exprs(funcNorm),4), norm)
 
-labels <- pData(test)[,"Label"]
-funcNorm <- normalizeD(exprs(test), labels, 
+labels <- Biobase::pData(test)[,"Label"]
+funcNorm <- normalizeD(Biobase::exprs(test), labels, 
                         "Mean Centering Scaling", 
                         "within conditions")
 expect_equal(round(funcNorm,4), norm)
