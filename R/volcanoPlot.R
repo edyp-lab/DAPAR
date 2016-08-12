@@ -34,7 +34,7 @@ diffAnaVolcanoplot <- function(logFC=NULL,
 xtitle <- paste("log2 ( mean(",conditions[2],") / mean(",conditions[1],") )",
                 sep="")
 
-print(xtitle)
+
 if (is.null(logFC)||is.null(pVal)) {
 
     p <- plot(-1,-1

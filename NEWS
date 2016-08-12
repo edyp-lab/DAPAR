@@ -1,3 +1,32 @@
+CHANGES IN VERSION 1.5.3
+------------------------ 
+
+NEW FEATURES
+    * Violin plots are available in the Descriptive Statistics
+
+
+CHANGES IN VERSION 1.4.7
+------------------------ 
+
+NEW FEATURES
+    * In the export tool, when the user chooses the Excel format, the ID is no longer        used to create a new column in the Quantitative Tab. This has no effect on the data.
+
+BUG FIXES
+    
+    
+CHANGES IN VERSION 1.4.6
+------------------------ 
+
+NEW FEATURES
+
+
+BUG FIXES
+
+    * The computation of the number of proteins with only specific peptides,
+    shared peptides or a mixture of two has been debugged.
+
+
+
 CHANGES IN VERSION 1.3.16
 ------------------------ 
 

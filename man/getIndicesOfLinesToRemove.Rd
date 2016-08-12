@@ -2,7 +2,7 @@
 % Please edit documentation in R/missingValuesFilter.R
 \name{getIndicesOfLinesToRemove}
 \alias{getIndicesOfLinesToRemove}
-\title{Get teh indices of the lines to delete, based on a prefix string}
+\title{Get the indices of the lines to delete, based on a prefix string}
 \usage{
 getIndicesOfLinesToRemove(obj, idLine2Delete = NULL, prefix = NULL)
 }

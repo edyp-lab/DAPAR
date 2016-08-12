@@ -141,7 +141,12 @@ m <- matrix(rep(0,nbLabels*(1+(nrow(samplesData)/nbLabels ))),
 
 for (i in unique(samplesData[,"Label"]))
 {
-    t <- table(rowSums(is.na(qData[,which(samplesData[,"Label"] == i)])))
+    nSample <- length(which(samplesData[,"Label"] == i))
+    t <- NULL
+    if (nSample == 1) {
+        t <- table(as.integer(is.na(qData[,which(samplesData[,"Label"] == i)])))
+    } else {t <- table(rowSums(is.na(qData[,which(samplesData[,"Label"] == i)])))}
+    
     m[as.integer(names(t))+1,i] <- t
 }
 
@@ -401,39 +406,37 @@ col.legend <- c(1:length(pal))
 
 
 conditions <- labels
-i <- 1
-d <- qData[,which(conditions==unique(conditions)[i])]
-color <- rep(pal[i],nrow(d))
+mTemp <- colorTemp <- nbNA <- matrix(rep(0,nrow(qData)*length(unique(conditions))), nrow=nrow(qData),
+                dimnames=list(NULL,unique(conditions)))
 
-for (i in 2:length(unique(conditions))){
-    d <- rbind(d, qData[,which(conditions==unique(conditions)[i])])
-    color <- rbind(color, rep(pal[i],
-                    nrow(qData[,which(conditions==unique(conditions)[i])])))
+for (iCond in unique(conditions)){
+    if (length(which(conditions==iCond)) == 1){
+        mTemp[,iCond] <- qData[,which(conditions==iCond)]
+        nbNA[,iCond] <- as.integer(is.na(qData[,which(conditions==iCond)]))
+    }else {
+        mTemp[,iCond] <- apply(qData[,which(conditions==iCond)], 1, mean, na.rm=TRUE)
+        nbNA[,iCond] <- apply(qData[,which(conditions==iCond)],1,function(x) length(which(is.na(x) == TRUE)))
+    }
+    colorTemp[,iCond] <- pal[which( unique(conditions) ==iCond)]
 }
 
-total <- apply(d,1,mean ,na.rm=TRUE)
-nbNA <- apply(d,1,function(x) length(which(is.na(x) == TRUE)))
 
-
-plot(total,
-        rep(-1,length(total)),
-        xlim = range(total, na.rm = TRUE),
+plot(c(mTemp),
+        rep(-1,length(c(mTemp))),
+        xlim = range(c(mTemp), na.rm = TRUE),
         ylim = c(0, ncol(qData)/length(unique(conditions))),
         xlab = "Mean of quantity values", 
         ylab = "Number of missing values",
         main =  "Missing values repartition")
 
 
-    points(total,
-            jitter(nbNA, 0.9), 
-            col = alpha(color, 0.5),
+    points(c(mTemp),
+            jitter(c(nbNA), 0.3), 
+            col = alpha(c(colorTemp), 0.5),
             pch = 16,
-            cex=0.5)
-    
-    lines(lowess(nbNA ~ total,
-                delta = 0.1 * diff(range(total, na.rm = TRUE))), 
-        col="black", lwd=2)
-    abline(v=threshold, col="blue", lwd=3)
+            cex=0.8)
+
+  #  abline(v=threshold, col="blue", lwd=3)
 
 
 legend("topright"         

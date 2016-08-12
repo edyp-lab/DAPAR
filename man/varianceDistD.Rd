@@ -21,6 +21,7 @@ in the dataset (see the slot \code{'Label'} in the \code{pData()} table)
 }
 \examples{
 data(UPSpep25)
+labels <- Biobase::pData(UPSpep25)[,"Label"]
 varianceDistD(UPSpep25)
 }
 \author{

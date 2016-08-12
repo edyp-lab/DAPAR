@@ -59,8 +59,7 @@ if (group2Color == "Condition") {
     pal <- getPaletteForLabels(labels)
     }else { pal <- getPaletteForReplicates(ncol(qData))}
 
-print("boxplot")
-print(pal)
+
 boxplot(qData
         ,las = 1
         , col = pal
@@ -73,12 +72,14 @@ boxplot(qData
 )
 
 if( !is.null(dataForXAxis))
-    {
-    for (i in 1:ncol(dataForXAxis)){
+{
+if (is.vector(dataForXAxis) ){
+    N <- 1} else{ N <- ncol(dataForXAxis)}
+for (i in 1:N){
     axis(side=1,
-        at = 1:ncol(qData),
-        labels = dataForXAxis[,i],
-        line= 2*i-1
+         at = 1:ncol(qData),
+         labels = if (is.vector(dataForXAxis) ) dataForXAxis else dataForXAxis[,i],
+         line= 2*i-1
     )
 }
 
@@ -91,6 +92,104 @@ mtext("Samples",
 abline(h=0) 
 palette("default")
 }
+
+
+##' This function is a wrapper for using the violinPlotD function with objects of 
+##' class \code{\link{MSnSet}}
+##' 
+##' @title Wrapper to the violinPlotD function on an object \code{\link{MSnSet}}
+##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param dataForXAxis A vector of strings containing the names of columns 
+##' in \code{pData()} to print labels on X-axis (Default is "Label").
+##' @param group2Color A string that indicates how to color the replicates: one
+##' color per condition (value "Condition") or one 
+##' color per replicate (value "Replicate"). Default value is by Condition.
+##' @return A violin plot
+##' @author Samuel Wieczorek
+##' @seealso \code{\link{wrapper.densityPlotD}}, \code{\link{wrapper.boxPlotD}}
+##' @examples
+##' data(UPSpep25)
+##' library(vioplot)
+##' types <- c("Label","Analyt.Rep")
+##' wrapper.violinPlotD(UPSpep25, types)
+wrapper.violinPlotD <- function(obj, 
+                             dataForXAxis="Label", 
+                             group2Color="Condition"){
+    
+    qData <- Biobase::exprs(obj)
+    dataForXAxis <- as.matrix(Biobase::pData(obj)[,dataForXAxis])
+    labels <- Biobase::pData(obj)[,"Label"]
+    
+    violinPlotD(qData, dataForXAxis, labels, group2Color)
+    
+}
+
+
+
+
+##' ViolinPlot for quantitative proteomics data
+##' 
+##' @title Builds a violinplot from a dataframe
+##' @param qData A dataframe that contains quantitative data.
+##' @param dataForXAxis A vector containing the types of replicates 
+##' to use as X-axis. Available values are: Label, Analyt.Rep,
+##' Bio.Rep and Tech.Rep. Default is "Label".
+##' @param labels A vector of the conditions (labels) (one label per sample).
+##' @param group2Color A string that indicates how to color the replicates: 
+##' one color per condition (value "Condition") or one 
+##' color per replicate (value "Replicate"). Default value is by Condition.
+##' @return A violinplot
+##' @author Florence Combes, Samuel Wieczorek
+##' @seealso \code{\link{densityPlotD}}
+##' @examples
+##' data(UPSpep25)
+##' library(vioplot)
+##' qData <- Biobase::exprs(UPSpep25)
+##' types <- c("Label","Analyt.Rep")
+##' dataForXAxis <- Biobase::pData(UPSpep25)[,types]
+##' labels <- Biobase::pData(UPSpep25)[,"Label"]
+##' violinPlotD(qData, dataForXAxis, labels)
+violinPlotD <- function(qData, 
+                     dataForXAxis=NULL, 
+                     labels=NULL, 
+                     group2Color="Condition"){
+    plot.new()
+    if (group2Color == "Condition") {
+        pal <- getPaletteForLabels(labels)
+    }else { pal <- getPaletteForReplicates(ncol(qData))}
+    
+    plot.window(xlim=c(0,ncol(qData)+1),
+                ylim=c(min(na.omit(qData)),max(na.omit(qData))))
+    title( ylab="Log (intensity)")
+    for (i in 1:ncol(qData)) {vioplot(na.omit(qData[,i]), col = pal[i], add=TRUE, at=i)}
+    
+    
+    axis(2, yaxp = c(floor(min(na.omit(qData))), floor(max(na.omit(qData))), 5), las=1)
+    
+     if( !is.null(dataForXAxis))
+     {
+        if (is.vector(dataForXAxis) ){
+            N <- 1} else{ N <- ncol(dataForXAxis)}
+         
+        for (i in 1:N){
+            axis(side=1,
+                 at = 1:ncol(qData),
+                 labels = if (is.vector(dataForXAxis) ) dataForXAxis else dataForXAxis[,i],
+                 line= 2*i-1
+            )
+        }
+
+        mtext("Samples",
+              side=1,
+              line=6+length(colnames(dataForXAxis)),
+              cex.lab=1, las=1)
+    }
+
+
+     palette("default")
+}
+
+
 
 ##' Wrapper to the function that plot to compare the quantitative proteomics 
 ##' data before and after normalization
@@ -294,8 +393,6 @@ if (group2Color == "Condition") {
                         labelsForLegend,sep=" ")
     txtLegend <- txtLegend[indData2Show]
 }
-print("densiyplot")
-print(pal)
 
 ###Erase data not to show (color in white)
 # lineWD <- NULL
@@ -368,6 +465,7 @@ varianceDistD(qData, labels)
 ##' @seealso \code{\link{densityPlotD}}.
 ##' @examples
 ##' data(UPSpep25)
+##' labels <- Biobase::pData(UPSpep25)[,"Label"]
 ##' varianceDistD(UPSpep25)
 varianceDistD <- function(qData, labels=NULL){
     
@@ -376,10 +474,13 @@ conditions <- unique(labels)
 n <- length(conditions)
 axis.limits <- matrix(data = 0, nrow = 4, ncol = n)
 for (i in conditions){
+    if (length(which(labels == i)) > 1){
     t <- density(apply(qData[,which(labels == i)], 1, 
                     function(x) var(x, na.rm=TRUE)), na.rm=TRUE)
+
     axis.limits[,which(conditions == i)]<- c(min(t$x), max(t$x), min(t$y),
                                             max(t$y))
+    }
 }
 
 lim.x <- range(min(axis.limits[1,]), max(axis.limits[2,]))
@@ -399,13 +500,15 @@ pal <- getPaletteForLabels(labels)
 conditions <- unique(labels)
 col.density = c(1:length(conditions))
 for (i in conditions){
-    t <- apply(qData[,which(labels == i)], 1, 
+    if (length(which(labels == i)) > 1){
+        t <- apply(qData[,which(labels == i)], 1, 
                 function(x) var(x, na.rm = TRUE))
     lines(density(t, na.rm = TRUE)
         , xlab=""
         , ylab=""
         , col=col.density[which(conditions == i)]
     )
+    }
 }
 
 legend("topright"         
@@ -479,13 +582,11 @@ d <- qplot(x = Var1,
         legend.text = text,
         legend.title = text) +
     labs(x = "", y = "") +
-    #scale_fill_gradient2(midpoint=0.5, space="Lab",low = "white",mid = 
-    #"white", high = "steelblue", limits=c(0.1,1))
-#scale_fill_gradientn(colours=cscale(seq(0.1,1,0.1), 
-#seq_gradient_pal("grey80", "black")),trans=exp_trans(), limits=c(0.1,1))
+
     scale_fill_gradientn (
     colours=colorRampPalette (c ("white", "lightblue","darkblue")) (101),
     values = c(pexp(seq(0,1,0.01), rate=gradientRate),1), limits=c(0,1))
+
 plot(d)
 }
 

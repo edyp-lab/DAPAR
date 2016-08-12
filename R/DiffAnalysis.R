@@ -25,11 +25,11 @@
 ##' labels <- Biobase::pData(obj)[,"Label"]
 ##' limma <- diffAnaLimma(qData,samplesData, labels, condition1, condition2)
 ##' diffAnaComputeFDR(limma)
-diffAnaComputeFDR <- function(data,threshold_PVal=0, threshold_LogFC =0, 
+diffAnaComputeFDR <- function(data,threshold_PVal=0, threshold_LogFC = 0, 
                             pi0Method=1){
     upItems <- which(abs(data$logFC) >= threshold_LogFC)
     selectedItems <- data[upItems,]$P.Value
-    
+
     padj <- adjust.p(selectedItems,  pi0Method)
     
     items <- which(-log10(padj$adjp[,1]) >= threshold_PVal)
@@ -182,7 +182,7 @@ diffAna <- function(qData, design){
 
     fit <- lmFit(qData, design)
     fit <- eBayes(fit)
-
+    #  fit$df.prior
     diffAna.res <- topTable(fit,
                             coef = 2, 
                             sort.by = "none",
@@ -264,6 +264,13 @@ design <- cbind(cond1=1, cond2 = rep(0,length(flatIndices)))
 rownames(design) <- rownames(samplesData[flatIndices,])
 design[flatIndices == indices$iCond2,2] <- 1
 res <- diffAna(tempexprs, design)
+#print(labels)
+#print(c(1:length(labels)))
+#res <- limmaCompleteTest(tempexprs, labels, c(1:length(labels)), c(1:length(labels)))
+#print(length(res$logFC))
+#print(length(rownames(qData)))
+
+
 p <- data.frame(P.Value = res$P.Value, 
                 logFC = res$logFC,
                 row.names = rownames(qData))

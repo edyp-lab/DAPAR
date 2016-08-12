@@ -18,7 +18,7 @@ Mout <- matrix(c(23.70,23.49,23.43,24.53,24.96,24.89,
                                 "50fmolR1", "50fmolR2", "50fmolR3"))
 )
 
-expect_equal(Biobase::exprs(mvFilter(test, "wholeMatrix", th=1)), Mout)
+expect_equal(Biobase::exprs(mvFilter(test, "wholeMatrix", th=as.integer(1))), Mout)
 })
 
 
@@ -38,7 +38,7 @@ Mout <- matrix(c(23.70,23.49,23.43,24.53,24.96,24.89,
                                                 "50fmolR2", "50fmolR3"))
 )
 
-expect_equal(Biobase::exprs(mvFilter(test, "allCond", th=2)), Mout)
+expect_equal(Biobase::exprs(mvFilter(test, "allCond", th=as.integer(2))), Mout)
 })
 
 
@@ -60,5 +60,5 @@ Mout <- matrix(c(23.70,23.49,23.43,24.53,24.96,24.89,
                                     "50fmolR1", "50fmolR2", "50fmolR3"))
 )
 
-expect_equal(Biobase::exprs(mvFilter(test, "atLeastOneCond", th=2)), Mout)
+expect_equal(Biobase::exprs(mvFilter(test, "atLeastOneCond", th=as.integer(2))), Mout)
 })

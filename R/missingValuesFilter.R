@@ -66,8 +66,8 @@ proportionConRev <- function(obj, idContaminants=NULL,
 if (is.null(obj) ){return(NULL)}
 nContaminants <- nReverse <- 0
 
-nContaminants <- getNumberOf(obj, idContaminants, prefixContaminants)
-nReverse <- getNumberOf(obj, idReverse, prefixReverse)
+nContaminants <- length(getIndicesOfLinesToRemove(obj, idContaminants, prefixContaminants))
+nReverse <- length(getIndicesOfLinesToRemove(obj, idReverse, prefixReverse))
 
 pctContaminants <- 100 * round(nContaminants/nrow(Biobase::fData(obj)),  digits=4)
 pctReverse <- 100 * round(nReverse/nrow(Biobase::fData(obj)),  digits=4)
@@ -110,12 +110,11 @@ graphics::text(x= 20, y= bp, labels=as.character(lbls), xpd=TRUE, cex=1.5)
 ##' removeLines(UPSpep25, "Reverse")
 removeLines <- function(obj, idLine2Delete=NULL, prefix=NULL){
 if ((prefix == "") || is.null(prefix)) {
-    warning ("No change was made")
+    #warning ("No change was made")
     return (obj)}
-t <- NULL
-q <- paste("^",prefix, "$", sep="")
-
-    obj <- obj[-which(regexpr(q,Biobase::fData(obj)[,idLine2Delete]) == -1) ]
+    t <- (prefix == substring(Biobase::fData(obj)[,idLine2Delete],1,nchar(prefix)))
+    ind <- which( t== TRUE)
+    obj <- obj[-ind ]
 
 return(obj)
 }
@@ -123,7 +122,7 @@ return(obj)
 ##' This function returns the indice of the lines to delete, based on a 
 ##' prefix string
 ##' 
-##' @title Get teh indices of the lines to delete, based on a prefix string
+##' @title Get the indices of the lines to delete, based on a prefix string
 ##' @param obj An object of class \code{\link{MSnSet}}.
 ##' @param idLine2Delete The name of the column that correspond to the data 
 ##' to filter
@@ -136,13 +135,11 @@ return(obj)
 getIndicesOfLinesToRemove <- function(obj, idLine2Delete=NULL, prefix=NULL)
 {
 if ((prefix == "") || is.null(prefix)) {
-    warning ("No change was made")
+   # warning ("No change was made")
     return (NULL)}
-t <- NULL
-q <- paste("^",prefix, "$", sep="")
-
-ind <- which(regexpr(q,Biobase::fData(obj)[,idLine2Delete]) == -1)
-
+t <- (prefix == substring(Biobase::fData(obj)[,idLine2Delete],1,nchar(prefix)))
+ind <- which( t== TRUE)
+return(ind)
 }
 
 ##' Filters the lines of \code{exprs()} table with conditions on the number
@@ -186,6 +183,8 @@ mvFilter <- function(obj,type, th, processText=NULL )
         warning("Param th is not correct.")
         return (NULL)
     }
+    
+    if(!is.integer(th)){th <- as.integer(th)}
 
     keepThat <- mvFilterGetIndices(obj,type, th)
 
@@ -330,10 +329,10 @@ if (type == "none"){
     
     
     if (type == "allCond") {
-    keepThat <- which(rowSums(s) == nbCond)
+        keepThat <- which(rowSums(s) == nbCond)
     }
     else if (type == "atLeastOneCond") {
-    keepThat <- which(rowSums(s) >= 1)
+        keepThat <- which(rowSums(s) >= 1)
     }
 }
 return(keepThat)

@@ -1,7 +1,6 @@
 exportPattern("^[[:alpha:]]+")
 
 import(MSnbase)
-
 import(RColorBrewer)
 import(Cairo)
 import(png)
@@ -10,37 +9,41 @@ import(reshape2)
 import(tmvtnorm)
 import(ggplot2)
 import(norm)
+importFrom("sm", "sm.density")
+
+import(vioplot)
 import(impute)
 import(knitr)
+
 importFrom("doParallel", "registerDoParallel")
 importFrom("foreach", "foreach", "%dopar%")
 importFrom("parallel", "detectCores")
+importFrom("Matrix", "sparseMatrix")
 import(cp4p)
 importFrom("graphics", "par", "boxplot", "axis", "mtext", "abline", "points", 
             "legend", "lines",  "barplot", "text",
-           "layout", "plot.new", "strheight", "strwidth", "title")
-import(Biobase)
+           "layout", "plot.new", "strheight", "strwidth", "title","plot.window")
+
 
 importFrom("stats", "lowess", "cor", "density","pexp", 
             "var", "t.test", "dist", "hclust", "setNames", 
-            "median", "p.adjust")
+            "median", "p.adjust", "model.matrix", "rnorm","na.omit")
 importFrom("imputeLCMD", "impute.wrapper.KNN", "impute.wrapper.MLE",
             "impute.QRILC")
 importFrom("preprocessCore", "normalize.quantiles")
 importFrom("gplots", "heatmap.2")
-importFrom("XLConnect", "loadWorkbook", "createSheet", 
-            "writeWorksheet", "saveWorkbook")
-importFrom("limma", "lmFit", "eBayes", "topTable")
+importFrom("limma", "lmFit", "eBayes", "topTable", "makeContrasts", "contrasts.fit")
 importFrom("pcaMethods", "completeObs", "pca")
 importFrom("scales", "alpha")
 importFrom("grDevices", "colorRampPalette", "palette", "heat.colors")
 importFrom("utils", "read.csv")
+importFrom("XLConnect", "loadWorkbook", "createSheet", 
+            "writeWorksheet", "saveWorkbook")
 
 
 export(
-"writeMSnsetToExcel"
-,"createMSnset"
-
+"writeMSnsetToExcel",
+"createMSnset"
 
 ,"wrapper.boxPlotD","boxPlotD"
 ,"wrapper.densityPlotD","densityPlotD"
@@ -73,6 +76,7 @@ export(
 ,"BuildAdjacencyMatrix"
 ,"GraphPepProt"
 ,"BuildColumnToProteinDataset"
+,"getProteinsStats"
 
 
 ,"wrapper.diffAnaLimma","diffAnaLimma"

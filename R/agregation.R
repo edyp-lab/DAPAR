@@ -1,3 +1,40 @@
+##' This function computes the number of proteins that are only defined by 
+##' specific peptides, shared peptides or a mixture of two. 
+##' 
+##' @title computes the number of proteins that are only defined by 
+##' specific peptides, shared peptides or a mixture of two.
+##' @param matUnique The adjacency matrix with only specific peptides.
+##' @param matShared The adjacency matrix with both specific and shared peptides.
+##' @return A list
+##' @author Samuel Wieczorek
+##' @examples
+##' data(UPSpep25)
+##' protID <- "Protein.group.IDs"
+##' MShared <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
+##' MUnique <- BuildAdjacencyMatrix(UPSpep25, protID, TRUE)
+##' getProteinsStats(MUnique,MShared)
+getProteinsStats <- function(matUnique, matShared){
+    if (is.null(matUnique) || is.null(matShared) ||
+        !is.matrix(matUnique) || !is.matrix(matShared)){return(NULL)}
+    
+    t <- setdiff(union(rownames(matUnique), rownames(matShared)), intersect(rownames(matUnique), rownames(matShared)))
+    sharedPeptides <- matShared[t,]
+    sharedPeptides <- sharedPeptides[,-which(colSums(sharedPeptides)==0)]
+    protOnlyUnique <- setdiff(union(colnames(sharedPeptides), colnames(matShared)), intersect(colnames(sharedPeptides), colnames(matShared)))
+    
+    protOnlyShared <- setdiff(union(colnames(matUnique), colnames(matShared)), intersect(colnames(matUnique), colnames(matShared)))
+    a <- union(protOnlyUnique, protOnlyShared)
+    b <- colnames(matShared)
+    protMix <- setdiff(union(union(protOnlyUnique, protOnlyShared),colnames(matShared)),intersect(union(protOnlyUnique, protOnlyShared),colnames(matShared)))
+
+    return (list(protOnlyUniquePep =protOnlyUnique,
+                  protOnlySharedPep =protOnlyShared,
+                  protMixPep = protMix))
+}
+
+
+
+
 ##' This function creates a column for the protein dataset after agregation 
 ##' by using the previous peptide dataset.
 ##' 
@@ -250,6 +287,7 @@ data <- Biobase::exprs(obj.pep)
     for (i in 1:nrow(data)){
     X[i, as.character(PG.l[[i]])] <- 1
     }
+
     
     
     if (unique == TRUE){
@@ -292,9 +330,9 @@ topMaxUsingPartialSortIndices <- function(x, n) {
 ##' @examples 
 ##' data(UPSpep25)
 ##' protID <- "Protein.group.IDs"
-##' m <- BuildAdjacencyMatrix(UPSpep25, protID, TRUE)
-##' pepAgregate(UPSpep25, protID, "sum")
-pepAgregate <- function (obj.pep, protID, method="sum",matAdj=NULL, n=NULL){
+##' mat <- BuildAdjacencyMatrix(UPSpep25, protID, TRUE)
+##' pepAgregate(UPSpep25, protID, "sum", mat)
+pepAgregate <- function (obj.pep, protID, method="sum", matAdj=NULL, n=NULL){
     #Check the validity of parameters
     parammethod <- c("sum overall", "mean", "sum on top n") 
     if (sum(is.na(match(method, parammethod) == TRUE)) > 0){return (NULL)}
@@ -362,5 +400,163 @@ GraphPepProt <- function(mat){
             names.arg=label, xaxp=c(1, length(tab), 3), las=1
             , col = "orange")
 
+}
+
+
+
+
+##' Method to create a binary matrix with proteins in columns and peptides 
+##' in lines on a MSnSet object (peptides)
+##' 
+##' @title Function matrix of appartenance group
+##' @param obj.pep An object (peptides) of class \code{\link{MSnbase}}.
+##' @param protID The name of proteins ID column 
+##' @param unique A boolean to indicate whether only the unique peptides must 
+##' be considered (TRUE) or if the shared peptides have to 
+##' be integrated (FALSE).
+##' @return A binary matrix  
+##' @author Florence Combes, Samuel Wieczorek, Alexia Dorffer
+##' @examples
+##' data(UPSpep25) 
+##' BuildSparseAdjacencyMatrix(UPSpep25, "Protein.group.IDs", TRUE)
+BuildSparseAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
+    
+    data <- Biobase::exprs(obj.pep)
+    PG <- Biobase::fData(obj.pep)[,protID]
+    PG.l <- strsplit(as.character(PG), split=";", fixed=TRUE)
+    
+    Un1 <- unlist(PG.l)
+    X<- sparseMatrix(i = rep(seq_along(PG.l), lengths(PG.l)),
+                     j=as.integer(factor(Un1, levels = unique(Un1))),
+                     x=1, 
+                     dimnames=list(rownames(data),unique(Un1)))
+    
+    if (unique == TRUE){
+        X <- X[which(rowSums(as.matrix(X))==1),]
+        X <- X[,which(colSums(as.matrix(X))>0)]
+    }
+    
+    return(X)
+}
+
+
+
+##' This function computes the intensity of proteins based on the sum of the 
+##' intensities of their peptides.
+##' 
+##' @title Compute the intensity of proteins with the sum of the intensities
+##' of their peptides.
+##' @param matAdj An adjacency matrix in which lines and columns correspond 
+##' respectively to peptides and proteins.
+##' @param expr A matrix of intensities of peptides
+##' @return A matrix of intensities of proteins
+##' @author Alexia Dorffer
+##' @examples
+##' data(UPSpep25)
+##' protID <- "Protein.group.IDs"
+##' M <- BuildSparseAdjacencyMatrix(UPSpep25, protID, FALSE)
+##' SumPeptidesSpeedUp(M, Biobase::exprs(UPSpep25))
+SumPeptidesSpeedUp <- function(matAdj, expr){
+    expr <- expr[rownames(matAdj),]
+    Mp <- t(matAdj) %*% expr
+    .temp <- expr
+    .temp[!is.na(.temp)] <- 1
+    .temp[is.na(.temp)] <- 0
+    pep <- t(matAdj) %*% .temp
+    
+    colnames(pep) <- paste("nb.pep.used.", colnames(expr), sep="")
+    rownames(pep) <- colnames(matAdj)
+    
+    res <- list("idprot" = colnames(matAdj), "matfin"=Mp, "nbpep"=pep)
+    return(res)
+    
+}
+
+##' This function computes the intensity of proteins as the mean of the 
+##' intensities of their peptides.
+##' 
+##' @title Compute the intensity of proteins as the mean of the intensities
+##' of their peptides.
+##' @param matAdj An adjacency matrix in which lines and columns correspond 
+##' respectively to peptides and proteins.
+##' @param expr A matrix of intensities of peptides
+##' @return A matrix of intensities of proteins
+##' @author Alexia Dorffer
+##' @examples
+##' data(UPSpep25)
+##' protID <- "Protein.group.IDs"
+##' matAdj <- BuildSparseAdjacencyMatrix(UPSpep25, protID, FALSE)
+##' MeanPeptidesSpeedUp(matAdj, Biobase::exprs(UPSpep25))
+MeanPeptidesSpeedUp <- function(matAdj, expr){
+    expr <- expr[rownames(matAdj),]
+    Mp <- t(matAdj) %*% expr
+    .temp <- expr
+    .temp[!is.na(.temp)] <- 1
+    .temp[is.na(.temp)] <- 0
+    pep <- t(matAdj) %*% .temp
+    Mp <- Mp / pep
+    
+    colnames(pep) <- paste("nb.pep.used.", colnames(expr), sep="")
+    rownames(pep) <- colnames(matAdj)
+    
+    res <- list("idprot" = colnames(matAdj), "matfin"=Mp, "nbpep"=pep)
+    return(res)
+    
+}
+
+
+##' Method to agregate with a method peptides to proteins on
+##' a MSnSet object (peptides)
+##' 
+##' @title Function agregate peptides to proteins 
+##' @param obj.pep An object (peptides) of class \code{\link{MSnbase}}.
+##' @param protID The name of proteins ID column 
+##' @param method The method used to aggregate the peptides into proteins.
+##' Values are "sum", "mean" or "sum on top n" : do the sum / mean of intensity
+##' on all peptides belonging to proteins. Default is "sum"
+##' @param matAdj An adjacency matrix
+##' @param n The number of peptides considered for the aggregation.
+##' @return An object of class \code{\link{MSnbase}} with proteins  
+##' @author Alexia Dorffer, Samuel Wieczorek
+##' @examples 
+##' data(UPSpep25)
+##' protID <- "Protein.group.IDs"
+##' mat <- BuildSparseAdjacencyMatrix(UPSpep25, protID, TRUE)
+##' pepAgregateSpeedUp(UPSpep25, protID, "sum overall", mat)
+pepAgregateSpeedUp <- function (obj.pep, protID, method="sum overall", matAdj=NULL, n=NULL){
+    #Check the validity of parameters
+    parammethod <- c("sum overall", "mean", "sum on top n") 
+    if (sum(is.na(match(method, parammethod) == TRUE)) > 0){return (NULL)}
+    if (is.null(matAdj)){warning("Adjacency matrix is missing.")
+        return (NULL)}
+    
+    if (!is.na(match(method, "sum on top n")) && is.null(n)){
+        warning("With the top n method, the parameter n must not be NULL.")
+        return (NULL)}
+    
+    condname <- Biobase::pData(obj.pep)$Experiment
+    condition <- Biobase::pData(obj.pep)
+    expr <- 2^(Biobase::exprs(obj.pep))
+    
+    if(method == "sum overall"){ res <- SumPeptidesSpeedUp(matAdj, expr)}
+    else if  (method == "mean"){ res <- MeanPeptidesSpeedUp(matAdj, expr)}
+    else if (method == "sum on top n"){ res <- TopnPeptides(matAdj, expr, n) }
+    
+    Mp <- as.matrix(res$matfin)
+    Mp[Mp == 0] <- NA
+    Mp[is.nan(Mp)] <- NA
+    Mp[is.infinite(Mp)] <-NA
+    
+    
+    
+    pep <- as.matrix(res$nbpep)
+    protId <- res$idprot
+    fd <- data.frame(protId, pep)
+    
+    obj <- MSnSet(exprs = log2(Mp), fData = fd, pData = Biobase::pData(obj.pep))
+    obj@experimentData@other  <- list(obj@experimentData@other,
+                                      typeOfData ="protein")
+    
+    return(obj)
 }
 

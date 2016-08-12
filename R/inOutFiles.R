@@ -133,9 +133,9 @@ writeMSnsetToExcel <- function(obj, filename, id)
     createSheet(file, "Quantitative Data")
     createSheet(file, "Feature Meta Data")
     createSheet(file, "Samples Meta Data")
-        temp.data <- cbind(Biobase::fData(obj)[id,],Biobase::exprs(obj))
+     #   temp.data <- cbind(Biobase::fData(obj)[,id],Biobase::exprs(obj))
         
-    writeWorksheet(file, data = temp.data,
+    writeWorksheet(file, data = Biobase::exprs(obj),
                         sheet="Quantitative Data", header=TRUE)
     writeWorksheet(file, data = Biobase::fData(obj),
                         sheet="Feature Meta Data", header=TRUE)
@@ -144,3 +144,5 @@ writeMSnsetToExcel <- function(obj, filename, id)
     saveWorkbook(file)
     return(name)
 }
+
+
