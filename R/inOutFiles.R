@@ -119,30 +119,19 @@ data <- read.csv(file, header=TRUE, sep="\t", as.is=TRUE)
 ##' @title This function exports a \code{\link{MSnSet}} object to a Excel file.
 ##' @param obj An object of class \code{\link{MSnSet}}.
 ##' @param filename A character string for the name of the Excel file.
-##' @param id An integer to select in the fdata frame which column has to be
-##' used as an index.
-##' @return A Excel file
+##' @return A Excel file (.xlsx)
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' data(UPSpep25)
-##' writeMSnsetToExcel(UPSpep25, "foo", 1)
-writeMSnsetToExcel <- function(obj, filename, id)
+##' writeMSnsetToExcel(UPSpep25, "foo")
+writeMSnsetToExcel <- function(obj, filename)
 {
-    name <- paste(filename, ".xls", sep="")
-    file <- loadWorkbook(name, create=TRUE)
-    createSheet(file, "Quantitative Data")
-    createSheet(file, "Feature Meta Data")
-    createSheet(file, "Samples Meta Data")
-     #   temp.data <- cbind(Biobase::fData(obj)[,id],Biobase::exprs(obj))
-        
-    writeWorksheet(file, data = Biobase::exprs(obj),
-                        sheet="Quantitative Data", header=TRUE)
-    writeWorksheet(file, data = Biobase::fData(obj),
-                        sheet="Feature Meta Data", header=TRUE)
-    writeWorksheet(file, data = Biobase::pData(obj),
-                        sheet="Samples Meta Data", header=TRUE)
-    saveWorkbook(file)
+    name <- paste(filename, ".xlsx", sep="")
+    l <- list("Quantitative Data" = Biobase::exprs(obj), 
+              "Feature Meta Data" = Biobase::fData(obj), 
+              "Samples Meta Data" = Biobase::pData(obj))
+
+    write.xlsx(l, file=name)
+    
     return(name)
 }
-
-

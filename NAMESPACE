@@ -37,8 +37,7 @@ importFrom("pcaMethods", "completeObs", "pca")
 importFrom("scales", "alpha")
 importFrom("grDevices", "colorRampPalette", "palette", "heat.colors")
 importFrom("utils", "read.csv")
-importFrom("XLConnect", "loadWorkbook", "createSheet", 
-            "writeWorksheet", "saveWorkbook")
+importFrom("openxlsx", "write.xlsx")
 
 
 export(

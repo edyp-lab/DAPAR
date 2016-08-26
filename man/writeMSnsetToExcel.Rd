@@ -4,18 +4,15 @@
 \alias{writeMSnsetToExcel}
 \title{This function exports a \code{\link{MSnSet}} object to a Excel file.}
 \usage{
-writeMSnsetToExcel(obj, filename, id)
+writeMSnsetToExcel(obj, filename)
 }
 \arguments{
 \item{obj}{An object of class \code{\link{MSnSet}}.}
 
 \item{filename}{A character string for the name of the Excel file.}
-
-\item{id}{An integer to select in the fdata frame which column has to be
-used as an index.}
 }
 \value{
-A Excel file
+A Excel file (.xlsx)
 }
 \description{
 This function exports a \code{\link{MSnSet}} data object to a Excel file.
@@ -27,7 +24,7 @@ the Excel file).
 }
 \examples{
 data(UPSpep25)
-writeMSnsetToExcel(UPSpep25, "foo", 1)
+writeMSnsetToExcel(UPSpep25, "foo")
 }
 \author{
 Samuel Wieczorek
