@@ -256,14 +256,9 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText=NULL )
     
     if (is.null(deleteThat)) {return(obj)}
     obj <- obj[-deleteThat,]
-    obj@processingData@processing <- 
-        c(obj@processingData@processing, processText)
-    txt <- unlist(strsplit(processText, split=" "))
-    if (txt[2] == "contaminants"){
-    obj@experimentData@other$contaminantsRemoved <- TRUE
-    } else if (txt[2] == "reverse"){
-        obj@experimentData@other$reverseRemoved <- TRUE
-    }
+    obj@processingData@processing <-  c(obj@processingData@processing, processText)
+    if (grepl("contaminants", processText)){obj@experimentData@other$contaminantsRemoved <- TRUE}
+    if (grepl("reverse", processText)){obj@experimentData@other$reverseRemoved <- TRUE }
     return(obj)
 }
 

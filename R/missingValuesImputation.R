@@ -78,3 +78,55 @@ if (method == "BPCA"){
 
 return (exprs)
 }
+
+
+
+
+# Functions to use with the imp4p package
+
+wrapper.identifyMCAR_MNAR <- function(obj, dat.slsa){
+    #Estimation of the mixture model
+    res <- estim.mix(tab=Biobase::exprs(obj), tab.imp=dat.slsa, conditions=as.factor(Biobase::pData(obj)$Label))
+    #Computing probabilities to be MCAR
+    born <- estim.bound(tab=Biobase::exprs(obj),conditions=as.factor(Biobase::pData(obj)$Label))
+    proba <- prob.mcar.tab(born$tab.lower,born$tab.upper,res)
+    return(proba)
+}
+
+
+
+wrapper.imputeImp4p <- function(obj, dat.slsa, proba, nb.iter=1, selec=100,ind.comp=0){
+    
+    #Multiple imputation strategy with 5 iterations (can be time consuming!)
+    data.mi <- mi.mix(tab = Biobase::exprs(obj), 
+                      tab.imp = dat.slsa, 
+                      prob.MCAR = proba, 
+                      conditions = as.factor(Biobase::pData(obj)$Label), 
+                      repbio = as.factor(Biobase::pData(obj)$Bio.Rep), 
+                      reptech = as.factor(Biobase::pData(obj)$Tech.Rep),
+                      nb.iter = nb.iter,
+                      selec = selec,
+                      ind.comp = ind.comp)
+    colnames(data.mi) <- colnames(Biobase::exprs(obj))
+    Biobase::exprs(obj) <- data.mi
+    
+    msg <- paste("Missing values imputation using imp4p")
+    obj@processingData@processing <- c(obj@processingData@processing,msg)
+    
+    obj@experimentData@other$imputation.method <- "imp4p"
+    
+    return(obj)
+}
+
+
+wrapper.impute.slsa <- function(obj, selec = 100){
+    #Imputation of missing values with the slsa algorithm
+    dat.slsa <- impute.slsa(Biobase::exprs(obj),
+                            conditions=as.factor(Biobase::pData(obj)$Label),
+                            repbio=as.factor(Biobase::pData(obj)$Bio.Rep),
+                            reptech=as.factor(Biobase::pData(obj)$Tech.Rep),
+                            selec = selec)
+    return(dat.slsa)
+}
+
+

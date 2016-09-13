@@ -153,6 +153,7 @@ violinPlotD <- function(qData,
                      dataForXAxis=NULL, 
                      labels=NULL, 
                      group2Color="Condition"){
+
     plot.new()
     if (group2Color == "Condition") {
         pal <- getPaletteForLabels(labels)

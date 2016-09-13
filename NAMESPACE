@@ -9,7 +9,6 @@ import(reshape2)
 import(tmvtnorm)
 import(ggplot2)
 import(norm)
-importFrom("sm", "sm.density")
 
 import(vioplot)
 import(impute)
@@ -20,6 +19,7 @@ importFrom("foreach", "foreach", "%dopar%")
 importFrom("parallel", "detectCores")
 importFrom("Matrix", "sparseMatrix")
 import(cp4p)
+import(imp4p)
 importFrom("graphics", "par", "boxplot", "axis", "mtext", "abline", "points", 
             "legend", "lines",  "barplot", "text",
            "layout", "plot.new", "strheight", "strwidth", "title","plot.window")
@@ -69,6 +69,7 @@ export(
 
 
 ,"wrapper.mvImputation","mvImputation"
+,"wrapper.identifyMCAR_MNAR", "wrapper.imputeImp4p", "wrapper.impute.slsa"
 
 
 ,"pepAgregate"

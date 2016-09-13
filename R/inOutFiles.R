@@ -66,9 +66,15 @@ data <- read.csv(file, header=TRUE, sep="\t", as.is=TRUE)
     colnames(fd) <- colnames(data)[indFData]
 
     ##building pData of MSnSet file
-    pd <- metadata
+    if (!is.na(sum(match(metadata$Bio.Rep," ")))) 
+        {metadata$Bio.Rep <-  as.factor(1:length(metadata$Bio.Rep))}
+    if (!is.na(sum(match(metadata$Tech.Rep," ")))) 
+        {metadata$Tech.Rep <-  as.factor(1:length(metadata$Tech.Rep))}
+    if (!is.na(sum(match(metadata$Analyt.Rep," ")))) 
+        {metadata$Analyt.Rep <-  as.factor(1:length(metadata$Analyt.Rep))}
+    pd <- as.data.frame(metadata)
     rownames(pd) <- pd$Experiment
-
+   
     ##Integrity tests
     if(identical(rownames(Intensity), rownames(fd))==FALSE)
         stop("Problem consistency between

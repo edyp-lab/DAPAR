@@ -321,7 +321,7 @@ topMaxUsingPartialSortIndices <- function(x, n) {
 ##' @param obj.pep An object (peptides) of class \code{\link{MSnbase}}.
 ##' @param protID The name of proteins ID column 
 ##' @param method The method used to aggregate the peptides into proteins.
-##' Values are "sum", "mean" or "sum on top n" : do the sum / mean of intensity
+##' Values are "sum overall", "mean" or "sum on top n" : do the sum / mean of intensity
 ##' on all peptides belonging to proteins. Default is "sum"
 ##' @param matAdj An adjacency matrix
 ##' @param n The number of peptides considered for the aggregation.
@@ -331,11 +331,13 @@ topMaxUsingPartialSortIndices <- function(x, n) {
 ##' data(UPSpep25)
 ##' protID <- "Protein.group.IDs"
 ##' mat <- BuildAdjacencyMatrix(UPSpep25, protID, TRUE)
-##' pepAgregate(UPSpep25, protID, "sum", mat)
-pepAgregate <- function (obj.pep, protID, method="sum", matAdj=NULL, n=NULL){
+##' pepAgregate(UPSpep25, protID, "sum overall", mat)
+pepAgregate <- function (obj.pep, protID, method="sum overall", matAdj=NULL, n=NULL){
     #Check the validity of parameters
     parammethod <- c("sum overall", "mean", "sum on top n") 
-    if (sum(is.na(match(method, parammethod) == TRUE)) > 0){return (NULL)}
+    if (sum(is.na(match(method, parammethod) == TRUE)) > 0){
+        warning("The method is not a valid method")
+        return (NULL)}
     if (is.null(matAdj)){warning("Adjacency matrix is missing.")
                             return (NULL)}
 

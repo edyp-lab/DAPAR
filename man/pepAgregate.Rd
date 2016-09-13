@@ -4,7 +4,8 @@
 \alias{pepAgregate}
 \title{Function agregate peptides to proteins}
 \usage{
-pepAgregate(obj.pep, protID, method = "sum", matAdj = NULL, n = NULL)
+pepAgregate(obj.pep, protID, method = "sum overall", matAdj = NULL,
+  n = NULL)
 }
 \arguments{
 \item{obj.pep}{An object (peptides) of class \code{\link{MSnbase}}.}
@@ -12,7 +13,7 @@ pepAgregate(obj.pep, protID, method = "sum", matAdj = NULL, n = NULL)
 \item{protID}{The name of proteins ID column}
 
 \item{method}{The method used to aggregate the peptides into proteins.
-Values are "sum", "mean" or "sum on top n" : do the sum / mean of intensity
+Values are "sum overall", "mean" or "sum on top n" : do the sum / mean of intensity
 on all peptides belonging to proteins. Default is "sum"}
 
 \item{matAdj}{An adjacency matrix}
@@ -30,7 +31,7 @@ a MSnSet object (peptides)
 data(UPSpep25)
 protID <- "Protein.group.IDs"
 mat <- BuildAdjacencyMatrix(UPSpep25, protID, TRUE)
-pepAgregate(UPSpep25, protID, "sum", mat)
+pepAgregate(UPSpep25, protID, "sum overall", mat)
 }
 \author{
 Alexia Dorffer, Samuel Wieczorek
