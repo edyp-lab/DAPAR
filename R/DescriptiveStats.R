@@ -60,6 +60,8 @@ if (group2Color == "Condition") {
     }else { pal <- getPaletteForReplicates(ncol(qData))}
 
 
+    par(mar=c(2*length(labels),4,2,2))
+        
 boxplot(qData
         ,las = 1
         , col = pal

@@ -79,6 +79,7 @@ export(
 ,"getProteinsStats"
 
 
+
 ,"wrapper.diffAnaLimma","diffAnaLimma"
 ,"wrapper.diffAnaWelch","diffAnaWelch"
 ,"diffAnaVolcanoplot"

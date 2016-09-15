@@ -13,7 +13,7 @@ pepAgregate(obj.pep, protID, method = "sum overall", matAdj = NULL,
 \item{protID}{The name of proteins ID column}
 
 \item{method}{The method used to aggregate the peptides into proteins.
-Values are "sum overall", "mean" or "sum on top n" : do the sum / mean of intensity
+Values are "sum", "mean" or "sum on top n" : do the sum / mean of intensity
 on all peptides belonging to proteins. Default is "sum"}
 
 \item{matAdj}{An adjacency matrix}

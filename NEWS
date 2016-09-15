@@ -1,9 +1,16 @@
+CHANGES IN VERSION 1.5.9
+------------------------ 
+
+NEW FEATURES
+    * The agregation methods have been improved and now take less time
+    
+    
 CHANGES IN VERSION 1.5.7
 ------------------------ 
 
 NEW FEATURES
     * Adds support for hierarchical experimental design
-    * Integrates the missing values impuation with the imp4p package
+    * Integrates the missing values imputation with the imp4p package
     
     
 CHANGES IN VERSION 1.5.5

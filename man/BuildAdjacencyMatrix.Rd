@@ -24,7 +24,7 @@ in lines on a MSnSet object (peptides)
 }
 \examples{
 data(UPSpep25) 
-BuildAdjacencyMatrix(UPSpep25, "Protein.group.IDs")
+BuildAdjacencyMatrix(UPSpep25, "Protein.group.IDs", TRUE)
 }
 \author{
 Florence Combes, Samuel Wieczorek, Alexia Dorffer
