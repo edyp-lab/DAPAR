@@ -13,7 +13,7 @@ import(norm)
 import(vioplot)
 import(impute)
 import(knitr)
-
+import(sm)
 importFrom("doParallel", "registerDoParallel")
 importFrom("foreach", "foreach", "%dopar%")
 importFrom("parallel", "detectCores")
@@ -36,7 +36,7 @@ importFrom("limma", "lmFit", "eBayes", "topTable", "makeContrasts", "contrasts.f
 importFrom("pcaMethods", "completeObs", "pca")
 importFrom("scales", "alpha")
 importFrom("grDevices", "colorRampPalette", "palette", "heat.colors")
-importFrom("utils", "read.csv")
+importFrom("utils", "read.csv", "read.table")
 importFrom("openxlsx", "write.xlsx")
 
 

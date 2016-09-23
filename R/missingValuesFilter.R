@@ -319,7 +319,11 @@ if (type == "none"){
     
     for (c in 1:nbCond){
         ind <- which(Biobase::pData(obj)$Label == conditions[c])
-        s[,c] <- (apply(!is.na(Biobase::exprs(obj)[,ind]), 1, sum) >= th)
+        if (length(ind) == 1){
+            s[,c] <- (!is.na(Biobase::exprs(obj)[,ind]) >= th)}
+        else {
+            s[,c] <- (apply(!is.na(Biobase::exprs(obj)[,ind]), 1, sum) >= th)
+        }
     }
     
     

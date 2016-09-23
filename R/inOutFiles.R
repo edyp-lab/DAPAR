@@ -38,7 +38,7 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
                         pep_prot_data=NULL){
 
 if (!is.data.frame(file)){ #the variable is a path to a text file
-data <- read.csv(file, header=TRUE, sep="\t", as.is=TRUE)
+data <- read.table(file, header=TRUE, sep="\t",colClasses="character")
 } else {data <- file}
 
     ## replace all blanks by a dot
@@ -46,9 +46,13 @@ data <- read.csv(file, header=TRUE, sep="\t", as.is=TRUE)
     ##   dotIndice <- regexpr(pattern = '.',cols, fixed=TRUE) [1]
     ##   pattern <- substr(cols,1,dotIndice)
     ##   cols <- sub(pattern[1], replacement="", cols)
-
+    #intensities <- as.matrix(data[,indExpData])
+    #intensities <- gsub(",", ".", intensities)
     ##building exprs Data of MSnSet file
-    Intensity <- data.matrix(data[,indExpData])
+   Intensity <- matrix(as.numeric(gsub(",", ".",as.matrix(data[,indExpData] )))
+                       , ncol=length(indExpData)
+                       , byrow=FALSE)
+    
     colnames(Intensity) <- colnames(data)[indExpData]
     ##the name of lines are the same as the data of the first column
     if (is.null(indiceID)) {
@@ -100,6 +104,7 @@ data <- read.csv(file, header=TRUE, sep="\t", as.is=TRUE)
                                             "All zeros were replaced by NA")
     }
     
+   
     if (!is.null(pep_prot_data)) {
         obj@experimentData@other$typeOfData <- pep_prot_data
     }

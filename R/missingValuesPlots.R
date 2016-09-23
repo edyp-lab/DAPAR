@@ -134,10 +134,10 @@ if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)
 
 nbLabels <- length(unique(samplesData[,"Label"]))
 
-m <- matrix(rep(0,nbLabels*(1+(nrow(samplesData)/nbLabels ))), 
+ncolMatrix <- max(unlist(lapply(unique(samplesData[,"Label"]), function(x){length(which(samplesData[,"Label"]==x))})))
+m <- matrix(rep(0, nbLabels*(1+ncolMatrix)), 
             ncol = nbLabels, 
-            dimnames=list(seq(0:(nrow(samplesData)/nbLabels)),
-                            unique(samplesData[,"Label"])))
+            dimnames=list(seq(0:(ncolMatrix)),unique(samplesData[,"Label"])))
 
 for (i in unique(samplesData[,"Label"]))
 {
@@ -155,8 +155,7 @@ m <- t(m)
 x <- barplot(m, 
                 main = "# lines by # of NA",
                 xlab = "# NA per lines",
-                names.arg = as.character(
-                    seq(0:(nrow(samplesData)/nbLabels))-1), 
+                names.arg = as.character(0:ncolMatrix), 
                 col = unique(pal),
                 ylim = c(0, 1.2*max(m)), 
                 xpd = FALSE,

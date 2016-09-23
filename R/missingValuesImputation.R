@@ -83,7 +83,19 @@ return (exprs)
 
 
 # Functions to use with the imp4p package
-
+##' This method is a wrapper to the function \code{estim.mix} of the package \code{imp4p} adapted to 
+##' an object of class \code{\link{MSnSet}}.
+##' 
+##' @title Estimation of a mixture model of MCAR and MNAR values.
+##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param dat.slsa This parameter corresponds to the parameter \code{tab.imp} in the function \code{estim.mix}.
+##' @return A list. For details, please refer to the value section of the help for the function \code{estim.mix}.
+##' @author Samuel Wieczorek
+##' @examples
+##' data(UPSpep25)
+##' dat <- mvFilter(UPSpep25, type="allCond", th = 1)
+##' dat.slsa <- wrapper.impute.slsa(dat)
+##' proba <- wrapper.identifyMCAR_MNAR(dat,dat.slsa)
 wrapper.identifyMCAR_MNAR <- function(obj, dat.slsa){
     #Estimation of the mixture model
     res <- estim.mix(tab=Biobase::exprs(obj), tab.imp=dat.slsa, conditions=as.factor(Biobase::pData(obj)$Label))
@@ -95,6 +107,26 @@ wrapper.identifyMCAR_MNAR <- function(obj, dat.slsa){
 
 
 
+##' This method is a wrapper to the function \code{mi.mix} of the package \code{imp4p} adapted to 
+##' an object of class \code{\link{MSnSet}}.
+##' 
+##' @title Multiple imputation form a matrix of probabilities of being MCAR for each missing value..
+##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param dat.slsa This parameter corresponds to the parameter \code{tab.imp} in the function \code{mi.mix}.
+##' @param proba This parameter corresponds 
+##' to the parameter \code{proba.MCAR} in the function \code{mi.mix}.
+##' @param nb.iter The number of iterations used for the multiple imputation method. 
+##' This parameter corresponds to the parameter \code{nb.iter} in the function \code{mi.mix}.
+##' @param selec This parameter corresponds to the parameter \code{selec} in the function \code{mi.mix}.
+##' @param ind.comp This parameter corresponds to the parameter \code{ind.comp} in the function \code{mi.mix}.
+##' @return The \code{obj}  with imputed values instead of missing values.
+##' @author Samuel Wieczorek
+##' @examples
+##' data(UPSpep25)
+##' dat <- mvFilter(UPSpep25, type="allCond", th = 1)
+##' dat.slsa <- wrapper.impute.slsa(dat)
+##' proba <- wrapper.identifyMCAR_MNAR(dat,dat.slsa)
+##' wrapper.imputeImp4p(dat, dat.slsa, proba)
 wrapper.imputeImp4p <- function(obj, dat.slsa, proba, nb.iter=1, selec=100,ind.comp=0){
     
     #Multiple imputation strategy with 5 iterations (can be time consuming!)
@@ -119,6 +151,19 @@ wrapper.imputeImp4p <- function(obj, dat.slsa, proba, nb.iter=1, selec=100,ind.c
 }
 
 
+##' This method is a wrapper to the function \code{impute.slsa} of the package \code{imp4p} adapted to 
+##' an object of class \code{\link{MSnSet}}.
+##' 
+##' @title Missing values imputation using the LSimpute algorithm.
+##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param selec An integer which corresponds to the \code{selec} parameter of the
+##' function \code{impute.slsa}.
+##' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
+##' @author Samuel Wieczorek
+##' @examples
+##' data(UPSpep25)
+##' dat <- mvFilter(UPSpep25, type="allCond", th = 1)
+##' wrapper.impute.slsa(dat)
 wrapper.impute.slsa <- function(obj, selec = 100){
     #Imputation of missing values with the slsa algorithm
     dat.slsa <- impute.slsa(Biobase::exprs(obj),

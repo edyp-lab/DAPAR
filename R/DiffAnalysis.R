@@ -264,11 +264,7 @@ design <- cbind(cond1=1, cond2 = rep(0,length(flatIndices)))
 rownames(design) <- rownames(samplesData[flatIndices,])
 design[flatIndices == indices$iCond2,2] <- 1
 res <- diffAna(tempexprs, design)
-#print(labels)
-#print(c(1:length(labels)))
 #res <- limmaCompleteTest(tempexprs, labels, c(1:length(labels)), c(1:length(labels)))
-#print(length(res$logFC))
-#print(length(rownames(qData)))
 
 
 p <- data.frame(P.Value = res$P.Value, 
