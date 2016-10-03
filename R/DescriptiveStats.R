@@ -666,7 +666,7 @@ if (!(cluster %in%  paramcluster)){
     colors = c(seq(-3, -2, length=100),
                 seq(-2, 0.5, length=100),
                 seq(0.5, 6, length=100))
-    heatmap.color <- colorRampPalette(c("green", "black", "red"))(n = 1000)
+    heatmap.color <- colorRampPalette(c("green", "red"))(n = 1000)
     
     
     if (dendro){ .dendro = "row"} else {.dendro = "none"}

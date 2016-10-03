@@ -138,9 +138,15 @@ data <- read.table(file, header=TRUE, sep="\t",colClasses="character")
 writeMSnsetToExcel <- function(obj, filename)
 {
     name <- paste(filename, ".xlsx", sep="")
-    l <- list("Quantitative Data" = Biobase::exprs(obj), 
-              "Feature Meta Data" = Biobase::fData(obj), 
-              "Samples Meta Data" = Biobase::pData(obj))
+    
+    if (dim(Biobase::fData(obj))[2] == 0){
+        l <- list("Quantitative Data" = Biobase::exprs(obj), 
+                  "Samples Meta Data" = Biobase::pData(obj))
+        
+    } else {l <- list("Quantitative Data" = Biobase::exprs(obj), 
+                      "Feature Meta Data" = Biobase::fData(obj), 
+                      "Samples Meta Data" = Biobase::pData(obj))}
+    
 
     write.xlsx(l, file=name)
     

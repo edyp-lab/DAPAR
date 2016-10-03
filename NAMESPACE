@@ -13,13 +13,13 @@ import(norm)
 import(vioplot)
 import(impute)
 import(knitr)
-import(sm)
+#import(sm)
 importFrom("doParallel", "registerDoParallel")
 importFrom("foreach", "foreach", "%dopar%")
 importFrom("parallel", "detectCores")
 importFrom("Matrix", "sparseMatrix")
 import(cp4p)
-import(imp4p)
+#import(imp4p)
 importFrom("graphics", "par", "boxplot", "axis", "mtext", "abline", "points", 
             "legend", "lines",  "barplot", "text",
            "layout", "plot.new", "strheight", "strwidth", "title","plot.window")
@@ -69,7 +69,7 @@ export(
 
 
 ,"wrapper.mvImputation","mvImputation"
-,"wrapper.identifyMCAR_MNAR", "wrapper.imputeImp4p", "wrapper.impute.slsa"
+#,"wrapper.identifyMCAR_MNAR", "wrapper.imputeImp4p", "wrapper.impute.slsa"
 
 
 ,"pepAgregate"
