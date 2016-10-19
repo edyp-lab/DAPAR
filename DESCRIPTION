@@ -39,4 +39,3 @@ biocViews: Proteomics, Normalization, Preprocessing, MassSpectrometry,
         QualityControl, DataImport
 NeedsCompilation: no
 RoxygenNote: 5.0.1
-Packaged: 2016-06-27 13:31:30 UTC; sw175264
