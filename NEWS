@@ -1,4 +1,13 @@
-    CHANGES IN VERSION 1.5.13
+    CHANGES IN VERSION 1.7.3
+------------------------ 
+
+BUG FIXES
+    * A bug in the agregation tool was fixed. It was making errors when the dataset
+    contains some missing values.
+    
+    
+    
+        CHANGES IN VERSION 1.5.13
 ------------------------ 
 
 NEW FEATURES

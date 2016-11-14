@@ -176,6 +176,7 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
 ##' SumPeptides(M, Biobase::exprs(UPSpep25))
 SumPeptides <- function(matAdj, expr){
     expr <- expr[rownames(matAdj),]
+    expr[is.na(expr)] <- 0
     Mp <- t(matAdj) %*% expr
     .temp <- expr
     .temp[!is.na(.temp)] <- 1
@@ -207,6 +208,7 @@ SumPeptides <- function(matAdj, expr){
 ##' MeanPeptides(matAdj, Biobase::exprs(UPSpep25))
 MeanPeptides <- function(matAdj, expr){
     expr <- expr[rownames(matAdj),]
+    expr[is.na(expr)] <- 0
     Mp <- t(matAdj) %*% expr
     .temp <- expr
     .temp[!is.na(.temp)] <- 1
