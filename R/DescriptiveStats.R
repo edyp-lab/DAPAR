@@ -20,7 +20,9 @@ wrapper.boxPlotD <- function(obj,
                             group2Color="Condition"){
 
 qData <- Biobase::exprs(obj)
+#dataForXAxis <- as.matrix(Biobase::pData(obj)[,dataForXAxis])
 dataForXAxis <- as.matrix(Biobase::pData(obj)[,dataForXAxis])
+
 labels <- Biobase::pData(obj)[,"Label"]
 
 boxPlotD(qData, dataForXAxis, labels, group2Color)
@@ -59,8 +61,8 @@ if (group2Color == "Condition") {
     pal <- getPaletteForLabels(labels)
     }else { pal <- getPaletteForReplicates(ncol(qData))}
 
-
-    par(mar=c(2*length(labels),4,2,2))
+    if (is.null(labels)){size <- 2}else{size <- 2*length(labels)}
+   #par(mar=c(size,4,2,2))
         
 boxplot(qData
         ,las = 1
@@ -73,17 +75,22 @@ boxplot(qData
         , horizontal = FALSE
 )
 
+
 if( !is.null(dataForXAxis))
 {
 if (is.vector(dataForXAxis) ){
-    N <- 1} else{ N <- ncol(dataForXAxis)}
-for (i in 1:N){
+    xAxisLegend <- dataForXAxis
+    } 
+    else{ 
+        xAxisLegend <- NULL
+        N <- nrow(dataForXAxis)
+        for (i in 1:N){
+            xAxisLegend <- c(xAxisLegend, paste(dataForXAxis[i,], collapse="_"))
+        }
+    }
     axis(side=1,
          at = 1:ncol(qData),
-         labels = if (is.vector(dataForXAxis) ) dataForXAxis else dataForXAxis[,i],
-         line= 2*i-1
-    )
-}
+         labels = xAxisLegend)
 
 mtext("Samples", 
     side=1, 
