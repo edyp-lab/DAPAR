@@ -63,8 +63,10 @@ data <- read.table(file, header=TRUE, sep="\t",colClasses="character")
     ##building fData of MSnSet file
     fd <- data.frame( data[,indFData])
     if (is.null(indiceID)) {
-    rownames(fd) <- rep(paste(pep_prot_data, "_", 1:nrow(fd), sep=""))
-    }else{rownames(fd) <- data[,indiceID]}
+        rownames(fd) <- rep(paste(pep_prot_data, "_", 1:nrow(fd), sep=""))
+    }else{
+        rownames(fd) <- data[,indiceID]
+        }
     
     #rownames(fd) <- data[,indiceID]
     colnames(fd) <- colnames(data)[indFData]
@@ -138,13 +140,15 @@ data <- read.table(file, header=TRUE, sep="\t",colClasses="character")
 writeMSnsetToExcel <- function(obj, filename)
 {
     name <- paste(filename, ".xlsx", sep="")
+    print(colnames(exprs(obj)))
+    print(colnames(fData(obj)))
     
     if (dim(Biobase::fData(obj))[2] == 0){
-        l <- list("Quantitative Data" = Biobase::exprs(obj), 
-                  "Samples Meta Data" = Biobase::pData(obj))
+        l <- list("Quantitative Data" = cbind(ID = rownames(Biobase::exprs(obj)),Biobase::exprs(obj)), 
+                  "Samples Meta Data" = cbind(ID = rownames(Biobase::fData(obj)),Biobase::fData(obj)))
         
-    } else {l <- list("Quantitative Data" = Biobase::exprs(obj), 
-                      "Feature Meta Data" = Biobase::fData(obj), 
+    } else {l <- list("Quantitative Data" = cbind(ID = rownames(Biobase::exprs(obj)),Biobase::exprs(obj)), 
+                      "Feature Meta Data" = cbind(ID = rownames(Biobase::fData(obj)),Biobase::fData(obj)), 
                       "Samples Meta Data" = Biobase::pData(obj))}
     
 
