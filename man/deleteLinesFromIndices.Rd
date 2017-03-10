@@ -30,4 +30,3 @@ mvFilter(UPSpep25, c(1:10))
 \author{
 Florence Combes, Samuel Wieczorek
 }
-

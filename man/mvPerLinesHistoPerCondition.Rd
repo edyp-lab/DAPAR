@@ -34,4 +34,3 @@ mvPerLinesHistoPerCondition(qData, samplesData)
 \author{
 Samuel Wieczorek
 }
-

@@ -23,4 +23,3 @@ getPourcentageOfMV(UPSpep25)
 \author{
 Florence Combes, Samuel Wieczorek
 }
-

@@ -10,4 +10,3 @@ Partial (small) dataset for unit tests without any
 missing values.
 }
 \keyword{data}
-

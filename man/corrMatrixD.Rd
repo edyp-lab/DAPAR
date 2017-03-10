@@ -31,4 +31,3 @@ corrMatrixD(qData, samplesData)
 \author{
 Florence Combes, Samuel Wieczorek
 }
-

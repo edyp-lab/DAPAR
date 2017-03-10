@@ -25,4 +25,3 @@ GraphPepProt(mat)
 \author{
 Alexia Dorffer, Samuel Wieczorek
 }
-

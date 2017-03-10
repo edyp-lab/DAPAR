@@ -39,4 +39,3 @@ limma <- limmaCompleteTest(qData,conds,RepBio, RepTech)
 \author{
 Quentin Giai-Gianetto
 }
-

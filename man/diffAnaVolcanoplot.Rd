@@ -44,4 +44,3 @@ diffAnaVolcanoplot(data$logFC, data$P.Value)
 \author{
 Florence Combes, Samuel Wieczorek
 }
-

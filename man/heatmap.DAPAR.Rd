@@ -45,4 +45,3 @@ heatmapD(qData)
 \author{
 Samuel Wieczorek
 }
-

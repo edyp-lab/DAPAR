@@ -28,4 +28,3 @@ signif <- diffAnaGetSignificant(obj)
 \author{
 Alexia Dorffer
 }
-

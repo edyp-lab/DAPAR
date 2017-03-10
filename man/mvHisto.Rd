@@ -35,4 +35,3 @@ mvHisto(qData, samplesData, labels, indLegend="auto", showValues=TRUE)
 \author{
 Florence Combes, Samuel Wieczorek
 }
-

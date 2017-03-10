@@ -38,4 +38,3 @@ diffAnaWelch(qData, labels, condition1, condition2)
 \author{
 Florence Combes, Samuel Wieczorek
 }
-

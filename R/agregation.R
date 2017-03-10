@@ -67,6 +67,31 @@ return(newCol)
 }
 
 
+##' This function removes from the dataset the proteins that are defined 
+##' by less than n peptides.
+##' 
+##' @title Removes lines in the protein dataset where the proteins are
+##' defined by too few peptides
+##' @param peptideData A protein dataset of the MSnset object.
+##' @param n An integer. The minimum number of peptides.
+##' @return An object of the class xxxxx
+##' @author Samuel Wieczorek
+##' @examples
+##' data(UPSpep25)
+##' protID <- "Protein.group.IDs"
+##' M <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
+##' data <- Biobase::fData(UPSpep25)
+##' name <- "organism"
+##' FilterProteinWithFewPeptides(data, M)
+FilterProteinWithFewPeptides <- function(obj, n)
+{
+    
+    
+}
+
+
+
+
 
 ##' This function computes the number of peptides used to aggregate proteins.
 ##' 

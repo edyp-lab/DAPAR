@@ -25,4 +25,3 @@ getPaletteForLabels(labels)
 \author{
 Florence Combes, Samuel Wieczorek
 }
-

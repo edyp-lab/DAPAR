@@ -23,4 +23,3 @@ getProcessingInfo(UPSpep25)
 \author{
 Samuel Wieczorek
 }
-

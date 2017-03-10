@@ -34,4 +34,3 @@ wrapper.mvTypePlot(UPSpep25)
 \author{
 Florence Combes, Samuel Wieczorek
 }
-

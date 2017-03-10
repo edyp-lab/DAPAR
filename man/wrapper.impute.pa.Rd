@@ -24,4 +24,3 @@ dat <- wrapper.impute.pa(dat)
 \author{
 Samuel Wieczorek
 }
-

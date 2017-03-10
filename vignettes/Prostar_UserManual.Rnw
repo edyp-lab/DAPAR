@@ -715,18 +715,18 @@ correspond to the different conditions (column \textbf{Label} in the table of
 
 %%%%%%%%%%%%%%%%%%%%%%
 
-\subsubsection{Variance distribution}
-This plot shows the distribution of the variance of the log-intensity of 
+\subsubsection{CV distribution}
+This plot shows the distribution of the CV of the log-intensity of 
 proteins for each condition (see Fig.~\ref{fig:sdvd}).
 
 \begin {figure}
 \centering
 \includegraphics[width=0.75\textwidth]{images/desc_varDist.png}
-\caption{Variance distribution for the quantitative data.}\label{fig:sdvd}
+\caption{CV distribution for the quantitative data.}\label{fig:sdvd}
 \end {figure}
 
 \hl{\bf Command line:} In \Biocpkg{DAPAR}, the corresponding function is 
-\Rfunction{varianceDistD()}.
+\Rfunction{CVDistD()}.
 
 \subsubsection{Density plot}\label{sec:densityplot}
 This plots shows the distribution of the log-intensity of proteins for each 

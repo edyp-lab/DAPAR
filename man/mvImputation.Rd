@@ -27,4 +27,3 @@ mvImputation(qData, "QRILC")
 \author{
 Samuel Wieczorek
 }
-

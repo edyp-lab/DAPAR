@@ -29,10 +29,9 @@ library(vioplot)
 types <- c("Label","Analyt.Rep")
 wrapper.violinPlotD(UPSpep25, types)
 }
-\author{
-Samuel Wieczorek
-}
 \seealso{
 \code{\link{wrapper.densityPlotD}}, \code{\link{wrapper.boxPlotD}}
 }
-
+\author{
+Samuel Wieczorek
+}

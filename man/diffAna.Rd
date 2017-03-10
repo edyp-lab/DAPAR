@@ -34,4 +34,3 @@ diffAna(qData, design)
 \author{
 Florence Combes, Samuel Wieczorek
 }
-

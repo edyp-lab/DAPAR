@@ -37,4 +37,3 @@ mvTypePlot(qData, labels, threshold=0)
 \author{
 Florence Combes, Samuel Wieczorek
 }
-

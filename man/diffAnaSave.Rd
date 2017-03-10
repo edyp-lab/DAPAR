@@ -53,4 +53,3 @@ obj <- diffAnaSave(UPSpep25, limma, "limma", condition1, condition2)
 \author{
 Alexia Dorffer, Samuel Wieczorek
 }
-

@@ -31,4 +31,3 @@ diffAnaWelch(qData, labels, condition1, condition2)
 \author{
 Samuel Wieczorek
 }
-

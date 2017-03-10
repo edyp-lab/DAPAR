@@ -28,10 +28,9 @@ data(UPSpep25)
 types <- c("Label","Analyt.Rep")
 wrapper.boxPlotD(UPSpep25, types)
 }
-\author{
-Florence Combes, Samuel Wieczorek
-}
 \seealso{
 \code{\link{wrapper.densityPlotD}}
 }
-
+\author{
+Florence Combes, Samuel Wieczorek
+}

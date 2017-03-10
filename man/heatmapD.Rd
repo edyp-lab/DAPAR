@@ -34,4 +34,3 @@ heatmapD(qData)
 \author{
 Florence Combes, Samuel Wieczorek
 }
-

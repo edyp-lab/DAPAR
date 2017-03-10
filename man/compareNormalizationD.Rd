@@ -43,4 +43,3 @@ compareNormalizationD(qDataBefore, qDataAfter, labels)
 \author{
 Samuel Wieczorek
 }
-

@@ -34,4 +34,3 @@ wrapper.heatmapD(testWithoutNA)
 \author{
 Alexia Dorffer
 }
-

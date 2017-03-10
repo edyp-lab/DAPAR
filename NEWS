@@ -1,4 +1,28 @@
-    CHANGES IN VERSION 1.7.7
+    CHANGES IN VERSION 1.7.13
+------------------------ 
+
+NEW FEATURES
+    * The normalization function has been modified to take into account the quantile normalization.Only works with Prostar version >= 1.7.13
+    
+    
+    
+        CHANGES IN VERSION 1.7.11
+------------------------ 
+
+NEW FEATURES
+    * During the export to an Excel file, th columns of quantitavie data are formatted as "Number"
+    
+    
+    
+    CHANGES IN VERSION 1.7.9
+------------------------ 
+
+NEW FEATURES
+    * The variance distribution plot has been replaced by the CV distribution plot
+    
+    
+    
+        CHANGES IN VERSION 1.7.7
 ------------------------ 
 
 BUG FIXES

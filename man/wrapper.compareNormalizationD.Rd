@@ -42,4 +42,3 @@ wrapper.compareNormalizationD(UPSpep25, objAfter, labels)
 \author{
 Samuel Wieczorek
 }
-

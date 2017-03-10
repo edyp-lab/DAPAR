@@ -227,6 +227,10 @@ mvFilterFromIndices <- function(obj,keepThat=NULL, processText=NULL )
 
 if (is.null(keepThat)) {return(obj)}
 obj <- obj[keepThat,]
+
+if (!is.null(obj@experimentData@other$isMissingValues)){
+    obj@experimentData@other$isMissingValues <- obj@experimentData@other$isMissingValues[keepThat,]
+}
 obj@processingData@processing <- 
     c(obj@processingData@processing, processText)
 
@@ -256,6 +260,10 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText=NULL )
     
     if (is.null(deleteThat)) {return(obj)}
     obj <- obj[-deleteThat,]
+    if (!is.null(obj@experimentData@other$isMissingValues)){
+        obj@experimentData@other$isMissingValues <- obj@experimentData@other$isMissingValues[-deleteThat,]
+    }
+    
     obj@processingData@processing <-  c(obj@processingData@processing, processText)
     if (grepl("contaminants", processText)){obj@experimentData@other$contaminantsRemoved <- TRUE}
     if (grepl("reverse", processText)){obj@experimentData@other$reverseRemoved <- TRUE }

@@ -80,3 +80,105 @@ abline(v = -threshold_logFC, col = "gray")
 
 return(p)
 }
+
+
+##' Plots an interactive volcanoplot after the differential analysis.
+##' Typically, the log of Fold Change is represented on the X-axis and the
+##' log10 of the p-value is drawn on the Y-axis. When the \code{threshold_pVal}
+##' and the \code{threshold_logFC} are set, two lines are drawn respectively on
+##' the y-axis and the X-axis to visually distinguish between differential and
+##' non differential data. With the use of the package Highcharter, a customizable tooltip 
+##' appears when the user put the mouse's pointer over a point of the scatter plot.
+##' 
+##' @title Volcanoplot of the differential analysis
+##' @param df A dataframe which contains the following slots :
+##' x : a vector of the log(fold change) values of the differential analysis,
+##' y : a vector of the p-value values returned by the differential analysis.
+##' index : a vector of the rowanmes of the data.
+##' This dataframe must has been built with the option stringsAsFactors set to FALSE.
+##' There may be additional slots which will be used to show informations in the tooltip. The name of these
+##' slots must begin with the prefix "tooltip_". It will be automatically removed in the plot.
+##' @param threshold_pVal A floating number which represents the p-value that
+##' separates differential and non-differential data.
+##' @param threshold_logFC A floating number which represents the log of the
+##' Fold Change that separates differential and non-differential data.
+##' @param conditions A list of the names of condition 1 and 2 used for the
+##' differential analysis.
+##' @param clickFunction A string that contains a JavaScript function used to show info
+##' from slots in df. The variable this.index refers to the slot named index and allows to retrieve
+##' the rigth row to show in the tooltip
+##' @return An interactive volcanoplot
+##' @author Samuel Wieczorek
+##' @examples
+##' library(highcharter) 
+##' data(UPSpep25)
+##' condition1 <- '25fmol'
+##' condition2 <- '10fmol'
+##' cond <- c(condition1, condition2)
+##' keepThat <- mvFilterGetIndices(UPSpep25, 'wholeMatrix', '6')
+##' UPSpep25 <- mvFilterFromIndices(UPSpep25, keepThat, 'Filtered with wholeMatrix (threshold = 6 ).')
+##' data <- wrapper.diffAnaLimma(UPSpep25, condition1, condition2)
+##' df <- data.frame(x=data$logFC, y = -log10(data$P.Value),index = as.character(rownames(UPSpep25)),stringsAsFactors = FALSE)
+##' tooltipSlot <- c("Sequence", "Score")
+##' df <- cbind(df,Biobase::fData(UPSpep25)[tooltipSlot])
+##' colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
+##' if (ncol(df) > 3){
+    ##'     colnames(df)[4:ncol(df)] <- paste("tooltip_", colnames(df)[4:ncol(df)], sep="")
+    ##' }
+##' hc_clickFunction <- JS("function(event) {Shiny.onInputChange('eventPointClicked', [this.index]);}")
+##' diffAnaVolcanoplot_rCharts(df,threshold_logFC = 1,threshold_pVal = 3,conditions = cond,clickFunction=hc_clickFunction) 
+diffAnaVolcanoplot_rCharts <- function(df, 
+                                       threshold_pVal=1e-60, 
+                                       threshold_logFC=0, 
+                                       conditions=NULL, 
+                                       clickFunction=NULL){
+    
+    xtitle <- paste("log2 ( mean(",conditions[2],") / mean(",conditions[1],") )",
+                    sep="")
+    
+    if (is.null(clickFunction)){
+        clickFunction <- JS("function(event) {Shiny.onInputChange('eventPointClicked', [this.name]);}")
+    }
+
+    colorCode <- c("blue", "orange")
+    .color <- rep(colorCode[1], nrow(df))
+    
+    
+    for (i in 1:nrow(df)){
+        if ( (df$y[i] >= threshold_pVal) && (abs(df$x[i]) >= threshold_logFC) ){
+            .color[i] <- colorCode[2]
+        }
+    }
+    df <- cbind(df, color=.color)
+    ds <- list_parse(df)
+    names(ds) <- NULL
+    
+    i_tooltip <- which(startsWith(colnames(df),"tooltip"))
+    txt_tooltip <- NULL
+    for (i in i_tooltip){
+        t <- 
+        txt_tooltip <- paste(txt_tooltip,"<b>",gsub("tooltip_", "", colnames(df)[i], fixed=TRUE), " </b>: {point.", colnames(df)[i],"} <br> ", sep="")
+    }
+
+    h1 <-  highchart() %>% 
+        #hc_title(text = "Scatter chart with color") %>% 
+        hc_add_series(data = ds, type="scatter") %>%
+        hc_add_series(data = data.frame(x=c(-threshold_logFC, -threshold_logFC), y=c(0,max(df$y))), type="line", color="lightgrey") %>%
+        hc_add_series(data = data.frame(x=c(threshold_logFC, threshold_logFC), y=c(0,max(df$y))), type="line", color="lightgrey") %>%
+        hc_add_series(data = data.frame(x=c(-max(max(df$x), abs(min(df$x))),max(max(df$x), abs(min(df$x)))), 
+                                        y=c(threshold_pVal,threshold_pVal)), 
+                    type="line", 
+                    color="lightgrey", 
+                    marker=list(enabled = FALSE)) %>%
+        hc_chart(zoomType = "xy",
+                 type="scatter") %>%
+        hc_legend(enabled = FALSE) %>%
+        hc_xAxis(title = list(text="logFC")) %>%
+        hc_yAxis(title = list(text = "-log10(pValue)")) %>%
+        hc_tooltip(headerFormat= '',
+                   pointFormat = txt_tooltip) %>%
+        hc_plotOptions( series = list( cursor = "pointer", 
+                                       point = list( events = list( click = clickFunction ) ) ) )
+        
+    return(h1)
+}

@@ -31,4 +31,3 @@ TopnPeptides(matAdj, Biobase::exprs(UPSpep25), 3)
 \author{
 Alexia Dorffer
 }
-

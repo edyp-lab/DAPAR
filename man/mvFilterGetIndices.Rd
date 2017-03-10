@@ -41,4 +41,3 @@ mvFilterGetIndices(UPSpep25, "wholeMatrix", 2)
 \author{
 Florence Combes, Samuel Wieczorek
 }
-

@@ -28,4 +28,3 @@ getIndicesOfLinesToRemove(UPSpep25, "Potential.contaminant", prefix="+")
 \author{
 Samuel Wieczorek
 }
-

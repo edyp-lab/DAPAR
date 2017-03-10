@@ -36,4 +36,3 @@ pepAgregate(UPSpep25, protID, "sum overall", mat)
 \author{
 Alexia Dorffer, Samuel Wieczorek
 }
-

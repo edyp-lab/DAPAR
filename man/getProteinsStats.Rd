@@ -29,4 +29,3 @@ getProteinsStats(MUnique,MShared)
 \author{
 Samuel Wieczorek
 }
-

@@ -32,11 +32,10 @@ data(UPSpep25)
 labels <- Biobase::pData(UPSpep25)[,"Label"]
 wrapper.densityPlotD(UPSpep25, labels)
 }
+\seealso{
+\code{\link{wrapper.boxPlotD}}, 
+\code{\link{wrapper.CVDistD}}
+}
 \author{
 Alexia Dorffer
 }
-\seealso{
-\code{\link{wrapper.boxPlotD}}, 
-\code{\link{wrapper.varianceDistD}}
-}
-

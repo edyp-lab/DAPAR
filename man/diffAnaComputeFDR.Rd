@@ -44,4 +44,3 @@ diffAnaComputeFDR(limma)
 \author{
 Samuel Wieczorek
 }
-

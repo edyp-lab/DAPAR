@@ -31,4 +31,3 @@ mvImage(qData, labels)
 \author{
 Samuel Wieczorek, Thomas Burger
 }
-

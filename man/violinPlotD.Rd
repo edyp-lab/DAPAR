@@ -35,10 +35,9 @@ dataForXAxis <- Biobase::pData(UPSpep25)[,types]
 labels <- Biobase::pData(UPSpep25)[,"Label"]
 violinPlotD(qData, dataForXAxis, labels)
 }
-\author{
-Florence Combes, Samuel Wieczorek
-}
 \seealso{
 \code{\link{densityPlotD}}
 }
-
+\author{
+Florence Combes, Samuel Wieczorek
+}

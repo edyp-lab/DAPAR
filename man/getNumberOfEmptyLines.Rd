@@ -23,4 +23,3 @@ getNumberOfEmptyLines(qData)
 \author{
 Samuel Wieczorek
 }
-

@@ -31,4 +31,3 @@ wrapper.mvPerLinesHistoPerCondition(UPSpep25)
 \author{
 Samuel Wieczorek
 }
-

@@ -83,7 +83,7 @@ diffAnaSave <- function (obj, data, method="limma", condition1, condition2,
     #####################################################################
     Biobase::fData(obj)$P.Value <- data$P.Value
     Biobase::fData(obj)$logFC <- data$logFC
-    Biobase::fData(obj)$Significant <- FALSE
+    Biobase::fData(obj)$Significant <- 0
 
     text <- paste("Differential analysis with",method)
     obj@processingData@processing <- c(obj@processingData@processing, text)
@@ -95,7 +95,7 @@ diffAnaSave <- function (obj, data, method="limma", condition1, condition2,
     
     ipval <- which(y >= threshold_pVal)
     ilogfc <- which(abs(x) >= threshold_logFC)
-    Biobase::fData(obj)[intersect(ipval, ilogfc),]$Significant <- TRUE
+    Biobase::fData(obj)[intersect(ipval, ilogfc),]$Significant <- 1
     
     # obj@experimentData@other <- list(obj@experimentData@other,
     #                                 method = method,

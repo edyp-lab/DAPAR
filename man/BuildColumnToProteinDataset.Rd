@@ -34,4 +34,3 @@ BuildColumnToProteinDataset(data, M, name )
 \author{
 Samuel Wieczorek
 }
-

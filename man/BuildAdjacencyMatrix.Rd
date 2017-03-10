@@ -29,4 +29,3 @@ BuildAdjacencyMatrix(UPSpep25, "Protein.group.IDs", TRUE)
 \author{
 Florence Combes, Samuel Wieczorek, Alexia Dorffer
 }
-

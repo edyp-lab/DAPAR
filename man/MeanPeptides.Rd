@@ -29,4 +29,3 @@ MeanPeptides(matAdj, Biobase::exprs(UPSpep25))
 \author{
 Alexia Dorffer
 }
-

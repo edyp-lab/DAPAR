@@ -341,7 +341,7 @@ palette("default")
 ##' @return A density plot
 ##' @author Alexia Dorffer
 ##' @seealso \code{\link{wrapper.boxPlotD}}, 
-##' \code{\link{wrapper.varianceDistD}}
+##' \code{\link{wrapper.CVDistD}}
 ##' @examples
 ##' data(UPSpep25)
 ##' labels <- Biobase::pData(UPSpep25)[,"Label"]
@@ -368,7 +368,7 @@ densityPlotD(qData, labelsForLegend, indData2Show,group2Color)
 ##' color per replicate (value "Replicate"). Default value is by Condition.
 ##' @return A density plot
 ##' @author Florence Combes, Samuel Wieczorek
-##' @seealso \code{\link{boxPlotD}}, \code{\link{varianceDistD}}
+##' @seealso \code{\link{boxPlotD}}, \code{\link{CVDistD}}
 ##' @examples 
 ##' data(UPSpep25)
 ##' qData <- Biobase::exprs(UPSpep25)
@@ -441,33 +441,33 @@ legend("topleft"
 
 
 
-##' Builds a densityplot of the variance of entities in the exprs() table
+##' Builds a densityplot of the CV of entities in the exprs() table
 ##' of an object \code{\link{MSnSet}}. The variance is calculated for each 
 ##' condition (Label) present
 ##' in the dataset (see the slot \code{'Label'} in the \code{pData()} table).
 ##' 
-##' @title Distribution of variance of proteins
+##' @title Distribution of CV of entities
 ##' @param obj An object of class \code{\link{MSnSet}}.
 ##' @return A density plot
 ##' @author Alexia Dorffer
 ##' @seealso \code{\link{wrapper.densityPlotD}}
 ##' @examples
 ##' data(UPSpep25)
-##' wrapper.varianceDistD(UPSpep25)
-wrapper.varianceDistD <- function(obj){
+##' wrapper.CVDistD(UPSpep25)
+wrapper.CVDistD <- function(obj){
 qData <- Biobase::exprs(obj)
 labels <- Biobase::pData(obj)[,"Label"]
-varianceDistD(qData, labels)
+CVDistD(qData, labels)
 }
 
 
 
 
-##' Builds a densityplot of the variance of entities in the exprs() table
-##' of a object. The variance is calculated for each condition (Label) present
+##' Builds a densityplot of the CV of entities in the exprs() table
+##' of a object. The CV is calculated for each condition (Label) present
 ##' in the dataset (see the slot \code{'Label'} in the \code{pData()} table)
 ##' 
-##' @title Distribution of variance of proteins
+##' @title Distribution of CV of entities
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param labels A vector of the conditions (labels) (one label per sample).
 ##' @return A density plot
@@ -476,8 +476,8 @@ varianceDistD(qData, labels)
 ##' @examples
 ##' data(UPSpep25)
 ##' labels <- Biobase::pData(UPSpep25)[,"Label"]
-##' varianceDistD(UPSpep25)
-varianceDistD <- function(qData, labels=NULL){
+##' CVDistD(UPSpep25)
+CVDistD <- function(qData, labels=NULL){
     
 if (is.null(labels)) {return(NULL)}
 conditions <- unique(labels)
@@ -486,7 +486,7 @@ axis.limits <- matrix(data = 0, nrow = 4, ncol = n)
 for (i in conditions){
     if (length(which(labels == i)) > 1){
     t <- density(apply(qData[,which(labels == i)], 1, 
-                    function(x) var(x, na.rm=TRUE)), na.rm=TRUE)
+                    function(x) 100*var(x, na.rm=TRUE)/mean(x, na.rm=TRUE)), na.rm=TRUE)
 
     axis.limits[,which(conditions == i)]<- c(min(t$x), max(t$x), min(t$y),
                                             max(t$y))
@@ -499,7 +499,7 @@ lim.y <- range(min(axis.limits[3,]), max(axis.limits[4,]))
 #par(mar = c(5, 5, 6, 3))
 plot(x = NULL
         , ylab ="Density"
-        , xlab = "Variance( log (intensity) )"
+        , xlab = "CV( log (intensity) )"
         , xlim = lim.x
         , ylim = lim.y
         , las=1
@@ -512,7 +512,7 @@ col.density = c(1:length(conditions))
 for (i in conditions){
     if (length(which(labels == i)) > 1){
         t <- apply(qData[,which(labels == i)], 1, 
-                function(x) var(x, na.rm = TRUE))
+                function(x) 100*var(x, na.rm=TRUE)/mean(x, na.rm=TRUE))
     lines(density(t, na.rm = TRUE)
         , xlab=""
         , ylab=""
@@ -680,13 +680,13 @@ if (!(cluster %in%  paramcluster)){
     p <- heatmap.2(
         x=t(.data),
         distfun = function(x) {
-        x[is.na(x)] <- -1e5
-        dist(x, method=distance)
-        },
+            x[is.na(x)] <- -1e5
+            dist(x, method=distance)
+            },
         hclustfun = function(x) {
-        x[is.na(x)] <- -1e5
-        hclust(x, method=cluster)
-        },
+            x[is.na(x)] <- -1e5
+            hclust(x, method=cluster)
+            },
         dendrogram =.dendro,
         Rowv=TRUE,
         col=heatmap.color ,
@@ -695,9 +695,9 @@ if (!(cluster %in%  paramcluster)){
         trace="none",
         scale="none",
         #srtCol=45,
-    labCol="",
-        margins=c(4,9),
-        cexRow=1
+        labCol="",
+        margins=c(4,12),
+        cexRow=1.5
     )
 #    }
 }
@@ -815,7 +815,7 @@ heatmap.DAPAR <-
         
         
         if (!is.null(labRow) ) {
-            axis(4, iy, labels = labRow, las = 2, line = -0.5 + offsetRow, 
+            axis(4, iy, labels = labRow, las = 5, line = -0.5 + offsetRow, 
                  tick = 0, cex.axis = cexRow, hadj = 0, padj = NA)
         }
         else {

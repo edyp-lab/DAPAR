@@ -25,4 +25,3 @@ getPaletteForLabels(5)
 \author{
 Samuel Wieczorek
 }
-

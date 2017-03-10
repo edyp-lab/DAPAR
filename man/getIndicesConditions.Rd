@@ -33,4 +33,3 @@ getIndicesConditions(labels, "25fmol", "10fmol")
 \author{
 Florence Combes, Samuel Wieczorek
 }
-

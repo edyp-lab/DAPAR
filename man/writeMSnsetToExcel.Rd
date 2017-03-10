@@ -29,4 +29,3 @@ writeMSnsetToExcel(UPSpep25, "foo")
 \author{
 Samuel Wieczorek
 }
-

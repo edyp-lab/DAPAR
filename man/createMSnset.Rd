@@ -56,4 +56,3 @@ pep_prot_data = "peptide")
 \author{
 Florence Combes, Samuel Wieczorek
 }
-

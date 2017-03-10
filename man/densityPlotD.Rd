@@ -32,10 +32,9 @@ qData <- Biobase::exprs(UPSpep25)
 labels <- lab2Show <- Biobase::pData(UPSpep25)[,"Label"]
 densityPlotD(qData, labels)
 }
+\seealso{
+\code{\link{boxPlotD}}, \code{\link{CVDistD}}
+}
 \author{
 Florence Combes, Samuel Wieczorek
 }
-\seealso{
-\code{\link{boxPlotD}}, \code{\link{varianceDistD}}
-}
-

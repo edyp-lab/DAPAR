@@ -6,7 +6,7 @@
 \usage{
 wrapper.dapar.impute.mi(obj, nb.iter = 3, nknn = 15, selec = 600,
   siz = 500, weight = 1, ind.comp = 1, progress.bar = TRUE,
-  x.min = 20, x.max = 30, x.step.mod = 300, x.step.pi = 300,
+  x.min = 10, x.max = 35, x.step.mod = 300, x.step.pi = 300,
   nb.rei = 100, method = 4, gridsize = 300, q = 0.95, q.min = 0,
   q.norm = 3, eps = 2, methodi = "slsa", lapala = TRUE)
 }
@@ -31,4 +31,3 @@ dat <- wrapper.dapar.impute.mi(dat)
 \author{
 Samuel Wieczorek
 }
-
