@@ -1,8 +1,18 @@
-    CHANGES IN VERSION 1.7.13
+    CHANGES IN VERSION 1.7.17
 ------------------------ 
 
 NEW FEATURES
-    * The normalization function has been modified to take into account the quantile normalization.Only works with Prostar version >= 1.7.13
+    * The volcanoplots (of the differential analysis) are now interactive 
+    since they use the package highcharter
+    
+    
+    
+        CHANGES IN VERSION 1.7.13
+------------------------ 
+
+NEW FEATURES
+    * The normalization function has been modified to take into account the 
+    quantile normalization.Only works with Prostar version >= 1.7.13
     
     
     

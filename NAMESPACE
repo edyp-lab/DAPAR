@@ -13,7 +13,6 @@ import(highcharter)
 import(vioplot)
 import(impute)
 import(knitr)
-#import(sm)
 importFrom("doParallel", "registerDoParallel")
 importFrom("foreach", "foreach", "%dopar%")
 importFrom("parallel", "detectCores")
@@ -27,7 +26,8 @@ importFrom("graphics", "par", "boxplot", "axis", "mtext", "abline", "points",
 
 importFrom("stats", "lowess", "cor", "density","pexp", 
             "var", "t.test", "dist", "hclust", "setNames", 
-            "median", "p.adjust", "model.matrix", "rnorm","na.omit")
+            "median", "p.adjust", "model.matrix", "rnorm","na.omit",
+           "quantile", "rbeta", "runif", "sd")
 importFrom("imputeLCMD", "impute.wrapper.KNN", "impute.wrapper.MLE",
             "impute.QRILC")
 importFrom("preprocessCore", "normalize.quantiles")
@@ -64,13 +64,14 @@ export(
 ,"removeLines"
 ,"deleteLinesFromIndices"
 ,"getIndicesOfLinesToRemove"
-,"wrapper.normalizeD","normalizeD"
+#,"wrapper.normalizeD","normalizeD"
 ,"wrapper.normalizeD2","normalizeD2"
 ,"wrapper.compareNormalizationD","compareNormalizationD"
 
 
 ,"wrapper.mvImputation","mvImputation"
 ,"wrapper.dapar.impute.mi",  "wrapper.impute.pa"
+,"wrapper.impute.pa2"
 
 
 ,"pepAgregate"

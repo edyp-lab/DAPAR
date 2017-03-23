@@ -140,7 +140,7 @@ diffAnaVolcanoplot_rCharts <- function(df,
         clickFunction <- JS("function(event) {Shiny.onInputChange('eventPointClicked', [this.name]);}")
     }
 
-    colorCode <- c("blue", "orange")
+    colorCode <- c("lightgrey", "orange")
     .color <- rep(colorCode[1], nrow(df))
     
     

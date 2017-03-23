@@ -70,14 +70,14 @@ return(obj)
 ##' normalizeD(qData, labels, "Median Centering", "within conditions")
 normalizeD <- function(qData, labels, family, method){
 #Verification des parametres
-paramfamily<-c("Global Rescaling", "Median Centering", "Mean Centering", 
+paramfamily<-c("Global Alignment", "Median Centering", "Mean Centering", 
                 "Mean Centering Scaling")
 if (sum(is.na(match(family, paramfamily)==TRUE))>0){
     warning("Parameter family is not correct")
     return (NULL)
 }
 
-parammethod<-c("sum by columns", "quantiles", "overall", 
+parammethod<-c("sum by columns", "quantile alignment", "overall", 
                 "within conditions")
 if (sum(is.na(match(method, parammethod)==TRUE))>0){
     warning("Parameter method is not correct")
@@ -92,7 +92,7 @@ if (!is.null(.temp)){
     
     
     ###############
-    if (family == "Global Rescaling"){
+    if (family == "Global Alignment"){
         if (method == "sum by columns"){
             t <- 2^(.temp)
             s <- colSums(t, na.rm=TRUE)
@@ -100,7 +100,7 @@ if (!is.null(.temp)){
             for ( i in 1:nrow(data)) { data[i,] <- t[i,] / s}
             .temp <- log2(data)
         }
-    else if (method == "quantiles"){
+    else if (method == "quantile alignment"){
         .temp <- normalize.quantiles(.temp)
         dimnames(.temp) <- list(rownames(qData),colnames(qData))
         }
@@ -192,8 +192,42 @@ return(.temp)
 }
 
 
-
-
+##' Provides several methods to normalize quantitative data from
+##' a \code{\link{MSnSet}} object.
+##' They are organized in four main families : Strong Rescaling, 
+##' Median Centering, Mean Centering, Mean CenteringScaling.
+##' For the first family, two sub-categories are available : the sum by columns
+##' and the quantiles method.
+##' For the three other families, two categories are available : 
+##' "Overall" which means that the value for each protein 
+##' (ie line in the expression data tab) is computed over all the samples ;
+##' "within conditions" which means that the value for each protein 
+##' (ie line in the \code{exprs()} data tab) is computed condition
+##' by condition.
+##' 
+##' @title Normalisation
+##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param method One of the following : Global Alignment (for normalizations 
+##' of important magnitude), Quantile Centering, Mean Centering.  
+##' @param type For the method "Global Alignment", the parameters are:
+##' "sum by columns": operates on the original scale (not the log2 one) and propose 
+##' to normalize each abundance by the total abundance of the sample (so as to focus
+##' on the analyte proportions among each sample).
+##' "Alignment on all quantiles": proposes to align the quantiles of all the 
+##' replicates; practically it amounts to replace abundances by order statistics.
+##' For the two other methods, the parameters are "overall" (shift all the 
+##' sample distributions at once) or "within conditions" (shift the sample 
+##' distributions within each condition at a time).
+##' @param scaling A boolean that indicates if the variance of the data have to 
+##' be forced to unit (variance reduction) or not.
+##' @param quantile A float that corresponds to the quantile used to align the
+##' data.
+##' @return An instance of class \code{\link{MSnSet}} where the quantitative 
+##' data in the \code{exprs()} tab has been normalized.
+##' @author Samuel Wieczorek
+##' @examples
+##' data(UPSpep25)
+##' wrapper.normalizeD2(UPSpep25, "Quantile Centering", "within conditions")
 wrapper.normalizeD2 <- function(obj, method, type, scaling=FALSE, quantile=0.15){
     
     qData <- Biobase::exprs(obj)
@@ -203,7 +237,7 @@ wrapper.normalizeD2 <- function(obj, method, type, scaling=FALSE, quantile=0.15)
     msg_method <- paste("Normalisation using method =", method,  sep="")
     msg_type <- paste("With type =", type,  sep="")
     
-    if (method == "Global Rescaling"){
+    if (method == "Global Alignment"){
         obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type)
         obj@experimentData@other$normalizationMethod <- method
         obj@experimentData@other$normalizationType <- type
@@ -217,7 +251,7 @@ wrapper.normalizeD2 <- function(obj, method, type, scaling=FALSE, quantile=0.15)
     }   
     else if (method =="Mean Centering"){
         msg_scaling <- paste("With scaling =", scaling,  sep="")
-        obj@processingData@processing <- c(obj@processingData@processing, msg, msg_type, msg_scaling)
+        obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type, msg_scaling)
         obj@experimentData@other$normalizationMethod <- msg_method
         obj@experimentData@other$normalizationType <- type
         obj@experimentData@other$normalizationScaling <- scaling
@@ -246,22 +280,32 @@ wrapper.normalizeD2 <- function(obj, method, type, scaling=FALSE, quantile=0.15)
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param labels A vector of strings containing the column "Label" of 
 ##' the \code{pData()}.
-##' @param method One of the following : Global Rescaling, 
+##' @param method One of the following : Global Alignment, 
 ##' Quantile Centering, Mean Centering.
-##' @param type "Overall" or "Within conditions".
-##' @param scaling A boolean
-##' @param quantile A float
+##' @param type For the method "Global Alignment", the parameters are:
+##' "sum by columns": operates on the original scale (not the log2 one) and propose 
+##' to normalize each abundance by the total abundance of the sample (so as to focus
+##' on the analyte proportions among each sample).
+##' "Alignment on all quantiles": proposes to align the quantiles of all the 
+##' replicates; practically it amounts to replace abundances by order statistics.
+##' For the two other methods, the parameters are "overall" (shift all the 
+##' sample distributions at once) or "within conditions" (shift the sample 
+##' distributions within each condition at a time).
+##' @param scaling A boolean that indicates if the variance of the data have to 
+##' be forced to unit (variance reduction) or not.
+##' @param quantile A float that corresponds to the quantile used to align the
+##' data.
 ##' @return A matrix normalized
-##' @author Florence Combes, Samuel Wieczorek, Thomas Burger
+##' @author Samuel Wieczorek, Thomas Burger
 ##' @examples
 ##' data(UPSpep25)
 ##' qData <- Biobase::exprs(UPSpep25)
 ##' labels <- Biobase::pData(UPSpep25)[,"Label"]
-##' normalizeD(qData, labels, "Median Centering", "within conditions")
-normalizeD2 <- function(qData, labels, method, type, scaling=FALSE, quantile=NULL){
-    #Verification des parametres
-    parammethod<-c("Global Rescaling", "Quantile Centering", "Mean Centering")
-    paramtype<-c("sum by columns", "quantiles", "overall","within conditions")
+##' normalizeD2(qData, labels, "Quantile Centering", "within conditions", quantile = 0.15)
+normalizeD2 <- function(qData, labels, method, type, scaling=FALSE, quantile=0.15){
+    #Check of parameters
+    parammethod<-c("Global Alignment", "Quantile Centering", "Mean Centering")
+    paramtype<-c("sum by columns", "Alignment on all quantiles", "overall","within conditions")
     
     if (!(method %in% parammethod)){
         warning("Parameter method is not correct")
@@ -280,7 +324,7 @@ normalizeD2 <- function(qData, labels, method, type, scaling=FALSE, quantile=NUL
         
         
         ###############
-        if (method == "Global Rescaling"){
+        if (method == "Global Alignment"){
             if (type == "sum by columns"){
                 t <- 2^(.temp)
                 s <- colSums(t, na.rm=TRUE)
@@ -288,8 +332,8 @@ normalizeD2 <- function(qData, labels, method, type, scaling=FALSE, quantile=NUL
                 for ( i in 1:nrow(data)) { data[i,] <- t[i,] / s}
                 .temp <- log2(data)
             }
-            else if (type == "quantiles"){
-                .temp <- normalize.quantiles(.temp)
+            else if (type == "Alignment on all quantiles"){
+                .temp <- preprocessCore::normalize.quantiles(.temp)
                 dimnames(.temp) <- list(rownames(qData),colnames(qData))
             }
         }
@@ -302,7 +346,7 @@ normalizeD2 <- function(qData, labels, method, type, scaling=FALSE, quantile=NUL
             medianOverSamples <- apply(.temp, 2, q)
             
             if (type == "overall"){
-                cOverall <- median(medianOverSamples)
+                cOverall <- q(medianOverSamples)
                 .temp <- sweep(.temp, 2, medianOverSamples)
                 .temp <- .temp + cOverall
                 
@@ -314,7 +358,7 @@ normalizeD2 <- function(qData, labels, method, type, scaling=FALSE, quantile=NUL
                 for (l in unique(labels))
                 {
                     indices <- which(labels== l)
-                    cCond[l] <- median(medianOverSamples[indices])
+                    cCond[l] <- q(medianOverSamples[indices])
                     .temp[,indices] <- .temp[,indices] + cCond[l]
                 }
             }
@@ -351,10 +395,10 @@ normalizeD2 <- function(qData, labels, method, type, scaling=FALSE, quantile=NUL
             }
         } 
         
-
-        #     msg <- paste("Normalisation using ", method,  sep="")
-        #     .temp@processingData@processing <- c(.temp@processingData@processing,
-        #                                          msg)
+# 
+#              msg <- paste("Normalisation using ", method, " and ", type, sep="")
+#              .temp@processingData@processing <- c(.temp@processingData@processing,
+#                                                   msg)
     }
     return(.temp)
 }
