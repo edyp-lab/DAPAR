@@ -154,7 +154,7 @@ writeMSnsetToExcel <- function(obj, filename)
     if (dim(Biobase::fData(obj))[2] != 0){
         addWorksheet(wb, "Feature Meta Data")
         numericCols <- which(sapply(Biobase::fData(obj), is.numeric))
-        Biobase::fData(obj)[,numericCols] <- format(Biobase::fData(obj)[,numericCols], decimal.mark = '.')
+        Biobase::fData(obj)[,numericCols] <- format(Biobase::fData(obj)[,numericCols])
         
         writeData(wb, sheet=3, cbind(ID = rownames(Biobase::fData(obj)),Biobase::fData(obj)), rowNames = TRUE)
         bodyStyleNumber <- createStyle(numFmt = "NUMBER")

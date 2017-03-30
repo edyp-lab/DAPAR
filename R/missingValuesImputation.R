@@ -113,13 +113,14 @@ wrapper.impute.pa <- function(obj, q.min = 0.025){
 ##' @examples
 ##' data(UPSpep25)
 ##' dat <- mvFilter(UPSpep25, type="allCond", th = 1)
-##' dat <- wrapper.dapar.impute.mi(dat)
+##' dat <- wrapper.dapar.impute.mi(dat, nb.iter=1)
 wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, 
                                nknn = 15, selec = 600, siz = 500, weight = 1, ind.comp = 1, 
                                progress.bar = TRUE, x.min = 10, x.max = 35, x.step.mod = 300, 
                                x.step.pi = 300, nb.rei = 100, method = 4, gridsize = 300, 
                                q = 0.95, q.min = 0, q.norm = 3, eps = 0, methodi = "slsa",
-                               lapala = TRUE) 
+                               lapala = TRUE,
+                               distribution="unif") 
 {
     
     conditions <- as.factor(Biobase::pData(obj)$Label)
@@ -162,8 +163,8 @@ wrapper.dapar.impute.mi <- function (obj, nb.iter = 3,
         if (progress.bar == TRUE) {
             cat(paste("\n\n 5/ Imputation of rows with only missing values in a condition with impute.pa ... \n  "))
             }
-        data.final = impute.pa(tab = data.mi, conditions = conditions, 
-                           q.min = q.min, q.norm = q.norm, eps = eps)
+        data.final = impute.pa2(tab = data.mi, conditions = conditions, 
+                           q.min = q.min, q.norm = q.norm, eps = eps, distribution = distribution)
         } else {
         data.final <- data.mi
     }
@@ -185,16 +186,15 @@ wrapper.dapar.impute.mi <- function (obj, nb.iter = 3,
 ##' This method xxxxxxxxxxx
 ##' 
 ##' @title xxxxxxx
-##' @param n xxxxxxxx.
-##' @param min xxxxxxxxxx
-##' @param max xxxxxxxxx
-##' @param param1 xxxxxxxxx.
-##' @param param2 xxxxxxxx.
-##' @return The object \code{obj} which has been imputed
+##' @param n An integer which is the number of simulation (same as in rbeta)
+##' @param min An integer that corresponds to the lower bound of the interval
+##' @param max An integer that corresponds to the upper bound of the interval
+##' @param param1 An integer that is the first parameter of rbeta function.
+##' @param param2 An integer that is second parameter of rbeta function.
+##' @return A vector of n simulated values
 ##' @author Thomas Burger
 ##' @examples
-##' data(UPSpep25)
-##' translatedRandomBeta(Biobase::exprs(UPSpep25), min=0, max=1)
+##' translatedRandomBeta(1000, 5, 10, 1, 1)
 translatedRandomBeta <- function(n, min, max, param1=3, param2=1){
     scale <- max-min
     simu <- rbeta(n,param1,param2)
@@ -227,37 +227,59 @@ translatedRandomBeta <- function(n, min, max, param1=3, param2=1){
 ##' data(UPSpep25)
 ##' wrapper.impute.pa2(UPSpep25, distribution="beta")
 wrapper.impute.pa2 <- function (obj, q.min = 0, q.norm = 3, eps = 0, distribution = "unif"){
-    #require (imp4p)
     tab <- Biobase::exprs(obj)
     conditions <- as.factor(Biobase::pData(obj)$Label)
+
+    tab_imp <- impute.pa2(tab, conditions, q.min, q.norm, eps, distribution)
+    Biobase::exprs(obj) <- tab_imp
     
-    tab_imp = tab
-        qu = apply(tab_imp, 2, quantile, na.rm = TRUE, q.min)
-        nb_cond = length(levels(conditions))
-        nb_rep = rep(0, nb_cond)
-        k = 1
-        j = 1
-        for (i in 1:nb_cond) {
-            nb_rep[i] = sum((conditions == levels(conditions)[i]))
-            sde = apply(tab_imp[, (k:(k + nb_rep[i] - 1))], 1, sd, 
-                        na.rm = TRUE)
-            while (j < (k + nb_rep[i])) {
-                if(distribution == "unif")
-                    {
-                    tab_imp[which(is.na(tab_imp[, j])), j] = runif(n = sum(is.na(tab_imp[,j])), 
-                                                                   min = qu[j] - eps - q.norm * median(sde, na.rm = TRUE), 
-                                                                   max = qu[j] - eps)
-                } else if (distribution == "beta"){
-                    tab_imp[which(is.na(tab_imp[, j])), j] = translatedRandomBeta(n = sum(is.na(tab_imp[,j])), 
-                                                                                  min = qu[j] - eps - q.norm * median(sde, na.rm = TRUE), 
-                                                                                  max = qu[j] - eps,
-                                                                                  param1 = 3,
-                                                                                  param2 = 1)
-                }
-                j = j + 1
-            }
-            k = k + nb_rep[i]
-        }
-        Biobase::exprs(obj) <- tab_imp
-        return(obj)
+     
+     return(obj)
     }
+
+
+
+
+
+
+impute.pa2 <- function (tab, conditions, q.min = 0, q.norm = 3, eps = 0, distribution = "unif"){
+    tab_imp = tab
+    qu = apply(tab_imp, 2, quantile, na.rm = TRUE, q.min)
+    nb_cond = length(levels(conditions))
+    nb_rep = rep(0, nb_cond)
+    k = 1
+    j = 1
+    for (i in 1:nb_cond) {
+        nb_rep[i] = sum((conditions == levels(conditions)[i]))
+        sde = apply(tab_imp[, (k:(k + nb_rep[i] - 1))], 1, sd, 
+                    na.rm = TRUE)
+        while (j < (k + nb_rep[i])) {
+            if(distribution == "unif")
+            {
+                tab_imp[which(is.na(tab_imp[, j])), j] = runif(n = sum(is.na(tab_imp[,j])), 
+                                                               min = qu[j] - eps - q.norm * median(sde, na.rm = TRUE), 
+                                                               max = qu[j] - eps)
+            } else if (distribution == "beta"){
+                tab_imp[which(is.na(tab_imp[, j])), j] = translatedRandomBeta(n = sum(is.na(tab_imp[,j])), 
+                                                                              min = qu[j] - eps - q.norm * median(sde, na.rm = TRUE), 
+                                                                              max = qu[j] - eps,
+                                                                              param1 = 3,
+                                                                              param2 = 1)
+            }
+            j = j + 1
+        }
+        k = k + nb_rep[i]
+    }
+    
+    return(tab_imp)
+}
+
+
+
+
+
+
+
+
+
+

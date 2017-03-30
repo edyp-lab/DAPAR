@@ -7,25 +7,24 @@
 translatedRandomBeta(n, min, max, param1 = 3, param2 = 1)
 }
 \arguments{
-\item{n}{xxxxxxxx.}
+\item{n}{An integer which is the number of simulation (same as in rbeta)}
 
-\item{min}{xxxxxxxxxx}
+\item{min}{An integer that corresponds to the lower bound of the interval}
 
-\item{max}{xxxxxxxxx}
+\item{max}{An integer that corresponds to the upper bound of the interval}
 
-\item{param1}{xxxxxxxxx.}
+\item{param1}{An integer that is the first parameter of rbeta function.}
 
-\item{param2}{xxxxxxxx.}
+\item{param2}{An integer that is second parameter of rbeta function.}
 }
 \value{
-The object \code{obj} which has been imputed
+A vector of n simulated values
 }
 \description{
 This method xxxxxxxxxxx
 }
 \examples{
-data(UPSpep25)
-translatedRandomBeta(Biobase::exprs(UPSpep25), min=0, max=1)
+translatedRandomBeta(1000, 5, 10, 1, 1)
 }
 \author{
 Thomas Burger
