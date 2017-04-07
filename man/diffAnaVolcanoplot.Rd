@@ -35,10 +35,11 @@ the y-axis and the X-axis to visually distinguish between differential and
 non differential data.
 }
 \examples{
-data(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
 condition1 <- '25fmol'
 condition2 <- '10fmol'
-data <- wrapper.diffAnaLimma(UPSpep25, condition1, condition2)
+data <- wrapper.diffAnaLimma(Exp1_R25_pept, condition1, condition2)
 diffAnaVolcanoplot(data$logFC, data$P.Value)
 }
 \author{

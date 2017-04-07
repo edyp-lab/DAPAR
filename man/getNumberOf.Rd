@@ -21,8 +21,9 @@ Returns the number of lines, in a given column, where content matches
 the prefix.
 }
 \examples{
-data(UPSpep25)
-getNumberOf(UPSpep25, "Potential.contaminant", "+")
+require(DAPARdata)
+data(Exp1_R25_pept)
+getNumberOf(Exp1_R25_pept, "Potential.contaminant", "+")
 }
 \author{
 Samuel Wieczorek

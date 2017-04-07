@@ -27,11 +27,12 @@ A boxplot
 Boxplot for quantitative proteomics data
 }
 \examples{
-data(UPSpep25)
-qData <- Biobase::exprs(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
+qData <- Biobase::exprs(Exp1_R25_pept)
 types <- c("Label","Analyt.Rep")
-dataForXAxis <- Biobase::pData(UPSpep25)[,types]
-labels <- Biobase::pData(UPSpep25)[,"Label"]
+dataForXAxis <- Biobase::pData(Exp1_R25_pept)[,types]
+labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 boxPlotD(qData, dataForXAxis, labels)
 }
 \seealso{

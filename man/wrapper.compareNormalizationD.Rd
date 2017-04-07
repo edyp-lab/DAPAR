@@ -33,11 +33,12 @@ Wrapper to the function that plot to compare the quantitative proteomics
 data before and after normalization
 }
 \examples{
-data(UPSpep25)
-labels <- Biobase::pData(UPSpep25)[,"Label"]
-objAfter <- wrapper.normalizeD(UPSpep25, "Median Centering", 
+require(DAPARdata)
+data(Exp1_R25_pept)
+labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+objAfter <- wrapper.normalizeD(Exp1_R25_pept, "Median Centering", 
 "within conditions")
-wrapper.compareNormalizationD(UPSpep25, objAfter, labels)
+wrapper.compareNormalizationD(Exp1_R25_pept, objAfter, labels)
 }
 \author{
 Samuel Wieczorek

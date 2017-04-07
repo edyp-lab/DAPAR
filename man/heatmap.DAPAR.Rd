@@ -38,8 +38,10 @@ A heatmap
 Heatmap inspired by the heatmap.2 function.
 }
 \examples{
-data(testWithoutNA)
-qData <- Biobase::exprs(testWithoutNA)
+require(DAPARdata)
+data(Exp1_R25_pept)
+obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
+qData <- Biobase::exprs(obj)
 heatmapD(qData)
 }
 \author{

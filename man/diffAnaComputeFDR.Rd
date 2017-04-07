@@ -31,8 +31,9 @@ differential analysis.
 The FDR is computed with the function \code{p.adjust}\{stats\}..
 }
 \examples{
-data(UPSpep25)
-obj <- wrapper.mvImputation(UPSpep25, "QRILC")
+require(DAPARdata)
+data(Exp1_R25_pept)
+obj <- wrapper.mvImputation(Exp1_R25_pept, "QRILC")
 condition1 <- '25fmol'
 condition2 <- '10fmol'
 qData <- Biobase::exprs(obj)

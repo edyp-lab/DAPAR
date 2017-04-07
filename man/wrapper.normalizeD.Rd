@@ -2,17 +2,17 @@
 % Please edit documentation in R/normalize.R
 \name{wrapper.normalizeD}
 \alias{wrapper.normalizeD}
-\title{Normalisation}
+\title{Normalization}
 \usage{
 wrapper.normalizeD(obj, family, method)
 }
 \arguments{
 \item{obj}{An object of class \code{\link{MSnSet}}.}
 
-\item{family}{One of the following : Global Rescaling, 
+\item{family}{One of the following : Global Alignment, 
 Median Centering, Mean Centering, Mean Centering Scaling.}
 
-\item{method}{"Overall" or "within conditions".}
+\item{method}{"overall" or "within conditions".}
 }
 \value{
 An instance of class \code{\link{MSnSet}} 
@@ -22,8 +22,8 @@ has been normalized.
 \description{
 Provides several methods to normalize quantitative data from
 a \code{\link{MSnSet}} object.
-They are organized in four main families : Strong Rescaling, 
-Median Centering, Mean Centering, Mean CenteringScaling.
+They are organized in four main families : Global Alignment, 
+Median Centering, Mean Centering, Mean Centering Scaling.
 For the first family, two sub-categories are available : the sum by columns
 and the quantiles method.
 For the three other families, two categories are available : 
@@ -34,8 +34,9 @@ For the three other families, two categories are available :
 by condition.
 }
 \examples{
-data(UPSpep25)
-wrapper.normalizeD(UPSpep25, "Median Centering", "within conditions")
+require(DAPARdata)
+data(Exp1_R25_pept)
+wrapper.normalizeD(Exp1_R25_pept, "Median Centering", "within conditions")
 }
 \author{
 Alexia Dorffer

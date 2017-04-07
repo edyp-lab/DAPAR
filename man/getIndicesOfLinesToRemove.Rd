@@ -22,8 +22,9 @@ This function returns the indice of the lines to delete, based on a
 prefix string
 }
 \examples{
-data(UPSpep25)
-getIndicesOfLinesToRemove(UPSpep25, "Potential.contaminant", prefix="+")
+require(DAPARdata)
+data(Exp1_R25_pept)
+getIndicesOfLinesToRemove(Exp1_R25_pept, "Potential.contaminant", prefix="+")
 }
 \author{
 Samuel Wieczorek

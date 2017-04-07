@@ -28,8 +28,9 @@ and the considered condition.
 The data have been jittered for an easier vizualisation.
 }
 \examples{
-data(UPSpep25)
-wrapper.mvTypePlot(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
+wrapper.mvTypePlot(Exp1_R25_pept)
 }
 \author{
 Florence Combes, Samuel Wieczorek

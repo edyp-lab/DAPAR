@@ -19,8 +19,9 @@ A colored correlation matrix
 Builds a correlation matrix based on a \code{\link{MSnSet}} object.
 }
 \examples{
-data(UPSpep25)
-wrapper.corrMatrixD(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
+wrapper.corrMatrixD(Exp1_R25_pept)
 }
 \author{
 Alexia Dorffer

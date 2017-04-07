@@ -20,8 +20,9 @@ This method is a wrapper to the \code{imputeLCMD} package adapted to
 a matrix.
 }
 \examples{
-data(UPSpep25)
-qData <- Biobase::exprs(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
+qData <- Biobase::exprs(Exp1_R25_pept)
 mvImputation(qData, "QRILC")
 }
 \author{

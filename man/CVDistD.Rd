@@ -20,9 +20,10 @@ of a object. The CV is calculated for each condition (Label) present
 in the dataset (see the slot \code{'Label'} in the \code{pData()} table)
 }
 \examples{
-data(UPSpep25)
-labels <- Biobase::pData(UPSpep25)[,"Label"]
-CVDistD(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
+labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+CVDistD(Exp1_R25_pept)
 }
 \seealso{
 \code{\link{densityPlotD}}.

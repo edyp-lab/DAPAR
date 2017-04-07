@@ -17,8 +17,9 @@ Returns the percentage of missing values in the quantitative
 data (\code{exprs()} table of the dataset).
 }
 \examples{
-data(UPSpep25)
-getPourcentageOfMV(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
+getPourcentageOfMV(Exp1_R25_pept)
 }
 \author{
 Florence Combes, Samuel Wieczorek

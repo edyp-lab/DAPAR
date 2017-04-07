@@ -28,11 +28,12 @@ an \code{\link{MSnSet}} object, using the Welch t-test
 (\code{\link{t.test}{stats}}).
 }
 \examples{
-data(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
 condition1 <- '25fmol'
 condition2 <- '10fmol'
-qData <- Biobase::exprs(UPSpep25)
-labels <- Biobase::pData(UPSpep25)[,"Label"]
+qData <- Biobase::exprs(Exp1_R25_pept)
+labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 diffAnaWelch(qData, labels, condition1, condition2)
 }
 \author{

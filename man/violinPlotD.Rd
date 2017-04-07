@@ -27,12 +27,13 @@ A violinplot
 ViolinPlot for quantitative proteomics data
 }
 \examples{
-data(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
 library(vioplot)
-qData <- Biobase::exprs(UPSpep25)
+qData <- Biobase::exprs(Exp1_R25_pept)
 types <- c("Label","Analyt.Rep")
-dataForXAxis <- Biobase::pData(UPSpep25)[,types]
-labels <- Biobase::pData(UPSpep25)[,"Label"]
+dataForXAxis <- Biobase::pData(Exp1_R25_pept)[,types]
+labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 violinPlotD(qData, dataForXAxis, labels)
 }
 \seealso{

@@ -11,8 +11,9 @@
 ##' @return A histogram
 ##' @author Alexia Dorffer
 ##' @examples
-##' data(UPSpep25)
-##' wrapper.mvPerLinesHisto(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' wrapper.mvPerLinesHisto(Exp1_R25_pept)
 wrapper.mvPerLinesHisto <- function(obj, indLegend="auto", showValues=FALSE){
 qData <- Biobase::exprs(obj)
 samplesData <- Biobase::pData(obj)
@@ -32,9 +33,10 @@ mvPerLinesHisto(qData, samplesData, indLegend, showValues)
 ##' @return A bar plot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' qData <- Biobase::exprs(UPSpep25)
-##' samplesData <- Biobase::pData(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qData <- Biobase::exprs(Exp1_R25_pept)
+##' samplesData <- Biobase::pData(Exp1_R25_pept)
 ##' mvPerLinesHisto(qData, samplesData)
 mvPerLinesHisto <- function(qData, samplesData, indLegend="auto", 
                         showValues=FALSE){
@@ -100,8 +102,9 @@ x <- barplot(nb.na2barplot[-1],
 ##' @return A bar plot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' wrapper.mvPerLinesHistoPerCondition(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' wrapper.mvPerLinesHistoPerCondition(Exp1_R25_pept)
 wrapper.mvPerLinesHistoPerCondition <- function(obj, indLegend="auto", 
                                             showValues=FALSE){
 qData <- Biobase::exprs(obj)
@@ -122,9 +125,10 @@ mvPerLinesHistoPerCondition(qData, samplesData, indLegend, showValues)
 ##' @return A bar plot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' qData <- Biobase::exprs(UPSpep25)
-##' samplesData <- Biobase::pData(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qData <- Biobase::exprs(Exp1_R25_pept)
+##' samplesData <- Biobase::pData(Exp1_R25_pept)
 ##' mvPerLinesHistoPerCondition(qData, samplesData)
 mvPerLinesHistoPerCondition <- function(qData, samplesData, indLegend="auto", 
                                         showValues=FALSE){
@@ -187,8 +191,9 @@ x <- barplot(m,
 ##' @return A histogram
 ##' @author Alexia Dorffer
 ##' @examples
-##' data(UPSpep25)
-##' wrapper.mvHisto(UPSpep25, showValues=TRUE)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' wrapper.mvHisto(Exp1_R25_pept, showValues=TRUE)
 wrapper.mvHisto <- function(obj, indLegend="auto", showValues=FALSE){
 qData <- Biobase::exprs(obj)
 samplesData <- Biobase::pData(obj)
@@ -211,10 +216,11 @@ mvHisto(qData, samplesData, labels, indLegend, showValues)
 ##' @return A histogram
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' qData <- Biobase::exprs(UPSpep25)
-##' samplesData <- Biobase::pData(UPSpep25)
-##' labels <- Biobase::pData(UPSpep25)[,"Label"]
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qData <- Biobase::exprs(Exp1_R25_pept)
+##' samplesData <- Biobase::pData(Exp1_R25_pept)
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 ##' mvHisto(qData, samplesData, labels, indLegend="auto", showValues=TRUE)
 mvHisto <- function(qData, samplesData, labels, indLegend="auto", 
                     showValues=FALSE){
@@ -277,8 +283,9 @@ graphics::text(x, -3,
 ##' @return A heatmap
 ##' @author Alexia Dorffer
 ##' @examples
-##' data(UPSpep25)
-##' wrapper.mvImage(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' wrapper.mvImage(Exp1_R25_pept)
 wrapper.mvImage <- function(obj){
 qData <- Biobase::exprs(obj)
 labels <- Biobase::pData(obj)[,"Label"]
@@ -300,9 +307,10 @@ mvImage(qData, labels)
 ##' @return A heatmap
 ##' @author Samuel Wieczorek, Thomas Burger
 ##' @examples
-##' data(UPSpep25)
-##' qData <- Biobase::exprs(UPSpep25)
-##' labels <- Biobase::pData(UPSpep25)[,"Label"]
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qData <- Biobase::exprs(Exp1_R25_pept)
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 ##' mvImage(qData, labels)
 mvImage <- function(qData, labels){
 ### build indices of conditions
@@ -364,8 +372,9 @@ heatmap.DAPAR(exprso,
 ##' @return A scatter plot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' wrapper.mvTypePlot(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' wrapper.mvTypePlot(Exp1_R25_pept)
 wrapper.mvTypePlot <- function(obj, threshold=0){
 qData <- Biobase::exprs(obj)
 labels <- Biobase::pData(obj)[,"Label"]
@@ -393,9 +402,10 @@ mvTypePlot(qData, labels, threshold)
 ##' @return A scatter plot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' qData <- Biobase::exprs(UPSpep25)
-##' labels <- Biobase::pData(UPSpep25)[,"Label"]
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qData <- Biobase::exprs(Exp1_R25_pept)
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 ##' mvTypePlot(qData, labels, threshold=0)
 mvTypePlot <- function(qData, labels, threshold=0){
 #require(scales)

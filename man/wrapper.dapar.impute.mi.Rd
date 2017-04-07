@@ -14,8 +14,47 @@ wrapper.dapar.impute.mi(obj, nb.iter = 3, nknn = 15, selec = 600,
 \arguments{
 \item{obj}{An object of class \code{\link{MSnSet}}.}
 
-\item{selec}{An integer which corresponds to the \code{selec} parameter of the
-function \code{impute.slsa}.}
+\item{nb.iter}{Same as the function \code{mi.mix} in the package \code{imp4p}}
+
+\item{nknn}{Same as the function \code{mi.mix} in the package \code{imp4p}}
+
+\item{selec}{Same as the function \code{mi.mix} in the package \code{imp4p}}
+
+\item{siz}{Same as the function \code{mi.mix} in the package \code{imp4p}}
+
+\item{weight}{Same as the function \code{mi.mix} in the package \code{imp4p}}
+
+\item{ind.comp}{Same as the function \code{mi.mix} in the package \code{imp4p}}
+
+\item{progress.bar}{Same as the function \code{mi.mix} in the package \code{imp4p}}
+
+\item{x.min}{Same as the function \code{estim.mix} in the package \code{imp4p}}
+
+\item{x.max}{Same as the function \code{estim.mix} in the package \code{imp4p}}
+
+\item{x.step.mod}{Same as the function \code{estim.mix} in the package \code{imp4p}}
+
+\item{x.step.pi}{Same as the function \code{estim.mix} in the package \code{imp4p}}
+
+\item{nb.rei}{Same as the function \code{estim.mix} in the package \code{imp4p}}
+
+\item{method}{Same as the function \code{estim.mix} in the package \code{imp4p}}
+
+\item{gridsize}{Same as the function \code{estim.mix} in the package \code{imp4p}}
+
+\item{q}{Same as the function \code{mi.mix} in the package \code{imp4p}}
+
+\item{q.min}{Same as the function \code{impute.pa} in the package \code{imp4p}}
+
+\item{q.norm}{Same as the function \code{impute.pa} in the package \code{imp4p}}
+
+\item{eps}{Same as the function \code{impute.pa} in the package \code{imp4p}}
+
+\item{methodi}{Same as the function \code{mi.mix} in the package \code{imp4p}}
+
+\item{lapala}{xxxxxxxxxxx}
+
+\item{distribution}{xxxxxxxxxxx}
 }
 \value{
 The \code{exprs(obj)} matrix with imputed values instead of missing values.
@@ -25,8 +64,9 @@ This method is a wrapper to the function \code{impute.mi} of the package \code{i
 an object of class \code{\link{MSnSet}}.
 }
 \examples{
-data(UPSpep25)
-dat <- mvFilter(UPSpep25, type="allCond", th = 1)
+require(DAPARdata)
+data(Exp1_R25_pept)
+dat <- mvFilter(Exp1_R25_pept, type="allCond", th = 1)
 dat <- wrapper.dapar.impute.mi(dat, nb.iter=1)
 }
 \author{

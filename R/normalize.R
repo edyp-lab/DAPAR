@@ -1,7 +1,7 @@
 ##' Provides several methods to normalize quantitative data from
 ##' a \code{\link{MSnSet}} object.
-##' They are organized in four main families : Strong Rescaling, 
-##' Median Centering, Mean Centering, Mean CenteringScaling.
+##' They are organized in four main families : Global Alignment, 
+##' Median Centering, Mean Centering, Mean Centering Scaling.
 ##' For the first family, two sub-categories are available : the sum by columns
 ##' and the quantiles method.
 ##' For the three other families, two categories are available : 
@@ -11,18 +11,19 @@
 ##' (ie line in the \code{exprs()} data tab) is computed condition
 ##' by condition.
 ##' 
-##' @title Normalisation
+##' @title Normalization
 ##' @param obj An object of class \code{\link{MSnSet}}.
-##' @param family One of the following : Global Rescaling, 
+##' @param family One of the following : Global Alignment, 
 ##' Median Centering, Mean Centering, Mean Centering Scaling.
-##' @param method "Overall" or "within conditions".
+##' @param method "overall" or "within conditions".
 ##' @return An instance of class \code{\link{MSnSet}} 
 ##' where the quantitative data in the \code{exprs()} tab
 ##' has been normalized.
 ##' @author Alexia Dorffer
 ##' @examples
-##' data(UPSpep25)
-##' wrapper.normalizeD(UPSpep25, "Median Centering", "within conditions")
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' wrapper.normalizeD(Exp1_R25_pept, "Median Centering", "within conditions")
 wrapper.normalizeD <- function(obj, family, method){
 
 qData <- Biobase::exprs(obj)
@@ -48,7 +49,7 @@ return(obj)
 ##' For the first family, two sub-categories are available : the sum by columns
 ##' and the quantiles method.
 ##' For the three other families, two categories are available : 
-##' "Overall" which means that the value for each protein 
+##' "overall" which means that the value for each protein 
 ##' (ie line in the expression data tab) is computed over all the samples ;
 ##' "within conditions" which means that the value for each protein 
 ##' (ie line in the matrix) is computed condition
@@ -58,15 +59,16 @@ return(obj)
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param labels A vector of strings containing the column "Label" of 
 ##' the \code{pData()}.
-##' @param family One of the following : Global Rescaling, 
+##' @param family One of the following : Global Alignment, 
 ##' Median Centering, Mean Centering, Mean Centering Scaling.
 ##' @param method "Overall" or "within conditions".
 ##' @return A matrix normalized
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' qData <- Biobase::exprs(UPSpep25)
-##' labels <- Biobase::pData(UPSpep25)[,"Label"]
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qData <- Biobase::exprs(Exp1_R25_pept)
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 ##' normalizeD(qData, labels, "Median Centering", "within conditions")
 normalizeD <- function(qData, labels, family, method){
 #Verification des parametres
@@ -226,8 +228,9 @@ return(.temp)
 ##' data in the \code{exprs()} tab has been normalized.
 ##' @author Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' wrapper.normalizeD2(UPSpep25, "Quantile Centering", "within conditions")
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' wrapper.normalizeD2(Exp1_R25_pept, "Quantile Centering", "within conditions")
 wrapper.normalizeD2 <- function(obj, method, type, scaling=FALSE, quantile=0.15){
     
     qData <- Biobase::exprs(obj)
@@ -298,9 +301,10 @@ wrapper.normalizeD2 <- function(obj, method, type, scaling=FALSE, quantile=0.15)
 ##' @return A matrix normalized
 ##' @author Samuel Wieczorek, Thomas Burger
 ##' @examples
-##' data(UPSpep25)
-##' qData <- Biobase::exprs(UPSpep25)
-##' labels <- Biobase::pData(UPSpep25)[,"Label"]
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qData <- Biobase::exprs(Exp1_R25_pept)
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 ##' normalizeD2(qData, labels, "Quantile Centering", "within conditions", quantile = 0.15)
 normalizeD2 <- function(qData, labels, method, type, scaling=FALSE, quantile=0.15){
     #Check of parameters

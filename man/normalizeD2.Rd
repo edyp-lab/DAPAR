@@ -49,9 +49,10 @@ For the three other families, two categories are available :
 by condition.
 }
 \examples{
-data(UPSpep25)
-qData <- Biobase::exprs(UPSpep25)
-labels <- Biobase::pData(UPSpep25)[,"Label"]
+require(DAPARdata)
+data(Exp1_R25_pept)
+qData <- Biobase::exprs(Exp1_R25_pept)
+labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 normalizeD2(qData, labels, "Quantile Centering", "within conditions", quantile = 0.15)
 }
 \author{

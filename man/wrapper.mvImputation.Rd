@@ -20,8 +20,9 @@ This method is a wrapper to the \code{imputeLCMD} package adapted to
 objects of class \code{\link{MSnSet}}.
 }
 \examples{
-data(UPSpep25)
-wrapper.mvImputation(UPSpep25, "QRILC")
+require(DAPARdata)
+data(Exp1_R25_pept)
+wrapper.mvImputation(Exp1_R25_pept, "QRILC")
 }
 \author{
 Alexia Dorffer

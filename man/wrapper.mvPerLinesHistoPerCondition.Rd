@@ -25,8 +25,9 @@ bar plot which represents the distribution of the
 number of missing values (NA) per lines (ie proteins) and per conditions.
 }
 \examples{
-data(UPSpep25)
-wrapper.mvPerLinesHistoPerCondition(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
+wrapper.mvPerLinesHistoPerCondition(Exp1_R25_pept)
 }
 \author{
 Samuel Wieczorek

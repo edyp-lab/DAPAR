@@ -33,9 +33,10 @@ Plot to compare the quantitative proteomics data before and after
 normalization
 }
 \examples{
-data(UPSpep25)
-qDataBefore <- Biobase::exprs(UPSpep25)
-labels <- Biobase::pData(UPSpep25)[,"Label"]
+require(DAPARdata)
+data(Exp1_R25_pept)
+qDataBefore <- Biobase::exprs(Exp1_R25_pept)
+labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 qDataAfter <- normalizeD(qDataBefore,labels,"Median Centering",
 "within conditions")
 compareNormalizationD(qDataBefore, qDataAfter, labels)

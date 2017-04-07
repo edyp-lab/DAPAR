@@ -23,10 +23,11 @@ This function computes the intensity of proteins as the sum of the
 intensities of their n best peptides.
 }
 \examples{
-data(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
 protID <- "Protein.group.IDs"
-matAdj <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
-TopnPeptides(matAdj, Biobase::exprs(UPSpep25), 3)
+matAdj <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, FALSE)
+TopnPeptides(matAdj, Biobase::exprs(Exp1_R25_pept), 3)
 }
 \author{
 Alexia Dorffer

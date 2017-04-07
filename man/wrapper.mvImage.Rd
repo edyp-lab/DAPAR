@@ -21,8 +21,9 @@ The lines have been sorted in order to vizualize easily the different
 number of missing values. A white square is plotted for missing values.
 }
 \examples{
-data(UPSpep25)
-wrapper.mvImage(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
+wrapper.mvImage(Exp1_R25_pept)
 }
 \author{
 Alexia Dorffer

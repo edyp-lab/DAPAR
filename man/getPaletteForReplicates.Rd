@@ -18,9 +18,10 @@ the dataset. The palette is derived from
 the brewer palette "Dark2" (see \code{\link{RColorBrewer}}).
 }
 \examples{
-data(UPSpep25)
-n <- nrow(Biobase::pData(UPSpep25))
-getPaletteForLabels(5)
+require(DAPARdata)
+data(Exp1_R25_pept)
+n <- nrow(Biobase::pData(Exp1_R25_pept))
+getPaletteForReplicates(n)
 }
 \author{
 Samuel Wieczorek

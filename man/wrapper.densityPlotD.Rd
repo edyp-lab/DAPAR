@@ -28,9 +28,10 @@ This function is a wrapper for using the densityPlotD function with
 objects of class \code{\link{MSnSet}}
 }
 \examples{
-data(UPSpep25)
-labels <- Biobase::pData(UPSpep25)[,"Label"]
-wrapper.densityPlotD(UPSpep25, labels)
+require(DAPARdata)
+data(Exp1_R25_pept)
+labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+wrapper.densityPlotD(Exp1_R25_pept, labels)
 }
 \seealso{
 \code{\link{wrapper.boxPlotD}}, 

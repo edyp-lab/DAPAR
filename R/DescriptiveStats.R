@@ -12,9 +12,10 @@
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{wrapper.densityPlotD}}
 ##' @examples
-##' data(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
 ##' types <- c("Label","Analyt.Rep")
-##' wrapper.boxPlotD(UPSpep25, types)
+##' wrapper.boxPlotD(Exp1_R25_pept, types)
 wrapper.boxPlotD <- function(obj, 
                             dataForXAxis="Label", 
                             group2Color="Condition"){
@@ -46,11 +47,12 @@ boxPlotD(qData, dataForXAxis, labels, group2Color)
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{densityPlotD}}
 ##' @examples
-##' data(UPSpep25)
-##' qData <- Biobase::exprs(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' types <- c("Label","Analyt.Rep")
-##' dataForXAxis <- Biobase::pData(UPSpep25)[,types]
-##' labels <- Biobase::pData(UPSpep25)[,"Label"]
+##' dataForXAxis <- Biobase::pData(Exp1_R25_pept)[,types]
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 ##' boxPlotD(qData, dataForXAxis, labels)
 boxPlotD <- function(qData, 
                     dataForXAxis=NULL, 
@@ -117,10 +119,11 @@ palette("default")
 ##' @author Samuel Wieczorek
 ##' @seealso \code{\link{wrapper.densityPlotD}}, \code{\link{wrapper.boxPlotD}}
 ##' @examples
-##' data(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
 ##' library(vioplot)
 ##' types <- c("Label","Analyt.Rep")
-##' wrapper.violinPlotD(UPSpep25, types)
+##' wrapper.violinPlotD(Exp1_R25_pept, types)
 wrapper.violinPlotD <- function(obj, 
                              dataForXAxis="Label", 
                              group2Color="Condition"){
@@ -151,12 +154,13 @@ wrapper.violinPlotD <- function(obj,
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{densityPlotD}}
 ##' @examples
-##' data(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
 ##' library(vioplot)
-##' qData <- Biobase::exprs(UPSpep25)
+##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' types <- c("Label","Analyt.Rep")
-##' dataForXAxis <- Biobase::pData(UPSpep25)[,types]
-##' labels <- Biobase::pData(UPSpep25)[,"Label"]
+##' dataForXAxis <- Biobase::pData(Exp1_R25_pept)[,types]
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 ##' violinPlotD(qData, dataForXAxis, labels)
 violinPlotD <- function(qData, 
                      dataForXAxis=NULL, 
@@ -220,11 +224,12 @@ violinPlotD <- function(qData,
 ##' @return A plot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' labels <- Biobase::pData(UPSpep25)[,"Label"]
-##' objAfter <- wrapper.normalizeD(UPSpep25, "Median Centering", 
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+##' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "Median Centering", 
 ##' "within conditions")
-##' wrapper.compareNormalizationD(UPSpep25, objAfter, labels)
+##' wrapper.compareNormalizationD(Exp1_R25_pept, objAfter, labels)
 wrapper.compareNormalizationD <- function(objBefore, objAfter, 
                                         labelsForLegend=NULL,
                                         indData2Show=NULL,
@@ -256,9 +261,10 @@ compareNormalizationD(qDataBefore, qDataAfter, labelsForLegend, indData2Show,
 ##' @return A plot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' qDataBefore <- Biobase::exprs(UPSpep25)
-##' labels <- Biobase::pData(UPSpep25)[,"Label"]
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qDataBefore <- Biobase::exprs(Exp1_R25_pept)
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 ##' qDataAfter <- normalizeD(qDataBefore,labels,"Median Centering",
 ##' "within conditions")
 ##' compareNormalizationD(qDataBefore, qDataAfter, labels)
@@ -343,9 +349,10 @@ palette("default")
 ##' @seealso \code{\link{wrapper.boxPlotD}}, 
 ##' \code{\link{wrapper.CVDistD}}
 ##' @examples
-##' data(UPSpep25)
-##' labels <- Biobase::pData(UPSpep25)[,"Label"]
-##' wrapper.densityPlotD(UPSpep25, labels)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+##' wrapper.densityPlotD(Exp1_R25_pept, labels)
 wrapper.densityPlotD <- function(obj, labelsForLegend=NULL,  indData2Show=NULL,
                                 group2Color = "Condition"){
 qData <- Biobase::exprs(obj)
@@ -370,9 +377,10 @@ densityPlotD(qData, labelsForLegend, indData2Show,group2Color)
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{boxPlotD}}, \code{\link{CVDistD}}
 ##' @examples 
-##' data(UPSpep25)
-##' qData <- Biobase::exprs(UPSpep25)
-##' labels <- lab2Show <- Biobase::pData(UPSpep25)[,"Label"]
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qData <- Biobase::exprs(Exp1_R25_pept)
+##' labels <- lab2Show <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 ##' densityPlotD(qData, labels)
 densityPlotD <- function(qData, labelsForLegend=NULL,indData2Show=NULL,
                         group2Color = "Condition"){
@@ -452,8 +460,9 @@ legend("topleft"
 ##' @author Alexia Dorffer
 ##' @seealso \code{\link{wrapper.densityPlotD}}
 ##' @examples
-##' data(UPSpep25)
-##' wrapper.CVDistD(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' wrapper.CVDistD(Exp1_R25_pept)
 wrapper.CVDistD <- function(obj){
 qData <- Biobase::exprs(obj)
 labels <- Biobase::pData(obj)[,"Label"]
@@ -474,9 +483,10 @@ CVDistD(qData, labels)
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{densityPlotD}}.
 ##' @examples
-##' data(UPSpep25)
-##' labels <- Biobase::pData(UPSpep25)[,"Label"]
-##' CVDistD(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+##' CVDistD(Exp1_R25_pept)
 CVDistD <- function(qData, labels=NULL){
     
 if (is.null(labels)) {return(NULL)}
@@ -544,8 +554,9 @@ legend("topright"
 ##' @return A colored correlation matrix
 ##' @author Alexia Dorffer
 ##' @examples
-##' data(UPSpep25)
-##' wrapper.corrMatrixD(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' wrapper.corrMatrixD(Exp1_R25_pept)
 wrapper.corrMatrixD <- function(obj, rate=5){
 qData <- Biobase::exprs(obj)
 samplesData <- Biobase::pData(obj)
@@ -567,9 +578,10 @@ corrMatrixD(qData, samplesData, rate)
 ##' @return A colored correlation matrix
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' qData <- Biobase::exprs(UPSpep25)
-##' samplesData <- Biobase::pData(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qData <- Biobase::exprs(Exp1_R25_pept)
+##' samplesData <- Biobase::pData(Exp1_R25_pept)
 ##' corrMatrixD(qData, samplesData)
 corrMatrixD <- function(qData, samplesData, gradientRate = 5){
 Var1 <- Var2 <- value <- NULL
@@ -616,8 +628,10 @@ plot(d)
 ##' @return A heatmap
 ##' @author Alexia Dorffer
 ##' @examples
-##' data(testWithoutNA)
-##' wrapper.heatmapD(testWithoutNA)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
+##' wrapper.heatmapD(obj)
 wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="average", 
                             dendro = FALSE){
 qData <- Biobase::exprs(obj)
@@ -641,8 +655,10 @@ heatmapD(qData, distance, cluster, dendro)
 ##' @return A heatmap
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' data(testWithoutNA)
-##' qData <- Biobase::exprs(testWithoutNA)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
+##' qData <- Biobase::exprs(obj)
 ##' heatmapD(qData)
 heatmapD <- function(qData, distance="euclidean", cluster="average", 
                     dendro = FALSE){
@@ -722,8 +738,10 @@ if (!(cluster %in%  paramcluster)){
 ##' @return A heatmap
 ##' @author Samuel Wieczorek
 ##' @examples
-##' data(testWithoutNA)
-##' qData <- Biobase::exprs(testWithoutNA)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
+##' qData <- Biobase::exprs(obj)
 ##' heatmapD(qData)
 heatmap.DAPAR <- 
     function (x, 

@@ -1,8 +1,8 @@
 
 ##############################################################
-#Fonction r?alisant un test de contrastes entre conditions ? l'aide du package LIMMA.
+#Fonction realisant un test de contrastes entre conditions a l'aide du package LIMMA.
 #
-#En entr?e:
+#En entree:
 #qData: tableau de donn?es sans valeurs manquantes avec chaque r?plicat en colonne
 #Conditions: indique le num?ro/la lettre de la condition biologique auquel appartient chaque r?plicat
 
@@ -11,7 +11,7 @@
 #ou chaque condition contre toutes les autres (Contrast=2; par exemple H0:"C1=(C2+C3)/2" vs H1:"C1!=(C2+C3)/2", etc. si on a 3 conditions ).
 #
 #En sortie :
-#Objet fit renvoy? par la fonction eBayes de LIMMA.
+#Objet fit renvoye par la fonction eBayes de LIMMA.
 ##QGG, Aout 2015
 ##############################################################
 
@@ -26,15 +26,16 @@
 ##' @param Conditions A vector of factor which indicates the name of the biological condition for each replicate. 
 ##' @param RepBio A vector of factor which indicates the number of the bio rep for each replicate. 
 ##' @param RepTech A vector of factor which indicates the number of the tech rep for each replicate.
-##' @param Contrast Indicates if the test concists of the comparison of each biological condition versus 
+##' @param Contrast Indicates if the test consists of the comparison of each biological condition versus 
 ##' each of the other ones (Contrast=1; for example H0:"C1=C2" vs H1:"C1!=C2", etc.) 
 ##' or each condition versus all others (Contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
 ##'  H1:"C1!=(C2+C3)/2", etc. if there are three conditions).
 ##' @return fdsfdgfdg
 ##' @author Quentin Giai-Gianetto
 ##' @examples
-##' data(UPSpep25)
-##' obj <- wrapper.mvImputation(UPSpep25, "QRILC")
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' obj <- wrapper.mvImputation(Exp1_R25_pept, "QRILC")
 ##' condition1 <- '25fmol'
 ##' condition2 <- '10fmol'
 ##' qData <- Biobase::exprs(obj)

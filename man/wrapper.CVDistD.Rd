@@ -19,8 +19,9 @@ condition (Label) present
 in the dataset (see the slot \code{'Label'} in the \code{pData()} table).
 }
 \examples{
-data(UPSpep25)
-wrapper.CVDistD(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
+wrapper.CVDistD(Exp1_R25_pept)
 }
 \seealso{
 \code{\link{wrapper.densityPlotD}}

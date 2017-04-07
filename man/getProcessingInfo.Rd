@@ -17,8 +17,9 @@ The slot processing of obj@processingData
 Returns the contains of the slot processing  of an object of class MSnSet.
 }
 \examples{
-data(UPSpep25)
-getProcessingInfo(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
+getProcessingInfo(Exp1_R25_pept)
 }
 \author{
 Samuel Wieczorek

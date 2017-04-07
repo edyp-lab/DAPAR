@@ -1,27 +1,31 @@
 context("Agregation peptides to proteins")
 
+require(DAPARdata)
 
 #########################################################
 test_that("Build Adjacency Matrix with sparse Matrix", {
     
-    data(testWithoutNA)
+    data(Exp1_R2_pept)
+    obj <- Exp1_R2_pept[1:10]
     
-    matShared <- matrix(rep(0,40), 10,4, dimnames=list(1:10, 1:4))
-    matShared[1:2,1] <- matShared[c(5:8,10),2] <-1 
-    matShared[c(3:5, 9),3] <- 1
-    matShared[8:10,4] <- 1
-    matUnique <- matrix(rep(0,18), 6,3, dimnames=list(c(1:4, 6,7), 1:3))
-    matUnique[1:2,1] <- matUnique[3:4,3] <- matUnique[5:6,2] <-  1
+    matUnique <- matrix(rep(0,72), 9,8, dimnames=list(c(0:8), c("1212", "253", "360", "375", "1050", "1995", "595", "856")))
+    matUnique[1,1] <- matUnique[2:3,2] <- matUnique[4,3] <-   matUnique[5,4] <-  matUnique[6,5] <-  matUnique[7,6] <-  matUnique[8,7] <- matUnique[9,8] <- 1
     
-    computedMatUnique  <- BuildAdjacencyMatrix(testWithoutNA, 
+    
+    
+    matShared <-matrix(rep(0,100), 10,10, dimnames=list(c(0:9),NULL))
+    matShared[1,1] <-  matShared[2:3,2]<-  matShared[4,3] <-   matShared[5,4] <-  matShared[6,5] <-  matShared[7,6] <-  matShared[8,7] <-  matShared[9,8] <-  matShared[10,9] <-matShared[10,10] <-  1
+    
+    computedMatUnique  <- BuildAdjacencyMatrix(obj, 
                                                "Protein.group.IDs", 
                                                unique=TRUE)
-    computedMatShared  <- BuildAdjacencyMatrix(testWithoutNA, 
+    computedMatShared  <- BuildAdjacencyMatrix(obj, 
                                                "Protein.group.IDs", 
                                                unique=FALSE)
+    colnames(computedMatShared) <- NULL
     
-    expect_equal(as(matUnique, "dgCMatrix"), computedMatUnique[,sort(colnames(computedMatUnique))])
-    expect_equal(as(matShared, "dgCMatrix"), computedMatShared[,sort(colnames(computedMatShared))])
+    expect_equal(as(matUnique, "dgCMatrix"), computedMatUnique[,colnames(computedMatUnique)])
+    expect_equal(as(matShared, "dgCMatrix"), computedMatShared)
 })
 
 
@@ -32,35 +36,43 @@ test_that("Build Adjacency Matrix with sparse Matrix", {
 #########################################################
 test_that("Sum of shared peptides using sparse Matrices", {
     
-    data(testWithoutNA)
+    require(DAPARdata)
+    data(Exp1_R2_pept)
+    obj <- Exp1_R2_pept[1:10]
     
     protID <- "Protein.group.IDs"
     
-    computedMShared <- BuildAdjacencyMatrix(testWithoutNA, protID, unique=FALSE)
-    sumShared <- matrix(c( 41.13,47.33,47.24,49.20,49.84,49.65,
-                           107.67,113.81,113.45,116.73,120.52,118.71,
-                           93.59,94.15,93.53,97.31,97.97,98.03,
-                           61.90,65.87,65.52,67.93,69.36,69.33),byrow=TRUE, 4,6, 
-                        dimnames=list(1:4, c("25fmolR1", "25fmolR2", "25fmolR3", 
-                                             "50fmolR1", "50fmolR2", "50fmolR3")))
+    computedMShared <- BuildAdjacencyMatrix(obj, protID, unique=FALSE)
+    sumShared <- matrix(c( 25.278, 24.996, 24.487, 25.502, 25.025, 24.691,
+                           48.949, 48.702, 48.546, 49.512, 49.208, 49.416,
+                           24.088, 23.866, 24.335, 24.532, 24.674, 24.766,
+                           24.607, 24.836, 24.414, 24.455, 24.608, 24.921,
+                           0.000, 0.000, 0.000, 0.000, 22.180, 21.932,
+                           24.684, 24.302, 24.255, 24.937, 24.614, 24.584,
+                           27.113, 27.180, 27.270, 27.380, 27.351, 27.383,
+                           21.839, 21.811, 23.116, 21.859, 22.157, 0.000,
+                           31.092, 31.104, 31.195, 31.208, 31.213, 31.299,
+                           31.092, 31.104, 31.195, 31.208, 31.213, 31.299),byrow=TRUE, 10,6, 
+                        dimnames=list(c("1212","253","360","375","1050","1995" ,"595", "856","115" ,"114"), 
+                                      c("Intensity.D.R1", "Intensity.D.R2", "Intensity.D.R3", "Intensity.E.R1", "Intensity.E.R2", "Intensity.E.R3")))
     
-    peptSharedUsed <- matrix(c( 2,2,2,2,2,2,
-                                5,5,5,5,5,5,
-                                4,4,4,4,4,4,
-                                3,3,3,3,3,3),byrow=TRUE, 4,6, 
-                             dimnames=list(1:4, c("nb.pep.used.25fmolR1", 
-                                                  "nb.pep.used.25fmolR2", 
-                                                  "nb.pep.used.25fmolR3",
-                                                  "nb.pep.used.50fmolR1", 
-                                                  "nb.pep.used.50fmolR2", 
-                                                  "nb.pep.used.50fmolR3")))
+    peptSharedUsed <- matrix(c( 1,1,1,1,1,1,
+                                2,2,2,2,2,2,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1),byrow=TRUE, 10,6, 
+                             dimnames=list(c("1212","253","360","375","1050","1995" ,"595", "856","115" ,"114"), 
+                                           c("nb.pep.used.Intensity.D.R1", "nb.pep.used.Intensity.D.R2", "nb.pep.used.Intensity.D.R3", "nb.pep.used.Intensity.E.R1", "nb.pep.used.Intensity.E.R2", "nb.pep.used.Intensity.E.R3")))
     
     
-    sumOfMatShared <- SumPeptides(computedMShared, Biobase::exprs(testWithoutNA))
-    expect_equal(as(sumShared, "dgeMatrix"), 
-                 sumOfMatShared$matfin[sort(rownames(sumOfMatShared$matfin)),])
-    expect_equal(as(peptSharedUsed, "dgeMatrix"),
-                 sumOfMatShared$nbpep[sort(rownames(sumOfMatShared$nbpep)),])
+    sumOfMatShared <- SumPeptides(computedMShared, Biobase::exprs(obj))
+    expect_equal(as(sumShared, "dgeMatrix"),  round(sumOfMatShared$matfin, digits = 3))
+    expect_equal(as(peptSharedUsed, "dgeMatrix"), sumOfMatShared$nbpep)
 })
 
 
@@ -70,33 +82,36 @@ test_that("Sum of shared peptides using sparse Matrices", {
 #########################################################
 test_that("Sum of unique peptides with sparse Matrices", {
     
-    data(testWithoutNA)
+    data(Exp1_R2_pept)
+    obj <- Exp1_R2_pept[1:10]
     protID <- "Protein.group.IDs"
     
-    computedMUnique <- BuildAdjacencyMatrix(testWithoutNA, protID, unique=TRUE)
-    sumUnique <- matrix(c(41.13,47.33,47.24,49.20,49.84,49.65,
-                          42.00,43.86,43.92,44.75,47.47,45.89,
-                          48.94,49.01,48.28,50.58,50.88,50.78),byrow=TRUE, 3,6, 
-                        dimnames=list(1:3, c("25fmolR1", "25fmolR2", 
-                                             "25fmolR3", "50fmolR1", "50fmolR2", 
-                                             "50fmolR3")))
+    computedMUnique <- BuildAdjacencyMatrix(obj, protID, unique=TRUE)
+    sumUnique <- matrix(c(25.278,24.996,24.487,25.502,25.025,24.691,
+                          48.949,48.702,48.546,49.512,49.208,49.416,
+                          24.088,23.866,24.335,24.532,24.674,24.766,
+                          24.607,24.836,24.414,24.455,24.608,24.921,
+                          0.000,0.000,0.000,0.000,22.180,21.932,
+                          24.684,24.302,24.255,24.937,24.614,24.584,
+                          27.113,27.180,27.270,27.380,27.351,27.383,
+                          21.839,21.811,23.116,21.859,22.157,0.000),byrow=TRUE, 8,6, 
+                        dimnames=list(c("1212", "253", "360", "375", "1050", "1995", "595", "856"), c("Intensity.D.R1", "Intensity.D.R2", "Intensity.D.R3", "Intensity.E.R1", "Intensity.E.R2", "Intensity.E.R3")))
     
-    peptUniqueUsed <- matrix(c( 2,2,2,2,2,2,
+    peptUniqueUsed <- matrix(c( 1,1,1,1,1,1,
                                 2,2,2,2,2,2,
-                                2,2,2,2,2,2),byrow=TRUE, 3,6, 
-                             dimnames=list(1:3, c("nb.pep.used.25fmolR1", 
-                                                  "nb.pep.used.25fmolR2", 
-                                                  "nb.pep.used.25fmolR3",
-                                                  "nb.pep.used.50fmolR1", 
-                                                  "nb.pep.used.50fmolR2", 
-                                                  "nb.pep.used.50fmolR3")))
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1),byrow=TRUE, 8,6, 
+                             dimnames=list(c("1212", "253", "360", "375", "1050", "1995", "595", "856"),
+                                           c("nb.pep.used.Intensity.D.R1", "nb.pep.used.Intensity.D.R2", "nb.pep.used.Intensity.D.R3", "nb.pep.used.Intensity.E.R1", "nb.pep.used.Intensity.E.R2", "nb.pep.used.Intensity.E.R3")))
     
     
-    sumOfMatUnique <- SumPeptides(computedMUnique, Biobase::exprs(testWithoutNA))
-    expect_equal(as(sumUnique, "dgeMatrix"), 
-                 sumOfMatUnique$matfin[sort(rownames(sumOfMatUnique$matfin)),])
-    expect_equal(as(peptUniqueUsed, "dgeMatrix"),
-                 sumOfMatUnique$nbpep[sort(rownames(sumOfMatUnique$nbpep)),])
+    sumOfMatUnique <- SumPeptides(computedMUnique, Biobase::exprs(obj))
+    expect_equal(as(sumUnique, "dgeMatrix"),round(sumOfMatUnique$matfin, digits=3))
+    expect_equal(as(peptUniqueUsed, "dgeMatrix"), sumOfMatUnique$nbpep)
 })
 
 
@@ -107,33 +122,37 @@ test_that("Sum of unique peptides with sparse Matrices", {
 #########################################################
 test_that("Mean of unique peptides with sparse Matrix", {
     
-    data(testWithoutNA)
+    data(Exp1_R2_pept)
+    obj <- Exp1_R2_pept[1:10]
     protID <- "Protein.group.IDs"
     
-    computedMUnique <- BuildAdjacencyMatrix(testWithoutNA, protID, unique=TRUE)
-    meanUnique <- matrix(c(20.565,23.665,23.62,24.600,24.920,24.825,
-                           21.000,21.930,21.96,22.375,23.735,22.945,
-                           24.470,24.505,24.14,25.290,25.440,25.390
-    ),byrow=TRUE, 3,6, 
-    dimnames=list(1:3, c("25fmolR1", "25fmolR2", 
-                         "25fmolR3", 
-                         "50fmolR1", "50fmolR2", "50fmolR3")))
+    computedMUnique <- BuildAdjacencyMatrix(obj, protID, unique=TRUE)
+    meanUnique <- matrix(c(25.278,24.996,24.487,25.502,25.025,24.691,
+                           24.474,24.351,24.273,24.756,24.604,24.708,
+                           24.088,23.866,24.335,24.532,24.674,24.766,
+                           24.607,24.836,24.414,24.455,24.608,24.921,
+                           0.000,0.000,0.000,0.000,22.180,21.932,
+                           24.684,24.302,24.255,24.937,24.614,24.584,
+                           27.113,27.180,27.270,27.380,27.351,27.383,
+                           21.839,21.811,23.116,21.859,22.157,0.000
+    ),byrow=TRUE, 8,6, 
+    dimnames=list(c("1212", "253", "360", "375", "1050", "1995", "595", "856"),
+                  c("Intensity.D.R1", "Intensity.D.R2", "Intensity.D.R3", "Intensity.E.R1", "Intensity.E.R2", "Intensity.E.R3")))
     
-    peptUniqueUsed <- matrix(c( 2,2,2,2,2,2,
+    peptUniqueUsed <- matrix(c( 1,1,1,1,1,1,
                                 2,2,2,2,2,2,
-                                2,2,2,2,2,2),byrow=TRUE, 3,6, 
-                             dimnames=list(1:3, c("nb.pep.used.25fmolR1", 
-                                                  "nb.pep.used.25fmolR2", 
-                                                  "nb.pep.used.25fmolR3",
-                                                  "nb.pep.used.50fmolR1", 
-                                                  "nb.pep.used.50fmolR2", 
-                                                  "nb.pep.used.50fmolR3")))
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1),byrow=TRUE, 8,6, 
+                             dimnames=list(c("1212", "253", "360", "375", "1050", "1995", "595", "856"), 
+                                           c("nb.pep.used.Intensity.D.R1", "nb.pep.used.Intensity.D.R2", "nb.pep.used.Intensity.D.R3", "nb.pep.used.Intensity.E.R1", "nb.pep.used.Intensity.E.R2", "nb.pep.used.Intensity.E.R3")))
     
-    meanOfMatUnique <- MeanPeptides(computedMUnique, exprs(testWithoutNA))
-    expect_equal(as(meanUnique, "dgeMatrix"), 
-                 meanOfMatUnique$matfin[sort(rownames(meanOfMatUnique$matfin)),])
-    expect_equal(as(peptUniqueUsed, "dgeMatrix"),
-                 meanOfMatUnique$nbpep[sort(rownames(meanOfMatUnique$nbpep)),])
+    meanOfMatUnique <- MeanPeptides(computedMUnique, exprs(obj))
+    expect_equal(as(meanUnique, "dgeMatrix"), round(meanOfMatUnique$matfin, digits=3))
+    expect_equal(as(peptUniqueUsed, "dgeMatrix"),  meanOfMatUnique$nbpep)
 })
 
 
@@ -143,35 +162,41 @@ test_that("Mean of unique peptides with sparse Matrix", {
 #########################################################
 test_that("Mean of SHARED peptides with sparse Matrix", {
     
-    data(testWithoutNA)
+    data(Exp1_R2_pept)
+    obj <- Exp1_R2_pept[1:10]
     protID <- "Protein.group.IDs"
     
-    computedMShared <- BuildAdjacencyMatrix(testWithoutNA, protID, unique=FALSE)
+    computedMShared <- BuildAdjacencyMatrix(obj, protID, unique=FALSE)
     meanShared <- 
-        matrix(c(20.56500, 23.66500,  23.6200, 24.60000,  24.9200,  24.8250,
-                 21.53400, 22.76200,  22.6900, 23.34600,  24.1040,  23.7420,
-                 23.39750, 23.53750,  23.3825, 24.32750,  24.4925,  24.5075,
-                 20.63333, 21.95667,  21.8400, 22.64333,  23.1200 , 23.1100),
-               byrow=TRUE, 4,6, 
-               dimnames=list(1:4, c("25fmolR1", "25fmolR2", "25fmolR3", 
-                                    "50fmolR1", "50fmolR2", "50fmolR3")))
+        matrix(c(25.278,24.996,24.487,25.502,25.025,24.691,
+                 24.474,24.351,24.273,24.756,24.604,24.708,
+                 24.088,23.866,24.335,24.532,24.674,24.766,
+                 24.607,24.836,24.414,24.455,24.608,24.921,
+                 0.000,0.000,0.000,0.000,22.180,21.932,
+                 24.684,24.302,24.255,24.937,24.614,24.584,
+                 27.113,27.180,27.270,27.380,27.351,27.383,
+                 21.839,21.811,23.116,21.859,22.157,0.000,
+                 31.092,31.104,31.195,31.208,31.213,31.299,
+                 31.092,31.104,31.195,31.208,31.213,31.299),
+               byrow=TRUE, 10,6, 
+               dimnames=list(c("1212", "253", "360", "375", "1050", "1995", "595", "856", "115", "114"),
+                             c("Intensity.D.R1", "Intensity.D.R2", "Intensity.D.R3", "Intensity.E.R1", "Intensity.E.R2", "Intensity.E.R3")))
     
-    peptSharedUsed <- matrix(c( 2,2,2,2,2,2,
-                                5,5,5,5,5,5,
-                                4,4,4,4,4,4,
-                                3,3,3,3,3,3),byrow=TRUE, 4,6, 
-                             dimnames=list(1:4, c("nb.pep.used.25fmolR1", 
-                                                  "nb.pep.used.25fmolR2", 
-                                                  "nb.pep.used.25fmolR3",
-                                                  "nb.pep.used.50fmolR1", 
-                                                  "nb.pep.used.50fmolR2", 
-                                                  "nb.pep.used.50fmolR3")))
-    meanOfMatShared <- MeanPeptides(computedMShared, Biobase::exprs(testWithoutNA))
-    expect_equal(as(meanShared, "dgeMatrix"), 
-                 meanOfMatShared$matfin[sort(rownames(meanOfMatShared$matfin)),]
-                 , tolerance=1e-5)
-    expect_equal(as(peptSharedUsed, "dgeMatrix"),
-                 meanOfMatShared$nbpep[sort(rownames(meanOfMatShared$nbpep)),])
+    peptSharedUsed <- matrix(c( 1,1,1,1,1,1,
+                                2,2,2,2,2,2,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1),byrow=TRUE, 10,6, 
+                             dimnames=list(c("1212", "253", "360", "375", "1050", "1995", "595", "856", "115", "114"),
+                                           c("nb.pep.used.Intensity.D.R1", "nb.pep.used.Intensity.D.R2", "nb.pep.used.Intensity.D.R3", "nb.pep.used.Intensity.E.R1", "nb.pep.used.Intensity.E.R2", "nb.pep.used.Intensity.E.R3")))
+    meanOfMatShared <- MeanPeptides(computedMShared, Biobase::exprs(obj))
+    expect_equal(as(meanShared, "dgeMatrix"), round(meanOfMatShared$matfin, digits=3), tolerance=1e-5)
+    expect_equal(as(peptSharedUsed, "dgeMatrix"),meanOfMatShared$nbpep)
 })
 
 
@@ -182,38 +207,43 @@ test_that("Mean of SHARED peptides with sparse Matrix", {
 #########################################################
 test_that("Top 3 of SHARED peptides with sparse Matrix", {
     
-    data(testWithoutNA)
+    data(Exp1_R2_pept)
+    obj <- Exp1_R2_pept[1:10]
     n <- 3
     protID <- "Protein.group.IDs"
     
-    computedMShared <- BuildAdjacencyMatrix(testWithoutNA, protID, unique=FALSE)
-    topnShared <- matrix(c( 41.13,47.33,47.24,49.20,49.84,49.65,
-                            65.44,71.47,70.93,73.63,74.56,74.10,
-                            73.15,73.62,72.91,75.97,76.27,76.15,
-                            61.90,65.87,65.52,67.93,69.36,69.33),
-                         byrow=TRUE, 4,6, 
-                         dimnames=list(1:4, 
-                                       c("25fmolR1", "25fmolR2", "25fmolR3"
-                                         , "50fmolR1", "50fmolR2", "50fmolR3")))
+    computedMShared <- BuildAdjacencyMatrix(obj, protID, unique=FALSE)
+    topnShared <- matrix(c( 25.278, 24.996, 24.487, 25.502, 25.025, 24.691,
+                            48.949, 48.702, 48.546, 49.512, 49.208, 49.416,
+                            24.088, 23.866, 24.335, 24.532, 24.674, 24.766,
+                            24.607, 24.836, 24.414, 24.455, 24.608, 24.921,
+                            0.000, 0.000, 0.000, 0.000, 22.180, 21.932,
+                            24.684, 24.302, 24.255, 24.937, 24.614, 24.584,
+                            27.113, 27.180, 27.270, 27.380, 27.351, 27.383,
+                            21.839, 21.811, 23.116, 21.859, 22.157, 0.000,
+                            31.092, 31.104, 31.195, 31.208, 31.213, 31.299,
+                            31.092, 31.104, 31.195, 31.208, 31.213, 31.299),
+                         byrow=TRUE, 10,6, 
+                         dimnames=list(c("1212", "253", "360", "375", "1050", "1995", "595", "856", "115", "114"), 
+                                       c("Intensity.D.R1", "Intensity.D.R2", "Intensity.D.R3", "Intensity.E.R1", "Intensity.E.R2", "Intensity.E.R3")))
     
-    peptSharedUsed <- matrix(c( 2,2,2,2,2,2,
-                                3,3,3,3,3,3,
-                                3,3,3,3,3,3,
-                                3,3,3,3,3,3),byrow=TRUE, 4,6, 
-                             dimnames=list(1:4, c("nb.pep.used.25fmolR1", 
-                                                  "nb.pep.used.25fmolR2", 
-                                                  "nb.pep.used.25fmolR3",
-                                                  "nb.pep.used.50fmolR1", 
-                                                  "nb.pep.used.50fmolR2", 
-                                                  "nb.pep.used.50fmolR3")))
+    peptSharedUsed <- matrix(c( 1,1,1,1,1,1,
+                                2,2,2,2,2,2,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1,
+                                1,1,1,1,1,1),byrow=TRUE, 10,6, 
+                             dimnames=list(c("1212", "253", "360", "375", "1050", "1995", "595", "856", "115", "114"),
+                                           c("nb.pep.used.Intensity.D.R1", "nb.pep.used.Intensity.D.R2", "nb.pep.used.Intensity.D.R3", "nb.pep.used.Intensity.E.R1", "nb.pep.used.Intensity.E.R2", "nb.pep.used.Intensity.E.R3")))
     
     
-    topnOfMatShared <- TopnPeptides(computedMShared, Biobase::exprs(testWithoutNA), n)
-    expect_equal(as(topnShared, "dgeMatrix"), 
-                 topnOfMatShared$matfin[sort(rownames(topnOfMatShared$matfin)),]
-                 , tolerance=1e-5)
-    expect_equal(as(peptSharedUsed, "dgeMatrix"),
-                 topnOfMatShared$nbpep[sort(rownames(topnOfMatShared$nbpep)),])
+    topnOfMatShared <- TopnPeptides(computedMShared, Biobase::exprs(obj), n)
+    expect_equal(as(topnShared, "dgeMatrix"), topnOfMatShared$matfin, tolerance=1e-5)
+    expect_equal(as(peptSharedUsed, "dgeMatrix"),topnOfMatShared$nbpep)
 })
 
 
@@ -226,32 +256,37 @@ test_that("Top 3 of SHARED peptides with sparse Matrix", {
 #########################################################
 test_that("Top 3 of UNIQUE peptides with sparse matrices", {
     
-    data(testWithoutNA)
+    data(Exp1_R2_pept)
+    obj <- Exp1_R2_pept[1:10]
     n <- 3
     protID <- "Protein.group.IDs"
     
-    computedMUnique <- BuildAdjacencyMatrix(testWithoutNA, protID, unique=TRUE)
-    topnUnique <- matrix(c( 41.13,47.33,47.24,49.20,49.84,49.65,
-                            42.00,43.86,43.92,44.75,47.47,45.89,
-                            48.94,49.01,48.28,50.58,50.88,50.78),
-                         byrow=TRUE, 3,6, 
-                         dimnames=list(1:3, 
-                                       c("25fmolR1", "25fmolR2", "25fmolR3"
-                                         , "50fmolR1", "50fmolR2", "50fmolR3")))
+    computedMUnique <- BuildAdjacencyMatrix(obj, protID, unique=TRUE)
+    topnUnique <- matrix(c( 25.278, 24.996, 24.487, 25.502, 25.025, 24.691,
+                            48.949, 48.702, 48.546, 49.512, 49.208, 49.416,
+                            24.088, 23.866, 24.335, 24.532, 24.674, 24.766,
+                           24.607, 24.836, 24.414, 24.455, 24.608, 24.921,
+                           0.000, 0.000, 0.000 ,0.000, 22.180, 21.932,
+                           24.684, 24.302, 24.255, 24.937, 24.614, 24.584,
+                           27.113, 27.180, 27.270, 27.380, 27.351, 27.383,
+                           21.839 ,21.811, 23.116, 21.859, 22.157, 0.000),
+                         byrow=TRUE, 8,6, 
+                         dimnames=list(c("1212", "253", "360", "375", "1050", "1995", "595", "856"), 
+                                       c("Intensity.D.R1", "Intensity.D.R2", "Intensity.D.R3", "Intensity.E.R1", "Intensity.E.R2", "Intensity.E.R3")))
     
-    peptUniqueUsed <- matrix(rep(2,18),byrow=TRUE, 3,6, 
-                             dimnames=list(1:3, c("nb.pep.used.25fmolR1", 
-                                                  "nb.pep.used.25fmolR2", 
-                                                  "nb.pep.used.25fmolR3",
-                                                  "nb.pep.used.50fmolR1", 
-                                                  "nb.pep.used.50fmolR2", 
-                                                  "nb.pep.used.50fmolR3")))
+    peptUniqueUsed <- matrix(c(1,1,1,1,1,1,
+                             2,2,2,2,2,2,
+                             1,1,1,1,1,1,
+                             1,1,1,1,1,1,
+                             1,1,1,1,1,1,
+                             1,1,1,1,1,1,
+                             1,1,1,1,1,1,
+                             1,1,1,1,1,1),byrow=TRUE, 8,6, 
+                             dimnames=list(c("1212", "253", "360", "375", "1050", "1995", "595", "856"),
+                                           c("nb.pep.used.Intensity.D.R1", "nb.pep.used.Intensity.D.R2", "nb.pep.used.Intensity.D.R3", "nb.pep.used.Intensity.E.R1", "nb.pep.used.Intensity.E.R2", "nb.pep.used.Intensity.E.R3")))
     
     
-    topnOfMatUnique <- TopnPeptides(computedMUnique, Biobase::exprs(testWithoutNA), n)
-    expect_equal(as(topnUnique, "dgeMatrix"), 
-                 topnOfMatUnique$matfin[sort(rownames(topnOfMatUnique$matfin)),]
-                 , tolerance=1e-5)
-    expect_equal(as(peptUniqueUsed, "dgeMatrix"),
-                 topnOfMatUnique$nbpep[sort(rownames(topnOfMatUnique$nbpep)),])
+    topnOfMatUnique <- TopnPeptides(computedMUnique, Biobase::exprs(obj), n)
+    expect_equal(as(topnUnique, "dgeMatrix"), topnOfMatUnique$matfin , tolerance=1e-5)
+    expect_equal(as(peptUniqueUsed, "dgeMatrix"), topnOfMatUnique$nbpep)
 })

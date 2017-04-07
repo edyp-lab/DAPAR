@@ -23,9 +23,10 @@ A colored correlation matrix
 Correlation matrix based on a \code{\link{MSnSet}} object
 }
 \examples{
-data(UPSpep25)
-qData <- Biobase::exprs(UPSpep25)
-samplesData <- Biobase::pData(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
+qData <- Biobase::exprs(Exp1_R25_pept)
+samplesData <- Biobase::pData(Exp1_R25_pept)
 corrMatrixD(qData, samplesData)
 }
 \author{

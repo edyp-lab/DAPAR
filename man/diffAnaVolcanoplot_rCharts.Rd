@@ -43,16 +43,17 @@ appears when the user put the mouse's pointer over a point of the scatter plot.
 }
 \examples{
 library(highcharter) 
-data(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
 condition1 <- '25fmol'
 condition2 <- '10fmol'
 cond <- c(condition1, condition2)
-keepThat <- mvFilterGetIndices(UPSpep25, 'wholeMatrix', '6')
-UPSpep25 <- mvFilterFromIndices(UPSpep25, keepThat, 'Filtered with wholeMatrix (threshold = 6 ).')
-data <- wrapper.diffAnaLimma(UPSpep25, condition1, condition2)
-df <- data.frame(x=data$logFC, y = -log10(data$P.Value),index = as.character(rownames(UPSpep25)),stringsAsFactors = FALSE)
+keepThat <- mvFilterGetIndices(Exp1_R25_pept, 'wholeMatrix', '6')
+Exp1_R25_pept <- mvFilterFromIndices(Exp1_R25_pept, keepThat, 'Filtered with wholeMatrix (threshold = 6 ).')
+data <- wrapper.diffAnaLimma(Exp1_R25_pept, condition1, condition2)
+df <- data.frame(x=data$logFC, y = -log10(data$P.Value),index = as.character(rownames(Exp1_R25_pept)),stringsAsFactors = FALSE)
 tooltipSlot <- c("Sequence", "Score")
-df <- cbind(df,Biobase::fData(UPSpep25)[tooltipSlot])
+df <- cbind(df,Biobase::fData(Exp1_R25_pept)[tooltipSlot])
 colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
 if (ncol(df) > 3){
     colnames(df)[4:ncol(df)] <- paste("tooltip_", colnames(df)[4:ncol(df)], sep="")

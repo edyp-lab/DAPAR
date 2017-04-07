@@ -8,6 +8,8 @@ wrapper.impute.pa(obj, q.min = 0.025)
 }
 \arguments{
 \item{obj}{An object of class \code{\link{MSnSet}}.}
+
+\item{q.min}{Same as the function \code{impute.pa} in the package \code{imp4p}}
 }
 \value{
 The \code{exprs(obj)} matrix with imputed values instead of missing values.
@@ -17,8 +19,9 @@ This method is a wrapper to the function \code{impute.pa} of the package
 \code{imp4p} adapted to an object of class \code{\link{MSnSet}}.
 }
 \examples{
-data(UPSpep25)
-dat <- mvFilter(UPSpep25, type="allCond", th = 1)
+require(DAPARdata)
+data(Exp1_R25_pept)
+dat <- mvFilter(Exp1_R25_pept, type="allCond", th = 1)
 dat <- wrapper.impute.pa(dat)
 }
 \author{

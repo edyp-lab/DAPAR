@@ -21,11 +21,12 @@ This function is a wrapper to the calibration.plot method of the
 \code{cp4p} package for use with \code{\link{MSnSet}} objects.
 }
 \examples{
-data(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
 condition1 <- '25fmol'
 condition2 <- '10fmol'
-qData <- Biobase::exprs(UPSpep25)
-labels <- Biobase::pData(UPSpep25)[,"Label"]
+qData <- Biobase::exprs(Exp1_R25_pept)
+labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 diffAnaWelch(qData, labels, condition1, condition2)
 }
 \author{

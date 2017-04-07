@@ -5,7 +5,7 @@
 \title{Delete the lines in the matrix of intensities and the metadata table
 given their indice.}
 \usage{
-deleteLinesFromIndices(obj, deleteThat = NULL, processText = NULL)
+deleteLinesFromIndices(obj, deleteThat = NULL, processText = "")
 }
 \arguments{
 \item{obj}{An object of class \code{\link{MSnSet}} containing
@@ -24,8 +24,9 @@ An instance of class \code{\link{MSnSet}} that have been filtered.
 Delete the lines of \code{exprs()} table identified by their indice.
 }
 \examples{
-data(UPSpep25)
-mvFilter(UPSpep25, c(1:10))
+require(DAPARdata)
+data(Exp1_R25_pept)
+deleteLinesFromIndices(Exp1_R25_pept, c(1:10))
 }
 \author{
 Florence Combes, Samuel Wieczorek

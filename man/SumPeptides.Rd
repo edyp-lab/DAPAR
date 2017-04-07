@@ -21,10 +21,11 @@ This function computes the intensity of proteins based on the sum of the
 intensities of their peptides.
 }
 \examples{
-data(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
 protID <- "Protein.group.IDs"
-M <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
-SumPeptides(M, Biobase::exprs(UPSpep25))
+M <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, FALSE)
+SumPeptides(M, Biobase::exprs(Exp1_R25_pept))
 }
 \author{
 Alexia Dorffer

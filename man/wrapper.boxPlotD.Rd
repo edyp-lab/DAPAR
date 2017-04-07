@@ -24,9 +24,10 @@ This function is a wrapper for using the boxPlotD function with objects of
 class \code{\link{MSnSet}}
 }
 \examples{
-data(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
 types <- c("Label","Analyt.Rep")
-wrapper.boxPlotD(UPSpep25, types)
+wrapper.boxPlotD(Exp1_R25_pept, types)
 }
 \seealso{
 \code{\link{wrapper.densityPlotD}}

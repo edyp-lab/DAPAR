@@ -8,10 +8,11 @@
 ##' @return A list
 ##' @author Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
 ##' protID <- "Protein.group.IDs"
-##' MShared <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
-##' MUnique <- BuildAdjacencyMatrix(UPSpep25, protID, TRUE)
+##' MShared <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, FALSE)
+##' MUnique <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, TRUE)
 ##' getProteinsStats(MUnique,MShared)
 getProteinsStats <- function(matUnique, matShared){
     if (is.null(matUnique) || is.null(matShared) ||
@@ -48,10 +49,11 @@ getProteinsStats <- function(matUnique, matShared){
 ##' @return A vector
 ##' @author Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
 ##' protID <- "Protein.group.IDs"
-##' M <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
-##' data <- Biobase::fData(UPSpep25)
+##' M <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, FALSE)
+##' data <- Biobase::fData(Exp1_R25_pept)
 ##' name <- "organism"
 ##' BuildColumnToProteinDataset(data, M, name )
 BuildColumnToProteinDataset <- function(peptideData, matAdj, columnName){
@@ -79,9 +81,10 @@ return(newCol)
 ##' but with NA values if they exist in the intensity matrix.
 ##' @author Alexia Dorffer
 ##' @examples
-##' data(UPSpep25)
+##' library(DAPARdata)
+##' data(Exp1_R25_pept)
 ##' protID <- "Protein.group.IDs"
-##' M <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
+##' M <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, FALSE)
 ##' CountPep(M)
 CountPep <- function (M) {
     z <- M
@@ -100,8 +103,9 @@ CountPep <- function (M) {
 ##' @return A histogram  
 ##' @author Alexia Dorffer, Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' mat <- BuildAdjacencyMatrix(UPSpep25, "Protein.group.IDs")
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' mat <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein.group.IDs")
 ##' GraphPepProt(mat)
 GraphPepProt <- function(mat){
     if (is.null(mat)){return (NULL)} 
@@ -137,8 +141,9 @@ GraphPepProt <- function(mat){
 ##' @return A binary matrix  
 ##' @author Florence Combes, Samuel Wieczorek, Alexia Dorffer
 ##' @examples
-##' data(UPSpep25) 
-##' BuildAdjacencyMatrix(UPSpep25, "Protein.group.IDs", TRUE)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept) 
+##' BuildAdjacencyMatrix(Exp1_R25_pept, "Protein.group.IDs", TRUE)
 BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
     
     data <- Biobase::exprs(obj.pep)
@@ -149,7 +154,7 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
     X<- sparseMatrix(i = rep(seq_along(PG.l), lengths(PG.l)),
                      j=as.integer(factor(Un1, levels = unique(Un1))),
                      x=1, 
-                     dimnames=list(rownames(data),unique(Un1)))
+                     dimnames=list(rownames(data),as.character(unique(Un1))))
     
     if (unique == TRUE){
         X <- X[which(rowSums(as.matrix(X))==1),]
@@ -172,10 +177,11 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
 ##' @return A matrix of intensities of proteins
 ##' @author Alexia Dorffer
 ##' @examples
-##' data(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
 ##' protID <- "Protein.group.IDs"
-##' M <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
-##' SumPeptides(M, Biobase::exprs(UPSpep25))
+##' M <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, FALSE)
+##' SumPeptides(M, Biobase::exprs(Exp1_R25_pept))
 SumPeptides <- function(matAdj, expr){
     expr <- expr[rownames(matAdj),]
     expr[is.na(expr)] <- 0
@@ -204,10 +210,11 @@ SumPeptides <- function(matAdj, expr){
 ##' @return A matrix of intensities of proteins
 ##' @author Alexia Dorffer
 ##' @examples
-##' data(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
 ##' protID <- "Protein.group.IDs"
-##' matAdj <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
-##' MeanPeptides(matAdj, Biobase::exprs(UPSpep25))
+##' matAdj <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, FALSE)
+##' MeanPeptides(matAdj, Biobase::exprs(Exp1_R25_pept))
 MeanPeptides <- function(matAdj, expr){
     expr <- expr[rownames(matAdj),]
     expr[is.na(expr)] <- 0
@@ -239,10 +246,11 @@ MeanPeptides <- function(matAdj, expr){
 ##' @return A matrix of intensities of proteins
 ##' @author Alexia Dorffer
 ##' @examples
-##' data(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
 ##' protID <- "Protein.group.IDs"
-##' matAdj <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
-##' TopnPeptides(matAdj, Biobase::exprs(UPSpep25), 3)
+##' matAdj <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, FALSE)
+##' TopnPeptides(matAdj, Biobase::exprs(Exp1_R25_pept), 3)
 TopnPeptides <-function(matAdj,expr,n){
     
     #Get the indices of the n peptides with the best median
@@ -301,10 +309,11 @@ TopnPeptides <-function(matAdj,expr,n){
 ##' @return An object of class \code{\link{MSnbase}} with proteins  
 ##' @author Alexia Dorffer, Samuel Wieczorek
 ##' @examples 
-##' data(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
 ##' protID <- "Protein.group.IDs"
-##' mat <- BuildAdjacencyMatrix(UPSpep25, protID, TRUE)
-##' pepAgregate(UPSpep25, protID, "sum overall", mat)
+##' mat <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, TRUE)
+##' pepAgregate(Exp1_R25_pept, protID, "sum overall", mat)
 pepAgregate <- function (obj.pep, protID, method="sum overall", matAdj=NULL, n=NULL){
     #Check the validity of parameters
     parammethod <- c("sum overall", "mean", "sum on top n") 

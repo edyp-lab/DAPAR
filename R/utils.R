@@ -6,8 +6,9 @@
 ##' @return The slot processing of obj@processingData
 ##' @author Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' getProcessingInfo(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' getProcessingInfo(Exp1_R25_pept)
 getProcessingInfo <- function(obj){
 return(obj@processingData@processing)
 }
@@ -19,8 +20,9 @@ return(obj@processingData@processing)
 ##' @return An integer
 ##' @author Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' qData <- Biobase::exprs(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' getNumberOfEmptyLines(qData)
 getNumberOfEmptyLines <- function(qData){
 n <- sum(apply(is.na(as.matrix(qData)), 1, all))
@@ -45,8 +47,9 @@ return (n)
 ##' dataset. 
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' labels <- Biobase::pData(UPSpep25)[,"Label"]
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 ##' getIndicesConditions(labels, "25fmol", "10fmol")
 getIndicesConditions <- function(labels, cond1, cond2){
 indCondition1 <- indCondition2 <- NULL
@@ -74,8 +77,9 @@ return(list(iCond1 = indCondition1, iCond2 = indCondition2))
 ##' @return A palette designed for the data manipulated in DAPAR
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' labels <- Biobase::pData(UPSpep25)[,"Label"]
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 ##' getPaletteForLabels(labels)
 getPaletteForLabels <- function(labels){
 nColors <- 8
@@ -100,9 +104,10 @@ return (col.boxplot)
 ##' @return A palette designed for the data manipulated in DAPAR
 ##' @author Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' n <- nrow(Biobase::pData(UPSpep25))
-##' getPaletteForLabels(5)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' n <- nrow(Biobase::pData(Exp1_R25_pept))
+##' getPaletteForReplicates(n)
 getPaletteForReplicates <- function(nColors){
 col <- c(1:nColors)
 getPalette <- colorRampPalette(brewer.pal(8, "Dark2"))

@@ -23,9 +23,10 @@ The lines have been sorted in order to vizualize easily the different
 number of missing values. A white square is plotted for missing values.
 }
 \examples{
-data(UPSpep25)
-qData <- Biobase::exprs(UPSpep25)
-labels <- Biobase::pData(UPSpep25)[,"Label"]
+require(DAPARdata)
+data(Exp1_R25_pept)
+qData <- Biobase::exprs(Exp1_R25_pept)
+labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 mvImage(qData, labels)
 }
 \author{

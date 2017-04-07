@@ -20,10 +20,11 @@ This function computes the number of proteins that are only defined by
 specific peptides, shared peptides or a mixture of two.
 }
 \examples{
-data(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
 protID <- "Protein.group.IDs"
-MShared <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
-MUnique <- BuildAdjacencyMatrix(UPSpep25, protID, TRUE)
+MShared <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, FALSE)
+MUnique <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, TRUE)
 getProteinsStats(MUnique,MShared)
 }
 \author{

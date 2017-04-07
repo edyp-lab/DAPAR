@@ -23,8 +23,10 @@ and metaData are respectively integrated into separate sheets in
 the Excel file).
 }
 \examples{
-data(UPSpep25)
-writeMSnsetToExcel(UPSpep25, "foo")
+require(DAPARdata)
+data(Exp1_R2_pept)
+obj <- Exp1_R2_pept[1:1000]
+writeMSnsetToExcel(obj, "foo")
 }
 \author{
 Samuel Wieczorek

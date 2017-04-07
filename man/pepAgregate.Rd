@@ -28,10 +28,11 @@ Method to agregate with a method peptides to proteins on
 a MSnSet object (peptides)
 }
 \examples{
-data(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
 protID <- "Protein.group.IDs"
-mat <- BuildAdjacencyMatrix(UPSpep25, protID, TRUE)
-pepAgregate(UPSpep25, protID, "sum overall", mat)
+mat <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, TRUE)
+pepAgregate(Exp1_R25_pept, protID, "sum overall", mat)
 }
 \author{
 Alexia Dorffer, Samuel Wieczorek

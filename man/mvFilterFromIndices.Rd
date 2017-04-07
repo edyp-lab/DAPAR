@@ -4,7 +4,7 @@
 \alias{mvFilterFromIndices}
 \title{Filter lines in the matrix of intensities w.r.t. some criteria}
 \usage{
-mvFilterFromIndices(obj, keepThat = NULL, processText = NULL)
+mvFilterFromIndices(obj, keepThat = NULL, processText = "")
 }
 \arguments{
 \item{obj}{An object of class \code{\link{MSnSet}} containing
@@ -36,8 +36,9 @@ at least \code{th} values for each of the conditions are kept.
 at least \code{th} values, and for at least one condition, are kept.
 }
 \examples{
-data(UPSpep25)
-mvFilter(UPSpep25, c(1:10))
+require(DAPARdata)
+data(Exp1_R25_pept)
+mvFilterFromIndices(Exp1_R25_pept, c(1:10))
 }
 \author{
 Florence Combes, Samuel Wieczorek

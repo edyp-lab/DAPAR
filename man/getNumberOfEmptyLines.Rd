@@ -16,8 +16,9 @@ An integer
 Returns the number of empty lines in a matrix.
 }
 \examples{
-data(UPSpep25)
-qData <- Biobase::exprs(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
+qData <- Biobase::exprs(Exp1_R25_pept)
 getNumberOfEmptyLines(qData)
 }
 \author{

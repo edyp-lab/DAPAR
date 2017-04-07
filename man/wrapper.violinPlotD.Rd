@@ -24,10 +24,11 @@ This function is a wrapper for using the violinPlotD function with objects of
 class \code{\link{MSnSet}}
 }
 \examples{
-data(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
 library(vioplot)
 types <- c("Label","Analyt.Rep")
-wrapper.violinPlotD(UPSpep25, types)
+wrapper.violinPlotD(Exp1_R25_pept, types)
 }
 \seealso{
 \code{\link{wrapper.densityPlotD}}, \code{\link{wrapper.boxPlotD}}

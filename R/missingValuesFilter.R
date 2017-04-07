@@ -6,8 +6,9 @@
 ##' @return A floating number
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' getPourcentageOfMV(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' getPourcentageOfMV(Exp1_R25_pept)
 getPourcentageOfMV <- function(obj){
 
 NA.count<-apply(data.frame(Biobase::exprs(obj)), 2, 
@@ -29,8 +30,9 @@ return(pourcentage)
 ##' @return An integer
 ##' @author Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' getNumberOf(UPSpep25, "Potential.contaminant", "+")
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' getNumberOf(Exp1_R25_pept, "Potential.contaminant", "+")
 getNumberOf <- function(obj, name=NULL, prefix=NULL){
 if (is.null(name) || is.null(prefix) || (name=="") || (prefix=="")){
     return(0)}
@@ -56,9 +58,10 @@ return(count)
 ##' @return A barplot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
 ##' pref <- "+"
-##' proportionConRev(UPSpep25, "Potential.contaminant", pref, "Reverse", pref)
+##' proportionConRev(Exp1_R25_pept, "Potential.contaminant", pref, "Reverse", pref)
 proportionConRev <- function(obj, idContaminants=NULL, 
                             prefixContaminants=NULL, 
                             idReverse=NULL, prefixReverse=NULL){
@@ -105,9 +108,10 @@ graphics::text(x= 20, y= bp, labels=as.character(lbls), xpd=TRUE, cex=1.5)
 ##' @return An object of class \code{\link{MSnSet}}.
 ##' @author Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' removeLines(UPSpep25, "Potential.contaminant")
-##' removeLines(UPSpep25, "Reverse")
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' removeLines(Exp1_R25_pept, "Potential.contaminant")
+##' removeLines(Exp1_R25_pept, "Reverse")
 removeLines <- function(obj, idLine2Delete=NULL, prefix=NULL){
 if ((prefix == "") || is.null(prefix)) {
     #warning ("No change was made")
@@ -130,8 +134,9 @@ return(obj)
 ##' @return A vector of integers.
 ##' @author Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' getIndicesOfLinesToRemove(UPSpep25, "Potential.contaminant", prefix="+")
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' getIndicesOfLinesToRemove(Exp1_R25_pept, "Potential.contaminant", prefix="+")
 getIndicesOfLinesToRemove <- function(obj, idLine2Delete=NULL, prefix=NULL)
 {
 if ((prefix == "") || is.null(prefix)) {
@@ -167,8 +172,9 @@ return(ind)
 ##' @return An instance of class \code{\link{MSnSet}} that have been filtered.
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' mvFilter(UPSpep25, "wholeMatrix", 2)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' mvFilter(Exp1_R25_pept, "wholeMatrix", 2)
 mvFilter <- function(obj,type, th, processText=NULL )
 {
     #Check parameters
@@ -220,9 +226,10 @@ obj <- obj[keepThat,]
 ##' @return An instance of class \code{\link{MSnSet}} that have been filtered.
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' mvFilter(UPSpep25, c(1:10))
-mvFilterFromIndices <- function(obj,keepThat=NULL, processText=NULL )
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' mvFilterFromIndices(Exp1_R25_pept, c(1:10))
+mvFilterFromIndices <- function(obj,keepThat=NULL, processText="" )
 {
 
 if (is.null(keepThat)) {return(obj)}
@@ -253,9 +260,10 @@ return(obj)
 ##' @return An instance of class \code{\link{MSnSet}} that have been filtered.
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' mvFilter(UPSpep25, c(1:10))
-deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText=NULL )
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' deleteLinesFromIndices(Exp1_R25_pept, c(1:10))
+deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
 {
     
     if (is.null(deleteThat)) {return(obj)}
@@ -294,8 +302,9 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText=NULL )
 ##' @return An vector of indices that correspond to the lines to keep.
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' mvFilterGetIndices(UPSpep25, "wholeMatrix", 2)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' mvFilterGetIndices(Exp1_R25_pept, "wholeMatrix", 2)
 mvFilterGetIndices <- function(obj,type, th)
 {
 #Check parameters

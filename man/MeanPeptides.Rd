@@ -21,10 +21,11 @@ This function computes the intensity of proteins as the mean of the
 intensities of their peptides.
 }
 \examples{
-data(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
 protID <- "Protein.group.IDs"
-matAdj <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
-MeanPeptides(matAdj, Biobase::exprs(UPSpep25))
+matAdj <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, FALSE)
+MeanPeptides(matAdj, Biobase::exprs(Exp1_R25_pept))
 }
 \author{
 Alexia Dorffer

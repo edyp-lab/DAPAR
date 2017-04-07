@@ -24,8 +24,9 @@ histogram which represents the distribution of the
 number of missing values (NA) per lines (ie proteins).
 }
 \examples{
-data(UPSpep25)
-wrapper.mvPerLinesHisto(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
+wrapper.mvPerLinesHisto(Exp1_R25_pept)
 }
 \author{
 Alexia Dorffer

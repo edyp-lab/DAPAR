@@ -16,8 +16,9 @@
 ##' @return The computed FDR value (floating number)
 ##' @author Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' obj <- wrapper.mvImputation(UPSpep25, "QRILC")
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' obj <- wrapper.mvImputation(Exp1_R25_pept, "QRILC")
 ##' condition1 <- '25fmol'
 ##' condition2 <- '10fmol'
 ##' qData <- Biobase::exprs(obj)
@@ -65,11 +66,12 @@ diffAnaComputeFDR <- function(data,threshold_PVal=0, threshold_LogFC = 0,
 ##' @return A MSnSet
 ##' @author Alexia Dorffer, Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
 ##' condition1 <- '25fmol'
 ##' condition2 <- '10fmol'
-##' limma <- wrapper.diffAnaLimma(UPSpep25, condition1, condition2)
-##' obj <- diffAnaSave(UPSpep25, limma, "limma", condition1, condition2)
+##' limma <- wrapper.diffAnaLimma(Exp1_R25_pept, condition1, condition2)
+##' obj <- diffAnaSave(Exp1_R25_pept, limma, "limma", condition1, condition2)
 diffAnaSave <- function (obj, data, method="limma", condition1, condition2, 
                         threshold_pVal=1e-60, threshold_logFC=0, fdr=0, 
                         calibrationMethod = "pounds"){
@@ -135,11 +137,12 @@ diffAnaSave <- function (obj, data, method="limma", condition1, condition2,
 ##' @return A MSnSet
 ##' @author Alexia Dorffer
 ##' @examples
-##' data(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
 ##' condition1 <- "25fmol"
 ##' condition2 <- "10fmol"
-##' resLimma <- wrapper.diffAnaLimma(UPSpep25, condition1, condition2)
-##' obj <-diffAnaSave(UPSpep25, resLimma, "limma", condition1, condition2)
+##' resLimma <- wrapper.diffAnaLimma(Exp1_R25_pept, condition1, condition2)
+##' obj <-diffAnaSave(Exp1_R25_pept, resLimma, "limma", condition1, condition2)
 ##' signif <- diffAnaGetSignificant(obj)
 
 diffAnaGetSignificant <- function (obj){
@@ -170,11 +173,12 @@ diffAnaGetSignificant <- function (obj){
 ##' to each element (peptide/protein)
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' qData <- Biobase::exprs(UPSpep25)
-##' design <- cbind(cond1=1, cond2 = rep(0,nrow(Biobase::pData(UPSpep25))))
-##' rownames(design) <- rownames(Biobase::pData(UPSpep25))
-##' labels <- Biobase::pData(UPSpep25)[,"Label"]
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qData <- Biobase::exprs(Exp1_R25_pept)
+##' design <- cbind(cond1=1, cond2 = rep(0,nrow(Biobase::pData(Exp1_R25_pept))))
+##' rownames(design) <- rownames(Biobase::pData(Exp1_R25_pept))
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 ##' indices <- getIndicesConditions(labels, "25fmol", "10fmol")
 ##' design[indices$iCond2,2] <- 1
 ##' diffAna(qData, design)
@@ -206,10 +210,11 @@ diffAna <- function(qData, design){
 ##' @return A dataframe as returned by the \code{limma} package
 ##' @author Alexia Dorffer
 ##' @examples
-##' data(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
 ##' condition1 <- '25fmol'
 ##' condition2 <- '10fmol'
-##' wrapper.diffAnaLimma(UPSpep25, condition1, condition2)
+##' wrapper.diffAnaLimma(Exp1_R25_pept, condition1, condition2)
 wrapper.diffAnaLimma <- function(obj, condition1, condition2){
 
 qData <- Biobase::exprs(obj)
@@ -238,12 +243,13 @@ return(p)
 ##' @return A dataframe as returned by the \code{limma} package
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
 ##' condition1 <- '25fmol'
 ##' condition2 <- '10fmol'
-##' qData <- Biobase::exprs(UPSpep25)
-##' samplesData <- Biobase::pData(UPSpep25)
-##' labels <- Biobase::pData(UPSpep25)[,"Label"]
+##' qData <- Biobase::exprs(Exp1_R25_pept)
+##' samplesData <- Biobase::pData(Exp1_R25_pept)
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 ##' diffAnaLimma(qData, samplesData, labels, condition1, condition2)
 diffAnaLimma <- function(qData, samplesData, labels, condition1, condition2){
 if( sum(is.na(qData == TRUE))>0) {
@@ -260,9 +266,12 @@ flatIndices <- unlist(indices)
 
 tempexprs <- qData[,flatIndices]
 design <- cbind(cond1=1, cond2 = rep(0,length(flatIndices)))
-
 rownames(design) <- rownames(samplesData[flatIndices,])
-design[flatIndices == indices$iCond2,2] <- 1
+
+#design[flatIndices == indices$iCond2, 2] <- 1
+design[indices$iCond2, 2] <- 1
+
+
 res <- diffAna(tempexprs, design)
 #res <- limmaCompleteTest(tempexprs, labels, c(1:length(labels)), c(1:length(labels)))
 
@@ -290,10 +299,11 @@ return(p)
 ##' (the log of the Fold Change).
 ##' @author Alexia Dorffer
 ##' @examples
-##' data(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
 ##' condition1 <- '25fmol'
 ##' condition2 <- '10fmol'
-##' wrapper.diffAnaWelch(UPSpep25, condition1, condition2)
+##' wrapper.diffAnaWelch(Exp1_R25_pept, condition1, condition2)
 wrapper.diffAnaWelch <- function(obj, condition1, condition2){
 
 qData <- Biobase::exprs(obj)
@@ -322,11 +332,12 @@ return(p)
 ##' (the log of the Fold Change).
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
 ##' condition1 <- '25fmol'
 ##' condition2 <- '10fmol'
-##' qData <- Biobase::exprs(UPSpep25)
-##' labels <- Biobase::pData(UPSpep25)[,"Label"]
+##' qData <- Biobase::exprs(Exp1_R25_pept)
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 ##' diffAnaWelch(qData, labels, condition1, condition2)
 diffAnaWelch <- function(qData, labels, condition1, condition2){
 
@@ -365,11 +376,12 @@ return(p)
 ##' @return A plot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
 ##' condition1 <- '25fmol'
 ##' condition2 <- '10fmol'
-##' qData <- Biobase::exprs(UPSpep25)
-##' labels <- Biobase::pData(UPSpep25)[,"Label"]
+##' qData <- Biobase::exprs(Exp1_R25_pept)
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 ##' diffAnaWelch(qData, labels, condition1, condition2)
 wrapperCalibrationPlot <- function(vPVal, pi0Method="pounds"){
 

@@ -28,8 +28,10 @@ Builds a heatmap of the quantitative proteomic data of a
 \code{\link{MSnSet}} object.
 }
 \examples{
-data(testWithoutNA)
-wrapper.heatmapD(testWithoutNA)
+require(DAPARdata)
+data(Exp1_R25_pept)
+obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
+wrapper.heatmapD(obj)
 }
 \author{
 Alexia Dorffer

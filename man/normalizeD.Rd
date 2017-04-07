@@ -12,7 +12,7 @@ normalizeD(qData, labels, family, method)
 \item{labels}{A vector of strings containing the column "Label" of 
 the \code{pData()}.}
 
-\item{family}{One of the following : Global Rescaling, 
+\item{family}{One of the following : Global Alignment, 
 Median Centering, Mean Centering, Mean Centering Scaling.}
 
 \item{method}{"Overall" or "within conditions".}
@@ -28,16 +28,17 @@ Median Centering, Mean Centering, Mean CenteringScaling.
 For the first family, two sub-categories are available : the sum by columns
 and the quantiles method.
 For the three other families, two categories are available : 
-"Overall" which means that the value for each protein 
+"overall" which means that the value for each protein 
 (ie line in the expression data tab) is computed over all the samples ;
 "within conditions" which means that the value for each protein 
 (ie line in the matrix) is computed condition
 by condition.
 }
 \examples{
-data(UPSpep25)
-qData <- Biobase::exprs(UPSpep25)
-labels <- Biobase::pData(UPSpep25)[,"Label"]
+require(DAPARdata)
+data(Exp1_R25_pept)
+qData <- Biobase::exprs(Exp1_R25_pept)
+labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 normalizeD(qData, labels, "Median Centering", "within conditions")
 }
 \author{

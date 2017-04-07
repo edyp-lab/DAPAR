@@ -27,9 +27,10 @@ A density plot
 Densityplot of quantitative proteomics data over samples.
 }
 \examples{
-data(UPSpep25)
-qData <- Biobase::exprs(UPSpep25)
-labels <- lab2Show <- Biobase::pData(UPSpep25)[,"Label"]
+require(DAPARdata)
+data(Exp1_R25_pept)
+qData <- Biobase::exprs(Exp1_R25_pept)
+labels <- lab2Show <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 densityPlotD(qData, labels)
 }
 \seealso{

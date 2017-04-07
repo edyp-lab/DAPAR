@@ -26,8 +26,9 @@ Returns a list for the two conditions where each slot is a vector of
 indices for the samples.
 }
 \examples{
-data(UPSpep25)
-labels <- Biobase::pData(UPSpep25)[,"Label"]
+require(DAPARdata)
+data(Exp1_R25_pept)
+labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 getIndicesConditions(labels, "25fmol", "10fmol")
 }
 \author{

@@ -24,10 +24,11 @@ This function creates a column for the protein dataset after agregation
 by using the previous peptide dataset.
 }
 \examples{
-data(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
 protID <- "Protein.group.IDs"
-M <- BuildAdjacencyMatrix(UPSpep25, protID, FALSE)
-data <- Biobase::fData(UPSpep25)
+M <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, FALSE)
+data <- Biobase::fData(Exp1_R25_pept)
 name <- "organism"
 BuildColumnToProteinDataset(data, M, name )
 }

@@ -8,8 +8,9 @@
 ##' @return The object \code{obj} which has been imputed
 ##' @author Alexia Dorffer
 ##' @examples
-##' data(UPSpep25)
-##' wrapper.mvImputation(UPSpep25, "QRILC")
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' wrapper.mvImputation(Exp1_R25_pept, "QRILC")
 wrapper.mvImputation <- function(obj, method){
 qData <- Biobase::exprs(obj)
 Biobase::exprs(obj) <- mvImputation(qData, method)
@@ -33,8 +34,9 @@ return(obj)
 ##' @return The matrix imputed
 ##' @author Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' qData <- Biobase::exprs(UPSpep25)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' mvImputation(qData, "QRILC")
 mvImputation <- function(qData, method){
 #Check parameters
@@ -87,11 +89,13 @@ return (exprs)
 ##'
 ##' @title Imputation of peptides having no values in a biological condition.
 ##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param q.min Same as the function \code{impute.pa} in the package \code{imp4p}
 ##' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
 ##' @author Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' dat <- mvFilter(UPSpep25, type="allCond", th = 1)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' dat <- mvFilter(Exp1_R25_pept, type="allCond", th = 1)
 ##' dat <- wrapper.impute.pa(dat)
 wrapper.impute.pa <- function(obj, q.min = 0.025){
     cond <- as.factor(Biobase::pData(obj)$Label)
@@ -106,13 +110,33 @@ wrapper.impute.pa <- function(obj, q.min = 0.025){
 ##'
 ##' @title Missing values imputation using the LSimpute algorithm.
 ##' @param obj An object of class \code{\link{MSnSet}}.
-##' @param selec An integer which corresponds to the \code{selec} parameter of the
-##' function \code{impute.slsa}.
+##' @param nb.iter Same as the function \code{mi.mix} in the package \code{imp4p}
+##' @param nknn Same as the function \code{mi.mix} in the package \code{imp4p}
+##' @param selec Same as the function \code{mi.mix} in the package \code{imp4p}
+##' @param siz Same as the function \code{mi.mix} in the package \code{imp4p}
+##' @param weight Same as the function \code{mi.mix} in the package \code{imp4p}
+##' @param ind.comp Same as the function \code{mi.mix} in the package \code{imp4p}
+##' @param progress.bar Same as the function \code{mi.mix} in the package \code{imp4p}
+##' @param x.min Same as the function \code{estim.mix} in the package \code{imp4p}
+##' @param x.max Same as the function \code{estim.mix} in the package \code{imp4p}
+##' @param x.step.mod Same as the function \code{estim.mix} in the package \code{imp4p}
+##' @param x.step.pi Same as the function \code{estim.mix} in the package \code{imp4p}
+##' @param nb.rei Same as the function \code{estim.mix} in the package \code{imp4p}
+##' @param method Same as the function \code{estim.mix} in the package \code{imp4p}
+##' @param gridsize Same as the function \code{estim.mix} in the package \code{imp4p}
+##' @param q Same as the function \code{mi.mix} in the package \code{imp4p}
+##' @param q.min Same as the function \code{impute.pa} in the package \code{imp4p}
+##' @param q.norm Same as the function \code{impute.pa} in the package \code{imp4p}
+##' @param eps Same as the function \code{impute.pa} in the package \code{imp4p}
+##' @param methodi Same as the function \code{mi.mix} in the package \code{imp4p}
+##' @param lapala xxxxxxxxxxx
+##' @param distribution xxxxxxxxxxx
 ##' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
 ##' @author Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' dat <- mvFilter(UPSpep25, type="allCond", th = 1)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' dat <- mvFilter(Exp1_R25_pept, type="allCond", th = 1)
 ##' dat <- wrapper.dapar.impute.mi(dat, nb.iter=1)
 wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, 
                                nknn = 15, selec = 600, siz = 500, weight = 1, ind.comp = 1, 
@@ -224,8 +248,9 @@ translatedRandomBeta <- function(n, min, max, param1=3, param2=1){
 ##' @return The object \code{obj} which has been imputed
 ##' @author Thomas Burger, Samuel Wieczorek
 ##' @examples
-##' data(UPSpep25)
-##' wrapper.impute.pa2(UPSpep25, distribution="beta")
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' wrapper.impute.pa2(Exp1_R25_pept, distribution="beta")
 wrapper.impute.pa2 <- function (obj, q.min = 0, q.norm = 3, eps = 0, distribution = "unif"){
     tab <- Biobase::exprs(obj)
     conditions <- as.factor(Biobase::pData(obj)$Label)
@@ -241,7 +266,31 @@ wrapper.impute.pa2 <- function (obj, q.min = 0, q.norm = 3, eps = 0, distributio
 
 
 
-
+################################################
+##' This method is a variation to the function \code{impute.pa} from the package 
+##' \code{imp4p}.
+##' 
+##' @title Missing values imputation from a \code{\link{MSnSet}} object
+##' @param tab An object of class \code{\link{MSnSet}}.
+##' @param conditions xxxxxxxxxxxx
+##' @param q.min A quantile value of the observed values allowing defining the 
+##' maximal value which can be generated. This maximal value is defined by the
+##' quantile q.min of the observed values distribution minus eps. 
+##' Default is 0 (the maximal value is the minimum of observed values minus eps).
+##' @param q.norm A quantile value of a normal distribution allowing defining 
+##' the minimal value which can be generated. Default is 3 (the minimal value 
+##' is the maximal value minus qn*median(sd(observed values)) where sd is the 
+##' standard deviation of a row in a condition).
+##' @param eps A value allowing defining the maximal value which can be 
+##' generated. This maximal value is defined by the quantile q.min of the 
+##' observed values distribution minus eps. Default is 0.
+##' @param distribution The type of distribution used. Values are unif or beta.
+##' @return The object \code{obj} which has been imputed
+##' @author Thomas Burger, Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' wrapper.impute.pa2(Exp1_R25_pept, distribution="beta")
 impute.pa2 <- function (tab, conditions, q.min = 0, q.norm = 3, eps = 0, distribution = "unif"){
     tab_imp = tab
     qu = apply(tab_imp, 2, quantile, na.rm = TRUE, q.min)

@@ -1,6 +1,7 @@
 exportPattern("^[[:alpha:]]+")
 
 import(MSnbase)
+import(DAPARdata)
 import(RColorBrewer)
 import(Cairo)
 import(png)

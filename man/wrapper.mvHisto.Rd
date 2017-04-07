@@ -22,8 +22,9 @@ This method plots from a \code{\link{MSnSet}} object a histogram of
 missing values.
 }
 \examples{
-data(UPSpep25)
-wrapper.mvHisto(UPSpep25, showValues=TRUE)
+require(DAPARdata)
+data(Exp1_R25_pept)
+wrapper.mvHisto(Exp1_R25_pept, showValues=TRUE)
 }
 \author{
 Alexia Dorffer

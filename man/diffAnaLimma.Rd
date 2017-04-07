@@ -29,12 +29,13 @@ Method to perform differential analysis on
 an \code{\link{MSnSet}} object (calls the \code{limma} package function).
 }
 \examples{
-data(UPSpep25)
+require(DAPARdata)
+data(Exp1_R25_pept)
 condition1 <- '25fmol'
 condition2 <- '10fmol'
-qData <- Biobase::exprs(UPSpep25)
-samplesData <- Biobase::pData(UPSpep25)
-labels <- Biobase::pData(UPSpep25)[,"Label"]
+qData <- Biobase::exprs(Exp1_R25_pept)
+samplesData <- Biobase::pData(Exp1_R25_pept)
+labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 diffAnaLimma(qData, samplesData, labels, condition1, condition2)
 }
 \author{

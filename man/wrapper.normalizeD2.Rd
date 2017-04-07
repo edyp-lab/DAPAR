@@ -47,8 +47,9 @@ For the three other families, two categories are available :
 by condition.
 }
 \examples{
-data(UPSpep25)
-wrapper.normalizeD2(UPSpep25, "Quantile Centering", "within conditions")
+require(DAPARdata)
+data(Exp1_R25_pept)
+wrapper.normalizeD2(Exp1_R25_pept, "Quantile Centering", "within conditions")
 }
 \author{
 Samuel Wieczorek

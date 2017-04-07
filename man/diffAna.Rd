@@ -22,11 +22,12 @@ Performs a differential analysis on an \code{\link{MSnSet}} object,
 based on \code{\link{limma}} functions.
 }
 \examples{
-data(UPSpep25)
-qData <- Biobase::exprs(UPSpep25)
-design <- cbind(cond1=1, cond2 = rep(0,nrow(Biobase::pData(UPSpep25))))
-rownames(design) <- rownames(Biobase::pData(UPSpep25))
-labels <- Biobase::pData(UPSpep25)[,"Label"]
+require(DAPARdata)
+data(Exp1_R25_pept)
+qData <- Biobase::exprs(Exp1_R25_pept)
+design <- cbind(cond1=1, cond2 = rep(0,nrow(Biobase::pData(Exp1_R25_pept))))
+rownames(design) <- rownames(Biobase::pData(Exp1_R25_pept))
+labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 indices <- getIndicesConditions(labels, "25fmol", "10fmol")
 design[indices$iCond2,2] <- 1
 diffAna(qData, design)
