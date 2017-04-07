@@ -18,7 +18,7 @@
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' obj <- wrapper.mvImputation(Exp1_R25_pept, "QRILC")
+##' obj <- wrapper.mvImputation(Exp1_R25_pept[1:1000], "QRILC")
 ##' condition1 <- '25fmol'
 ##' condition2 <- '10fmol'
 ##' qData <- Biobase::exprs(obj)
@@ -70,8 +70,10 @@ diffAnaComputeFDR <- function(data,threshold_PVal=0, threshold_LogFC = 0,
 ##' data(Exp1_R25_pept)
 ##' condition1 <- '25fmol'
 ##' condition2 <- '10fmol'
-##' limma <- wrapper.diffAnaLimma(Exp1_R25_pept, condition1, condition2)
-##' obj <- diffAnaSave(Exp1_R25_pept, limma, "limma", condition1, condition2)
+##' limma <- wrapper.diffAnaLimma(Exp1_R25_pept[1:1000], 
+##' condition1, condition2)
+##' obj <- diffAnaSave(Exp1_R25_pept[1:1000], limma, "limma", 
+##' condition1, condition2)
 diffAnaSave <- function (obj, data, method="limma", condition1, condition2, 
                         threshold_pVal=1e-60, threshold_logFC=0, fdr=0, 
                         calibrationMethod = "pounds"){
@@ -141,8 +143,10 @@ diffAnaSave <- function (obj, data, method="limma", condition1, condition2,
 ##' data(Exp1_R25_pept)
 ##' condition1 <- "25fmol"
 ##' condition2 <- "10fmol"
-##' resLimma <- wrapper.diffAnaLimma(Exp1_R25_pept, condition1, condition2)
-##' obj <-diffAnaSave(Exp1_R25_pept, resLimma, "limma", condition1, condition2)
+##' resLimma <- wrapper.diffAnaLimma(Exp1_R25_pept[1:1000], 
+##' condition1, condition2)
+##' obj <-diffAnaSave(Exp1_R25_pept[1:1000], resLimma, "limma", 
+##' condition1, condition2)
 ##' signif <- diffAnaGetSignificant(obj)
 
 diffAnaGetSignificant <- function (obj){
@@ -175,10 +179,11 @@ diffAnaGetSignificant <- function (obj){
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' design <- cbind(cond1=1, cond2 = rep(0,nrow(Biobase::pData(Exp1_R25_pept))))
-##' rownames(design) <- rownames(Biobase::pData(Exp1_R25_pept))
-##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+##' qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
+##' design <- cbind(cond1=1, 
+##' cond2 = rep(0,nrow(Biobase::pData(Exp1_R25_pept[1:1000]))))
+##' rownames(design) <- rownames(Biobase::pData(Exp1_R25_pept[1:1000]))
+##' labels <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Label"]
 ##' indices <- getIndicesConditions(labels, "25fmol", "10fmol")
 ##' design[indices$iCond2,2] <- 1
 ##' diffAna(qData, design)
@@ -214,7 +219,7 @@ diffAna <- function(qData, design){
 ##' data(Exp1_R25_pept)
 ##' condition1 <- '25fmol'
 ##' condition2 <- '10fmol'
-##' wrapper.diffAnaLimma(Exp1_R25_pept, condition1, condition2)
+##' wrapper.diffAnaLimma(Exp1_R25_pept[1:1000], condition1, condition2)
 wrapper.diffAnaLimma <- function(obj, condition1, condition2){
 
 qData <- Biobase::exprs(obj)
@@ -247,9 +252,9 @@ return(p)
 ##' data(Exp1_R25_pept)
 ##' condition1 <- '25fmol'
 ##' condition2 <- '10fmol'
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' samplesData <- Biobase::pData(Exp1_R25_pept)
-##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+##' qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
+##' samplesData <- Biobase::pData(Exp1_R25_pept[1:1000])
+##' labels <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Label"]
 ##' diffAnaLimma(qData, samplesData, labels, condition1, condition2)
 diffAnaLimma <- function(qData, samplesData, labels, condition1, condition2){
 if( sum(is.na(qData == TRUE))>0) {
@@ -273,7 +278,8 @@ design[indices$iCond2, 2] <- 1
 
 
 res <- diffAna(tempexprs, design)
-#res <- limmaCompleteTest(tempexprs, labels, c(1:length(labels)), c(1:length(labels)))
+#res <- limmaCompleteTest(tempexprs, 
+#labels, c(1:length(labels)), c(1:length(labels)))
 
 
 p <- data.frame(P.Value = res$P.Value, 
@@ -303,7 +309,7 @@ return(p)
 ##' data(Exp1_R25_pept)
 ##' condition1 <- '25fmol'
 ##' condition2 <- '10fmol'
-##' wrapper.diffAnaWelch(Exp1_R25_pept, condition1, condition2)
+##' wrapper.diffAnaWelch(Exp1_R25_pept[1:1000], condition1, condition2)
 wrapper.diffAnaWelch <- function(obj, condition1, condition2){
 
 qData <- Biobase::exprs(obj)
@@ -336,8 +342,8 @@ return(p)
 ##' data(Exp1_R25_pept)
 ##' condition1 <- '25fmol'
 ##' condition2 <- '10fmol'
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+##' qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
+##' labels <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Label"]
 ##' diffAnaWelch(qData, labels, condition1, condition2)
 diffAnaWelch <- function(qData, labels, condition1, condition2){
 
@@ -380,8 +386,8 @@ return(p)
 ##' data(Exp1_R25_pept)
 ##' condition1 <- '25fmol'
 ##' condition2 <- '10fmol'
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+##' qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
+##' labels <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Label"]
 ##' diffAnaWelch(qData, labels, condition1, condition2)
 wrapperCalibrationPlot <- function(vPVal, pi0Method="pounds"){
 

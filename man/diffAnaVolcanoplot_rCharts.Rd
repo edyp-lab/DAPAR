@@ -27,7 +27,7 @@ differential analysis.}
 
 \item{clickFunction}{A string that contains a JavaScript function used to show info
 from slots in df. The variable this.index refers to the slot named index and allows to retrieve
-the rigth row to show in the tooltip}
+the right row to show in the tooltip}
 }
 \value{
 An interactive volcanoplot
@@ -45,15 +45,16 @@ appears when the user put the mouse's pointer over a point of the scatter plot.
 library(highcharter) 
 require(DAPARdata)
 data(Exp1_R25_pept)
+obj <- Exp1_R25_pept[1:1000]
 condition1 <- '25fmol'
 condition2 <- '10fmol'
 cond <- c(condition1, condition2)
-keepThat <- mvFilterGetIndices(Exp1_R25_pept, 'wholeMatrix', '6')
-Exp1_R25_pept <- mvFilterFromIndices(Exp1_R25_pept, keepThat, 'Filtered with wholeMatrix (threshold = 6 ).')
-data <- wrapper.diffAnaLimma(Exp1_R25_pept, condition1, condition2)
-df <- data.frame(x=data$logFC, y = -log10(data$P.Value),index = as.character(rownames(Exp1_R25_pept)),stringsAsFactors = FALSE)
+keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', '6')
+obj <- mvFilterFromIndices(obj, keepThat, 'Filtered with wholeMatrix (threshold = 6 ).')
+data <- wrapper.diffAnaLimma(obj, condition1, condition2)
+df <- data.frame(x=data$logFC, y = -log10(data$P.Value),index = as.character(rownames(obj)),stringsAsFactors = FALSE)
 tooltipSlot <- c("Sequence", "Score")
-df <- cbind(df,Biobase::fData(Exp1_R25_pept)[tooltipSlot])
+df <- cbind(df,Biobase::fData(obj)[tooltipSlot])
 colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
 if (ncol(df) > 3){
     colnames(df)[4:ncol(df)] <- paste("tooltip_", colnames(df)[4:ncol(df)], sep="")

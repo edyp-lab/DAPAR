@@ -26,8 +26,10 @@
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples 
 ##' require(DAPARdata)
-##' exprsFile <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
-##' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
+##' exprsFile <- system.file("extdata", "Exp1_R25_pept.txt", 
+##' package="DAPARdata")
+##' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", 
+##' package="DAPARdata")
 ##' metadata = read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
 ##' indExpData <- c(56:61)
 ##' indFData <- c(1:55,62:71)
@@ -147,9 +149,11 @@ writeMSnsetToExcel <- function(obj, filename)
     wb <- openxlsx::createWorkbook(name)
     
     addWorksheet(wb, "Quantitative Data")
-    writeData(wb, sheet=1, cbind(ID = rownames(Biobase::exprs(obj)),Biobase::exprs(obj)), rowNames = TRUE)
+    writeData(wb, sheet=1, cbind(ID = rownames(Biobase::exprs(obj)),
+                                 Biobase::exprs(obj)), rowNames = TRUE)
     #bodyStyleNumber <- createStyle(numFmt = "NUMBER")
-    #addStyle(wb, sheet=1, bodyStyleNumber, rows = 2:nrow(Biobase::exprs(obj)), cols=2:ncol(Biobase::exprs(obj)),gridExpand = TRUE)
+    #addStyle(wb, sheet=1, bodyStyleNumber, rows = 2:nrow(Biobase::exprs(obj)), 
+    #cols=2:ncol(Biobase::exprs(obj)),gridExpand = TRUE)
     
     addWorksheet(wb, "Samples Meta Data")
     writeData(wb, sheet=2, Biobase::pData(obj), rowNames = TRUE)
@@ -157,11 +161,15 @@ writeMSnsetToExcel <- function(obj, filename)
     if (dim(Biobase::fData(obj))[2] != 0){
         addWorksheet(wb, "Feature Meta Data")
         #numericCols <- which(sapply(Biobase::fData(obj), is.numeric))
-        #Biobase::fData(obj)[,numericCols] <- format(Biobase::fData(obj)[,numericCols])
+        #Biobase::fData(obj)[,numericCols] <- 
+        #format(Biobase::fData(obj)[,numericCols])
         
-        writeData(wb, sheet=3, cbind(ID = rownames(Biobase::fData(obj)),Biobase::fData(obj)), rowNames = TRUE)
+        writeData(wb, sheet=3, cbind(ID = rownames(Biobase::fData(obj)),
+                                     Biobase::fData(obj)), rowNames = TRUE)
         #bodyStyleNumber <- createStyle(numFmt = "NUMBER")
-        #addStyle(wb, sheet=3, bodyStyleNumber, rows = 2:nrow(Biobase::exprs(obj)), cols=numericCols, gridExpand = TRUE, stack=TRUE)
+        #addStyle(wb, sheet=3, bodyStyleNumber, 
+        #rows = 2:nrow(Biobase::exprs(obj)), cols=numericCols, 
+        #gridExpand = TRUE, stack=TRUE)
         
     }
 

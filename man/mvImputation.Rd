@@ -22,7 +22,7 @@ a matrix.
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-qData <- Biobase::exprs(Exp1_R25_pept)
+qData <- Biobase::exprs(Exp1_R25_pept)[1:1000]
 mvImputation(qData, "QRILC")
 }
 \author{

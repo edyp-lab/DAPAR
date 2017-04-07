@@ -1,14 +1,19 @@
 
 ##############################################################
-#Fonction realisant un test de contrastes entre conditions a l'aide du package LIMMA.
+#Fonction realisant un test de contrastes entre conditions a l'aide du 
+#package LIMMA.
 #
 #En entree:
-#qData: tableau de donn?es sans valeurs manquantes avec chaque r?plicat en colonne
-#Conditions: indique le num?ro/la lettre de la condition biologique auquel appartient chaque r?plicat
+#qData: tableau de donn?es sans valeurs manquantes avec chaque replicat en 
+#colonne
+#Conditions: indique le num?ro/la lettre de la condition biologique auquel 
+#appartient chaque replicat
 
 #
-#Contrast: indique si l'on souhaite tester chaque condition biologique contre chacune (Contrast=1; par exemple H0:"C1=C2" vs H1:"C1!=C2", etc.) 
-#ou chaque condition contre toutes les autres (Contrast=2; par exemple H0:"C1=(C2+C3)/2" vs H1:"C1!=(C2+C3)/2", etc. si on a 3 conditions ).
+#Contrast: indique si l'on souhaite tester chaque condition biologique 
+#contre chacune (Contrast=1; par exemple H0:"C1=C2" vs H1:"C1!=C2", etc.) 
+#ou chaque condition contre toutes les autres (Contrast=2; par exemple 
+#H0:"C1=(C2+C3)/2" vs H1:"C1!=(C2+C3)/2", etc. si on a 3 conditions ).
 #
 #En sortie :
 #Objet fit renvoye par la fonction eBayes de LIMMA.
@@ -23,11 +28,16 @@
 ##' 
 ##' @title Computes a hierarchical differential analysis
 ##' @param qData A matrix of quantitative data, without any missing values.
-##' @param Conditions A vector of factor which indicates the name of the biological condition for each replicate. 
-##' @param RepBio A vector of factor which indicates the number of the bio rep for each replicate. 
-##' @param RepTech A vector of factor which indicates the number of the tech rep for each replicate.
-##' @param Contrast Indicates if the test consists of the comparison of each biological condition versus 
-##' each of the other ones (Contrast=1; for example H0:"C1=C2" vs H1:"C1!=C2", etc.) 
+##' @param Conditions A vector of factor which indicates the name of the 
+##' biological condition for each replicate. 
+##' @param RepBio A vector of factor which indicates the number of the bio rep 
+##' for each replicate. 
+##' @param RepTech A vector of factor which indicates the number of the tech 
+##' rep for each replicate.
+##' @param Contrast Indicates if the test consists of the comparison of each 
+##' biological condition versus 
+##' each of the other ones (Contrast=1; 
+##' for example H0:"C1=C2" vs H1:"C1!=C2", etc.) 
 ##' or each condition versus all others (Contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
 ##'  H1:"C1!=(C2+C3)/2", etc. if there are three conditions).
 ##' @return fdsfdgfdg
@@ -35,7 +45,7 @@
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' obj <- wrapper.mvImputation(Exp1_R25_pept, "QRILC")
+##' obj <- wrapper.mvImputation(Exp1_R25_pept[1:1000], "QRILC")
 ##' condition1 <- '25fmol'
 ##' condition2 <- '10fmol'
 ##' qData <- Biobase::exprs(obj)
@@ -49,7 +59,8 @@ limmaCompleteTest <- function(qData,Conditions, RepBio, RepTech, Contrast=1){
     
     
     
-    #Compute of the hierarchical design matrix : 2-level case : Bio-Tech or Bio-Analytical or Tech-Analytical .
+    #Compute of the hierarchical design matrix : 2-level case : Bio-Tech or 
+    #Bio-Analytical or Tech-Analytical .
     make.design.2=function(qData, Condition, RepBio){
         #Renome the levels of factor
         levels(Condition)=c(1:length(levels(Condition)))
@@ -81,7 +92,8 @@ limmaCompleteTest <- function(qData,Conditions, RepBio, RepTech, Contrast=1){
     
     
     #######################
-    #Compute of the hierarchical design matrix : 3-levels case : Bio, Tech and Analytical.
+    #Compute of the hierarchical design matrix : 3-levels case : Bio, 
+    #Tech and Analytical.
     make.design.3=function(qData,Condition,RepBio,RepTech){
         #Rename the levels of factor
         levels(Condition)=c(1:length(levels(Condition)))
@@ -117,7 +129,8 @@ limmaCompleteTest <- function(qData,Conditions, RepBio, RepTech, Contrast=1){
     
     
     #######################
-    #Aggregation of columns from the same condition to build the contrast matrix.
+    #Aggregation of columns from the same condition to build the 
+    #contrast matrix.
     aggreg.column.design=function(design,Condition){
         nb.cond=length(levels(Condition))
         name.col=colnames(design)
@@ -128,7 +141,9 @@ limmaCompleteTest <- function(qData,Conditions, RepBio, RepTech, Contrast=1){
             col.name.begin=paste("Condition",i, sep = "")
             nc=nchar(col.name.begin)
             for (j in 1:length(design[1,])){
-                if (substr(name.col[j], 1, nc)==col.name.begin){col.select=c(col.select,j)}
+                if (substr(name.col[j], 1, nc)==col.name.begin){
+                    col.select=c(col.select,j)
+                    }
             }
             name.aggreg=NULL
             for (j in 1:length(col.select)){
@@ -153,7 +168,9 @@ limmaCompleteTest <- function(qData,Conditions, RepBio, RepTech, Contrast=1){
         contra=rep(0,sum(1:(nb.cond-1)))
         for (i in 1:(nb.cond-1)){
             for (j in (i+1):nb.cond){
-                contra[k]=c(paste("(",label.agg[i],")/",nb.agg[i],"-(",label.agg[j],")/",nb.agg[j]))
+                contra[k]=c(paste("(",label.agg[i],")/",
+                                  nb.agg[i],"-(",label.agg[j],")/",
+                                  nb.agg[j]))
                 k=k+1
             }
         }
@@ -200,7 +217,8 @@ limmaCompleteTest <- function(qData,Conditions, RepBio, RepTech, Contrast=1){
         if(lt==lc){
             if (lb==lc){
                 if (lte==lc){  
-                    #CHeck if the number of factors in Conditions is less than the one in Bio.Rep, itself must
+                    #CHeck if the number of factors in Conditions is less than 
+                    #the one in Bio.Rep, itself must
                     #be less than tech.Rep
                     if (length(levels(Conditions))<=length(levels(RepBio))){
                         if (length(levels(RepBio))<=length(levels(RepTech))){
@@ -243,8 +261,10 @@ limmaCompleteTest <- function(qData,Conditions, RepBio, RepTech, Contrast=1){
                                 design=make.design.2(qData,Condition=Conditions,RepBio=RepBio)
                                 #####################
                                 #Compute the contrast matrices
-                                if (Contrast==1){contra=make.contraste.1.1(design,Condition=Conditions);}
-                                if (Contrast==2){contra=make.contraste.2.1(design,Condition=Conditions);}
+                                if (Contrast==1){
+                                    contra=make.contraste.1.1(design,Condition=Conditions);}
+                                if (Contrast==2){
+                                    contra=make.contraste.2.1(design,Condition=Conditions);}
                                 cmtx=makeContrasts(contrasts=contra,levels=make.names(colnames(design)))
                                 fit <- eBayes(contrasts.fit(lmFit(qData, design), cmtx))
                                 #return(fit)
@@ -255,8 +275,10 @@ limmaCompleteTest <- function(qData,Conditions, RepBio, RepTech, Contrast=1){
                                 design=make.design.3(qData,Condition=Conditions,RepBio=RepBio,RepTech=RepTech)
                                 #####################
                                 #Compute the contrast matrices
-                                if (Contrast==1){contra=make.contraste.1.1(design,Condition=Conditions);}
-                                if (Contrast==2){contra=make.contraste.2.1(design,Condition=Conditions);}
+                                if (Contrast==1){
+                                    contra=make.contraste.1.1(design,Condition=Conditions);}
+                                if (Contrast==2){
+                                    contra=make.contraste.2.1(design,Condition=Conditions);}
                                 cmtx=makeContrasts(contrasts=contra,levels=make.names(colnames(design)))
                                 fit <- eBayes(contrasts.fit(lmFit(qData, design), cmtx))
                                 #return(fit)

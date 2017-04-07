@@ -33,9 +33,9 @@ require(DAPARdata)
 data(Exp1_R25_pept)
 condition1 <- '25fmol'
 condition2 <- '10fmol'
-qData <- Biobase::exprs(Exp1_R25_pept)
-samplesData <- Biobase::pData(Exp1_R25_pept)
-labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
+samplesData <- Biobase::pData(Exp1_R25_pept[1:1000])
+labels <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Label"]
 diffAnaLimma(qData, samplesData, labels, condition1, condition2)
 }
 \author{

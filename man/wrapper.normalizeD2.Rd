@@ -49,7 +49,7 @@ by condition.
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-wrapper.normalizeD2(Exp1_R25_pept, "Quantile Centering", "within conditions")
+wrapper.normalizeD2(Exp1_R25_pept[1:1000], "Quantile Centering", "within conditions")
 }
 \author{
 Samuel Wieczorek

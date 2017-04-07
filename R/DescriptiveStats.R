@@ -105,8 +105,8 @@ palette("default")
 }
 
 
-##' This function is a wrapper for using the violinPlotD function with objects of 
-##' class \code{\link{MSnSet}}
+##' This function is a wrapper for using the violinPlotD function with objects 
+##' of class \code{\link{MSnSet}}
 ##' 
 ##' @title Wrapper to the violinPlotD function on an object \code{\link{MSnSet}}
 ##' @param obj An object of class \code{\link{MSnSet}}.
@@ -175,10 +175,12 @@ violinPlotD <- function(qData,
     plot.window(xlim=c(0,ncol(qData)+1),
                 ylim=c(min(na.omit(qData)),max(na.omit(qData))))
     title( ylab="Log (intensity)")
-    for (i in 1:ncol(qData)) {vioplot(na.omit(qData[,i]), col = pal[i], add=TRUE, at=i)}
+    for (i in 1:ncol(qData)) {
+        vioplot(na.omit(qData[,i]), col = pal[i], add=TRUE, at=i)}
     
     
-    axis(2, yaxp = c(floor(min(na.omit(qData))), floor(max(na.omit(qData))), 5), las=1)
+    axis(2, yaxp = c(floor(min(na.omit(qData))), 
+                     floor(max(na.omit(qData))), 5), las=1)
     
      if( !is.null(dataForXAxis))
      {
@@ -188,7 +190,8 @@ violinPlotD <- function(qData,
         for (i in 1:N){
             axis(side=1,
                  at = 1:ncol(qData),
-                 labels = if (is.vector(dataForXAxis) ) dataForXAxis else dataForXAxis[,i],
+                 labels = if (is.vector(dataForXAxis) ) 
+                     {dataForXAxis} else {dataForXAxis[,i]},
                  line= 2*i-1
             )
         }
@@ -496,7 +499,8 @@ axis.limits <- matrix(data = 0, nrow = 4, ncol = n)
 for (i in conditions){
     if (length(which(labels == i)) > 1){
     t <- density(apply(qData[,which(labels == i)], 1, 
-                    function(x) 100*var(x, na.rm=TRUE)/mean(x, na.rm=TRUE)), na.rm=TRUE)
+                    function(x) 100*var(x, na.rm=TRUE)/mean(x, na.rm=TRUE)), 
+                 na.rm=TRUE)
 
     axis.limits[,which(conditions == i)]<- c(min(t$x), max(t$x), min(t$y),
                                             max(t$y))
@@ -630,7 +634,7 @@ plot(d)
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
+##' obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
 ##' wrapper.heatmapD(obj)
 wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="average", 
                             dendro = FALSE){
@@ -657,7 +661,7 @@ heatmapD(qData, distance, cluster, dendro)
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
+##' obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
 ##' qData <- Biobase::exprs(obj)
 ##' heatmapD(qData)
 heatmapD <- function(qData, distance="euclidean", cluster="average", 
@@ -676,7 +680,8 @@ if (!(cluster %in%  paramcluster)){
 }
 
 # if (isTRUE(dendro) && getNumberOfEmptyLines(qData) != 0)  {
-#     stop("Your dataset contains empty lines: the dendrogram cannot be computed.
+#     stop("Your dataset contains empty lines: the dendrogram cannot 
+# be computed.
 #         Please filter or impute missing values before.")
 #     return (NULL)
 # }

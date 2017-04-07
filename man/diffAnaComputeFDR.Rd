@@ -33,7 +33,7 @@ The FDR is computed with the function \code{p.adjust}\{stats\}..
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-obj <- wrapper.mvImputation(Exp1_R25_pept, "QRILC")
+obj <- wrapper.mvImputation(Exp1_R25_pept[1:1000], "QRILC")
 condition1 <- '25fmol'
 condition2 <- '10fmol'
 qData <- Biobase::exprs(obj)

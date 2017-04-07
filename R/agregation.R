@@ -4,29 +4,40 @@
 ##' @title computes the number of proteins that are only defined by 
 ##' specific peptides, shared peptides or a mixture of two.
 ##' @param matUnique The adjacency matrix with only specific peptides.
-##' @param matShared The adjacency matrix with both specific and shared peptides.
+##' @param matShared The adjacency matrix with both specific and 
+##' shared peptides.
 ##' @return A list
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' protID <- "Protein.group.IDs"
-##' MShared <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, FALSE)
-##' MUnique <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, TRUE)
+##' MShared <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
+##' MUnique <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, TRUE)
 ##' getProteinsStats(MUnique,MShared)
 getProteinsStats <- function(matUnique, matShared){
     if (is.null(matUnique) || is.null(matShared) ||
         !is.matrix(matUnique) || !is.matrix(matShared)){return(NULL)}
     
-    t <- setdiff(union(rownames(matUnique), rownames(matShared)), intersect(rownames(matUnique), rownames(matShared)))
+    t <- setdiff(union(rownames(matUnique), rownames(matShared)), 
+                 intersect(rownames(matUnique), rownames(matShared)))
     sharedPeptides <- matShared[t,]
     sharedPeptides <- sharedPeptides[,-which(colSums(sharedPeptides)==0)]
-    protOnlyUnique <- setdiff(union(colnames(sharedPeptides), colnames(matShared)), intersect(colnames(sharedPeptides), colnames(matShared)))
+    protOnlyUnique <- setdiff(union(colnames(sharedPeptides), 
+                                    colnames(matShared)), 
+                              intersect(colnames(sharedPeptides), 
+                                        colnames(matShared)))
     
-    protOnlyShared <- setdiff(union(colnames(matUnique), colnames(matShared)), intersect(colnames(matUnique), colnames(matShared)))
+    protOnlyShared <- setdiff(union(colnames(matUnique), 
+                                    colnames(matShared)), 
+                              intersect(colnames(matUnique), 
+                                        colnames(matShared)))
     a <- union(protOnlyUnique, protOnlyShared)
     b <- colnames(matShared)
-    protMix <- setdiff(union(union(protOnlyUnique, protOnlyShared),colnames(matShared)),intersect(union(protOnlyUnique, protOnlyShared),colnames(matShared)))
+    protMix <- setdiff(union(union(protOnlyUnique, protOnlyShared),
+                             colnames(matShared)),
+                       intersect(union(protOnlyUnique, protOnlyShared),
+                                 colnames(matShared)))
 
     return (list(protOnlyUniquePep =protOnlyUnique,
                   protOnlySharedPep =protOnlyShared,
@@ -52,8 +63,8 @@ getProteinsStats <- function(matUnique, matShared){
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' protID <- "Protein.group.IDs"
-##' M <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, FALSE)
-##' data <- Biobase::fData(Exp1_R25_pept)
+##' M <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
+##' data <- Biobase::fData(Exp1_R25_pept[1:1000])
 ##' name <- "organism"
 ##' BuildColumnToProteinDataset(data, M, name )
 BuildColumnToProteinDataset <- function(peptideData, matAdj, columnName){
@@ -84,7 +95,7 @@ return(newCol)
 ##' library(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' protID <- "Protein.group.IDs"
-##' M <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, FALSE)
+##' M <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
 ##' CountPep(M)
 CountPep <- function (M) {
     z <- M
@@ -105,7 +116,7 @@ CountPep <- function (M) {
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' mat <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein.group.IDs")
+##' mat <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein.group.IDs")
 ##' GraphPepProt(mat)
 GraphPepProt <- function(mat){
     if (is.null(mat)){return (NULL)} 
@@ -143,7 +154,7 @@ GraphPepProt <- function(mat){
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept) 
-##' BuildAdjacencyMatrix(Exp1_R25_pept, "Protein.group.IDs", TRUE)
+##' BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein.group.IDs", TRUE)
 BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
     
     data <- Biobase::exprs(obj.pep)
@@ -180,8 +191,8 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' protID <- "Protein.group.IDs"
-##' M <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, FALSE)
-##' SumPeptides(M, Biobase::exprs(Exp1_R25_pept))
+##' M <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
+##' SumPeptides(M, Biobase::exprs(Exp1_R25_pept[1:1000]))
 SumPeptides <- function(matAdj, expr){
     expr <- expr[rownames(matAdj),]
     expr[is.na(expr)] <- 0
@@ -213,8 +224,8 @@ SumPeptides <- function(matAdj, expr){
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' protID <- "Protein.group.IDs"
-##' matAdj <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, FALSE)
-##' MeanPeptides(matAdj, Biobase::exprs(Exp1_R25_pept))
+##' matAdj <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
+##' MeanPeptides(matAdj, Biobase::exprs(Exp1_R25_pept[1:1000]))
 MeanPeptides <- function(matAdj, expr){
     expr <- expr[rownames(matAdj),]
     expr[is.na(expr)] <- 0
@@ -249,8 +260,8 @@ MeanPeptides <- function(matAdj, expr){
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' protID <- "Protein.group.IDs"
-##' matAdj <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, FALSE)
-##' TopnPeptides(matAdj, Biobase::exprs(Exp1_R25_pept), 3)
+##' matAdj <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
+##' TopnPeptides(matAdj, Biobase::exprs(Exp1_R25_pept[1:1000]), 3)
 TopnPeptides <-function(matAdj,expr,n){
     
     #Get the indices of the n peptides with the best median
@@ -281,7 +292,8 @@ TopnPeptides <-function(matAdj,expr,n){
 #     return(A)
 #     }
 # 
-#     time1 <- system.time(t <- mapply(test, split(matAdj, col(matAdj)), split(xmed, col(xmed)),n))
+#     time1 <- system.time(t <- mapply(test, 
+    #split(matAdj, col(matAdj)), split(xmed, col(xmed)),n))
 # 
 # print(time0)
 # print(time1)
@@ -312,9 +324,11 @@ TopnPeptides <-function(matAdj,expr,n){
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' protID <- "Protein.group.IDs"
-##' mat <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, TRUE)
-##' pepAgregate(Exp1_R25_pept, protID, "sum overall", mat)
-pepAgregate <- function (obj.pep, protID, method="sum overall", matAdj=NULL, n=NULL){
+##' mat <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, TRUE)
+##' pepAgregate(Exp1_R25_pept[1:1000], protID, "sum overall", mat)
+pepAgregate <- function (obj.pep, protID, method="sum overall", 
+                         matAdj=NULL, 
+                         n=NULL){
     #Check the validity of parameters
     parammethod <- c("sum overall", "mean", "sum on top n") 
     if (sum(is.na(match(method, parammethod) == TRUE)) > 0){return (NULL)}
@@ -344,7 +358,9 @@ pepAgregate <- function (obj.pep, protID, method="sum overall", matAdj=NULL, n=N
     protId <- res$idprot
     fd <- data.frame(protId, pep)
     
-    obj <- MSnSet(exprs = log2(Mp), fData = fd, pData = Biobase::pData(obj.pep))
+    obj <- MSnSet(exprs = log2(Mp), 
+                  fData = fd, 
+                  pData = Biobase::pData(obj.pep))
     obj@experimentData@other  <- list(obj@experimentData@other,
                                       typeOfData ="protein")
     

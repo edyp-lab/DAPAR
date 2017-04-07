@@ -31,8 +31,8 @@ a MSnSet object (peptides)
 require(DAPARdata)
 data(Exp1_R25_pept)
 protID <- "Protein.group.IDs"
-mat <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, TRUE)
-pepAgregate(Exp1_R25_pept, protID, "sum overall", mat)
+mat <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, TRUE)
+pepAgregate(Exp1_R25_pept[1:1000], protID, "sum overall", mat)
 }
 \author{
 Alexia Dorffer, Samuel Wieczorek

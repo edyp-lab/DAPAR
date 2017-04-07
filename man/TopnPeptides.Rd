@@ -26,8 +26,8 @@ intensities of their n best peptides.
 require(DAPARdata)
 data(Exp1_R25_pept)
 protID <- "Protein.group.IDs"
-matAdj <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, FALSE)
-TopnPeptides(matAdj, Biobase::exprs(Exp1_R25_pept), 3)
+matAdj <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
+TopnPeptides(matAdj, Biobase::exprs(Exp1_R25_pept[1:1000]), 3)
 }
 \author{
 Alexia Dorffer

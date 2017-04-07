@@ -36,7 +36,7 @@ by condition.
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-wrapper.normalizeD(Exp1_R25_pept, "Median Centering", "within conditions")
+wrapper.normalizeD(Exp1_R25_pept[1:1000], "Median Centering", "within conditions")
 }
 \author{
 Alexia Dorffer

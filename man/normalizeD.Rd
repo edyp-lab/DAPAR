@@ -37,8 +37,8 @@ by condition.
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-qData <- Biobase::exprs(Exp1_R25_pept)
-labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
+labels <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Label"]
 normalizeD(qData, labels, "Median Centering", "within conditions")
 }
 \author{

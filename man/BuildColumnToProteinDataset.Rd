@@ -27,8 +27,8 @@ by using the previous peptide dataset.
 require(DAPARdata)
 data(Exp1_R25_pept)
 protID <- "Protein.group.IDs"
-M <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, FALSE)
-data <- Biobase::fData(Exp1_R25_pept)
+M <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
+data <- Biobase::fData(Exp1_R25_pept[1:1000])
 name <- "organism"
 BuildColumnToProteinDataset(data, M, name )
 }

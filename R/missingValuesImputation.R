@@ -10,7 +10,7 @@
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' wrapper.mvImputation(Exp1_R25_pept, "QRILC")
+##' wrapper.mvImputation(Exp1_R25_pept[1:1000], "QRILC")
 wrapper.mvImputation <- function(obj, method){
 qData <- Biobase::exprs(obj)
 Biobase::exprs(obj) <- mvImputation(qData, method)
@@ -36,7 +36,7 @@ return(obj)
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' qData <- Biobase::exprs(Exp1_R25_pept)
+##' qData <- Biobase::exprs(Exp1_R25_pept)[1:1000]
 ##' mvImputation(qData, "QRILC")
 mvImputation <- function(qData, method){
 #Check parameters
@@ -95,7 +95,7 @@ return (exprs)
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' dat <- mvFilter(Exp1_R25_pept, type="allCond", th = 1)
+##' dat <- mvFilter(Exp1_R25_pept[1:1000], type="allCond", th = 1)
 ##' dat <- wrapper.impute.pa(dat)
 wrapper.impute.pa <- function(obj, q.min = 0.025){
     cond <- as.factor(Biobase::pData(obj)$Label)
@@ -136,7 +136,7 @@ wrapper.impute.pa <- function(obj, q.min = 0.025){
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' dat <- mvFilter(Exp1_R25_pept, type="allCond", th = 1)
+##' dat <- mvFilter(Exp1_R25_pept[1:1000], type="allCond", th = 1)
 ##' dat <- wrapper.dapar.impute.mi(dat, nb.iter=1)
 wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, 
                                nknn = 15, selec = 600, siz = 500, weight = 1, ind.comp = 1, 
@@ -250,7 +250,7 @@ translatedRandomBeta <- function(n, min, max, param1=3, param2=1){
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' wrapper.impute.pa2(Exp1_R25_pept, distribution="beta")
+##' wrapper.impute.pa2(Exp1_R25_pept[1:1000], distribution="beta")
 wrapper.impute.pa2 <- function (obj, q.min = 0, q.norm = 3, eps = 0, distribution = "unif"){
     tab <- Biobase::exprs(obj)
     conditions <- as.factor(Biobase::pData(obj)$Label)
@@ -290,7 +290,7 @@ wrapper.impute.pa2 <- function (obj, q.min = 0, q.norm = 3, eps = 0, distributio
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' wrapper.impute.pa2(Exp1_R25_pept, distribution="beta")
+##' wrapper.impute.pa2(Exp1_R25_pept[1:1000], distribution="beta")
 impute.pa2 <- function (tab, conditions, q.min = 0, q.norm = 3, eps = 0, distribution = "unif"){
     tab_imp = tab
     qu = apply(tab_imp, 2, quantile, na.rm = TRUE, q.min)

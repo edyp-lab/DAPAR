@@ -14,7 +14,8 @@ getPourcentageOfMV <- function(obj){
 NA.count<-apply(data.frame(Biobase::exprs(obj)), 2, 
                 function(x) length(which(is.na(data.frame(x))==TRUE)) )
 pourcentage <- 100 * round(sum(NA.count)
-                            /(dim(Biobase::exprs(obj))[1]*dim(Biobase::exprs(obj))[2]), 
+                            /(dim(Biobase::exprs(obj))[1]*
+                                  dim(Biobase::exprs(obj))[2]), 
                             digits=4)
 
 return(pourcentage)
@@ -61,7 +62,8 @@ return(count)
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' pref <- "+"
-##' proportionConRev(Exp1_R25_pept, "Potential.contaminant", pref, "Reverse", pref)
+##' proportionConRev(Exp1_R25_pept, "Potential.contaminant", pref, 
+##' "Reverse", pref)
 proportionConRev <- function(obj, idContaminants=NULL, 
                             prefixContaminants=NULL, 
                             idReverse=NULL, prefixReverse=NULL){

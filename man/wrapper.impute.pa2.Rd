@@ -36,7 +36,7 @@ This method is a wrapper to the function \code{impute.pa} from the package
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-wrapper.impute.pa2(Exp1_R25_pept, distribution="beta")
+wrapper.impute.pa2(Exp1_R25_pept[1:1000], distribution="beta")
 }
 \author{
 Thomas Burger, Samuel Wieczorek

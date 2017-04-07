@@ -24,8 +24,8 @@ intensities of their peptides.
 require(DAPARdata)
 data(Exp1_R25_pept)
 protID <- "Protein.group.IDs"
-M <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, FALSE)
-SumPeptides(M, Biobase::exprs(Exp1_R25_pept))
+M <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
+SumPeptides(M, Biobase::exprs(Exp1_R25_pept[1:1000]))
 }
 \author{
 Alexia Dorffer

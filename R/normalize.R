@@ -23,7 +23,7 @@
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' wrapper.normalizeD(Exp1_R25_pept, "Median Centering", "within conditions")
+##' wrapper.normalizeD(Exp1_R25_pept[1:1000], "Median Centering", "within conditions")
 wrapper.normalizeD <- function(obj, family, method){
 
 qData <- Biobase::exprs(obj)
@@ -67,8 +67,8 @@ return(obj)
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+##' qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
+##' labels <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Label"]
 ##' normalizeD(qData, labels, "Median Centering", "within conditions")
 normalizeD <- function(qData, labels, family, method){
 #Verification des parametres
@@ -230,7 +230,7 @@ return(.temp)
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' wrapper.normalizeD2(Exp1_R25_pept, "Quantile Centering", "within conditions")
+##' wrapper.normalizeD2(Exp1_R25_pept[1:1000], "Quantile Centering", "within conditions")
 wrapper.normalizeD2 <- function(obj, method, type, scaling=FALSE, quantile=0.15){
     
     qData <- Biobase::exprs(obj)
@@ -303,8 +303,8 @@ wrapper.normalizeD2 <- function(obj, method, type, scaling=FALSE, quantile=0.15)
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+##' qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
+##' labels <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Label"]
 ##' normalizeD2(qData, labels, "Quantile Centering", "within conditions", quantile = 0.15)
 normalizeD2 <- function(qData, labels, method, type, scaling=FALSE, quantile=0.15){
     #Check of parameters

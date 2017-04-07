@@ -29,7 +29,7 @@ Heatmap of the quantitative proteomic data of a \code{\link{MSnSet}} object
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
+obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
 qData <- Biobase::exprs(obj)
 heatmapD(qData)
 }

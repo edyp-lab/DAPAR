@@ -23,8 +23,8 @@ specific peptides, shared peptides or a mixture of two.
 require(DAPARdata)
 data(Exp1_R25_pept)
 protID <- "Protein.group.IDs"
-MShared <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, FALSE)
-MUnique <- BuildAdjacencyMatrix(Exp1_R25_pept, protID, TRUE)
+MShared <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
+MUnique <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, TRUE)
 getProteinsStats(MUnique,MShared)
 }
 \author{

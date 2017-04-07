@@ -30,7 +30,7 @@ require(DAPARdata)
 data(Exp1_R25_pept)
 condition1 <- '25fmol'
 condition2 <- '10fmol'
-wrapper.diffAnaWelch(Exp1_R25_pept, condition1, condition2)
+wrapper.diffAnaWelch(Exp1_R25_pept[1:1000], condition1, condition2)
 }
 \author{
 Alexia Dorffer
