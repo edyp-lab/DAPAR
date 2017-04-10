@@ -5,10 +5,29 @@ test <- Exp1_R25_prot[1:10]
 
 test_that("wrapper boxplot", {
     types <- c("Label","Analyt.Rep")
-    t <- wrapper.boxPlotD(test, types)
+    t <- wrapper.boxPlotD(test, types,group2Color="Replicate")
+    expect_is(t, "character")
+    expect_equal(t, c("black", "red", "green3", "blue", "cyan", "magenta", "yellow", "gray"))
+    dev.off()
+})
+
+test_that("wrapper boxplot", {
+    types <- c("Label","Analyt.Rep")
+    t <- wrapper.boxPlotD(test, types,group2Color="Condition")
     expect_is(t, "character")
     expect_equal(length(t), 8)
-    expect_equal(t[8], "gray40")
+    expect_equal(t, c("#1B9E77", "#D95F02", "#7570B3", "#E7298A", "#66A61E", "#E6AB02", "#A6761D", "gray40"))
+    dev.off()
+})
+
+test_that("boxplotD", {
+    labels <- Biobase::pData(test)[,"Label"]
+    types <- c("Label","Analyt.Rep")
+    dataForXAxis <- Biobase::pData(test)[,types]
+    t <- boxPlotD(exprs(test), dataForXAxis, labels,group2Color="Condition")
+    expect_is(t, "character")
+    expect_equal(length(t), 8)
+    expect_equal(t, c("#1B9E77", "#D95F02", "#7570B3", "#E7298A", "#66A61E", "#E6AB02", "#A6761D", "gray40"))
     dev.off()
 })
 
@@ -17,10 +36,10 @@ test_that("boxplotD", {
     labels <- Biobase::pData(test)[,"Label"]
     types <- c("Label","Analyt.Rep")
     dataForXAxis <- Biobase::pData(test)[,types]
-    t <- boxPlotD(exprs(test), dataForXAxis, labels)
+    t <- boxPlotD(exprs(test), dataForXAxis, labels,group2Color="Replicate")
     expect_is(t, "character")
     expect_equal(length(t), 8)
-    expect_equal(t[8], "gray40")
+    expect_equal(t, c("black", "red", "green3", "blue", "cyan", "magenta", "yellow", "gray"))
     dev.off()
 })
 
@@ -51,10 +70,32 @@ test_that("wrapper violinPlot", {
     require(vioplot)
     require(sm)
     types <- c("Label","Analyt.Rep")
-    t <- wrapper.violinPlotD(test, types)
+    t <- wrapper.violinPlotD(test, types,group2Color="Condition")
     expect_is(t, "character")
     expect_equal(length(t), 8)
-    expect_equal(t[8], "gray40")
+    expect_equal(t, c("#1B9E77", "#D95F02", "#7570B3", "#E7298A", "#66A61E", "#E6AB02", "#A6761D", "gray40"))
+    dev.off()
+})
+
+test_that("wrapper violinPlot", {
+    require(vioplot)
+    require(sm)
+    types <- c("Label","Analyt.Rep")
+    t <- wrapper.violinPlotD(test, types,group2Color="Replicate")
+    expect_is(t, "character")
+    expect_equal(length(t), 8)
+    expect_equal(t, c("black", "red", "green3", "blue", "cyan", "magenta", "yellow", "gray"))
+    dev.off()
+})
+
+test_that("violinPlotD", {
+    labels <- Biobase::pData(test)[,"Label"]
+    types <- c("Label","Analyt.Rep")
+    dataForXAxis <- Biobase::pData(test)[,types]
+    t <- violinPlotD(exprs(test), dataForXAxis, labels,group2Color="Condition")
+    expect_is(t, "character")
+    expect_equal(length(t), 8)
+    expect_equal(t, c("#1B9E77", "#D95F02", "#7570B3", "#E7298A", "#66A61E", "#E6AB02", "#A6761D", "gray40"))
     dev.off()
 })
 
@@ -63,14 +104,12 @@ test_that("violinPlotD", {
     labels <- Biobase::pData(test)[,"Label"]
     types <- c("Label","Analyt.Rep")
     dataForXAxis <- Biobase::pData(test)[,types]
-    t <- violinPlotD(exprs(test), dataForXAxis, labels)
-    expect_is(t, "character")
-    expect_equal(length(t), 8)
-    expect_equal(t[8], "gray40")
-    dev.off()
+    t <- violinPlotD(exprs(test), dataForXAxis, labels,group2Color="Replicate")
+expect_is(t, "character")
+expect_equal(length(t), 8)
+expect_equal(t, c("black", "red", "green3", "blue", "cyan", "magenta", "yellow", "gray"))
+dev.off()
 })
-
-
 
 
 test_that("wrapper.compareNormalizationD", {

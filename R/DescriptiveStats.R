@@ -61,7 +61,8 @@ boxPlotD <- function(qData,
 
 if (group2Color == "Condition") {
     pal <- getPaletteForLabels(labels)
-    }else { pal <- getPaletteForReplicates(ncol(qData))}
+}else { 
+        pal <- getPaletteForReplicates(ncol(qData))}
 
     if (is.null(labels)){size <- 2}else{size <- 2*length(labels)}
    #par(mar=c(size,4,2,2))
