@@ -23,7 +23,7 @@ in the dataset (see the slot \code{'Label'} in the \code{pData()} table)
 require(DAPARdata)
 data(Exp1_R25_pept)
 labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-CVDistD(Exp1_R25_pept)
+CVDistD(Biobase::exprs(Exp1_R25_pept), labels)
 }
 \seealso{
 \code{\link{densityPlotD}}.

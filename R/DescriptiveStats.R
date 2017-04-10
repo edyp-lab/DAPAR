@@ -335,6 +335,10 @@ palette("default")
 
 
 
+
+
+
+
 ##' This function is a wrapper for using the densityPlotD function with 
 ##' objects of class \code{\link{MSnSet}}
 ##' 
@@ -489,7 +493,7 @@ CVDistD(qData, labels)
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-##' CVDistD(Exp1_R25_pept)
+##' CVDistD(Biobase::exprs(Exp1_R25_pept), labels)
 CVDistD <- function(qData, labels=NULL){
     
 if (is.null(labels)) {return(NULL)}
@@ -747,7 +751,7 @@ if (!(cluster %in%  paramcluster)){
 ##' data(Exp1_R25_pept)
 ##' obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
 ##' qData <- Biobase::exprs(obj)
-##' heatmapD(qData)
+##' heatmap.DAPAR(qData)
 heatmap.DAPAR <- 
     function (x, 
               col = heat.colors(100),

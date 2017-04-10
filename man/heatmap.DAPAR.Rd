@@ -42,7 +42,7 @@ require(DAPARdata)
 data(Exp1_R25_pept)
 obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
 qData <- Biobase::exprs(obj)
-heatmapD(qData)
+heatmap.DAPAR(qData)
 }
 \author{
 Samuel Wieczorek

@@ -25,7 +25,8 @@ based on \code{\link{limma}} functions.
 require(DAPARdata)
 data(Exp1_R25_pept)
 qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
-design <- cbind(cond1=1, cond2 = rep(0,nrow(Biobase::pData(Exp1_R25_pept[1:1000]))))
+design <- cbind(cond1=1, 
+cond2 = rep(0,nrow(Biobase::pData(Exp1_R25_pept[1:1000]))))
 rownames(design) <- rownames(Biobase::pData(Exp1_R25_pept[1:1000]))
 labels <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Label"]
 indices <- getIndicesConditions(labels, "25fmol", "10fmol")

@@ -10,7 +10,8 @@ getProteinsStats(matUnique, matShared)
 \arguments{
 \item{matUnique}{The adjacency matrix with only specific peptides.}
 
-\item{matShared}{The adjacency matrix with both specific and shared peptides.}
+\item{matShared}{The adjacency matrix with both specific and 
+shared peptides.}
 }
 \value{
 A list

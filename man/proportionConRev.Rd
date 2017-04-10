@@ -28,7 +28,8 @@ Plots a barplot of proportion of contaminants and reverse
 require(DAPARdata)
 data(Exp1_R25_pept)
 pref <- "+"
-proportionConRev(Exp1_R25_pept, "Potential.contaminant", pref, "Reverse", pref)
+proportionConRev(Exp1_R25_pept, "Potential.contaminant", pref, 
+"Reverse", pref)
 }
 \author{
 Samuel Wieczorek

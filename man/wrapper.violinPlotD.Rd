@@ -20,8 +20,8 @@ color per replicate (value "Replicate"). Default value is by Condition.}
 A violin plot
 }
 \description{
-This function is a wrapper for using the violinPlotD function with objects of 
-class \code{\link{MSnSet}}
+This function is a wrapper for using the violinPlotD function with objects 
+of class \code{\link{MSnSet}}
 }
 \examples{
 require(DAPARdata)

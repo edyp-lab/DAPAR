@@ -22,8 +22,10 @@ require(DAPARdata)
 data(Exp1_R25_pept)
 condition1 <- "25fmol"
 condition2 <- "10fmol"
-resLimma <- wrapper.diffAnaLimma(Exp1_R25_pept[1:1000], condition1, condition2)
-obj <-diffAnaSave(Exp1_R25_pept[1:1000], resLimma, "limma", condition1, condition2)
+resLimma <- wrapper.diffAnaLimma(Exp1_R25_pept[1:1000], 
+condition1, condition2)
+obj <-diffAnaSave(Exp1_R25_pept[1:1000], resLimma, "limma", 
+condition1, condition2)
 signif <- diffAnaGetSignificant(obj)
 }
 \author{

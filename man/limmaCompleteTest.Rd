@@ -9,14 +9,19 @@ limmaCompleteTest(qData, Conditions, RepBio, RepTech, Contrast = 1)
 \arguments{
 \item{qData}{A matrix of quantitative data, without any missing values.}
 
-\item{Conditions}{A vector of factor which indicates the name of the biological condition for each replicate.}
+\item{Conditions}{A vector of factor which indicates the name of the 
+biological condition for each replicate.}
 
-\item{RepBio}{A vector of factor which indicates the number of the bio rep for each replicate.}
+\item{RepBio}{A vector of factor which indicates the number of the bio rep 
+for each replicate.}
 
-\item{RepTech}{A vector of factor which indicates the number of the tech rep for each replicate.}
+\item{RepTech}{A vector of factor which indicates the number of the tech 
+rep for each replicate.}
 
-\item{Contrast}{Indicates if the test consists of the comparison of each biological condition versus 
-each of the other ones (Contrast=1; for example H0:"C1=C2" vs H1:"C1!=C2", etc.) 
+\item{Contrast}{Indicates if the test consists of the comparison of each 
+biological condition versus 
+each of the other ones (Contrast=1; 
+for example H0:"C1=C2" vs H1:"C1!=C2", etc.) 
 or each condition versus all others (Contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
  H1:"C1!=(C2+C3)/2", etc. if there are three conditions).}
 }

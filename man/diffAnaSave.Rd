@@ -48,8 +48,10 @@ require(DAPARdata)
 data(Exp1_R25_pept)
 condition1 <- '25fmol'
 condition2 <- '10fmol'
-limma <- wrapper.diffAnaLimma(Exp1_R25_pept[1:1000], condition1, condition2)
-obj <- diffAnaSave(Exp1_R25_pept[1:1000], limma, "limma", condition1, condition2)
+limma <- wrapper.diffAnaLimma(Exp1_R25_pept[1:1000], 
+condition1, condition2)
+obj <- diffAnaSave(Exp1_R25_pept[1:1000], limma, "limma", 
+condition1, condition2)
 }
 \author{
 Alexia Dorffer, Samuel Wieczorek

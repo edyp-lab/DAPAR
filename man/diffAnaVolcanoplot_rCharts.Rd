@@ -12,9 +12,10 @@ diffAnaVolcanoplot_rCharts(df, threshold_pVal = 1e-60, threshold_logFC = 0,
 x : a vector of the log(fold change) values of the differential analysis,
 y : a vector of the p-value values returned by the differential analysis.
 index : a vector of the rowanmes of the data.
-This dataframe must has been built with the option stringsAsFactors set to FALSE.
-There may be additional slots which will be used to show informations in the tooltip. The name of these
-slots must begin with the prefix "tooltip_". It will be automatically removed in the plot.}
+This dataframe must has been built with the option stringsAsFactors set 
+to FALSE. There may be additional slots which will be used to show 
+informations in the tooltip. The name of these slots must begin with the 
+prefix "tooltip_". It will be automatically removed in the plot.}
 
 \item{threshold_pVal}{A floating number which represents the p-value that
 separates differential and non-differential data.}
@@ -25,9 +26,9 @@ Fold Change that separates differential and non-differential data.}
 \item{conditions}{A list of the names of condition 1 and 2 used for the
 differential analysis.}
 
-\item{clickFunction}{A string that contains a JavaScript function used to show info
-from slots in df. The variable this.index refers to the slot named index and allows to retrieve
-the right row to show in the tooltip}
+\item{clickFunction}{A string that contains a JavaScript function used to 
+show info from slots in df. The variable this.index refers to the slot 
+named index and allows to retrieve the right row to show in the tooltip}
 }
 \value{
 An interactive volcanoplot
@@ -38,8 +39,9 @@ Typically, the log of Fold Change is represented on the X-axis and the
 log10 of the p-value is drawn on the Y-axis. When the \code{threshold_pVal}
 and the \code{threshold_logFC} are set, two lines are drawn respectively on
 the y-axis and the X-axis to visually distinguish between differential and
-non differential data. With the use of the package Highcharter, a customizable tooltip 
-appears when the user put the mouse's pointer over a point of the scatter plot.
+non differential data. With the use of the package Highcharter, a 
+customizable tooltip appears when the user put the mouse's pointer over 
+a point of the scatter plot.
 }
 \examples{
 library(highcharter) 
@@ -50,17 +52,26 @@ condition1 <- '25fmol'
 condition2 <- '10fmol'
 cond <- c(condition1, condition2)
 keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', '6')
-obj <- mvFilterFromIndices(obj, keepThat, 'Filtered with wholeMatrix (threshold = 6 ).')
+obj <- mvFilterFromIndices(obj, keepThat, 
+       'Filtered with wholeMatrix (threshold = 6 ).')
 data <- wrapper.diffAnaLimma(obj, condition1, condition2)
-df <- data.frame(x=data$logFC, y = -log10(data$P.Value),index = as.character(rownames(obj)),stringsAsFactors = FALSE)
+df <- data.frame(x=data$logFC, 
+y = -log10(data$P.Value),
+index = as.character(rownames(obj)),
+stringsAsFactors = FALSE)
 tooltipSlot <- c("Sequence", "Score")
 df <- cbind(df,Biobase::fData(obj)[tooltipSlot])
 colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
 if (ncol(df) > 3){
-    colnames(df)[4:ncol(df)] <- paste("tooltip_", colnames(df)[4:ncol(df)], sep="")
+    colnames(df)[4:ncol(df)] <- 
+    paste("tooltip_", colnames(df)[4:ncol(df)], sep="")
 }
-hc_clickFunction <- JS("function(event) {Shiny.onInputChange('eventPointClicked', [this.index]);}")
-diffAnaVolcanoplot_rCharts(df,threshold_logFC = 1,threshold_pVal = 3,conditions = cond,clickFunction=hc_clickFunction) 
+hc_clickFunction <- JS("function(event) {
+Shiny.onInputChange('eventPointClicked', [this.index]);}")
+diffAnaVolcanoplot_rCharts(df,threshold_logFC = 1,
+threshold_pVal = 3,
+conditions = cond,
+clickFunction=hc_clickFunction) 
 }
 \author{
 Samuel Wieczorek
