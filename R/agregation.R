@@ -74,7 +74,7 @@ newCol <- rep("", nbProt)
 for (p in 1:nbProt){
     listeIndicePeptides <- which(matAdj[,p] == 1)
     listeData <- unique(peptideData[listeIndicePeptides,columnName])
-    newCol[p] <- paste(listeData, collapse = ",")
+    newCol[p] <- paste(listeData, collapse = ", ")
 }
 return(newCol)
 }
