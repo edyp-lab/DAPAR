@@ -6,10 +6,9 @@
 \usage{
 wrapper.dapar.impute.mi(obj, nb.iter = 3, nknn = 15, selec = 600,
   siz = 500, weight = 1, ind.comp = 1, progress.bar = TRUE,
-  x.min = 10, x.max = 35, x.step.mod = 300, x.step.pi = 300,
-  nb.rei = 100, method = 4, gridsize = 300, q = 0.95, q.min = 0,
-  q.norm = 3, eps = 0, methodi = "slsa", lapala = TRUE,
-  distribution = "unif")
+  x.step.mod = 300, x.step.pi = 300, nb.rei = 100, method = 4,
+  gridsize = 300, q = 0.95, q.min = 0, q.norm = 3, eps = 0,
+  methodi = "slsa", lapala = TRUE, distribution = "unif")
 }
 \arguments{
 \item{obj}{An object of class \code{\link{MSnSet}}.}
@@ -27,10 +26,6 @@ wrapper.dapar.impute.mi(obj, nb.iter = 3, nknn = 15, selec = 600,
 \item{ind.comp}{Same as the function \code{mi.mix} in the package \code{imp4p}}
 
 \item{progress.bar}{Same as the function \code{mi.mix} in the package \code{imp4p}}
-
-\item{x.min}{Same as the function \code{estim.mix} in the package \code{imp4p}}
-
-\item{x.max}{Same as the function \code{estim.mix} in the package \code{imp4p}}
 
 \item{x.step.mod}{Same as the function \code{estim.mix} in the package \code{imp4p}}
 

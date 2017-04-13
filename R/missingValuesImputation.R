@@ -117,8 +117,6 @@ wrapper.impute.pa <- function(obj, q.min = 0.025){
 ##' @param weight Same as the function \code{mi.mix} in the package \code{imp4p}
 ##' @param ind.comp Same as the function \code{mi.mix} in the package \code{imp4p}
 ##' @param progress.bar Same as the function \code{mi.mix} in the package \code{imp4p}
-##' @param x.min Same as the function \code{estim.mix} in the package \code{imp4p}
-##' @param x.max Same as the function \code{estim.mix} in the package \code{imp4p}
 ##' @param x.step.mod Same as the function \code{estim.mix} in the package \code{imp4p}
 ##' @param x.step.pi Same as the function \code{estim.mix} in the package \code{imp4p}
 ##' @param nb.rei Same as the function \code{estim.mix} in the package \code{imp4p}
@@ -140,7 +138,7 @@ wrapper.impute.pa <- function(obj, q.min = 0.025){
 ##' dat <- wrapper.dapar.impute.mi(dat, nb.iter=1)
 wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, 
                                nknn = 15, selec = 600, siz = 500, weight = 1, ind.comp = 1, 
-                               progress.bar = TRUE, x.min = 10, x.max = 35, x.step.mod = 300, 
+                               progress.bar = TRUE, x.step.mod = 300, 
                                x.step.pi = 300, nb.rei = 100, method = 4, gridsize = 300, 
                                q = 0.95, q.min = 0, q.norm = 3, eps = 0, methodi = "slsa",
                                lapala = TRUE,
@@ -162,7 +160,7 @@ wrapper.dapar.impute.mi <- function (obj, nb.iter = 3,
         cat(paste("\n 2/ Estimation of the mixture model in each sample... \n  "))
     }
     res = estim.mix(tab = tab, tab.imp = dat.slsa, conditions = conditions, 
-                    x.min = x.min, x.max = x.max, x.step.mod = x.step.mod, 
+                    x.step.mod = x.step.mod, 
                     x.step.pi = x.step.pi, nb.rei = nb.rei, method = method, 
                     gridsize = gridsize)
     

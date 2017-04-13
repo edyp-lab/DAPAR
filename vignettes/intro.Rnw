@@ -12,7 +12,7 @@
 \headsep=0in
 
 \begin{document}
-\SweaveOpts{concordance=TRUE}
+%\SweaveOpts{concordance=TRUE}
 \title{DAPAR\\(Differential Analysis for Proteomics Abundance with R)}
 \author{Samuel Wieczorek, Florence Combes, Thomas Burger}
 \date{29 July 2015}
