@@ -29,7 +29,8 @@
 diffAnaComputeFDR <- function(data,threshold_PVal=0, threshold_LogFC = 0, 
                             pi0Method=1){
     upItems <- which(abs(data$logFC) >= threshold_LogFC)
-    selectedItems <- data[upItems,]$P.Value
+    
+    selectedItems <- data[upItems,]$P_Value
 
     padj <- adjust.p(selectedItems,  pi0Method)
     
@@ -85,7 +86,8 @@ diffAnaSave <- function (obj, data, method="limma", condition1, condition2,
     
     # temp <- obj
     #####################################################################
-    Biobase::fData(obj)$P.Value <- data$P.Value
+    
+    Biobase::fData(obj)$P_Value <- data$P_Value
     Biobase::fData(obj)$logFC <- data$logFC
     Biobase::fData(obj)$Significant <- 0
 
@@ -95,7 +97,7 @@ diffAnaSave <- function (obj, data, method="limma", condition1, condition2,
     
     ##setSignificant
     x <- Biobase::fData(obj)$logFC
-    y <- -log10(Biobase::fData(obj)$P.Value)
+    y <- -log10(Biobase::fData(obj)$P_Value)
     
     ipval <- which(y >= threshold_pVal)
     ilogfc <- which(abs(x) >= threshold_logFC)
@@ -105,7 +107,7 @@ diffAnaSave <- function (obj, data, method="limma", condition1, condition2,
     #                                 method = method,
     #                                     condition1 = condition1,
     #                                     condition2 = condition2,
-    #                                     threshold.p.value = threshold_pVal,
+    #                                     threshold_p_value = threshold_pVal,
     #                                     threshold.logFC = threshold_logFC,
     #                                     fdr = fdr,
     #                                 calibrationMethod = calibrationMethod)
@@ -114,8 +116,8 @@ diffAnaSave <- function (obj, data, method="limma", condition1, condition2,
     obj@experimentData@other$method = method
     obj@experimentData@other$condition1 = condition1
     obj@experimentData@other$condition2 = condition2
-    obj@experimentData@other$threshold.p.value = threshold_pVal
-    obj@experimentData@other$threshold.logFC = threshold_logFC
+    obj@experimentData@other$threshold_p_value = threshold_pVal
+    obj@experimentData@other$threshold_logFC = threshold_logFC
     obj@experimentData@other$fdr = fdr
     obj@experimentData@other$calibrationMethod = calibrationMethod
     
@@ -196,6 +198,8 @@ diffAna <- function(qData, design){
                             coef = 2, 
                             sort.by = "none",
                             number=nrow(qData))
+    names(diffAna.res) <- gsub(".", "_", names(diffAna.res), fixed=TRUE)
+    
     return (diffAna.res)
 }
 
@@ -277,12 +281,15 @@ rownames(design) <- rownames(samplesData[flatIndices,])
 design[indices$iCond2, 2] <- 1
 
 
+
+
+
 res <- diffAna(tempexprs, design)
 #res <- limmaCompleteTest(tempexprs, 
 #labels, c(1:length(labels)), c(1:length(labels)))
 
 
-p <- data.frame(P.Value = res$P.Value, 
+p <- data.frame(P_Value = res$P_Value, 
                 logFC = res$logFC,
                 row.names = rownames(qData))
 
@@ -301,7 +308,7 @@ return(p)
 ##' considered as condition 1.
 ##' @param condition2 A vector containing the names of the conditions 
 ##' considered as condition 2.
-##' @return A dataframe with two slots : P.Value (for the p-value) and logFC
+##' @return A dataframe with two slots : P_Value (for the p-value) and logFC
 ##' (the log of the Fold Change).
 ##' @author Alexia Dorffer
 ##' @examples
@@ -334,7 +341,7 @@ return(p)
 ##' qData as condition 1
 ##' @param condition2 A vector containing the names of the conditions 
 ##' considered as condition 2
-##' @return A dataframe with two slots : P.Value (for the p-value) and logFC
+##' @return A dataframe with two slots : P_Value (for the p-value) and logFC
 ##' (the log of the Fold Change).
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
@@ -363,10 +370,10 @@ logRatio <- NULL
 for (i in 1:nrow(qData)){
     res <- t.test(x=qData[i,indices$iCond1],
                 y=qData[i,indices$iCond2])
-    t <- c(t,res$p.value)
+    t <- c(t,res$p_value)
     logRatio <- c(logRatio, (res$estimate[2] - res$estimate[1]))
 }
-p <- data.frame(P.Value=t, logFC = logRatio)
+p <- data.frame(P_Value=t, logFC = logRatio)
 return(p)
 }
 

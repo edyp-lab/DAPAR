@@ -25,7 +25,7 @@
 ##' condition1 <- '25fmol'
 ##' condition2 <- '10fmol'
 ##' data <- wrapper.diffAnaLimma(Exp1_R25_pept[1:1000], condition1, condition2)
-##' diffAnaVolcanoplot(data$logFC, data$P.Value)
+##' diffAnaVolcanoplot(data$logFC, data$P_Value)
 diffAnaVolcanoplot <- function(logFC=NULL, 
                                 pVal=NULL, 
                                 threshold_pVal=1e-60, 
@@ -125,7 +125,7 @@ return(p)
 ##'        'Filtered with wholeMatrix (threshold = 6 ).')
 ##' data <- wrapper.diffAnaLimma(obj, condition1, condition2)
 ##' df <- data.frame(x=data$logFC, 
-##' y = -log10(data$P.Value),
+##' y = -log10(data$P_Value),
 ##' index = as.character(rownames(obj)),
 ##' stringsAsFactors = FALSE)
 ##' tooltipSlot <- c("Sequence", "Score")

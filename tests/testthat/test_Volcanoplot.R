@@ -8,7 +8,7 @@ test_that("diffAnaVolcanoplot", {
     condition1 <- '25fmol'
     condition2 <- '10fmol'
     data <- wrapper.diffAnaLimma(test, condition1, condition2)
-    t <- diffAnaVolcanoplot(data$logFC, data$P.Value)
+    t <- diffAnaVolcanoplot(data$logFC, data$P_Value)
     
     expect_null(t)
     dev.off()
@@ -23,7 +23,7 @@ test_that("diffAnaVolcanoplot_rCharts", {
     cond <- c(condition1, condition2)
     data <- wrapper.diffAnaLimma(test, condition1, condition2)
     df <- data.frame(x=data$logFC, 
-                    y = -log10(data$P.Value),
+                    y = -log10(data$P_Value),
                     index = as.character(rownames(test)),
                     stringsAsFactors = FALSE)
     tooltipSlot <- c("Sequence.length", "Protein.IDs")
