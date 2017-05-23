@@ -277,8 +277,8 @@ tempexprs <- qData[,flatIndices]
 design <- cbind(cond1=1, cond2 = rep(0,length(flatIndices)))
 rownames(design) <- rownames(samplesData[flatIndices,])
 
-#design[flatIndices == indices$iCond2, 2] <- 1
-design[indices$iCond2, 2] <- 1
+design[which(flatIndices == indices$iCond2), 2] <- 1
+#design[indices$iCond2, 2] <- 1
 
 
 
