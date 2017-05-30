@@ -644,6 +644,11 @@ plot(d)
 wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="average", 
                             dendro = FALSE){
 qData <- Biobase::exprs(obj)
+for (j in 1:length(colnames(qData))){
+    colnames(qData)[j] <- paste(as.character(Biobase::pData(obj)[j,2:5]), 
+                                collapse =" ")
+}
+
 heatmapD(qData, distance, cluster, dendro)
 }
 
@@ -683,6 +688,7 @@ if (!(cluster %in%  paramcluster)){
     stop("Param clustering is not correct.")
     return (NULL)
 }
+
 
 # if (isTRUE(dendro) && getNumberOfEmptyLines(qData) != 0)  {
 #     stop("Your dataset contains empty lines: the dendrogram cannot 

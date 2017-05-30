@@ -1,3 +1,11 @@
+    CHANGES IN VERSION 1.8.7
+------------------------ 
+
+BUG FIXES
+    * Bug fixed in the aggregation module. The columns of the petpide dataset that have to be imported in the 
+    protein dataset were not correct
+    
+    
     CHANGES IN VERSION 1.7.19
 ------------------------ 
 

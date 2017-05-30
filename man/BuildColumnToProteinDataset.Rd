@@ -5,7 +5,7 @@
 \title{creates a column for the protein dataset after agregation by
  using the previous peptide dataset.}
 \usage{
-BuildColumnToProteinDataset(peptideData, matAdj, columnName)
+BuildColumnToProteinDataset(peptideData, matAdj, columnName, proteinNames)
 }
 \arguments{
 \item{peptideData}{A data.frame of meta data of peptides. It is the fData 
@@ -15,6 +15,8 @@ of the MSnset object.}
 
 \item{columnName}{The name of the column in fData(peptides_MSnset) that 
 the user wants to keep in the new protein data.frame.}
+
+\item{proteinNames}{The names of the protein in the new dataset (i.e. rownames)}
 }
 \value{
 A vector
@@ -29,8 +31,10 @@ data(Exp1_R25_pept)
 protID <- "Protein.group.IDs"
 M <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
 data <- Biobase::fData(Exp1_R25_pept[1:1000])
+protData <- pepAgregate(Exp1_R25_pept[1:1000], 'Protein_group_IDs', 'sum overall', M)
 name <- "organism"
-BuildColumnToProteinDataset(data, M, name )
+proteinNames <- rownames(Biobase::fData(protData))
+BuildColumnToProteinDataset(data, M, name,proteinNames )
 }
 \author{
 Samuel Wieczorek

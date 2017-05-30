@@ -57,6 +57,7 @@ getProteinsStats <- function(matUnique, matShared){
 ##' @param matAdj The adjacency matrix used to agregate the peptides data.
 ##' @param columnName The name of the column in fData(peptides_MSnset) that 
 ##' the user wants to keep in the new protein data.frame.
+##' @param proteinNames The names of the protein in the new dataset (i.e. rownames)
 ##' @return A vector
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -65,16 +66,22 @@ getProteinsStats <- function(matUnique, matShared){
 ##' protID <- "Protein.group.IDs"
 ##' M <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
 ##' data <- Biobase::fData(Exp1_R25_pept[1:1000])
+##' protData <- pepAgregate(Exp1_R25_pept[1:1000], 'Protein_group_IDs', 'sum overall', M)
 ##' name <- "organism"
-##' BuildColumnToProteinDataset(data, M, name )
-BuildColumnToProteinDataset <- function(peptideData, matAdj, columnName){
+##' proteinNames <- rownames(Biobase::fData(protData))
+##' BuildColumnToProteinDataset(data, M, name,proteinNames )
+BuildColumnToProteinDataset <- function(peptideData, matAdj, columnName, proteinNames){
 nbProt <- ncol(matAdj)
 newCol <- rep("", nbProt)
 
-for (p in 1:nbProt){
-    listeIndicePeptides <- which(matAdj[,p] == 1)
-    listeData <- unique(peptideData[listeIndicePeptides,columnName])
-    newCol[p] <- paste(listeData, collapse = ", ")
+#print(head(rownames(peptideData)))
+i <- 1
+for (p in proteinNames){
+    listeIndicePeptides <- names(which(matAdj[,p] == 1))
+    listeData <- unique(as.character(peptideData[listeIndicePeptides,columnName], ";"))
+    #if (p=="1046") {print(paste(i, listeData, sep= " --"))}
+    newCol[i] <- paste0(listeData, collapse = ", ")
+    i <- i +1
 }
 return(newCol)
 }

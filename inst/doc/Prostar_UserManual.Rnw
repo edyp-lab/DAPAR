@@ -340,7 +340,7 @@ function \Rfunction{readRDS()}.
 {The user can find examples of MSnSet file in the 'extdata' directory 
 of \Biocpkg{DAPARdata}. The user can find this directory by entering:\newline
 
-<< getProstarInstallDir>>=
+<< getDAPARdataInstallDir>>=
 installed.packages()["DAPARdata","LibPath"]
 @
 
@@ -509,7 +509,7 @@ goes on the corresponding tab and select the appropriate option
 %The result is a file containing three sheets, one sheet per tab in the 
 %MSnSet: expression data (quantitative data in our case), Feature Data and 
 %Samples Data (see \Biocpkg{MSnbase} documentation~\cite{xxxxxx}).
-% The user chooses the format of the file and enter the name of the file. 
+%XXX The user chooses the format of the file and enter the name of the file. 
 %Then, he clicks on the "Download" button XXX.
 
 \hl{\bf Command line:} When working exclusively with \Biocpkg{DAPAR}, the 
@@ -1122,23 +1122,22 @@ missingness or censoring of the low intensities).
 The user can choose one of the several available imputation methods, depending 
 on the type of missing values:
 \begin{itemize}
-\item If the missing values are mainly due to a censoring and/or random process
-of the low intensity proteins, it is advised to use the functions of the 
-package \CRANpkg{imp4p}. This package is a collection of proteomic-specific 
+\item If the missing values are due to a mixture of censorship and of randomness
+, it is advised to use the functions of the package \CRANpkg{imp4p}. This 
+package is a collection of proteomic-specific 
 multiple imputation methods that operate on peptide-level datasets and which 
 propose to impute each missing value according to its nature (censored or 
 random). Two parameters are available: the number of iterations (the more 
 iterations, the more accurate the results, yet the more time-consuming) and a 
 checkbox to let the user choose if he/she wants to impute the LAPALA. This
-term (from French "là/pas-là", meaning "here/not-here") refers to analytes 
+term coined from French "là/pas-là"(meaning "here/not-here") refers to analytes 
 (peptides or proteins) that are entirely missing in some conditions while they
-are (partially or totally) visible in others. There specific accounting in a 
+are (partially or totally) visible in others. Their specific accounting in a 
 conservative way is a real issue as the imputation cannot rely on any observed 
 value in a given condition. The parameter "Upper LAPALA bound" defines the 
 maximum imputed value as a centile of the observed distribution (a tuning 
 between 0\% and 10\% is advised). 
-\item Alternatively, if the missing values are roughly uniformly distributed,
-it is advised to use KNN ($K$ Nearest Neighbors) from package 
+\item Alternatively, it is possible to use KNN ($K$ Nearest Neighbors) from package 
 \Biocpkg{impute} or MLE (Maximum Likelihood Estimation) from package 
 \Biocpkg{norm}.
 \end{itemize}
