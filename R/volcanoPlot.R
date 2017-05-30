@@ -205,7 +205,8 @@ JS("function(event) {Shiny.onInputChange('eventPointClicked', [this.name]);}")
                    pointFormat = txt_tooltip) %>%
         hc_plotOptions( series = list( cursor = "pointer", 
                                        point = list( events = list( 
-                                           click = clickFunction ) ) ) )
+                                           click = clickFunction ) ) ) ) %>%
+        hc_exporting(enabled = TRUE,filename = "volcanoplot")
         
     return(h1)
 }
