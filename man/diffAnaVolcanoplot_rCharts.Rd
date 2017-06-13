@@ -56,7 +56,7 @@ obj <- mvFilterFromIndices(obj, keepThat,
        'Filtered with wholeMatrix (threshold = 6 ).')
 data <- wrapper.diffAnaLimma(obj, condition1, condition2)
 df <- data.frame(x=data$logFC, 
-y = -log10(data$P.Value),
+y = -log10(data$P_Value),
 index = as.character(rownames(obj)),
 stringsAsFactors = FALSE)
 tooltipSlot <- c("Sequence", "Score")

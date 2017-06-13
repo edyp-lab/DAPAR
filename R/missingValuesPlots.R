@@ -20,6 +20,30 @@ samplesData <- Biobase::pData(obj)
 mvPerLinesHisto(qData, samplesData, indLegend, showValues)
 }
 
+
+##' This method is a wrapper to plots from a \code{\link{MSnSet}} object a 
+##' histogram which represents the distribution of the 
+##' number of missing values (NA) per lines (ie proteins).
+##' 
+##' @title Histogram of missing values per lines from an object using highcharter
+##' \code{\link{MSnSet}}
+##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param indLegend The indice of the column name's in \code{pData()} tab .
+##' @param showValues A logical that indicates wether numeric values should be
+##' drawn above the bars.
+##' @return A histogram
+##' @author Alexia Dorffer
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' wrapper.mvPerLinesHisto(Exp1_R25_pept)
+wrapper.mvPerLinesHisto_HC <- function(obj, indLegend="auto", showValues=FALSE){
+    qData <- Biobase::exprs(obj)
+    samplesData <- Biobase::pData(obj)
+    hc <- mvPerLinesHisto_HC(qData, samplesData, indLegend, showValues)
+    return(hc)
+}
+
 ##' This method plots a bar plot which represents the distribution of the 
 ##' number of missing values (NA) per lines (ie proteins).
 ##' 
@@ -38,8 +62,7 @@ mvPerLinesHisto(qData, samplesData, indLegend, showValues)
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' samplesData <- Biobase::pData(Exp1_R25_pept)
 ##' mvPerLinesHisto(qData, samplesData)
-mvPerLinesHisto <- function(qData, samplesData, indLegend="auto", 
-                        showValues=FALSE){
+mvPerLinesHisto <- function(qData, samplesData, indLegend="auto", showValues=FALSE){
 
 if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
     
@@ -85,6 +108,86 @@ x <- barplot(nb.na2barplot[-1],
 #        col = rep("black",nb.col)) 
 #   
 # }
+}
+
+
+##' This method plots a bar plot which represents the distribution of the 
+##' number of missing values (NA) per lines (ie proteins).
+##' 
+##' @title Bar plot of missing values per lines using highcharter
+##' @param qData A dataframe that contains the data to plot.
+##' @param samplesData A dataframe which contains informations about 
+##' the replicates.
+##' @param indLegend The indice of the column name's in \code{pData()} tab 
+##' @param showValues A logical that indicates wether numeric values should be
+##' drawn above the bars.
+##' @return A bar plot
+##' @author Florence Combes, Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qData <- Biobase::exprs(Exp1_R25_pept)
+##' samplesData <- Biobase::pData(Exp1_R25_pept)
+##' mvPerLinesHisto(qData, samplesData)
+mvPerLinesHisto_HC <- function(qData, samplesData, indLegend="auto", showValues=FALSE){
+    
+    if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
+    
+    for (j in 1:length(colnames(qData))){
+        noms <- NULL
+        for (i in 1:length(indLegend)){
+            noms <- paste(noms, samplesData[j,indLegend[i]], sep=" ")
+        }
+        colnames(qData)[j] <- noms
+    }
+    
+    coeffMax <- .1
+    
+    NbNAPerCol <- colSums(is.na(qData))
+    NbNAPerRow <- rowSums(is.na(qData))
+    #par(mar = c(10,3, 3, 3))
+    
+    nb.col <- dim(qData)[2] 
+    nb.na <- NbNAPerRow
+    temp <- table(NbNAPerRow)
+    nb.na2barplot <- c(temp, rep(0,1+ncol(qData)-length(temp)))
+    
+    if (sum(NbNAPerRow) == 0){
+        nb.na2barplot <- rep(0,1+ncol(qData))
+    }
+    
+    df <- data.frame(y=nb.na2barplot)
+    
+    df1 <- df2 <- df
+    df1[ncol(qData),] <- 0
+    df2 [1:(ncol(qData)-1),] <- 0
+    print(df)
+    
+    #df <- list_parse(df)
+    # x <- barplot(nb.na2barplot[-1], 
+    #              main = "# lines by # of NA",
+    #              xlab = "# NA per lines",
+    #              names.arg = as.character(c(1:(ncol(qData)))), 
+    #              col = c(rep("lightgrey",nb.col-1), "red"),
+    #              ylim = c(0, 1.2*max(1,nb.na2barplot[-1])), 
+    #              las=1,
+    #              cex.names=1.5,
+    #              cex.axis=1.5
+    # )
+    # 
+    # 
+    
+    
+    
+    h1 <-  highchart() %>% 
+        #hc_title(text = "Scatter chart with color") %>% 
+        hc_add_series(data = df1, type="column", color="lightgrey") %>%
+        hc_add_series(data = df2, type="column", color="red") %>%
+        #hc_plotOptions( series = list( pointWidth = 60) ) %>%
+        hc_legend(enabled = FALSE)
+    
+    return(h1)
+ 
 }
 
 

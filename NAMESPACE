@@ -23,12 +23,11 @@ import(imp4p)
 importFrom("graphics", "par", "boxplot", "axis", "mtext", "abline", "points", 
             "legend", "lines",  "barplot", "text",
            "layout", "plot.new", "strheight", "strwidth", "title","plot.window")
-
-
+ 
 importFrom("stats", "lowess", "cor", "density","pexp", 
             "var", "t.test", "dist", "hclust", "setNames", 
             "median", "p.adjust", "model.matrix", "rnorm","na.omit",
-           "quantile", "rbeta", "runif", "sd")
+           "quantile", "rbeta", "runif", "sd", "pchisq", "residuals")
 importFrom("imputeLCMD", "impute.wrapper.KNN", "impute.wrapper.MLE",
             "impute.QRILC")
 importFrom("preprocessCore", "normalize.quantiles")
@@ -37,9 +36,11 @@ importFrom("limma", "lmFit", "eBayes", "topTable", "makeContrasts", "contrasts.f
 importFrom("pcaMethods", "completeObs", "pca")
 importFrom("scales", "alpha")
 importFrom("grDevices", "colorRampPalette", "palette", "heat.colors")
-importFrom("utils", "read.csv", "read.table")
+importFrom("utils", "read.csv", "read.table", "de")
+importFrom("lme4", "getME")
 import("openxlsx")
-
+import("siggenes") # SAM
+import("graph")
 
 export(
 "writeMSnsetToExcel",
@@ -51,6 +52,7 @@ export(
 ,"wrapper.corrMatrixD","corrMatrixD"
 ,"wrapper.heatmapD","heatmapD"
 ,"wrapper.mvPerLinesHisto", "mvPerLinesHisto"
+,"wrapper.mvPerLinesHisto_HC", "mvPerLinesHisto_HC"
 ,"wrapper.mvPerLinesHistoPerCondition", "mvPerLinesHistoPerCondition"
 ,"wrapper.mvHisto", "mvHisto"
 
@@ -91,5 +93,7 @@ export(
 ,"wrapperCalibrationPlot"
 
 ,"getProcessingInfo"
+
+,"pepa.test"
 
 )

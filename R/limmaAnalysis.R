@@ -302,7 +302,8 @@ limmaCompleteTest <- function(qData,Conditions, RepBio, RepTech, Contrast=1){
     else{cat("Problem: the factor-vector Conditions must contain several replicates in each condition  !\n")}
     
     res <- topTable(fit,number=Inf)
-   
+    names(res) <- gsub(".", "_", names(res), fixed=TRUE)
+    
         return(res)
 }
 

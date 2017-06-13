@@ -19,7 +19,7 @@ qData as condition 1}
 considered as condition 2}
 }
 \value{
-A dataframe with two slots : P.Value (for the p-value) and logFC
+A dataframe with two slots : P_Value (for the p-value) and logFC
 (the log of the Fold Change).
 }
 \description{
