@@ -44,75 +44,151 @@
 ##' msg: a character string summarizing the most important information
 ##'           about the fudge factor.
 ##' @author Thomas Burger, Laurent Jacob
-fudge2LRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s, alpha = seq(0, 1, 0.05), include.zero = TRUE) 
+fudge2LRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s, alpha = seq(0, 1, 0.05), include.zero = TRUE)
+    
 {
-    if (max(alpha) > 1 || min(alpha) < 0) 
+    
+    if (max(alpha) > 1 || min(alpha) < 0)
+        
         stop("alpha has to be between 0 and 1")
+    
     if (any(round(100 * alpha, 10) != round(100 * alpha, 0))) {
-        warning("At least one alpha is not a percentile. Only the first two decimal digits", 
+        
+        warning("At least one alpha is not a percentile. Only the first two decimal digits",
+                
                 " are retained.")
+        
         alpha <- signif(alpha, 2)
+        
     }
+    
     if (length(alpha) == 1) {
+        
         s.zero <- quantile(s, alpha)
-        msg <- paste("s0 =", round(s.zero, 4), " (The", 100 * 
+        
+        msg <- paste("s0 =", round(s.zero, 4), " (The", 100 *
+                         
                          alpha, "% quantile of the s values.) \n \n")
-        invisible(return(list(s.zero = s.zero, alpha.hat = alpha, 
+        
+        invisible(return(list(s.zero = s.zero, alpha.hat = alpha,
+                              
                               vec.cv = NULL, msg = msg)))
+        
     }
+    
     fudge.quan <- quantile(s, alpha)
-    fudge.quan <- c(fudge.quan, max(fudge.quan)*seq(2, 30, 1))
-    if (include.zero) 
+    
+    fudge.quan <- sort(c(fudge.quan, 2*fudge.quan), decreasing=FALSE)
+    
+    if (include.zero)
+        
         fudge.quan <- c(0, fudge.quan)
+    
     n.alpha <- length(fudge.quan)
-    n.pep <- rep(NA, p)
-    for(ee in cc){
-        ee <- as.numeric(ee)
-        pp <- ee[ee <= p]    
-        n.pep[pp] <- sum(ee > p)
-    }
+    
+    ## n.pep <- rep(NA, p)
+    
+    ## for(ee in cc){
+    
+    ##     ee <- as.numeric(ee)
+    
+    ##     pp <- ee[ee <= p]   
+    
+    ##     n.pep[pp] <- sum(ee > p)
+    
+    ## }
+    
     d.mat <- sapply(fudge.quan, FUN=function(s1){
+        
         sam.res <- samLRT(lmm.res.h0, lmm.res.h1, cc, n, p, s1)
-        exp(sam.res$llr.sam)^(-(2/(sam.res$sample.sizes))) # V1
-        ## sam.res$sample.sizes * (exp(sam.res$llr.sam)^(-(2/(sam.res$sample.sizes))) - 1) # V2
-        ## (n.pep*n1*n2/(n1+n2)) * (exp(sam.res$llr.sam)^(-(2/(sam.res$sample.sizes))) - 1) # V3
+        
+        ## (n*n.pep) * exp(llr)^(-(2/(n*n.pep))) # Hotelling T2
+        
+        exp(sam.res$llr.sam)^(-(2/(sam.res$sample.sizes))) # Hotelling T2
+        
     })
-    ## r/outer(s, fudge.quan, "+")
+    
+    # r/outer(s, fudge.quan, "+")
+    
+    ## print(str(d.mat))
+    
     n.uni.s <- length(unique(s))
-    if (n.uni.s < 25) 
-        stop("For the computation of the fugde factor,", "\n", 
+    
+    if (n.uni.s < 25)
+        
+        stop("For the computation of the fugde factor,", "\n",
+             
              "there should be at least 25 genes with differing standard deviations.")
+    
     n.int <- ifelse(n.uni.s > 500, 101, floor(n.uni.s/5))
+    
     quan <- quantile(s, seq(0, 1, le = n.int))
+    
     quan <- unique(round(quan, 8))
+    
     n.int <- length(quan)
+    
     int.s <- as.numeric(cut(s, quan, include.lowest = TRUE, right = FALSE))
+    
+    ## print(cbind(int.s, s))
+    
     mad.mat <- matrix(0, n.int - 1, ncol(d.mat))
+    
     for (i in 1:(n.int - 1)) {
-        mad.mat[i, ] <- apply(d.mat[which(int.s == i), , drop = FALSE], 
-                              2, median)
+        
+        mad.mat[i, ] <- apply(d.mat[which(int.s == i), , drop = FALSE],
+                              
+                              2, mad)
+        
     }
+    
     cv <- function(x) {
+        
         sd(x)/mean(x)
+        
     }
+    
     vec.cv <- apply(mad.mat, 2, cv)
+    
+    ## print(fudge.quan)
+    
+    ## x11()
+    
+    ## plot(fudge.quan, vec.cv)
+    
     which.min <- which(vec.cv == min(vec.cv))
+    
     if (include.zero & which.min == 1) {
+        
         msg <- "s0 = 0 \n \n"
+        
         s.zero <- 0
-        invisible(return(list(s.zero = s.zero, vec.cv = vec.cv, 
+        
+        invisible(return(list(s.zero = s.zero, vec.cv = vec.cv,
+                              
                               msg = msg)))
+        
     }
+    
     s.zero <- fudge.quan[which.min]
-    if (include.zero) 
+    
+    print(s.zero)
+    
+    if (include.zero)
+        
         which.min <- which.min - 1
+    
     alpha.hat <- alpha[which.min]
-    msg <- paste("s0 =", round(s.zero, 4), " (The", 100 * alpha.hat, 
+    
+    msg <- paste("s0 =", round(s.zero, 4), " (The", 100 * alpha.hat,
+                 
                  "% quantile of the s values.)", "\n", "\n")
-    invisible(return(list(alpha.hat = alpha.hat, s.zero = s.zero, 
+    
+    invisible(return(list(alpha.hat = alpha.hat, s.zero = s.zero,
+                          
                           vec.cv = vec.cv, msg = msg)))
+    
 }
-
 
 
 
@@ -355,5 +431,5 @@ pepa.test <- function(X, y, n1, n2){
     return(list(llr=llr, llr.map=llr.map,
                 llr.pv=llr.pv, llr.map.pv=llr.map.pv,
                 mse.h0=mse.h0, mse.h1=mse.h1,
-                s=s, wchi2=wchi2))
+                s=s, s1=s1, wchi2=wchi2))
 }

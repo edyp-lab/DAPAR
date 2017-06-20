@@ -95,6 +95,23 @@ for (i in 1:length(labels)){
 return (col.boxplot)
 }
 
+getPaletteForLabels_HC <- function(labels){
+    nColors <- 8
+    #col <- c(1:nColors)
+    #pal <- c('#7cb5ec', '#434348', '#90ed7d', '#f7a35c', '#8085e9', '#f15c80', '#e4d354', '#2b908f', '#f45b5b', '#91e8e1')
+    #pal <- c("#002F80", "#002F80","#002F80","#002F80","#F9AF38","#F9AF38","#F9AF38","#F9AF38")
+    pal <- brewer.pal(nColors, "Dark2")
+    ## Define one color per label/condition
+    col.boxplot <- NULL
+    for (i in 1:length(labels)){
+        col.boxplot[which(labels == unique(labels)[i])] <- pal[i]
+    }
+    
+    return (col.boxplot)
+}
+
+
+
 ##' Selects colors for the plots in DAPAR based on the replicates in
 ##' the dataset. The palette is derived from
 ##' the brewer palette "Dark2" (see \code{\link{RColorBrewer}}).
@@ -114,5 +131,11 @@ getPalette <- colorRampPalette(brewer.pal(8, "Dark2"))
 return(col)
 }
 
+getPaletteForReplicates_HC <- function(nColors){
+    #col <- c(1:nColors)
+    #pal <- c("#002F80", "#002F80","#002F80","#002F80","#F9AF38","#F9AF38","#F9AF38","#F9AF38")
+    pal <- brewer.pal(nColors, "Dark2")
+    return(pal)
+}
 
 

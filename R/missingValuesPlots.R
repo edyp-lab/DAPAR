@@ -88,6 +88,9 @@ nb.na2barplot <- c(temp, rep(0,1+ncol(qData)-length(temp)))
 if (sum(NbNAPerRow) == 0){
     nb.na2barplot <- rep(0,1+ncol(qData))
 }
+
+print(nb.na2barplot[-1])
+
 x <- barplot(nb.na2barplot[-1], 
                 main = "# lines by # of NA",
                 xlab = "# NA per lines",
@@ -156,35 +159,22 @@ mvPerLinesHisto_HC <- function(qData, samplesData, indLegend="auto", showValues=
         nb.na2barplot <- rep(0,1+ncol(qData))
     }
     
-    df <- data.frame(y=nb.na2barplot)
+    df <- data.frame(y=nb.na2barplot[-1])
     
     df1 <- df2 <- df
-    df1[ncol(qData),] <- 0
-    df2 [1:(ncol(qData)-1),] <- 0
-    print(df)
-    
-    #df <- list_parse(df)
-    # x <- barplot(nb.na2barplot[-1], 
-    #              main = "# lines by # of NA",
-    #              xlab = "# NA per lines",
-    #              names.arg = as.character(c(1:(ncol(qData)))), 
-    #              col = c(rep("lightgrey",nb.col-1), "red"),
-    #              ylim = c(0, 1.2*max(1,nb.na2barplot[-1])), 
-    #              las=1,
-    #              cex.names=1.5,
-    #              cex.axis=1.5
-    # )
-    # 
-    # 
+    df2[1:(nrow(df)-1),] <- 0
+    df1 [nrow(df),] <- 0
     
     
+    #, series = list( pointWidth = 50)
     
     h1 <-  highchart() %>% 
-        #hc_title(text = "Scatter chart with color") %>% 
+        hc_title(text = "Number of lines by number of NA values") %>% 
         hc_add_series(data = df1, type="column", color="lightgrey") %>%
         hc_add_series(data = df2, type="column", color="red") %>%
-        #hc_plotOptions( series = list( pointWidth = 60) ) %>%
-        hc_legend(enabled = FALSE)
+        hc_plotOptions( column = list(stacking = "normal") ) %>%
+        hc_legend(enabled = FALSE) %>%
+        hc_xAxis(categories = row.names(df), title = list(text = "Number of NA values by lines"))
     
     return(h1)
  
@@ -214,6 +204,31 @@ qData <- Biobase::exprs(obj)
 samplesData <- Biobase::pData(obj)
 mvPerLinesHistoPerCondition(qData, samplesData, indLegend, showValues)
 }
+
+
+##' This method is a wrapper to plots (using highcharts) from a \code{\link{MSnSet}} object a 
+##' bar plot which represents the distribution of the 
+##' number of missing values (NA) per lines (ie proteins) and per conditions.
+##' 
+##' @title Bar plot of missing values per lines and per conditions from an 
+##' object \code{\link{MSnSet}}
+##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param indLegend The indice of the column name's in \code{pData()} tab .
+##' @param showValues A logical that indicates wether numeric values should be
+##' drawn above the bars.
+##' @return A bar plot
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' wrapper.mvPerLinesHistoPerCondition(Exp1_R25_pept)
+wrapper.mvPerLinesHistoPerCondition_HC <- function(obj, indLegend="auto", 
+                                                showValues=FALSE){
+    qData <- Biobase::exprs(obj)
+    samplesData <- Biobase::pData(obj)
+    mvPerLinesHistoPerCondition_HC(qData, samplesData, indLegend, showValues)
+}
+
 
 ##' This method plots a bar plot which represents the distribution of the 
 ##' number of missing values (NA) per lines (ie proteins) and per conditions.
@@ -283,6 +298,93 @@ x <- barplot(m,
 }
 
 
+
+
+##' This method plots a bar plot which represents the distribution of the 
+##' number of missing values (NA) per lines (ie proteins) and per conditions.
+##' 
+##' @title Bar plot of missing values per lines and per condition
+##' @param qData A dataframe that contains quantitative data.
+##' @param samplesData A dataframe where lines correspond to samples and 
+##' columns to the meta-data for those samples.
+##' @param indLegend The indice of the column name's in \code{pData()} tab 
+##' @param showValues A logical that indicates wether numeric values should be
+##' drawn above the bars.
+##' @return A bar plot
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qData <- Biobase::exprs(Exp1_R25_pept)
+##' samplesData <- Biobase::pData(Exp1_R25_pept)
+##' mvPerLinesHistoPerCondition(qData, samplesData)
+mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto", 
+                                        showValues=FALSE){
+    
+    labels <- samplesData[,"Label"]
+        pal <- getPaletteForLabels(samplesData[,"Label"])
+    if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
+    
+    nbLabels <- length(unique(samplesData[,"Label"]))
+    
+    ncolMatrix <- max(unlist(lapply(unique(samplesData[,"Label"]), function(x){length(which(samplesData[,"Label"]==x))})))
+    m <- matrix(rep(0, nbLabels*(1+ncolMatrix)), 
+                ncol = nbLabels, 
+                dimnames=list(seq(0:(ncolMatrix)),unique(samplesData[,"Label"])))
+    
+    for (i in unique(samplesData[,"Label"]))
+    {
+        nSample <- length(which(samplesData[,"Label"] == i))
+        t <- NULL
+        if (nSample == 1) {
+            t <- table(as.integer(is.na(qData[,which(samplesData[,"Label"] == i)])))
+        } else {t <- table(rowSums(is.na(qData[,which(samplesData[,"Label"] == i)])))}
+        
+        m[as.integer(names(t))+1,i] <- t
+    }
+    
+    
+    colnames(m) <- unique(labels)
+    #m <- t(m)
+    #list(name="A",data=mydata$A)
+    # x <- barplot(m, 
+    #              main = "# lines by # of NA",
+    #              xlab = "# NA per lines",
+    #              names.arg = as.character(0:ncolMatrix), 
+    #              col = unique(pal),
+    #              ylim = c(0, 1.2*max(m)), 
+    #              xpd = FALSE,
+    #              las=1,
+    #              cex.names=1.5,
+    #              cex.axis=1.5,
+    #              beside=TRUE
+    # )
+    
+    #m <- as.data.frame(m)
+    
+    nbSeries = length(unique(labels))
+    series <- list()
+    for (i in 1:nbSeries){
+        tmp <- list(data = m[,i], name=(unique(labels))[i])
+        names(tmp$data) <- c()
+        series[[i]] <- tmp
+    }
+    
+    h1 <-  highchart() %>% 
+        hc_title(text = "# lines by # of NA") %>% 
+        hc_chart(type = "column") %>%
+        hc_plotOptions( column = list(stacking = "") ) %>%
+        hc_add_series_list(series) %>%
+        hc_legend(enabled = FALSE) %>%
+        hc_xAxis(categories = row.names(m), title = list(text = "# NA per lines"))
+    
+    return(h1)
+    
+
+    
+}
+
+
 ##' This method plots from a \code{\link{MSnSet}} object a histogram of 
 ##' missing values.
 ##' 
@@ -302,6 +404,28 @@ qData <- Biobase::exprs(obj)
 samplesData <- Biobase::pData(obj)
 labels <- samplesData[,"Label"]
 mvHisto(qData, samplesData, labels, indLegend, showValues)
+}
+
+
+##' This method plots from a \code{\link{MSnSet}} object a histogram of 
+##' missing values.
+##' 
+##' @title Histogram of missing values from a \code{\link{MSnSet}} object
+##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param indLegend The indices of the column name's in \code{pData()} tab.
+##' @param showValues A logical that indicates wether numeric values should be
+##' drawn above the bars.
+##' @return A histogram
+##' @author Alexia Dorffer
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' wrapper.mvHisto(Exp1_R25_pept, showValues=TRUE)
+wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE){
+    qData <- Biobase::exprs(obj)
+    samplesData <- Biobase::pData(obj)
+    labels <- samplesData[,"Label"]
+    mvHisto_HC(qData, samplesData, labels, indLegend, showValues)
 }
 
 
@@ -372,6 +496,76 @@ graphics::text(x, -3,
 #   }
 
 }
+
+
+
+##' This method plots a histogram of missing values.
+##' 
+##' @title Histogram of missing values
+##' @param qData A dataframe that contains quantitative data.
+##' @param samplesData A dataframe where lines correspond to samples and 
+##' columns to the meta-data for those samples.
+##' @param labels A vector of the conditions (labels) (one label per sample).
+##' @param indLegend The indices of the column name's in \code{pData()} tab
+##' @param showValues A logical that indicates wether numeric values should be
+##' drawn above the bars.
+##' @return A histogram
+##' @author Florence Combes, Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qData <- Biobase::exprs(Exp1_R25_pept)
+##' samplesData <- Biobase::pData(Exp1_R25_pept)
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+##' mvHisto(qData, samplesData, labels, indLegend="auto", showValues=TRUE)
+mvHisto_HC <- function(qData, samplesData, labels, indLegend="auto", 
+                    showValues=FALSE){
+    
+    if (identical(indLegend,"auto")) { 
+        indLegend <- c(2:length(colnames(samplesData)))
+    }
+    
+    
+    colnames(qData) <- samplesData[,"Label"]
+    
+    coeffMax <- .1
+    pal <- getPaletteForLabels(labels)
+    
+    NbNAPerCol <- colSums(is.na(qData))
+    NbNAPerRow <- rowSums(is.na(qData))
+    
+    if (sum(NbNAPerCol) == 0) {if (sum(NbNAPerCol) == 0){
+        NbNAPerCol <- rep(0,1+ncol(qData))
+    }} 
+    
+    
+    nbSeries = length(unique(labels))
+    series <- list()
+    for (i in 1:nbSeries){
+        data <- rep(0, length(NbNAPerCol))
+        data[which((unique(labels))[i] == labels)] <- NbNAPerCol[which(labels == (unique(labels))[i])]
+        
+        tmp <- list(data = data, name=(unique(labels))[i])
+        names(tmp$data) <- c()
+        series[[i]] <- tmp
+    }
+    
+    h1 <-  highchart() %>%
+         hc_chart(type = "column") %>%
+         hc_title(text = "# lines by # of NA") %>%
+        hc_add_series_list(series) %>%
+        hc_plotOptions( column = list(stacking = "normal") ) %>%
+        hc_legend(enabled = FALSE) %>%
+        hc_xAxis(categories = labels, title = list(text = "# NA per lines"))
+
+    return(h1)
+    
+    
+    
+
+    
+}
+
 
 
 ##' Plots a heatmap of the quantitative data. Each column represent one of

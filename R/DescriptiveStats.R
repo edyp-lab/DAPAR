@@ -31,6 +31,20 @@ boxPlotD(qData, dataForXAxis, labels, group2Color)
 }
 
 
+wrapper.boxPlotD_HC <- function(obj, 
+                             dataForXAxis="Label", 
+                             group2Color="Condition"){
+    
+    qData <- Biobase::exprs(obj)
+    #dataForXAxis <- as.matrix(Biobase::pData(obj)[,dataForXAxis])
+    dataForXAxis <- as.matrix(Biobase::pData(obj)[,dataForXAxis])
+    
+    labels <- Biobase::pData(obj)[,"Label"]
+    
+    boxPlotD_HC(qData, dataForXAxis, labels, group2Color)
+    
+}
+
 
 ##' Boxplot for quantitative proteomics data
 ##' 
@@ -104,6 +118,71 @@ mtext("Samples",
 abline(h=0) 
 palette("default")
 }
+
+
+
+
+boxPlotD_HC <- function(qData, 
+                     dataForXAxis=NULL, 
+                     labels=NULL, 
+                     group2Color="Condition"){
+    
+    if (group2Color == "Condition") {
+        pal <- getPaletteForLabels(labels)
+    }else { 
+        pal <- getPaletteForReplicates(ncol(qData))}
+    
+    if (is.null(labels)){size <- 2}else{size <- 2*length(labels)}
+    #par(mar=c(size,4,2,2))
+    
+    # boxplot(qData
+    #         ,las = 1
+    #         , col = pal
+    #         , cex = 2
+    #         , axes=TRUE
+    #         , xaxt = "n"
+    #         , ylab = "Log (intensity)"
+    #         , pt.cex = 4
+    #         , horizontal = FALSE
+    # )
+    # 
+    # 
+    # if( !is.null(dataForXAxis))
+    # {
+    #     if (is.vector(dataForXAxis) ){
+    #         xAxisLegend <- dataForXAxis
+    #     } 
+    #     else{ 
+    #         xAxisLegend <- NULL
+    #         N <- nrow(dataForXAxis)
+    #         for (i in 1:N){
+    #             xAxisLegend <- c(xAxisLegend, paste(dataForXAxis[i,], collapse="_"))
+    #         }
+    #     }
+    #     axis(side=1,
+    #          at = 1:ncol(qData),
+    #          labels = xAxisLegend)
+    #     
+    #     mtext("Samples", 
+    #           side=1, 
+    #           line=6+length(colnames(dataForXAxis)), 
+    #           cex.lab=1, las=1)
+    # }
+    # 
+    # abline(h=0) 
+    # palette("default")
+    # 
+    pal <- c("#002F80", "#002F80","#002F80")
+    h1 <-  highchart() %>% 
+        hc_add_series_boxplot(x = iris$Sepal.Length, by = iris$Species,
+                              name = "length", lineWidth = 1) %>%
+        hc_colors(c("#002F80", "#002F80","#002F80"))
+
+    
+    return(h1)
+}
+
+
 
 
 ##' This function is a wrapper for using the violinPlotD function with objects 
@@ -246,6 +325,19 @@ compareNormalizationD(qDataBefore, qDataAfter, labelsForLegend, indData2Show,
                     group2Color)
 }
 
+
+wrapper.compareNormalizationD_HC <- function(objBefore, objAfter, 
+                                          labelsForLegend=NULL,
+                                          indData2Show=NULL,
+                                          group2Color="Condition"){
+    
+    qDataBefore <- Biobase::exprs(objBefore)
+    qDataAfter <- Biobase::exprs(objAfter)
+    
+    compareNormalizationD_HC(qDataBefore, qDataAfter, labelsForLegend, indData2Show, 
+                          group2Color)
+}
+
 ##' Plot to compare the quantitative proteomics data before and after 
 ##' normalization
 ##' 
@@ -336,6 +428,83 @@ palette("default")
 
 
 
+compareNormalizationD_HC <- function(qDataBefore,
+                                  qDataAfter,
+                                  labelsForLegend=NULL,
+                                  indData2Show=NULL,
+                                  group2Color="Condition"){
+    
+    if (is.null(labelsForLegend)) return(NULL)
+    if (is.null(indData2Show)) {indData2Show <- c(1:ncol(qDataAfter)) }
+    
+    x <- qDataBefore
+    y <- qDataAfter/qDataBefore
+   
+    ##Colors definition
+    if (group2Color == "Condition") {
+        pal <- getPaletteForLabels(labelsForLegend)
+        legendColor <- unique(pal)
+        txtLegend <- unique(labelsForLegend)
+    }else { 
+        pal <- getPaletteForReplicates(ncol(x))
+        legendColor <- pal[indData2Show]
+        txtLegend <- paste("Replicate", seq(1,ncol(x)), labelsForLegend,sep=" ")
+        txtLegend <- txtLegend[indData2Show]
+    }
+    
+    
+    nbSeries = length(indData2Show)
+    #for (i in 1:length(indData2Show)){
+        dt <- data.frame(x=x[,3], y=y[,3])
+        tmp <- list(data = dt, name='toto')
+        names(tmp$data) <- c()
+        series[[1]] <- tmp
+    #}
+    
+    
+    h1 <-  highchart() %>% 
+        hc_title(text = "Density plot") %>% 
+        hc_chart(type = "scatter", zoomType="xy") %>%
+        hc_add_series_list(series) %>%
+        hc_colors(myColors)
+    
+    return(h1)
+    
+    
+    
+    # 
+    # plot(x=NULL
+    #      ,xlim = lim.x
+    #      ,ylim = lim.y
+    #      , cex = 1
+    #      , axes=TRUE
+    #      , xlab = "Intensities before normalization"
+    #      , ylab = "Intensities after normalization / Intensities before 
+    #      normalization"
+    #      ,cex.lab = 1
+    #      ,cex.axis = 1
+    #      ,cex.main = 3)
+    # 
+    # 
+    # for (i in indData2Show){
+    #     points(x[,i], y[,i], col = pal[i], cex = 1,pch=16)
+    # }
+    # 
+    # legend("topleft"
+    #        , legend = txtLegend
+    #        , col = legendColor
+    #        , pch = 15 
+    #        , bty = "n"
+    #        , pt.cex = 2
+    #        , cex = 1
+    #        , horiz = FALSE
+    #        , inset=c(0,0)
+    # )
+    # 
+    # 
+    # palette("default")
+}
+
 
 
 
@@ -367,6 +536,12 @@ qData <- Biobase::exprs(obj)
 densityPlotD(qData, labelsForLegend, indData2Show,group2Color)
 }
 
+
+wrapper.densityPlotD_HC <- function(obj, labelsForLegend=NULL,  indData2Show=NULL,
+                                 group2Color = "Condition"){
+    qData <- Biobase::exprs(obj)
+    densityPlotD_HC(qData, labelsForLegend, indData2Show,group2Color)
+}
 
 
 
@@ -457,6 +632,62 @@ legend("topleft"
 
 
 
+
+
+densityPlotD_HC <- function(qData, labelsForLegend=NULL,indData2Show=NULL,
+                            group2Color = "Condition"){
+    
+    
+    if (is.null(labelsForLegend) ) return(NULL)
+    
+    if (is.null(indData2Show)) {indData2Show <- c(1:ncol(qData)) }
+    
+    series <- list()
+    pal <- c("#002F80", "#002F80","#002F80","#002F80","#F9AF38","#F9AF38","#F9AF38","#F9AF38")
+    
+    myColors <- NULL
+    ##Colors definition
+    if (group2Color == "Condition") {
+        myColors <- getPaletteForLabels_HC(labelsForLegend)[indData2Show]
+        # legendColor <- unique(pal)
+        # txtLegend <- unique(labelsForLegend)
+        #myColors <-pal[indData2Show]
+    } else { 
+        myColors<- getPaletteForReplicates_HC(ncol(qData))[indData2Show]
+        # legendColor <- pal[indData2Show]
+        # txtLegend <- paste("Replicate", seq(1,ncol(qData)), 
+        #                    labelsForLegend,sep=" ")
+        # txtLegend <- txtLegend[indData2Show]
+        # 
+       # myColors <-pal
+    }
+
+nbSeries = length(indData2Show)
+for (i in 1:length(indData2Show)){
+    print(i)
+    tmp <- list(data = density(qData[,indData2Show[i]], na.rm = TRUE)$y, name=labelsForLegend[indData2Show[i]])
+    names(tmp$data) <- c()
+    series[[i]] <- tmp
+}
+
+
+    h1 <-  highchart() %>% 
+        hc_title(text = "Density plot") %>% 
+        hc_chart(type = "spline", zoomType="x") %>%
+        hc_add_series_list(series) %>%
+        hc_legend(enabled = TRUE) %>%
+        hc_xAxis(title = list(text = "log(Intensity)")) %>%
+        hc_yAxis(title = list(text = "Density")) %>%
+        hc_colors(myColors)
+    
+    return(h1)
+
+}
+
+
+
+
+
 ##' Builds a densityplot of the CV of entities in the exprs() table
 ##' of an object \code{\link{MSnSet}}. The variance is calculated for each 
 ##' condition (Label) present
@@ -478,6 +709,11 @@ CVDistD(qData, labels)
 }
 
 
+wrapper.CVDistD_HC <- function(obj){
+    qData <- Biobase::exprs(obj)
+    labels <- Biobase::pData(obj)[,"Label"]
+    CVDistD_HC(qData, labels)
+}
 
 
 ##' Builds a densityplot of the CV of entities in the exprs() table
@@ -554,6 +790,44 @@ legend("topright"
 }
 
 
+
+
+CVDistD_HC <- function(qData, labels=NULL){
+    
+    if (is.null(labels)) {return(NULL)}
+    conditions <- unique(labels)
+    n <- length(conditions)
+    
+    nbSeries = n
+    series <- list()
+    for (i in 1:length(conditions)){
+        if (length(which(labels == conditions[i])) > 1){
+            t <- apply(qData[,which(labels == conditions[i])], 1, 
+                       function(x) 100*var(x, na.rm=TRUE)/mean(x, na.rm=TRUE))
+            tmp <- list(data = density(t, na.rm = TRUE)$y, name=conditions[i])
+            names(tmp$data) <- c()
+            series[[i]] <- tmp
+        }
+    }
+
+    h1 <-  highchart() %>% 
+        #hc_title(text = "xxxxxx") %>% 
+        hc_chart(type = "spline", zoomType="x") %>%
+        #hc_plotOptions( column = list(stacking = "") ) %>%
+        hc_add_series_list(series) %>%
+        hc_legend(enabled = TRUE) %>%
+        hc_xAxis(title = list(text = "CV(log(Intensity))")) %>%
+        hc_yAxis(title = list(text = "Density"))
+    
+    return(h1)
+
+}
+
+
+
+
+
+
 ##' Builds a correlation matrix based on a \code{\link{MSnSet}} object.
 ##' 
 ##' @title Displays a correlation matrix of the quantitative data of the
@@ -572,6 +846,11 @@ samplesData <- Biobase::pData(obj)
 corrMatrixD(qData, samplesData, rate)
 }
 
+wrapper.corrMatrixD_HC <- function(obj, minColor=0.5){
+    qData <- Biobase::exprs(obj)
+    samplesData <- Biobase::pData(obj)
+    corrMatrixD_HC(cor(qData,use = 'pairwise.complete.obs'),samplesData, minColor)
+}
 
 
 
@@ -620,6 +899,67 @@ d <- qplot(x = Var1,
 
 plot(d)
 }
+
+
+
+
+
+corrMatrixD_HC <- function(object,samplesData = NULL, minColor = 0.5) {
+    
+    df <- as.data.frame(object)
+    
+    if (!is.null(samplesData)){
+        for (j in 1:ncol(df)){
+            names(df)[j] <- paste(as.character(samplesData[j,2:5]), 
+                                        collapse =" ")
+        }
+        }
+    is.num <- sapply(df, is.numeric)
+    df[is.num] <- lapply(df[is.num], round, 2)
+    dist <- NULL
+    
+    x <- y <- names(df)
+    
+    df <- tbl_df(cbind(x = y, df)) %>% 
+        gather(y, dist, -x) %>% 
+        mutate(x = as.character(x),
+               y = as.character(y)) %>% 
+        left_join(data_frame(x = y,
+                             xid = seq(length(y)) - 1), by = "x") %>% 
+        left_join(data_frame(y = y,
+                             yid = seq(length(y)) - 1), by = "y")
+    
+    ds <- df %>% 
+        select_("xid", "yid", "dist") %>% 
+        list_parse2()
+    
+    fntltp <- JS("function(){
+                  return this.series.xAxis.categories[this.point.x] + ' ~ ' +
+                         this.series.yAxis.categories[this.point.y] + ': <b>' +
+                         Highcharts.numberFormat(this.point.value, 2)+'</b>';
+               ; }")
+    cor_colr <- list( list(0, '#FF5733'),
+                      list(0.5, '#F8F5F5'),
+                      list(1, '#2E86C1')
+    )
+    highchart() %>% 
+        hc_chart(type = "heatmap") %>% 
+        hc_xAxis(categories = y, title = NULL) %>% 
+        hc_yAxis(categories = y, title = NULL) %>% 
+        hc_add_series(data = ds) %>% 
+        hc_plotOptions(
+            series = list(
+                boderWidth = 0,
+                dataLabels = list(enabled = TRUE)
+            )) %>% 
+        hc_tooltip(formatter = fntltp) %>% 
+        hc_legend(align = "right", layout = "vertical",
+                  margin = 0, verticalAlign = "top",
+                  y = 25, symbolHeight = 280) %>% 
+        hc_colorAxis(  stops= cor_colr,min=minColor,max=1)
+}
+
+
 
 
 ##' Builds a heatmap of the quantitative proteomic data of a 
