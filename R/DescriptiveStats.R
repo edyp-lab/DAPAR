@@ -176,7 +176,7 @@ boxPlotD_HC <- function(qData,
     h1 <-  highchart() %>% 
         hc_add_series_boxplot(x = iris$Sepal.Length, by = iris$Species,
                               name = "length", lineWidth = 1) %>%
-        hc_colors(c("#002F80", "#002F80","#002F80"))
+        hc_colors(c("#002F80", "#002F20","#002F10"))
 
     
     return(h1)
@@ -453,21 +453,18 @@ compareNormalizationD_HC <- function(qDataBefore,
     }
     
     
-    nbSeries = length(indData2Show)
-    #for (i in 1:length(indData2Show)){
-        dt <- data.frame(x=x[,3], y=y[,3])
-        tmp <- list(data = dt, name='toto')
-        names(tmp$data) <- c()
-        series[[1]] <- tmp
-    #}
-    
-    
+    series <- list()
+    for (i in 1:length(indData2Show)){
+        tmp <- list(name=labelsForLegend[i], data =list_parse(data.frame(x=x[,indData2Show[i]],y=y[,indData2Show[i]])))
+        series[[i]] <- tmp
+    }
+   
     h1 <-  highchart() %>% 
-        hc_title(text = "Density plot") %>% 
-        hc_chart(type = "scatter", zoomType="xy") %>%
+        hc_chart( regression = TRUE,
+                 regressionSettings = list(type = "loess", loessSmooth = 2)) %>%
         hc_add_series_list(series) %>%
-        hc_colors(myColors)
-    
+        hc_tooltip(enabled= "false" )
+    h1
     return(h1)
     
     

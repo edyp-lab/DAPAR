@@ -679,6 +679,12 @@ mvTypePlot(qData, labels, threshold)
 }
 
 
+wrapper.mvTypePlot_HC <- function(obj, threshold=0){
+    qData <- Biobase::exprs(obj)
+    labels <- Biobase::pData(obj)[,"Label"]
+    mvTypePlot_HC(qData, labels, threshold)
+}
+
 
 
 ##' This method plots a scatter plot which represents the distribution of
@@ -755,4 +761,82 @@ legend("topright"
         , horiz = FALSE
         , inset=c(0,0)
 )
+}
+
+
+
+
+
+
+
+mvTypePlot_HC <- function(qData, labels, threshold=0){
+    #require(scales)
+    pal <- unique(getPaletteForLabels(labels))
+    color <- NULL
+    col.legend <- c(1:length(pal))
+    
+    
+    conditions <- labels
+    mTemp <- colorTemp <- nbNA <- matrix(rep(0,nrow(qData)*length(unique(conditions))), nrow=nrow(qData),
+                                         dimnames=list(NULL,unique(conditions)))
+    
+    for (iCond in unique(conditions)){
+        if (length(which(conditions==iCond)) == 1){
+            mTemp[,iCond] <- qData[,which(conditions==iCond)]
+            nbNA[,iCond] <- as.integer(is.na(qData[,which(conditions==iCond)]))
+        }else {
+            mTemp[,iCond] <- apply(qData[,which(conditions==iCond)], 1, mean, na.rm=TRUE)
+            nbNA[,iCond] <- apply(qData[,which(conditions==iCond)],1,function(x) length(which(is.na(x) == TRUE)))
+        }
+        colorTemp[,iCond] <- pal[which( unique(conditions) ==iCond)]
+    }
+    print(str(mTemp))
+    
+    
+    series <- list()
+    
+    for (i in 1:length(unique(conditions))){
+        tmp <- list(name='toto', data =list_parse(data.frame(
+            x=apply(qData[,which(conditions==unique(conditions)[i])], 1, mean, na.rm=TRUE),
+            y=apply(qData[,which(conditions==unique(conditions)[i])],1,function(x) length(which(is.na(x) == TRUE))))))
+        series[[i]] <- tmp
+    }
+    
+    
+    print(str(series))
+    #highchart() %>% 
+    #    hc_add_series_list(series) %>%
+    #    hc_plotOptions(type='scatter')
+    
+    
+    
+    
+    # plot(c(mTemp),
+    #      rep(-1,length(c(mTemp))),
+    #      xlim = range(c(mTemp), na.rm = TRUE),
+    #      ylim = c(0, ncol(qData)/length(unique(conditions))),
+    #      xlab = "Mean of quantity values", 
+    #      ylab = "Number of missing values",
+    #      main =  "Missing values repartition")
+    # 
+    # 
+    # points(c(mTemp),
+    #        jitter(c(nbNA), 0.3), 
+    #        col = alpha(c(colorTemp), 0.5),
+    #        pch = 16,
+    #        cex=0.8)
+    
+    #  abline(v=threshold, col="blue", lwd=3)
+    
+    
+    # legend("topright"         
+    #        , legend = unique(labels)
+    #        , col = col.legend
+    #        , pch = 15 
+    #        , bty = "n"
+    #        , pt.cex = 2
+    #        , cex = 1
+    #        , horiz = FALSE
+    #        , inset=c(0,0)
+    # )
 }

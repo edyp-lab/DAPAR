@@ -56,7 +56,9 @@ data <- read.table(file, header=TRUE, sep="\t",colClasses="character")
                        , ncol=length(indExpData)
                        , byrow=FALSE)
     
-    colnames(Intensity) <- colnames(data)[indExpData]
+    #colnames(Intensity) <- colnames(data)[indExpData]
+    colnames(Intensity) <- gsub(".", "_", colnames(data)[indExpData], fixed=TRUE)
+    
     ##the name of lines are the same as the data of the first column
     if (is.null(indiceID)) {
     rownames(Intensity) <- rep(paste(pep_prot_data, "_", 1:nrow(Intensity), 
@@ -72,7 +74,9 @@ data <- read.table(file, header=TRUE, sep="\t",colClasses="character")
         }
     
     #rownames(fd) <- data[,indiceID]
-    colnames(fd) <- colnames(data)[indFData]
+    #colnames(fd) <- colnames(data)[indFData]
+    colnames(fd) <- gsub(".", "_", colnames(data)[indFData], fixed=TRUE)
+    
 
     ##building pData of MSnSet file
     if (!is.na(sum(match(metadata$Bio.Rep," ")))) 
@@ -82,8 +86,9 @@ data <- read.table(file, header=TRUE, sep="\t",colClasses="character")
     if (!is.na(sum(match(metadata$Analyt.Rep," ")))) 
         {metadata$Analyt.Rep <-  as.factor(1:length(metadata$Analyt.Rep))}
     pd <- as.data.frame(metadata)
-    rownames(pd) <- pd$Experiment
-   
+    #rownames(pd) <- pd$Experiment
+    rownames(pd) <- gsub(".", "_", pd$Experiment, fixed=TRUE)
+    
     ##Integrity tests
     if(identical(rownames(Intensity), rownames(fd))==FALSE)
         stop("Problem consistency between
@@ -176,5 +181,37 @@ writeMSnsetToExcel <- function(obj, filename)
     saveWorkbook(wb, name, overwrite=TRUE)
     return(name)
     
+    
+}
+
+##' This function reads a sheet of an Excel file and put the data into a data.frame.
+##' 
+##' @title This function reads a sheet of an Excel file and put the data into a data.frame.
+##' @param file The name of the Excel file.
+##' @param extension ddddd
+##' @param sheet The name of the sheet
+##' @return A data.frame
+##' @author Samuel Wieczorek
+readExcel <- function(file, extension, sheet){
+    data <- NULL
+    if (extension=="xls") {
+     data <- readxl::read_xls(file, sheet)
+    }
+    else if (extension=="xlsx") {
+        data <- readxl::read_xlsx(file, sheet)
+    }
+    return(as.data.frame(data))
+
+}
+
+
+##' This function lists all the sheets of an Excel file.
+##' 
+##' @title This function returns the list of the sheets names in a Excel file.
+##' @param file The name of the Excel file.
+##' @return A vector
+##' @author Samuel Wieczorek
+listSheets <- function(file){
+    return(getSheetNames(file))
     
 }

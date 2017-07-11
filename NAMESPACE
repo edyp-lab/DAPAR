@@ -44,7 +44,9 @@ import("graph")
 
 export(
 "writeMSnsetToExcel",
-"createMSnset"
+"createMSnset",
+"readExcel",
+"listSheets"
 
 ,"wrapper.boxPlotD","boxPlotD"
 ,"wrapper.densityPlotD","densityPlotD"
