@@ -39,8 +39,11 @@ importFrom("grDevices", "colorRampPalette", "palette", "heat.colors")
 importFrom("utils", "read.csv", "read.table", "de")
 importFrom("lme4", "getME")
 import("openxlsx")
+import("readxl")
 import("siggenes") # SAM
 import("graph")
+
+import("clusterProfiler")
 
 export(
 "writeMSnsetToExcel",
@@ -97,5 +100,7 @@ export(
 ,"getProcessingInfo"
 
 ,"pepa.test"
+
+
 
 )

@@ -42,7 +42,7 @@ BiocStyle::latex()
 
 
 ###################################################
-### code chunk number 7: getProstarInstallDir (eval = FALSE)
+### code chunk number 7: getDAPARdataInstallDir (eval = FALSE)
 ###################################################
 ## installed.packages()["DAPARdata","LibPath"]
 
