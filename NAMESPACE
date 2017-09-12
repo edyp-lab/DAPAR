@@ -102,5 +102,8 @@ export(
 ,"pepa.test"
 
 
+,"getUniprotID"
+,"group_GO"
+,"enrich_GO"
 
 )
