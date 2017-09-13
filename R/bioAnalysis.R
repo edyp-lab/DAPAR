@@ -46,7 +46,7 @@ group_GO <- function(data, idFrom, idTo, orgdb, ont, level, readable=TRUE){
 
 
 
-enrich_GO <- function(data, idFrom, idTo, orgdb, ont, readable=TRUE, pAdj, pval, qval, universe)
+enrich_GO <- function(data, idFrom, idTo, orgdb, ont, readable=TRUE, pAdj, pval, universe)
 {
     
     ## ENRICHMENT : GO over-representation test
@@ -57,7 +57,6 @@ enrich_GO <- function(data, idFrom, idTo, orgdb, ont, readable=TRUE, pAdj, pval,
     ego<-enrichGO(gene = gene.id, OrgDb = orgdb, ont = ont, 
                   pAdjustMethod=pAdj, 
                   pvalueCutoff=pval, 
-                  qvalueCutoff=qval, 
                   readable=TRUE,
                   universe = NULL)   
     
