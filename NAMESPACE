@@ -103,6 +103,8 @@ export(
 
 
 ,"getUniprotID"
+,"getUniprotID_FromString"
+,"getUniprotID_FromVector"
 ,"group_GO"
 ,"enrich_GO"
 
