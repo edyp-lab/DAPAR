@@ -41,7 +41,7 @@ getUniprotID_FromString <- function(x){
 
 ###################################
 getUniprotID_FromVector <- function(dat){
-    
+    require(stringr)
     d <- str_split(dat, "|", Inf)
     uniprotID <- lapply(d,test)
 
