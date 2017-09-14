@@ -27,8 +27,28 @@ getUniprotID <- function(data){
 }
 
 
+###################################
+getUniprotID_FromString <- function(x){
+    x <- unlist(x)
+    uniprotSepIndices <- which(x=="|")
+    if (length(uniprotSepIndices) == 2) { 
+        x <- paste0(x, collapse="")
+        res <- substr(x,uniprotSepIndices[1], uniprotSepIndices[2]-2)
 
+    } else { res <- NA}
+    return(res)
+}
 
+###################################
+getUniprotID_FromVector <- function(dat){
+    
+    d <- str_split(dat, "|", Inf)
+    uniprotID <- lapply(d,test)
+
+return(unlist(uniprotID))
+}
+
+###################################
 group_GO <- function(data, idFrom, idTo, orgdb, ont, level, readable=TRUE){
     
     require(as.character(orgdb),character.only = TRUE)
