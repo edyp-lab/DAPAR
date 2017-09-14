@@ -27,6 +27,36 @@ getUniprotID <- function(data){
 }
 
 
+##' This function is a wrappper to the function groupGO from the
+##' package clusterProfiler. Given a vector of genes/proteins, it returns the 
+##' GO profile at a specific level. 
+##' 
+##' It returns a groupGOResult instance. 
+##' 
+##' 
+##' @title Calculates the GO profile of a vector of genes/proteins at specific 
+##' level
+##' @param data A vector of ID (genes or proteins !!DIRE LESQUELS!!)
+##' @param threshold_PVal The threshold on p-pvalue to
+##' distinguish between differential and non-differential data 
+##' @param threshold_LogFC The threshold on log(Fold Change) to
+##' distinguish between differential and non-differential data 
+##' @param pi0Method The parameter pi0.method of the method adjust.p 
+##' in the package \code{cp4p}
+##' @return The computed FDR value (floating number)
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' obj <- wrapper.mvImputation(Exp1_R25_pept[1:1000], "QRILC")
+##' condition1 <- '25fmol'
+##' condition2 <- '10fmol'
+##' qData <- Biobase::exprs(obj)
+##' samplesData <- Biobase::pData(obj)
+##' labels <- Biobase::pData(obj)[,"Label"]
+##' limma <- diffAnaLimma(qData,samplesData, labels, condition1, condition2)
+##' diffAnaComputeFDR(limma)
+
 
 
 group_GO <- function(data, idFrom, idTo, orgdb, ont, level, readable=TRUE){
