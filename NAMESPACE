@@ -20,7 +20,6 @@ importFrom("parallel", "detectCores")
 importFrom("Matrix", "sparseMatrix")
 import(cp4p)
 import(imp4p)
-importFrom("stringr", "str_split")
 importFrom("graphics", "par", "boxplot", "axis", "mtext", "abline", "points", 
             "legend", "lines",  "barplot", "text",
            "layout", "plot.new", "strheight", "strwidth", "title","plot.window")
@@ -103,10 +102,5 @@ export(
 ,"pepa.test"
 
 
-,"getUniprotID"
-,"getUniprotID_FromString"
-,"getUniprotID_FromVector"
-,"group_GO"
-,"enrich_GO"
 
 )
