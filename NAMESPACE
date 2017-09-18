@@ -108,5 +108,6 @@ export(
 ,"getUniprotID_FromVector"
 ,"group_GO"
 ,"enrich_GO"
+,"univ_AnnotDbPkg"
 
 )
