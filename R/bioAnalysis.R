@@ -28,29 +28,6 @@ getUniprotID <- function(data){
 
 
 
-##' Returns a vector of ENTREZ ID (gene id)  
-##' 
-##' @title Returns a vector of ENTREZ ID (gene id) 
-##' @param dat a vector of ID
-##' @param idFrom ID type of data to convert
-##' @param idTo ID to convert to
-##' @param orgdb a Bioconductor annotation package 
-##' @return A vector of ID of the asked type 
-##' @author Florence Combes
-##' @examples
-##' require(org.Hs.eg.db)
-##' dat<-c("P15924","P02538", "P02768", "P08779", "Q02413", "P14923")
-##' ID_conversion(dat, idFrom="UNIPROT", idTo="ENTREZID", orgdb=org.Hs.eg.db)
-ID_conversion<-function(dat, idFrom, idTo=ENTREZID, orgdb) {
-    
-    #require(clusterProfiler)
-    gene <- bitr(dat, fromType=idFrom, toType=idTo, OrgDb=orgdb)
-    gene.id = gene$ENTREZID
-    return(gene.id)
-}
-
-
-
 ##' This function is a wrappper to the function groupGO from the
 ##' package clusterProfiler. Given a vector of genes/proteins, it returns the 
 ##' GO profile at a specific level. 
