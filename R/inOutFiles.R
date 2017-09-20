@@ -177,6 +177,19 @@ writeMSnsetToExcel <- function(obj, filename)
         #gridExpand = TRUE, stack=TRUE)
         
     }
+    
+    if (!is.null(obj@experimentData@other$GGO_analysis))
+        {
+        addWorksheet(wb, "Group GO")
+        writeData(wb, sheet=4, obj@experimentData@other$GGO_analysis$ggo_res@result)
+        }
+    
+    if (!is.null(obj@experimentData@other$EGO_analysis))
+        {
+        addWorksheet(wb, "Enrichment GO")
+        writeData(wb, sheet=5, obj@experimentData@other$EGO_analysis$ego_res@result)
+        
+        }
 
     saveWorkbook(wb, name, overwrite=TRUE)
     return(name)
