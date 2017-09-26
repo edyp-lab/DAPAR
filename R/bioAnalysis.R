@@ -2,15 +2,14 @@
 
 ##' This function is a wrappper to the function groupGO from the
 ##' package clusterProfiler. Given a vector of genes/proteins, it returns the 
-##' GO profile at a specific level. 
-##' 
-##' It returns a groupGOResult instance. 
+##' GO profile at a specific level. It returns a groupGOResult instance. 
 ##' 
 ##' 
 ##' @title Calculates the GO profile of a vector of genes/proteins at specific 
 ##' level
 ##' @param data A vector of ID (genes or proteins !!DIRE LESQUELS!!)
 ##' @param idFrom
+##' @param idTo
 ##' @param threshold_LogFC The threshold on log(Fold Change) to
 ##' distinguish between differential and non-differential data 
 ##' @param pi0Method The parameter pi0.method of the method adjust.p 
@@ -45,10 +44,7 @@ group_GO <- function(data, idFrom, idTo, orgdb, ont, level, readable=TRUE){
 
 ##' This function is a wrappper to the function groupGO from the
 ##' package clusterProfiler. Given a vector of genes/proteins, it returns the 
-##' GO profile at a specific level. 
-##' 
-##' It returns a groupGOResult instance. 
-##' 
+##' GO profile at a specific level. It returns a groupGOResult instance. 
 ##' 
 ##' @title Calculates the GO profile of a vector of genes/proteins at specific 
 ##' level
@@ -134,7 +130,7 @@ enrich_GO <- function(data, idFrom, idTo, orgdb, ont, readable=TRUE, pAdj, pval,
 univ_AnnotDbPkg <- function(orgdb){
     
     require(as.character(orgdb),character.only = TRUE)
-    univ<-keys(get(orgdb), keytype="ENTREZID")
+    univ <- keys(get(orgdb), keytype="ENTREZID")
     #different syntax for 'org.Pf.plasmo.db' package
     #univ<-keys(get(orgdb), keytype="ORF")
     return(univ)
