@@ -103,8 +103,8 @@ export(
 ,"pepa.test"
 
 
-,"getUniprotID_FromString"
-,"getUniprotID_FromVector"
+#,"getUniprotID_FromString"
+#,"getUniprotID_FromVector"
 ,"group_GO"
 ,"enrich_GO"
 ,"univ_AnnotDbPkg"

@@ -96,16 +96,16 @@ enrich_GO <- function(data, idFrom, idTo, orgdb, ont, readable=TRUE, pAdj, pval,
 ##' @param c xxxxxxxxxxxxxx 
 ##' @return xxxxxxxxxxxxxx 
 ##' @author Samuel Wieczorek
-getUniprotID_FromString <- function(x){
-    x <- unlist(x)
-    uniprotSepIndices <- which(x=="|")
-    if (length(uniprotSepIndices) == 2) { 
-        x <- paste0(x, collapse="")
-        res <- substr(x,uniprotSepIndices[1], uniprotSepIndices[2]-2)
-        
-    } else { res <- NA}
-    return(res)
-}
+# getUniprotID_FromString <- function(x){
+#     x <- unlist(x)
+#     uniprotSepIndices <- which(x=="|")
+#     if (length(uniprotSepIndices) == 2) { 
+#         x <- paste0(x, collapse="")
+#         res <- substr(x,uniprotSepIndices[1], uniprotSepIndices[2]-2)
+#         
+#     } else { res <- NA}
+#     return(res)
+# }
 
 ##' xxxxxxxxxxxxxx
 ##' 
@@ -113,13 +113,13 @@ getUniprotID_FromString <- function(x){
 ##' @param dat xxxxxxxxxxxxxx 
 ##' @return xxxxxxxxxxxxxx 
 ##' @author Samuel Wieczorek
-getUniprotID_FromVector <- function(dat){
-    require(stringr)
-    d <- str_split(dat, "|", Inf)
-    uniprotID <- lapply(d,test)
-    
-    return(unlist(uniprotID))
-}
+# getUniprotID_FromVector <- function(dat){
+#     require(stringr)
+#     d <- str_split(dat, "|", Inf)
+#     uniprotID <- lapply(d,test)
+#     
+#     return(unlist(uniprotID))
+# }
 
 
 ##' Returns the universe = totality of ID of an OrgDb annotation package
@@ -179,4 +179,56 @@ GOAnalysisSave <- function (obj, ggo_res, ego_res, organism, ontology, level, PA
 }
 
 
-      
+
+
+barplotGroupGO_HC <- function(ggo, nRes=5){
+    
+    dat <- ggo@result
+    n <- which(dat$Count==0)
+    if (length(n) > 0){dat <- dat[-which(dat$Count==0),]}
+    dat <- dat[order(dat$Count, decreasing=TRUE),]
+    dat <- dat[seq(1:nRes),]
+    
+        
+        
+    h1 <-  highchart() %>%
+    hc_chart(type = "bar") %>%
+    hc_add_series(dat$Count) %>%
+    hc_legend(enabled = FALSE) %>%
+    #hc_colors(myColors) %>%
+     hc_xAxis(categories = dat$Description, title = list(text = ""))
+
+return(h1)
+}
+
+
+barplotEnrichGO_HC <- function(ego, nRes = 5){
+    
+    dat <- ego@result
+    n <- which(dat$Count==0)
+    if (length(n) > 0){dat <- dat[-which(dat$Count==0),]}
+    dat <- dat[order(dat$Count, decreasing=TRUE),]
+    dat <- dat[seq(1:nRes),]
+    
+    pal <- c("#002F80", "#002F80","#002F80","#002F80","#F9AF38","#F9AF38","#F9AF38","#F9AF38")
+    
+    maxPval <- max(dat$pvalue)
+    minPval <- min(dat$pvalue)
+    cor_colr <- list( list(minPval, '#FF5733'),
+                      list(mean(minPval, maxPval), '#F8F5F5'),
+                      list(maxPval, '#2E86C1'))
+    minColor <- mean(minPval, maxPval)
+    
+    h1 <-  highchart() %>%
+        hc_chart(type = "bar") %>%
+        hc_add_series(dat$Count) %>%
+        hc_legend(enabled = FALSE) %>%
+        #hc_colors(myColors) %>%
+        hc_xAxis(categories = dat$Description, title = list(text = "")) %>% 
+        #hc_legend(align = "right", layout = "vertical",
+        #          margin = 0, verticalAlign = "top",
+        #          y = 25, symbolHeight = 280) %>% 
+        hc_colorAxis(  stops= cor_colr, min=minPval,max=maxPval)
+    
+    return(h1)
+}

@@ -174,7 +174,8 @@ mvPerLinesHisto_HC <- function(qData, samplesData, indLegend="auto", showValues=
         hc_add_series(data = df2, type="column", color="red") %>%
         hc_plotOptions( column = list(stacking = "normal") ) %>%
         hc_legend(enabled = FALSE) %>%
-        hc_xAxis(categories = row.names(df), title = list(text = "Number of NA values by lines"))
+        hc_xAxis(categories = row.names(df), title = list(text = "Number of NA values by lines")) %>%
+        hc_exporting(enabled = TRUE,filename = "missingValuesPlot1")
     
     return(h1)
  
@@ -376,7 +377,8 @@ mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto",
         hc_plotOptions( column = list(stacking = "") ) %>%
         hc_add_series_list(series) %>%
         hc_legend(enabled = FALSE) %>%
-        hc_xAxis(categories = row.names(m), title = list(text = "# NA per lines"))
+        hc_xAxis(categories = row.names(m), title = list(text = "# NA per lines")) %>%
+        hc_exporting(enabled = TRUE,filename = "missingValuesPlot_2")
     
     return(h1)
     
@@ -556,7 +558,9 @@ mvHisto_HC <- function(qData, samplesData, labels, indLegend="auto",
         hc_add_series_list(series) %>%
         hc_plotOptions( column = list(stacking = "normal") ) %>%
         hc_legend(enabled = FALSE) %>%
-        hc_xAxis(categories = labels, title = list(text = "# NA per lines"))
+        hc_xAxis(categories = labels, title = list(text = "# NA per lines")) %>%
+        hc_exporting(enabled = TRUE,filename = "missingValuesPlot_3")
+    
 
     return(h1)
     
