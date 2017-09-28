@@ -15,6 +15,8 @@ import(vioplot)
 import(impute)
 import(knitr)
 importFrom("doParallel", "registerDoParallel")
+import(dplyr)
+import(tidyr)
 importFrom("foreach", "foreach", "%dopar%")
 importFrom("parallel", "detectCores")
 importFrom("Matrix", "sparseMatrix")
@@ -102,5 +104,11 @@ export(
 ,"pepa.test"
 
 
+#,"getUniprotID_FromString"
+#,"getUniprotID_FromVector"
+,"group_GO"
+,"enrich_GO"
+,"univ_AnnotDbPkg"
+,"GOAnalysisSave"
 
 )

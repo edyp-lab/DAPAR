@@ -176,7 +176,8 @@ boxPlotD_HC <- function(qData,
     h1 <-  highchart() %>% 
         hc_add_series_boxplot(x = iris$Sepal.Length, by = iris$Species,
                               name = "length", lineWidth = 1) %>%
-        hc_colors(c("#002F80", "#002F20","#002F10"))
+        hc_colors(c("#002F80", "#002F20","#002F10")) %>%
+        hc_exporting(enabled = TRUE,filename = "boxplot")
 
     
     return(h1)
@@ -325,7 +326,32 @@ compareNormalizationD(qDataBefore, qDataAfter, labelsForLegend, indData2Show,
                     group2Color)
 }
 
-
+##' Wrapper to the function that plot to compare the quantitative proteomics 
+##' data before and after normalization. Same as the function \link{wrapper.compareNormalizationD}
+##' but uses the package \CRANpkg{highcharter}
+##' 
+##' @title Builds a plot from a dataframe
+##' @param objBefore A dataframe that contains quantitative data before 
+##' normalization.
+##' @param objAfter A dataframe that contains quantitative data after 
+##' normalization.
+##' @param labelsForLegend A vector of the conditions (labels) (one label 
+##' per sample).
+##' @param indData2Show A vector of the indices of the columns to show in the 
+##' plot. The indices are those of indices of 
+##' the columns int the data.frame qDataBefore.
+##' @param group2Color A string that indicates how to color the replicates: 
+##' one color per condition (value "Condition") or one 
+##' color per replicate (value "Replicate"). Default value is by Condition.
+##' @return A plot
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+##' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "Median Centering", 
+##' "within conditions")
+##' wrapper.compareNormalizationD_HC(Exp1_R25_pept, objAfter, labels)
 wrapper.compareNormalizationD_HC <- function(objBefore, objAfter, 
                                           labelsForLegend=NULL,
                                           indData2Show=NULL,
@@ -427,7 +453,31 @@ palette("default")
 
 
 
-
+##' 
+##' @title Builds a plot from a dataframe. Same as compareNormalizationD but 
+##' uses the Highcharter library
+##' @param qDataBefore A dataframe that contains quantitative data before 
+##' normalization.
+##' @param qDataAfter A dataframe that contains quantitative data after 
+##' normalization.
+##' @param labelsForLegend A vector of the conditions (labels) (one label 
+##' per sample).
+##' @param indData2Show A vector of the indices of the columns to show in 
+##' the plot. The indices are those of indices of 
+##' the columns int the data.frame qDataBefore.
+##' @param group2Color A string that indicates how to color the replicates:
+##' one color per condition (value "Condition") or one 
+##' color per replicate (value "Replicate"). Default value is by Condition.
+##' @return A plot
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qDataBefore <- Biobase::exprs(Exp1_R25_pept)
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+##' qDataAfter <- normalizeD(qDataBefore,labels,"Median Centering",
+##' "within conditions")
+##' compareNormalizationD_HC(qDataBefore, qDataAfter, labels)
 compareNormalizationD_HC <- function(qDataBefore,
                                   qDataAfter,
                                   labelsForLegend=NULL,
@@ -463,7 +513,8 @@ compareNormalizationD_HC <- function(qDataBefore,
         hc_chart( regression = TRUE,
                  regressionSettings = list(type = "loess", loessSmooth = 2)) %>%
         hc_add_series_list(series) %>%
-        hc_tooltip(enabled= "false" )
+        hc_tooltip(enabled= "false" ) %>%
+        hc_exporting(enabled = TRUE,filename = "compareNormalization")
     h1
     return(h1)
     
@@ -533,7 +584,28 @@ qData <- Biobase::exprs(obj)
 densityPlotD(qData, labelsForLegend, indData2Show,group2Color)
 }
 
-
+##' This function is a wrapper for using the densityPlotD function with 
+##' objects of class \code{\link{MSnSet}}. Same as the function \link{wrapper.densityPlotD}
+##' but uses the package \CRANpkg{highcharter}
+##' 
+##' @title Builds a densityplot from an object of class \code{\link{MSnSet}}
+##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param labelsForLegend A vector of labels to show in densityplot.
+##' @param indData2Show A vector of the indices of the columns to show in 
+##' the plot. The indices are those of indices of the columns int the data
+##' frame qDataBefore in the density plot.
+##' @param group2Color A string that indicates how to color the replicates: 
+##' one color per condition (value "Condition") or one color per replicate
+##' (value "Replicate"). Default value is by Condition.
+##' @return A density plot
+##' @author Samuel Wieczorek
+##' @seealso \code{\link{wrapper.boxPlotD}}, 
+##' \code{\link{wrapper.CVDistD}}
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+##' wrapper.densityPlotD_HC(Exp1_R25_pept, labels)
 wrapper.densityPlotD_HC <- function(obj, labelsForLegend=NULL,  indData2Show=NULL,
                                  group2Color = "Condition"){
     qData <- Biobase::exprs(obj)
@@ -630,7 +702,27 @@ legend("topleft"
 
 
 
-
+##' Densityplot of quantitative proteomics data over samples. Same as the function \code{\link{densityPlotD}}
+##' but uses the package \CRANpkg{highcharter}
+##' 
+##' @title Builds a densityplot from a dataframe
+##' @param qData A dataframe that contains quantitative data.
+##' @param labelsForLegend A vector of the conditions (labels) (one label 
+##' per sample).
+##' @param indData2Show A vector of indices to show in densityplot. If NULL, 
+##' then all labels are displayed.
+##' @param group2Color A string that indicates how to color the replicates: 
+##' one color per condition (value "Condition") or one 
+##' color per replicate (value "Replicate"). Default value is by Condition.
+##' @return A density plot
+##' @author Samuel Wieczorek
+##' @seealso \code{\link{boxPlotD}}, \code{\link{CVDistD}}
+##' @examples 
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qData <- Biobase::exprs(Exp1_R25_pept)
+##' labels <- lab2Show <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+##' densityPlotD_HC(qData, labels)
 densityPlotD_HC <- function(qData, labelsForLegend=NULL,indData2Show=NULL,
                             group2Color = "Condition"){
     
@@ -675,7 +767,8 @@ for (i in 1:length(indData2Show)){
         hc_legend(enabled = TRUE) %>%
         hc_xAxis(title = list(text = "log(Intensity)")) %>%
         hc_yAxis(title = list(text = "Density")) %>%
-        hc_colors(myColors)
+        hc_colors(myColors) %>%
+        hc_exporting(enabled = TRUE,filename = "densityplot")
     
     return(h1)
 
@@ -706,6 +799,21 @@ CVDistD(qData, labels)
 }
 
 
+##' Builds a densityplot of the CV of entities in the exprs() table. 
+##' of an object \code{\link{MSnSet}}. The variance is calculated for each 
+##' condition (Label) present
+##' in the dataset (see the slot \code{'Label'} in the \code{pData()} table).
+##' Same as the function \code{\link{wrapper.CVDistD}} but uses the package \CRANpkg{highcharter}
+##' 
+##' @title Distribution of CV of entities
+##' @param obj An object of class \code{\link{MSnSet}}.
+##' @return A density plot
+##' @author Samuel Wieczorek
+##' @seealso \code{\link{wrapper.densityPlotD}}
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' wrapper.CVDistD_HC(Exp1_R25_pept)
 wrapper.CVDistD_HC <- function(obj){
     qData <- Biobase::exprs(obj)
     labels <- Biobase::pData(obj)[,"Label"]
@@ -788,7 +896,21 @@ legend("topright"
 
 
 
-
+##' Builds a densityplot of the CV of entities in the exprs() table
+##' of a object. The CV is calculated for each condition (Label) present
+##' in the dataset (see the slot \code{'Label'} in the \code{pData()} table)
+##' Same as the function \code{CVDistD} but uses the package \CRANpkg{highcharter}
+##' @title Distribution of CV of entities
+##' @param qData A dataframe that contains quantitative data.
+##' @param labels A vector of the conditions (labels) (one label per sample).
+##' @return A density plot
+##' @author Samuel Wieczorek
+##' @seealso \code{\link{densityPlotD}}.
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+##' CVDistD_HC(Biobase::exprs(Exp1_R25_pept), labels)
 CVDistD_HC <- function(qData, labels=NULL){
     
     if (is.null(labels)) {return(NULL)}
@@ -814,7 +936,8 @@ CVDistD_HC <- function(qData, labels=NULL){
         hc_add_series_list(series) %>%
         hc_legend(enabled = TRUE) %>%
         hc_xAxis(title = list(text = "CV(log(Intensity))")) %>%
-        hc_yAxis(title = list(text = "Density"))
+        hc_yAxis(title = list(text = "Density")) %>%
+        hc_exporting(enabled = TRUE,filename = "logIntensity")
     
     return(h1)
 
@@ -843,6 +966,19 @@ samplesData <- Biobase::pData(obj)
 corrMatrixD(qData, samplesData, rate)
 }
 
+##' Builds a correlation matrix based on a \code{\link{MSnSet}} object. 
+##' Same as the function \link{wrapper.corrMatrixD} but uses the package \CRANpkg{highcharter}
+##' 
+##' @title Displays a correlation matrix of the quantitative data of the
+##' \code{exprs()} table
+##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param rate A float that defines the gradient of colors.
+##' @return A colored correlation matrix
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' wrapper.corrMatrixD_HC(Exp1_R25_pept)
 wrapper.corrMatrixD_HC <- function(obj, minColor=0.5){
     qData <- Biobase::exprs(obj)
     samplesData <- Biobase::pData(obj)
@@ -900,7 +1036,24 @@ plot(d)
 
 
 
-
+##' Correlation matrix based on a \code{\link{MSnSet}} object. Same as the 
+##' function \link{corrMatrixD} but uses the package \CRANpkg{highcharter}
+##' 
+##' @title Displays a correlation matrix of the quantitative data of the
+##' \code{exprs()} table.
+##' @param qData A dataframe of quantitative data.
+##' @param samplesData A dataframe where lines correspond to samples and 
+##' columns to the meta-data for those samples.
+##' @param gradientRate The rate parameter to control the exponential law for 
+##' the gradient of colors
+##' @return A colored correlation matrix
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qData <- Biobase::exprs(Exp1_R25_pept)
+##' samplesData <- Biobase::pData(Exp1_R25_pept)
+##' corrMatrixD_HC(cor(qData,use = 'pairwise.complete.obs'),samplesData)
 corrMatrixD_HC <- function(object,samplesData = NULL, minColor = 0.5) {
     
     df <- as.data.frame(object)
@@ -953,7 +1106,8 @@ corrMatrixD_HC <- function(object,samplesData = NULL, minColor = 0.5) {
         hc_legend(align = "right", layout = "vertical",
                   margin = 0, verticalAlign = "top",
                   y = 25, symbolHeight = 280) %>% 
-        hc_colorAxis(  stops= cor_colr,min=minColor,max=1)
+        hc_colorAxis(  stops= cor_colr,min=minColor,max=1) %>%
+        hc_exporting(enabled = TRUE,filename = "corrMatrix")
 }
 
 

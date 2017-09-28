@@ -132,7 +132,8 @@ proportionConRev_HC <- function(obj, idContaminants=NULL,
             stacking = "normal",
             enableMouseTracking = FALSE)
         ) %>% 
-        hc_series(list(name="Total",data=mydata$test,dataLabels = list(enabled = TRUE, format='{point.y}%')))
+        hc_series(list(name="Total",data=mydata$test,dataLabels = list(enabled = TRUE, format='{point.y}%'))) %>%
+        hc_exporting(enabled = TRUE,filename = "contaminants")
 
 
 }
