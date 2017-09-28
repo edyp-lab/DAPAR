@@ -303,6 +303,8 @@ x <- barplot(m,
 
 ##' This method plots a bar plot which represents the distribution of the 
 ##' number of missing values (NA) per lines (ie proteins) and per conditions.
+##' Same as the function \link{mvPerLinesHistoPerCondition} but uses the package
+##' \CRANpkg{highcharter}.
 ##' 
 ##' @title Bar plot of missing values per lines and per condition
 ##' @param qData A dataframe that contains quantitative data.
@@ -318,7 +320,7 @@ x <- barplot(m,
 ##' data(Exp1_R25_pept)
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' samplesData <- Biobase::pData(Exp1_R25_pept)
-##' mvPerLinesHistoPerCondition(qData, samplesData)
+##' mvPerLinesHistoPerCondition_HC(qData, samplesData)
 mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto", 
                                         showValues=FALSE){
     
@@ -346,22 +348,7 @@ mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto",
     
     
     colnames(m) <- unique(labels)
-    #m <- t(m)
-    #list(name="A",data=mydata$A)
-    # x <- barplot(m, 
-    #              main = "# lines by # of NA",
-    #              xlab = "# NA per lines",
-    #              names.arg = as.character(0:ncolMatrix), 
-    #              col = unique(pal),
-    #              ylim = c(0, 1.2*max(m)), 
-    #              xpd = FALSE,
-    #              las=1,
-    #              cex.names=1.5,
-    #              cex.axis=1.5,
-    #              beside=TRUE
-    # )
-    
-    #m <- as.data.frame(m)
+    rownames(m) <- 0:(nrow(m)-1)
     
     nbSeries = length(unique(labels))
     series <- list()
@@ -501,7 +488,8 @@ graphics::text(x, -3,
 
 
 
-##' This method plots a histogram of missing values.
+##' This method plots a histogram of missing values. Same as the function \code{mvHisto}
+##' but uses the package \CRANpkg{highcharter}
 ##' 
 ##' @title Histogram of missing values
 ##' @param qData A dataframe that contains quantitative data.
@@ -519,7 +507,7 @@ graphics::text(x, -3,
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' samplesData <- Biobase::pData(Exp1_R25_pept)
 ##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-##' mvHisto(qData, samplesData, labels, indLegend="auto", showValues=TRUE)
+##' mvHisto_HC(qData, samplesData, labels, indLegend="auto", showValues=TRUE)
 mvHisto_HC <- function(qData, samplesData, labels, indLegend="auto", 
                     showValues=FALSE){
     
@@ -536,9 +524,9 @@ mvHisto_HC <- function(qData, samplesData, labels, indLegend="auto",
     NbNAPerCol <- colSums(is.na(qData))
     NbNAPerRow <- rowSums(is.na(qData))
     
-    if (sum(NbNAPerCol) == 0) {if (sum(NbNAPerCol) == 0){
-        NbNAPerCol <- rep(0,1+ncol(qData))
-    }} 
+    # if (sum(NbNAPerCol) == 0){
+    #     NbNAPerCol <- rep(0,1+ncol(qData))
+    # }
     
     
     nbSeries = length(unique(labels))
@@ -554,11 +542,11 @@ mvHisto_HC <- function(qData, samplesData, labels, indLegend="auto",
     
     h1 <-  highchart() %>%
          hc_chart(type = "column") %>%
-         hc_title(text = "# lines by # of NA") %>%
+         hc_title(text = "# lines by columns") %>%
         hc_add_series_list(series) %>%
         hc_plotOptions( column = list(stacking = "normal") ) %>%
         hc_legend(enabled = FALSE) %>%
-        hc_xAxis(categories = labels, title = list(text = "# NA per lines")) %>%
+        hc_xAxis(categories = labels) %>%
         hc_exporting(enabled = TRUE,filename = "missingValuesPlot_3")
     
 

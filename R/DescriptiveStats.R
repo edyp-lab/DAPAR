@@ -605,7 +605,7 @@ densityPlotD(qData, labelsForLegend, indData2Show,group2Color)
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-##' wrapper.densityPlotD(Exp1_R25_pept, labels)
+##' wrapper.densityPlotD_HC(Exp1_R25_pept, labels)
 wrapper.densityPlotD_HC <- function(obj, labelsForLegend=NULL,  indData2Show=NULL,
                                  group2Color = "Condition"){
     qData <- Biobase::exprs(obj)
