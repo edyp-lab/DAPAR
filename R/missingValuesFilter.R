@@ -99,7 +99,23 @@ graphics::text(x= 20, y= bp, labels=as.character(lbls), xpd=TRUE, cex=1.5)
 
 
 
-
+##' Plots a barplot of proportion of contaminants and reverse. Same as the function
+##' \code{proportionConRev} but uses the package \CRANpkg{highcharter}.
+##' 
+##' @title Barplot of proportion of contaminants and reverse
+##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param idContaminants The name of a column of Contaminants
+##' @param prefixContaminants The prefix to identify contaminants
+##' @param idReverse The name of a column of Reverse
+##' @param prefixReverse The prefix to identify Reverse
+##' @return A barplot
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' pref <- "+"
+##' proportionConRev_HC(Exp1_R25_pept, "Potential.contaminant", pref, 
+##' "Reverse", pref)
 proportionConRev_HC <- function(obj, idContaminants=NULL, 
                              prefixContaminants=NULL, 
                              idReverse=NULL, prefixReverse=NULL){

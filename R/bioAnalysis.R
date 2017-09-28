@@ -203,28 +203,41 @@ barplotEnrichGO_HC <- function(ego, nRes = 5){
     dat <- ego@result
     n <- which(dat$Count==0)
     if (length(n) > 0){dat <- dat[-which(dat$Count==0),]}
-    dat <- dat[order(dat$Count, decreasing=TRUE),]
+    dat <- dat[order(dat$pvalue, decreasing=FALSE),]
     dat <- dat[seq(1:nRes),]
     
-    pal <- c("#002F80", "#002F80","#002F80","#002F80","#F9AF38","#F9AF38","#F9AF38","#F9AF38")
     
-    maxPval <- max(dat$pvalue)
-    minPval <- min(dat$pvalue)
-    cor_colr <- list( list(minPval, '#FF5733'),
-                      list(mean(minPval, maxPval), '#F8F5F5'),
-                      list(maxPval, '#2E86C1'))
-    minColor <- mean(minPval, maxPval)
+    colfunc <- colorRampPalette(c("red","royalblue"))
+    nbBreaks <- 100
+    series <- list()
+    pal <- colfunc(nbBreaks)
+    t <- log(dat$pvalue)
+    d <- (max(t) - min(t))/nbBreaks
+    base <- seq(from=min(t), to=max(t), by = d)
+    myColorsIndex <- unlist(lapply(t, function(x){last(which(x > base))}))
+    myColorsIndex[which(is.na(myColorsIndex))] <- 1
+    
+    nbSeries <- nRes
+    for (i in 1:nbSeries){
+        d <- rep(0, nbSeries)
+        d[i] <- dat[i,"Count"]
+        tmp <- list(data = d)
+        names(tmp$data) <- c()
+        series[[i]] <- tmp
+    }
+    
+   
+    
     
     h1 <-  highchart() %>%
         hc_chart(type = "bar") %>%
-        hc_add_series(dat$Count) %>%
+        hc_add_series_list(series) %>%
         hc_legend(enabled = FALSE) %>%
-        #hc_colors(myColors) %>%
-        hc_xAxis(categories = dat$Description, title = list(text = "")) %>% 
-        #hc_legend(align = "right", layout = "vertical",
-        #          margin = 0, verticalAlign = "top",
-        #          y = 25, symbolHeight = 280) %>% 
-        hc_colorAxis(  stops= cor_colr, min=minPval,max=maxPval)
+        hc_xAxis(categories = dat$Description, title = list(text = ""))  %>%
+        hc_colors(pal[myColorsIndex]) %>%
+        hc_legend(layout = "vertical", verticalAlign = "top",
+                  align = "right", valueDecimals = 0) 
+
     
     return(h1)
 }
