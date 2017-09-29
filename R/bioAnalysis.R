@@ -208,6 +208,45 @@ barplotEnrichGO_HC <- function(ego, nRes = 5){
     
     
     colfunc <- colorRampPalette(c("red","royalblue"))
+    nbBreaks <- 50
+    pal <- colfunc(nbBreaks)
+    t <- log(dat$pvalue)
+    d <- (max(t) - min(t))/nbBreaks
+    base <- seq(from=min(t), to=max(t), by = d)
+    myColorsIndex <- unlist(lapply(t, function(x){last(which(x > base))}))
+    myColorsIndex[which(is.na(myColorsIndex))] <- 1
+    myColors <- pal[myColorsIndex]
+    
+    dat$pvalue <- format(dat$pvalue, digits=2)
+    
+    h1 <- highchart() %>%  
+        hc_yAxis(title = list(text = "Count")) %>% 
+        hc_xAxis(categories = dat$Description) %>% 
+        hc_add_series(data = dat, type = "bar", hcaes(x = Description, y = Count),
+                      dataLabels = list(enabled = TRUE, format='pval={point.pvalue}'),
+                      colorByPoint = TRUE) %>%
+        hc_colors(myColors) %>%
+        hc_exporting(enabled = TRUE,filename = "GOEnrich_barplot") %>%
+        hc_legend(enabled = FALSE) %>%
+        hc_plotOptions(bar = list(
+            pointWidth=60,
+            dataLabels = list(enabled = TRUE)))
+    
+     return(h1)
+}
+
+
+
+scatterplotEnrichGO_HC <- function(ego, nRes = 8){
+    
+    dat <- ego@result
+    n <- which(dat$Count==0)
+    if (length(n) > 0){dat <- dat[-which(dat$Count==0),]}
+    dat <- dat[order(dat$Count, decreasing=TRUE),]
+    dat <- dat[seq(1:nRes),]
+    
+    
+    colfunc <- colorRampPalette(c("red","royalblue"))
     nbBreaks <- 100
     series <- list()
     pal <- colfunc(nbBreaks)
@@ -220,24 +259,28 @@ barplotEnrichGO_HC <- function(ego, nRes = 5){
     nbSeries <- nRes
     for (i in 1:nbSeries){
         d <- rep(0, nbSeries)
-        d[i] <- dat[i,"Count"]
-        tmp <- list(data = d)
+        d[i] <- dat[i,"GeneRatio"]
+        tmp <- list(name = "",
+                    data = d)
         names(tmp$data) <- c()
         series[[i]] <- tmp
     }
     
-   
     
     
+    series <- dat$GeneRatio
+    series <- dat$Count
     h1 <-  highchart() %>%
-        hc_chart(type = "bar") %>%
-        hc_add_series_list(series) %>%
+        hc_chart(type = "scatter") %>%
+        hc_add_series_scatter(x=dat$GeneRatio, y=dat$Description, z=dat$Count, color = dat$p.adjust) %>%
         hc_legend(enabled = FALSE) %>%
-        hc_xAxis(categories = dat$Description, title = list(text = ""))  %>%
-        hc_colors(pal[myColorsIndex]) %>%
+        hc_yAxis(categories = dat$Description, title = list(text = ""))  %>%
+        hc_xAxis(categories = dat$GeneRatio, title = list(text = ""))  %>%
+        #hc_colors(pal[myColorsIndex]) %>%
         hc_legend(layout = "vertical", verticalAlign = "top",
-                  align = "right", valueDecimals = 0) 
-
+                  align = "right", valueDecimals = 0)  %>%
+        hc_exporting(enabled = TRUE,filename = "GOEnrich_dotplot") 
+    
     
     return(h1)
 }
