@@ -208,7 +208,7 @@ barplotEnrichGO_HC <- function(ego, nRes = 5){
     
     
     colfunc <- colorRampPalette(c("red","royalblue"))
-    nbBreaks <- 50
+    nbBreaks <- 20*nRes
     pal <- colfunc(nbBreaks)
     t <- log(dat$pvalue)
     d <- (max(t) - min(t))/nbBreaks
@@ -237,9 +237,15 @@ barplotEnrichGO_HC <- function(ego, nRes = 5){
 
 
 
-scatterplotEnrichGO_HC <- function(ego, nRes = 8){
+scatterplotEnrichGO_HC <- function(ego, nRes = 10){
     
     dat <- ego@result
+    
+    dat$GeneRatio <- unlist(lapply(dat$GeneRatio, function(x){
+        as.numeric(unlist(str_split(x,'/'))[1]) / as.numeric(unlist(str_split(x,'/'))[2])
+    }))
+    
+    
     n <- which(dat$Count==0)
     if (length(n) > 0){dat <- dat[-which(dat$Count==0),]}
     dat <- dat[order(dat$Count, decreasing=TRUE),]
@@ -250,35 +256,34 @@ scatterplotEnrichGO_HC <- function(ego, nRes = 8){
     nbBreaks <- 100
     series <- list()
     pal <- colfunc(nbBreaks)
-    t <- log(dat$pvalue)
+    t <- log(dat$p.adjust)
     d <- (max(t) - min(t))/nbBreaks
     base <- seq(from=min(t), to=max(t), by = d)
     myColorsIndex <- unlist(lapply(t, function(x){last(which(x > base))}))
     myColorsIndex[which(is.na(myColorsIndex))] <- 1
     
-    nbSeries <- nRes
-    for (i in 1:nbSeries){
-        d <- rep(0, nbSeries)
-        d[i] <- dat[i,"GeneRatio"]
-        tmp <- list(name = "",
-                    data = d)
-        names(tmp$data) <- c()
-        series[[i]] <- tmp
-    }
+    df <- data.frame(x=c(0:(nRes-1)),
+                        y=dat$GeneRatio,
+                        z=dat$Count,
+                        color=pal[myColorsIndex],
+                        colorSegment=pal[myColorsIndex],
+                        pAdjust = format(dat$p.adjust, digits=2),
+                        name = dat$Description)
     
     
+    txt_tooltip <- NULL
+    txt_tooltip <- paste("<b> p.adjust </b>: {point.pAdjust} <br> ", 
+                         "<b> Count </b>: {point.z} <br> ",
+                         sep="")
     
-    series <- dat$GeneRatio
-    series <- dat$Count
     h1 <-  highchart() %>%
-        hc_chart(type = "scatter") %>%
-        hc_add_series_scatter(x=dat$GeneRatio, y=dat$Description, z=dat$Count, color = dat$p.adjust) %>%
+        hc_chart(type = "bubble") %>%
+        hc_add_series(df) %>%
         hc_legend(enabled = FALSE) %>%
-        hc_yAxis(categories = dat$Description, title = list(text = ""))  %>%
-        hc_xAxis(categories = dat$GeneRatio, title = list(text = ""))  %>%
-        #hc_colors(pal[myColorsIndex]) %>%
-        hc_legend(layout = "vertical", verticalAlign = "top",
-                  align = "right", valueDecimals = 0)  %>%
+        hc_xAxis(type = "category", categories = df$name)  %>%
+        hc_yAxis(title = list(text = "Gene Ratio"))  %>%
+        hc_tooltip(headerFormat= '',
+                   pointFormat = txt_tooltip) %>%
         hc_exporting(enabled = TRUE,filename = "GOEnrich_dotplot") 
     
     
