@@ -70,10 +70,12 @@ group_GO <- function(data, idFrom, idTo, orgdb, ont, level, readable=TRUE){
 ##' diffAnaComputeFDR(limma)
 enrich_GO <- function(data, idFrom, idTo, orgdb, ont, readable=TRUE, pAdj, pval, universe)
 {
-    
+  data <- data[-which(is.na(data))]
+  
     ## ENRICHMENT : GO over-representation test
     
     gene <- bitr(data, fromType=idFrom, toType=idTo, OrgDb=orgdb)
+    if (is.null(gene)){return (NULL)}
     gene.id = gene$ENTREZID
     
     ego<-enrichGO(gene = gene.id, OrgDb = orgdb, ont = ont, 
@@ -92,16 +94,16 @@ enrich_GO <- function(data, idFrom, idTo, orgdb, ont, readable=TRUE, pAdj, pval,
 ##' @param c xxxxxxxxxxxxxx 
 ##' @return xxxxxxxxxxxxxx 
 ##' @author Samuel Wieczorek
-# getUniprotID_FromString <- function(x){
-#     x <- unlist(x)
-#     uniprotSepIndices <- which(x=="|")
-#     if (length(uniprotSepIndices) == 2) { 
-#         x <- paste0(x, collapse="")
-#         res <- substr(x,uniprotSepIndices[1], uniprotSepIndices[2]-2)
-#         
-#     } else { res <- NA}
-#     return(res)
-# }
+getUniprotID_FromString <- function(x){
+    x <- unlist(x)
+    uniprotSepIndices <- which(x=="|")
+    if (length(uniprotSepIndices) >= 2) {
+        x <- paste0(x, collapse="")
+        res <- substr(x,uniprotSepIndices[1], uniprotSepIndices[2]-2)
+
+    } else { res <- NA}
+    return(res)
+}
 
 ##' xxxxxxxxxxxxxx
 ##' 
@@ -109,13 +111,13 @@ enrich_GO <- function(data, idFrom, idTo, orgdb, ont, readable=TRUE, pAdj, pval,
 ##' @param dat xxxxxxxxxxxxxx 
 ##' @return xxxxxxxxxxxxxx 
 ##' @author Samuel Wieczorek
-# getUniprotID_FromVector <- function(dat){
-#     require(stringr)
-#     d <- str_split(dat, "|", Inf)
-#     uniprotID <- lapply(d,test)
-#     
-#     return(unlist(uniprotID))
-# }
+getUniprotID_FromVector <- function(dat){
+    require(stringr)
+    d <- str_split(dat, "|", Inf)
+    uniprotID <- lapply(d,getUniprotID_FromString)
+
+    return(unlist(uniprotID))
+}
 
 
 ##' Returns the universe = totality of ID of an OrgDb annotation package
@@ -125,8 +127,9 @@ enrich_GO <- function(data, idFrom, idTo, orgdb, ont, readable=TRUE, pAdj, pval,
 ##' @param orgdb a Bioconductor OrgDb annotation package 
 ##' @return A vector of ENTREZ ID (totality if the ID for the package) 
 ##' @author Florence Combes
+##' @examples 
 ##' 
-##' careful : org.Pf.plasmo.db : no 'ENTREZID' but 'ORF'
+##' Careful : org.Pf.plasmo.db : no 'ENTREZID' but 'ORF'
 univ_AnnotDbPkg <- function(orgdb){
     
     require(as.character(orgdb),character.only = TRUE)
@@ -140,9 +143,20 @@ univ_AnnotDbPkg <- function(orgdb){
 ##' xxxxxxxxxxxxxx
 ##' 
 ##' @title xxxxxxxxxxxxxx
-##' @param dat xxxxxxxxxxxxxx 
-##' @return xxxxxxxxxxxxxx 
+##' @param obj An object of the class \class{MSnset} 
+##' @param ggo_res The object returned by the function \code{group_GO} of the package DAPAR
+##' or the function \code{groupGO} of the package \CRANpkg{clusterProfiler}
+##' @param ego_res The object returned by the function \code{enrich_GO} of the package DAPAR
+##' or the function \code{enrichGO} of the package \CRANpkg{clusterProfiler}
+##' @param organism The parameter xxx of the function
+##' @param ontology xxxxxxxxxxxxxx
+##' @param level xxxxxxxxxxxxxx
+##' @param PAdjustMethod xxxxxxxxxxxxxx
+##' @param pvalueCutoff xxxxxxxxx
+##' @param typeUniverse 
+##' @return An object of the class \xxx{MSnset}
 ##' @author Samuel Wieczorek
+##' @examples
 GOAnalysisSave <- function (obj, ggo_res, ego_res, organism, ontology, level, PAdjustMethod, pvalueCutoff, typeUniverse){
     if (is.null(ggo_res) && is.null(ego_res)){
         warning("Neither ggo or ego analysis has  been completed.")
@@ -176,16 +190,25 @@ GOAnalysisSave <- function (obj, ggo_res, ego_res, organism, ontology, level, PA
 
 
 
-
-barplotGroupGO_HC <- function(ggo, nRes=5){
+##' A barplot of GO classification analysis
+##' 
+##' @title A barplot that shows the result of a GO classification, using the package \CRANpkg{highcharter}
+##' @param ego The result of the GO classification, provides either by the function
+##' \code{group_GO} in the package \xxxpkg{DAPAR} or the function \code{xxx} of the packaage xxxx
+##' @param maxRes An integer which is the maximum number of classes to display in the plot 
+##' @return A barplot 
+##' @author Samuel Wieczorek
+##' @examples 
+barplotGroupGO_HC <- function(ggo, maxRes=5){
     
     dat <- ggo@result
+    nRes <- min(maxRes, nrow(dat))
+    
     n <- which(dat$Count==0)
     if (length(n) > 0){dat <- dat[-which(dat$Count==0),]}
     dat <- dat[order(dat$Count, decreasing=TRUE),]
     dat <- dat[seq(1:nRes),]
     
-        
         
     h1 <-  highchart() %>%
     hc_chart(type = "bar") %>%
@@ -197,10 +220,20 @@ barplotGroupGO_HC <- function(ggo, nRes=5){
 return(h1)
 }
 
-
-barplotEnrichGO_HC <- function(ego, nRes = 5){
+##' A barplot of GO enrichment analysis
+##' 
+##' @title A barplot that shows the result of a GO enrichment, using the package \CRANpkg{highcharter}
+##' @param ego The result of the GO enrichment, provides either by the function
+##' \code {enrichGO} in the package DAPAR or the function \code{xxx} of the packaage xxxx
+##' @param maxRes An integer which is the maximum number of categories to display in the plot 
+##' @return A barplot 
+##' @author Samuel Wieczorek
+##' @examples
+barplotEnrichGO_HC <- function(ego, maxRes = 5){
     
     dat <- ego@result
+    nRes <- min(maxRes, nrow(dat))
+    
     n <- which(dat$Count==0)
     if (length(n) > 0){dat <- dat[-which(dat$Count==0),]}
     dat <- dat[order(dat$pvalue, decreasing=FALSE),]
@@ -236,31 +269,44 @@ barplotEnrichGO_HC <- function(ego, nRes = 5){
 }
 
 
-
-scatterplotEnrichGO_HC <- function(ego, nRes = 10){
+##' xxxxxxxxxxxxxx
+##' 
+##' @title A dotplot that shows the result of a GO enrichment, using the package \CRANpkg{highcharter}
+##' @param ego The result of the GO enrichment, provides either by the function
+##' enrichGO in DAPAR or bye the function \code{xxx} of the packaage xxxx
+##' maxRes An integer which is the maximum number of categories to display in the plot 
+##' @return xxxxxxxxxxxxxx 
+##' @author Samuel Wieczorek
+##' @examples
+scatterplotEnrichGO_HC <- function(ego, maxRes = 10){
     
     dat <- ego@result
-    
+    nRes <- min(maxRes, nrow(dat))
     dat$GeneRatio <- unlist(lapply(dat$GeneRatio, function(x){
         as.numeric(unlist(str_split(x,'/'))[1]) / as.numeric(unlist(str_split(x,'/'))[2])
     }))
     
     
-    n <- which(dat$Count==0)
-    if (length(n) > 0){dat <- dat[-which(dat$Count==0),]}
-    dat <- dat[order(dat$Count, decreasing=TRUE),]
+    n <- which(dat$GeneRatio==0)
+    if (length(n) > 0){dat <- dat[-which(dat$GeneRatio==0),]}
+    dat <- dat[order(dat$GeneRatio, decreasing=TRUE),]
     dat <- dat[seq(1:nRes),]
     
     
     colfunc <- colorRampPalette(c("red","royalblue"))
-    nbBreaks <- 100
-    series <- list()
-    pal <- colfunc(nbBreaks)
+    nbColors <- 5
+    
+    pal <- colfunc(nbColors)
     t <- log(dat$p.adjust)
-    d <- (max(t) - min(t))/nbBreaks
+    d <- (max(t) - min(t))/nbColors
     base <- seq(from=min(t), to=max(t), by = d)
-    myColorsIndex <- unlist(lapply(t, function(x){last(which(x > base))}))
-    myColorsIndex[which(is.na(myColorsIndex))] <- 1
+    tmpList <- lapply(t, function(x){
+                                  if (x == min(t)){ ind <- 1}
+                                  else {ind <- which(x > base)[length(which(x > base))]}
+                                  
+    })
+    
+    myColorsIndex <- unlist(tmpList)
     
     df <- data.frame(x=c(0:(nRes-1)),
                         y=dat$GeneRatio,
@@ -284,8 +330,9 @@ scatterplotEnrichGO_HC <- function(ego, nRes = 10){
         hc_yAxis(title = list(text = "Gene Ratio"))  %>%
         hc_tooltip(headerFormat= '',
                    pointFormat = txt_tooltip) %>%
-        hc_exporting(enabled = TRUE,filename = "GOEnrich_dotplot") 
+        hc_exporting(enabled = TRUE,filename = "GOEnrich_dotplot")
     
+
     
     return(h1)
 }

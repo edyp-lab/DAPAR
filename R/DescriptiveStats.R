@@ -770,6 +770,7 @@ for (i in 1:length(indData2Show)){
         hc_colors(myColors) %>%
         hc_exporting(enabled = TRUE,filename = "densityplot")
     
+    
     return(h1)
 
 }

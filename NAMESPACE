@@ -110,5 +110,8 @@ export(
 ,"enrich_GO"
 ,"univ_AnnotDbPkg"
 ,"GOAnalysisSave"
+,"scatterplotEnrichGO_HC"
+,"barplotEnrichGO_HC"
+,"barplotGroupGO_HC"
 
 )
