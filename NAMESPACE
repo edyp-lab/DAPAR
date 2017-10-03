@@ -82,6 +82,9 @@ export(
 ,"wrapper.mvImputation","mvImputation"
 ,"wrapper.dapar.impute.mi",  "wrapper.impute.pa"
 ,"wrapper.impute.pa2"
+,"wrapper.impute.detQuant"
+,"getQuantile4Imp"
+,""
 
 
 ,"pepAgregate"

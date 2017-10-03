@@ -81,6 +81,47 @@ if (method == "BPCA"){
 return (exprs)
 }
 
+################
+wrapper.impute.detQuant <- function(obj, qval=0.025, factor=1){
+  if (is.null(obj)){return(NULL)}
+  
+  qData <- Biobase::exprs(obj)
+  values <- getQuantile4Imp(qData, qval, factor)
+  
+  Biobase::exprs(obj) <- impute.detQuant(qData, values$shiftedImpVal)
+  msg <- "Missing values imputation using deterministic quantile"
+  obj@processingData@processing <- c(obj@processingData@processing,msg)
+  
+  obj@experimentData@other$imputation.method <- "detQuantile"
+  return(obj)
+}
+
+
+
+  
+###########  
+getQuantile4Imp <- function(qData, qval=0.025, factor=1){
+  r1 <- apply(qData, 2, quantile, qval, na.rm=T)
+  r2 <- r1*factor
+  return(list(ImpVal = r1, shiftedImpVal = r2))
+}
+
+
+###############
+impute.detQuant <- function(qData, values){
+  for(i in 1:dim(qData)[2]){
+    col <- qData[,i]
+    col[which(is.na(col))] <- values[i]
+    qData[,i] <- col
+  }
+  return(qData)
+}
+
+
+
+
+
+
 
 
 
