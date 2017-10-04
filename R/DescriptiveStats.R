@@ -514,7 +514,7 @@ compareNormalizationD_HC <- function(qDataBefore,
                  regressionSettings = list(type = "loess", loessSmooth = 2)) %>%
         hc_add_series_list(series) %>%
         hc_tooltip(enabled= "false" ) %>%
-        hc_exporting(enabled = TRUE,filename = "compareNormalization")
+        my_hc_ExportMenu(filename = "compareNormalization")
     h1
     return(h1)
     
@@ -762,7 +762,8 @@ for (i in 1:length(indData2Show)){
 
     h1 <-  highchart() %>% 
         hc_title(text = "Density plot") %>% 
-        hc_chart(type = "spline", zoomType="x") %>%
+        hc_chart(type = "spline", 
+                 zoomType="x") %>%
         hc_add_series_list(series) %>%
         hc_legend(enabled = TRUE) %>%
         hc_xAxis(title = list(text = "log(Intensity)")) %>%

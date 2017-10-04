@@ -140,13 +140,25 @@ getPaletteForReplicates_HC <- function(nColors){
 
 
 
-
+##' Customise the contextual menu of highcharts plots.
+##' 
+##' @title Customised contextual menu of highcharts plots
+##' @param hc A highcharter object
+##' @param filename The filename under which the plot has to be saved
+##' @return A contextual menu for hghcharts plots
+##' @author Samuel Wieczorek
+##' @examples
+##' library("highcharter")
+##' hc <- highchart() %>% 
+##' hc_chart(hc,type = "line") %>% 
+##' hc_add_series(hc,data = c(29, 71, 40)) %>%
+##' my_hc_ExportMenu(hc,filename='foo')
 my_hc_ExportMenu <- function(hc, filename){
   hc_exporting(hc, enabled=T,
                filename = filename,
                buttons= list(
                  contextButton= list(
-                   menuItems= list('downloadPNG', 'downloadSVG', 'separator', 'downloadPDF')
+                   menuItems= list('downloadPNG', 'downloadSVG','downloadPDF')
                  )
                )
   )
