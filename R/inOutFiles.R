@@ -155,13 +155,13 @@ writeMSnsetToExcel <- function(obj, filename)
     
     addWorksheet(wb, "Quantitative Data")
     writeData(wb, sheet=1, cbind(ID = rownames(Biobase::exprs(obj)),
-                                 Biobase::exprs(obj)), rowNames = TRUE)
+                                 Biobase::exprs(obj)), rowNames = FALSE)
     #bodyStyleNumber <- createStyle(numFmt = "NUMBER")
     #addStyle(wb, sheet=1, bodyStyleNumber, rows = 2:nrow(Biobase::exprs(obj)), 
     #cols=2:ncol(Biobase::exprs(obj)),gridExpand = TRUE)
     
     addWorksheet(wb, "Samples Meta Data")
-    writeData(wb, sheet=2, Biobase::pData(obj), rowNames = TRUE)
+    writeData(wb, sheet=2, Biobase::pData(obj), rowNames = FALSE)
     
     if (dim(Biobase::fData(obj))[2] != 0){
         addWorksheet(wb, "Feature Meta Data")
@@ -170,7 +170,7 @@ writeMSnsetToExcel <- function(obj, filename)
         #format(Biobase::fData(obj)[,numericCols])
         
         writeData(wb, sheet=3, cbind(ID = rownames(Biobase::fData(obj)),
-                                     Biobase::fData(obj)), rowNames = TRUE)
+                                     Biobase::fData(obj)), rowNames = FALSE)
         #bodyStyleNumber <- createStyle(numFmt = "NUMBER")
         #addStyle(wb, sheet=3, bodyStyleNumber, 
         #rows = 2:nrow(Biobase::exprs(obj)), cols=numericCols, 

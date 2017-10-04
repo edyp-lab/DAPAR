@@ -206,7 +206,7 @@ JS("function(event) {Shiny.onInputChange('eventPointClicked', [this.name]);}")
         hc_plotOptions( series = list( cursor = "pointer", 
                                        point = list( events = list( 
                                            click = clickFunction ) ) ) ) %>%
-        hc_exporting(enabled = TRUE,filename = "volcanoplot")
+      my_hc_ExportMenu(filename = "volcanoplot")
         
     return(h1)
 }

@@ -86,7 +86,6 @@ export(
 ,"getQuantile4Imp"
 
 
-
 ,"pepAgregate"
 ,"BuildAdjacencyMatrix"
 ,"GraphPepProt"
@@ -116,5 +115,7 @@ export(
 ,"scatterplotEnrichGO_HC"
 ,"barplotEnrichGO_HC"
 ,"barplotGroupGO_HC"
+
+,"my_hc_ExportMenu"
 
 )

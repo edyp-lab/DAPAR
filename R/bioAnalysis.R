@@ -229,8 +229,9 @@ return(h1)
 ##' @return A barplot 
 ##' @author Samuel Wieczorek
 ##' @examples
+
 barplotEnrichGO_HC <- function(ego, maxRes = 5){
-    
+   
     dat <- ego@result
     nRes <- min(maxRes, nrow(dat))
     
@@ -259,7 +260,7 @@ barplotEnrichGO_HC <- function(ego, maxRes = 5){
                       dataLabels = list(enabled = TRUE, format='pval={point.pvalue}'),
                       colorByPoint = TRUE) %>%
         hc_colors(myColors) %>%
-        hc_exporting(enabled = TRUE,filename = "GOEnrich_barplot") %>%
+        my_hc_ExportMenu(filename = "GOEnrich_barplot") %>%
         hc_legend(enabled = FALSE) %>%
         hc_plotOptions(bar = list(
             pointWidth=60,
@@ -330,7 +331,7 @@ scatterplotEnrichGO_HC <- function(ego, maxRes = 10){
         hc_yAxis(title = list(text = "Gene Ratio"))  %>%
         hc_tooltip(headerFormat= '',
                    pointFormat = txt_tooltip) %>%
-        hc_exporting(enabled = TRUE,filename = "GOEnrich_dotplot")
+      my_hc_ExportMenu(filename = "GOEnrich_dotplot")
     
 
     

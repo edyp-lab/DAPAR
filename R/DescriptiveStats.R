@@ -177,7 +177,7 @@ boxPlotD_HC <- function(qData,
         hc_add_series_boxplot(x = iris$Sepal.Length, by = iris$Species,
                               name = "length", lineWidth = 1) %>%
         hc_colors(c("#002F80", "#002F20","#002F10")) %>%
-        hc_exporting(enabled = TRUE,filename = "boxplot")
+      my_hc_ExportMenu(filename = "boxplot")
 
     
     return(h1)
@@ -768,7 +768,7 @@ for (i in 1:length(indData2Show)){
         hc_xAxis(title = list(text = "log(Intensity)")) %>%
         hc_yAxis(title = list(text = "Density")) %>%
         hc_colors(myColors) %>%
-        hc_exporting(enabled = TRUE,filename = "densityplot")
+      my_hc_ExportMenu(filename = "densityplot")
     
     
     return(h1)
@@ -938,7 +938,7 @@ CVDistD_HC <- function(qData, labels=NULL){
         hc_legend(enabled = TRUE) %>%
         hc_xAxis(title = list(text = "CV(log(Intensity))")) %>%
         hc_yAxis(title = list(text = "Density")) %>%
-        hc_exporting(enabled = TRUE,filename = "logIntensity")
+      my_hc_ExportMenu(filename = "logIntensity")
     
     return(h1)
 
@@ -1108,7 +1108,7 @@ corrMatrixD_HC <- function(object,samplesData = NULL, minColor = 0.5) {
                   margin = 0, verticalAlign = "top",
                   y = 25, symbolHeight = 280) %>% 
         hc_colorAxis(  stops= cor_colr,min=minColor,max=1) %>%
-        hc_exporting(enabled = TRUE,filename = "corrMatrix")
+      my_hc_ExportMenu(filename = "corrMatrix")
 }
 
 

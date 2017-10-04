@@ -139,3 +139,15 @@ getPaletteForReplicates_HC <- function(nColors){
 }
 
 
+
+
+my_hc_ExportMenu <- function(hc, filename){
+  hc_exporting(hc, enabled=T,
+               filename = filename,
+               buttons= list(
+                 contextButton= list(
+                   menuItems= list('downloadPNG', 'downloadSVG', 'separator', 'downloadPDF')
+                 )
+               )
+  )
+}
