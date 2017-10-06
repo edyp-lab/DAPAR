@@ -510,8 +510,7 @@ compareNormalizationD_HC <- function(qDataBefore,
     }
    
     h1 <-  highchart() %>% 
-        hc_chart( regression = TRUE,
-                 regressionSettings = list(type = "loess", loessSmooth = 2)) %>%
+        hc_chart( type = "scatter") %>%
         hc_add_series_list(series) %>%
         hc_tooltip(enabled= "false" ) %>%
         my_hc_ExportMenu(filename = "compareNormalization")
