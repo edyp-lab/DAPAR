@@ -1,8 +1,8 @@
 Package: DAPAR
 Type: Package
 Title: Tools for the Differential Analysis of Proteins Abundance with R
-Version: 1.9.11
-Date: 2017-10-03
+Version: 1.9.12
+Date: 2017-10-05
 Authors@R: c(person(given = "Samuel", family = "Wieczorek",
             email = "samuel.wieczorek@cea.fr",
     role = c("aut","cre")),
@@ -34,9 +34,9 @@ Imports: MSnbase, RColorBrewer,stats,preprocessCore,Cairo,png,
         lattice,reshape2,gplots,pcaMethods,ggplot2,
         limma,knitr,tmvtnorm,norm,impute, imputeLCMD, doParallel,
         parallel, foreach,grDevices, graphics, openxlsx, utils, cp4p
-        (>= 0.3.5), scales, Matrix, vioplot, imp4p (>= 0.3),
+        (>= 0.3.5), scales, Matrix, vioplot, imp4p (>= 0.4),
         highcharter, DAPARdata, siggenes, graph, lme4, readxl,
-        clusterProfiler, stringr, dplyr, tidyr
+        clusterProfiler, dplyr, tidyr
 biocViews: Proteomics, Normalization, Preprocessing, MassSpectrometry,
         QualityControl, DataImport
 NeedsCompilation: no

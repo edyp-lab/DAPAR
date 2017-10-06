@@ -62,7 +62,7 @@ return(count)
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' pref <- "+"
-##' proportionConRev(Exp1_R25_pept, "Potential.contaminant", pref, 
+##' proportionConRev(10, "Potential.contaminant", pref, 
 ##' "Reverse", pref)
 proportionConRev <- function(obj, idContaminants=NULL, 
                             prefixContaminants=NULL, 
@@ -103,34 +103,20 @@ graphics::text(x= 20, y= bp, labels=as.character(lbls), xpd=TRUE, cex=1.5)
 ##' \code{proportionConRev} but uses the package \CRANpkg{highcharter}.
 ##' 
 ##' @title Barplot of proportion of contaminants and reverse
-##' @param obj An object of class \code{\link{MSnSet}}.
-##' @param idContaminants The name of a column of Contaminants
-##' @param prefixContaminants The prefix to identify contaminants
-##' @param idReverse The name of a column of Reverse
-##' @param prefixReverse The prefix to identify Reverse
+##' @param nCont The number of contaminants identified in the dataset.
+##' @param nRev The number of reverse entities identified in the dataset.
+##' @param lDataset The total length (number of rows) of the dataset
 ##' @return A barplot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' pref <- "+"
-##' proportionConRev_HC(Exp1_R25_pept, "Potential.contaminant", pref, 
-##' "Reverse", pref)
-proportionConRev_HC <- function(obj, idContaminants=NULL, 
-                             prefixContaminants=NULL, 
-                             idReverse=NULL, prefixReverse=NULL){
-    #if (is.null(prefixContaminants) && is.null(prefixReverse) ){return(NULL)}
-    if (is.null(obj) ){return(NULL)}
-    nContaminants <- nReverse <- 0
+##' proportionConRev_HC(10, 20, 100)
+proportionConRev_HC <- function(nCont=0, nRev=0, lDataset=0){
+    if (is.null(nCont) || is.null(nRev) || is.null(lDataset)){return(NULL)}
     
-    nContaminants <- length(getIndicesOfLinesToRemove(obj, idContaminants, prefixContaminants))
-    nReverse <- length(getIndicesOfLinesToRemove(obj, idReverse, prefixReverse))
+  pctContaminants <- 100 * round(nCont/lDataset,  digits=4)
+    pctReverse <- 100 * round(nRev/lDataset,  digits=4)
     
-    pctContaminants <- 100 * round(nContaminants/nrow(Biobase::fData(obj)),  digits=4)
-    pctReverse <- 100 * round(nReverse/nrow(Biobase::fData(obj)),  digits=4)
-    
-    counts <- c(nrow(Biobase::fData(obj))-nContaminants-nReverse, nContaminants, 
-                nReverse )
+    counts <- c(lDataset-nCont-nRev, nCont, nRev)
     slices <- c(100-pctContaminants-pctReverse, pctContaminants, pctReverse ) 
     lbls <- c("Quantitative data", "Contaminants", "Reverse")
     pct <- c(100-pctContaminants-pctReverse, pctContaminants, pctReverse )

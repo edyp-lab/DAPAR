@@ -140,6 +140,7 @@ getPaletteForReplicates_HC <- function(nColors){
 
 
 
+
 ##' Customise the contextual menu of highcharts plots.
 ##' 
 ##' @title Customised contextual menu of highcharts plots

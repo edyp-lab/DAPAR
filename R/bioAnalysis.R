@@ -10,23 +10,6 @@
 ##' @param data A vector of ID (genes or proteins !!DIRE LESQUELS!!)
 ##' @param idFrom
 ##' @param idTo
-##' @param threshold_LogFC The threshold on log(Fold Change) to
-##' distinguish between differential and non-differential data 
-##' @param pi0Method The parameter pi0.method of the method adjust.p 
-##' in the package \code{cp4p}
-##' @return The computed FDR value (floating number)
-##' @author Florence Combes
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' obj <- wrapper.mvImputation(Exp1_R25_pept[1:1000], "QRILC")
-##' condition1 <- '25fmol'
-##' condition2 <- '10fmol'
-##' qData <- Biobase::exprs(obj)
-##' samplesData <- Biobase::pData(obj)
-##' labels <- Biobase::pData(obj)[,"Label"]
-##' limma <- diffAnaLimma(qData,samplesData, labels, condition1, condition2)
-##' diffAnaComputeFDR(limma)
 group_GO <- function(data, idFrom, idTo, orgdb, ont, level, readable=TRUE){
     
     require(as.character(orgdb),character.only = TRUE)
@@ -42,44 +25,20 @@ group_GO <- function(data, idFrom, idTo, orgdb, ont, level, readable=TRUE){
 }
 
 
-##' This function is a wrappper to the function groupGO from the
-##' package clusterProfiler. Given a vector of genes/proteins, it returns the 
-##' GO profile at a specific level. It returns a groupGOResult instance. 
-##' 
-##' @title Calculates the GO profile of a vector of genes/proteins at specific 
-##' level
-##' @param data A vector of ID (genes or proteins !!DIRE LESQUELS!!)
-##' @param threshold_PVal The threshold on p-pvalue to
-##' distinguish between differential and non-differential data 
-##' @param threshold_LogFC The threshold on log(Fold Change) to
-##' distinguish between differential and non-differential data 
-##' @param pi0Method The parameter pi0.method of the method adjust.p 
-##' in the package \code{cp4p}
-##' @return The computed FDR value (floating number)
-##' @author Samuel Wieczorek
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' obj <- wrapper.mvImputation(Exp1_R25_pept[1:1000], "QRILC")
-##' condition1 <- '25fmol'
-##' condition2 <- '10fmol'
-##' qData <- Biobase::exprs(obj)
-##' samplesData <- Biobase::pData(obj)
-##' labels <- Biobase::pData(obj)[,"Label"]
-##' limma <- diffAnaLimma(qData,samplesData, labels, condition1, condition2)
-##' diffAnaComputeFDR(limma)
-enrich_GO <- function(data, idFrom, idTo, orgdb, ont, readable=TRUE, pAdj, pval, universe)
+
+enrich_GO <- function(data, idFrom, idTo, orgdb, ont, readable=TRUE, pval, universe)
 {
-  data <- data[-which(is.na(data))]
+  tmp <- which(is.na(data))
+  if (length(tmp) > 0){
+      data <- data[-which(is.na(data))]
+  }
   
-    ## ENRICHMENT : GO over-representation test
-    
     gene <- bitr(data, fromType=idFrom, toType=idTo, OrgDb=orgdb)
     if (is.null(gene)){return (NULL)}
     gene.id = gene$ENTREZID
     
-    ego<-enrichGO(gene = gene.id, OrgDb = orgdb, ont = ont, 
-                  pAdjustMethod=pAdj, 
+    ego <- enrichGO(gene = gene.id, OrgDb = orgdb, ont = ont, 
+                  pAdjustMethod="BH", 
                   pvalueCutoff=pval, 
                   readable=TRUE,
                   universe = NULL)   
@@ -87,37 +46,6 @@ enrich_GO <- function(data, idFrom, idTo, orgdb, ont, readable=TRUE, pAdj, pval,
     return(ego)
 }
 
-
-##' xxxxxxxxxxxxxx
-##' 
-##' @title xxxxxxxxxxxxxx
-##' @param c xxxxxxxxxxxxxx 
-##' @return xxxxxxxxxxxxxx 
-##' @author Samuel Wieczorek
-getUniprotID_FromString <- function(x){
-    x <- unlist(x)
-    uniprotSepIndices <- which(x=="|")
-    if (length(uniprotSepIndices) >= 2) {
-        x <- paste0(x, collapse="")
-        res <- substr(x,uniprotSepIndices[1], uniprotSepIndices[2]-2)
-
-    } else { res <- NA}
-    return(res)
-}
-
-##' xxxxxxxxxxxxxx
-##' 
-##' @title xxxxxxxxxxxxxx
-##' @param dat xxxxxxxxxxxxxx 
-##' @return xxxxxxxxxxxxxx 
-##' @author Samuel Wieczorek
-getUniprotID_FromVector <- function(dat){
-    require(stringr)
-    d <- str_split(dat, "|", Inf)
-    uniprotID <- lapply(d,getUniprotID_FromString)
-
-    return(unlist(uniprotID))
-}
 
 
 ##' Returns the universe = totality of ID of an OrgDb annotation package
@@ -151,13 +79,12 @@ univ_AnnotDbPkg <- function(orgdb){
 ##' @param organism The parameter xxx of the function
 ##' @param ontology xxxxxxxxxxxxxx
 ##' @param level xxxxxxxxxxxxxx
-##' @param PAdjustMethod xxxxxxxxxxxxxx
 ##' @param pvalueCutoff xxxxxxxxx
 ##' @param typeUniverse 
 ##' @return An object of the class \xxx{MSnset}
 ##' @author Samuel Wieczorek
 ##' @examples
-GOAnalysisSave <- function (obj, ggo_res, ego_res, organism, ontology, level, PAdjustMethod, pvalueCutoff, typeUniverse){
+GOAnalysisSave <- function (obj, ggo_res=NULL, ego_res=NULL, organism, ontology, levels, pvalueCutoff, typeUniverse){
     if (is.null(ggo_res) && is.null(ego_res)){
         warning("Neither ggo or ego analysis has  been completed.")
         return(NULL)}
@@ -169,7 +96,7 @@ GOAnalysisSave <- function (obj, ggo_res, ego_res, organism, ontology, level, PA
         obj@experimentData@other$GGO_analysis <- list(ggo_res = ggo_res,
                                                     organism = organism,
                                                     ontology = ontology,
-                                                    level = level)
+                                                    levels = levels)
     }
     
     if (!is.null(ego_res)){
@@ -179,7 +106,7 @@ GOAnalysisSave <- function (obj, ggo_res, ego_res, organism, ontology, level, PA
         obj@experimentData@other$EGO_analysis <- list(ego_res = ego_res,
                                                       organism = organism,
                                                       ontology = ontology,
-                                                      PAdjustMethod = PAdjustMethod,
+                                                      PAdjustMethod = "BH",
                                                       pvalueCutoff = pvalueCutoff,
                                                       typeUniverse = typeUniverse)
     }
@@ -199,7 +126,7 @@ GOAnalysisSave <- function (obj, ggo_res, ego_res, organism, ontology, level, PA
 ##' @return A barplot 
 ##' @author Samuel Wieczorek
 ##' @examples 
-barplotGroupGO_HC <- function(ggo, maxRes=5){
+barplotGroupGO_HC <- function(ggo, maxRes=5, title=""){
     
     dat <- ggo@result
     nRes <- min(maxRes, nrow(dat))
@@ -212,6 +139,7 @@ barplotGroupGO_HC <- function(ggo, maxRes=5){
         
     h1 <-  highchart() %>%
     hc_chart(type = "bar") %>%
+    hc_title(text =title) %>%
     hc_add_series(dat$Count) %>%
     hc_legend(enabled = FALSE) %>%
     #hc_colors(myColors) %>%
@@ -230,7 +158,7 @@ return(h1)
 ##' @author Samuel Wieczorek
 ##' @examples
 
-barplotEnrichGO_HC <- function(ego, maxRes = 5){
+barplotEnrichGO_HC <- function(ego, maxRes = 5, title=NULL){
    
     dat <- ego@result
     nRes <- min(maxRes, nrow(dat))
@@ -254,6 +182,7 @@ barplotEnrichGO_HC <- function(ego, maxRes = 5){
     dat$pvalue <- format(dat$pvalue, digits=2)
     
     h1 <- highchart() %>%  
+        hc_title(title = title) %>%
         hc_yAxis(title = list(text = "Count")) %>% 
         hc_xAxis(categories = dat$Description) %>% 
         hc_add_series(data = dat, type = "bar", hcaes(x = Description, y = Count),
@@ -279,12 +208,12 @@ barplotEnrichGO_HC <- function(ego, maxRes = 5){
 ##' @return xxxxxxxxxxxxxx 
 ##' @author Samuel Wieczorek
 ##' @examples
-scatterplotEnrichGO_HC <- function(ego, maxRes = 10){
+scatterplotEnrichGO_HC <- function(ego, maxRes = 10, title=NULL){
     
     dat <- ego@result
     nRes <- min(maxRes, nrow(dat))
     dat$GeneRatio <- unlist(lapply(dat$GeneRatio, function(x){
-        as.numeric(unlist(str_split(x,'/'))[1]) / as.numeric(unlist(str_split(x,'/'))[2])
+        as.numeric(unlist(strsplit(x,'/'))[1]) / as.numeric(unlist(strsplit(x,'/'))[2])
     }))
     
     
@@ -324,6 +253,7 @@ scatterplotEnrichGO_HC <- function(ego, maxRes = 10){
                          sep="")
     
     h1 <-  highchart() %>%
+        hc_title(title = title) %>%
         hc_chart(type = "bubble") %>%
         hc_add_series(df) %>%
         hc_legend(enabled = FALSE) %>%
