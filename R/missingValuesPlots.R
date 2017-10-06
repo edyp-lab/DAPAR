@@ -359,7 +359,7 @@ mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto",
     }
     
     h1 <-  highchart() %>% 
-        hc_title(text = "#[lines] with X NA values (condition-wise") %>% 
+        hc_title(text = "#[lines] with X NA values (condition-wise)") %>% 
         hc_chart(type = "column") %>%
         hc_plotOptions( column = list(stacking = "") ) %>%
         hc_add_series_list(series) %>%
