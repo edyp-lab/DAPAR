@@ -169,12 +169,12 @@ mvPerLinesHisto_HC <- function(qData, samplesData, indLegend="auto", showValues=
     #, series = list( pointWidth = 50)
     
     h1 <-  highchart() %>% 
-        hc_title(text = "Number of lines by number of NA values") %>% 
+        hc_title(text = "#[lines] with X NA values") %>% 
         hc_add_series(data = df1, type="column", color="lightgrey") %>%
         hc_add_series(data = df2, type="column", color="red") %>%
         hc_plotOptions( column = list(stacking = "normal") ) %>%
         hc_legend(enabled = FALSE) %>%
-        hc_xAxis(categories = row.names(df), title = list(text = "Number of NA values by lines")) %>%
+        hc_xAxis(categories = row.names(df), title = list(text = "#[NA values] per line")) %>%
       my_hc_ExportMenu(filename = "missingValuesPlot1")
     
     return(h1)
@@ -359,12 +359,12 @@ mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto",
     }
     
     h1 <-  highchart() %>% 
-        hc_title(text = "# lines by # of NA") %>% 
+        hc_title(text = "#[lines] with X NA values (condition-wise") %>% 
         hc_chart(type = "column") %>%
         hc_plotOptions( column = list(stacking = "") ) %>%
         hc_add_series_list(series) %>%
         hc_legend(enabled = FALSE) %>%
-        hc_xAxis(categories = row.names(m), title = list(text = "# NA per lines")) %>%
+        hc_xAxis(categories = row.names(m), title = list(text = "#[NA values] per line (condition-wise)")) %>%
       my_hc_ExportMenu(filename = "missingValuesPlot_2")
     
     return(h1)
@@ -542,11 +542,11 @@ mvHisto_HC <- function(qData, samplesData, labels, indLegend="auto",
     
     h1 <-  highchart() %>%
          hc_chart(type = "column") %>%
-         hc_title(text = "# lines by columns") %>%
+         hc_title(text = "#[non-NA values] by replicate") %>%
         hc_add_series_list(series) %>%
         hc_plotOptions( column = list(stacking = "normal") ) %>%
         hc_legend(enabled = FALSE) %>%
-        hc_xAxis(categories = labels) %>%
+        hc_xAxis(categories = labels, title = list(text = "Replicates")) %>%
       my_hc_ExportMenu(filename = "missingValuesPlot_3")
     
 
