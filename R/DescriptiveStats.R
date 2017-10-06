@@ -1166,20 +1166,20 @@ heatmapD(qData, distance, cluster, dendro)
 ##' obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
 ##' qData <- Biobase::exprs(obj)
 ##' heatmapD(qData)
-heatmapD <- function(qData, distance="euclidean", cluster="average", 
+heatmapD <- function(qData, distance="euclidean", cluster="complete", 
                     dendro = FALSE){
 ##Check parameters
-paramdist <- c("euclidean", "manhattan") 
-if (!(distance %in% paramdist)){
-    stop("Param distance is not correct.")
-    return (NULL)
-}
-
-paramcluster <- c("ward.D", "average")
-if (!(cluster %in%  paramcluster)){
-    stop("Param clustering is not correct.")
-    return (NULL)
-}
+# paramdist <- c("euclidean", "manhattan") 
+# if (!(distance %in% paramdist)){
+#     stop("Param distance is not correct.")
+#     return (NULL)
+# }
+# 
+# paramcluster <- c("ward.D", "average")
+# if (!(cluster %in%  paramcluster)){
+#     stop("Param clustering is not correct.")
+#     return (NULL)
+# }
 
 
 # if (isTRUE(dendro) && getNumberOfEmptyLines(qData) != 0)  {
