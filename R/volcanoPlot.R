@@ -197,7 +197,7 @@ JS("function(event) {Shiny.onInputChange('eventPointClicked', [this.name]);}")
         x=c(-max(max(df$x), abs(min(df$x))),max(max(df$x), abs(min(df$x)))), 
                                         y=c(threshold_pVal,threshold_pVal)), 
             type="line", color="lightgrey", marker=list(enabled = FALSE)) %>%
-        hc_chart(zoomType = "xy",type="scatter") %>%
+        my_hc_chart(zoomType = "xy",chartType="scatter") %>%
         hc_legend(enabled = FALSE) %>%
         hc_xAxis(title = list(text="logFC")) %>%
         hc_yAxis(title = list(text = "-log10(pValue)")) %>%

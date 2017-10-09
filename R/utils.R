@@ -164,3 +164,15 @@ my_hc_ExportMenu <- function(hc, filename){
                )
   )
 }
+
+
+my_hc_chart <- function(hc,  chartType,zoomType="None"){
+  hc %>% 
+    hc_chart(type = chartType, 
+           zoomType=zoomType,
+           resetZoomButton= list(
+             position = list(
+               align= 'left',
+               verticalAlign = 'top')
+           ))
+}

@@ -125,7 +125,7 @@ proportionConRev_HC <- function(nCont=0, nRev=0, lDataset=0){
     mydata <- data.frame(test=c(100-pctContaminants-pctReverse, pctContaminants, pctReverse ))
     
     highchart() %>% 
-        hc_chart(type = "bar") %>% 
+        my_hc_chart(chartType = "bar") %>% 
         hc_yAxis(title = list(text = "Pourcentage")) %>% 
         hc_xAxis(categories=lbls) %>% 
         hc_legend(enabled = FALSE) %>%

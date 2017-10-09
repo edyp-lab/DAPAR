@@ -138,7 +138,7 @@ barplotGroupGO_HC <- function(ggo, maxRes=5, title=""){
     
         
     h1 <-  highchart() %>%
-    hc_chart(type = "bar") %>%
+    my_hc_chart(chartType = "bar") %>%
     hc_title(text =title) %>%
     hc_add_series(dat$Count) %>%
     hc_legend(enabled = FALSE) %>%
@@ -247,14 +247,13 @@ scatterplotEnrichGO_HC <- function(ego, maxRes = 10, title=NULL){
                         name = dat$Description)
     
     
-    txt_tooltip <- NULL
     txt_tooltip <- paste("<b> p.adjust </b>: {point.pAdjust} <br> ", 
                          "<b> Count </b>: {point.z} <br> ",
                          sep="")
     
     h1 <-  highchart() %>%
         hc_title(title = title) %>%
-        hc_chart(type = "bubble") %>%
+        my_hc_chart(chartType = "bubble") %>%
         hc_add_series(df) %>%
         hc_legend(enabled = FALSE) %>%
         hc_xAxis(type = "category", categories = df$name)  %>%

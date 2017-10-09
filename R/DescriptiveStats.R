@@ -321,6 +321,8 @@ wrapper.compareNormalizationD <- function(objBefore, objAfter,
 
 qDataBefore <- Biobase::exprs(objBefore)
 qDataAfter <- Biobase::exprs(objAfter)
+if (is.null(labelsForLegend)){
+  labelsForLegend <- Biobase::pData(objBefore)[,"Label"]}
 
 compareNormalizationD(qDataBefore, qDataAfter, labelsForLegend, indData2Show, 
                     group2Color)
@@ -510,7 +512,7 @@ compareNormalizationD_HC <- function(qDataBefore,
     }
    
     h1 <-  highchart() %>% 
-        hc_chart( type = "scatter") %>%
+        my_hc_chart( chartType = "scatter") %>%
         hc_add_series_list(series) %>%
         hc_tooltip(enabled= "false" ) %>%
         my_hc_ExportMenu(filename = "compareNormalization")
@@ -580,6 +582,9 @@ compareNormalizationD_HC <- function(qDataBefore,
 wrapper.densityPlotD <- function(obj, labelsForLegend=NULL,  indData2Show=NULL,
                                 group2Color = "Condition"){
 qData <- Biobase::exprs(obj)
+if (is.null(labelsForLegend) ) {
+  labelsForLegend <- Biobase::pData(obj)[,"Label"]}
+
 densityPlotD(qData, labelsForLegend, indData2Show,group2Color)
 }
 
@@ -608,6 +613,10 @@ densityPlotD(qData, labelsForLegend, indData2Show,group2Color)
 wrapper.densityPlotD_HC <- function(obj, labelsForLegend=NULL,  indData2Show=NULL,
                                  group2Color = "Condition"){
     qData <- Biobase::exprs(obj)
+    
+    if (is.null(labelsForLegend) ) {
+      labelsForLegend <- Biobase::pData(obj)[,"Label"]}
+    
     densityPlotD_HC(qData, labelsForLegend, indData2Show,group2Color)
 }
 
@@ -636,7 +645,8 @@ wrapper.densityPlotD_HC <- function(obj, labelsForLegend=NULL,  indData2Show=NUL
 densityPlotD <- function(qData, labelsForLegend=NULL,indData2Show=NULL,
                         group2Color = "Condition"){
     
-if (is.null(labelsForLegend) ) return(NULL)
+#if (is.null(labelsForLegend) ) {
+#  labelsForLegend <- Biobase::pData(rv$current.obj)[,"Label"]}
 
 if (is.null(indData2Show)) {indData2Show <- c(1:ncol(qData)) }
 
@@ -737,22 +747,12 @@ densityPlotD_HC <- function(qData, labelsForLegend=NULL,indData2Show=NULL,
     ##Colors definition
     if (group2Color == "Condition") {
         myColors <- getPaletteForLabels_HC(labelsForLegend)[indData2Show]
-        # legendColor <- unique(pal)
-        # txtLegend <- unique(labelsForLegend)
-        #myColors <-pal[indData2Show]
     } else { 
         myColors<- getPaletteForReplicates_HC(ncol(qData))[indData2Show]
-        # legendColor <- pal[indData2Show]
-        # txtLegend <- paste("Replicate", seq(1,ncol(qData)), 
-        #                    labelsForLegend,sep=" ")
-        # txtLegend <- txtLegend[indData2Show]
-        # 
-       # myColors <-pal
     }
 
 nbSeries = length(indData2Show)
 for (i in 1:length(indData2Show)){
-    print(i)
     tmp <- list(data = density(qData[,indData2Show[i]], na.rm = TRUE)$y, name=labelsForLegend[indData2Show[i]])
     names(tmp$data) <- c()
     series[[i]] <- tmp
@@ -761,13 +761,15 @@ for (i in 1:length(indData2Show)){
 
     h1 <-  highchart() %>% 
         hc_title(text = "Density plot") %>% 
-        hc_chart(type = "spline", 
-                 zoomType="x") %>%
+        my_hc_chart(chartType = "spline", zoomType="x") %>%
         hc_add_series_list(series) %>%
         hc_legend(enabled = TRUE) %>%
         hc_xAxis(title = list(text = "log(Intensity)")) %>%
         hc_yAxis(title = list(text = "Density")) %>%
         hc_colors(myColors) %>%
+        hc_tooltip(headerFormat= '',
+                   pointFormat = "<b> Density </b>: {point.y} ",
+                   valueDecimals = 2) %>%
       my_hc_ExportMenu(filename = "densityplot")
     
     
@@ -932,12 +934,15 @@ CVDistD_HC <- function(qData, labels=NULL){
 
     h1 <-  highchart() %>% 
         #hc_title(text = "xxxxxx") %>% 
-        hc_chart(type = "spline", zoomType="x") %>%
+        my_hc_chart(chartType = "spline", zoomType="x") %>%
         #hc_plotOptions( column = list(stacking = "") ) %>%
         hc_add_series_list(series) %>%
         hc_legend(enabled = TRUE) %>%
         hc_xAxis(title = list(text = "CV(log(Intensity))")) %>%
         hc_yAxis(title = list(text = "Density")) %>%
+        hc_tooltip(headerFormat= '',
+                   pointFormat = "<b> Density </b>: {point.y} ",
+                   valueDecimals = 2) %>%
       my_hc_ExportMenu(filename = "logIntensity")
     
     return(h1)
@@ -1094,7 +1099,7 @@ corrMatrixD_HC <- function(object,samplesData = NULL, minColor = 0.5) {
                       list(1, '#2E86C1')
     )
     highchart() %>% 
-        hc_chart(type = "heatmap") %>% 
+        my_hc_chart(chartType = "heatmap") %>% 
         hc_xAxis(categories = y, title = NULL) %>% 
         hc_yAxis(categories = y, title = NULL) %>% 
         hc_add_series(data = ds) %>% 
@@ -1105,8 +1110,7 @@ corrMatrixD_HC <- function(object,samplesData = NULL, minColor = 0.5) {
             )) %>% 
         hc_tooltip(formatter = fntltp) %>% 
         hc_legend(align = "right", layout = "vertical",
-                  margin = 0, verticalAlign = "top",
-                  y = 25, symbolHeight = 280) %>% 
+                  verticalAlign="middle") %>% 
         hc_colorAxis(  stops= cor_colr,min=minColor,max=1) %>%
       my_hc_ExportMenu(filename = "corrMatrix")
 }
