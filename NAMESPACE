@@ -15,8 +15,8 @@ import(vioplot)
 import(impute)
 import(knitr)
 importFrom("doParallel", "registerDoParallel")
-import(dplyr)
-import(tidyr)
+importFrom("dplyr", "left_join", "mutate")
+importFrom("tidyr", "gather")
 importFrom("foreach", "foreach", "%dopar%")
 importFrom("AnnotationDbi", "keys")
 importFrom("parallel", "detectCores")
@@ -46,7 +46,7 @@ import("readxl")
 import("siggenes") # SAM
 import("graph")
 
-import("clusterProfiler")
+importFrom("clusterProfiler", "bitr", "enrichGO", "groupGO")
 
 export(
 "writeMSnsetToExcel",
