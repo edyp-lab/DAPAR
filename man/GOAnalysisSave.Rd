@@ -2,19 +2,38 @@
 % Please edit documentation in R/bioAnalysis.R
 \name{GOAnalysisSave}
 \alias{GOAnalysisSave}
-\title{xxxxxxxxxxxxxx}
+\title{Returns a \code{\link{MSnSet}} object with the results of
+the GO analysis performed with the \code{\link{clusterProfiler}} package.}
 \usage{
-GOAnalysisSave(obj, ggo_res, ego_res, organism, ontology, level, PAdjustMethod,
-  pvalueCutoff, typeUniverse)
+GOAnalysisSave(obj, ggo_res = NULL, ego_res = NULL, organism, ontology,
+  levels, pvalueCutoff, typeUniverse)
 }
 \arguments{
-\item{dat}{xxxxxxxxxxxxxx}
+\item{obj}{An object of the class \code{\link{MSnSet}}}
+
+\item{ggo_res}{The object returned by the function \code{group_GO} of the package DAPAR
+or the function \code{groupGO} of the package \code{\link{clusterProfiler}}}
+
+\item{ego_res}{The object returned by the function \code{enrich_GO} of the package DAPAR
+or the function \code{enrichGO} of the package \code{\link{clusterProfiler}}}
+
+\item{organism}{The parameter xxx of the function}
+
+\item{ontology}{One of "MF", "BP", and "CC" subontologies}
+
+\item{pvalueCutoff}{The qvalue cutoff (same parameter as in the function \code{enrichGO} of the package \code{\link{clusterProfiler}})}
+
+\item{typeUniverse}{The type of background to be used. Values are 'Entire Organism', 'Entire dataset' or 'Custom'. In the latter
+case, a file should be uploaded by the user}
+
+\item{level}{Specific GO Level}
 }
 \value{
-xxxxxxxxxxxxxx
+An object of the class \code{\link{MSnSet}}
 }
 \description{
-xxxxxxxxxxxxxx
+This method returns a \code{\link{MSnSet}} object with the results
+of the Gene Ontology analysis.
 }
 \author{
 Samuel Wieczorek

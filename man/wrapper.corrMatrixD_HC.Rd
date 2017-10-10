@@ -5,7 +5,7 @@
 \title{Displays a correlation matrix of the quantitative data of the
 \code{exprs()} table}
 \usage{
-wrapper.corrMatrixD_HC(obj, minColor = 0.5)
+wrapper.corrMatrixD_HC(obj, rate = 0.5)
 }
 \arguments{
 \item{obj}{An object of class \code{\link{MSnSet}}.}

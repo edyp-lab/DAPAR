@@ -51,39 +51,38 @@ enrich_GO <- function(data, idFrom, idTo, orgdb, ont, readable=TRUE, pval, unive
 ##' Returns the universe = totality of ID of an OrgDb annotation package
 ##' 
 ##' @title Returns the totality of ENTREZ ID (gene id) of an OrgDb annotation 
-##' package
+##' package. Careful : org.Pf.plasmo.db : no ENTREZID but ORF
 ##' @param orgdb a Bioconductor OrgDb annotation package 
 ##' @return A vector of ENTREZ ID (totality if the ID for the package) 
 ##' @author Florence Combes
-##' @examples 
-##' 
-##' Careful : org.Pf.plasmo.db : no 'ENTREZID' but 'ORF'
 univ_AnnotDbPkg <- function(orgdb){
     
     require(as.character(orgdb),character.only = TRUE)
-    univ <- keys(get(orgdb), keytype="ENTREZID")
+    univ <- AnnotationDbi::keys(get(orgdb), keytype="ENTREZID")
     #different syntax for 'org.Pf.plasmo.db' package
     #univ<-keys(get(orgdb), keytype="ORF")
     return(univ)
 }
 
 
-##' xxxxxxxxxxxxxx
+##' This method returns a \code{\link{MSnSet}} object with the results
+##' of the Gene Ontology analysis.
 ##' 
-##' @title xxxxxxxxxxxxxx
-##' @param obj An object of the class \class{MSnset} 
+##' @title Returns a \code{\link{MSnSet}} object with the results of
+##' the GO analysis performed with the \code{\link{clusterProfiler}} package. 
+##' @param obj An object of the class \code{\link{MSnSet}}
 ##' @param ggo_res The object returned by the function \code{group_GO} of the package DAPAR
-##' or the function \code{groupGO} of the package \CRANpkg{clusterProfiler}
+##' or the function \code{groupGO} of the package \code{\link{clusterProfiler}}
 ##' @param ego_res The object returned by the function \code{enrich_GO} of the package DAPAR
-##' or the function \code{enrichGO} of the package \CRANpkg{clusterProfiler}
+##' or the function \code{enrichGO} of the package \code{\link{clusterProfiler}}
 ##' @param organism The parameter xxx of the function
-##' @param ontology xxxxxxxxxxxxxx
-##' @param level xxxxxxxxxxxxxx
-##' @param pvalueCutoff xxxxxxxxx
-##' @param typeUniverse 
-##' @return An object of the class \xxx{MSnset}
+##' @param ontology One of "MF", "BP", and "CC" subontologies
+##' @param level Specific GO Level
+##' @param pvalueCutoff The qvalue cutoff (same parameter as in the function \code{enrichGO} of the package \code{\link{clusterProfiler}})
+##' @param typeUniverse  The type of background to be used. Values are 'Entire Organism', 'Entire dataset' or 'Custom'. In the latter
+##' case, a file should be uploaded by the user
+##' @return An object of the class \code{\link{MSnSet}}
 ##' @author Samuel Wieczorek
-##' @examples
 GOAnalysisSave <- function (obj, ggo_res=NULL, ego_res=NULL, organism, ontology, levels, pvalueCutoff, typeUniverse){
     if (is.null(ggo_res) && is.null(ego_res)){
         warning("Neither ggo or ego analysis has  been completed.")
@@ -119,45 +118,46 @@ GOAnalysisSave <- function (obj, ggo_res=NULL, ego_res=NULL, organism, ontology,
 
 ##' A barplot of GO classification analysis
 ##' 
-##' @title A barplot that shows the result of a GO classification, using the package \CRANpkg{highcharter}
+##' @title A barplot that shows the result of a GO classification, using the package \code{\link{highcharter}}
 ##' @param ego The result of the GO classification, provides either by the function
-##' \code{group_GO} in the package \xxxpkg{DAPAR} or the function \code{xxx} of the packaage xxxx
+##' \code{group_GO} in the package \code{\link{DAPAR}} or the function \code{groupGO} in the package \code{\link{clusterProfiler}}
 ##' @param maxRes An integer which is the maximum number of classes to display in the plot 
+##' @param title The title of the plot
 ##' @return A barplot 
 ##' @author Samuel Wieczorek
-##' @examples 
 barplotGroupGO_HC <- function(ggo, maxRes=5, title=""){
     
     dat <- ggo@result
     nRes <- min(maxRes, nrow(dat))
     
-    n <- which(dat$Count==0)
-    if (length(n) > 0){dat <- dat[-which(dat$Count==0),]}
-    dat <- dat[order(dat$Count, decreasing=TRUE),]
+    n <- which(dat[,"Count"]==0)
+    if (length(n) > 0){dat <- dat[-which(dat[,"Count"]==0),]}
+    dat <- dat[order(dat[,"Count"], decreasing=TRUE),]
     dat <- dat[seq(1:nRes),]
     
         
     h1 <-  highchart() %>%
     my_hc_chart(chartType = "bar") %>%
     hc_title(text =title) %>%
-    hc_add_series(dat$Count) %>%
+    hc_add_series(dat[,"Count"]) %>%
     hc_legend(enabled = FALSE) %>%
     #hc_colors(myColors) %>%
-     hc_xAxis(categories = dat$Description, title = list(text = ""))
+     hc_xAxis(categories = dat[,"Description"], title = list(text = ""))
 
 return(h1)
 }
 
+
+
 ##' A barplot of GO enrichment analysis
 ##' 
-##' @title A barplot that shows the result of a GO enrichment, using the package \CRANpkg{highcharter}
+##' @title A barplot that shows the result of a GO enrichment, using the package \code{\link{highcharter}}
 ##' @param ego The result of the GO enrichment, provides either by the function
-##' \code {enrichGO} in the package DAPAR or the function \code{xxx} of the packaage xxxx
-##' @param maxRes An integer which is the maximum number of categories to display in the plot 
+##' \code{enrichGO} in the package \code{\link{DAPAR}} or the function \code{enrichGO} of the package \code{\link{clusterProfiler}}
+##' @param maxRes The maximum number of categories to display in the plot 
+##' @param title The title of the plot
 ##' @return A barplot 
 ##' @author Samuel Wieczorek
-##' @examples
-
 barplotEnrichGO_HC <- function(ego, maxRes = 5, title=NULL){
    
     dat <- ego@result
@@ -199,15 +199,16 @@ barplotEnrichGO_HC <- function(ego, maxRes = 5, title=NULL){
 }
 
 
-##' xxxxxxxxxxxxxx
+##' A scatter plot of GO enrichment analysis
 ##' 
-##' @title A dotplot that shows the result of a GO enrichment, using the package \CRANpkg{highcharter}
+##' @title A dotplot that shows the result of a GO enrichment, using the package \code{\link{highcharter}}
 ##' @param ego The result of the GO enrichment, provides either by the function
-##' enrichGO in DAPAR or bye the function \code{xxx} of the packaage xxxx
+##' enrichGO in \code{\link{DAPAR}} or bye the function \code{enrichGO} of the packaage \code{\link{clusterProfiler}}
 ##' maxRes An integer which is the maximum number of categories to display in the plot 
-##' @return xxxxxxxxxxxxxx 
+##' @param maxRes The maximum number of categories to display in the plot
+##' @param title The title of the plot
+##' @return A dotplot 
 ##' @author Samuel Wieczorek
-##' @examples
 scatterplotEnrichGO_HC <- function(ego, maxRes = 10, title=NULL){
     
     dat <- ego@result
@@ -260,7 +261,7 @@ scatterplotEnrichGO_HC <- function(ego, maxRes = 10, title=NULL){
         hc_yAxis(title = list(text = "Gene Ratio"))  %>%
         hc_tooltip(headerFormat= '',
                    pointFormat = txt_tooltip) %>%
-      my_hc_ExportMenu(filename = "GOEnrich_dotplot")
+        my_hc_ExportMenu(filename = "GOEnrich_dotplot")
     
 
     

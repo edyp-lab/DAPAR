@@ -32,7 +32,7 @@ but uses the package \CRANpkg{highcharter}
 require(DAPARdata)
 data(Exp1_R25_pept)
 labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-wrapper.densityPlotD(Exp1_R25_pept, labels)
+wrapper.densityPlotD_HC(Exp1_R25_pept, labels)
 }
 \seealso{
 \code{\link{wrapper.boxPlotD}}, 

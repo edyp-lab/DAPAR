@@ -149,28 +149,28 @@ data <- read.table(file, header=TRUE, sep="\t",colClasses="character")
 ##' writeMSnsetToExcel(obj, "foo")
 writeMSnsetToExcel <- function(obj, filename)
 {
-    require(openxlsx)
+    #require(openxlsx)
     name <- paste(filename, ".xlsx", sep="")
     wb <- openxlsx::createWorkbook(name)
     n <- 1
-    addWorksheet(wb, "Quantitative Data")
-    writeData(wb, sheet=n, cbind(ID = rownames(Biobase::exprs(obj)),
+    openxlsx::addWorksheet(wb, "Quantitative Data")
+    openxlsx::writeData(wb, sheet=n, cbind(ID = rownames(Biobase::exprs(obj)),
                                  Biobase::exprs(obj)), rowNames = FALSE)
     #bodyStyleNumber <- createStyle(numFmt = "NUMBER")
     #addStyle(wb, sheet=1, bodyStyleNumber, rows = 2:nrow(Biobase::exprs(obj)), 
     #cols=2:ncol(Biobase::exprs(obj)),gridExpand = TRUE)
     
-    addWorksheet(wb, "Samples Meta Data")
+    openxlsx::addWorksheet(wb, "Samples Meta Data")
     n <- n +1
-    writeData(wb, sheet=n, Biobase::pData(obj), rowNames = FALSE)
+    openxlsx::writeData(wb, sheet=n, Biobase::pData(obj), rowNames = FALSE)
     n <- n +1
     if (dim(Biobase::fData(obj))[2] != 0){
-        addWorksheet(wb, "Feature Meta Data")
+        openxlsx::addWorksheet(wb, "Feature Meta Data")
         #numericCols <- which(sapply(Biobase::fData(obj), is.numeric))
         #Biobase::fData(obj)[,numericCols] <- 
         #format(Biobase::fData(obj)[,numericCols])
         
-        writeData(wb, sheet=n, cbind(ID = rownames(Biobase::fData(obj)),
+        openxlsx::writeData(wb, sheet=n, cbind(ID = rownames(Biobase::fData(obj)),
                                      Biobase::fData(obj)), rowNames = FALSE)
         #bodyStyleNumber <- createStyle(numFmt = "NUMBER")
         #addStyle(wb, sheet=3, bodyStyleNumber, 
@@ -185,20 +185,20 @@ writeMSnsetToExcel <- function(obj, filename)
         for (i in 1:l){
             n <- n +1
             level <- as.numeric(obj@experimentData@other$GGO_analysis$levels[i])
-            addWorksheet(wb, paste("Group GO - level ", level, sep=""))
-            writeData(wb, sheet=n, obj@experimentData@other$GGO_analysis$ggo_res[[i]]$ggo_res@result)
+            openxlsx::addWorksheet(wb, paste("Group GO - level ", level, sep=""))
+            openxlsx::writeData(wb, sheet=n, obj@experimentData@other$GGO_analysis$ggo_res[[i]]$ggo_res@result)
             }
         }
     
     if (!is.null(obj@experimentData@other$EGO_analysis))
         {
         n <- n +1
-        addWorksheet(wb, "Enrichment GO")
-        writeData(wb, sheet=n, obj@experimentData@other$EGO_analysis$ego_res@result)
+        openxlsx::addWorksheet(wb, "Enrichment GO")
+        openxlsx::writeData(wb, sheet=n, obj@experimentData@other$EGO_analysis$ego_res@result)
         
         }
 
-    saveWorkbook(wb, name, overwrite=TRUE)
+    openxlsx::saveWorkbook(wb, name, overwrite=TRUE)
     return(name)
     
     
@@ -232,7 +232,7 @@ readExcel <- function(file, extension, sheet){
 ##' @return A vector
 ##' @author Samuel Wieczorek
 listSheets <- function(file){
-    require(openxlsx)
-    return(getSheetNames(file))
+    #require(openxlsx)
+    return(openxlsx::getSheetNames(file))
     
 }

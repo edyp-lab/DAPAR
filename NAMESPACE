@@ -18,6 +18,7 @@ importFrom("doParallel", "registerDoParallel")
 import(dplyr)
 import(tidyr)
 importFrom("foreach", "foreach", "%dopar%")
+importFrom("AnnotationDbi", "keys")
 importFrom("parallel", "detectCores")
 importFrom("Matrix", "sparseMatrix")
 import(cp4p)
@@ -26,7 +27,7 @@ importFrom("graphics", "par", "boxplot", "axis", "mtext", "abline", "points",
             "legend", "lines",  "barplot", "text",
            "layout", "plot.new", "strheight", "strwidth", "title","plot.window")
  
-importFrom("stats", "lowess", "cor", "density","pexp", 
+importFrom("stats", "lowess", "cor", "density","pexp", "mad", 
             "var", "t.test", "dist", "hclust", "setNames", 
             "median", "p.adjust", "model.matrix", "rnorm","na.omit",
            "quantile", "rbeta", "runif", "sd", "pchisq", "residuals")
@@ -38,9 +39,9 @@ importFrom("limma", "lmFit", "eBayes", "topTable", "makeContrasts", "contrasts.f
 importFrom("pcaMethods", "completeObs", "pca")
 importFrom("scales", "alpha")
 importFrom("grDevices", "colorRampPalette", "palette", "heat.colors")
-importFrom("utils", "read.csv", "read.table", "de")
+importFrom("utils", "read.csv", "read.table", "de", "str")
 importFrom("lme4", "getME")
-import("openxlsx")
+importFrom("openxlsx", "getSheetNames", "createWorkbook", "addWorksheet", "writeData", "saveWorkbook")
 import("readxl")
 import("siggenes") # SAM
 import("graph")
@@ -74,7 +75,6 @@ export(
 ,"removeLines"
 ,"deleteLinesFromIndices"
 ,"getIndicesOfLinesToRemove"
-#,"wrapper.normalizeD","normalizeD"
 ,"wrapper.normalizeD2","normalizeD2"
 ,"wrapper.compareNormalizationD","compareNormalizationD"
 

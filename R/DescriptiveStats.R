@@ -31,20 +31,6 @@ boxPlotD(qData, dataForXAxis, labels, group2Color)
 }
 
 
-wrapper.boxPlotD_HC <- function(obj, 
-                             dataForXAxis="Label", 
-                             group2Color="Condition"){
-    
-    qData <- Biobase::exprs(obj)
-    #dataForXAxis <- as.matrix(Biobase::pData(obj)[,dataForXAxis])
-    dataForXAxis <- as.matrix(Biobase::pData(obj)[,dataForXAxis])
-    
-    labels <- Biobase::pData(obj)[,"Label"]
-    
-    boxPlotD_HC(qData, dataForXAxis, labels, group2Color)
-    
-}
-
 
 ##' Boxplot for quantitative proteomics data
 ##' 
@@ -120,68 +106,6 @@ palette("default")
 }
 
 
-
-
-boxPlotD_HC <- function(qData, 
-                     dataForXAxis=NULL, 
-                     labels=NULL, 
-                     group2Color="Condition"){
-    
-    if (group2Color == "Condition") {
-        pal <- getPaletteForLabels(labels)
-    }else { 
-        pal <- getPaletteForReplicates(ncol(qData))}
-    
-    if (is.null(labels)){size <- 2}else{size <- 2*length(labels)}
-    #par(mar=c(size,4,2,2))
-    
-    # boxplot(qData
-    #         ,las = 1
-    #         , col = pal
-    #         , cex = 2
-    #         , axes=TRUE
-    #         , xaxt = "n"
-    #         , ylab = "Log (intensity)"
-    #         , pt.cex = 4
-    #         , horizontal = FALSE
-    # )
-    # 
-    # 
-    # if( !is.null(dataForXAxis))
-    # {
-    #     if (is.vector(dataForXAxis) ){
-    #         xAxisLegend <- dataForXAxis
-    #     } 
-    #     else{ 
-    #         xAxisLegend <- NULL
-    #         N <- nrow(dataForXAxis)
-    #         for (i in 1:N){
-    #             xAxisLegend <- c(xAxisLegend, paste(dataForXAxis[i,], collapse="_"))
-    #         }
-    #     }
-    #     axis(side=1,
-    #          at = 1:ncol(qData),
-    #          labels = xAxisLegend)
-    #     
-    #     mtext("Samples", 
-    #           side=1, 
-    #           line=6+length(colnames(dataForXAxis)), 
-    #           cex.lab=1, las=1)
-    # }
-    # 
-    # abline(h=0) 
-    # palette("default")
-    # 
-    pal <- c("#002F80", "#002F80","#002F80")
-    h1 <-  highchart() %>% 
-        hc_add_series_boxplot(x = iris$Sepal.Length, by = iris$Species,
-                              name = "length", lineWidth = 1) %>%
-        hc_colors(c("#002F80", "#002F20","#002F10")) %>%
-      my_hc_ExportMenu(filename = "boxplot")
-
-    
-    return(h1)
-}
 
 
 
@@ -985,10 +909,10 @@ corrMatrixD(qData, samplesData, rate)
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' wrapper.corrMatrixD_HC(Exp1_R25_pept)
-wrapper.corrMatrixD_HC <- function(obj, minColor=0.5){
+wrapper.corrMatrixD_HC <- function(obj, rate=0.5){
     qData <- Biobase::exprs(obj)
     samplesData <- Biobase::pData(obj)
-    corrMatrixD_HC(cor(qData,use = 'pairwise.complete.obs'),samplesData, minColor)
+    corrMatrixD_HC(cor(qData,use = 'pairwise.complete.obs'),samplesData, rate)
 }
 
 
@@ -1050,7 +974,7 @@ plot(d)
 ##' @param qData A dataframe of quantitative data.
 ##' @param samplesData A dataframe where lines correspond to samples and 
 ##' columns to the meta-data for those samples.
-##' @param gradientRate The rate parameter to control the exponential law for 
+##' @param rate The rate parameter to control the exponential law for 
 ##' the gradient of colors
 ##' @return A colored correlation matrix
 ##' @author Samuel Wieczorek
@@ -1059,8 +983,9 @@ plot(d)
 ##' data(Exp1_R25_pept)
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' samplesData <- Biobase::pData(Exp1_R25_pept)
-##' corrMatrixD_HC(cor(qData,use = 'pairwise.complete.obs'),samplesData)
-corrMatrixD_HC <- function(object,samplesData = NULL, minColor = 0.5) {
+##' res <- cor(qData,use = 'pairwise.complete.obs')
+##' corrMatrixD_HC(res, samplesData)
+corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
     
     df <- as.data.frame(object)
     
@@ -1111,7 +1036,7 @@ corrMatrixD_HC <- function(object,samplesData = NULL, minColor = 0.5) {
         hc_tooltip(formatter = fntltp) %>% 
         hc_legend(align = "right", layout = "vertical",
                   verticalAlign="middle") %>% 
-        hc_colorAxis(  stops= cor_colr,min=minColor,max=1) %>%
+        hc_colorAxis(  stops= cor_colr,min=rate,max=1) %>%
       my_hc_ExportMenu(filename = "corrMatrix")
 }
 
@@ -1137,7 +1062,7 @@ corrMatrixD_HC <- function(object,samplesData = NULL, minColor = 0.5) {
 ##' data(Exp1_R25_pept)
 ##' obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
 ##' wrapper.heatmapD(obj)
-wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="average", 
+wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete", 
                             dendro = FALSE){
 qData <- Biobase::exprs(obj)
 for (j in 1:length(colnames(qData))){

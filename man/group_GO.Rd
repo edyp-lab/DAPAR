@@ -9,33 +9,9 @@ group_GO(data, idFrom, idTo, orgdb, ont, level, readable = TRUE)
 }
 \arguments{
 \item{data}{A vector of ID (genes or proteins !!DIRE LESQUELS!!)}
-
-\item{threshold_LogFC}{The threshold on log(Fold Change) to
-distinguish between differential and non-differential data}
-
-\item{pi0Method}{The parameter pi0.method of the method adjust.p 
-in the package \code{cp4p}}
-}
-\value{
-The computed FDR value (floating number)
 }
 \description{
 This function is a wrappper to the function groupGO from the
 package clusterProfiler. Given a vector of genes/proteins, it returns the 
 GO profile at a specific level. It returns a groupGOResult instance.
-}
-\examples{
-require(DAPARdata)
-data(Exp1_R25_pept)
-obj <- wrapper.mvImputation(Exp1_R25_pept[1:1000], "QRILC")
-condition1 <- '25fmol'
-condition2 <- '10fmol'
-qData <- Biobase::exprs(obj)
-samplesData <- Biobase::pData(obj)
-labels <- Biobase::pData(obj)[,"Label"]
-limma <- diffAnaLimma(qData,samplesData, labels, condition1, condition2)
-diffAnaComputeFDR(limma)
-}
-\author{
-Florence Combes
 }

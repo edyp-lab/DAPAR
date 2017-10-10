@@ -5,16 +5,16 @@
 \title{Displays a correlation matrix of the quantitative data of the
 \code{exprs()} table.}
 \usage{
-corrMatrixD_HC(object, samplesData = NULL, minColor = 0.5)
+corrMatrixD_HC(object, samplesData = NULL, rate = 0.5)
 }
 \arguments{
 \item{samplesData}{A dataframe where lines correspond to samples and 
 columns to the meta-data for those samples.}
 
-\item{qData}{A dataframe of quantitative data.}
-
-\item{gradientRate}{The rate parameter to control the exponential law for 
+\item{rate}{The rate parameter to control the exponential law for 
 the gradient of colors}
+
+\item{qData}{A dataframe of quantitative data.}
 }
 \value{
 A colored correlation matrix
@@ -28,7 +28,8 @@ require(DAPARdata)
 data(Exp1_R25_pept)
 qData <- Biobase::exprs(Exp1_R25_pept)
 samplesData <- Biobase::pData(Exp1_R25_pept)
-corrMatrixD_HC(cor(qData,use = 'pairwise.complete.obs'),samplesData)
+res <- cor(qData,use = 'pairwise.complete.obs')
+corrMatrixD_HC(res, samplesData)
 }
 \author{
 Samuel Wieczorek

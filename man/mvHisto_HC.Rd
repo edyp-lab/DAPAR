@@ -24,7 +24,8 @@ drawn above the bars.}
 A histogram
 }
 \description{
-This method plots a histogram of missing values.
+This method plots a histogram of missing values. Same as the function \code{mvHisto}
+but uses the package \CRANpkg{highcharter}
 }
 \examples{
 require(DAPARdata)
@@ -32,7 +33,7 @@ data(Exp1_R25_pept)
 qData <- Biobase::exprs(Exp1_R25_pept)
 samplesData <- Biobase::pData(Exp1_R25_pept)
 labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-mvHisto(qData, samplesData, labels, indLegend="auto", showValues=TRUE)
+mvHisto_HC(qData, samplesData, labels, indLegend="auto", showValues=TRUE)
 }
 \author{
 Florence Combes, Samuel Wieczorek

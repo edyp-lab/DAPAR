@@ -2,35 +2,20 @@
 % Please edit documentation in R/bioAnalysis.R
 \name{univ_AnnotDbPkg}
 \alias{univ_AnnotDbPkg}
-\title{xxxxxxxxxxxxxx}
+\title{Returns the totality of ENTREZ ID (gene id) of an OrgDb annotation 
+package. Careful : org.Pf.plasmo.db : no ENTREZID but ORF}
 \usage{
 univ_AnnotDbPkg(orgdb)
 }
 \arguments{
 \item{orgdb}{a Bioconductor OrgDb annotation package}
-
-\item{c}{xxxxxxxxxxxxxx}
-
-\item{dat}{xxxxxxxxxxxxxx}
 }
 \value{
-xxxxxxxxxxxxxx
-
-xxxxxxxxxxxxxx
-
 A vector of ENTREZ ID (totality if the ID for the package)
 }
 \description{
-xxxxxxxxxxxxxx
+Returns the universe = totality of ID of an OrgDb annotation package
 }
 \author{
-Samuel Wieczorek
-xxxxxxxxxxxxxx
-
-Samuel Wieczorek
-Returns the universe = totality of ID of an OrgDb annotation package
-
 Florence Combes
-
-careful : org.Pf.plasmo.db : no 'ENTREZID' but 'ORF'
 }

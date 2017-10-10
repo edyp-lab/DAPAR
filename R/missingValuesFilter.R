@@ -48,55 +48,6 @@ return(count)
 }
 
 
-##' Plots a barplot of proportion of contaminants and reverse
-##' 
-##' @title Barplot of proportion of contaminants and reverse
-##' @param obj An object of class \code{\link{MSnSet}}.
-##' @param idContaminants The name of a column of Contaminants
-##' @param prefixContaminants The prefix to identify contaminants
-##' @param idReverse The name of a column of Reverse
-##' @param prefixReverse The prefix to identify Reverse
-##' @return A barplot
-##' @author Samuel Wieczorek
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' pref <- "+"
-##' proportionConRev(10, "Potential.contaminant", pref, 
-##' "Reverse", pref)
-proportionConRev <- function(obj, idContaminants=NULL, 
-                            prefixContaminants=NULL, 
-                            idReverse=NULL, prefixReverse=NULL){
-#if (is.null(prefixContaminants) && is.null(prefixReverse) ){return(NULL)}
-if (is.null(obj) ){return(NULL)}
-nContaminants <- nReverse <- 0
-
-nContaminants <- length(getIndicesOfLinesToRemove(obj, idContaminants, prefixContaminants))
-nReverse <- length(getIndicesOfLinesToRemove(obj, idReverse, prefixReverse))
-
-pctContaminants <- 100 * round(nContaminants/nrow(Biobase::fData(obj)),  digits=4)
-pctReverse <- 100 * round(nReverse/nrow(Biobase::fData(obj)),  digits=4)
-
-counts <- c(nrow(Biobase::fData(obj))-nContaminants-nReverse, nContaminants, 
-            nReverse )
-slices <- c(100-pctContaminants-pctReverse, pctContaminants, pctReverse ) 
-lbls <- c("Quantitative data", "Contaminants", "Reverse")
-pct <- c(100-pctContaminants-pctReverse, pctContaminants, pctReverse )
-lbls <- paste(lbls, " : ", counts, " lines (", pct, "%)", sep="") 
-#lbls <- paste(lbls,"%",sep="") # ad % to labels 
-
-bp <- barplot(slices,
-        #names.arg = lbls, 
-        horiz = TRUE,
-        col=c("lightgrey", "green", "blue"),
-        axes = FALSE,
-        cex.names = 1.5)
-
-graphics::text(x= 20, y= bp, labels=as.character(lbls), xpd=TRUE, cex=1.5)
-
-}
-
-
 
 
 ##' Plots a barplot of proportion of contaminants and reverse. Same as the function

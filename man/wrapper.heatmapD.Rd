@@ -6,7 +6,7 @@
 quantitative data in the \code{exprs()} table of an object of
 class \code{\link{MSnSet}}}
 \usage{
-wrapper.heatmapD(obj, distance = "euclidean", cluster = "average",
+wrapper.heatmapD(obj, distance = "euclidean", cluster = "complete",
   dendro = FALSE)
 }
 \arguments{
