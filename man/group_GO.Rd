@@ -9,9 +9,27 @@ group_GO(data, idFrom, idTo, orgdb, ont, level, readable = TRUE)
 }
 \arguments{
 \item{data}{A vector of ID (genes or proteins !!DIRE LESQUELS!!)}
+
+\item{idFrom}{xxxxx}
+
+\item{idTo}{xxxxx}
+
+\item{orgdb}{xxxxx}
+
+\item{ont}{xxxxx}
+
+\item{level}{Specific GO Level}
+
+\item{readable}{xxxxx}
+}
+\value{
+xxxxx
 }
 \description{
 This function is a wrappper to the function groupGO from the
 package clusterProfiler. Given a vector of genes/proteins, it returns the 
 GO profile at a specific level. It returns a groupGOResult instance.
+}
+\author{
+xxxxx
 }

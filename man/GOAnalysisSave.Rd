@@ -11,22 +11,22 @@ GOAnalysisSave(obj, ggo_res = NULL, ego_res = NULL, organism, ontology,
 \arguments{
 \item{obj}{An object of the class \code{\link{MSnSet}}}
 
-\item{ggo_res}{The object returned by the function \code{group_GO} of the package DAPAR
+\item{ggo_res}{The object returned by the function \code{group_GO} of the package \code{\link{DAPAR}}
 or the function \code{groupGO} of the package \code{\link{clusterProfiler}}}
 
-\item{ego_res}{The object returned by the function \code{enrich_GO} of the package DAPAR
+\item{ego_res}{The object returned by the function \code{enrich_GO} of the package \code{\link{DAPAR}}
 or the function \code{enrichGO} of the package \code{\link{clusterProfiler}}}
 
 \item{organism}{The parameter xxx of the function}
 
 \item{ontology}{One of "MF", "BP", and "CC" subontologies}
 
+\item{levels}{A vector of the different GO grouping levels to save}
+
 \item{pvalueCutoff}{The qvalue cutoff (same parameter as in the function \code{enrichGO} of the package \code{\link{clusterProfiler}})}
 
 \item{typeUniverse}{The type of background to be used. Values are 'Entire Organism', 'Entire dataset' or 'Custom'. In the latter
 case, a file should be uploaded by the user}
-
-\item{level}{Specific GO Level}
 }
 \value{
 An object of the class \code{\link{MSnSet}}

@@ -379,9 +379,11 @@ palette("default")
 
 
 
+##' Plot to compare the quantitative proteomics data before and after 
+##' normalization using the library \code{\link{highcharter}}
 ##' 
 ##' @title Builds a plot from a dataframe. Same as compareNormalizationD but 
-##' uses the Highcharter library
+##' uses the library \code{\link{highcharter}}
 ##' @param qDataBefore A dataframe that contains quantitative data before 
 ##' normalization.
 ##' @param qDataAfter A dataframe that contains quantitative data after 
@@ -670,17 +672,63 @@ densityPlotD_HC <- function(qData, labelsForLegend=NULL,indData2Show=NULL,
     myColors <- NULL
     ##Colors definition
     if (group2Color == "Condition") {
-        myColors <- getPaletteForLabels_HC(labelsForLegend)[indData2Show]
+        myColors <- getPaletteForLabels(labelsForLegend)[indData2Show]
     } else { 
-        myColors<- getPaletteForReplicates_HC(ncol(qData))[indData2Show]
+        myColors<- getPaletteForReplicates(ncol(qData))[indData2Show]
     }
 
 nbSeries = length(indData2Show)
+total <- NULL
 for (i in 1:length(indData2Show)){
-    tmp <- list(data = density(qData[,indData2Show[i]], na.rm = TRUE)$y, name=labelsForLegend[indData2Show[i]])
-    names(tmp$data) <- c()
+    tmp <- list(x = round(density(qData[,i], na.rm = TRUE)$x, 1), 
+                y = density(qData[,i], na.rm = TRUE)$y)
     series[[i]] <- tmp
+    total <- c(total, tmp$x)
 }
+
+total <- unique(total)
+total <- total[order(total)]
+t1 <- rep(NA, length(total))
+t2 <- rep(NA, length(total))
+t3 <- rep(NA, length(total))
+t4 <- rep(NA, length(total))
+t5 <- rep(NA, length(total))
+t6 <- rep(NA, length(total))
+
+for (i in 1:length(series[[1]]$x)){
+     t1[(series[[1]]$x)[i]] <- (series[[1]]$y)[i]
+}
+
+for (i in 1:length(series[[2]]$x)){
+    t2[(series[[2]]$x)[i]] <- (series[[2]]$y)[i]
+}
+for (i in 1:length(series[[3]]$x)){
+    t3[(series[[3]]$x)[i]] <- (series[[3]]$y)[i]
+}
+for (i in 1:length(series[[4]]$x)){
+    t4[(series[[4]]$x)[i]] <- (series[[4]]$y)[i]
+}
+for (i in 1:length(series[[5]]$x)){
+    t5[(series[[5]]$x)[i]] <- (series[[5]]$y)[i]
+}
+for (i in 1:length(series[[6]]$x)){
+    t6[(series[[6]]$x)[i]] <- (series[[6]]$y)[i]
+}
+
+
+
+toto <- list(list(data=t1, name='t1'), 
+     list(data=t2, name ='t2'),
+     list(data=t3, name ='t3'),
+     list(data=t4, name ='t4'),
+     list(data=t5, name ='t5'),
+     list(data=t6, name ='t6'))
+
+
+
+
+
+
 
 
     h1 <-  highchart() %>% 
@@ -690,11 +738,15 @@ for (i in 1:length(indData2Show)){
         hc_legend(enabled = TRUE) %>%
         hc_xAxis(title = list(text = "log(Intensity)")) %>%
         hc_yAxis(title = list(text = "Density")) %>%
-        hc_colors(myColors) %>%
+      #  hc_colors(myColors) %>%
         hc_tooltip(headerFormat= '',
                    pointFormat = "<b> Density </b>: {point.y} ",
                    valueDecimals = 2) %>%
-      my_hc_ExportMenu(filename = "densityplot")
+      my_hc_ExportMenu(filename = "densityplot") %>%
+        hc_plotOptions(
+            series=list(
+                connectNulls= TRUE)
+        ) 
     
     
     return(h1)
@@ -912,7 +964,8 @@ corrMatrixD(qData, samplesData, rate)
 wrapper.corrMatrixD_HC <- function(obj, rate=0.5){
     qData <- Biobase::exprs(obj)
     samplesData <- Biobase::pData(obj)
-    corrMatrixD_HC(cor(qData,use = 'pairwise.complete.obs'),samplesData, rate)
+    data <- cor(qData,use = 'pairwise.complete.obs')
+    corrMatrixD_HC(data,samplesData, rate)
 }
 
 
@@ -967,12 +1020,12 @@ plot(d)
 
 
 ##' Correlation matrix based on a \code{\link{MSnSet}} object. Same as the 
-##' function \link{corrMatrixD} but uses the package \CRANpkg{highcharter}
+##' function \link{corrMatrixD} but uses the package \code{\link{highcharter}}
 ##' 
 ##' @title Displays a correlation matrix of the quantitative data of the
 ##' \code{exprs()} table.
-##' @param qData A dataframe of quantitative data.
-##' @param samplesData A dataframe where lines correspond to samples and 
+##' @param object The result of the \code{cor} function.
+##' @param samplesData A dataframe in which lines correspond to samples and 
 ##' columns to the meta-data for those samples.
 ##' @param rate The rate parameter to control the exponential law for 
 ##' the gradient of colors

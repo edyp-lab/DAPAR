@@ -82,24 +82,7 @@ return(list(iCond1 = indCondition1, iCond2 = indCondition2))
 ##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 ##' getPaletteForLabels(labels)
 getPaletteForLabels <- function(labels){
-nColors <- 8
-col <- c(1:nColors)
-palette(brewer.pal(nColors,"Dark2"))
-
-## Define one color per label/condition
-col.boxplot <- NULL
-for (i in 1:length(labels)){
-    col.boxplot[which(labels == unique(labels)[i])] <- col[i]
-}
-
-return (col.boxplot)
-}
-
-getPaletteForLabels_HC <- function(labels){
     nColors <- 8
-    #col <- c(1:nColors)
-    #pal <- c('#7cb5ec', '#434348', '#90ed7d', '#f7a35c', '#8085e9', '#f15c80', '#e4d354', '#2b908f', '#f45b5b', '#91e8e1')
-    #pal <- c("#002F80", "#002F80","#002F80","#002F80","#F9AF38","#F9AF38","#F9AF38","#F9AF38")
     pal <- brewer.pal(nColors, "Dark2")
     ## Define one color per label/condition
     col.boxplot <- NULL
@@ -126,18 +109,12 @@ getPaletteForLabels_HC <- function(labels){
 ##' n <- nrow(Biobase::pData(Exp1_R25_pept))
 ##' getPaletteForReplicates(n)
 getPaletteForReplicates <- function(nColors){
-col <- c(1:nColors)
-getPalette <- colorRampPalette(brewer.pal(8, "Dark2"))
-return(col)
+#col <- c(1:nColors)
+#getPalette <- colorRampPalette(brewer.pal(8, "Dark2"))
+#return(col)
+pal <- brewer.pal(nColors, "Dark2")
+return(pal)
 }
-
-getPaletteForReplicates_HC <- function(nColors){
-    #col <- c(1:nColors)
-    #pal <- c("#002F80", "#002F80","#002F80","#002F80","#F9AF38","#F9AF38","#F9AF38","#F9AF38")
-    pal <- brewer.pal(nColors, "Dark2")
-    return(pal)
-}
-
 
 
 

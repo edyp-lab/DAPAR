@@ -7,7 +7,7 @@ test_that("wrapper boxplot", {
     types <- c("Label","Analyt.Rep")
     t <- wrapper.boxPlotD(test, types,group2Color="Replicate")
     expect_is(t, "character")
-    expect_equal(t, c("black", "red", "green3", "blue", "cyan", "magenta", "yellow", "gray"))
+    expect_equal(t, c("#1B9E77", "#D95F02", "#7570B3", "#E7298A", "#66A61E", "#E6AB02", "#A6761D", "gray40"))
     dev.off()
 })
 

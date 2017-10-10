@@ -3,7 +3,7 @@
 \name{compareNormalizationD_HC}
 \alias{compareNormalizationD_HC}
 \title{Builds a plot from a dataframe. Same as compareNormalizationD but 
-uses the Highcharter library}
+uses the library \code{\link{highcharter}}}
 \usage{
 compareNormalizationD_HC(qDataBefore, qDataAfter, labelsForLegend = NULL,
   indData2Show = NULL, group2Color = "Condition")
@@ -28,6 +28,10 @@ color per replicate (value "Replicate"). Default value is by Condition.}
 }
 \value{
 A plot
+}
+\description{
+Plot to compare the quantitative proteomics data before and after 
+normalization using the library \code{\link{highcharter}}
 }
 \examples{
 require(DAPARdata)

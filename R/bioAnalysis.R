@@ -8,8 +8,14 @@
 ##' @title Calculates the GO profile of a vector of genes/proteins at specific 
 ##' level
 ##' @param data A vector of ID (genes or proteins !!DIRE LESQUELS!!)
-##' @param idFrom
-##' @param idTo
+##' @param idFrom xxxxx
+##' @param idTo xxxxx
+##' @param orgdb xxxxx
+##' @param ont xxxxx
+##' @param level Specific GO Level
+##' @param readable xxxxx
+##' @return xxxxx
+##' @author xxxxx
 group_GO <- function(data, idFrom, idTo, orgdb, ont, level, readable=TRUE){
     
     require(as.character(orgdb),character.only = TRUE)
@@ -25,7 +31,21 @@ group_GO <- function(data, idFrom, idTo, orgdb, ont, level, readable=TRUE){
 }
 
 
-
+##' This function is a wrappper to the function enrichGO from the
+##' package \code{\link{clusterProfiler}}. Given a vector of genes/proteins, it returns the 
+##' GO xxxxxxx.  
+##' 
+##' @title Calculates the GO xxxxxxxxx
+##' @param data A vector of ID (genes or proteins !!DIRE LESQUELS!!)
+##' @param idFrom xxxxx
+##' @param idTo xxxxx
+##' @param orgdb xxxxx
+##' @param ont One of "MF", "BP", and "CC" subontologies
+##' @param readable xxxxx
+##' @param pval The qvalue cutoff (same parameter as in the function \code{enrichGO} of the package \code{\link{clusterProfiler}})
+##' @param universe xxxxxxxxx
+##' @return A groupGOResult instance.
+##' @author xxxxx
 enrich_GO <- function(data, idFrom, idTo, orgdb, ont, readable=TRUE, pval, universe)
 {
   tmp <- which(is.na(data))
@@ -71,13 +91,13 @@ univ_AnnotDbPkg <- function(orgdb){
 ##' @title Returns a \code{\link{MSnSet}} object with the results of
 ##' the GO analysis performed with the \code{\link{clusterProfiler}} package. 
 ##' @param obj An object of the class \code{\link{MSnSet}}
-##' @param ggo_res The object returned by the function \code{group_GO} of the package DAPAR
+##' @param ggo_res The object returned by the function \code{group_GO} of the package \code{\link{DAPAR}}
 ##' or the function \code{groupGO} of the package \code{\link{clusterProfiler}}
-##' @param ego_res The object returned by the function \code{enrich_GO} of the package DAPAR
+##' @param ego_res The object returned by the function \code{enrich_GO} of the package \code{\link{DAPAR}}
 ##' or the function \code{enrichGO} of the package \code{\link{clusterProfiler}}
 ##' @param organism The parameter xxx of the function
 ##' @param ontology One of "MF", "BP", and "CC" subontologies
-##' @param level Specific GO Level
+##' @param levels A vector of the different GO grouping levels to save
 ##' @param pvalueCutoff The qvalue cutoff (same parameter as in the function \code{enrichGO} of the package \code{\link{clusterProfiler}})
 ##' @param typeUniverse  The type of background to be used. Values are 'Entire Organism', 'Entire dataset' or 'Custom'. In the latter
 ##' case, a file should be uploaded by the user
@@ -119,7 +139,7 @@ GOAnalysisSave <- function (obj, ggo_res=NULL, ego_res=NULL, organism, ontology,
 ##' A barplot of GO classification analysis
 ##' 
 ##' @title A barplot that shows the result of a GO classification, using the package \code{\link{highcharter}}
-##' @param ego The result of the GO classification, provides either by the function
+##' @param ggo The result of the GO classification, provides either by the function
 ##' \code{group_GO} in the package \code{\link{DAPAR}} or the function \code{groupGO} in the package \code{\link{clusterProfiler}}
 ##' @param maxRes An integer which is the maximum number of classes to display in the plot 
 ##' @param title The title of the plot
@@ -163,28 +183,28 @@ barplotEnrichGO_HC <- function(ego, maxRes = 5, title=NULL){
     dat <- ego@result
     nRes <- min(maxRes, nrow(dat))
     
-    n <- which(dat$Count==0)
-    if (length(n) > 0){dat <- dat[-which(dat$Count==0),]}
-    dat <- dat[order(dat$pvalue, decreasing=FALSE),]
+    n <- which(dat[,"Count"]==0)
+    if (length(n) > 0){dat <- dat[-which(dat[,"Count"]==0),]}
+    dat <- dat[order(dat[,"pvalue"], decreasing=FALSE),]
     dat <- dat[seq(1:nRes),]
     
     
     colfunc <- colorRampPalette(c("red","royalblue"))
     nbBreaks <- 20*nRes
     pal <- colfunc(nbBreaks)
-    t <- log(dat$pvalue)
+    t <- log(dat[,"pvalue"])
     d <- (max(t) - min(t))/nbBreaks
     base <- seq(from=min(t), to=max(t), by = d)
     myColorsIndex <- unlist(lapply(t, function(x){last(which(x > base))}))
     myColorsIndex[which(is.na(myColorsIndex))] <- 1
     myColors <- pal[myColorsIndex]
     
-    dat$pvalue <- format(dat$pvalue, digits=2)
+    dat[,"pvalue"] <- format(dat[,"pvalue"], digits=2)
     
     h1 <- highchart() %>%  
         hc_title(title = title) %>%
         hc_yAxis(title = list(text = "Count")) %>% 
-        hc_xAxis(categories = dat$Description) %>% 
+        hc_xAxis(categories = dat[,"Description"]) %>% 
         hc_add_series(data = dat, type = "bar", hcaes(x = Description, y = Count),
                       dataLabels = list(enabled = TRUE, format='pval={point.pvalue}'),
                       colorByPoint = TRUE) %>%
@@ -245,7 +265,7 @@ scatterplotEnrichGO_HC <- function(ego, maxRes = 10, title=NULL){
                         color=pal[myColorsIndex],
                         colorSegment=pal[myColorsIndex],
                         pAdjust = format(dat$p.adjust, digits=2),
-                        name = dat$Description)
+                        name = dat[,"Description"])
     
     
     txt_tooltip <- paste("<b> p.adjust </b>: {point.pAdjust} <br> ", 

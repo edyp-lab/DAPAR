@@ -8,20 +8,20 @@
 corrMatrixD_HC(object, samplesData = NULL, rate = 0.5)
 }
 \arguments{
-\item{samplesData}{A dataframe where lines correspond to samples and 
+\item{object}{The result of the \code{cor} function.}
+
+\item{samplesData}{A dataframe in which lines correspond to samples and 
 columns to the meta-data for those samples.}
 
 \item{rate}{The rate parameter to control the exponential law for 
 the gradient of colors}
-
-\item{qData}{A dataframe of quantitative data.}
 }
 \value{
 A colored correlation matrix
 }
 \description{
 Correlation matrix based on a \code{\link{MSnSet}} object. Same as the 
-function \link{corrMatrixD} but uses the package \CRANpkg{highcharter}
+function \link{corrMatrixD} but uses the package \code{\link{highcharter}}
 }
 \examples{
 require(DAPARdata)
