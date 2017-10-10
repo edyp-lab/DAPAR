@@ -45,7 +45,7 @@ import("readxl")
 import("siggenes") # SAM
 import("graph")
 
-import("clusterProfiler")
+importFrom("clusterProfiler", "bitr", "enrichGO", "groupGO")
 
 export(
 "writeMSnsetToExcel",
