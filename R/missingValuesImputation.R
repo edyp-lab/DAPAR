@@ -112,13 +112,13 @@ wrapper.impute.detQuant <- function(obj, qval=0.025, factor=1){
 
 
   
-##' This method is xxxxxxxx
-##' 
-##' @title xxxxxxxxx
-##' @param qData xxxxxxxxx
-##' @param qval xxxxxxxxx
-##' @param factor xxxxxxxxx. 
-##' @return xxxxxxxxx
+##' This method returns the q-th quantile of each colum of an expression set, up to a scaling factor
+##'
+##' @title Quantile imputation value definition
+##' @param qData An expression set containing quantitative values of various replicates
+##' @param qval The quantile used to define the imputation value
+##' @param factor A scaling factor to multiply the imputation value with
+##' @return A list of two vectors, respectively containing the imputation values and the rescaled imputation values
 ##' @author Thomas Burger
 ##' @examples
 ##' require(DAPARdata)
@@ -132,12 +132,12 @@ getQuantile4Imp <- function(qData, qval=0.025, factor=1){
 }
 
 
-##' This method is xxxxxxxx
-##' 
-##' @title xxxxxxxxx
-##' @param qData xxxxxxxxx
-##' @param values xxxxxxxxx
-##' @return xxxxxxxxx
+##' This method replaces each missing value by a given value
+##'
+##' @title Deterministic imputation
+##' @param qData An expression set containing quantitative or missing values
+##' @param values A vector with as many elements as the number of colums of qData
+##' @return An imputed dataset
 ##' @author Thomas Burger
 ##' @examples
 ##' require(DAPARdata)

@@ -2,20 +2,20 @@
 % Please edit documentation in R/missingValuesImputation.R
 \name{impute.detQuant}
 \alias{impute.detQuant}
-\title{xxxxxxxxx}
+\title{Deterministic imputation}
 \usage{
 impute.detQuant(qData, values)
 }
 \arguments{
-\item{qData}{xxxxxxxxx}
+\item{qData}{An expression set containing quantitative or missing values}
 
-\item{values}{xxxxxxxxx}
+\item{values}{A vector with as many elements as the number of colums of qData}
 }
 \value{
-xxxxxxxxx
+An imputed dataset
 }
 \description{
-This method is xxxxxxxx
+This method replaces each missing value by a given value
 }
 \examples{
 require(DAPARdata)

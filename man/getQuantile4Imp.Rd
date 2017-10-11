@@ -2,22 +2,22 @@
 % Please edit documentation in R/missingValuesImputation.R
 \name{getQuantile4Imp}
 \alias{getQuantile4Imp}
-\title{xxxxxxxxx}
+\title{Quantile imputation value definition}
 \usage{
 getQuantile4Imp(qData, qval = 0.025, factor = 1)
 }
 \arguments{
-\item{qData}{xxxxxxxxx}
+\item{qData}{An expression set containing quantitative values of various replicates}
 
-\item{qval}{xxxxxxxxx}
+\item{qval}{The quantile used to define the imputation value}
 
-\item{factor}{xxxxxxxxx.}
+\item{factor}{A scaling factor to multiply the imputation value with}
 }
 \value{
-xxxxxxxxx
+A list of two vectors, respectively containing the imputation values and the rescaled imputation values
 }
 \description{
-This method is xxxxxxxx
+This method returns the q-th quantile of each colum of an expression set, up to a scaling factor
 }
 \examples{
 require(DAPARdata)
