@@ -662,73 +662,41 @@ densityPlotD_HC <- function(qData, labelsForLegend=NULL,indData2Show=NULL,
                             group2Color = "Condition"){
     
     
-    if (is.null(labelsForLegend) ) return(NULL)
+    if (is.null(labelsForLegend) ) {
+      labelsForLegend <- rep("",ncol(qData))
+      }
     
-    if (is.null(indData2Show)) {indData2Show <- c(1:ncol(qData)) }
+    if (is.null(indData2Show)) {
+      indData2Show <- c(1:ncol(qData)) 
+      }
     
-    series <- list()
     pal <- c("#002F80", "#002F80","#002F80","#002F80","#F9AF38","#F9AF38","#F9AF38","#F9AF38")
     
     myColors <- NULL
     ##Colors definition
     if (group2Color == "Condition") {
-        myColors <- getPaletteForLabels(labelsForLegend)[indData2Show]
+      myColors <- getPaletteForLabels_HC(labelsForLegend)[indData2Show]
+      # legendColor <- unique(pal)
+      # txtLegend <- unique(labelsForLegend)
+      #myColors <-pal[indData2Show]
     } else { 
-        myColors<- getPaletteForReplicates(ncol(qData))[indData2Show]
+      myColors<- getPaletteForReplicates_HC(ncol(qData))[indData2Show]
+      # legendColor <- pal[indData2Show]
+      # txtLegend <- paste("Replicate", seq(1,ncol(qData)), 
+      #                    labelsForLegend,sep=" ")
+      # txtLegend <- txtLegend[indData2Show]
+      # 
+      # myColors <-pal
     }
 
-nbSeries = length(indData2Show)
-total <- NULL
-for (i in 1:length(indData2Show)){
-    tmp <- list(x = round(density(qData[,i], na.rm = TRUE)$x, 1), 
-                y = density(qData[,i], na.rm = TRUE)$y)
-    series[[i]] <- tmp
-    total <- c(total, tmp$x)
+    series <- list()
+    for (i in 1:length(indData2Show)){
+  
+    tmp <- data.frame(x = density(qData[,indData2Show[i]], na.rm = TRUE)$x, 
+                y = density(qData[,indData2Show[i]], na.rm = TRUE)$y)
+    series[[i]] <- list(name = labelsForLegend[i],
+                              data = list_parse(tmp))
 }
-
-total <- unique(total)
-total <- total[order(total)]
-t1 <- rep(NA, length(total))
-t2 <- rep(NA, length(total))
-t3 <- rep(NA, length(total))
-t4 <- rep(NA, length(total))
-t5 <- rep(NA, length(total))
-t6 <- rep(NA, length(total))
-
-for (i in 1:length(series[[1]]$x)){
-     t1[(series[[1]]$x)[i]] <- (series[[1]]$y)[i]
-}
-
-for (i in 1:length(series[[2]]$x)){
-    t2[(series[[2]]$x)[i]] <- (series[[2]]$y)[i]
-}
-for (i in 1:length(series[[3]]$x)){
-    t3[(series[[3]]$x)[i]] <- (series[[3]]$y)[i]
-}
-for (i in 1:length(series[[4]]$x)){
-    t4[(series[[4]]$x)[i]] <- (series[[4]]$y)[i]
-}
-for (i in 1:length(series[[5]]$x)){
-    t5[(series[[5]]$x)[i]] <- (series[[5]]$y)[i]
-}
-for (i in 1:length(series[[6]]$x)){
-    t6[(series[[6]]$x)[i]] <- (series[[6]]$y)[i]
-}
-
-
-
-toto <- list(list(data=t1, name='t1'), 
-     list(data=t2, name ='t2'),
-     list(data=t3, name ='t3'),
-     list(data=t4, name ='t4'),
-     list(data=t5, name ='t5'),
-     list(data=t6, name ='t6'))
-
-
-
-
-
-
 
 
     h1 <-  highchart() %>% 
@@ -738,21 +706,23 @@ toto <- list(list(data=t1, name='t1'),
         hc_legend(enabled = TRUE) %>%
         hc_xAxis(title = list(text = "log(Intensity)")) %>%
         hc_yAxis(title = list(text = "Density")) %>%
-      #  hc_colors(myColors) %>%
+        hc_colors(myColors) %>%
         hc_tooltip(headerFormat= '',
                    pointFormat = "<b> Density </b>: {point.y} ",
                    valueDecimals = 2) %>%
       my_hc_ExportMenu(filename = "densityplot") %>%
         hc_plotOptions(
             series=list(
-                connectNulls= TRUE)
-        ) 
+                connectNulls= TRUE,
+                marker=list(
+                  enabled = FALSE)
+            )
+        )
     
     
     return(h1)
 
 }
-
 
 
 
