@@ -94,6 +94,19 @@ getPaletteForLabels <- function(labels){
 }
 
 
+##' Selects colors for the highcharter plots in \code{\link{DAPAR}} based on the different conditions in
+##' the dataset. The palette is derived from
+##' the brewer palette "Dark2" (see \code{\link{RColorBrewer}}).
+##' 
+##' @title Palette for highcharter plots in \code{\link{DAPAR}}
+##' @param labels A vector of labels (strings).
+##' @return A palette designed for the data manipulated in \code{\link{DAPAR}}
+##' @author Florence Combes, Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+##' getPaletteForLabels_HC(labels)
 getPaletteForLabels_HC <- function(labels){
   nColors <- 8
   #col <- c(1:nColors)
@@ -109,7 +122,19 @@ getPaletteForLabels_HC <- function(labels){
   return (col.boxplot)
 }
 
-
+##' Selects colors for the highcharter plots in \code{\link{DAPAR based on the replicates in
+##' the dataset. The palette is derived from
+##' the brewer palette "Dark2" (see \code{\link{RColorBrewer}}).
+##' 
+##' @title Palette for highcharter plot the replicates in \code{\link{DAPAR}}
+##' @param nColors The desired number of colors
+##' @return A palette designed for the data manipulated in \code{\link{DAPAR}}
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' n <- nrow(Biobase::pData(Exp1_R25_pept))
+##' getPaletteForReplicates_HC(n)
 getPaletteForReplicates_HC <- function(nColors){
   #col <- c(1:nColors)
   #pal <- c("#002F80", "#002F80","#002F80","#002F80","#F9AF38","#F9AF38","#F9AF38","#F9AF38")
