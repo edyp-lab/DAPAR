@@ -708,7 +708,7 @@ densityPlotD_HC <- function(qData, labelsForLegend=NULL,indData2Show=NULL,
         hc_yAxis(title = list(text = "Density")) %>%
         hc_colors(myColors) %>%
         hc_tooltip(headerFormat= '',
-                   pointFormat = "<b> Density </b>: {point.y} ",
+                   pointFormat = "<b> {series.name} </b>: {point.y} ",
                    valueDecimals = 2) %>%
       my_hc_ExportMenu(filename = "densityplot") %>%
         hc_plotOptions(
@@ -888,9 +888,16 @@ CVDistD_HC <- function(qData, labels=NULL){
         hc_xAxis(title = list(text = "CV(log(Intensity))")) %>%
         hc_yAxis(title = list(text = "Density")) %>%
         hc_tooltip(headerFormat= '',
-                   pointFormat = "<b> Density </b>: {point.y} ",
+                   pointFormat = "<b>{series.name}</b>: {point.y} ",
                    valueDecimals = 2) %>%
-      my_hc_ExportMenu(filename = "logIntensity")
+      my_hc_ExportMenu(filename = "logIntensity") %>%
+        hc_plotOptions(
+            series=list(
+                connectNulls= TRUE,
+                marker=list(
+                    enabled = FALSE)
+            )
+        )
     
     return(h1)
 

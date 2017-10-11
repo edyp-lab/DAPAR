@@ -131,7 +131,7 @@ x <- barplot(nb.na2barplot[-1],
 ##' data(Exp1_R25_pept)
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' samplesData <- Biobase::pData(Exp1_R25_pept)
-##' mvPerLinesHisto(qData, samplesData)
+##' mvPerLinesHisto_HC(qData, samplesData)
 mvPerLinesHisto_HC <- function(qData, samplesData, indLegend="auto", showValues=FALSE){
     
     if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
@@ -160,22 +160,26 @@ mvPerLinesHisto_HC <- function(qData, samplesData, indLegend="auto", showValues=
     }
     
     df <- data.frame(y=nb.na2barplot[-1])
+    myColors = rep("lightgrey",nrow(df))
+    myColors[nrow(df)] <- "red"
     
-    df1 <- df2 <- df
-    df2[1:(nrow(df)-1),] <- 0
-    df1 [nrow(df),] <- 0
+    #df1 <- df2 <- df
+    #df2[1:(nrow(df)-1),] <- 0
+    #df1 [nrow(df),] <- 0
     
     
     #, series = list( pointWidth = 50)
     
     h1 <-  highchart() %>% 
         hc_title(text = "#[lines] with X NA values") %>% 
-        hc_add_series(data = df1, type="column", color="lightgrey") %>%
-        hc_add_series(data = df2, type="column", color="red") %>%
+        hc_add_series(data = df, type="column", colorByPoint = TRUE) %>%
+        hc_colors(myColors) %>%
         hc_plotOptions( column = list(stacking = "normal") ) %>%
         hc_legend(enabled = FALSE) %>%
         hc_xAxis(categories = row.names(df), title = list(text = "#[NA values] per line")) %>%
-      my_hc_ExportMenu(filename = "missingValuesPlot1")
+      my_hc_ExportMenu(filename = "missingValuesPlot1") %>%
+        hc_tooltip(headerFormat= '',
+                   pointFormat = "{point.y} ")
     
     return(h1)
  
@@ -365,7 +369,9 @@ mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto",
         hc_add_series_list(series) %>%
         hc_legend(enabled = FALSE) %>%
         hc_xAxis(categories = row.names(m), title = list(text = "#[NA values] per line (condition-wise)")) %>%
-      my_hc_ExportMenu(filename = "missingValuesPlot_2")
+      my_hc_ExportMenu(filename = "missingValuesPlot_2") %>%
+        hc_tooltip(headerFormat= '',
+                   pointFormat = "{point.y} ")
     
     return(h1)
     
@@ -547,7 +553,9 @@ mvHisto_HC <- function(qData, samplesData, labels, indLegend="auto",
         hc_plotOptions( column = list(stacking = "normal") ) %>%
         hc_legend(enabled = FALSE) %>%
         hc_xAxis(categories = labels, title = list(text = "Replicates")) %>%
-      my_hc_ExportMenu(filename = "missingValuesPlot_3")
+      my_hc_ExportMenu(filename = "missingValuesPlot_3") %>%
+        hc_tooltip(headerFormat= '',
+                   pointFormat = "{point.y}")
     
 
     return(h1)
