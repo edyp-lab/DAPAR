@@ -4,11 +4,13 @@
 ##' the heuristic described in [1] and adapt the code of the fudge2
 ##' function in the siggene R package.
 
-##' [1] Tusher, Tibshirani and Chu, "Significance analysis of
-##' microarrays applied to the ionizing radiation response", PNAS 2001
+##' [1] Tusher, Tibshirani and Chu, Significance analysis of
+##' microarrays applied to the ionizing radiation response, PNAS 2001
 ##' 98: 5116-5121, (Apr 24).
 ##' 
-##' @title xxxxxx
+##' @title Heuristic to choose the value of the hyperparameter
+##' (fudge factor) used to regularize the variance estimator in the
+##' likelihood ratio statistic
 ##' @param lmm.res.h0 a vector of object containing the estimates (used to
 ##' compute the statistic) under H0 for each connected component. If
 ##' the fast version of the estimator was used (as implemented in this
@@ -35,10 +37,10 @@
 ##' the list of candidates. Default to TRUE.
 ##' @return (same as the fudge2 function of siggene):
 ##' s.zero: the value of the fudge factor s0.
-##' alpha.hat: the optimal quantile of the ‘s’ values. If s0=0, ‘alpha.hat’
+##' alpha.hat: the optimal quantile of the 's' values. If s0=0, 'alpha.hat'
 ##' will not be returned.
 ##' vec.cv: the vector of the coefficients of variations.  Following
-##'           Tusher et al. (2001), the optimal ‘alpha’ quantile is given
+##'           Tusher et al. (2001), the optimal 'alpha' quantile is given
 ##'           by the quantile that leads to the smallest CV of the modified
 ##'           test statistics.
 ##' msg: a character string summarizing the most important information

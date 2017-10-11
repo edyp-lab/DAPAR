@@ -28,13 +28,13 @@ test_that("getIndicesConditions", {
 
 test_that("getPaletteForLabels", {
     labels <- Biobase::pData(Exp1_R2_pept)[,"Label"]
-    expect_equal(getPaletteForLabels(labels), c(1,1,1,2,2,2))
+    expect_equal(getPaletteForLabels(labels), c("#1B9E77", "#1B9E77", "#1B9E77", "#D95F02", "#D95F02", "#D95F02"))
 })
 
 
 
 test_that("getPaletteForReplicates", {
     n <- nrow(Biobase::pData(Exp1_R2_pept))
-expect_equal(getPaletteForReplicates(n), c(1,2,3,4,5,6))
+expect_equal(getPaletteForReplicates(n), c("#1B9E77", "#D95F02", "#7570B3", "#E7298A", "#66A61E", "#E6AB02"))
 })
 

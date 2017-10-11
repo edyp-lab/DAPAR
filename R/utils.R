@@ -1,8 +1,8 @@
-##' Returns the contains of the slot processing  of an object of class MSnSet.
+##' Returns the contents of the slot processing of an object of class \code{\link{MSnSet}}
 ##' 
 ##' @title Returns the contains of the slot processing  of an object of 
-##' class MSnSet
-##' @param  obj An object (peptides) of class \code{\link{MSnbase}}.
+##' class \code{\link{MSnSet}}
+##' @param  obj An object (peptides) of class \code{\link{MSnSet}}.
 ##' @return The slot processing of obj@processingData
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -122,9 +122,8 @@ getPaletteForLabels_HC <- function(labels){
   return (col.boxplot)
 }
 
-##' Selects colors for the highcharter plots in \code{\link{DAPAR based on the replicates in
-##' the dataset. The palette is derived from
-##' the brewer palette "Dark2" (see \code{\link{RColorBrewer}}).
+##' Selects colors for the highcharter plots in \code{\link{DAPAR}} based on the replicates in
+##' the dataset. The palette is derived from the brewer palette "Dark2" (see \code{\link{RColorBrewer}}).
 ##' 
 ##' @title Palette for highcharter plot the replicates in \code{\link{DAPAR}}
 ##' @param nColors The desired number of colors
@@ -172,7 +171,7 @@ return(pal)
 ##' @title Customised contextual menu of highcharts plots
 ##' @param hc A highcharter object
 ##' @param filename The filename under which the plot has to be saved
-##' @return A contextual menu for hghcharts plots
+##' @return A contextual menu for highcharts plots
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' library("highcharter")
@@ -192,6 +191,21 @@ my_hc_ExportMenu <- function(hc, filename){
 }
 
 
+
+##' Customise the resetZoomButton of highcharts plots.
+##' 
+##' @title Customised resetZoomButton of highcharts plots
+##' @param hc A highcharter object
+##' @param chartType The type of the plot
+##' @param zoomType The type of the zoom (one of "x", "y", "xy", "None")
+##' @return A highchart plot
+##' @author Samuel Wieczorek
+##' @examples
+##' library("highcharter")
+##' hc <- highchart() 
+##' hc_chart(hc,type = "line") 
+##' hc_add_series(hc,data = c(29, 71, 40))
+##' my_hc_ExportMenu(hc,filename='foo')
 my_hc_chart <- function(hc,  chartType,zoomType="None"){
   hc %>% 
     hc_chart(type = chartType, 

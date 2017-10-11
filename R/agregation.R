@@ -148,10 +148,10 @@ GraphPepProt <- function(mat){
 
 
 ##' Method to create a binary matrix with proteins in columns and peptides 
-##' in lines on a MSnSet object (peptides)
+##' in lines on a \code{\link{MSnSet}} object (peptides)
 ##' 
 ##' @title Function matrix of appartenance group
-##' @param obj.pep An object (peptides) of class \code{\link{MSnbase}}.
+##' @param obj.pep An object (peptides) of class \code{\link{MSnSet}}.
 ##' @param protID The name of proteins ID column 
 ##' @param unique A boolean to indicate whether only the unique peptides must 
 ##' be considered (TRUE) or if the shared peptides have to 
@@ -315,17 +315,17 @@ TopnPeptides <-function(matAdj,expr,n){
 
 
 ##' Method to agregate with a method peptides to proteins on
-##' a MSnSet object (peptides)
+##' a \code{\link{MSnSet}} object (peptides)
 ##' 
 ##' @title Function agregate peptides to proteins 
-##' @param obj.pep An object (peptides) of class \code{\link{MSnbase}}.
+##' @param obj.pep An object (peptides) of class \code{\link{MSnSet}}.
 ##' @param protID The name of proteins ID column 
 ##' @param method The method used to aggregate the peptides into proteins.
 ##' Values are "sum", "mean" or "sum on top n" : do the sum / mean of intensity
 ##' on all peptides belonging to proteins. Default is "sum"
 ##' @param matAdj An adjacency matrix
 ##' @param n The number of peptides considered for the aggregation.
-##' @return An object of class \code{\link{MSnbase}} with proteins  
+##' @return An object of class \code{\link{MSnSet}} with proteins  
 ##' @author Alexia Dorffer, Samuel Wieczorek
 ##' @examples 
 ##' require(DAPARdata)

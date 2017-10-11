@@ -140,7 +140,8 @@ GOAnalysisSave <- function (obj, ggo_res=NULL, ego_res=NULL, organism, ontology,
 ##' 
 ##' @title A barplot that shows the result of a GO classification, using the package \code{\link{highcharter}}
 ##' @param ggo The result of the GO classification, provides either by the function
-##' \code{group_GO} in the package \code{\link{DAPAR}} or the function \code{groupGO} in the package \code{\link{clusterProfiler}}
+##' \code{group_GO} in the package \code{\link{DAPAR}} or the function \code{groupGO} 
+##' in the package \code{\link{clusterProfiler}}
 ##' @param maxRes An integer which is the maximum number of classes to display in the plot 
 ##' @param title The title of the plot
 ##' @return A barplot 
@@ -173,7 +174,8 @@ return(h1)
 ##' 
 ##' @title A barplot that shows the result of a GO enrichment, using the package \code{\link{highcharter}}
 ##' @param ego The result of the GO enrichment, provides either by the function
-##' \code{enrichGO} in the package \code{\link{DAPAR}} or the function \code{enrichGO} of the package \code{\link{clusterProfiler}}
+##' \code{enrichGO} in the package \code{\link{DAPAR}} or the function \code{enrichGO} 
+##' of the package \code{\link{clusterProfiler}}
 ##' @param maxRes The maximum number of categories to display in the plot 
 ##' @param title The title of the plot
 ##' @return A barplot 
@@ -205,7 +207,7 @@ barplotEnrichGO_HC <- function(ego, maxRes = 5, title=NULL){
         hc_title(title = title) %>%
         hc_yAxis(title = list(text = "Count")) %>% 
         hc_xAxis(categories = dat[,"Description"]) %>% 
-        hc_add_series(data = dat, type = "bar", hcaes(x = Description, y = Count),
+        hc_add_series(data = dat, type = "bar", hcaes(x = dat[,"Description"], y = dat[,"Count"]),
                       dataLabels = list(enabled = TRUE, format='pval={point.pvalue}'),
                       colorByPoint = TRUE) %>%
         hc_colors(myColors) %>%
@@ -223,8 +225,7 @@ barplotEnrichGO_HC <- function(ego, maxRes = 5, title=NULL){
 ##' 
 ##' @title A dotplot that shows the result of a GO enrichment, using the package \code{\link{highcharter}}
 ##' @param ego The result of the GO enrichment, provides either by the function
-##' enrichGO in \code{\link{DAPAR}} or bye the function \code{enrichGO} of the packaage \code{\link{clusterProfiler}}
-##' maxRes An integer which is the maximum number of categories to display in the plot 
+##' enrichGO in \code{\link{DAPAR}} or the function \code{enrichGO} of the packaage \code{\link{clusterProfiler}}
 ##' @param maxRes The maximum number of categories to display in the plot
 ##' @param title The title of the plot
 ##' @return A dotplot 

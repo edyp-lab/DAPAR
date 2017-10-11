@@ -81,7 +81,20 @@ if (method == "BPCA"){
 return (exprs)
 }
 
-################
+
+
+##' This method is xxxxxxxx
+##' 
+##' @title xxxxxxxxx
+##' @param obj xxxxxxxxx
+##' @param qval xxxxxxxxx
+##' @param factor xxxxxxxxx. 
+##' @return xxxxxxxxx
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' wrapper.impute.detQuant(Exp1_R25_pept)
 wrapper.impute.detQuant <- function(obj, qval=0.025, factor=1){
   if (is.null(obj)){return(NULL)}
   
@@ -99,7 +112,19 @@ wrapper.impute.detQuant <- function(obj, qval=0.025, factor=1){
 
 
   
-###########  
+##' This method is xxxxxxxx
+##' 
+##' @title xxxxxxxxx
+##' @param qData xxxxxxxxx
+##' @param qval xxxxxxxxx
+##' @param factor xxxxxxxxx. 
+##' @return xxxxxxxxx
+##' @author Thomas Burger
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qData <- Biobase::exprs(Exp1_R25_pept)
+##' getQuantile4Imp(qData) 
 getQuantile4Imp <- function(qData, qval=0.025, factor=1){
   r1 <- apply(qData, 2, quantile, qval, na.rm=T)
   r2 <- r1*factor
@@ -107,7 +132,19 @@ getQuantile4Imp <- function(qData, qval=0.025, factor=1){
 }
 
 
-###############
+##' This method is xxxxxxxx
+##' 
+##' @title xxxxxxxxx
+##' @param qData xxxxxxxxx
+##' @param values xxxxxxxxx
+##' @return xxxxxxxxx
+##' @author Thomas Burger
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qData <- Biobase::exprs(Exp1_R25_pept)
+##' values <- getQuantile4Imp(qData)$shiftedImpVal
+##' impute.detQuant(qData, values) 
 impute.detQuant <- function(qData, values){
   for(i in 1:dim(qData)[2]){
     col <- qData[,i]

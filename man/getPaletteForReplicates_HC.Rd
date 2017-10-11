@@ -12,6 +12,10 @@ getPaletteForReplicates_HC(nColors)
 \value{
 A palette designed for the data manipulated in \code{\link{DAPAR}}
 }
+\description{
+Selects colors for the highcharter plots in \code{\link{DAPAR}} based on the replicates in
+the dataset. The palette is derived from the brewer palette "Dark2" (see \code{\link{RColorBrewer}}).
+}
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)

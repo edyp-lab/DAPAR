@@ -3,18 +3,18 @@
 \name{getProcessingInfo}
 \alias{getProcessingInfo}
 \title{Returns the contains of the slot processing  of an object of 
-class MSnSet}
+class \code{\link{MSnSet}}}
 \usage{
 getProcessingInfo(obj)
 }
 \arguments{
-\item{obj}{An object (peptides) of class \code{\link{MSnbase}}.}
+\item{obj}{An object (peptides) of class \code{\link{MSnSet}}.}
 }
 \value{
 The slot processing of obj@processingData
 }
 \description{
-Returns the contains of the slot processing  of an object of class MSnSet.
+Returns the contents of the slot processing of an object of class \code{\link{MSnSet}}
 }
 \examples{
 require(DAPARdata)

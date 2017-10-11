@@ -8,8 +8,7 @@ scatterplotEnrichGO_HC(ego, maxRes = 10, title = NULL)
 }
 \arguments{
 \item{ego}{The result of the GO enrichment, provides either by the function
-enrichGO in \code{\link{DAPAR}} or bye the function \code{enrichGO} of the packaage \code{\link{clusterProfiler}}
-maxRes An integer which is the maximum number of categories to display in the plot}
+enrichGO in \code{\link{DAPAR}} or the function \code{enrichGO} of the packaage \code{\link{clusterProfiler}}}
 
 \item{maxRes}{The maximum number of categories to display in the plot}
 

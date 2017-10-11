@@ -7,7 +7,7 @@
 BuildAdjacencyMatrix(obj.pep, protID, unique = TRUE)
 }
 \arguments{
-\item{obj.pep}{An object (peptides) of class \code{\link{MSnbase}}.}
+\item{obj.pep}{An object (peptides) of class \code{\link{MSnSet}}.}
 
 \item{protID}{The name of proteins ID column}
 
@@ -20,7 +20,7 @@ A binary matrix
 }
 \description{
 Method to create a binary matrix with proteins in columns and peptides 
-in lines on a MSnSet object (peptides)
+in lines on a \code{\link{MSnSet}} object (peptides)
 }
 \examples{
 require(DAPARdata)

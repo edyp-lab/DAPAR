@@ -2,7 +2,9 @@
 % Please edit documentation in R/pepa.R
 \name{fudge2LRT}
 \alias{fudge2LRT}
-\title{xxxxxx}
+\title{Heuristic to choose the value of the hyperparameter
+(fudge factor) used to regularize the variance estimator in the
+likelihood ratio statistic}
 \usage{
 fudge2LRT(lmm.res.h0, lmm.res.h1, cc, n, p, s, alpha = seq(0, 1, 0.05),
   include.zero = TRUE)
@@ -43,10 +45,10 @@ the list of candidates. Default to TRUE.}
 \value{
 (same as the fudge2 function of siggene):
 s.zero: the value of the fudge factor s0.
-alpha.hat: the optimal quantile of the ‘s’ values. If s0=0, ‘alpha.hat’
+alpha.hat: the optimal quantile of the 's' values. If s0=0, 'alpha.hat'
 will not be returned.
 vec.cv: the vector of the coefficients of variations.  Following
-          Tusher et al. (2001), the optimal ‘alpha’ quantile is given
+          Tusher et al. (2001), the optimal 'alpha' quantile is given
           by the quantile that leads to the smallest CV of the modified
           test statistics.
 msg: a character string summarizing the most important information
@@ -58,8 +60,8 @@ fudge2LRT: heuristic to choose the value of the hyperparameter
 likelihood ratio statistic (as implemented in samLRT). We follow
 the heuristic described in [1] and adapt the code of the fudge2
 function in the siggene R package.
-[1] Tusher, Tibshirani and Chu, "Significance analysis of
-microarrays applied to the ionizing radiation response", PNAS 2001
+[1] Tusher, Tibshirani and Chu, Significance analysis of
+microarrays applied to the ionizing radiation response, PNAS 2001
 98: 5116-5121, (Apr 24).
 }
 \author{
