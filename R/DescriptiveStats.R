@@ -872,9 +872,10 @@ CVDistD_HC <- function(qData, labels=NULL){
         if (length(which(labels == conditions[i])) > 1){
             t <- apply(qData[,which(labels == conditions[i])], 1, 
                        function(x) 100*var(x, na.rm=TRUE)/mean(x, na.rm=TRUE))
-            tmp <- list(data = density(t, na.rm = TRUE)$y, name=conditions[i])
-            names(tmp$data) <- c()
-            series[[i]] <- tmp
+            tmp <- data.frame(x = density(t, na.rm = TRUE)$x,
+                              y = density(t, na.rm = TRUE)$y)
+            series[[i]] <- list(name = conditions[i],
+                                data = list_parse(tmp))
         }
     }
 
