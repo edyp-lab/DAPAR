@@ -83,11 +83,13 @@ return(list(iCond1 = indCondition1, iCond2 = indCondition2))
 ##' getPaletteForLabels(labels)
 getPaletteForLabels <- function(labels){
     nColors <- 8
-    pal <- brewer.pal(nColors, "Dark2")
+    col <- c(1:nColors)
+    palette(brewer.pal(nColors,"Dark2"))
+    
     ## Define one color per label/condition
     col.boxplot <- NULL
     for (i in 1:length(labels)){
-        col.boxplot[which(labels == unique(labels)[i])] <- pal[i]
+        col.boxplot[which(labels == unique(labels)[i])] <- col[i]
     }
     
     return (col.boxplot)
