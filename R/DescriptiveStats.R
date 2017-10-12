@@ -713,6 +713,9 @@ densityPlotD_HC <- function(qData, labelsForLegend=NULL,indData2Show=NULL,
       my_hc_ExportMenu(filename = "densityplot") %>%
         hc_plotOptions(
             series=list(
+                animation=list(
+                    duration = 100
+                ),
                 connectNulls= TRUE,
                 marker=list(
                   enabled = FALSE)

@@ -174,12 +174,12 @@ mvPerLinesHisto_HC <- function(qData, samplesData, indLegend="auto", showValues=
         hc_title(text = "#[lines] with X NA values") %>% 
         hc_add_series(data = df, type="column", colorByPoint = TRUE) %>%
         hc_colors(myColors) %>%
-        hc_plotOptions( column = list(stacking = "normal") ) %>%
+        hc_plotOptions( column = list(stacking = "normal"),
+                        animation=list(duration = 100)) %>%
         hc_legend(enabled = FALSE) %>%
         hc_xAxis(categories = row.names(df), title = list(text = "#[NA values] per line")) %>%
       my_hc_ExportMenu(filename = "missingValuesPlot1") %>%
-        hc_tooltip(headerFormat= '',
-                   pointFormat = "{point.y} ")
+        hc_tooltip(enabled = FALSE)
     
     return(h1)
  
@@ -365,7 +365,8 @@ mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto",
     h1 <-  highchart() %>% 
         hc_title(text = "#[lines] with X NA values (condition-wise)") %>% 
         my_hc_chart(chartType = "column") %>%
-        hc_plotOptions( column = list(stacking = "") ) %>%
+        hc_plotOptions( column = list(stacking = ""),
+                        animation=list(duration = 100)) %>%
         hc_add_series_list(series) %>%
         hc_legend(enabled = FALSE) %>%
         hc_xAxis(categories = row.names(m), title = list(text = "#[NA values] per line (condition-wise)")) %>%
@@ -550,7 +551,8 @@ mvHisto_HC <- function(qData, samplesData, labels, indLegend="auto",
          my_hc_chart(chartType = "column") %>%
          hc_title(text = "#[non-NA values] by replicate") %>%
         hc_add_series_list(series) %>%
-        hc_plotOptions( column = list(stacking = "normal") ) %>%
+        hc_plotOptions( column = list(stacking = "normal"),
+                        animation=list(duration = 100)) %>%
         hc_legend(enabled = FALSE) %>%
         hc_xAxis(categories = labels, title = list(text = "Replicates")) %>%
       my_hc_ExportMenu(filename = "missingValuesPlot_3") %>%

@@ -203,7 +203,8 @@ JS("function(event) {Shiny.onInputChange('eventPointClicked', [this.name]);}")
         hc_yAxis(title = list(text = "-log10(pValue)")) %>%
         hc_tooltip(headerFormat= '',
                    pointFormat = txt_tooltip) %>%
-        hc_plotOptions( series = list( cursor = "pointer", 
+        hc_plotOptions( series = list( animation=list(duration = 100),
+                                cursor = "pointer", 
                                        point = list( events = list( 
                                            click = clickFunction ) ) ) ) %>%
       my_hc_ExportMenu(filename = "volcanoplot")

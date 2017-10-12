@@ -163,6 +163,7 @@ barplotGroupGO_HC <- function(ggo, maxRes=5, title=""){
     hc_add_series(dat[,"Count"]) %>%
     hc_legend(enabled = FALSE) %>%
     #hc_colors(myColors) %>%
+        hc_tooltip(enabled = FALSE) %>%
      hc_xAxis(categories = dat[,"Description"], title = list(text = ""))
 
 return(h1)
