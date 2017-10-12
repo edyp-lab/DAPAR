@@ -4,7 +4,7 @@
 \alias{enrich_GO}
 \title{Calculates the GO xxxxxxxxx}
 \usage{
-enrich_GO(data, idFrom, idTo, orgdb, ont, readable = TRUE, pval, universe)
+enrich_GO(data, idFrom, idTo, orgdb, ont, readable = FALSE, pval, universe)
 }
 \arguments{
 \item{data}{A vector of ID (genes or proteins !!DIRE LESQUELS!!)}

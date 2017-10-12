@@ -5,7 +5,7 @@
 \title{Calculates the GO profile of a vector of genes/proteins at specific 
 level}
 \usage{
-group_GO(data, idFrom, idTo, orgdb, ont, level, readable = TRUE)
+group_GO(data, idFrom, idTo, orgdb, ont, level, readable = FALSE)
 }
 \arguments{
 \item{data}{A vector of ID (genes or proteins !!DIRE LESQUELS!!)}

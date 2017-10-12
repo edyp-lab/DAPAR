@@ -16,7 +16,7 @@
 ##' @param readable xxxxx
 ##' @return xxxxx
 ##' @author xxxxx
-group_GO <- function(data, idFrom, idTo, orgdb, ont, level, readable=TRUE){
+group_GO <- function(data, idFrom, idTo, orgdb, ont, level, readable=FALSE){
     
     require(as.character(orgdb),character.only = TRUE)
     gene <- bitr(data, fromType=idFrom, toType=idTo, OrgDb=orgdb)
@@ -25,7 +25,7 @@ group_GO <- function(data, idFrom, idTo, orgdb, ont, level, readable=TRUE){
                  OrgDb = orgdb, 
                  ont = ont, 
                  level = level, 
-                 readable= TRUE)
+                 readable= readable)
     
     return(ggo)
 }
@@ -46,7 +46,7 @@ group_GO <- function(data, idFrom, idTo, orgdb, ont, level, readable=TRUE){
 ##' @param universe xxxxxxxxx
 ##' @return A groupGOResult instance.
 ##' @author xxxxx
-enrich_GO <- function(data, idFrom, idTo, orgdb, ont, readable=TRUE, pval, universe)
+enrich_GO <- function(data, idFrom, idTo, orgdb, ont, readable=FALSE, pval, universe)
 {
   tmp <- which(is.na(data))
   if (length(tmp) > 0){
@@ -60,7 +60,7 @@ enrich_GO <- function(data, idFrom, idTo, orgdb, ont, readable=TRUE, pval, unive
     ego <- enrichGO(gene = gene.id, OrgDb = orgdb, ont = ont, 
                   pAdjustMethod="BH", 
                   pvalueCutoff=pval, 
-                  readable=TRUE,
+                  readable=readable,
                   universe = NULL)   
     
     return(ego)
@@ -182,7 +182,7 @@ return(h1)
 ##' @return A barplot 
 ##' @author Samuel Wieczorek
 barplotEnrichGO_HC <- function(ego, maxRes = 5, title=NULL){
-   
+   if (is.null(ego)){return(NULL)}
     dat <- ego@result
     nRes <- min(maxRes, nrow(dat))
     
@@ -208,10 +208,12 @@ barplotEnrichGO_HC <- function(ego, maxRes = 5, title=NULL){
         hc_title(title = title) %>%
         hc_yAxis(title = list(text = "Count")) %>% 
         hc_xAxis(categories = dat[,"Description"]) %>% 
-        hc_add_series(data = dat, type = "bar", hcaes(x = dat[,"Description"], y = dat[,"Count"]),
-                      dataLabels = list(enabled = TRUE, format='pval={point.pvalue}'),
+        hc_add_series(data = data.frame(y=dat[,"Count"]), type = "bar", 
+                      dataLabels = list(enabled = FALSE),
                       colorByPoint = TRUE) %>%
         hc_colors(myColors) %>%
+        hc_tooltip(headerFormat= '', 
+                   pointFormat = "{point.y}") %>%
         my_hc_ExportMenu(filename = "GOEnrich_barplot") %>%
         hc_legend(enabled = FALSE) %>%
         hc_plotOptions(bar = list(
