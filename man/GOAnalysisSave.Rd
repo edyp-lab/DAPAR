@@ -11,10 +11,10 @@ GOAnalysisSave(obj, ggo_res = NULL, ego_res = NULL, organism, ontology,
 \arguments{
 \item{obj}{An object of the class \code{\link{MSnSet}}}
 
-\item{ggo_res}{The object returned by the function \code{group_GO} of the package \code{\link{DAPAR}}
+\item{ggo_res}{The object returned by the function \code{group_GO} of the package \code{DAPAR}
 or the function \code{groupGO} of the package \code{\link{clusterProfiler}}}
 
-\item{ego_res}{The object returned by the function \code{enrich_GO} of the package \code{\link{DAPAR}}
+\item{ego_res}{The object returned by the function \code{enrich_GO} of the package \code{DAPAR}
 or the function \code{enrichGO} of the package \code{\link{clusterProfiler}}}
 
 \item{organism}{The parameter xxx of the function}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{getPaletteForReplicates}
 \alias{getPaletteForReplicates}
-\title{Palette for plot the replicates in DAPAR}
+\title{Palette for plot the replicates in \code{DAPAR}}
 \usage{
 getPaletteForReplicates(nColors)
 }
@@ -10,10 +10,10 @@ getPaletteForReplicates(nColors)
 \item{nColors}{The desired number of colors}
 }
 \value{
-A palette designed for the data manipulated in DAPAR
+A palette designed for the data manipulated in \code{DAPAR}
 }
 \description{
-Selects colors for the plots in DAPAR based on the replicates in
+Selects colors for the plots in \code{DAPAR} based on the replicates in
 the dataset. The palette is derived from
 the brewer palette "Dark2" (see \code{\link{RColorBrewer}}).
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{getPaletteForLabels}
 \alias{getPaletteForLabels}
-\title{Palette for plots in \code{\link{DAPAR}}}
+\title{Palette for plots in \code{DAPAR}}
 \usage{
 getPaletteForLabels(labels)
 }
@@ -10,10 +10,10 @@ getPaletteForLabels(labels)
 \item{labels}{A vector of labels (strings).}
 }
 \value{
-A palette designed for the data manipulated in DAPAR
+A palette designed for the data manipulated in \code{DAPAR}
 }
 \description{
-Selects colors for the plots in \code{\link{DAPAR}} based on the different conditions in
+Selects colors for the plots in \code{DAPAR} based on the different conditions in
 the dataset. The palette is derived from
 the brewer palette "Dark2" (see \code{\link{RColorBrewer}}).
 }

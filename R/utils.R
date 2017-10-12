@@ -68,13 +68,13 @@ return(list(iCond1 = indCondition1, iCond2 = indCondition2))
 
 
 
-##' Selects colors for the plots in \code{\link{DAPAR}} based on the different conditions in
+##' Selects colors for the plots in \code{DAPAR} based on the different conditions in
 ##' the dataset. The palette is derived from
 ##' the brewer palette "Dark2" (see \code{\link{RColorBrewer}}).
 ##' 
-##' @title Palette for plots in \code{\link{DAPAR}}
+##' @title Palette for plots in \code{DAPAR}
 ##' @param labels A vector of labels (strings).
-##' @return A palette designed for the data manipulated in DAPAR
+##' @return A palette designed for the data manipulated in \code{DAPAR}
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' require(DAPARdata)
@@ -96,13 +96,13 @@ getPaletteForLabels <- function(labels){
 }
 
 
-##' Selects colors for the highcharter plots in \code{\link{DAPAR}} based on the different conditions in
+##' Selects colors for the highcharter plots in \code{DAPAR} based on the different conditions in
 ##' the dataset. The palette is derived from
 ##' the brewer palette "Dark2" (see \code{\link{RColorBrewer}}).
 ##' 
-##' @title Palette for highcharter plots in \code{\link{DAPAR}}
+##' @title Palette for highcharter plots used in \code{DAPAR}
 ##' @param labels A vector of labels (strings).
-##' @return A palette designed for the data manipulated in \code{\link{DAPAR}}
+##' @return A palette designed for the data manipulated in \code{DAPAR}
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' require(DAPARdata)
@@ -124,12 +124,12 @@ getPaletteForLabels_HC <- function(labels){
   return (col.boxplot)
 }
 
-##' Selects colors for the highcharter plots in \code{\link{DAPAR}} based on the replicates in
+##' Selects colors for the highcharter plots in \code{DAPAR} based on the replicates in
 ##' the dataset. The palette is derived from the brewer palette "Dark2" (see \code{\link{RColorBrewer}}).
 ##' 
-##' @title Palette for highcharter plot the replicates in \code{\link{DAPAR}}
+##' @title Palette for highcharter plot the replicates in DAPAR
 ##' @param nColors The desired number of colors
-##' @return A palette designed for the data manipulated in \code{\link{DAPAR}}
+##' @return A palette designed for the data manipulated in \code{DAPAR}
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' require(DAPARdata)
@@ -145,13 +145,13 @@ getPaletteForReplicates_HC <- function(nColors){
 
 
 
-##' Selects colors for the plots in DAPAR based on the replicates in
+##' Selects colors for the plots in \code{DAPAR} based on the replicates in
 ##' the dataset. The palette is derived from
 ##' the brewer palette "Dark2" (see \code{\link{RColorBrewer}}).
 ##' 
-##' @title Palette for plot the replicates in DAPAR
+##' @title Palette for plot the replicates in \code{DAPAR}
 ##' @param nColors The desired number of colors
-##' @return A palette designed for the data manipulated in DAPAR
+##' @return A palette designed for the data manipulated in \code{DAPAR}
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' require(DAPARdata)
@@ -182,7 +182,7 @@ return(pal)
 ##' hc_add_series(hc,data = c(29, 71, 40))
 ##' my_hc_ExportMenu(hc,filename='foo')
 my_hc_ExportMenu <- function(hc, filename){
-  hc_exporting(hc, enabled=T,
+  hc_exporting(hc, enabled=TRUE,
                filename = filename,
                buttons= list(
                  contextButton= list(

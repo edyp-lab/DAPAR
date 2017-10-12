@@ -8,7 +8,7 @@ barplotEnrichGO_HC(ego, maxRes = 5, title = NULL)
 }
 \arguments{
 \item{ego}{The result of the GO enrichment, provides either by the function
-\code{enrichGO} in the package \code{\link{DAPAR}} or the function \code{enrichGO} 
+\code{enrichGO} in the package \code{DAPAR} or the function \code{enrichGO} 
 of the package \code{\link{clusterProfiler}}}
 
 \item{maxRes}{The maximum number of categories to display in the plot}
