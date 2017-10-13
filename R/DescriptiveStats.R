@@ -32,6 +32,49 @@ boxPlotD(qData, dataForXAxis, labels, group2Color)
 
 
 
+
+
+
+
+##' This function is a wrapper for using the boxPlotD_HC function with objects of 
+##' class \code{\link{MSnSet}}
+##' 
+##' @title Wrapper to the boxplotD_HC function on an object \code{\link{MSnSet}}
+##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param dataForXAxis A vector of strings containing the names of columns 
+##' in \code{pData()} to print labels on X-axis (Default is "Label").
+##' @param group2Color A string that indicates how to color the replicates: one
+##' color per condition (value "Condition") or one 
+##' color per replicate (value "Replicate"). Default value is by Condition.
+##' @return A boxplot
+##' @author Samuel Wieczorek
+##' @seealso \code{\link{wrapper.densityPlotD}}
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' types <- c("Label","Analyt.Rep")
+##' wrapper.boxPlotD_HC(Exp1_R25_pept, types)
+wrapper.boxPlotD_HC <- function(obj, 
+                             dataForXAxis="Label", 
+                             group2Color="Condition"){
+    
+    qData <- Biobase::exprs(obj)
+    #dataForXAxis <- as.matrix(Biobase::pData(obj)[,dataForXAxis])
+    dataForXAxis <- as.matrix(Biobase::pData(obj)[,dataForXAxis])
+    
+    labels <- Biobase::pData(obj)[,"Label"]
+    
+    boxPlotD_HC(qData, dataForXAxis, labels, group2Color)
+    
+}
+
+
+
+
+
+
+
+
 ##' Boxplot for quantitative proteomics data
 ##' 
 ##' @title Builds a boxplot from a dataframe
@@ -107,6 +150,101 @@ palette("default")
 
 
 
+
+##' Boxplot for quantitative proteomics data using the library \code{\link{highcharter}}
+##' 
+##' @title Builds a boxplot from a dataframe using the library \code{\link{highcharter}}
+##' @param qData A dataframe that contains quantitative data.
+##' @param dataForXAxis A vector containing the types of replicates 
+##' to use as X-axis. Available values are: Label, Analyt.Rep,
+##' Bio.Rep and Tech.Rep. Default is "Label".
+##' @param labels A vector of the conditions (labels) (one label per sample).
+##' @param group2Color A string that indicates how to color the replicates: 
+##' one color per condition (value "Condition") or one 
+##' color per replicate (value "Replicate"). Default value is by Condition.
+##' @return A boxplot
+##' @author Samuel Wieczorek
+##' @seealso \code{\link{densityPlotD_HC}}
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qData <- Biobase::exprs(Exp1_R25_pept)
+##' types <- c("Label","Analyt.Rep")
+##' dataForXAxis <- Biobase::pData(Exp1_R25_pept)[,types]
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+##' boxPlotD_HC(qData, dataForXAxis, labels)
+boxPlotD_HC <- function(qData, 
+                     dataForXAxis="Label", 
+                     labels=NULL, 
+                     group2Color="Condition"){
+
+    
+    if (is.null(labels) ) {
+        labels <- rep("",ncol(qData))
+    }
+
+    
+bx <-boxplot(qData, na.rm=TRUE)
+
+df_outlier <- data.frame(x=bx$group-1,y = bx$out)
+
+titi <- NULL
+nc <- ncol(qData)
+for (i in 1:nc){
+    titi <- c(titi, rep(colnames(qData)[i],nrow(qData)))
+}
+
+df <- data.frame(values = as.vector(qData,mode='numeric'),
+                 samples = titi)
+
+pal <- c("#002F80", "#002F80","#002F80","#002F80","#F9AF38","#F9AF38","#F9AF38","#F9AF38")
+
+myColors <- NULL
+##Colors definition
+if (group2Color == "Condition") {
+    myColors <- getPaletteForLabels_HC(labels)
+}else { 
+    myColors <- getPaletteForReplicates_HC(ncol(qData))}
+
+
+
+hcboxplot(x=df$values, var = df$samples, 
+          colorByPoint = TRUE, 
+          outliers = FALSE) %>%
+    
+    hc_chart(type="column") %>%
+    hc_yAxis(title = list(text = "Log (intensity)")) %>%
+    hc_xAxis(title = list(text = "Samples")) %>%
+    hc_colors(myColors) %>%
+    hc_add_series(type= "scatter",df_outlier) %>%
+    hc_tooltip(enabled = FALSE) %>%
+    hc_plotOptions(
+        boxplot= list(
+            fillColor= myColors,
+            lineWidth= 3,
+            medianColor= 'grey',
+            medianWidth= 3,
+            stemColor= '#A63400',
+            stemDashStyle= 'dot',
+            stemWidth= 1,
+            whiskerColor= '#3D9200',
+            whiskerLength= '20%',
+            whiskerWidth= 3
+        ),
+        scatter = list(
+            marker=list(
+                fillColor = 'white',
+                lineWidth = 0.5,
+                lineColor = 'grey'
+            )
+        )
+    )
+
+
+
+
+
+}
 
 
 
