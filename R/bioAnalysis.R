@@ -1,16 +1,18 @@
 
 
 ##' This function is a wrappper to the function groupGO from the
-##' package clusterProfiler. Given a vector of genes/proteins, it returns the 
-##' GO profile at a specific level. It returns a groupGOResult instance. 
-##' 
+##' package \code{\link{clusterProfiler}}. Given a vector of genes/proteins, 
+##' it returns the GO profile at a specific level. It returns a groupGOResult 
+##' instance. 
 ##' 
 ##' @title Calculates the GO profile of a vector of genes/proteins at a given 
-##' level
-##' @param data A vector of ID 
-##' @param idFrom character indicating the input ID format
-##' @param idTo character indicating the output ID format
-##' @param orgdb annotation Bioconductor package to use 
+##' level of the Gene Ontology
+##' @param data A vector of ID (among ENSEMBL, ENTREZID, GENENAME, REFSEQ, 
+##' UNIGENE, UNIPROT -can be different according to organisms)
+##' @param idFrom character indicating the input ID format (among ENSEMBL, 
+##' ENTREZID, GENENAME, REFSEQ, UNIGENE, UNIPROT)
+##' @param idTo character indicating the output ID format (default "ENTREZID")
+##' @param orgdb annotation Bioconductor package to use (character format)
 ##' @param ont on which ontology to perform the analysis (MF, BP or CC)
 ##' @param level level of the ontolofy to perform the analysis 
 ##' @param readable TRUE or FALSE (default FALSE)
@@ -19,7 +21,10 @@
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_prot)
-group_GO <- function(data, idFrom, idTo, orgdb, ont, level, readable=FALSE){
+##' ggo<-group_GO(data=fData(Exp1_R25_prot)$Protein.IDs, idFrom="UNIPROT", 
+##' orgdb="org.Sc.sgd.db", ont="MF", level=2)
+
+group_GO <- function(data, idFrom, idTo="ENTREZID", orgdb, ont, level, readable=FALSE){
     
     if (idTo!="ENTREZID"){ idTo<-"ENTREZID" }
     
@@ -35,23 +40,34 @@ group_GO <- function(data, idFrom, idTo, orgdb, ont, level, readable=FALSE){
     return(ggo)
 }
 
-
 ##' This function is a wrappper to the function enrichGO from the
-##' package \code{\link{clusterProfiler}}. Given a vector of genes/proteins, it returns the 
-##' GO xxxxxxx.  
+##' package \code{\link{clusterProfiler}}. Given a vector of genes/proteins, 
+##' it returns an enrichResult instance.  
 ##' 
-##' @title Calculates the GO xxxxxxxxx
-##' @param data A vector of ID (genes or proteins !!DIRE LESQUELS!!)
-##' @param idFrom xxxxx
-##' @param idTo xxxxx
-##' @param orgdb xxxxx
+##' @title Calculates GO enrichment classes for a given list of 
+##' proteins/genes ID. It results an enrichResult instance. 
+##' @param data A vector of ID (among ENSEMBL, ENTREZID, GENENAME, REFSEQ, 
+##' UNIGENE, UNIPROT -can be different according to organisms)
+##' @param idFrom character indicating the input ID format (among ENSEMBL, 
+##' ENTREZID, GENENAME, REFSEQ, UNIGENE, UNIPROT)
+##' @param idTo character indicating the output ID format (default "ENTREZID")
+##' @param orgdb annotation Bioconductor package to use (character format)
 ##' @param ont One of "MF", "BP", and "CC" subontologies
-##' @param readable xxxxx
-##' @param pval The qvalue cutoff (same parameter as in the function \code{enrichGO} of the package \code{\link{clusterProfiler}})
-##' @param universe xxxxxxxxx
+##' @param readable TRUE or FALSE (default FALSE)
+##' @param pval The qvalue cutoff (same parameter as in the function 
+##' \code{enrichGO} of the package \code{\link{clusterProfiler}})
+##' @param universe a list of ID to be considered as the background for 
+##' enrichment calculation 
 ##' @return A groupGOResult instance.
-##' @author xxxxx
-enrich_GO <- function(data, idFrom, idTo, orgdb, ont, readable=FALSE, pval, universe)
+##' @author Florence Combes
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_prot)
+##' univ<-univ_AnnotDbPkg("org.Sc.sgd.db") #univ is the background
+##' ego<-enrich_GO(data=fData(Exp1_R25_prot)$Protein.IDs, idFrom="UNIPROT", 
+##' orgdb="org.Sc.sgd.db",ont="MF", pval=0.05, universe = univ)
+
+enrich_GO <- function(data, idFrom, idTo="ENTREZID", orgdb, ont, readable=FALSE, pval, universe)
 {
   tmp <- which(is.na(data))
   if (length(tmp) > 0){
@@ -75,12 +91,16 @@ enrich_GO <- function(data, idFrom, idTo, orgdb, ont, readable=FALSE, pval, univ
 
 
 
-##' Returns the universe = totality of ID of an OrgDb annotation package
+##' Function to compute the "universe" argument for the \code{enrich_GO} 
+##' function, in case this latter should be the entire organism. 
+##' Returns all the ID of the OrgDb annotation package for the corresponding 
+##' organism. 
 ##' 
 ##' @title Returns the totality of ENTREZ ID (gene id) of an OrgDb annotation 
-##' package. Careful : org.Pf.plasmo.db : no ENTREZID but ORF
+##' package. 
+##' Careful : org.Pf.plasmo.db : no ENTREZID but ORF
 ##' @param orgdb a Bioconductor OrgDb annotation package 
-##' @return A vector of ENTREZ ID (totality if the ID for the package) 
+##' @return A vector of ENTREZ ID  
 ##' @author Florence Combes
 univ_AnnotDbPkg <- function(orgdb){
     
@@ -92,14 +112,15 @@ univ_AnnotDbPkg <- function(orgdb){
 }
 
 
-##' This method returns a \code{\link{MSnSet}} object with the results
+##' This method returns an \code{\link{MSnSet}} object with the results
 ##' of the Gene Ontology analysis.
 ##' 
-##' @title Returns a \code{\link{MSnSet}} object with the results of
-##' the GO analysis performed with the \code{\link{clusterProfiler}} package. 
+##' @title Returns an \code{\link{MSnSet}} object with the results of
+##' the GO analysis performed with the functions \code{enrichGO} and/or 
+##' \code{groupGO} of the \code{\link{clusterProfiler}} package. 
 ##' @param obj An object of the class \code{\link{MSnSet}}
-##' @param ggo_res The object returned by the function \code{group_GO} of the package \code{DAPAR}
-##' or the function \code{groupGO} of the package \code{\link{clusterProfiler}}
+##' @param ggo_res The object returned by the function \code{group_GO} of the 
+##' package \code{DAPAR} or the function \code{groupGO} of the package \code{\link{clusterProfiler}}
 ##' @param ego_res The object returned by the function \code{enrich_GO} of the package \code{DAPAR}
 ##' or the function \code{enrichGO} of the package \code{\link{clusterProfiler}}
 ##' @param organism The parameter xxx of the function
