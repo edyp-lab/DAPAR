@@ -5,18 +5,23 @@
 ##' GO profile at a specific level. It returns a groupGOResult instance. 
 ##' 
 ##' 
-##' @title Calculates the GO profile of a vector of genes/proteins at specific 
+##' @title Calculates the GO profile of a vector of genes/proteins at a given 
 ##' level
-##' @param data A vector of ID (genes or proteins !!DIRE LESQUELS!!)
-##' @param idFrom xxxxx
-##' @param idTo xxxxx
-##' @param orgdb xxxxx
-##' @param ont xxxxx
-##' @param level Specific GO Level
-##' @param readable xxxxx
-##' @return xxxxx
-##' @author xxxxx
+##' @param data A vector of ID 
+##' @param idFrom character indicating the input ID format
+##' @param idTo character indicating the output ID format
+##' @param orgdb annotation Bioconductor package to use 
+##' @param ont on which ontology to perform the analysis (MF, BP or CC)
+##' @param level level of the ontolofy to perform the analysis 
+##' @param readable TRUE or FALSE (default FALSE)
+##' @return GO profile at a specific level 
+##' @author Florence Combes
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_prot)
 group_GO <- function(data, idFrom, idTo, orgdb, ont, level, readable=FALSE){
+    
+    if (idTo!="ENTREZID"){ idTo<-"ENTREZID" }
     
     require(as.character(orgdb),character.only = TRUE)
     gene <- bitr(data, fromType=idFrom, toType=idTo, OrgDb=orgdb)
@@ -52,6 +57,8 @@ enrich_GO <- function(data, idFrom, idTo, orgdb, ont, readable=FALSE, pval, univ
   if (length(tmp) > 0){
       data <- data[-which(is.na(data))]
   }
+  
+  if (idTo!="ENTREZID"){ idTo<-"ENTREZID" }
   
     gene <- bitr(data, fromType=idFrom, toType=idTo, OrgDb=orgdb)
     if (is.null(gene)){return (NULL)}
