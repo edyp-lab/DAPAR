@@ -370,9 +370,10 @@ logRatio <- NULL
 for (i in 1:nrow(qData)){
     res <- t.test(x=qData[i,indices$iCond1],
                 y=qData[i,indices$iCond2])
-    t <- c(t,res$p_value)
+    t <- c(t,res$p.value)
     logRatio <- c(logRatio, (res$estimate[2] - res$estimate[1]))
 }
+
 p <- data.frame(P_Value=t, logFC = logRatio)
 return(p)
 }
