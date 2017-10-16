@@ -204,16 +204,25 @@ barplotEnrichGO_HC <- function(ego, maxRes = 5, title=NULL){
     
     dat[,"pvalue"] <- format(dat[,"pvalue"], digits=2)
     
+    df <- data.frame(y=dat[,"Count"],
+                           pvalue = format(dat$pvalue, digits=2),
+                           name = dat[,"Description"])
+    
+    txt_tooltip <- paste("<b> pvalue </b>: {point.pvalue} <br> ", 
+                         "<b> Count </b>: {point.y} <br> ",
+                         sep="")
+    
+    
     h1 <- highchart() %>%  
         hc_title(title = title) %>%
         hc_yAxis(title = list(text = "Count")) %>% 
         hc_xAxis(categories = dat[,"Description"]) %>% 
-        hc_add_series(data = data.frame(y=dat[,"Count"]), type = "bar", 
+        hc_add_series(data = df, type = "bar", 
                       dataLabels = list(enabled = FALSE),
                       colorByPoint = TRUE) %>%
         hc_colors(myColors) %>%
         hc_tooltip(headerFormat= '', 
-                   pointFormat = "{point.y}") %>%
+                   pointFormat = txt_tooltip) %>%
         my_hc_ExportMenu(filename = "GOEnrich_barplot") %>%
         hc_legend(enabled = FALSE) %>%
         hc_plotOptions(bar = list(
