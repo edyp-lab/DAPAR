@@ -2,35 +2,48 @@
 % Please edit documentation in R/bioAnalysis.R
 \name{enrich_GO}
 \alias{enrich_GO}
-\title{Calculates the GO xxxxxxxxx}
+\title{Calculates GO enrichment classes for a given list of 
+proteins/genes ID. It results an enrichResult instance.}
 \usage{
-enrich_GO(data, idFrom, idTo, orgdb, ont, readable = FALSE, pval, universe)
+enrich_GO(data, idFrom, idTo = "ENTREZID", orgdb, ont, readable = FALSE,
+  pval, universe)
 }
 \arguments{
-\item{data}{A vector of ID (genes or proteins !!DIRE LESQUELS!!)}
+\item{data}{A vector of ID (among ENSEMBL, ENTREZID, GENENAME, REFSEQ, 
+UNIGENE, UNIPROT -can be different according to organisms)}
 
-\item{idFrom}{xxxxx}
+\item{idFrom}{character indicating the input ID format (among ENSEMBL, 
+ENTREZID, GENENAME, REFSEQ, UNIGENE, UNIPROT)}
 
-\item{idTo}{xxxxx}
+\item{idTo}{character indicating the output ID format (default "ENTREZID")}
 
-\item{orgdb}{xxxxx}
+\item{orgdb}{annotation Bioconductor package to use (character format)}
 
 \item{ont}{One of "MF", "BP", and "CC" subontologies}
 
-\item{readable}{xxxxx}
+\item{readable}{TRUE or FALSE (default FALSE)}
 
-\item{pval}{The qvalue cutoff (same parameter as in the function \code{enrichGO} of the package \code{\link{clusterProfiler}})}
+\item{pval}{The qvalue cutoff (same parameter as in the function 
+\code{enrichGO} of the package \code{\link{clusterProfiler}})}
 
-\item{universe}{xxxxxxxxx}
+\item{universe}{a list of ID to be considered as the background for 
+enrichment calculation}
 }
 \value{
 A groupGOResult instance.
 }
 \description{
 This function is a wrappper to the function enrichGO from the
-package \code{\link{clusterProfiler}}. Given a vector of genes/proteins, it returns the 
-GO xxxxxxx.
+package \code{\link{clusterProfiler}}. Given a vector of genes/proteins, 
+it returns an enrichResult instance.
+}
+\examples{
+require(DAPARdata)
+data(Exp1_R25_prot)
+univ<-univ_AnnotDbPkg("org.Sc.sgd.db") #univ is the background
+ego<-enrich_GO(data=fData(Exp1_R25_prot)$Protein.IDs, idFrom="UNIPROT", 
+orgdb="org.Sc.sgd.db",ont="MF", pval=0.05, universe = univ)
 }
 \author{
-xxxxx
+Florence Combes
 }

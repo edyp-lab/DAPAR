@@ -3,7 +3,8 @@
 \name{univ_AnnotDbPkg}
 \alias{univ_AnnotDbPkg}
 \title{Returns the totality of ENTREZ ID (gene id) of an OrgDb annotation 
-package. Careful : org.Pf.plasmo.db : no ENTREZID but ORF}
+package. 
+Careful : org.Pf.plasmo.db : no ENTREZID but ORF}
 \usage{
 univ_AnnotDbPkg(orgdb)
 }
@@ -11,10 +12,13 @@ univ_AnnotDbPkg(orgdb)
 \item{orgdb}{a Bioconductor OrgDb annotation package}
 }
 \value{
-A vector of ENTREZ ID (totality if the ID for the package)
+A vector of ENTREZ ID
 }
 \description{
-Returns the universe = totality of ID of an OrgDb annotation package
+Function to compute the "universe" argument for the \code{enrich_GO} 
+function, in case this latter should be the entire organism. 
+Returns all the ID of the OrgDb annotation package for the corresponding 
+organism.
 }
 \author{
 Florence Combes

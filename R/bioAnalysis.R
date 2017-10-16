@@ -23,7 +23,6 @@
 ##' data(Exp1_R25_prot)
 ##' ggo<-group_GO(data=fData(Exp1_R25_prot)$Protein.IDs, idFrom="UNIPROT", 
 ##' orgdb="org.Sc.sgd.db", ont="MF", level=2)
-
 group_GO <- function(data, idFrom, idTo="ENTREZID", orgdb, ont, level, readable=FALSE){
     
     if (idTo!="ENTREZID"){ idTo<-"ENTREZID" }
@@ -66,7 +65,6 @@ group_GO <- function(data, idFrom, idTo="ENTREZID", orgdb, ont, level, readable=
 ##' univ<-univ_AnnotDbPkg("org.Sc.sgd.db") #univ is the background
 ##' ego<-enrich_GO(data=fData(Exp1_R25_prot)$Protein.IDs, idFrom="UNIPROT", 
 ##' orgdb="org.Sc.sgd.db",ont="MF", pval=0.05, universe = univ)
-
 enrich_GO <- function(data, idFrom, idTo="ENTREZID", orgdb, ont, readable=FALSE, pval, universe)
 {
   tmp <- which(is.na(data))

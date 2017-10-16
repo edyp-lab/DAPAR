@@ -2,34 +2,44 @@
 % Please edit documentation in R/bioAnalysis.R
 \name{group_GO}
 \alias{group_GO}
-\title{Calculates the GO profile of a vector of genes/proteins at specific 
-level}
+\title{Calculates the GO profile of a vector of genes/proteins at a given 
+level of the Gene Ontology}
 \usage{
-group_GO(data, idFrom, idTo, orgdb, ont, level, readable = FALSE)
+group_GO(data, idFrom, idTo = "ENTREZID", orgdb, ont, level,
+  readable = FALSE)
 }
 \arguments{
-\item{data}{A vector of ID (genes or proteins !!DIRE LESQUELS!!)}
+\item{data}{A vector of ID (among ENSEMBL, ENTREZID, GENENAME, REFSEQ, 
+UNIGENE, UNIPROT -can be different according to organisms)}
 
-\item{idFrom}{xxxxx}
+\item{idFrom}{character indicating the input ID format (among ENSEMBL, 
+ENTREZID, GENENAME, REFSEQ, UNIGENE, UNIPROT)}
 
-\item{idTo}{xxxxx}
+\item{idTo}{character indicating the output ID format (default "ENTREZID")}
 
-\item{orgdb}{xxxxx}
+\item{orgdb}{annotation Bioconductor package to use (character format)}
 
-\item{ont}{xxxxx}
+\item{ont}{on which ontology to perform the analysis (MF, BP or CC)}
 
-\item{level}{Specific GO Level}
+\item{level}{level of the ontolofy to perform the analysis}
 
-\item{readable}{xxxxx}
+\item{readable}{TRUE or FALSE (default FALSE)}
 }
 \value{
-xxxxx
+GO profile at a specific level
 }
 \description{
 This function is a wrappper to the function groupGO from the
-package clusterProfiler. Given a vector of genes/proteins, it returns the 
-GO profile at a specific level. It returns a groupGOResult instance.
+package \code{\link{clusterProfiler}}. Given a vector of genes/proteins, 
+it returns the GO profile at a specific level. It returns a groupGOResult 
+instance.
+}
+\examples{
+require(DAPARdata)
+data(Exp1_R25_prot)
+ggo<-group_GO(data=fData(Exp1_R25_prot)$Protein.IDs, idFrom="UNIPROT", 
+orgdb="org.Sc.sgd.db", ont="MF", level=2)
 }
 \author{
-xxxxx
+Florence Combes
 }

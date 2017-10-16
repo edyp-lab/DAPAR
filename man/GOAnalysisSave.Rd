@@ -2,8 +2,9 @@
 % Please edit documentation in R/bioAnalysis.R
 \name{GOAnalysisSave}
 \alias{GOAnalysisSave}
-\title{Returns a \code{\link{MSnSet}} object with the results of
-the GO analysis performed with the \code{\link{clusterProfiler}} package.}
+\title{Returns an \code{\link{MSnSet}} object with the results of
+the GO analysis performed with the functions \code{enrichGO} and/or 
+\code{groupGO} of the \code{\link{clusterProfiler}} package.}
 \usage{
 GOAnalysisSave(obj, ggo_res = NULL, ego_res = NULL, organism, ontology,
   levels, pvalueCutoff, typeUniverse)
@@ -11,8 +12,8 @@ GOAnalysisSave(obj, ggo_res = NULL, ego_res = NULL, organism, ontology,
 \arguments{
 \item{obj}{An object of the class \code{\link{MSnSet}}}
 
-\item{ggo_res}{The object returned by the function \code{group_GO} of the package \code{DAPAR}
-or the function \code{groupGO} of the package \code{\link{clusterProfiler}}}
+\item{ggo_res}{The object returned by the function \code{group_GO} of the 
+package \code{DAPAR} or the function \code{groupGO} of the package \code{\link{clusterProfiler}}}
 
 \item{ego_res}{The object returned by the function \code{enrich_GO} of the package \code{DAPAR}
 or the function \code{enrichGO} of the package \code{\link{clusterProfiler}}}
@@ -32,7 +33,7 @@ case, a file should be uploaded by the user}
 An object of the class \code{\link{MSnSet}}
 }
 \description{
-This method returns a \code{\link{MSnSet}} object with the results
+This method returns an \code{\link{MSnSet}} object with the results
 of the Gene Ontology analysis.
 }
 \author{
