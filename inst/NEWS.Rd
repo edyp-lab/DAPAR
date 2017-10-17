@@ -10,6 +10,7 @@
    \item When the aggregation step has been performed, the interface switches to the first tab of the 'Descriptive Statistics' in order to view informations aout the new dataset (the protein one).
          
       \item  A new package (readxl) is used to read xls or xlxs files. In certain circumstances, the functions of the previsous package openxlsx is not able to decode properly Excel files.
+      \item When converting a new (text or Excel) file in Prostar : the missing values were not registered as expected. Especially, they did not appear in blue in the table above the volcanoplot. Bug fixed
 }
   }
   \subsection{NEW FEATURES}{

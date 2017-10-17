@@ -126,6 +126,14 @@ data <- read.table(file, header=TRUE, sep="\t",colClasses="character")
     obj@experimentData@other$mvFilter.threshold <-NULL
     obj@experimentData@other$imputation.method <-NULL
     
+    
+    if (is.null(obj@experimentData@other$isMissingValues)){
+        obj@experimentData@other$isMissingValues <- 
+            Matrix(as.numeric(is.na(obj)),
+                   nrow = nrow(obj), 
+                   sparse=TRUE)
+    }
+    
     return(obj)
 }
 
