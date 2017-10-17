@@ -90,6 +90,7 @@ export(
 ,"BuildAdjacencyMatrix"
 ,"GraphPepProt"
 ,"BuildColumnToProteinDataset"
+,"BuildColumnToProteinDataset_par"
 ,"getProteinsStats"
 
 

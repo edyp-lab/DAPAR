@@ -67,7 +67,7 @@ getProteinsStats <- function(matUnique, matShared){
 ##' M <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
 ##' data <- Biobase::fData(Exp1_R25_pept[1:1000])
 ##' protData <- pepAgregate(Exp1_R25_pept[1:1000], 'Protein_group_IDs', 'sum overall', M)
-##' name <- "organism"
+##' name <- "Protein.group.IDs"
 ##' proteinNames <- rownames(Biobase::fData(protData))
 ##' BuildColumnToProteinDataset(data, M, name,proteinNames )
 BuildColumnToProteinDataset <- function(peptideData, matAdj, columnName, proteinNames){
@@ -79,7 +79,6 @@ i <- 1
 for (p in proteinNames){
     listeIndicePeptides <- names(which(matAdj[,p] == 1))
     listeData <- unique(as.character(peptideData[listeIndicePeptides,columnName], ";"))
-    #if (p=="1046") {print(paste(i, listeData, sep= " --"))}
     newCol[i] <- paste0(listeData, collapse = ", ")
     i <- i +1
 }
@@ -87,6 +86,43 @@ return(newCol)
 }
 
 
+##' This function creates a column for the protein dataset after agregation 
+##' by using the previous peptide dataset. It is a parallel version of the function
+##' \code{BuildColumnToProteinDataset}
+##' 
+##' @title creates a column for the protein dataset after agregation by
+##'  using the previous peptide dataset.
+##' @param peptideData A data.frame of meta data of peptides. It is the fData 
+##' of the MSnset object.
+##' @param matAdj The adjacency matrix used to agregate the peptides data.
+##' @param columnName The name of the column in fData(peptides_MSnset) that 
+##' the user wants to keep in the new protein data.frame.
+##' @param proteinNames The names of the protein in the new dataset (i.e. rownames)
+##' @return A vector
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' protID <- "Protein.group.IDs"
+##' M <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
+##' data <- Biobase::fData(Exp1_R25_pept[1:1000])
+##' protData <- pepAgregate(Exp1_R25_pept[1:1000], ProtID, 'sum overall', M)
+##' name <- "Protein.group.IDs"
+##' proteinNames <- rownames(Biobase::fData(protData))
+##' BuildColumnToProteinDataset_par(data, M, name,proteinNames )
+BuildColumnToProteinDataset_par <- function(peptideData, matAdj, columnName, proteinNames){
+    doParallel::registerDoParallel()
+    
+    nbProt <- ncol(matAdj)
+    newCol <- rep("", nbProt)
+    i <- 1
+    newCol <- foreach (i=1:length(proteinNames), .combine=rbind) %dopar% {
+        listeIndicePeptides <- names(which(matAdj[,proteinNames[i]] == 1))
+        listeData <- unique(as.character(peptideData[listeIndicePeptides,columnName], ";"))
+        paste0(listeData, collapse = ", ")
+    }
+    return(as.vector(newCol))
+}
 
 
 
