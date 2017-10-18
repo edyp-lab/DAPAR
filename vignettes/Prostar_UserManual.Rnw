@@ -2,6 +2,7 @@
 %\VignetteKeywords{MassSpectrometry, Proteomics, DAPAR}
 %\VignettePackage{Prostar}
 
+
 \documentclass[12pt]{article}
 \usepackage{soul}
 \usepackage{url}
@@ -19,17 +20,10 @@ BiocStyle::latex()
 
 
 \author{
-Samuel Wieczorek\footnote{firstname.lastname@cea.fr} ,
+Samuel Wieczorek$^\ast$,
 Florence Combes$^\ast$,
-Cosmin Lazar,
-Quentin Giai Gianetto,\\
-Laurent Gatto,
-Alexia Dorffer,
-Anne-Marie Hesse,
-Yohann Coute,\\
-Myriam Ferro,
-Christophe Bruley
-and Thomas Burger$^\ast$
+and Thomas Burger$^\ast$\\
+$^\ast$\url{firstname.lastname@cea.fr}
 }
 
 
@@ -91,9 +85,9 @@ the conditions (or groups).
 dataset.}
 \item {Perform the various processing steps of a complete quantitative 
 analysis}: (i) filtering and data cleaning; (ii) cross-replicate 
-normalization; (iii) missing value imputation; {(iv) aggregation of peptide 
-intensities into protein intensities;} (v) statistical tests and false 
-discovery rate computation.
+normalization; (iii) missing value imputation; (iv) aggregation of peptide 
+intensities into protein intensities; (v) statistical tests and false 
+discovery rate computation; (vi) Gene Ontology (GO) analysis (grouping and category enrichment).
 \end{itemize}
 
 This package can be used on its own; or as a complement to the numerous 
@@ -170,10 +164,12 @@ biocLite("Prostar")
 @
 
 This step will automatically install the following packages: \CRANpkg{shiny}, 
-\CRANpkg{reshape2}, \Githubpkg{jrowen/rhandsontable}, \CRANpkg{DAPARdata}, 
-\CRANpkg{data.table}, \CRANpkg{DT}, \CRANpkg{shinyjs}, \CRANpkg{sm}, 
-\CRANpkg{openxlsx}, \CRANpkg{shinyAce}, \CRANpkg{highcharter}.
-
+\Githubpkg{jrowen/rhandsontable}, \Biocpkg{DAPARdata}, \Biocpkg{DAPAR},
+\CRANpkg{data.table}, \CRANpkg{DT}, \CRANpkg{shinyjs}, 
+\CRANpkg{openxlsx}, \CRANpkg{shinyAce}, \CRANpkg{highcharter},
+\CRANpkg{rhandsontable}, \CRANpkg{htmlwidgets}, \CRANpkg{webshot}.
+        
+        
 Once the package is installed, to launch \Biocpkg{ProStaR}, then enter:
 << runProstarStandalone>>=
 library(Prostar)
@@ -242,15 +238,14 @@ This step will automatically install the following packages:
 \item {From CRAN}: \CRANpkg{RColorBrewer}, \CRANpkg{Cairo}, \CRANpkg{png}, 
 \CRANpkg{lattice}, \CRANpkg{reshape2}, \CRANpkg{tmvtnorm}, \CRANpkg{norm}, 
 \CRANpkg{ggplot2}, \CRANpkg{imputeLCMD}, \CRANpkg{gplots}, \CRANpkg{openxlsx},
-\CRANpkg{knitr}, \CRANpkg{cp4p}, \CRANpkg{doParallel}, \CRANpkg{scales},
-\CRANpkg{stats}, \CRANpkg{grDevices}, \CRANpkg{vioplot}, \CRANpkg{sm}
+\CRANpkg{knitr}, \CRANpkg{cp4p}, \CRANpkg{doParallel}, \CRANpkg{foreach}, \CRANpkg{scales},
+\CRANpkg{stats}, \CRANpkg{grDevices}, \CRANpkg{vioplot}, \CRANpkg{sm}, 
 \CRANpkg{graphics}, \CRANpkg{utils}, \CRANpkg{parallel}, \CRANpkg{openxlsx}, 
-\CRANpkg{Matrix}, \CRANpkg{highcharter}
-\item {From Bioconductor}: \Biocpkg{MSnbase}, \Biocpkg{preprocessCore}, 
-\Biocpkg{impute}, \Biocpkg{limma}, \Biocpkg{pcaMethods}
+\CRANpkg{Matrix}, \CRANpkg{highcharter}, \CRANpkg{dplyr}, \CRANpkg{tidyr}, \CRANpkg{imp4p}, \CRANpkg{readxl}, \CRANpkg{lme4},\CRANpkg{graph}
+\item {From Bioconductor}: \Biocpkg{MSnbase}, \Biocpkg{DAPARdata}, \Biocpkg{preprocessCore}, \Biocpkg{impute}, \Biocpkg{limma}, \Biocpkg{pcaMethods}, \Biocpkg{clusterProfiler}, \Biocpkg{AnnotationDbi}, \Biocpkg{siggenes}
 \end{itemize}
 
-
+        
 \subsection{DAPARdata}\label{sec:DAPARdata}
 
 The installation of the package \Biocpkg{DAPARdata} follows 
@@ -488,7 +483,9 @@ on the top of the left panel, above the menu.
 from a CSV file is \Rfunction{createMSnSet()}.
 
 
-\subsubsection{Export}
+%\subsubsection{Export}
+
+\subsubsection{Export dataset to a file}
 Once an MSnSet has been created, it is possible to save it as a MSnSet binary 
 object (so that next time, it is not necessary to create it, and a simple 
 uploads makes it, as described in Section~\ref{sec:load}). It is also possible 
@@ -522,6 +519,30 @@ right-clicking on the plot. A contextual menu appears and let the user
 choose either "Save image as" or "Copy image". In the latter case, he/she has 
 to paste the image in appropriate software.}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Export plots as report (Beta)}\label{sec:Report}
+In addition to the exported datasets (see previous section), the user can generate and download a report, dynamically created on demand (e.g. at the end of an analysis), through the interface presented on Fig.~\ref{fig:exportReport}.
+
+The left hand side of the interface shows a list of checkboxes (one for each dataset created during the analysis). By default, all the datasets are selected. The user chooses which results to include in the report. Even if no analysis has been performed (e.g. right after the upload of a dataset), the plots of the Descriptive Statistics panel are available.
+
+The right hand side of the interface allows the user to choose the format of the report: PDF, HTML or DOC file. 
+
+After selecting the desired options, one clicks on the button "Generate a report". Then, ProStaR rebuilds all the required images and includes them in the report file. During this step, the button "Download" remains disabled. Only when the report is ready, the "Download" buttons is enabled.
+
+\begin {figure}
+\centering
+\fbox{\includegraphics[width=0.9\textwidth]{images/exportReport.png}}
+\caption{Exporting analysis as a report.}\label{fig:exportReport}
+\end {figure}
+
+Please note this report generation functionality is still in Beta version, so that some bugs may remain. In the future, and depending on the users' expectations, the report will be completed: 
+\begin{itemize}
+\item So far, the R commands run for the report generation does not appear in the log console (see \ref{sec:sessionlog});
+\item The texts accompanying the figures is minimal;
+\item The report cannot be customized.
+\end{itemize}
+In the future, we hope to improve it, as well as to generate additional ready-to-use files for  publication (Material \& Methods sketch, R script for reproducibility, etc.)
+
 \subsubsection{Demo mode} \label{sec:demomode}
 
 In order to facilitate first steps with Prostar, the "demo mode" menu allows 
@@ -538,6 +559,7 @@ When the user chooses one of those datasets, it is automatically loaded in
 \caption{Loadind a demo dataset.}\label{fig:demomodeFig}
 \end {figure}
 
+A checkbox allows the user to show the PDF file in the interface; by default, it is unchecked.
 
 \subsubsection{Session log}\label{sec:sessionlog}
 
@@ -605,13 +627,13 @@ condition.}
 \hl{\bf Command line:} In \Biocpkg{DAPAR}, the functions for these three 
 plots are:
 \begin{itemize}
-\item for the dataframe parameter: \Rfunction{mvPerLinesHisto()}, 
-\Rfunction{mvHisto()} and \Rfunction{mvPerLinesHistoPerCondition()},
-\item for an object of class MSnSet: \Rfunction{wrapper.mvPerLinesHisto()}, 
-\Rfunction{wrapper.mvHisto()} and 
-\Rfunction{wrapper.mvPerLinesHistoPerCondition()}.
+\item for the dataframe parameter: \Rfunction{mvPerLinesHisto\_HC()}, 
+\Rfunction{mvHisto\_HC()} and \Rfunction{mvPerLinesHistoPerCondition\_HC()},
+\item for an object of class MSnSet: \Rfunction{wrapper.mvPerLinesHisto\_HC()}, 
+\Rfunction{wrapper.mvHisto\_HC()} and 
+\Rfunction{wrapper.mvPerLinesHistoPerCondition\_HC()}.
 \end{itemize}
-% end textcolor
+
 
 
 \subsubsection {Data explorer}\label{sec:dataexplorer}
@@ -667,30 +689,7 @@ getProcessingInfo(obj)
 @
 %% $
 
-\subsubsection {Heatmap}
-A heatmap is drawn with the associated dendrogram (see Fig.~\ref{fig:sdhm}). 
-The colors represent the intensities: red for high intensities and green for 
-low intensities. White color is reserved for missing values.
-The dendrogram shows the hierarchical classification of the samples. This 
-classification can be tuned by two parameters:
-\begin {itemize}
-\item \textbf{Distance}: Euclidean or Manhattan
-\item \textbf{Linkage}: Ward.D or mean
-\end {itemize}
 
-\begin {figure}
-\centering
-\fbox{\includegraphics{images/desc_heatmap.png}}
-\caption{Heatmap and dendrogram for the quantitative data.}\label{fig:sdhm}
-\end {figure}
-
-%%\hl{\bf Command line:} In \Biocpkg{DAPAR}, the corresponding function is 
-%%\Rfunction{heatmapD()}.
-\hl{\bf Command line:} In \Biocpkg{DAPAR}, the corresponding function are:
-\begin{itemize}
-\item for the dataframe parameter: \Rfunction{heatmapD()},
-\item for an object of class MSnSet: \Rfunction{wrapper.heatmapD()}.
-\end{itemize}
 
 \subsubsection {Correlation matrix}
 
@@ -708,10 +707,34 @@ changed by modifying the color gradient.}
 %%\Rfunction{corrMatrixD()}.
 \hl{\bf Command line:} In \Biocpkg{DAPAR}, the corresponding function are:
 \begin{itemize}
+\item for the dataframe parameter: \Rfunction{corrMatrixD\_HC()},
+\item for an object of class MSnSet: \Rfunction{wrapper.corrMatrixD\_HC()}.
+\end{itemize}
+
+\subsubsection {Heatmap}
+A heatmap is drawn with the associated dendrogram (see Fig.~\ref{fig:sdhm}). 
+The colors represent the intensities: red for high intensities and green for 
+low intensities. White color is reserved for missing values.
+The dendrogram shows the hierarchical classification of the samples. This 
+classification can be tuned by two parameters:
+\begin {itemize}
+\item \textbf{Distance}: the parameter \emph{method} of the function \Rfunction{stats::dist}. The default value is \emph{'euclidean'}
+\item \textbf{Linkage}: the parameter \emph{method} of the function \Rfunction{stats::hclust}. The default value is \emph{'complete'}
+\end {itemize}
+
+\begin {figure}
+\centering
+\fbox{\includegraphics{images/desc_heatmap.png}}
+\caption{Heatmap and dendrogram for the quantitative data.}\label{fig:sdhm}
+\end {figure}
+
+%%\hl{\bf Command line:} In \Biocpkg{DAPAR}, the corresponding function is 
+%%\Rfunction{heatmapD()}.
+\hl{\bf Command line:} In \Biocpkg{DAPAR}, the corresponding function are:
+\begin{itemize}
 \item for the dataframe parameter: \Rfunction{heatmapD()},
 \item for an object of class MSnSet: \Rfunction{wrapper.heatmapD()}.
 \end{itemize}
-
 
 \subsubsection {Boxplot}\label{sec:boxplot}
 
@@ -769,16 +792,30 @@ correspond to the different conditions (column \textbf{Label} in the table of
 
 \subsubsection{CV distribution}
 This plot shows the distribution of the CV of the log-intensity of 
-proteins for each condition (see Fig.~\ref{fig:sdvd}).
+proteins for each condition (see Fig.~\ref{fig:sdvdZoomOut}). For better visualization, 
+the user can zoom in by click-and-drag (see Fig.~\ref{fig:sdvdZoomIn}).
+
 
 \begin {figure}
 \centering
-\includegraphics[width=0.75\textwidth]{images/desc_CVDist.png}
-\caption{CV distribution for the quantitative data.}\label{fig:sdvd}
+\includegraphics[width=0.75\textwidth]{images/desc_CVDist_ZoomOut.png}
+\caption{CV distribution for the quantitative data.}\label{fig:sdvdZoomOut}
 \end {figure}
 
+\begin {figure}
+\centering
+\includegraphics[width=0.75\textwidth]{images/desc_CVDist_ZoomIn.png}
+\caption{Zoom in of the CV distribution for the quantitative data.}\label{fig:sdvdZoomIn}
+\end {figure}
+
+
 \hl{\bf Command line:} In \Biocpkg{DAPAR}, the corresponding function is 
-\Rfunction{varianceDistD()}.
+
+\begin{itemize}
+\item for the dataframe parameter: \Rfunction{CVDistD\_HC()},
+\item for an object of class MSnSet: \Rfunction{wrapper.CVDistD\_HC()}.
+\end{itemize}
+
 
 \subsubsection{Density plot}\label{sec:densityplot}
 This plots shows the distribution of the log-intensity of proteins for each 
@@ -804,8 +841,8 @@ default, all the replicates are showed.
 %In \Biocpkg{DAPAR}, the corresponding function is \Rfunction{densityPlotD()}.
 \hl{\bf Command line:} In \Biocpkg{DAPAR}, the corresponding functions are:
 \begin{itemize}
-\item for the dataframe parameter: \Rfunction{densityPlotD()},
-\item for an object of class MSnSet: \Rfunction{wrapper.densityPlotD()}.
+\item for the dataframe parameter: \Rfunction{densityPlotD\_HC()},
+\item for an object of class MSnSet: \Rfunction{wrapper.densityPlotD\_HC()}.
 \end{itemize}
 
 
@@ -822,11 +859,12 @@ analysis. They are designed to be used in a specific order:
 \item{Missing values imputation}
 \item{Aggregation}
 \item{Differential analysis}
+\item{Gene Ontology analysis}
 \end{enumerate}
 For each step, several algorithms or parameters are available, and they are 
 toroughly detailled in the sequel of this section.
 
-During each of these 5 steps, it is possible to test several options, and to 
+During each of these steps, it is possible to test several options, and to 
 observe the influence of the processing in the descriptive statistics menu 
 (see Section~\ref{sec:descriptivestatistics}), which is dynamically updated. 
 
@@ -892,16 +930,16 @@ Afterwards, the user can choose to remove contaminants and reverses in the
 second tab called "String based filtering". To do so, he/she selects the 
 appropriate columns of the metadata listed in the dropdown menus. Then, 
 he/she specifies in each of these columns the prefix chain of characters 
-that identifies the analytes to filter.
+that identifies the analytes to filter. Note : the button "Perform string-based 
+filtering" is disabled until all the fields are complete.
 
 \textbf{Remark:} If he/she has no idea of the prefixes, he/she can switch to 
 the Data Explorer in the Descriptive Statistics menu, so as to visualize the 
 corresponding metadata. 
 
-For each fullfilled option, the barplot below is updated: it shows the 
-proportion of quantitative data, contaminants and reverses. Once the choices 
-are made, the user click on "Perform string based filtering" to remove 
-corresponding lines.
+Once the choices are made, the user click on "Perform string-based filtering" 
+to remove corresponding lines. Then, the barplot below  shows the 
+proportion of quantitative data, contaminants and reverses. 
 
 {Once the filtering is appropriately tuned, the user goes to the last tab 
 (called "visualize and Validate") (see Fig.~\ref{fig:filter3}), to visualize 
@@ -1118,30 +1156,39 @@ missingness or censoring of the low intensities).
 \caption{Interface of the imputation of missing values tool.}\label{fig:impu}
 \end {figure}
 
-\textcolor{red}{
 The user can choose one of the several available imputation methods, depending 
 on the type of missing values:
 \begin{itemize}
 \item If the missing values are due to a mixture of censorship and of randomness
-, it is advised to use the functions of the package \CRANpkg{imp4p}. This 
+mechanisms, it is advised to use the functions of the package \CRANpkg{imp4p}. This 
 package is a collection of proteomic-specific 
 multiple imputation methods that operate on peptide-level datasets and which 
 propose to impute each missing value according to its nature (censored or 
 random). Two parameters are available: the number of iterations (the more 
 iterations, the more accurate the results, yet the more time-consuming) and a 
 checkbox to let the user choose if he/she wants to impute the LAPALA. This
-term coined from French "là/pas-là"(meaning "here/not-here") refers to analytes 
+term coined from French "l\`a/pas-l\`a"(meaning "here/not-here") refers to analytes 
 (peptides or proteins) that are entirely missing in some conditions while they
 are (partially or totally) visible in others. Their specific accounting in a 
 conservative way is a real issue as the imputation cannot rely on any observed 
 value in a given condition. The parameter "Upper LAPALA bound" defines the 
 maximum imputed value as a centile of the observed distribution (a tuning 
-between 0\% and 10\% is advised). 
-\item Alternatively, it is possible to use KNN ($K$ Nearest Neighbors) from package 
-\Biocpkg{impute} or MLE (Maximum Likelihood Estimation) from package 
-\Biocpkg{norm}.
+between 0\% and 10\% is advised).
+
+
+\item As an alternative, it is possible to rely on several basics methods from
+the state of the art to perform imputation: KNN ($K$ Nearest Neighbors) 
+from \Biocpkg{impute} package, 
+MLE (Maximum Likelihood Estimation) from \Biocpkg{norm} package, 
+or deterministic quantile imputation. In the latter, the user tunes a specific 
+quantile, which is computed replicate-wise, so as to provide an imputation value
+for each replicate. Possibly, it is possible to multiply these values by a user-tuned
+factor (for instance, one may use $q(5\%) \times 0.9$ instead of $q(1\%)$).
 \end{itemize}
-}
+
+To date, we advise to use IMP4P for peptide-level imputation and other methods for protein-level
+imputation.
+
 
 The user can visualize the effect of an imputation method without changing 
 the current dataset. If the imputation does not produce the expected effect, 
@@ -1171,21 +1218,21 @@ are obtained with respectively:
 \subsubsection{Aggregation}\label{aggregation}
 
 
-{When working on a protein dataset, this step should be bypassed. On the other 
+When working on a protein dataset, this step should be bypassed. On the other 
 hand, when working on peptide datasets, one may want to conduct the 
 differential analysis at protein level, for proteins are the biological units 
 of interest. To do so, it is necessary to estimate the abundance of the 
 proteins on the basis of those of the peptides. This is what the Aggregation 
-step is made for.}
+step is made for.
 
-{First, the user chooses the "protein id" of the dataset, i.e. the column in 
+First, the user chooses the "protein id" of the dataset, i.e. the column in 
 the metadata, that contains the IDs of all the parent proteins for each 
 peptide. 
-Two barplots show up (Fig.~\ref{fig:agreg1} ). They provide the distribution 
+Two barplots show up (Fig.~\ref{fig:agreg1}). They provide the distribution 
 of proteins according to their number of peptides (either all of them, or 
 only those which are specific to a single protein). These statistics are 
 helpful to visualize the adjacency matrix of the peptide-protein graph, that 
-is sometime rather big.}
+is sometime rather big.
 
 
 \begin {figure}
@@ -1223,12 +1270,12 @@ recorded in the Session log tab (see section~\ref{sec:sessionlog}). This new
 dataset becomes the new current dataset and the name "Aggregated" appears in 
 "Dataset versions". All plots and tables in other menus are automatically 
 updated.
+As the new dataset is a protein one, the "Aggregation" menu has been disabled. Thus, the interface automatically switches to the "Descriptive Statistics" menu in order to let the user check the results of the aggreation step.
 
 The aggregation being more computationaly demanding than other processing 
 steps, the current version of \Biocpkg{ProStaR} does not provide the same 
-flexibility regarding the parameter tuning: Here, it is necessary to save the 
-aggregation result first, then, to go to "descriptive statistics" to check 
-the results, and possibly to go back to the imputed dataset with the "Dataset 
+flexibility regarding the parameter tuning. Here, it is necessary to save the 
+aggregation result first, then, check the results in the "descriptive statistics", and possibly to go back to the imputed dataset with the "Dataset 
 versions" dropdown menu to test another aggregation tuning. Contrarily to 
 other processing steps, it is not possible to visualize on-the-fly the 
 consequences of the parameter tuning, and to save it afterwards. We are 
@@ -1394,8 +1441,180 @@ user defining the thresholds on the $p$-values and on the Fold Change, so has
 to be more or less stringent on the number of proteins called "Significant".
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Gene Ontology analysis (Beta)}\label{sec:GOAnalysis}
+
+The Gene Ontology (GO, \url{www.geneontology.org}) is a controlled vocabulary for
+annotating three biological aspects of gene products. This ontology is made of three 
+parts : Molecular Function (MF), Biological Process (BP) and Cellular Component 
+(CC). 
+
+GO analysis is the last step proposed in the "Data 
+processing" menu. It aims to provide the user with a "global view" of what is 
+impacted (in a biological point of view) in his/her experiment, by showing which
+GO terms are represented (GO classification tab), or over-represented compared 
+to a reference (GO Enrichment tab). 
+
+\Biocpkg{Prostar} relies on the package \Biocpkg{clusterProfiler} to perform both GO 
+Classification and GO Enrichment. We propose a GO analysis interface with
+four separated tabs (see Fig.~\ref{fig:GO_tab1}): 
+    \begin{itemize}
+\item GO Setup 
+\item GO classification
+\item Go Enrichement
+\item Save GO analysis
+\end{itemize}
+
+\begin {figure}
+\centering
+\includegraphics[width=0.75\textwidth]{images/GO_tab1.png}
+\caption{Input parameters for GO analysis (GO Setup tab).}\label{fig:GO_tab1}
+\end {figure}
+
+The left-hand side of the \textbf{GO Setup} tab allows it to set the input parameters, namely: 
+\begin{itemize}
+\item Source of protein ID: user indicates either a column in the current 
+dataset or chooses a file (1 ID per line). 
+\item Id From: the type of ID supplied (UNIPROT by default).
+\item Genome Wide Annotation: the organism to consider for the analysis.  
+\item Ontology: the level of the ontology to work with. 
+\end{itemize}
+
+Once these parameters filled, clicking on "Map proteins IDs" launches the  mapping
+of the IDs onto the GO categories of the annotation package. 
+Then, on the right-hand side of the panel, 
+the proportion of proteins that cannot be mapped onto the annotation package
+is indicated (this informative ouput does not interrupt the process, unless no 
+protein maps). 
 
 
+\hl{\bf Command line:} The R function to map protein IDs on the annotation 
+package is \Rfunction{bitr()} (function of the Bioconductor package 
+\Biocpkg{clusterProfiler}). 
+In \Biocpkg{DAPAR}, the call to the \Rfunction{bitr} is integrated inside the 
+\Rfunction{group\_GO()} and \Rfunction{enrich\_GO()} functions. The mapping is 
+done implicitly and the user does not have to perform the mapping. 
+
+
+
+Next step is to perform either GO Classification or GO Enrichment (or both). 
+
+In the \textbf{GO Classification} tab (see Fig.~\ref{fig:GO_tab2}), one has to 
+indicate which level(s) of the ontology to consider.
+Then clicking on the "Perform GO grouping" button launches the analysis 
+(function \Rfunction{groupGO()} of the \Biocpkg{clusterProfiler} package). 
+The graphics shows the most represented GO categories for a user-defined 
+ontology at (a) user-defined level(s).
+
+
+\hl{\bf Command line:} The \Biocpkg{DAPAR()} function to perform the GO 
+classification is \Rfunction{group\_GO()}. It returns a 'groupGOResult' instance.
+The plot as seen in the GOClassification tab of ProStaR 
+(see Fig.~\ref{fig:GO_tab2}) can be generated with the \Rfunction{barplot()} 
+function. 
+
+<<GOClassif>>=
+ggo <- group_GO(data, idFrom="UNIPROT", orgdb=org.Hs.eg.db, ont="MF", level=2)
+barplotGroupGO_HC(ggo)
+@
+
+
+\begin {figure}
+\centering
+\includegraphics[width=0.75\textwidth]{images/GO_tab2.png}
+\caption{Tab to perform the GO classification}\label{fig:GO_tab2}
+\end {figure}
+
+The \textbf{GO Enrichment} tab (see Fig.~\ref{fig:GO_tab3}) allows it to know which
+GO categories are significantly enriched in the users list, compared 
+to a chosen reference ('background' or 'universe'). 
+This background can either be : 
+
+(i) the entire 
+organism (in this case, the totality of the proteins identified with an 
+"ENTREZGENE" ID in the annotation package specified in the GO Setup tab 
+constitutes the background), or 
+
+(ii) the entire dataset loaded in ProStaR (e.g. all the proteins IDs of the 
+'Leading\_razor\_protein' column of the dataset, as illustrated on 
+Fig.~\ref{fig:GO_tab1}), or 
+
+(iii) a custom IDs list provided in a separate file by the user (one ID per line). 
+
+
+\begin {figure}
+\centering
+\includegraphics[width=0.75\textwidth]{images/GO_tab3.png}
+\caption{GO enrichment tab.}\label{fig:GO_tab3}
+\end {figure}
+
+The enrichment tab calls the \Rfunction{groupGO()} function of the 
+\Biocpkg{clusterProfiler} package. This function performs a significance test
+for each category, followed by a multiple test correction at a user-defined level.
+Concretely, this level is tuned thanks to 
+the "FDR (BH Adjusted $P$-value cutoff)" field. 
+Analysis is launched by clicking the "Perform enrichment analysis" button.
+
+Once the analysis has been performed, the result is displayed via two graphics 
+on the right-hand side of the panel (see Fig.~\ref{fig:GO_tab3}). 
+The first one (top) is a barplot showing the five most significant categories. The 
+length of each bar represents the number of proteins within the corresponding category. 
+The second one (bottom) is a dotplot ranked by decreasing \textit{GeneRatio}, which reads: 
+$$
+{\textit{GeneRatio}}
+=
+\frac{\#(\mbox{Genes of the input list in this category})}
+{\#(\mbox{Total number of Genes in the category})}.
+$$
+
+
+\hl{\bf Command line:} The \Biocpkg{DAPAR()} function to perform the GO Enrichment 
+is \Rfunction{enrich\_GO()}. It returns an 'enrichResult' instance.
+The plots as seen in the GO Enrichment tab of ProStaR 
+(see Fig.~\ref{fig:GO_tab3}) can be generated with the \Rfunction{barplot()} and
+\Rfunction{dotplot()} functions. 
+The universe argument allows to indicate the list of IDs considered as the 
+reference (or background) to which the IDs input list of the user will be 
+compared. 
+To consider the whole organism IDs as a reference, one can extract it from 
+the annotation package with the \Biocpkg{DAPAR} function 
+\Rfunction{univ\_AnnotDbPkg()}. (see code below)
+
+
+<<GOEnrichment>>=
+univ.Hs<-univ_AnnotDbPkg(org.Hs.eg.db)
+ego<-group_GO(data, idFrom="UNIPROT", orgdb=org.Hs.eg.db, ont="MF", 
+              universe=univ.Hs, pval=0.05, pAdjustMethod="BH")
+barplotEnrichGO_HC(ego)
+scatterplotEnrichGO_HC(ego)
+@
+
+
+The last tab is the \textbf{Save GO analysis} one. It allows saving the results:
+GO classification, GO enrichment, or both (see Fig.~\ref{fig:GO_tab4}).
+Then, a new GOAnalysis dataset is created and loaded in memory. 
+
+As usual in ProStaR, it is possible to export this new dataset via the Dataset
+manager menu , either in MSnSet or in Excel format. 
+
+\begin {figure}
+\centering
+\includegraphics[width=0.75\textwidth]{images/GO_tab4.png}
+\caption{Saving the GO analysis.}\label{fig:GO_tab4}
+\end {figure}
+
+\hl{\bf Command line:} In \Biocpkg{DAPAR}, the function to save the results of the GO analysis in the MSnSet
+dataset is \Rfunction{GOAnalysisSave()}.
+
+
+\textbf{Nota Bene}: The GO Analysis functionalities are in beta version and improvements will be considered in the future, such as for instance:
+\begin{itemize}
+\item authorizing a larger range of input  format ID;
+\item handling external mapping file between ID and GO ontology
+(or even a custom ontology), so as to be able to work on other organisms than 
+those for which a Bioconductor annotation package exists. 
+\end{itemize}
+Any additional suggestion is welcome.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Menu

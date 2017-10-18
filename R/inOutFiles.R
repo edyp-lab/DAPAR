@@ -26,16 +26,14 @@
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples 
 ##' require(DAPARdata)
-##' exprsFile <- system.file("extdata", "Exp1_R25_pept.txt", 
-##' package="DAPARdata")
-##' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", 
-##' package="DAPARdata")
+##' require(Matrix)
+##' exprsFile <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
+##' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
 ##' metadata = read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
 ##' indExpData <- c(56:61)
 ##' indFData <- c(1:55,62:71)
 ##' indiceID <- 64
-##' createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID,
-##' pep_prot_data = "peptide")
+##' createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, pep_prot_data = "peptide")
 createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL, 
                         logData=FALSE, replaceZeros=FALSE,
                         pep_prot_data=NULL){
@@ -126,10 +124,9 @@ data <- read.table(file, header=TRUE, sep="\t",colClasses="character")
     obj@experimentData@other$mvFilter.threshold <-NULL
     obj@experimentData@other$imputation.method <-NULL
     
-    
     if (is.null(obj@experimentData@other$isMissingValues)){
         obj@experimentData@other$isMissingValues <- 
-            Matrix(as.numeric(is.na(obj)),
+            Matrix::Matrix(as.numeric(is.na(obj)),
                    nrow = nrow(obj), 
                    sparse=TRUE)
     }
