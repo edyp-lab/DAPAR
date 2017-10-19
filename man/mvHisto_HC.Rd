@@ -25,7 +25,7 @@ A histogram
 }
 \description{
 This method plots a histogram of missing values. Same as the function \code{mvHisto}
-but uses the package \CRANpkg{highcharter}
+but uses the package \code{highcharter}
 }
 \examples{
 require(DAPARdata)

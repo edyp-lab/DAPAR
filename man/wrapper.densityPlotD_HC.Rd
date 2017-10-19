@@ -26,7 +26,7 @@ A density plot
 \description{
 This function is a wrapper for using the densityPlotD function with 
 objects of class \code{MSnSet}. Same as the function \code{\link{wrapper.densityPlotD}}
-but uses the package \code{\link{highcharter}}
+but uses the package \code{highcharter}
 }
 \examples{
 require(DAPARdata)

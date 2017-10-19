@@ -25,7 +25,7 @@ A bar plot
 This method plots a bar plot which represents the distribution of the 
 number of missing values (NA) per lines (ie proteins) and per conditions.
 Same as the function \link{mvPerLinesHistoPerCondition} but uses the package
-\CRANpkg{highcharter}.
+\code{highcharter}.
 }
 \examples{
 require(DAPARdata)

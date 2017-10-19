@@ -18,7 +18,7 @@ A barplot
 }
 \description{
 Plots a barplot of proportion of contaminants and reverse. Same as the function
-\code{proportionConRev} but uses the package \CRANpkg{highcharter}.
+\code{proportionConRev} but uses the package \code{highcharter}
 }
 \examples{
 proportionConRev_HC(10, 20, 100)

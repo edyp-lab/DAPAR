@@ -2,7 +2,7 @@
 % Please edit documentation in R/bioAnalysis.R
 \name{scatterplotEnrichGO_HC}
 \alias{scatterplotEnrichGO_HC}
-\title{A dotplot that shows the result of a GO enrichment, using the package \code{\link{highcharter}}}
+\title{A dotplot that shows the result of a GO enrichment, using the package \code{highcharter}}
 \usage{
 scatterplotEnrichGO_HC(ego, maxRes = 10, title = NULL)
 }

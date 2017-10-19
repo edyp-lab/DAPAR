@@ -2,7 +2,7 @@
 % Please edit documentation in R/DescriptiveStats.R
 \name{boxPlotD_HC}
 \alias{boxPlotD_HC}
-\title{Builds a boxplot from a dataframe using the library \code{\link{highcharter}}}
+\title{Builds a boxplot from a dataframe using the library \code{highcharter}}
 \usage{
 boxPlotD_HC(qData, dataForXAxis = "Label", labels = NULL,
   group2Color = "Condition")
@@ -24,7 +24,7 @@ color per replicate (value "Replicate"). Default value is by Condition.}
 A boxplot
 }
 \description{
-Boxplot for quantitative proteomics data using the library \code{\link{highcharter}}
+Boxplot for quantitative proteomics data using the library \code{highcharter}
 }
 \examples{
 require(DAPARdata)

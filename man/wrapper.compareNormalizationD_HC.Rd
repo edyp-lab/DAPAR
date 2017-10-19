@@ -31,7 +31,7 @@ A plot
 \description{
 Wrapper to the function that plot to compare the quantitative proteomics 
 data before and after normalization. Same as the function \link{wrapper.compareNormalizationD}
-but uses the package \code{\link{highcharter}}
+but uses the package \code{highcharter}
 }
 \examples{
 require(DAPARdata)

@@ -17,7 +17,7 @@ A colored correlation matrix
 }
 \description{
 Builds a correlation matrix based on a \code{MSnSet} object. 
-Same as the function \code{\link{wrapper.corrMatrixD}} but uses the package \code{\link{highcharter}}
+Same as the function \code{\link{wrapper.corrMatrixD}} but uses the package \code{highcharter}
 }
 \examples{
 require(DAPARdata)

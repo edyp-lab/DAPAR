@@ -21,7 +21,7 @@ A colored correlation matrix
 }
 \description{
 Correlation matrix based on a \code{MSnSet} object. Same as the 
-function \link{corrMatrixD} but uses the package \code{\link{highcharter}}
+function \link{corrMatrixD} but uses the package \code{highcharter}
 }
 \examples{
 require(DAPARdata)
