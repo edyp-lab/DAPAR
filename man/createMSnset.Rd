@@ -2,7 +2,7 @@
 % Please edit documentation in R/inOutFiles.R
 \name{createMSnset}
 \alias{createMSnset}
-\title{Creates an object of class \code{\link{MSnSet}} from text file}
+\title{Creates an object of class \code{MSnSet} from text file}
 \usage{
 createMSnset(file, metadata = NULL, indExpData, indFData, indiceID = NULL,
   logData = FALSE, replaceZeros = FALSE, pep_prot_data = NULL)
@@ -15,7 +15,7 @@ createMSnset(file, metadata = NULL, indExpData, indFData, indiceID = NULL,
 \item{indExpData}{A vector of string where each element is the name
 of a column in designTable that have to be integrated in
 the \code{fData()} table
-of the \code{\link{MSnSet}} object.}
+of the \code{MSnSet} object.}
 
 \item{indFData}{The name of column in \code{file} that will be the name of
 rows for the \code{exprs()} and \code{fData()} tables}
@@ -33,10 +33,10 @@ intensity have to be replaced by NA (Default is FALSE)}
 peptides or proteins.}
 }
 \value{
-An instance of class \code{\link{MSnSet}}.
+An instance of class \code{MSnSet}.
 }
 \description{
-Builds an object of class \code{\link{MSnSet}} from a 
+Builds an object of class \code{MSnSet} from a 
 single tabulated-like file for quantitative and meta-data and a dataframe 
 for the samples description. It differs from
 the original \code{MSnSet} builder which requires three separated files 

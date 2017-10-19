@@ -110,13 +110,13 @@ univ_AnnotDbPkg <- function(orgdb){
 }
 
 
-##' This method returns an \code{\link{MSnSet}} object with the results
+##' This method returns an \code{MSnSet} object with the results
 ##' of the Gene Ontology analysis.
 ##' 
-##' @title Returns an \code{\link{MSnSet}} object with the results of
+##' @title Returns an \code{MSnSet} object with the results of
 ##' the GO analysis performed with the functions \code{enrichGO} and/or 
 ##' \code{groupGO} of the \code{\link{clusterProfiler}} package. 
-##' @param obj An object of the class \code{\link{MSnSet}}
+##' @param obj An object of the class \code{MSnSet}
 ##' @param ggo_res The object returned by the function \code{group_GO} of the 
 ##' package \code{DAPAR} or the function \code{groupGO} of the package \code{\link{clusterProfiler}}
 ##' @param ego_res The object returned by the function \code{enrich_GO} of the package \code{DAPAR}
@@ -127,7 +127,7 @@ univ_AnnotDbPkg <- function(orgdb){
 ##' @param pvalueCutoff The qvalue cutoff (same parameter as in the function \code{enrichGO} of the package \code{\link{clusterProfiler}})
 ##' @param typeUniverse  The type of background to be used. Values are 'Entire Organism', 'Entire dataset' or 'Custom'. In the latter
 ##' case, a file should be uploaded by the user
-##' @return An object of the class \code{\link{MSnSet}}
+##' @return An object of the class \code{MSnSet}
 ##' @author Samuel Wieczorek
 GOAnalysisSave <- function (obj, ggo_res=NULL, ego_res=NULL, organism, ontology, levels, pvalueCutoff, typeUniverse){
     if (is.null(ggo_res) && is.null(ego_res)){

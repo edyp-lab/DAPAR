@@ -7,7 +7,7 @@
 getIndicesOfLinesToRemove(obj, idLine2Delete = NULL, prefix = NULL)
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 
 \item{idLine2Delete}{The name of the column that correspond to the data 
 to filter}

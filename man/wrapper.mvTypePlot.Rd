@@ -3,12 +3,12 @@
 \name{wrapper.mvTypePlot}
 \alias{wrapper.mvTypePlot}
 \title{Distribution of missing values with respect to intensity values 
-from a \code{\link{MSnSet}} object}
+from a \code{MSnSet} object}
 \usage{
 wrapper.mvTypePlot(obj, threshold = 0)
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 
 \item{threshold}{An integer for the intensity that delimits MNAR and 
 MCAR missing values.}
@@ -20,7 +20,7 @@ A scatter plot
 This method plots a scatter plot which represents the distribution of
 missing values.
 The colors correspond to the different conditions (slot Label in in the
-dataset of class \code{\link{MSnSet}}).
+dataset of class \code{MSnSet}).
 The x-axis represent the mean of intensity for one condition and one
 entity in the dataset (i. e. a protein) 
 whereas the y-axis count the number of missing values for this entity

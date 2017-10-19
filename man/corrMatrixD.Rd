@@ -20,7 +20,7 @@ the gradient of colors}
 A colored correlation matrix
 }
 \description{
-Correlation matrix based on a \code{\link{MSnSet}} object
+Correlation matrix based on a \code{MSnSet} object
 }
 \examples{
 require(DAPARdata)

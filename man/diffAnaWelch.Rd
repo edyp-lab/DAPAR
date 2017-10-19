@@ -2,7 +2,7 @@
 % Please edit documentation in R/DiffAnalysis.R
 \name{diffAnaWelch}
 \alias{diffAnaWelch}
-\title{Performs a differential analysis on a \code{\link{MSnSet}} object
+\title{Performs a differential analysis on a \code{MSnSet} object
 using the Welch t-test}
 \usage{
 diffAnaWelch(qData, labels, condition1, condition2)
@@ -24,7 +24,7 @@ A dataframe with two slots : P_Value (for the p-value) and logFC
 }
 \description{
 Computes differential analysis on
-an \code{\link{MSnSet}} object, using the Welch t-test
+an \code{MSnSet} object, using the Welch t-test
 (\code{\link{t.test}{stats}}).
 }
 \examples{

@@ -4,7 +4,7 @@
 \alias{heatmapD}
 \title{This function is a wrapper to \code{\link{heatmap.2}} that displays 
 quantitative data in the \code{exprs()} table of an object of
-class \code{\link{MSnSet}}}
+class \code{MSnSet}}
 \usage{
 heatmapD(qData, distance = "euclidean", cluster = "complete",
   dendro = FALSE)
@@ -24,7 +24,7 @@ See \code{help(heatmap.2)}}
 A heatmap
 }
 \description{
-Heatmap of the quantitative proteomic data of a \code{\link{MSnSet}} object
+Heatmap of the quantitative proteomic data of a \code{MSnSet} object
 }
 \examples{
 require(DAPARdata)

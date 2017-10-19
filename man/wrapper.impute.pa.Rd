@@ -7,7 +7,7 @@
 wrapper.impute.pa(obj, q.min = 0.025)
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 
 \item{q.min}{Same as the function \code{impute.pa} in the package \code{imp4p}}
 }
@@ -16,7 +16,7 @@ The \code{exprs(obj)} matrix with imputed values instead of missing values.
 }
 \description{
 This method is a wrapper to the function \code{impute.pa} of the package
-\code{imp4p} adapted to an object of class \code{\link{MSnSet}}.
+\code{imp4p} adapted to an object of class \code{MSnSet}.
 }
 \examples{
 require(DAPARdata)

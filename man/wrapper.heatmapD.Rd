@@ -4,13 +4,13 @@
 \alias{wrapper.heatmapD}
 \title{This function is a wrapper to \code{\link{heatmap.2}} that displays 
 quantitative data in the \code{exprs()} table of an object of
-class \code{\link{MSnSet}}}
+class \code{MSnSet}}
 \usage{
 wrapper.heatmapD(obj, distance = "euclidean", cluster = "complete",
   dendro = FALSE)
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 
 \item{distance}{The distance used by the clustering algorithm to compute 
 the dendrogram. See \code{help(heatmap.2)}.}
@@ -25,7 +25,7 @@ A heatmap
 }
 \description{
 Builds a heatmap of the quantitative proteomic data of a 
-\code{\link{MSnSet}} object.
+\code{MSnSet} object.
 }
 \examples{
 require(DAPARdata)

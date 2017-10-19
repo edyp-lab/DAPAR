@@ -2,19 +2,19 @@
 % Please edit documentation in R/missingValuesPlots.R
 \name{wrapper.mvImage}
 \alias{wrapper.mvImage}
-\title{Heatmap of missing values from a \code{\link{MSnSet}} object}
+\title{Heatmap of missing values from a \code{MSnSet} object}
 \usage{
 wrapper.mvImage(obj)
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 }
 \value{
 A heatmap
 }
 \description{
 Plots a heatmap of the quantitative data. Each column represent one of
-the conditions in the object of class \code{\link{MSnSet}} and 
+the conditions in the object of class \code{MSnSet} and 
 the color is proportional to the mean of intensity for each line of
 the dataset.
 The lines have been sorted in order to vizualize easily the different

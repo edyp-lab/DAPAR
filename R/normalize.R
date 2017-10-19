@@ -1,5 +1,5 @@
 ##' Provides several methods to normalize quantitative data from
-##' a \code{\link{MSnSet}} object.
+##' a \code{MSnSet} object.
 ##' They are organized in four main families : Global Alignment, 
 ##' Median Centering, Mean Centering, Mean Centering Scaling.
 ##' For the first family, two sub-categories are available : the sum by columns
@@ -12,11 +12,11 @@
 ##' by condition.
 ##' 
 ##' @title Normalization
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param obj An object of class \code{MSnSet}.
 ##' @param family One of the following : Global Alignment, 
 ##' Median Centering, Mean Centering, Mean Centering Scaling.
 ##' @param method "overall" or "within conditions".
-##' @return An instance of class \code{\link{MSnSet}} 
+##' @return An instance of class \code{MSnSet} 
 ##' where the quantitative data in the \code{exprs()} tab
 ##' has been normalized.
 ##' @author Alexia Dorffer
@@ -195,7 +195,7 @@ return(.temp)
 
 
 ##' Provides several methods to normalize quantitative data from
-##' a \code{\link{MSnSet}} object.
+##' a \code{MSnSet} object.
 ##' They are organized in four main families : Strong Rescaling, 
 ##' Median Centering, Mean Centering, Mean CenteringScaling.
 ##' For the first family, two sub-categories are available : the sum by columns
@@ -208,7 +208,7 @@ return(.temp)
 ##' by condition.
 ##' 
 ##' @title Normalisation
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param obj An object of class \code{MSnSet}.
 ##' @param method One of the following : Global Alignment (for normalizations 
 ##' of important magnitude), Quantile Centering, Mean Centering.  
 ##' @param type For the method "Global Alignment", the parameters are:
@@ -224,7 +224,7 @@ return(.temp)
 ##' be forced to unit (variance reduction) or not.
 ##' @param quantile A float that corresponds to the quantile used to align the
 ##' data.
-##' @return An instance of class \code{\link{MSnSet}} where the quantitative 
+##' @return An instance of class \code{MSnSet} where the quantitative 
 ##' data in the \code{exprs()} tab has been normalized.
 ##' @author Samuel Wieczorek
 ##' @examples

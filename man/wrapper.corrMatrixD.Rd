@@ -8,7 +8,7 @@
 wrapper.corrMatrixD(obj, rate = 5)
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 
 \item{rate}{A float that defines the gradient of colors.}
 }
@@ -16,7 +16,7 @@ wrapper.corrMatrixD(obj, rate = 5)
 A colored correlation matrix
 }
 \description{
-Builds a correlation matrix based on a \code{\link{MSnSet}} object.
+Builds a correlation matrix based on a \code{MSnSet} object.
 }
 \examples{
 require(DAPARdata)

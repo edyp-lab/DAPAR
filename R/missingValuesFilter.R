@@ -2,7 +2,7 @@
 ##' data (\code{exprs()} table of the dataset).
 ##' 
 ##' @title Percentage of missing values
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param obj An object of class \code{MSnSet}.
 ##' @return A floating number
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
@@ -25,7 +25,7 @@ return(pourcentage)
 ##' the prefix.
 ##' 
 ##' @title Number of lines with prefix
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param obj An object of class \code{MSnSet}.
 ##' @param name The name of a column.
 ##' @param prefix A string
 ##' @return An integer
@@ -98,11 +98,11 @@ proportionConRev_HC <- function(nCont=0, nRev=0, lDataset=0){
 ##' This function removes lines in the dataset based on a prefix string.
 ##' 
 ##' @title Removes lines in the dataset based on a prefix string.
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param obj An object of class \code{MSnSet}.
 ##' @param idLine2Delete The name of the column that correspond to the 
 ##' data to filter
 ##' @param prefix A character string that is the prefix to find in the data
-##' @return An object of class \code{\link{MSnSet}}.
+##' @return An object of class \code{MSnSet}.
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' require(DAPARdata)
@@ -124,7 +124,7 @@ return(obj)
 ##' prefix string
 ##' 
 ##' @title Get the indices of the lines to delete, based on a prefix string
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param obj An object of class \code{MSnSet}.
 ##' @param idLine2Delete The name of the column that correspond to the data 
 ##' to filter
 ##' @param prefix A character string that is the prefix to find in the data
@@ -159,14 +159,14 @@ return(ind)
 ##' at least \code{th} values, and for at least one condition, are kept.
 ##' 
 ##' @title Filter lines in the matrix of intensities w.r.t. some criteria
-##' @param obj An object of class \code{\link{MSnSet}} containing
+##' @param obj An object of class \code{MSnSet} containing
 ##' quantitative data.
 ##' @param type Method used to choose the lines to delete.
 ##' Values are : "none", "wholeMatrix", "allCond", "atLeastOneCond"
 ##' @param th An integer value of the threshold
-##' @param processText A string to be included in the \code{\link{MSnSet}}
+##' @param processText A string to be included in the \code{MSnSet}
 ##' object for log. 
-##' @return An instance of class \code{\link{MSnSet}} that have been filtered.
+##' @return An instance of class \code{MSnSet} that have been filtered.
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' require(DAPARdata)
@@ -214,13 +214,13 @@ obj <- obj[keepThat,]
 ##' at least \code{th} values, and for at least one condition, are kept.
 ##' 
 ##' @title Filter lines in the matrix of intensities w.r.t. some criteria
-##' @param obj An object of class \code{\link{MSnSet}} containing
+##' @param obj An object of class \code{MSnSet} containing
 ##' quantitative data.
 ##' @param keepThat A vector of integers which are the indices of lines to 
 ##' keep.
-##' @param processText A string to be included in the \code{\link{MSnSet}}
+##' @param processText A string to be included in the \code{MSnSet}
 ##' object for log. 
-##' @return An instance of class \code{\link{MSnSet}} that have been filtered.
+##' @return An instance of class \code{MSnSet} that have been filtered.
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' require(DAPARdata)
@@ -248,13 +248,13 @@ return(obj)
 ##' 
 ##' @title Delete the lines in the matrix of intensities and the metadata table
 ##' given their indice.
-##' @param obj An object of class \code{\link{MSnSet}} containing
+##' @param obj An object of class \code{MSnSet} containing
 ##' quantitative data.
 ##' @param deleteThat A vector of integers which are the indices of lines to 
 ##' delete.
-##' @param processText A string to be included in the \code{\link{MSnSet}}
+##' @param processText A string to be included in the \code{MSnSet}
 ##' object for log. 
-##' @return An instance of class \code{\link{MSnSet}} that have been filtered.
+##' @return An instance of class \code{MSnSet} that have been filtered.
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' require(DAPARdata)
@@ -291,7 +291,7 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
 ##' at least \code{th} values, and for at least one condition, are kept.
 ##' 
 ##' @title Filter lines in the matrix of intensities w.r.t. some criteria
-##' @param obj An object of class \code{\link{MSnSet}} containing
+##' @param obj An object of class \code{MSnSet} containing
 ##' quantitative data.
 ##' @param type Method used to choose the lines to delete.
 ##' Values are : "none", "wholeMatrix", "allCond", "atLeastOneCond"

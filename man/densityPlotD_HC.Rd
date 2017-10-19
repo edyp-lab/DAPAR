@@ -25,7 +25,7 @@ A density plot
 }
 \description{
 Densityplot of quantitative proteomics data over samples. Same as the function \code{\link{densityPlotD}}
-but uses the package \CRANpkg{highcharter}
+but uses the package \code{\link{highcharter}}
 }
 \examples{
 require(DAPARdata)

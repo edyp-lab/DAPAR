@@ -1,8 +1,8 @@
-##' Returns the contents of the slot processing of an object of class \code{\link{MSnSet}}
+##' Returns the contents of the slot processing of an object of class \code{MSnSet}
 ##' 
 ##' @title Returns the contains of the slot processing  of an object of 
-##' class \code{\link{MSnSet}}
-##' @param  obj An object (peptides) of class \code{\link{MSnSet}}.
+##' class \code{MSnSet}
+##' @param  obj An object (peptides) of class \code{MSnSet}.
 ##' @return The slot processing of obj@processingData
 ##' @author Samuel Wieczorek
 ##' @examples

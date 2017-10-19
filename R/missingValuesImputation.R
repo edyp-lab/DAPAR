@@ -1,8 +1,8 @@
 ##' This method is a wrapper to the \code{imputeLCMD} package adapted to 
-##' objects of class \code{\link{MSnSet}}.
+##' objects of class \code{MSnSet}.
 ##' 
-##' @title Missing values imputation from a \code{\link{MSnSet}} object
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @title Missing values imputation from a \code{MSnSet} object
+##' @param obj An object of class \code{MSnSet}.
 ##' @param method The imputation method to be used.
 ##' Choices are QRILC, KNN, BPCA and MLE. 
 ##' @return The object \code{obj} which has been imputed
@@ -163,10 +163,10 @@ impute.detQuant <- function(qData, values){
 
 
 ##' This method is a wrapper to the function \code{impute.pa} of the package
-##' \code{imp4p} adapted to an object of class \code{\link{MSnSet}}.
+##' \code{imp4p} adapted to an object of class \code{MSnSet}.
 ##'
 ##' @title Imputation of peptides having no values in a biological condition.
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param obj An object of class \code{MSnSet}.
 ##' @param q.min Same as the function \code{impute.pa} in the package \code{imp4p}
 ##' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
 ##' @author Samuel Wieczorek
@@ -184,10 +184,10 @@ wrapper.impute.pa <- function(obj, q.min = 0.025){
 
 
 ##' This method is a wrapper to the function \code{impute.mi} of the package \code{imp4p} adapted to
-##' an object of class \code{\link{MSnSet}}.
+##' an object of class \code{MSnSet}.
 ##'
 ##' @title Missing values imputation using the LSimpute algorithm.
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param obj An object of class \code{MSnSet}.
 ##' @param nb.iter Same as the function \code{mi.mix} in the package \code{imp4p}
 ##' @param nknn Same as the function \code{mi.mix} in the package \code{imp4p}
 ##' @param selec Same as the function \code{mi.mix} in the package \code{imp4p}
@@ -305,10 +305,10 @@ translatedRandomBeta <- function(n, min, max, param1=3, param2=1){
 
 ################################################
 ##' This method is a wrapper to the function \code{impute.pa} from the package 
-##' \code{imp4p} adapted to objects of class \code{\link{MSnSet}}.
+##' \code{imp4p} adapted to objects of class \code{MSnSet}.
 ##' 
-##' @title Missing values imputation from a \code{\link{MSnSet}} object
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @title Missing values imputation from a \code{MSnSet} object
+##' @param obj An object of class \code{MSnSet}.
 ##' @param q.min A quantile value of the observed values allowing defining the 
 ##' maximal value which can be generated. This maximal value is defined by the
 ##' quantile q.min of the observed values distribution minus eps. 
@@ -346,8 +346,8 @@ wrapper.impute.pa2 <- function (obj, q.min = 0, q.norm = 3, eps = 0, distributio
 ##' This method is a variation to the function \code{impute.pa} from the package 
 ##' \code{imp4p}.
 ##' 
-##' @title Missing values imputation from a \code{\link{MSnSet}} object
-##' @param tab An object of class \code{\link{MSnSet}}.
+##' @title Missing values imputation from a \code{MSnSet} object
+##' @param tab An object of class \code{MSnSet}.
 ##' @param conditions xxxxxxxxxxxx
 ##' @param q.min A quantile value of the observed values allowing defining the 
 ##' maximal value which can be generated. This maximal value is defined by the

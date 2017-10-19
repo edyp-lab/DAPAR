@@ -7,7 +7,7 @@
 mvFilter(obj, type, th, processText = NULL)
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}} containing
+\item{obj}{An object of class \code{MSnSet} containing
 quantitative data.}
 
 \item{type}{Method used to choose the lines to delete.
@@ -15,11 +15,11 @@ Values are : "none", "wholeMatrix", "allCond", "atLeastOneCond"}
 
 \item{th}{An integer value of the threshold}
 
-\item{processText}{A string to be included in the \code{\link{MSnSet}}
+\item{processText}{A string to be included in the \code{MSnSet}
 object for log.}
 }
 \value{
-An instance of class \code{\link{MSnSet}} that have been filtered.
+An instance of class \code{MSnSet} that have been filtered.
 }
 \description{
 Filters the lines of \code{exprs()} table with conditions on the number

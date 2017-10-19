@@ -2,12 +2,12 @@
 % Please edit documentation in R/inOutFiles.R
 \name{writeMSnsetToExcel}
 \alias{writeMSnsetToExcel}
-\title{This function exports a \code{\link{MSnSet}} object to a Excel file.}
+\title{This function exports a \code{MSnSet} object to a Excel file.}
 \usage{
 writeMSnsetToExcel(obj, filename)
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 
 \item{filename}{A character string for the name of the Excel file.}
 }
@@ -15,9 +15,9 @@ writeMSnsetToExcel(obj, filename)
 A Excel file (.xlsx)
 }
 \description{
-This function exports a \code{\link{MSnSet}} data object to a Excel file.
+This function exports a \code{MSnSet} data object to a Excel file.
 Each of the 
-three data.frames in the \code{\link{MSnSet}} object (ie experimental data,
+three data.frames in the \code{MSnSet} object (ie experimental data,
 phenoData
 and metaData are respectively integrated into separate sheets in
 the Excel file).

@@ -2,13 +2,13 @@
 % Please edit documentation in R/missingValuesImputation.R
 \name{wrapper.impute.pa2}
 \alias{wrapper.impute.pa2}
-\title{Missing values imputation from a \code{\link{MSnSet}} object}
+\title{Missing values imputation from a \code{MSnSet} object}
 \usage{
 wrapper.impute.pa2(obj, q.min = 0, q.norm = 3, eps = 0,
   distribution = "unif")
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 
 \item{q.min}{A quantile value of the observed values allowing defining the 
 maximal value which can be generated. This maximal value is defined by the
@@ -31,7 +31,7 @@ The object \code{obj} which has been imputed
 }
 \description{
 This method is a wrapper to the function \code{impute.pa} from the package 
-\code{imp4p} adapted to objects of class \code{\link{MSnSet}}.
+\code{imp4p} adapted to objects of class \code{MSnSet}.
 }
 \examples{
 require(DAPARdata)

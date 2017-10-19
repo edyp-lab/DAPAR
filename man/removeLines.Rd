@@ -7,7 +7,7 @@
 removeLines(obj, idLine2Delete = NULL, prefix = NULL)
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 
 \item{idLine2Delete}{The name of the column that correspond to the 
 data to filter}
@@ -15,7 +15,7 @@ data to filter}
 \item{prefix}{A character string that is the prefix to find in the data}
 }
 \value{
-An object of class \code{\link{MSnSet}}.
+An object of class \code{MSnSet}.
 }
 \description{
 This function removes lines in the dataset based on a prefix string.

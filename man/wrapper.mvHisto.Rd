@@ -2,12 +2,12 @@
 % Please edit documentation in R/missingValuesPlots.R
 \name{wrapper.mvHisto}
 \alias{wrapper.mvHisto}
-\title{Histogram of missing values from a \code{\link{MSnSet}} object}
+\title{Histogram of missing values from a \code{MSnSet} object}
 \usage{
 wrapper.mvHisto(obj, indLegend = "auto", showValues = FALSE)
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 
 \item{indLegend}{The indices of the column name's in \code{pData()} tab.}
 
@@ -18,7 +18,7 @@ drawn above the bars.}
 A histogram
 }
 \description{
-This method plots from a \code{\link{MSnSet}} object a histogram of 
+This method plots from a \code{MSnSet} object a histogram of 
 missing values.
 }
 \examples{

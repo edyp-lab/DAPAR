@@ -2,7 +2,7 @@
 % Please edit documentation in R/DiffAnalysis.R
 \name{diffAnaSave}
 \alias{diffAnaSave}
-\title{Returns a \code{\link{MSnSet}} object with the results of
+\title{Returns a \code{MSnSet} object with the results of
 the differential analysis performed with \code{\link{limma}} package.}
 \usage{
 diffAnaSave(obj, data, method = "limma", condition1, condition2,
@@ -10,7 +10,7 @@ diffAnaSave(obj, data, method = "limma", condition1, condition2,
   calibrationMethod = "pounds")
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 
 \item{data}{The result of the differential analysis processed 
 by \code{\link{diffAna}}}
@@ -40,7 +40,7 @@ calibration plot}
 A MSnSet
 }
 \description{
-This method returns a \code{\link{MSnSet}} object with the results
+This method returns a class \code{MSnSet} object with the results
 of differential analysis.
 }
 \examples{

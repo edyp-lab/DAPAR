@@ -3,13 +3,13 @@
 \name{wrapper.mvPerLinesHistoPerCondition}
 \alias{wrapper.mvPerLinesHistoPerCondition}
 \title{Bar plot of missing values per lines and per conditions from an 
-object \code{\link{MSnSet}}}
+object \code{MSnSet}}
 \usage{
 wrapper.mvPerLinesHistoPerCondition(obj, indLegend = "auto",
   showValues = FALSE)
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 
 \item{indLegend}{The indice of the column name's in \code{pData()} tab .}
 
@@ -20,7 +20,7 @@ drawn above the bars.}
 A bar plot
 }
 \description{
-This method is a wrapper to plots from a \code{\link{MSnSet}} object a 
+This method is a wrapper to plots from a \code{MSnSet} object a 
 bar plot which represents the distribution of the 
 number of missing values (NA) per lines (ie proteins) and per conditions.
 }

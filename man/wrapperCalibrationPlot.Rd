@@ -3,7 +3,7 @@
 \name{wrapperCalibrationPlot}
 \alias{wrapperCalibrationPlot}
 \title{Performs a calibration plot on
-an \code{\link{MSnSet}} object, calling the \code{cp4p} package functions.}
+an \code{MSnSet} object, calling the \code{cp4p} package functions.}
 \usage{
 wrapperCalibrationPlot(vPVal, pi0Method = "pounds")
 }
@@ -18,7 +18,7 @@ A plot
 }
 \description{
 This function is a wrapper to the calibration.plot method of the 
-\code{cp4p} package for use with \code{\link{MSnSet}} objects.
+\code{cp4p} package for use with \code{MSnSet} objects.
 }
 \examples{
 require(DAPARdata)

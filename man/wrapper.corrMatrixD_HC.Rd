@@ -8,7 +8,7 @@
 wrapper.corrMatrixD_HC(obj, rate = 0.5)
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 
 \item{rate}{A float that defines the gradient of colors.}
 }
@@ -16,8 +16,8 @@ wrapper.corrMatrixD_HC(obj, rate = 0.5)
 A colored correlation matrix
 }
 \description{
-Builds a correlation matrix based on a \code{\link{MSnSet}} object. 
-Same as the function \link{wrapper.corrMatrixD} but uses the package \CRANpkg{highcharter}
+Builds a correlation matrix based on a \code{MSnSet} object. 
+Same as the function \code{\link{wrapper.corrMatrixD}} but uses the package \code{\link{highcharter}}
 }
 \examples{
 require(DAPARdata)

@@ -21,7 +21,7 @@ A scatter plot
 This method plots a scatter plot which represents the distribution of
 missing values.
 The colors correspond to the different conditions (slot Label in in the
-dataset of class \code{\link{MSnSet}}).
+dataset of class \code{MSnSet}).
 The x-axis represent the mean of intensity for one condition and one
 entity in the dataset (i. e. a protein) 
 whereas the y-axis count the number of missing values for this entity

@@ -16,7 +16,7 @@ A heatmap
 }
 \description{
 Plots a heatmap of the quantitative data. Each column represent one of
-the conditions in the object of class \code{\link{MSnSet}} and 
+the conditions in the object of class \code{MSnSet} and 
 the color is proportional to the mean of intensity for each line of
 the dataset.
 The lines have been sorted in order to vizualize easily the different

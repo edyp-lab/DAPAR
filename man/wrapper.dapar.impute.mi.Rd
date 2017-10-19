@@ -11,7 +11,7 @@ wrapper.dapar.impute.mi(obj, nb.iter = 3, nknn = 15, selec = 600,
   methodi = "slsa", lapala = TRUE, distribution = "unif")
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 
 \item{nb.iter}{Same as the function \code{mi.mix} in the package \code{imp4p}}
 
@@ -56,7 +56,7 @@ The \code{exprs(obj)} matrix with imputed values instead of missing values.
 }
 \description{
 This method is a wrapper to the function \code{impute.mi} of the package \code{imp4p} adapted to
-an object of class \code{\link{MSnSet}}.
+an object of class \code{MSnSet}.
 }
 \examples{
 require(DAPARdata)

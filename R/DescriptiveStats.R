@@ -1,8 +1,8 @@
 ##' This function is a wrapper for using the boxPlotD function with objects of 
-##' class \code{\link{MSnSet}}
+##' class \code{MSnSet}
 ##' 
-##' @title Wrapper to the boxplotD function on an object \code{\link{MSnSet}}
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @title Wrapper to the boxplotD function on an object \code{MSnSet}
+##' @param obj An object of class \code{MSnSet}.
 ##' @param dataForXAxis A vector of strings containing the names of columns 
 ##' in \code{pData()} to print labels on X-axis (Default is "Label").
 ##' @param group2Color A string that indicates how to color the replicates: one
@@ -37,10 +37,10 @@ boxPlotD(qData, dataForXAxis, labels, group2Color)
 
 
 ##' This function is a wrapper for using the boxPlotD_HC function with objects of 
-##' class \code{\link{MSnSet}}
+##' class \code{MSnSet}
 ##' 
-##' @title Wrapper to the boxplotD_HC function on an object \code{\link{MSnSet}}
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @title Wrapper to the boxplotD_HC function on an object \code{MSnSet}
+##' @param obj An object of class \code{MSnSet}.
 ##' @param dataForXAxis A vector of strings containing the names of columns 
 ##' in \code{pData()} to print labels on X-axis (Default is "Label").
 ##' @param group2Color A string that indicates how to color the replicates: one
@@ -249,10 +249,10 @@ hcboxplot(x=df$values, var = df$samples,
 
 
 ##' This function is a wrapper for using the violinPlotD function with objects 
-##' of class \code{\link{MSnSet}}
+##' of class \code{MSnSet}
 ##' 
-##' @title Wrapper to the violinPlotD function on an object \code{\link{MSnSet}}
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @title Wrapper to the violinPlotD function on an object \code{MSnSet}
+##' @param obj An object of class \code{MSnSet}.
 ##' @param dataForXAxis A vector of strings containing the names of columns 
 ##' in \code{pData()} to print labels on X-axis (Default is "Label").
 ##' @param group2Color A string that indicates how to color the replicates: one
@@ -392,7 +392,7 @@ compareNormalizationD(qDataBefore, qDataAfter, labelsForLegend, indData2Show,
 
 ##' Wrapper to the function that plot to compare the quantitative proteomics 
 ##' data before and after normalization. Same as the function \link{wrapper.compareNormalizationD}
-##' but uses the package \CRANpkg{highcharter}
+##' but uses the package \code{\link{highcharter}}
 ##' 
 ##' @title Builds a plot from a dataframe
 ##' @param objBefore A dataframe that contains quantitative data before 
@@ -623,10 +623,10 @@ compareNormalizationD_HC <- function(qDataBefore,
 
 
 ##' This function is a wrapper for using the densityPlotD function with 
-##' objects of class \code{\link{MSnSet}}
+##' objects of class \code{MSnSet}
 ##' 
-##' @title Builds a densityplot from an object of class \code{\link{MSnSet}}
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @title Builds a densityplot from an object of class \code{MSnSet}
+##' @param obj An object of class \code{MSnSet}.
 ##' @param labelsForLegend A vector of labels to show in densityplot.
 ##' @param indData2Show A vector of the indices of the columns to show in 
 ##' the plot. The indices are those of indices of the columns int the data
@@ -653,11 +653,11 @@ densityPlotD(qData, labelsForLegend, indData2Show,group2Color)
 }
 
 ##' This function is a wrapper for using the densityPlotD function with 
-##' objects of class \code{\link{MSnSet}}. Same as the function \link{wrapper.densityPlotD}
-##' but uses the package \CRANpkg{highcharter}
+##' objects of class \code{MSnSet}. Same as the function \code{\link{wrapper.densityPlotD}}
+##' but uses the package \code{\link{highcharter}}
 ##' 
-##' @title Builds a densityplot from an object of class \code{\link{MSnSet}}
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @title Builds a densityplot from an object of class \code{MSnSet}
+##' @param obj An object of class \code{MSnSet}.
 ##' @param labelsForLegend A vector of labels to show in densityplot.
 ##' @param indData2Show A vector of the indices of the columns to show in 
 ##' the plot. The indices are those of indices of the columns int the data
@@ -776,7 +776,7 @@ legend("topleft"
 
 
 ##' Densityplot of quantitative proteomics data over samples. Same as the function \code{\link{densityPlotD}}
-##' but uses the package \CRANpkg{highcharter}
+##' but uses the package \code{\link{highcharter}}
 ##' 
 ##' @title Builds a densityplot from a dataframe
 ##' @param qData A dataframe that contains quantitative data.
@@ -869,12 +869,12 @@ densityPlotD_HC <- function(qData, labelsForLegend=NULL,indData2Show=NULL,
 
 
 ##' Builds a densityplot of the CV of entities in the exprs() table
-##' of an object \code{\link{MSnSet}}. The variance is calculated for each 
+##' of an object \code{MSnSet}. The variance is calculated for each 
 ##' condition (Label) present
 ##' in the dataset (see the slot \code{'Label'} in the \code{pData()} table).
 ##' 
 ##' @title Distribution of CV of entities
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param obj An object of class \code{MSnSet}.
 ##' @return A density plot
 ##' @author Alexia Dorffer
 ##' @seealso \code{\link{wrapper.densityPlotD}}
@@ -890,13 +890,13 @@ CVDistD(qData, labels)
 
 
 ##' Builds a densityplot of the CV of entities in the exprs() table. 
-##' of an object \code{\link{MSnSet}}. The variance is calculated for each 
+##' of an object \code{MSnSet}. The variance is calculated for each 
 ##' condition (Label) present
 ##' in the dataset (see the slot \code{'Label'} in the \code{pData()} table).
-##' Same as the function \code{\link{wrapper.CVDistD}} but uses the package \CRANpkg{highcharter}
+##' Same as the function \code{\link{wrapper.CVDistD}} but uses the package \code{\link{highcharter}}
 ##' 
 ##' @title Distribution of CV of entities
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param obj An object of class \code{MSnSet}.
 ##' @return A density plot
 ##' @author Samuel Wieczorek
 ##' @seealso \code{\link{wrapper.densityPlotD}}
@@ -989,7 +989,7 @@ legend("topright"
 ##' Builds a densityplot of the CV of entities in the exprs() table
 ##' of a object. The CV is calculated for each condition (Label) present
 ##' in the dataset (see the slot \code{'Label'} in the \code{pData()} table)
-##' Same as the function \code{CVDistD} but uses the package \CRANpkg{highcharter}
+##' Same as the function \code{CVDistD} but uses the package \code{\link{highcharter}}
 ##' @title Distribution of CV of entities
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param labels A vector of the conditions (labels) (one label per sample).
@@ -1049,11 +1049,11 @@ CVDistD_HC <- function(qData, labels=NULL){
 
 
 
-##' Builds a correlation matrix based on a \code{\link{MSnSet}} object.
+##' Builds a correlation matrix based on a \code{MSnSet} object.
 ##' 
 ##' @title Displays a correlation matrix of the quantitative data of the
 ##' \code{exprs()} table
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param obj An object of class \code{MSnSet}.
 ##' @param rate A float that defines the gradient of colors.
 ##' @return A colored correlation matrix
 ##' @author Alexia Dorffer
@@ -1067,12 +1067,12 @@ samplesData <- Biobase::pData(obj)
 corrMatrixD(qData, samplesData, rate)
 }
 
-##' Builds a correlation matrix based on a \code{\link{MSnSet}} object. 
-##' Same as the function \link{wrapper.corrMatrixD} but uses the package \CRANpkg{highcharter}
+##' Builds a correlation matrix based on a \code{MSnSet} object. 
+##' Same as the function \code{\link{wrapper.corrMatrixD}} but uses the package \code{\link{highcharter}}
 ##' 
 ##' @title Displays a correlation matrix of the quantitative data of the
 ##' \code{exprs()} table
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param obj An object of class \code{MSnSet}.
 ##' @param rate A float that defines the gradient of colors.
 ##' @return A colored correlation matrix
 ##' @author Samuel Wieczorek
@@ -1089,7 +1089,7 @@ wrapper.corrMatrixD_HC <- function(obj, rate=0.5){
 
 
 
-##' Correlation matrix based on a \code{\link{MSnSet}} object
+##' Correlation matrix based on a \code{MSnSet} object
 ##' 
 ##' @title Displays a correlation matrix of the quantitative data of the
 ##' \code{exprs()} table.
@@ -1138,7 +1138,7 @@ plot(d)
 
 
 
-##' Correlation matrix based on a \code{\link{MSnSet}} object. Same as the 
+##' Correlation matrix based on a \code{MSnSet} object. Same as the 
 ##' function \link{corrMatrixD} but uses the package \code{\link{highcharter}}
 ##' 
 ##' @title Displays a correlation matrix of the quantitative data of the
@@ -1216,12 +1216,12 @@ corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
 
 
 ##' Builds a heatmap of the quantitative proteomic data of a 
-##' \code{\link{MSnSet}} object.
+##' \code{MSnSet} object.
 ##' 
 ##' @title This function is a wrapper to \code{\link{heatmap.2}} that displays 
 ##' quantitative data in the \code{exprs()} table of an object of
-##' class \code{\link{MSnSet}}
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' class \code{MSnSet}
+##' @param obj An object of class \code{MSnSet}.
 ##' @param distance The distance used by the clustering algorithm to compute 
 ##' the dendrogram. See \code{help(heatmap.2)}.
 ##' @param cluster the clustering algorithm used to build the dendrogram.
@@ -1248,11 +1248,11 @@ heatmapD(qData, distance, cluster, dendro)
 
 
 
-##' Heatmap of the quantitative proteomic data of a \code{\link{MSnSet}} object
+##' Heatmap of the quantitative proteomic data of a \code{MSnSet} object
 ##' 
 ##' @title This function is a wrapper to \code{\link{heatmap.2}} that displays 
 ##' quantitative data in the \code{exprs()} table of an object of
-##' class \code{\link{MSnSet}}
+##' class \code{MSnSet}
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param distance The distance used by the clustering algorithm to compute 
 ##' the dendrogram. See \code{help(heatmap.2)}
@@ -1332,7 +1332,7 @@ heatmapD <- function(qData, distance="euclidean", cluster="complete",
 ##' 
 ##' @title This function is inspired from the function \code{\link{heatmap.2}} 
 ##' that displays quantitative data in the \code{exprs()} table of an object of
-##' class \code{\link{MSnSet}}. For more information, please refer to the help 
+##' class \code{MSnSet}. For more information, please refer to the help 
 ##' of the heatmap.2 function.
 ##' @param x A dataframe that contains quantitative data.
 ##' @param col colors used for the image. Defaults to heat colors (heat.colors).

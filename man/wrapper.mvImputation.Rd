@@ -2,12 +2,12 @@
 % Please edit documentation in R/missingValuesImputation.R
 \name{wrapper.mvImputation}
 \alias{wrapper.mvImputation}
-\title{Missing values imputation from a \code{\link{MSnSet}} object}
+\title{Missing values imputation from a \code{MSnSet} object}
 \usage{
 wrapper.mvImputation(obj, method)
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 
 \item{method}{The imputation method to be used.
 Choices are QRILC, KNN, BPCA and MLE.}
@@ -17,7 +17,7 @@ The object \code{obj} which has been imputed
 }
 \description{
 This method is a wrapper to the \code{imputeLCMD} package adapted to 
-objects of class \code{\link{MSnSet}}.
+objects of class \code{MSnSet}.
 }
 \examples{
 require(DAPARdata)

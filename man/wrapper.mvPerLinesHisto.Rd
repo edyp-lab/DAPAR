@@ -3,12 +3,12 @@
 \name{wrapper.mvPerLinesHisto}
 \alias{wrapper.mvPerLinesHisto}
 \title{Histogram of missing values per lines from an object 
-\code{\link{MSnSet}}}
+\code{MSnSet}}
 \usage{
 wrapper.mvPerLinesHisto(obj, indLegend = "auto", showValues = FALSE)
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 
 \item{indLegend}{The indice of the column name's in \code{pData()} tab .}
 
@@ -19,7 +19,7 @@ drawn above the bars.}
 A histogram
 }
 \description{
-This method is a wrapper to plots from a \code{\link{MSnSet}} object a 
+This method is a wrapper to plots from a \code{MSnSet} object a 
 histogram which represents the distribution of the 
 number of missing values (NA) per lines (ie proteins).
 }

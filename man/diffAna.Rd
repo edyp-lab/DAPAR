@@ -18,7 +18,7 @@ A dataframe with the p-value and log(Fold Change) associated
 to each element (peptide/protein)
 }
 \description{
-Performs a differential analysis on an \code{\link{MSnSet}} object,
+Performs a differential analysis on an \code{MSnSet} object,
 based on \code{\link{limma}} functions.
 }
 \examples{

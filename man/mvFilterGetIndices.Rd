@@ -7,7 +7,7 @@
 mvFilterGetIndices(obj, type, th)
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}} containing
+\item{obj}{An object of class \code{MSnSet} containing
 quantitative data.}
 
 \item{type}{Method used to choose the lines to delete.

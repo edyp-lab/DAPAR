@@ -1,17 +1,17 @@
-##' Builds an object of class \code{\link{MSnSet}} from a 
+##' Builds an object of class \code{MSnSet} from a 
 ##' single tabulated-like file for quantitative and meta-data and a dataframe 
 ##' for the samples description. It differs from
 ##' the original \code{MSnSet} builder which requires three separated files 
 ##' tabulated-like quantitative proteomic data into a \code{MSnSet} object,
 ##' including metadata.
 ##' 
-##' @title Creates an object of class \code{\link{MSnSet}} from text file
+##' @title Creates an object of class \code{MSnSet} from text file
 ##' @param file The name of a tab-separated file that contains the data.
 ##' @param metadata A dataframe describing the samples (in lines).
 ##' @param indExpData A vector of string where each element is the name
 ##' of a column in designTable that have to be integrated in
 ##' the \code{fData()} table
-##' of the \code{\link{MSnSet}} object.
+##' of the \code{MSnSet} object.
 ##' @param indFData The name of column in \code{file} that will be the name of
 ##' rows for the \code{exprs()} and \code{fData()} tables
 ##' @param indiceID The indice of the column containing the ID of entities 
@@ -22,7 +22,7 @@
 ##' intensity have to be replaced by NA (Default is FALSE)
 ##' @param pep_prot_data A string that indicates whether the dataset is about 
 ##' peptides or proteins.
-##' @return An instance of class \code{\link{MSnSet}}.
+##' @return An instance of class \code{MSnSet}.
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples 
 ##' require(DAPARdata)
@@ -135,15 +135,15 @@ data <- read.table(file, header=TRUE, sep="\t",colClasses="character")
 }
 
 
-##' This function exports a \code{\link{MSnSet}} data object to a Excel file.
+##' This function exports a \code{MSnSet} data object to a Excel file.
 ##' Each of the 
-##' three data.frames in the \code{\link{MSnSet}} object (ie experimental data,
+##' three data.frames in the \code{MSnSet} object (ie experimental data,
 ##' phenoData
 ##' and metaData are respectively integrated into separate sheets in
 ##' the Excel file).
 ##' 
-##' @title This function exports a \code{\link{MSnSet}} object to a Excel file.
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @title This function exports a \code{MSnSet} object to a Excel file.
+##' @param obj An object of class \code{MSnSet}.
 ##' @param filename A character string for the name of the Excel file.
 ##' @return A Excel file (.xlsx)
 ##' @author Samuel Wieczorek

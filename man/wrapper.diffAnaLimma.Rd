@@ -8,7 +8,7 @@ an MSnSet object, calling the \code{limma} package functions}
 wrapper.diffAnaLimma(obj, condition1, condition2)
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 
 \item{condition1}{A vector that contains the names of the conditions 
 considered as condition 1.}
@@ -21,7 +21,7 @@ A dataframe as returned by the \code{limma} package
 }
 \description{
 Method to perform differential analysis on
-a \code{\link{MSnSet}} object (calls the \code{limma} package function).
+a \code{MSnSet} object (calls the \code{limma} package function).
 }
 \examples{
 require(DAPARdata)

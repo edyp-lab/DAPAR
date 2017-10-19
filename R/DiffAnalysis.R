@@ -42,12 +42,12 @@ diffAnaComputeFDR <- function(data,threshold_PVal=0, threshold_LogFC = 0,
 }
 
 
-##' This method returns a \code{\link{MSnSet}} object with the results
+##' This method returns a class \code{MSnSet} object with the results
 ##' of differential analysis.
 ##' 
-##' @title Returns a \code{\link{MSnSet}} object with the results of
+##' @title Returns a \code{MSnSet} object with the results of
 ##' the differential analysis performed with \code{\link{limma}} package. 
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param obj An object of class \code{MSnSet}.
 ##' @param data The result of the differential analysis processed 
 ##' by \code{\link{diffAna}} 
 ##' @param method The method used for differential analysis. 
@@ -137,7 +137,7 @@ diffAnaSave <- function (obj, data, method="limma", condition1, condition2,
 ##' 
 ##' @title Returns a MSnSet object with only proteins significant after 
 ##' differential analysis.
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param obj An object of class \code{MSnSet}.
 ##' @return A MSnSet
 ##' @author Alexia Dorffer
 ##' @examples
@@ -167,7 +167,7 @@ diffAnaGetSignificant <- function (obj){
 
 
 
-##' Performs a differential analysis on an \code{\link{MSnSet}} object,
+##' Performs a differential analysis on an \code{MSnSet} object,
 ##' based on \code{\link{limma}} functions.
 ##'
 ##' @title This function performs a differential analysis on an MSnSet
@@ -207,11 +207,11 @@ diffAna <- function(qData, design){
 
 
 ##' Method to perform differential analysis on
-##' a \code{\link{MSnSet}} object (calls the \code{limma} package function).  
+##' a \code{MSnSet} object (calls the \code{limma} package function).  
 ##' 
 ##' @title Performs differential analysis on
 ##' an MSnSet object, calling the \code{limma} package functions 
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param obj An object of class \code{MSnSet}.
 ##' @param condition1 A vector that contains the names of the conditions 
 ##' considered as condition 1.
 ##' @param condition2 A vector that contains the names of the conditions 
@@ -237,7 +237,7 @@ return(p)
 
 
 ##' Method to perform differential analysis on
-##' an \code{\link{MSnSet}} object (calls the \code{limma} package function).  
+##' an \code{MSnSet} object (calls the \code{limma} package function).  
 ##' 
 ##' @title Performs differential analysis on
 ##' an MSnSet object, calling the \code{limma} package functions 
@@ -298,12 +298,12 @@ return(p)
 
 
 ##' Computes differential analysis on
-##' a \code{\link{MSnSet}} object, using the Welch t-test
+##' a \code{MSnSet} object, using the Welch t-test
 ##' (\code{\link{t.test}{stats}}). 
 ##' 
-##' @title Performs a differential analysis on a \code{\link{MSnSet}} object
+##' @title Performs a differential analysis on a \code{MSnSet} object
 ##' using the Welch t-test
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @param obj An object of class \code{MSnSet}.
 ##' @param condition1 A vector containing the names of the conditions 
 ##' considered as condition 1.
 ##' @param condition2 A vector containing the names of the conditions 
@@ -330,10 +330,10 @@ return(p)
 
 
 ##' Computes differential analysis on
-##' an \code{\link{MSnSet}} object, using the Welch t-test
+##' an \code{MSnSet} object, using the Welch t-test
 ##' (\code{\link{t.test}{stats}}). 
 ##' 
-##' @title Performs a differential analysis on a \code{\link{MSnSet}} object
+##' @title Performs a differential analysis on a \code{MSnSet} object
 ##' using the Welch t-test
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param labels A vector of the conditions (labels) (one label per sample).
@@ -380,10 +380,10 @@ return(p)
 
 
 ##' This function is a wrapper to the calibration.plot method of the 
-##' \code{cp4p} package for use with \code{\link{MSnSet}} objects.
+##' \code{cp4p} package for use with \code{MSnSet} objects.
 ##'
 ##' @title Performs a calibration plot on
-##' an \code{\link{MSnSet}} object, calling the \code{cp4p} package functions. 
+##' an \code{MSnSet} object, calling the \code{cp4p} package functions. 
 ##' @param vPVal A dataframe that contains quantitative data.
 ##' @param pi0Method A vector of the conditions (labels) (one label 
 ##' per sample).

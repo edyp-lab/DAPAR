@@ -8,17 +8,17 @@ given their indice.}
 deleteLinesFromIndices(obj, deleteThat = NULL, processText = "")
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}} containing
+\item{obj}{An object of class \code{MSnSet} containing
 quantitative data.}
 
 \item{deleteThat}{A vector of integers which are the indices of lines to 
 delete.}
 
-\item{processText}{A string to be included in the \code{\link{MSnSet}}
+\item{processText}{A string to be included in the \code{MSnSet}
 object for log.}
 }
 \value{
-An instance of class \code{\link{MSnSet}} that have been filtered.
+An instance of class \code{MSnSet} that have been filtered.
 }
 \description{
 Delete the lines of \code{exprs()} table identified by their indice.

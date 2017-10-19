@@ -7,7 +7,7 @@
 getNumberOf(obj, name = NULL, prefix = NULL)
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 
 \item{name}{The name of a column.}
 

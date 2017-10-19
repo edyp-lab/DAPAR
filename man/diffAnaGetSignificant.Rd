@@ -8,7 +8,7 @@ differential analysis.}
 diffAnaGetSignificant(obj)
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 }
 \value{
 A MSnSet

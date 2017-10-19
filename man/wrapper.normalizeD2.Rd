@@ -7,7 +7,7 @@
 wrapper.normalizeD2(obj, method, type, scaling = FALSE, quantile = 0.15)
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 
 \item{method}{One of the following : Global Alignment (for normalizations 
 of important magnitude), Quantile Centering, Mean Centering.}
@@ -29,12 +29,12 @@ be forced to unit (variance reduction) or not.}
 data.}
 }
 \value{
-An instance of class \code{\link{MSnSet}} where the quantitative 
+An instance of class \code{MSnSet} where the quantitative 
 data in the \code{exprs()} tab has been normalized.
 }
 \description{
 Provides several methods to normalize quantitative data from
-a \code{\link{MSnSet}} object.
+a \code{MSnSet} object.
 They are organized in four main families : Strong Rescaling, 
 Median Centering, Mean Centering, Mean CenteringScaling.
 For the first family, two sub-categories are available : the sum by columns

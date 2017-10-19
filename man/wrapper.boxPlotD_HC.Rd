@@ -2,12 +2,12 @@
 % Please edit documentation in R/DescriptiveStats.R
 \name{wrapper.boxPlotD_HC}
 \alias{wrapper.boxPlotD_HC}
-\title{Wrapper to the boxplotD_HC function on an object \code{\link{MSnSet}}}
+\title{Wrapper to the boxplotD_HC function on an object \code{MSnSet}}
 \usage{
 wrapper.boxPlotD_HC(obj, dataForXAxis = "Label", group2Color = "Condition")
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 
 \item{dataForXAxis}{A vector of strings containing the names of columns 
 in \code{pData()} to print labels on X-axis (Default is "Label").}
@@ -21,7 +21,7 @@ A boxplot
 }
 \description{
 This function is a wrapper for using the boxPlotD_HC function with objects of 
-class \code{\link{MSnSet}}
+class \code{MSnSet}
 }
 \examples{
 require(DAPARdata)

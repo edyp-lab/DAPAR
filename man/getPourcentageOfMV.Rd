@@ -7,7 +7,7 @@
 getPourcentageOfMV(obj)
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 }
 \value{
 A floating number

@@ -1,10 +1,10 @@
-##' This method is a wrapper to plots from a \code{\link{MSnSet}} object a 
+##' This method is a wrapper to plots from a \code{MSnSet} object a 
 ##' histogram which represents the distribution of the 
 ##' number of missing values (NA) per lines (ie proteins).
 ##' 
 ##' @title Histogram of missing values per lines from an object 
-##' \code{\link{MSnSet}}
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' \code{MSnSet}
+##' @param obj An object of class \code{MSnSet}.
 ##' @param indLegend The indice of the column name's in \code{pData()} tab .
 ##' @param showValues A logical that indicates wether numeric values should be
 ##' drawn above the bars.
@@ -21,13 +21,13 @@ mvPerLinesHisto(qData, samplesData, indLegend, showValues)
 }
 
 
-##' This method is a wrapper to plots from a \code{\link{MSnSet}} object a 
+##' This method is a wrapper to plots from a \code{MSnSet} object a 
 ##' histogram which represents the distribution of the 
 ##' number of missing values (NA) per lines (ie proteins).
 ##' 
 ##' @title Histogram of missing values per lines from an object using highcharter
-##' \code{\link{MSnSet}}
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' \code{MSnSet}
+##' @param obj An object of class \code{MSnSet}.
 ##' @param indLegend The indice of the column name's in \code{pData()} tab .
 ##' @param showValues A logical that indicates wether numeric values should be
 ##' drawn above the bars.
@@ -189,13 +189,13 @@ mvPerLinesHisto_HC <- function(qData, samplesData, indLegend="auto", showValues=
 
 
 
-##' This method is a wrapper to plots from a \code{\link{MSnSet}} object a 
+##' This method is a wrapper to plots from a \code{MSnSet} object a 
 ##' bar plot which represents the distribution of the 
 ##' number of missing values (NA) per lines (ie proteins) and per conditions.
 ##' 
 ##' @title Bar plot of missing values per lines and per conditions from an 
-##' object \code{\link{MSnSet}}
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' object \code{MSnSet}
+##' @param obj An object of class \code{MSnSet}.
 ##' @param indLegend The indice of the column name's in \code{pData()} tab .
 ##' @param showValues A logical that indicates wether numeric values should be
 ##' drawn above the bars.
@@ -213,13 +213,13 @@ mvPerLinesHistoPerCondition(qData, samplesData, indLegend, showValues)
 }
 
 
-##' This method is a wrapper to plots (using highcharts) from a \code{\link{MSnSet}} object a 
+##' This method is a wrapper to plots (using highcharts) from a \code{MSnSet} object a 
 ##' bar plot which represents the distribution of the 
 ##' number of missing values (NA) per lines (ie proteins) and per conditions.
 ##' 
 ##' @title Bar plot of missing values per lines and per conditions from an 
-##' object \code{\link{MSnSet}}
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' object \code{MSnSet}
+##' @param obj An object of class \code{MSnSet}.
 ##' @param indLegend The indice of the column name's in \code{pData()} tab .
 ##' @param showValues A logical that indicates wether numeric values should be
 ##' drawn above the bars.
@@ -383,11 +383,11 @@ mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto",
 }
 
 
-##' This method plots from a \code{\link{MSnSet}} object a histogram of 
+##' This method plots from a \code{MSnSet} object a histogram of 
 ##' missing values.
 ##' 
-##' @title Histogram of missing values from a \code{\link{MSnSet}} object
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @title Histogram of missing values from a \code{MSnSet} object
+##' @param obj An object of class \code{MSnSet}.
 ##' @param indLegend The indices of the column name's in \code{pData()} tab.
 ##' @param showValues A logical that indicates wether numeric values should be
 ##' drawn above the bars.
@@ -405,11 +405,11 @@ mvHisto(qData, samplesData, labels, indLegend, showValues)
 }
 
 
-##' This method plots from a \code{\link{MSnSet}} object a histogram of 
+##' This method plots from a \code{MSnSet} object a histogram of 
 ##' missing values.
 ##' 
-##' @title Histogram of missing values from a \code{\link{MSnSet}} object
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @title Histogram of missing values from a \code{MSnSet} object
+##' @param obj An object of class \code{MSnSet}.
 ##' @param indLegend The indices of the column name's in \code{pData()} tab.
 ##' @param showValues A logical that indicates wether numeric values should be
 ##' drawn above the bars.
@@ -573,14 +573,14 @@ mvHisto_HC <- function(qData, samplesData, labels, indLegend="auto",
 
 
 ##' Plots a heatmap of the quantitative data. Each column represent one of
-##' the conditions in the object of class \code{\link{MSnSet}} and 
+##' the conditions in the object of class \code{MSnSet} and 
 ##' the color is proportional to the mean of intensity for each line of
 ##' the dataset.
 ##' The lines have been sorted in order to vizualize easily the different
 ##' number of missing values. A white square is plotted for missing values.
 ##' 
-##' @title Heatmap of missing values from a \code{\link{MSnSet}} object
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' @title Heatmap of missing values from a \code{MSnSet} object
+##' @param obj An object of class \code{MSnSet}.
 ##' @return A heatmap
 ##' @author Alexia Dorffer
 ##' @examples
@@ -596,7 +596,7 @@ mvImage(qData, labels)
 
 
 ##' Plots a heatmap of the quantitative data. Each column represent one of
-##' the conditions in the object of class \code{\link{MSnSet}} and 
+##' the conditions in the object of class \code{MSnSet} and 
 ##' the color is proportional to the mean of intensity for each line of
 ##' the dataset.
 ##' The lines have been sorted in order to vizualize easily the different
@@ -658,7 +658,7 @@ heatmap.DAPAR(exprso,
 ##' This method plots a scatter plot which represents the distribution of
 ##' missing values.
 ##' The colors correspond to the different conditions (slot Label in in the
-##' dataset of class \code{\link{MSnSet}}).
+##' dataset of class \code{MSnSet}).
 ##' The x-axis represent the mean of intensity for one condition and one
 ##' entity in the dataset (i. e. a protein) 
 ##' whereas the y-axis count the number of missing values for this entity
@@ -666,8 +666,8 @@ heatmap.DAPAR(exprso,
 ##' The data have been jittered for an easier vizualisation.
 ##' 
 ##' @title Distribution of missing values with respect to intensity values 
-##' from a \code{\link{MSnSet}} object
-##' @param obj An object of class \code{\link{MSnSet}}.
+##' from a \code{MSnSet} object
+##' @param obj An object of class \code{MSnSet}.
 ##' @param threshold An integer for the intensity that delimits MNAR and 
 ##' MCAR missing values.
 ##' @return A scatter plot
@@ -686,7 +686,7 @@ mvTypePlot(qData, labels, threshold)
 ##' This method plots a scatter plot which represents the distribution of
 ##' missing values.
 ##' The colors correspond to the different conditions (slot Label in in the
-##' dataset of class \code{\link{MSnSet}}).
+##' dataset of class \code{MSnSet}).
 ##' The x-axis represent the mean of intensity for one condition and one
 ##' entity in the dataset (i. e. a protein) 
 ##' whereas the y-axis count the number of missing values for this entity

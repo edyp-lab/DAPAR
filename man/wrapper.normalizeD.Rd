@@ -7,7 +7,7 @@
 wrapper.normalizeD(obj, family, method)
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 
 \item{family}{One of the following : Global Alignment, 
 Median Centering, Mean Centering, Mean Centering Scaling.}
@@ -15,13 +15,13 @@ Median Centering, Mean Centering, Mean Centering Scaling.}
 \item{method}{"overall" or "within conditions".}
 }
 \value{
-An instance of class \code{\link{MSnSet}} 
+An instance of class \code{MSnSet} 
 where the quantitative data in the \code{exprs()} tab
 has been normalized.
 }
 \description{
 Provides several methods to normalize quantitative data from
-a \code{\link{MSnSet}} object.
+a \code{MSnSet} object.
 They are organized in four main families : Global Alignment, 
 Median Centering, Mean Centering, Mean Centering Scaling.
 For the first family, two sub-categories are available : the sum by columns

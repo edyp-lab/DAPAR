@@ -4,7 +4,7 @@
 \alias{heatmap.DAPAR}
 \title{This function is inspired from the function \code{\link{heatmap.2}} 
 that displays quantitative data in the \code{exprs()} table of an object of
-class \code{\link{MSnSet}}. For more information, please refer to the help 
+class \code{MSnSet}. For more information, please refer to the help 
 of the heatmap.2 function.}
 \usage{
 heatmap.DAPAR(x, col = heat.colors(100), srtCol = NULL, labCol = NULL,

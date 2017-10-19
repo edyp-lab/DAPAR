@@ -7,17 +7,17 @@
 wrapper.CVDistD_HC(obj)
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 }
 \value{
 A density plot
 }
 \description{
 Builds a densityplot of the CV of entities in the exprs() table. 
-of an object \code{\link{MSnSet}}. The variance is calculated for each 
+of an object \code{MSnSet}. The variance is calculated for each 
 condition (Label) present
 in the dataset (see the slot \code{'Label'} in the \code{pData()} table).
-Same as the function \code{\link{wrapper.CVDistD}} but uses the package \CRANpkg{highcharter}
+Same as the function \code{\link{wrapper.CVDistD}} but uses the package \code{\link{highcharter}}
 }
 \examples{
 require(DAPARdata)

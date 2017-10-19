@@ -2,13 +2,13 @@
 % Please edit documentation in R/DescriptiveStats.R
 \name{wrapper.densityPlotD}
 \alias{wrapper.densityPlotD}
-\title{Builds a densityplot from an object of class \code{\link{MSnSet}}}
+\title{Builds a densityplot from an object of class \code{MSnSet}}
 \usage{
 wrapper.densityPlotD(obj, labelsForLegend = NULL, indData2Show = NULL,
   group2Color = "Condition")
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 
 \item{labelsForLegend}{A vector of labels to show in densityplot.}
 
@@ -25,7 +25,7 @@ A density plot
 }
 \description{
 This function is a wrapper for using the densityPlotD function with 
-objects of class \code{\link{MSnSet}}
+objects of class \code{MSnSet}
 }
 \examples{
 require(DAPARdata)

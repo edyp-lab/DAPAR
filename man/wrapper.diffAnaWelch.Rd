@@ -2,13 +2,13 @@
 % Please edit documentation in R/DiffAnalysis.R
 \name{wrapper.diffAnaWelch}
 \alias{wrapper.diffAnaWelch}
-\title{Performs a differential analysis on a \code{\link{MSnSet}} object
+\title{Performs a differential analysis on a \code{MSnSet} object
 using the Welch t-test}
 \usage{
 wrapper.diffAnaWelch(obj, condition1, condition2)
 }
 \arguments{
-\item{obj}{An object of class \code{\link{MSnSet}}.}
+\item{obj}{An object of class \code{MSnSet}.}
 
 \item{condition1}{A vector containing the names of the conditions 
 considered as condition 1.}
@@ -22,7 +22,7 @@ A dataframe with two slots : P_Value (for the p-value) and logFC
 }
 \description{
 Computes differential analysis on
-a \code{\link{MSnSet}} object, using the Welch t-test
+a \code{MSnSet} object, using the Welch t-test
 (\code{\link{t.test}{stats}}).
 }
 \examples{

@@ -8,7 +8,7 @@ pepAgregate(obj.pep, protID, method = "sum overall", matAdj = NULL,
   n = NULL)
 }
 \arguments{
-\item{obj.pep}{An object (peptides) of class \code{\link{MSnSet}}.}
+\item{obj.pep}{An object (peptides) of class \code{MSnSet}.}
 
 \item{protID}{The name of proteins ID column}
 
@@ -21,11 +21,11 @@ on all peptides belonging to proteins. Default is "sum"}
 \item{n}{The number of peptides considered for the aggregation.}
 }
 \value{
-An object of class \code{\link{MSnSet}} with proteins
+An object of class \code{MSnSet} with proteins
 }
 \description{
 Method to agregate with a method peptides to proteins on
-a \code{\link{MSnSet}} object (peptides)
+a \code{MSnSet} object (peptides)
 }
 \examples{
 require(DAPARdata)
