@@ -28,7 +28,7 @@ Description: This package contains a collection of functions for the
     visualisation and the statistical analysis of proteomic data.
 License: Artistic-2.0
 VignetteBuilder: knitr
-Depends: R (>= 3.4.1)
+Depends: R (>= 3.4.2)
 Suggests: BiocGenerics, Biobase, testthat, BiocStyle, Prostar
 Imports: MSnbase, RColorBrewer,stats,preprocessCore,Cairo,png,
         lattice,reshape2,gplots,pcaMethods,ggplot2,
