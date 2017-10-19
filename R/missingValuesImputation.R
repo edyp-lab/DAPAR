@@ -83,13 +83,15 @@ return (exprs)
 
 
 
-##' This method is xxxxxxxx
+##' This method is a wrapper of the function \code{\link{impute.detQuant}} for objects
+##' of class \code{MSnSet} 
 ##' 
-##' @title xxxxxxxxx
-##' @param obj xxxxxxxxx
-##' @param qval xxxxxxxxx
-##' @param factor xxxxxxxxx. 
-##' @return xxxxxxxxx
+##' @title Wrapper of the function \code{\link{impute.detQuant}} for objects
+##' of class \code{MSnSet}
+##' @param obj An instance of class \code{MSnSet}
+##' @param qval An expression set containing quantitative values of various replicates
+##' @param factor A scaling factor to multiply the imputation value with 
+##' @return An imputed instance of class \code{MSnSet}
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' require(DAPARdata)
@@ -206,7 +208,7 @@ wrapper.impute.pa <- function(obj, q.min = 0.025){
 ##' @param eps Same as the function \code{impute.pa} in the package \code{imp4p}
 ##' @param methodi Same as the function \code{mi.mix} in the package \code{imp4p}
 ##' @param lapala xxxxxxxxxxx
-##' @param distribution xxxxxxxxxxx
+##' @param distribution The type of distribution used. Values are \code{unif} (default) or \code{beta}.
 ##' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -283,9 +285,9 @@ wrapper.dapar.impute.mi <- function (obj, nb.iter = 3,
 
 
 ################################################
-##' This method xxxxxxxxxxx
+##' Generator of simulated values
 ##' 
-##' @title xxxxxxx
+##' @title Generator of simulated values
 ##' @param n An integer which is the number of simulation (same as in rbeta)
 ##' @param min An integer that corresponds to the lower bound of the interval
 ##' @param max An integer that corresponds to the upper bound of the interval
@@ -320,7 +322,7 @@ translatedRandomBeta <- function(n, min, max, param1=3, param2=1){
 ##' @param eps A value allowing defining the maximal value which can be 
 ##' generated. This maximal value is defined by the quantile q.min of the 
 ##' observed values distribution minus eps. Default is 0.
-##' @param distribution The type of distribution used. Values are unif or beta.
+##' @param distribution The type of distribution used. Values are \code{unif} (default) or \code{beta}.
 ##' @return The object \code{obj} which has been imputed
 ##' @author Thomas Burger, Samuel Wieczorek
 ##' @examples
@@ -348,7 +350,7 @@ wrapper.impute.pa2 <- function (obj, q.min = 0, q.norm = 3, eps = 0, distributio
 ##' 
 ##' @title Missing values imputation from a \code{MSnSet} object
 ##' @param tab An object of class \code{MSnSet}.
-##' @param conditions xxxxxxxxxxxx
+##' @param conditions A vector of conditions in the dataset
 ##' @param q.min A quantile value of the observed values allowing defining the 
 ##' maximal value which can be generated. This maximal value is defined by the
 ##' quantile q.min of the observed values distribution minus eps. 

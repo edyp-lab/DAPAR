@@ -49,7 +49,7 @@ wrapper.dapar.impute.mi(obj, nb.iter = 3, nknn = 15, selec = 600,
 
 \item{lapala}{xxxxxxxxxxx}
 
-\item{distribution}{xxxxxxxxxxx}
+\item{distribution}{The type of distribution used. Values are \code{unif} (default) or \code{beta}.}
 }
 \value{
 The \code{exprs(obj)} matrix with imputed values instead of missing values.

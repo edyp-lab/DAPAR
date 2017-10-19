@@ -24,7 +24,7 @@ standard deviation of a row in a condition).}
 generated. This maximal value is defined by the quantile q.min of the 
 observed values distribution minus eps. Default is 0.}
 
-\item{distribution}{The type of distribution used. Values are unif or beta.}
+\item{distribution}{The type of distribution used. Values are \code{unif} (default) or \code{beta}.}
 }
 \value{
 The object \code{obj} which has been imputed

@@ -10,7 +10,7 @@ impute.pa2(tab, conditions, q.min = 0, q.norm = 3, eps = 0,
 \arguments{
 \item{tab}{An object of class \code{MSnSet}.}
 
-\item{conditions}{xxxxxxxxxxxx}
+\item{conditions}{A vector of conditions in the dataset}
 
 \item{q.min}{A quantile value of the observed values allowing defining the 
 maximal value which can be generated. This maximal value is defined by the

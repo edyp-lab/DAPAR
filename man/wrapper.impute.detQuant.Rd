@@ -2,22 +2,24 @@
 % Please edit documentation in R/missingValuesImputation.R
 \name{wrapper.impute.detQuant}
 \alias{wrapper.impute.detQuant}
-\title{xxxxxxxxx}
+\title{Wrapper of the function \code{\link{impute.detQuant}} for objects
+of class \code{MSnSet}}
 \usage{
 wrapper.impute.detQuant(obj, qval = 0.025, factor = 1)
 }
 \arguments{
-\item{obj}{xxxxxxxxx}
+\item{obj}{An instance of class \code{MSnSet}}
 
-\item{qval}{xxxxxxxxx}
+\item{qval}{An expression set containing quantitative values of various replicates}
 
-\item{factor}{xxxxxxxxx.}
+\item{factor}{A scaling factor to multiply the imputation value with}
 }
 \value{
-xxxxxxxxx
+An imputed instance of class \code{MSnSet}
 }
 \description{
-This method is xxxxxxxx
+This method is a wrapper of the function \code{\link{impute.detQuant}} for objects
+of class \code{MSnSet}
 }
 \examples{
 require(DAPARdata)

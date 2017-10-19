@@ -1021,9 +1021,7 @@ CVDistD_HC <- function(qData, labels=NULL){
     }
 
     h1 <-  highchart() %>% 
-        #hc_title(text = "xxxxxx") %>% 
         my_hc_chart(chartType = "spline", zoomType="x") %>%
-        #hc_plotOptions( column = list(stacking = "") ) %>%
         hc_add_series_list(series) %>%
         hc_legend(enabled = TRUE) %>%
         hc_xAxis(title = list(text = "CV(log(Intensity))")) %>%

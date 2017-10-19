@@ -2,7 +2,7 @@
 % Please edit documentation in R/missingValuesImputation.R
 \name{translatedRandomBeta}
 \alias{translatedRandomBeta}
-\title{xxxxxxx}
+\title{Generator of simulated values}
 \usage{
 translatedRandomBeta(n, min, max, param1 = 3, param2 = 1)
 }
@@ -21,7 +21,7 @@ translatedRandomBeta(n, min, max, param1 = 3, param2 = 1)
 A vector of n simulated values
 }
 \description{
-This method xxxxxxxxxxx
+Generator of simulated values
 }
 \examples{
 translatedRandomBeta(1000, 5, 10, 1, 1)

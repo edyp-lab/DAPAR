@@ -121,7 +121,7 @@ univ_AnnotDbPkg <- function(orgdb){
 ##' package \code{DAPAR} or the function \code{groupGO} of the package \code{\link{clusterProfiler}}
 ##' @param ego_res The object returned by the function \code{enrich_GO} of the package \code{DAPAR}
 ##' or the function \code{enrichGO} of the package \code{\link{clusterProfiler}}
-##' @param organism The parameter xxx of the function
+##' @param organism The parameter OrgDb of the functions \code{\link{bitr}}, \code{\link{groupGO}} and \code{\link{enrichGO}}
 ##' @param ontology One of "MF", "BP", and "CC" subontologies
 ##' @param levels A vector of the different GO grouping levels to save
 ##' @param pvalueCutoff The qvalue cutoff (same parameter as in the function \code{enrichGO} of the package \code{\link{clusterProfiler}})

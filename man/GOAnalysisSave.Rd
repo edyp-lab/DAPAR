@@ -18,7 +18,7 @@ package \code{DAPAR} or the function \code{groupGO} of the package \code{\link{c
 \item{ego_res}{The object returned by the function \code{enrich_GO} of the package \code{DAPAR}
 or the function \code{enrichGO} of the package \code{\link{clusterProfiler}}}
 
-\item{organism}{The parameter xxx of the function}
+\item{organism}{The parameter OrgDb of the functions \code{\link{bitr}}, \code{\link{groupGO}} and \code{\link{enrichGO}}}
 
 \item{ontology}{One of "MF", "BP", and "CC" subontologies}
 
