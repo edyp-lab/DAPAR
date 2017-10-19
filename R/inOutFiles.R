@@ -148,6 +148,7 @@ data <- read.table(file, header=TRUE, sep="\t",colClasses="character")
 ##' @return A Excel file (.xlsx)
 ##' @author Samuel Wieczorek
 ##' @examples
+##' Sys.setenv("R_ZIPCMD"= Sys.which("zip"))
 ##' require(DAPARdata)
 ##' data(Exp1_R2_pept)
 ##' obj <- Exp1_R2_pept[1:1000]

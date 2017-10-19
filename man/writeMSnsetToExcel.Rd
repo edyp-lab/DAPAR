@@ -23,6 +23,7 @@ and metaData are respectively integrated into separate sheets in
 the Excel file).
 }
 \examples{
+Sys.setenv("R_ZIPCMD"= Sys.which("zip"))
 require(DAPARdata)
 data(Exp1_R2_pept)
 obj <- Exp1_R2_pept[1:1000]
