@@ -151,9 +151,9 @@ palette("default")
 
 
 
-##' Boxplot for quantitative proteomics data using the library \code{\link{highcharter}}
+##' Boxplot for quantitative proteomics data using the library \code{highcharter}
 ##' 
-##' @title Builds a boxplot from a dataframe using the library \code{\link{highcharter}}
+##' @title Builds a boxplot from a dataframe using the library \code{highcharter}
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param dataForXAxis A vector containing the types of replicates 
 ##' to use as X-axis. Available values are: Label, Analyt.Rep,
@@ -392,7 +392,7 @@ compareNormalizationD(qDataBefore, qDataAfter, labelsForLegend, indData2Show,
 
 ##' Wrapper to the function that plot to compare the quantitative proteomics 
 ##' data before and after normalization. Same as the function \link{wrapper.compareNormalizationD}
-##' but uses the package \code{\link{highcharter}}
+##' but uses the package \code{highcharter}
 ##' 
 ##' @title Builds a plot from a dataframe
 ##' @param objBefore A dataframe that contains quantitative data before 
@@ -518,10 +518,10 @@ palette("default")
 
 
 ##' Plot to compare the quantitative proteomics data before and after 
-##' normalization using the library \code{\link{highcharter}}
+##' normalization using the library \code{highcharter}
 ##' 
 ##' @title Builds a plot from a dataframe. Same as compareNormalizationD but 
-##' uses the library \code{\link{highcharter}}
+##' uses the library \code{highcharter}
 ##' @param qDataBefore A dataframe that contains quantitative data before 
 ##' normalization.
 ##' @param qDataAfter A dataframe that contains quantitative data after 
@@ -654,7 +654,7 @@ densityPlotD(qData, labelsForLegend, indData2Show,group2Color)
 
 ##' This function is a wrapper for using the densityPlotD function with 
 ##' objects of class \code{MSnSet}. Same as the function \code{\link{wrapper.densityPlotD}}
-##' but uses the package \code{\link{highcharter}}
+##' but uses the package \code{highcharter}
 ##' 
 ##' @title Builds a densityplot from an object of class \code{MSnSet}
 ##' @param obj An object of class \code{MSnSet}.
@@ -776,7 +776,7 @@ legend("topleft"
 
 
 ##' Densityplot of quantitative proteomics data over samples. Same as the function \code{\link{densityPlotD}}
-##' but uses the package \code{\link{highcharter}}
+##' but uses the package \code{highcharter}
 ##' 
 ##' @title Builds a densityplot from a dataframe
 ##' @param qData A dataframe that contains quantitative data.
@@ -893,7 +893,7 @@ CVDistD(qData, labels)
 ##' of an object \code{MSnSet}. The variance is calculated for each 
 ##' condition (Label) present
 ##' in the dataset (see the slot \code{'Label'} in the \code{pData()} table).
-##' Same as the function \code{\link{wrapper.CVDistD}} but uses the package \code{\link{highcharter}}
+##' Same as the function \code{\link{wrapper.CVDistD}} but uses the package \code{highcharter}
 ##' 
 ##' @title Distribution of CV of entities
 ##' @param obj An object of class \code{MSnSet}.
@@ -989,7 +989,7 @@ legend("topright"
 ##' Builds a densityplot of the CV of entities in the exprs() table
 ##' of a object. The CV is calculated for each condition (Label) present
 ##' in the dataset (see the slot \code{'Label'} in the \code{pData()} table)
-##' Same as the function \code{CVDistD} but uses the package \code{\link{highcharter}}
+##' Same as the function \code{CVDistD} but uses the package \code{highcharter}
 ##' @title Distribution of CV of entities
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param labels A vector of the conditions (labels) (one label per sample).
@@ -1066,7 +1066,7 @@ corrMatrixD(qData, samplesData, rate)
 }
 
 ##' Builds a correlation matrix based on a \code{MSnSet} object. 
-##' Same as the function \code{\link{wrapper.corrMatrixD}} but uses the package \code{\link{highcharter}}
+##' Same as the function \code{\link{wrapper.corrMatrixD}} but uses the package \code{highcharter}
 ##' 
 ##' @title Displays a correlation matrix of the quantitative data of the
 ##' \code{exprs()} table
@@ -1137,7 +1137,7 @@ plot(d)
 
 
 ##' Correlation matrix based on a \code{MSnSet} object. Same as the 
-##' function \link{corrMatrixD} but uses the package \code{\link{highcharter}}
+##' function \link{corrMatrixD} but uses the package \code{highcharter}
 ##' 
 ##' @title Displays a correlation matrix of the quantitative data of the
 ##' \code{exprs()} table.

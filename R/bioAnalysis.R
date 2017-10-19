@@ -164,7 +164,7 @@ GOAnalysisSave <- function (obj, ggo_res=NULL, ego_res=NULL, organism, ontology,
 
 ##' A barplot of GO classification analysis
 ##' 
-##' @title A barplot which shows the result of a GO classification, using the package \code{\link{highcharter}}
+##' @title A barplot which shows the result of a GO classification, using the package \code{highcharter}
 ##' @param ggo The result of the GO classification, provides either by the function
 ##' \code{group_GO} in the package \code{DAPAR} or the function \code{groupGO} 
 ##' in the package \code{\link{clusterProfiler}}
@@ -199,7 +199,7 @@ return(h1)
 
 ##' A barplot of GO enrichment analysis
 ##' 
-##' @title A barplot that shows the result of a GO enrichment, using the package \code{\link{highcharter}}
+##' @title A barplot that shows the result of a GO enrichment, using the package \code{highcharter}
 ##' @param ego The result of the GO enrichment, provides either by the function
 ##' \code{enrichGO} in the package \code{DAPAR} or the function \code{enrichGO} 
 ##' of the package \code{\link{clusterProfiler}}
@@ -261,7 +261,7 @@ barplotEnrichGO_HC <- function(ego, maxRes = 5, title=NULL){
 
 ##' A scatter plot of GO enrichment analysis
 ##' 
-##' @title A dotplot that shows the result of a GO enrichment, using the package \code{\link{highcharter}}
+##' @title A dotplot that shows the result of a GO enrichment, using the package \code{highcharter}
 ##' @param ego The result of the GO enrichment, provides either by the function
 ##' enrichGO in \code{DAPAR} or the function \code{enrichGO} of the packaage \code{\link{clusterProfiler}}
 ##' @param maxRes The maximum number of categories to display in the plot

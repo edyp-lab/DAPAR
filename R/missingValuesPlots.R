@@ -310,7 +310,7 @@ x <- barplot(m,
 ##' This method plots a bar plot which represents the distribution of the 
 ##' number of missing values (NA) per lines (ie proteins) and per conditions.
 ##' Same as the function \link{mvPerLinesHistoPerCondition} but uses the package
-##' \CRANpkg{highcharter}.
+##' \code{highcharter}.
 ##' 
 ##' @title Bar plot of missing values per lines and per condition
 ##' @param qData A dataframe that contains quantitative data.
@@ -498,7 +498,7 @@ graphics::text(x, -3,
 
 
 ##' This method plots a histogram of missing values. Same as the function \code{mvHisto}
-##' but uses the package \CRANpkg{highcharter}
+##' but uses the package \code{highcharter}
 ##' 
 ##' @title Histogram of missing values
 ##' @param qData A dataframe that contains quantitative data.

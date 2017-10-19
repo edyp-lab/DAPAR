@@ -51,7 +51,7 @@ return(count)
 
 
 ##' Plots a barplot of proportion of contaminants and reverse. Same as the function
-##' \code{proportionConRev} but uses the package \CRANpkg{highcharter}.
+##' \code{proportionConRev} but uses the package \code{highcharter}
 ##' 
 ##' @title Barplot of proportion of contaminants and reverse
 ##' @param nCont The number of contaminants identified in the dataset.
