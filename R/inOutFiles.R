@@ -141,6 +141,8 @@ data <- read.table(file, header=TRUE, sep="\t",colClasses="character")
 ##' phenoData
 ##' and metaData are respectively integrated into separate sheets in
 ##' the Excel file).
+##' The colored cells in the experimental data correspond to the original missing values
+##' which have been imputed.
 ##' 
 ##' @title This function exports a \code{MSnSet} object to a Excel file.
 ##' @param obj An object of class \code{MSnSet}.
@@ -157,6 +159,8 @@ data <- read.table(file, header=TRUE, sep="\t",colClasses="character")
 ##' }
 writeMSnsetToExcel <- function(obj, filename)
 {
+    missValuesStyle <- openxlsx::createStyle(fgFill = "lightblue")
+    
     #require(openxlsx)
     name <- paste(filename, ".xlsx", sep="")
     wb <- openxlsx::createWorkbook(name)
@@ -164,6 +168,14 @@ writeMSnsetToExcel <- function(obj, filename)
     openxlsx::addWorksheet(wb, "Quantitative Data")
     openxlsx::writeData(wb, sheet=n, cbind(ID = rownames(Biobase::exprs(obj)),
                                  Biobase::exprs(obj)), rowNames = FALSE)
+    if (!is.null(obj@experimentData@other$isMissingValues)) {
+        test <- which(obj@experimentData@other$isMissingValues==1, arr.ind=TRUE)
+    } else {
+        test <- which(is.na(exprs(obj)), arr.ind=TRUE)
+    }
+    
+    openxlsx::addStyle(wb, sheet=n, cols = test[,"col"]+1, rows = test[,"row"]+1, style = missValuesStyle)
+    
     #bodyStyleNumber <- createStyle(numFmt = "NUMBER")
     #addStyle(wb, sheet=1, bodyStyleNumber, rows = 2:nrow(Biobase::exprs(obj)), 
     #cols=2:ncol(Biobase::exprs(obj)),gridExpand = TRUE)
