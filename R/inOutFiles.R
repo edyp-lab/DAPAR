@@ -169,10 +169,7 @@ writeMSnsetToExcel <- function(obj, filename)
     openxlsx::writeData(wb, sheet=n, cbind(ID = rownames(Biobase::exprs(obj)),
                                  Biobase::exprs(obj)), rowNames = FALSE)
     if (!is.null(obj@experimentData@other$isMissingValues)) {
-        
-        test <- which(obj@experimentData@other$isMissingValues==
-                          1, arr.ind=TRUE)
-        
+        test <- which(obj@experimentData@other$isMissingValues==1, arr.ind=TRUE)
     } else {
         test <- which(is.na(exprs(obj)), arr.ind=TRUE)
     }
