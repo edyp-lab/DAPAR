@@ -218,3 +218,30 @@ my_hc_chart <- function(hc,  chartType,zoomType="None"){
                verticalAlign = 'top')
            ))
 }
+
+
+
+##' This function retrieves the indices of non-zero elements in sparse matrices
+##' of class dgCMatrix from package Matrix. Thi
+##' 
+##' @title Retrieve the indices of non-zero elements in sparse matrices
+##' @param x A sparse matrix of class dgCMatrix
+##' @return A two-column matrix
+##' @author Samuel Wieczorek
+##' @cite This fucntion is largely inspired from the package RINGO
+##' @examples
+##' library(Matrix)
+##' mat <- Matrix(c(0,0,0,0,0,1,0,0,1,1,0,0,0,0,1),nrow=5, byrow=TRUE, sparse=TRUE)
+##' res <- nonzero(mat)
+nonzero <- function(x){
+    ## function to get a two-column matrix containing the indices of the
+    ### non-zero elements in a "dgCMatrix" class matrix
+    stopifnot(inherits(x, "dgCMatrix"))
+    if (all(x@p == 0))
+        return(matrix(0, nrow=0, ncol=2,
+                      dimnames=list(character(0), c("row","col"))))
+    res <- cbind(x@i+1, rep(seq(dim(x)[2]), diff(x@p)))
+    colnames(res) <- c("row", "col")
+    res <- res[x@x != 0, , drop = FALSE]
+    return(res)
+}
