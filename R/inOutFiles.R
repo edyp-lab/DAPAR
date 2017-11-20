@@ -159,7 +159,6 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
 ##' }
 writeMSnsetToExcel <- function(obj, filename)
 {
-    require(Matrix)
     missValuesStyle <- openxlsx::createStyle(fgFill = "lightblue")
     
     #require(openxlsx)
@@ -259,3 +258,6 @@ listSheets <- function(file){
     return(openxlsx::getSheetNames(file))
     
 }
+
+
+
