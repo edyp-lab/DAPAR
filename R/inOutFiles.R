@@ -260,3 +260,17 @@ listSheets <- function(file){
     
 }
 
+
+writeMSnsetToCSV <- function(obj, fname){
+    
+    #fname <- paste(tempdir(),fname,  sep="/")
+    write.csv(Biobase::exprs(obj), paste(tempdir(), "exprs.csv", sep='/'))
+    write.csv(Biobase::fData(obj), paste(tempdir(), "fData.csv", sep='/'))
+    write.csv(Biobase::pData(obj), paste(tempdir(), "pData.csv", sep='/'))
+    files <- c(paste(tempdir(), "exprs.csv", sep='/'),
+               paste(tempdir(), "fData.csv", sep='/'),
+               paste(tempdir(), "pData.csv", sep='/'))
+    zip(fname, files, zip = Sys.getenv("R_ZIPCMD", "zip"))
+    
+    return(fname)
+}
