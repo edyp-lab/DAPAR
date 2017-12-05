@@ -50,6 +50,7 @@ importFrom("clusterProfiler", "bitr", "enrichGO", "groupGO")
 
 export(
 "writeMSnsetToExcel",
+"writeMSnsetToCSV",
 "createMSnset",
 "readExcel",
 "listSheets"
