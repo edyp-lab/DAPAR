@@ -54,6 +54,7 @@ return(count)
 ##' \code{proportionConRev} but uses the package \code{highcharter}
 ##' 
 ##' @title Barplot of proportion of contaminants and reverse
+##' @param nBoth The number of both contaminants and reverse identified in the dataset.
 ##' @param nCont The number of contaminants identified in the dataset.
 ##' @param nRev The number of reverse entities identified in the dataset.
 ##' @param lDataset The total length (number of rows) of the dataset
@@ -122,11 +123,32 @@ return(obj)
 }
 
 
-
+##' This function removes lines in the dataset based on prefix strings (contaminants, reverse or both).
+##' 
+##' @title Removes lines in the dataset based on a prefix strings (contaminants, reverse or both).
+##' @param obj An object of class \code{MSnSet}.
+##' @param idCont2Delete The name of the column that correspond to the 
+##' contaminants to filter
+##' @param prefix_Cont A character string that is the prefix for the contaminants to find in the data
+##' @param idRev2Delete The name of the column that correspond to the 
+##' reverse data to filter
+##' @param prefix_Rev A character string that is the prefix for the reverse to find in the data
+##' @return An list of 4 items :
+##' obj : an object of class \code{MSnSet} in which the lines have been deleted
+##' deleted.both : an object of class \code{MSnSet} which contains the deleted lines 
+##' corresponding to both contaminants and reverse, 
+##' deleted.contaminants : n object of class \code{MSnSet} which contains the deleted lines 
+##' corresponding to contaminnats, 
+##' deleted.reverse : an object of class \code{MSnSet} which contains the deleted lines 
+##' corresponding to reverse,
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' StringBasedFiltering(Exp1_R25_pept, 'Potential.contaminant', '+', 'Reverse', '+')
 StringBasedFiltering <- function(obj, 
                                  idCont2Delete=NULL, prefix_Cont=NULL, 
-                                 idRev2Delete=NULL, prefix_Rev=NULL,
-                                 verbose=TRUE){
+                                 idRev2Delete=NULL, prefix_Rev=NULL){
     #Search for both
     if ((!is.null(idCont2Delete) || (idCont2Delete != "")) &&
         (!is.null(idRev2Delete) || (idRev2Delete != ""))) {
