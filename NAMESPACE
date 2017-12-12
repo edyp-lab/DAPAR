@@ -75,6 +75,7 @@ export(
 ,"mvFilterGetIndices"
 ,"removeLines"
 ,"deleteLinesFromIndices"
+,"StringBasedFiltering"
 ,"getIndicesOfLinesToRemove"
 ,"wrapper.normalizeD2","normalizeD2"
 ,"wrapper.compareNormalizationD","compareNormalizationD"

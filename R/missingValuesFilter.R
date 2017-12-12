@@ -61,19 +61,20 @@ return(count)
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' proportionConRev_HC(10, 20, 100)
-proportionConRev_HC <- function(nCont=0, nRev=0, lDataset=0){
+proportionConRev_HC <- function(nBoth = 0, nCont=0, nRev=0, lDataset=0){
     if (is.null(nCont) || is.null(nRev) || is.null(lDataset)){return(NULL)}
     
-  pctContaminants <- 100 * round(nCont/lDataset,  digits=4)
+    pctBoth <- 100 * round(nBoth/lDataset,  digits=4)
+    pctContaminants <- 100 * round(nCont/lDataset,  digits=4)
     pctReverse <- 100 * round(nRev/lDataset,  digits=4)
     
-    counts <- c(lDataset-nCont-nRev, nCont, nRev)
-    slices <- c(100-pctContaminants-pctReverse, pctContaminants, pctReverse ) 
-    lbls <- c("Quantitative data", "Contaminants", "Reverse")
-    pct <- c(100-pctContaminants-pctReverse, pctContaminants, pctReverse )
+    counts <- c(lDataset-nCont-nRev-nBoth, nCont, nRev, nBoth)
+    slices <- c(100-pctContaminants-pctReverse-pctBoth, pctContaminants, pctReverse ,pctBoth) 
+    lbls <- c("Quantitative data", "Contaminants", "Reverse", "Both contaminants & Reverse")
+    pct <- c(100-pctContaminants-pctReverse-pctBoth, pctContaminants, pctReverse  ,pctBoth)
     lbls <- paste(lbls, " (", counts, " lines)", sep="") 
 
-    mydata <- data.frame(test=c(100-pctContaminants-pctReverse, pctContaminants, pctReverse ))
+    mydata <- data.frame(test=c(100-pctContaminants-pctReverse-pctBoth, pctContaminants, pctReverse  ,pctBoth))
     
     highchart() %>% 
         my_hc_chart(chartType = "bar") %>% 
@@ -119,6 +120,78 @@ if ((prefix == "") || is.null(prefix)) {
 
 return(obj)
 }
+
+
+
+StringBasedFiltering <- function(obj, 
+                                 idCont2Delete=NULL, prefix_Cont=NULL, 
+                                 idRev2Delete=NULL, prefix_Rev=NULL,
+                                 verbose=TRUE){
+    #Search for both
+    if ((!is.null(idCont2Delete) || (idCont2Delete != "")) &&
+        (!is.null(idRev2Delete) || (idRev2Delete != ""))) {
+        indContaminants <- getIndicesOfLinesToRemove(obj,idCont2Delete,  prefix_Cont)
+        indReverse <- getIndicesOfLinesToRemove(obj, idRev2Delete, prefix_Rev)
+        indBoth <- intersect(indContaminants, indReverse)
+        
+        if (!is.null(indBoth)){
+            if (length(indBoth) > 0)  {
+                deleted.both <- obj[indBoth]
+                
+                obj <- deleteLinesFromIndices(obj, indBoth, 
+                                               paste("\"", 
+                                                     length(indBoth), 
+                                                     " both contaminants and reverse were removed from dataset.\"",
+                                                     sep="")
+                )
+            }
+        }
+    }
+    
+    #Search for contaminants
+    if ((!is.null(idCont2Delete) || (idCont2Delete != ""))) {
+        indContaminants <- getIndicesOfLinesToRemove(obj,idCont2Delete,  prefix_Cont)
+        
+        if (!is.null(indContaminants)){
+            if (length(indContaminants) > 0)  {
+                deleted.contaminants <- obj[indContaminants]
+                
+                obj <- deleteLinesFromIndices(obj, indContaminants, 
+                                               paste("\"", 
+                                                     length(indContaminants), 
+                                                     " contaminants were removed from dataset.\"",
+                                                     sep="")
+                )
+            }
+        }
+    }
+    
+    
+    #Search for reverse
+    if ((!is.null(idRev2Delete) || (idRev2Delete != ""))) {
+        indReverse <- getIndicesOfLinesToRemove(obj, idRev2Delete, prefix_Rev)
+        
+        if (!is.null(indReverse)){
+            if (length(indReverse) > 0)  {
+                deleted.reverse <- obj[indReverse]
+                obj <- deleteLinesFromIndices(obj, indReverse, 
+                                               paste("\"", 
+                                                     length(indReverse), 
+                                                     " reverse were removed from dataset.\"",
+                                                     sep="")
+                )
+            }
+        }
+    }
+    
+    
+    return(list(obj=obj, 
+                deleted.both=deleted.both, 
+                deleted.contaminants=deleted.contaminants, 
+                deleted.reverse=deleted.reverse))
+}
+
+
 
 ##' This function returns the indice of the lines to delete, based on a 
 ##' prefix string
