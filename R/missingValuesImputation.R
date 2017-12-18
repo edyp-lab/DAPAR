@@ -179,8 +179,8 @@ impute.detQuant <- function(qData, values){
 ##' dat <- wrapper.impute.pa(dat)
 wrapper.impute.pa <- function(obj, q.min = 0.025){
     cond <- as.factor(Biobase::pData(obj)$Label)
-    Biobase::exprs(obj) <- impute.pa(Biobase::exprs(obj), conditions=cond, q.min = q.min, q.norm=3,  eps=0)
-
+    res <- impute.pa(Biobase::exprs(obj), conditions=cond, q.min = q.min, q.norm=3,  eps=0)
+    Biobase::exprs(obj) <- res[["tab.imp"]]
     return (obj)
 }
 
