@@ -117,5 +117,6 @@ export(
 ,"barplotGroupGO_HC"
 
 ,"my_hc_ExportMenu"
+,"nonzero"
 
 )
