@@ -9,7 +9,7 @@ readExcel(file, extension, sheet)
 \arguments{
 \item{file}{The name of the Excel file.}
 
-\item{extension}{ddddd}
+\item{extension}{The extension of the file}
 
 \item{sheet}{The name of the sheet}
 }

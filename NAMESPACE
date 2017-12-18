@@ -39,7 +39,7 @@ importFrom("limma", "lmFit", "eBayes", "topTable", "makeContrasts", "contrasts.f
 importFrom("pcaMethods", "completeObs", "pca")
 importFrom("scales", "alpha")
 importFrom("grDevices", "colorRampPalette", "palette", "heat.colors")
-importFrom("utils", "read.csv", "read.table", "de", "str")
+importFrom("utils", "read.csv", "read.table", "de", "str","write.csv", "zip")
 importFrom("lme4", "getME")
 importFrom("openxlsx", "getSheetNames", "createWorkbook", "addWorksheet", "writeData", "saveWorkbook")
 import("readxl")

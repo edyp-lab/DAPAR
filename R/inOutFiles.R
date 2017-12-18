@@ -231,7 +231,7 @@ writeMSnsetToExcel <- function(obj, filename)
 ##' 
 ##' @title This function reads a sheet of an Excel file and put the data into a data.frame.
 ##' @param file The name of the Excel file.
-##' @param extension ddddd
+##' @param extension The extension of the file
 ##' @param sheet The name of the sheet
 ##' @return A data.frame
 ##' @author Samuel Wieczorek
@@ -261,6 +261,20 @@ listSheets <- function(file){
 }
 
 
+##' This function exports a MSnset dataset into three csv files compressed in a zip file
+##' 
+##' @title Exports a MSnset dataset into a zip archive containing three zipped CSV files.
+##' @param obj An object of class \code{MSnSet}.
+##' @param fname The name of the archive file.
+##' @return A compressed file
+##' @author Samuel Wieczorek
+##' @examples
+##' \donttest{
+##' require(DAPARdata)
+##' data(Exp1_R2_pept)
+##' obj <- Exp1_R2_pept[1:1000]
+##' writeMSnsetToCSV(obj, "foo")
+##' }
 writeMSnsetToCSV <- function(obj, fname){
     
     #fname <- paste(tempdir(),fname,  sep="/")
