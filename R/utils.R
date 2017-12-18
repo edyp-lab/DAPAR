@@ -228,7 +228,7 @@ my_hc_chart <- function(hc,  chartType,zoomType="None"){
 ##' @param x A sparse matrix of class dgCMatrix
 ##' @return A two-column matrix
 ##' @author Samuel Wieczorek
-##' @cite This fucntion is largely inspired from the package RINGO
+##' @cite This function is largely inspired from the package RINGO
 ##' @examples
 ##' library(Matrix)
 ##' mat <- Matrix(c(0,0,0,0,0,1,0,0,1,1,0,0,0,0,1),nrow=5, byrow=TRUE, sparse=TRUE)
@@ -236,6 +236,7 @@ my_hc_chart <- function(hc,  chartType,zoomType="None"){
 nonzero <- function(x){
     ## function to get a two-column matrix containing the indices of the
     ### non-zero elements in a "dgCMatrix" class matrix
+    
     stopifnot(inherits(x, "dgCMatrix"))
     if (all(x@p == 0))
         return(matrix(0, nrow=0, ncol=2,
