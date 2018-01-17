@@ -246,3 +246,28 @@ nonzero <- function(x){
     res <- res[x@x != 0, , drop = FALSE]
     return(res)
 }
+
+
+
+##' This function overloads the brackets to select lines of dataframes in a MSnset file. It takes 
+##' into account the slots experimentData / other / OriginOfValues
+##' 
+##' @title Selects lines of dataframes in a MSnset file
+##' @param obj A MSnset object
+##' @param lineIndices The indices of lines to be extracted
+##' @return A MSnset object 
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' res <- tabOperator(Exp1_R25_pept, c(1:10))
+tabOperator <- function(obj, lineIndices){
+    
+    tmp <- obj[lineIndices]
+    if (!is.null(tmp@experimentData@other$OriginOfValues)){
+        tmp@experimentData@other$OriginOfValues <- tmp@experimentData@other$OriginOfValues[lineIndices,]
+    }
+    
+   
+    return(tmp)
+}

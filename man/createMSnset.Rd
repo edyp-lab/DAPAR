@@ -5,7 +5,8 @@
 \title{Creates an object of class \code{MSnSet} from text file}
 \usage{
 createMSnset(file, metadata = NULL, indExpData, indFData, indiceID = NULL,
-  logData = FALSE, replaceZeros = FALSE, pep_prot_data = NULL)
+  indexForOriginOfValue = NULL, logData = FALSE, replaceZeros = FALSE,
+  pep_prot_data = NULL)
 }
 \arguments{
 \item{file}{The name of a tab-separated file that contains the data.}
@@ -22,6 +23,8 @@ rows for the \code{exprs()} and \code{fData()} tables}
 
 \item{indiceID}{The indice of the column containing the ID of entities 
 (peptides or proteins)}
+
+\item{indexForOriginOfValue}{xxxxxxxxxxx}
 
 \item{logData}{A boolean value to indicate if the data have to be
 log-transformed (Default is FALSE)}
@@ -52,7 +55,7 @@ metadata = read.table(metadataFile, header=TRUE, sep="\\t", as.is=TRUE)
 indExpData <- c(56:61)
 indFData <- c(1:55,62:71)
 indiceID <- 64
-createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, pep_prot_data = "peptide")
+createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, indexForOriginOfValue = NULL, pep_prot_data = "peptide")
 }
 \author{
 Florence Combes, Samuel Wieczorek

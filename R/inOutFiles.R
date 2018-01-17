@@ -16,6 +16,7 @@
 ##' rows for the \code{exprs()} and \code{fData()} tables
 ##' @param indiceID The indice of the column containing the ID of entities 
 ##' (peptides or proteins)
+##' @param indexForOriginOfValue xxxxxxxxxxx
 ##' @param logData A boolean value to indicate if the data have to be
 ##' log-transformed (Default is FALSE)
 ##' @param replaceZeros A boolean value to indicate if the 0 and NaN values of
@@ -33,8 +34,9 @@
 ##' indExpData <- c(56:61)
 ##' indFData <- c(1:55,62:71)
 ##' indiceID <- 64
-##' createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, pep_prot_data = "peptide")
-createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL, 
+##' createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, indexForOriginOfValue = NULL, pep_prot_data = "peptide")
+createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
+                         indexForOriginOfValue = NULL,
                          logData=FALSE, replaceZeros=FALSE,
                          pep_prot_data=NULL){
     
@@ -124,11 +126,24 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
     obj@experimentData@other$mvFilter.threshold <-NULL
     obj@experimentData@other$imputation.method <-NULL
     
-    if (is.null(obj@experimentData@other$isMissingValues)){
-        obj@experimentData@other$isMissingValues <- 
-            Matrix::Matrix(as.numeric(is.na(obj)),
-                           nrow = nrow(obj), 
-                           sparse=TRUE)
+    
+    
+    if (is.null(obj@experimentData@other$OriginOfValues)){
+        
+        if (!is.null(indexForOriginOfValue))
+            {
+            obj@experimentData@other$OriginOfValues <- data[,indexForOriginOfValue]
+            rownames(obj@experimentData@other$OriginOfValues) <- rownames(exprs(obj))
+            }
+        
+        obj@experimentData@other$OriginOfValues[is.na(obj)] <-  "NA"
+        obj@experimentData@other$OriginOfValues[is.na(obj@experimentData@other$OriginOfValues)] <-  "unknown"
+        #obj@experimentData@other$OriginOfValues <- 
+        #    Matrix::Matrix(as.numeric(is.na(obj)), nrow = nrow(obj), sparse=TRUE)
+        
+        
+        
+        
     }
     
     return(obj)
@@ -170,7 +185,7 @@ writeMSnsetToExcel <- function(obj, filename)
     openxlsx::writeData(wb, sheet=n, cbind(ID = rownames(Biobase::exprs(obj)),
                                            Biobase::exprs(obj)), rowNames = FALSE)
     
-    mat <- obj@experimentData@other$isMissingValues
+    mat <- obj@experimentData@other$OriginOfValues
     if (!is.null(mat)){
         test <- nonzero(mat)
     } else {

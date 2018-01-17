@@ -149,6 +149,8 @@ return(obj)
 StringBasedFiltering <- function(obj, 
                                  idCont2Delete=NULL, prefix_Cont=NULL, 
                                  idRev2Delete=NULL, prefix_Rev=NULL){
+    
+    deleted.both <- deleted.contaminants <- deleted.reverse <- NULL
     #Search for both
     if ((!is.null(idCont2Delete) || (idCont2Delete != "")) &&
         (!is.null(idRev2Delete) || (idRev2Delete != ""))) {
@@ -158,8 +160,8 @@ StringBasedFiltering <- function(obj,
         
         if (!is.null(indBoth)){
             if (length(indBoth) > 0)  {
-                deleted.both <- obj[indBoth]
-                
+                deleted.both <- tabOperator(obj,indBoth)
+
                 obj <- deleteLinesFromIndices(obj, indBoth, 
                                                paste("\"", 
                                                      length(indBoth), 
@@ -176,7 +178,7 @@ StringBasedFiltering <- function(obj,
         
         if (!is.null(indContaminants)){
             if (length(indContaminants) > 0)  {
-                deleted.contaminants <- obj[indContaminants]
+                deleted.contaminants <- tabOperator(obj,indContaminants)
                 
                 obj <- deleteLinesFromIndices(obj, indContaminants, 
                                                paste("\"", 
@@ -195,7 +197,8 @@ StringBasedFiltering <- function(obj,
         
         if (!is.null(indReverse)){
             if (length(indReverse) > 0)  {
-                deleted.reverse <- obj[indReverse]
+                deleted.reverse <- tabOperator(obj,indReverse)
+                
                 obj <- deleteLinesFromIndices(obj, indReverse, 
                                                paste("\"", 
                                                      length(indReverse), 
@@ -286,7 +289,7 @@ mvFilter <- function(obj,type, th, processText=NULL )
 
     keepThat <- mvFilterGetIndices(obj,type, th)
 
-obj <- obj[keepThat,]
+obj <- tabOperator(obj,keepThat)
 
     obj@processingData@processing <- 
         c(obj@processingData@processing, processText)
@@ -325,11 +328,11 @@ mvFilterFromIndices <- function(obj,keepThat=NULL, processText="" )
 {
 
 if (is.null(keepThat)) {return(obj)}
-obj <- obj[keepThat,]
+obj <- tabOperator(obj,keepThat)
 
-if (!is.null(obj@experimentData@other$isMissingValues)){
-    obj@experimentData@other$isMissingValues <- obj@experimentData@other$isMissingValues[keepThat,]
-}
+# if (!is.null(obj@experimentData@other$OriginOfValues)){
+#     obj@experimentData@other$OriginOfValues <- obj@experimentData@other$OriginOfValues[keepThat,]
+# }
 obj@processingData@processing <- 
     c(obj@processingData@processing, processText)
 
@@ -359,10 +362,7 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
 {
     
     if (is.null(deleteThat)) {return(obj)}
-    obj <- obj[-deleteThat,]
-    if (!is.null(obj@experimentData@other$isMissingValues)){
-        obj@experimentData@other$isMissingValues <- obj@experimentData@other$isMissingValues[-deleteThat,]
-    }
+    obj <- tabOperator(obj,-deleteThat)
     
     obj@processingData@processing <-  c(obj@processingData@processing, processText)
     if (grepl("contaminants", processText)){obj@experimentData@other$contaminantsRemoved <- TRUE}
