@@ -127,25 +127,25 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
     obj@experimentData@other$imputation.method <-NULL
     
     
+   if (!is.null(indexForOriginOfValue))
+        {
+            OriginOfValues <- data[,indexForOriginOfValue]
+        }else {   
+            OriginOfValues <- data.frame(matrix(rep("unknown", dim(exprs(obj))[1]*dim(exprs(obj))[2]), 
+                                                nrow=nrow(exprs(obj)),
+                                                ncol=ncol(exprs(obj))))
+        }
+    OriginOfValues[is.na(obj)] <-  "NA"
+    #OriginOfValues[is.na(OriginOfValues)] <-  "unknown"
+    rownames(OriginOfValues) <- rownames(exprs(obj))
+    colnames(OriginOfValues) <- paste0("OriginOfValue",colnames(exprs(obj)))
     
-    if (is.null(obj@experimentData@other$OriginOfValues)){
-        
-        if (!is.null(indexForOriginOfValue))
-            {
-            obj@experimentData@other$OriginOfValues <- data[,indexForOriginOfValue]
-            rownames(obj@experimentData@other$OriginOfValues) <- rownames(exprs(obj))
-            }
-        
-        obj@experimentData@other$OriginOfValues[is.na(obj)] <-  "NA"
-        obj@experimentData@other$OriginOfValues[is.na(obj@experimentData@other$OriginOfValues)] <-  "unknown"
-        #obj@experimentData@other$OriginOfValues <- 
-        #    Matrix::Matrix(as.numeric(is.na(obj)), nrow = nrow(obj), sparse=TRUE)
-        
-        
-        
-        
-    }
-    
+    indMin <- length(colnames(fData(obj)))
+    indMax <- length(colnames(fData(obj))) + length(OriginOfValues)
+    fData(obj) <- cbind(fData(obj), OriginOfValues)
+          
+    print(colnames(OriginOfValues))
+    obj@experimentData@other$OriginOfValues <- colnames(OriginOfValues)
     return(obj)
 }
 

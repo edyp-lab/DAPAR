@@ -160,7 +160,7 @@ StringBasedFiltering <- function(obj,
         
         if (!is.null(indBoth)){
             if (length(indBoth) > 0)  {
-                deleted.both <- tabOperator(obj,indBoth)
+                deleted.both <- obj[indBoth]
 
                 obj <- deleteLinesFromIndices(obj, indBoth, 
                                                paste("\"", 
@@ -178,7 +178,7 @@ StringBasedFiltering <- function(obj,
         
         if (!is.null(indContaminants)){
             if (length(indContaminants) > 0)  {
-                deleted.contaminants <- tabOperator(obj,indContaminants)
+                deleted.contaminants <- obj[indContaminants]
                 
                 obj <- deleteLinesFromIndices(obj, indContaminants, 
                                                paste("\"", 
@@ -197,7 +197,7 @@ StringBasedFiltering <- function(obj,
         
         if (!is.null(indReverse)){
             if (length(indReverse) > 0)  {
-                deleted.reverse <- tabOperator(obj,indReverse)
+                deleted.reverse <- obj[indReverse]
                 
                 obj <- deleteLinesFromIndices(obj, indReverse, 
                                                paste("\"", 
@@ -289,7 +289,7 @@ mvFilter <- function(obj,type, th, processText=NULL )
 
     keepThat <- mvFilterGetIndices(obj,type, th)
 
-obj <- tabOperator(obj,keepThat)
+obj <- obj[keepThat]
 
     obj@processingData@processing <- 
         c(obj@processingData@processing, processText)
@@ -328,7 +328,7 @@ mvFilterFromIndices <- function(obj,keepThat=NULL, processText="" )
 {
 
 if (is.null(keepThat)) {return(obj)}
-obj <- tabOperator(obj,keepThat)
+obj <- obj[keepThat]
 
 # if (!is.null(obj@experimentData@other$OriginOfValues)){
 #     obj@experimentData@other$OriginOfValues <- obj@experimentData@other$OriginOfValues[keepThat,]
@@ -362,7 +362,7 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
 {
     
     if (is.null(deleteThat)) {return(obj)}
-    obj <- tabOperator(obj,-deleteThat)
+    obj <- obj[-deleteThat]
     
     obj@processingData@processing <-  c(obj@processingData@processing, processText)
     if (grepl("contaminants", processText)){obj@experimentData@other$contaminantsRemoved <- TRUE}

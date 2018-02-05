@@ -261,13 +261,13 @@ nonzero <- function(x){
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' res <- tabOperator(Exp1_R25_pept, c(1:10))
-tabOperator <- function(obj, lineIndices){
-    
-    tmp <- obj[lineIndices]
-    if (!is.null(tmp@experimentData@other$OriginOfValues)){
-        tmp@experimentData@other$OriginOfValues <- tmp@experimentData@other$OriginOfValues[lineIndices,]
-    }
-    
-   
-    return(tmp)
-}
+# tabOperator <- function(obj, lineIndices){
+#     
+#     tmp <- obj[lineIndices]
+#     if (!is.null(tmp@experimentData@other$OriginOfValues)){
+#         tmp@experimentData@other$OriginOfValues <- tmp@experimentData@other$OriginOfValues[lineIndices,]
+#     }
+#     
+#    
+#     return(tmp)
+# }
