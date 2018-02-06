@@ -63,19 +63,21 @@ return(count)
 ##' @examples
 ##' proportionConRev_HC(10, 20, 100)
 proportionConRev_HC <- function(nBoth = 0, nCont=0, nRev=0, lDataset=0){
-    if (is.null(nCont) || is.null(nRev) || is.null(lDataset)){return(NULL)}
+    if (is.null(nCont) && is.null(nBoth) && is.null(nRev) && is.null(lDataset)){return(NULL)}
     
-    pctBoth <- 100 * round(nBoth/lDataset,  digits=4)
-    pctContaminants <- 100 * round(nCont/lDataset,  digits=4)
-    pctReverse <- 100 * round(nRev/lDataset,  digits=4)
+    total <- nBoth + nCont + nRev + lDataset
+    pctGood <- 100 * round(lDataset/total,  digits=4)
+    pctBoth <- 100 * round(nBoth/total,  digits=4)
+    pctContaminants <- 100 * round(nCont/total,  digits=4)
+    pctReverse <- 100 * round(nRev/total,  digits=4)
     
-    counts <- c(lDataset-nCont-nRev-nBoth, nCont, nRev, nBoth)
-    slices <- c(100-pctContaminants-pctReverse-pctBoth, pctContaminants, pctReverse ,pctBoth) 
+    counts <- c(lDataset, nCont, nRev, nBoth)
+    slices <- c(pctGood, pctContaminants, pctReverse ,pctBoth) 
     lbls <- c("Quantitative data", "Contaminants", "Reverse", "Both contaminants & Reverse")
-    pct <- c(100-pctContaminants-pctReverse-pctBoth, pctContaminants, pctReverse  ,pctBoth)
+    #pct <- c(pctGood, pctContaminants, pctReverse  ,pctBoth)
     lbls <- paste(lbls, " (", counts, " lines)", sep="") 
 
-    mydata <- data.frame(test=c(100-pctContaminants-pctReverse-pctBoth, pctContaminants, pctReverse  ,pctBoth))
+    mydata <- data.frame(test=c(pctGood, pctContaminants, pctReverse ,pctBoth))
     
     highchart() %>% 
         my_hc_chart(chartType = "bar") %>% 
@@ -151,17 +153,19 @@ StringBasedFiltering <- function(obj,
                                  idRev2Delete=NULL, prefix_Rev=NULL){
     
     deleted.both <- deleted.contaminants <- deleted.reverse <- NULL
-    #Search for both
+    
+    ##
+    ##Search for both
+    ##
     if ((!is.null(idCont2Delete) || (idCont2Delete != "")) &&
         (!is.null(idRev2Delete) || (idRev2Delete != ""))) {
+        indContaminants <- indReverse <- indBoth <- NULL
         indContaminants <- getIndicesOfLinesToRemove(obj,idCont2Delete,  prefix_Cont)
         indReverse <- getIndicesOfLinesToRemove(obj, idRev2Delete, prefix_Rev)
         indBoth <- intersect(indContaminants, indReverse)
         
-        if (!is.null(indBoth)){
-            if (length(indBoth) > 0)  {
+        if (!is.null(indBoth) && (length(indBoth) > 0)){
                 deleted.both <- obj[indBoth]
-
                 obj <- deleteLinesFromIndices(obj, indBoth, 
                                                paste("\"", 
                                                      length(indBoth), 
@@ -169,42 +173,46 @@ StringBasedFiltering <- function(obj,
                                                      sep="")
                 )
             }
-        }
     }
     
-    #Search for contaminants
+    ##
+    ##Search for contaminants
+    ##
     if ((!is.null(idCont2Delete) || (idCont2Delete != ""))) {
+        indContaminants <- NULL
         indContaminants <- getIndicesOfLinesToRemove(obj,idCont2Delete,  prefix_Cont)
         
-        if (!is.null(indContaminants)){
-            if (length(indContaminants) > 0)  {
+        if (!is.null(indContaminants) && (length(indContaminants) > 0)){
                 deleted.contaminants <- obj[indContaminants]
-                
+
                 obj <- deleteLinesFromIndices(obj, indContaminants, 
                                                paste("\"", 
                                                      length(indContaminants), 
                                                      " contaminants were removed from dataset.\"",
                                                      sep="")
                 )
-            }
+
         }
     }
     
     
-    #Search for reverse
+    ##
+    ## Search for reverse
+    ##
     if ((!is.null(idRev2Delete) || (idRev2Delete != ""))) {
         indReverse <- getIndicesOfLinesToRemove(obj, idRev2Delete, prefix_Rev)
         
         if (!is.null(indReverse)){
             if (length(indReverse) > 0)  {
                 deleted.reverse <- obj[indReverse]
-                
+
                 obj <- deleteLinesFromIndices(obj, indReverse, 
                                                paste("\"", 
                                                      length(indReverse), 
                                                      " reverse were removed from dataset.\"",
                                                      sep="")
                 )
+
             }
         }
     }
