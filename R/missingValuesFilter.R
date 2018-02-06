@@ -61,19 +61,22 @@ return(count)
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' proportionConRev_HC(10, 20, 100)
-proportionConRev_HC <- function(nCont=0, nRev=0, lDataset=0){
-    if (is.null(nCont) || is.null(nRev) || is.null(lDataset)){return(NULL)}
+proportionConRev_HC <- function(nBoth = 0, nCont=0, nRev=0, lDataset=0){
+    if (is.null(nCont) && is.null(nBoth) && is.null(nRev) && is.null(lDataset)){return(NULL)}
     
-  pctContaminants <- 100 * round(nCont/lDataset,  digits=4)
-    pctReverse <- 100 * round(nRev/lDataset,  digits=4)
+    total <- nBoth + nCont + nRev + lDataset
+    pctGood <- 100 * round(lDataset/total,  digits=4)
+    pctBoth <- 100 * round(nBoth/total,  digits=4)
+    pctContaminants <- 100 * round(nCont/total,  digits=4)
+    pctReverse <- 100 * round(nRev/total,  digits=4)
     
-    counts <- c(lDataset-nCont-nRev, nCont, nRev)
-    slices <- c(100-pctContaminants-pctReverse, pctContaminants, pctReverse ) 
-    lbls <- c("Quantitative data", "Contaminants", "Reverse")
-    pct <- c(100-pctContaminants-pctReverse, pctContaminants, pctReverse )
+    counts <- c(lDataset, nCont, nRev, nBoth)
+    slices <- c(pctGood, pctContaminants, pctReverse ,pctBoth) 
+    lbls <- c("Quantitative data", "Contaminants", "Reverse", "Both contaminants & Reverse")
+    #pct <- c(pctGood, pctContaminants, pctReverse  ,pctBoth)
     lbls <- paste(lbls, " (", counts, " lines)", sep="") 
-
-    mydata <- data.frame(test=c(100-pctContaminants-pctReverse, pctContaminants, pctReverse ))
+    
+    mydata <- data.frame(test=c(pctGood, pctContaminants, pctReverse ,pctBoth))
     
     highchart() %>% 
         my_hc_chart(chartType = "bar") %>% 
@@ -87,11 +90,12 @@ proportionConRev_HC <- function(nCont=0, nRev=0, lDataset=0){
         ) %>% 
         hc_add_series(data  = mydata$test,
                       dataLabels = list(enabled = TRUE, format='{point.y}%'),
-                  colorByPoint = TRUE) %>%
-      my_hc_ExportMenu(filename = "contaminants")
-
-
+                      colorByPoint = TRUE) %>%
+        my_hc_ExportMenu(filename = "contaminants")
+    
+    
 }
+
 
 
 
