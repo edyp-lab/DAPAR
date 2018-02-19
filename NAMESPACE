@@ -85,6 +85,7 @@ export(
 ,"wrapper.dapar.impute.mi",  "wrapper.impute.pa"
 ,"wrapper.impute.pa2"
 ,"wrapper.impute.detQuant"
+,"wrapper.impute.slsa"
 ,"getQuantile4Imp"
 
 
