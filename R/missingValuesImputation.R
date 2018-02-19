@@ -161,8 +161,28 @@ impute.detQuant <- function(qData, values){
 
 
 
-
-
+##' This method is a wrapper to the function \code{impute.slsa} of the package
+##' \code{imp4p} adapted to an object of class \code{MSnSet}.
+##'
+##' @title Imputation of peptides having no values in a biological condition.
+##' @param obj An object of class \code{MSnSet}.
+##' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' dat <- mvFilter(Exp1_R25_pept[1:1000], type="allCond", th = 1)
+##' dat <- wrapper.impute.slsa(dat)
+wrapper.impute.slsa <- function(obj){
+    cond <- as.factor(Biobase::pData(obj)$Label)
+   
+   res <- impute.slsa(Biobase::exprs(obj), conditions=cond, nknn=15, selec="all", weight=1,
+                       ind.comp=1)
+  # print(str(res))
+  # print(str(exprs(obj)))
+    Biobase::exprs(obj) <-res
+    return (obj)
+}
 
 ##' This method is a wrapper to the function \code{impute.pa} of the package
 ##' \code{imp4p} adapted to an object of class \code{MSnSet}.
