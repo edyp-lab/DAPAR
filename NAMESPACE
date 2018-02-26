@@ -98,7 +98,7 @@ export(
 
 ,"wrapper.diffAnaLimma","diffAnaLimma"
 ,"wrapper.diffAnaWelch","diffAnaWelch"
-,"diffAnaVolcanoplot","diffAnaVolcanoplot_rCharts"
+"diffAnaVolcanoplot_rCharts"
 ,"diffAnaSave"
 ,"diffAnaComputeFDR"
 ,"wrapperCalibrationPlot"
