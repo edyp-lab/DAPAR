@@ -178,8 +178,7 @@ wrapper.impute.slsa <- function(obj){
    
    res <- impute.slsa(Biobase::exprs(obj), conditions=cond, nknn=15, selec="all", weight=1,
                        ind.comp=1)
-  # print(str(res))
-  # print(str(exprs(obj)))
+
     Biobase::exprs(obj) <-res
     return (obj)
 }
