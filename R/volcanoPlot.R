@@ -114,6 +114,7 @@ return(p)
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' library(highcharter) 
+##' library(tidyverse)
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' obj <- Exp1_R25_pept[1:1000]
@@ -126,8 +127,7 @@ return(p)
 ##' data <- wrapper.diffAnaLimma(obj, condition1, condition2)
 ##' df <- data.frame(x=data$logFC, 
 ##' y = -log10(data$P_Value),
-##' index = as.character(rownames(obj)),
-##' stringsAsFactors = FALSE)
+##' index = as.character(rownames(obj)))
 ##' tooltipSlot <- c("Sequence", "Score")
 ##' df <- cbind(df,Biobase::fData(obj)[tooltipSlot])
 ##' colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
@@ -209,5 +209,64 @@ JS("function(event) {Shiny.onInputChange('eventPointClicked', [this.name]);}")
                                            click = clickFunction ) ) ) ) %>%
       my_hc_ExportMenu(filename = "volcanoplot")
         
+    return(h1)
+}
+
+
+
+
+
+diffAnaVolcanoplot_rCharts2 <- function(df, 
+                                        threshold_pVal=1e-60, 
+                                        threshold_logFC=0, 
+                                        conditions=NULL, 
+                                        clickFunction=NULL){
+    
+    xtitle <- paste("log2 ( mean(",
+                    conditions[2],
+                    ") / mean(",
+                    conditions[1],
+                    ") )",
+                    sep="")
+    
+    if (is.null(clickFunction)){
+        clickFunction <- 
+            JS("function(event) {Shiny.onInputChange('eventPointClicked', [this.name]);}")
+    }
+    
+    
+    df <- cbind(df, 
+                g=ifelse(df$y >= threshold_pVal & abs(df$x) >= threshold_logFC, "g1", "g2")
+    )
+    
+    
+    i_tooltip <- which(startsWith(colnames(df),"tooltip"))
+    txt_tooltip <- NULL
+    for (i in i_tooltip){
+        t <- 
+            txt_tooltip <- paste(txt_tooltip,"<b>",gsub("tooltip_", "", 
+                                                        colnames(df)[i], 
+                                                        fixed=TRUE), 
+                                 " </b>: {point.", colnames(df)[i],"} <br> ", 
+                                 sep="")
+    }
+    
+    h1 <-  hchart(df, "scatter", hcaes(x,y,group=g)) %>%
+        hc_colors(c("orange", "lightgrey")) %>%
+        my_hc_chart(zoomType = "xy",chartType="scatter") %>%
+        hc_legend(enabled = FALSE) %>%
+        hc_yAxis(title = list(text="-log10(pValue)"),
+                 plotLines=list(list(color= "red" , width = 2, value = threshold_pVal, zIndex = 5))) %>%
+        hc_xAxis(title = list(text = "logFC"),
+                 plotLines=list(list(color= "red" , width = 2, value = threshold_logFC, zIndex = 5),
+                                list(color= "red" , width = 2, value = -threshold_logFC, zIndex = 5))) %>%
+        hc_tooltip(headerFormat= '',
+                   pointFormat = txt_tooltip) %>%
+        hc_plotOptions( series = list( animation=list(duration = 100),
+                                       cursor = "pointer", 
+                                       point = list( events = list( 
+                                           click = clickFunction ) ) ) ) %>%
+        my_hc_ExportMenu(filename = "volcanoplot")
+    
     return(h1)
 }
