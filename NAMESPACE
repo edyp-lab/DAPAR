@@ -22,6 +22,7 @@ importFrom("AnnotationDbi", "keys")
 importFrom("parallel", "detectCores")
 import("Matrix")
 import(cp4p)
+import(tidyverse)
 import(imp4p)
 importFrom("graphics", "par", "boxplot", "axis", "mtext", "abline", "points", 
             "legend", "lines",  "barplot", "text",
@@ -31,8 +32,7 @@ importFrom("stats", "lowess", "cor", "density","pexp", "mad",
             "var", "t.test", "dist", "hclust", "setNames", 
             "median", "p.adjust", "model.matrix", "rnorm","na.omit",
            "quantile", "rbeta", "runif", "sd", "pchisq", "residuals")
-importFrom("imputeLCMD", "impute.wrapper.KNN", "impute.wrapper.MLE",
-            "impute.QRILC")
+#importFrom("imputeLCMD", "impute.wrapper.KNN", "impute.wrapper.MLE","impute.QRILC")
 importFrom("preprocessCore", "normalize.quantiles")
 importFrom("gplots", "heatmap.2")
 importFrom("limma", "lmFit", "eBayes", "topTable", "makeContrasts", "contrasts.fit")
@@ -81,9 +81,9 @@ export(
 ,"wrapper.compareNormalizationD","compareNormalizationD"
 
 
-,"wrapper.mvImputation","mvImputation"
-,"wrapper.dapar.impute.mi",  "wrapper.impute.pa"
-,"wrapper.impute.pa2"
+,"reIntroduceLapala"
+,"findLapalaBlock"
+,"wrapper.impute.fixedValue"
 ,"wrapper.impute.detQuant"
 ,"wrapper.impute.slsa"
 ,"getQuantile4Imp"
@@ -101,7 +101,6 @@ export(
 ,"wrapper.diffAnaLimma","diffAnaLimma"
 ,"wrapper.diffAnaWelch","diffAnaWelch"
 ,"diffAnaVolcanoplot_rCharts"
-,"diffAnaVolcanoplot_rCharts2"
 ,"diffAnaSave"
 ,"diffAnaComputeFDR"
 ,"wrapperCalibrationPlot"

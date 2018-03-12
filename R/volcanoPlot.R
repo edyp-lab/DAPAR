@@ -141,82 +141,82 @@ return(p)
 ##' threshold_pVal = 3,
 ##' conditions = cond,
 ##' clickFunction=hc_clickFunction) 
+# diffAnaVolcanoplot_rCharts <- function(df, 
+#                                        threshold_pVal=1e-60, 
+#                                        threshold_logFC=0, 
+#                                        conditions=NULL, 
+#                                        clickFunction=NULL){
+#     
+#     xtitle <- paste("log2 ( mean(",
+#                     conditions[2],
+#                     ") / mean(",
+#                     conditions[1],
+#                     ") )",
+#                     sep="")
+#     
+#     if (is.null(clickFunction)){
+#         clickFunction <- 
+# JS("function(event) {Shiny.onInputChange('eventPointClicked', [this.name]);}")
+#     }
+# 
+#     colorCode <- c("lightgrey", "orange")
+#     .color <- rep(colorCode[1], nrow(df))
+#     
+#     
+#     for (i in 1:nrow(df)){
+#         if ( (df$y[i] >= threshold_pVal) && 
+#              (abs(df$x[i]) >= threshold_logFC) ){
+#             .color[i] <- colorCode[2]
+#         }
+#     }
+#     df <- cbind(df, color=.color)
+#     ds <- list_parse(df)
+#     names(ds) <- NULL
+#     
+#     i_tooltip <- which(startsWith(colnames(df),"tooltip"))
+#     txt_tooltip <- NULL
+#     for (i in i_tooltip){
+#         t <- 
+#         txt_tooltip <- paste(txt_tooltip,"<b>",gsub("tooltip_", "", 
+#                                                     colnames(df)[i], 
+#                                                     fixed=TRUE), 
+#                              " </b>: {point.", colnames(df)[i],"} <br> ", 
+#                              sep="")
+#     }
+# 
+#     h1 <-  highchart() %>% 
+#         #hc_title(text = "Scatter chart with color") %>% 
+#         hc_add_series(data = ds, type="scatter") %>%
+#         hc_add_series(data = data.frame(
+#             x=c(-threshold_logFC, -threshold_logFC), 
+#             y=c(0,max(df$y))), type="line", color="lightgrey") %>%
+#         hc_add_series(data = data.frame(
+#             x=c(threshold_logFC, threshold_logFC), 
+#             y=c(0,max(df$y))), type="line", color="lightgrey") %>%
+#         hc_add_series(data = data.frame(
+#         x=c(-max(max(df$x), abs(min(df$x))),max(max(df$x), abs(min(df$x)))), 
+#                                         y=c(threshold_pVal,threshold_pVal)), 
+#             type="line", color="lightgrey", marker=list(enabled = FALSE)) %>%
+#         my_hc_chart(zoomType = "xy",chartType="scatter") %>%
+#         hc_legend(enabled = FALSE) %>%
+#         hc_xAxis(title = list(text="logFC")) %>%
+#         hc_yAxis(title = list(text = "-log10(pValue)")) %>%
+#         hc_tooltip(headerFormat= '',
+#                    pointFormat = txt_tooltip) %>%
+#         hc_plotOptions( series = list( animation=list(duration = 100),
+#                                 cursor = "pointer", 
+#                                        point = list( events = list( 
+#                                            click = clickFunction ) ) ) ) %>%
+#       my_hc_ExportMenu(filename = "volcanoplot")
+#         
+#     return(h1)
+# }
+
+
+
+
+
 diffAnaVolcanoplot_rCharts <- function(df, 
-                                       threshold_pVal=1e-60, 
-                                       threshold_logFC=0, 
-                                       conditions=NULL, 
-                                       clickFunction=NULL){
-    
-    xtitle <- paste("log2 ( mean(",
-                    conditions[2],
-                    ") / mean(",
-                    conditions[1],
-                    ") )",
-                    sep="")
-    
-    if (is.null(clickFunction)){
-        clickFunction <- 
-JS("function(event) {Shiny.onInputChange('eventPointClicked', [this.name]);}")
-    }
-
-    colorCode <- c("lightgrey", "orange")
-    .color <- rep(colorCode[1], nrow(df))
-    
-    
-    for (i in 1:nrow(df)){
-        if ( (df$y[i] >= threshold_pVal) && 
-             (abs(df$x[i]) >= threshold_logFC) ){
-            .color[i] <- colorCode[2]
-        }
-    }
-    df <- cbind(df, color=.color)
-    ds <- list_parse(df)
-    names(ds) <- NULL
-    
-    i_tooltip <- which(startsWith(colnames(df),"tooltip"))
-    txt_tooltip <- NULL
-    for (i in i_tooltip){
-        t <- 
-        txt_tooltip <- paste(txt_tooltip,"<b>",gsub("tooltip_", "", 
-                                                    colnames(df)[i], 
-                                                    fixed=TRUE), 
-                             " </b>: {point.", colnames(df)[i],"} <br> ", 
-                             sep="")
-    }
-
-    h1 <-  highchart() %>% 
-        #hc_title(text = "Scatter chart with color") %>% 
-        hc_add_series(data = ds, type="scatter") %>%
-        hc_add_series(data = data.frame(
-            x=c(-threshold_logFC, -threshold_logFC), 
-            y=c(0,max(df$y))), type="line", color="lightgrey") %>%
-        hc_add_series(data = data.frame(
-            x=c(threshold_logFC, threshold_logFC), 
-            y=c(0,max(df$y))), type="line", color="lightgrey") %>%
-        hc_add_series(data = data.frame(
-        x=c(-max(max(df$x), abs(min(df$x))),max(max(df$x), abs(min(df$x)))), 
-                                        y=c(threshold_pVal,threshold_pVal)), 
-            type="line", color="lightgrey", marker=list(enabled = FALSE)) %>%
-        my_hc_chart(zoomType = "xy",chartType="scatter") %>%
-        hc_legend(enabled = FALSE) %>%
-        hc_xAxis(title = list(text="logFC")) %>%
-        hc_yAxis(title = list(text = "-log10(pValue)")) %>%
-        hc_tooltip(headerFormat= '',
-                   pointFormat = txt_tooltip) %>%
-        hc_plotOptions( series = list( animation=list(duration = 100),
-                                cursor = "pointer", 
-                                       point = list( events = list( 
-                                           click = clickFunction ) ) ) ) %>%
-      my_hc_ExportMenu(filename = "volcanoplot")
-        
-    return(h1)
-}
-
-
-
-
-
-diffAnaVolcanoplot_rCharts2 <- function(df, 
                                         threshold_pVal=1e-60, 
                                         threshold_logFC=0, 
                                         conditions=NULL, 

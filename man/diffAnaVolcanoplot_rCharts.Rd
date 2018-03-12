@@ -45,6 +45,7 @@ a point of the scatter plot.
 }
 \examples{
 library(highcharter) 
+library(tidyverse)
 require(DAPARdata)
 data(Exp1_R25_pept)
 obj <- Exp1_R25_pept[1:1000]
@@ -57,8 +58,7 @@ obj <- mvFilterFromIndices(obj, keepThat,
 data <- wrapper.diffAnaLimma(obj, condition1, condition2)
 df <- data.frame(x=data$logFC, 
 y = -log10(data$P_Value),
-index = as.character(rownames(obj)),
-stringsAsFactors = FALSE)
+index = as.character(rownames(obj)))
 tooltipSlot <- c("Sequence", "Score")
 df <- cbind(df,Biobase::fData(obj)[tooltipSlot])
 colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)

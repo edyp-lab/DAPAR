@@ -18,7 +18,11 @@
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' obj <- wrapper.mvImputation(Exp1_R25_pept[1:1000], "QRILC")
+##' obj <- Exp1_R25_pept[1:1000]
+##' lapala <- findLapalaBlock(obj)
+##' obj <- wrapper.impute.detQuant(obj)
+##' obj <- reIntroduceLapala(obj, lapala)
+##' obj <- wrapper.impute.detQuant(obj)
 ##' condition1 <- '25fmol'
 ##' condition2 <- '10fmol'
 ##' qData <- Biobase::exprs(obj)
