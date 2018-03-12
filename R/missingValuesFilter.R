@@ -140,7 +140,7 @@ return(obj)
 ##' deleted.both : an object of class \code{MSnSet} which contains the deleted lines 
 ##' corresponding to both contaminants and reverse, 
 ##' deleted.contaminants : n object of class \code{MSnSet} which contains the deleted lines 
-##' corresponding to contaminnats, 
+##' corresponding to contaminants, 
 ##' deleted.reverse : an object of class \code{MSnSet} which contains the deleted lines 
 ##' corresponding to reverse,
 ##' @author Samuel Wieczorek
