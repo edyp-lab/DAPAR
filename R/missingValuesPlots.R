@@ -730,19 +730,22 @@ for (iCond in unique(conditions)){
 
 
 plot(c(mTemp),
-        rep(-1,length(c(mTemp))),
+     jitter(c(nbNA), 0.3), 
+     col = alpha(c(colorTemp), 0.5),
+     pch = 16,
+     cex=0.8,
         xlim = range(c(mTemp), na.rm = TRUE),
         ylim = c(0, ncol(qData)/length(unique(conditions))),
         xlab = "Mean of quantity values", 
         ylab = "Number of missing values",
-        main =  "Missing values repartition")
+        main =  "Partially Observed Values repartition")
 
 
-    points(c(mTemp),
-            jitter(c(nbNA), 0.3), 
-            col = alpha(c(colorTemp), 0.5),
-            pch = 16,
-            cex=0.8)
+    # points(c(mTemp),
+    #         jitter(c(nbNA), 0.3), 
+    #         col = alpha(c(colorTemp), 0.5),
+    #         pch = 16,
+    #         cex=0.8)
 
   #  abline(v=threshold, col="blue", lwd=3)
 

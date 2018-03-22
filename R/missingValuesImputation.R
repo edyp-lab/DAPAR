@@ -124,6 +124,42 @@ reIntroduceLapala <- function(obj, lapalaIndex){
 # }
 
 
+
+
+##' This method is a wrapper for
+##' objects of class \code{MSnSet} and imputes missing values with a fixed value.
+##' This function imputes the missing values condition by condition.
+##'
+##' @title KNN missing values imputation from a \code{MSnSet} object
+##' @param obj An object of class \code{MSnSet}.
+##' @param K the number of neighbors.
+##' @return The object \code{obj} which has been imputed
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' wrapper.impute.KNN(Exp1_R25_pept[1:1000], 3)
+wrapper.impute.KNN <- function(obj, K){
+    
+    if (is.null(obj)){return(NULL)}
+    data <- Biobase::exprs(obj)
+    
+    conditions <- unique(Biobase::pData(obj)$Label)
+    nbCond <- length(conditions)
+    
+    
+    for (cond in 1:nbCond){
+        ind <- which(Biobase::pData(obj)$Label == conditions[cond])
+        resKNN <- impute.knn(Biobase::exprs(obj)[,ind] ,k = K, rowmax = 0.99, colmax = 0.99, maxp = 1500, rng.seed = sample(1:1000,1))
+        Biobase::exprs(obj)[,ind] <- resKNN[[1]]
+    }
+    
+    
+    return(obj)
+}
+
+
+
 ##' This method is a wrapper to
 ##' objects of class \code{MSnSet} and imputes missing values with a fixed value.
 ##'
