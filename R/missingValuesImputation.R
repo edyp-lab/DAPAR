@@ -52,8 +52,7 @@ reIntroduceLapala <- function(obj, lapalaIndex){
     {
         conditions <- unique(Biobase::pData(obj)$Label)
         replicates <- which(Biobase::pData(obj)$Label == conditions[lapalaIndex[i,"Condition"]])
-        Biobase::exprs(obj)[lapalaIndex[i,"Line"], replicates] <- NA
-        
+        Biobase::exprs(obj)[lapalaIndex[i,"Line"], as.vector(replicates)] <- NA
     }
     return(obj)
 }
