@@ -4,7 +4,7 @@
 \alias{mvTypePlot}
 \title{Distribution of missing values with respect to intensity values}
 \usage{
-mvTypePlot(qData, labels, threshold = 0)
+mvTypePlot(qData, labels, threshold = 0, type = "MV")
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
@@ -13,6 +13,9 @@ mvTypePlot(qData, labels, threshold = 0)
 
 \item{threshold}{An integer for the intensity that delimits MNAR and 
 MCAR missing values.}
+
+\item{type}{A string to indicate wether to show nb of mising values (MV)
+or nb of values (values)}
 }
 \value{
 A scatter plot

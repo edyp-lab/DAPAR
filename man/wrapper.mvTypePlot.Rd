@@ -5,13 +5,12 @@
 \title{Distribution of missing values with respect to intensity values 
 from a \code{MSnSet} object}
 \usage{
-wrapper.mvTypePlot(obj, threshold = 0)
+wrapper.mvTypePlot(obj, ...)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
 
-\item{threshold}{An integer for the intensity that delimits MNAR and 
-MCAR missing values.}
+\item{...}{See \code{\link{mvTypePlot}}}
 }
 \value{
 A scatter plot

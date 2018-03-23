@@ -668,18 +668,17 @@ heatmap.DAPAR(exprso,
 ##' @title Distribution of missing values with respect to intensity values 
 ##' from a \code{MSnSet} object
 ##' @param obj An object of class \code{MSnSet}.
-##' @param threshold An integer for the intensity that delimits MNAR and 
-##' MCAR missing values.
+##' @param ... See \code{\link{mvTypePlot}} 
 ##' @return A scatter plot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' wrapper.mvTypePlot(Exp1_R25_pept)
-wrapper.mvTypePlot <- function(obj, threshold=0){
+wrapper.mvTypePlot <- function(obj, ...){
 qData <- Biobase::exprs(obj)
 labels <- Biobase::pData(obj)[,"Label"]
-mvTypePlot(qData, labels, threshold)
+mvTypePlot(qData, labels = labels, ...)
 }
 
 
@@ -698,6 +697,8 @@ mvTypePlot(qData, labels, threshold)
 ##' @param labels A vector of the conditions (labels) (one label per sample).
 ##' @param threshold An integer for the intensity that delimits MNAR and 
 ##' MCAR missing values.
+##' @param type A string to indicate wether to show nb of mising values (MV)
+##' or nb of values (values)
 ##' @return A scatter plot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
@@ -706,7 +707,7 @@ mvTypePlot(qData, labels, threshold)
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 ##' mvTypePlot(qData, labels, threshold=0)
-mvTypePlot <- function(qData, labels, threshold=0){
+mvTypePlot <- function(qData, labels, threshold=0, type = 'MV'){
 #require(scales)
 pal <- unique(getPaletteForLabels(labels))
 color <- NULL
@@ -714,30 +715,41 @@ col.legend <- c(1:length(pal))
 
 
 conditions <- labels
-mTemp <- colorTemp <- nbNA <- matrix(rep(0,nrow(qData)*length(unique(conditions))), nrow=nrow(qData),
+mTemp <- colorTemp <- nbNA <- nbValues <- matrix(rep(0,nrow(qData)*length(unique(conditions))), nrow=nrow(qData),
                 dimnames=list(NULL,unique(conditions)))
 
 for (iCond in unique(conditions)){
     if (length(which(conditions==iCond)) == 1){
         mTemp[,iCond] <- qData[,which(conditions==iCond)]
         nbNA[,iCond] <- as.integer(is.na(qData[,which(conditions==iCond)]))
+        nbValues[,iCond] <- length(which(conditions==iCond)) - nbNA[,iCond]
     }else {
         mTemp[,iCond] <- apply(qData[,which(conditions==iCond)], 1, mean, na.rm=TRUE)
         nbNA[,iCond] <- apply(qData[,which(conditions==iCond)],1,function(x) length(which(is.na(x) == TRUE)))
+        nbValues[,iCond] <- length(which(conditions==iCond)) - nbNA[,iCond]
     }
     colorTemp[,iCond] <- pal[which( unique(conditions) ==iCond)]
 }
 
 
-plot(c(mTemp),
-     jitter(c(nbNA), 0.3), 
+data <- NULL
+print(type)
+switch(type,
+       MV = {data <- nbNA
+            yAxisLabel = "Number of Missing Values"},
+       values = {data <- nbValues
+       yAxisLabel = "Number of Observed Values"})
+
+
+plot(mTemp,
+     jitter(data, 0.3), 
      col = alpha(c(colorTemp), 0.5),
      pch = 16,
      cex=0.8,
         xlim = range(c(mTemp), na.rm = TRUE),
         ylim = c(0, ncol(qData)/length(unique(conditions))),
         xlab = "Mean of quantity values", 
-        ylab = "Number of missing values",
+        ylab = yAxisLabel,
         main =  "Partially Observed Values repartition")
 
 
