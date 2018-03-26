@@ -4,15 +4,15 @@ data(Exp1_R25_prot)
 test <- Exp1_R25_prot[1:100]
 test <- mvFilter(test, "wholeMatrix", 6)
 
-test_that("diffAnaVolcanoplot", {
-    condition1 <- '25fmol'
-    condition2 <- '10fmol'
-    data <- wrapper.diffAnaLimma(test, condition1, condition2)
-    t <- diffAnaVolcanoplot(data$logFC, data$P_Value)
-    
-    expect_null(t)
-    dev.off()
-})
+# test_that("diffAnaVolcanoplot", {
+#     condition1 <- '25fmol'
+#     condition2 <- '10fmol'
+#     data <- wrapper.diffAnaLimma(test, condition1, condition2)
+#     t <- diffAnaVolcanoplot(data$logFC, data$P_Value)
+#     
+#     expect_null(t)
+#     dev.off()
+# })
 
 
 

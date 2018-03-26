@@ -54,6 +54,7 @@ return(count)
 ##' \code{proportionConRev} but uses the package \code{highcharter}
 ##' 
 ##' @title Barplot of proportion of contaminants and reverse
+##' @param nBoth The number of both contaminants and reverse identified in the dataset.
 ##' @param nCont The number of contaminants identified in the dataset.
 ##' @param nRev The number of reverse entities identified in the dataset.
 ##' @param lDataset The total length (number of rows) of the dataset

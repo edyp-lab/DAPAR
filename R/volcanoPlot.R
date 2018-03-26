@@ -1,31 +1,5 @@
 
-##' Plots a volcanoplot after the differential analysis.
-##' Typically, the log of Fold Change is represented on the X-axis and the
-##' log10 of the p-value is drawn on the Y-axis. When the \code{threshold_pVal}
-##' and the \code{threshold_logFC} are set, two lines are drawn respectively on
-##' the y-axis and the X-axis to visually distinguish between differential and
-##' non differential data.
-##' 
-##' @title Volcanoplot of the differential analysis
-##' @param logFC A vector of the log(fold change) values of the differential
-##' analysis.
-##' @param pVal A vector of the p-value values returned by the differential
-##' analysis.
-##' @param threshold_pVal A floating number which represents the p-value that
-##' separates differential and non-differential data.
-##' @param threshold_logFC A floating number which represents the log of the
-##' Fold Change that separates differential and non-differential data.
-##' @param conditions A list of the names of condition 1 and 2 used for the
-##' differential analysis.
-##' @return A volcanoplot
-##' @author Florence Combes, Samuel Wieczorek
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' condition1 <- '25fmol'
-##' condition2 <- '10fmol'
-##' data <- wrapper.diffAnaLimma(Exp1_R25_pept[1:1000], condition1, condition2)
-##' diffAnaVolcanoplot(data$logFC, data$P_Value)
+
 # diffAnaVolcanoplot <- function(logFC=NULL, 
 #                                 pVal=NULL, 
 #                                 threshold_pVal=1e-60, 

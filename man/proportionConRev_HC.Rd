@@ -4,9 +4,11 @@
 \alias{proportionConRev_HC}
 \title{Barplot of proportion of contaminants and reverse}
 \usage{
-proportionConRev_HC(nCont = 0, nRev = 0, lDataset = 0)
+proportionConRev_HC(nBoth = 0, nCont = 0, nRev = 0, lDataset = 0)
 }
 \arguments{
+\item{nBoth}{The number of both contaminants and reverse identified in the dataset.}
+
 \item{nCont}{The number of contaminants identified in the dataset.}
 
 \item{nRev}{The number of reverse entities identified in the dataset.}
