@@ -682,6 +682,13 @@ mvTypePlot(qData, labels = labels, ...)
 }
 
 
+wrapper.mvTypePlot2 <- function(obj, ...){
+    qData <- Biobase::exprs(obj)
+    labels <- Biobase::pData(obj)[,"Label"]
+    mvTypePlot2(qData, labels = labels, ...)
+}
+
+
 ##' This method plots a scatter plot which represents the distribution of
 ##' missing values.
 ##' The colors correspond to the different conditions (slot Label in in the
@@ -742,7 +749,7 @@ switch(type,
 
 
 plot(mTemp,
-     jitter(data, 0.3), 
+     jitter(data, amount=0.3), 
      col = alpha(c(colorTemp), 0.5),
      pch = 16,
      cex=0.8,
@@ -775,5 +782,91 @@ legend("topright"
 }
 
 
+mvTypePlot2 <- function(qData, labels, threshold=0, type = 'MV'){
+    #require(scales)
+    pal <- unique(getPaletteForLabels(labels))
+    color <- NULL
+    col.legend <- c(1:length(pal))
+    
+    
+    conditions <- labels
+    mTemp <- colorTemp <- nbNA <- nbValues <- matrix(rep(0,nrow(qData)*length(unique(conditions))), nrow=nrow(qData),
+                                                     dimnames=list(NULL,unique(conditions)))
+    dataCond <- data.frame()
+    
+    for (iCond in unique(conditions)){
+        if (length(which(conditions==iCond)) == 1){
+            mTemp[,iCond] <- qData[,which(conditions==iCond)]
+            nbNA[,iCond] <- as.integer(is.na(qData[,which(conditions==iCond)]))
+            nbValues[,iCond] <- length(which(conditions==iCond)) - nbNA[,iCond]
+        }else {
+            mTemp[,iCond] <- apply(qData[,which(conditions==iCond)], 1, mean, na.rm=TRUE)
+            nbNA[,iCond] <- apply(qData[,which(conditions==iCond)],1,function(x) length(which(is.na(x) == TRUE)))
+            nbValues[,iCond] <- length(which(conditions==iCond)) - nbNA[,iCond]
+            
+            #dataCond[iCond]$A <- density(mTemp[which(nbValues[,iCond]==1),iCond])
+            
+            
+                               # B=density(mTemp[which(nbValues[,iCond]==2),iCond]),
+                               # C=density(mTemp[which(nbValues[,iCond]==3),iCond]))
+        }
+        colorTemp[,iCond] <- pal[which( unique(conditions) ==iCond)]
+    }
+    
+    data <- list(density(mTemp[which(nbValues[,1]==1),1]),
+               density(mTemp[which(nbValues[,1]==2),1]),
+               density(mTemp[which(nbValues[,1]==3),1]),
+               density(mTemp[which(nbValues[,2]==1),2]),
+               density(mTemp[which(nbValues[,2]==2),2]),
+               density(mTemp[which(nbValues[,2]==3),2])
+               )
+    #d1 <- density(mTemp[which(nbValues[,1]==1),1])
+    data[[1]]$y <- data[[1]]$y +1
+    data[[2]]$y <- data[[2]]$y +2
+    data[[3]]$y <- data[[3]]$y +3
+    data[[4]]$y <- data[[4]]$y +1
+    data[[5]]$y <- data[[5]]$y +2
+    data[[6]]$y <- data[[6]]$y +3
+    
+    
+    ymin <- ymax <-xmin <- xmax <- 0
+    for (i in 1:6){
+        ifelse(data[[i]]$y)
+    }
+    plot(data[[1]], col=pal[1], lwd=3,
+         ylim = range(min(data[[1]]$y, data[[2]]$y, data[[3]]$y,data[[4]]$y, data[[5]]$y, data[[6]]$y),max(data[[1]]$y, data[[2]]$y, data[[3]]$y,data[[4]]$y, data[[5]]$y, data[[6]]$y)),
+         xlim = range(min(data[[1]]$x, data[[2]]$x, data[[3]]$x,data[[4]]$x, data[[5]]$x, data[[6]]$x),max(data[[1]]$x, data[[2]]$x, data[[3]]$x,data[[4]]$x, data[[5]]$x, data[[6]]$x)),
+         main =  "Partially Observed Values repartition",
+         ylab = "Number of values",
+         xlab = "Mean of intensities"
+    )
+         
+    lines(data[[2]], col=pal[1], lwd=3) 
+    lines(data[[3]], col=pal[1], lwd=3)
+    
+    lines(data[[4]], col=pal[2], lwd=3) 
+    lines(data[[5]], col=pal[2], lwd=3) 
+    lines(data[[6]], col=pal[2], lwd=3)
+    
+    # points(c(mTemp),
+    #         jitter(c(nbNA), 0.3), 
+    #         col = alpha(c(colorTemp), 0.5),
+    #         pch = 16,
+    #         cex=0.8)
+    
+    #  abline(v=threshold, col="blue", lwd=3)
+    
+    
+    legend("topright"         
+           , legend = unique(labels)
+           , col = col.legend
+           , pch = 15 
+           , bty = "n"
+           , pt.cex = 2
+           , cex = 1
+           , horiz = FALSE
+           , inset=c(0,0)
+    )
+}
 
 
