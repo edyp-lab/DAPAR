@@ -682,10 +682,23 @@ mvTypePlot(qData, labels = labels, ...)
 }
 
 
-wrapper.mvTypePlot2 <- function(obj, ...){
+##' This method is a wrapper for the function \code{\link{hc_mvTypePlot2}} adapted to objects
+##' of class \code{MSnSet}).
+
+##' @title Distribution of observed values with respect to intensity values 
+##' from a \code{MSnSet} object
+##' @param obj An object of class \code{MSnSet}.
+##' @param ... See \code{\link{hc_mvTypePlot2}} 
+##' @return A scatter plot
+##' @author Florence Combes, Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' wrapper.hc_mvTypePlot2(Exp1_R25_pept)
+wrapper.hc_mvTypePlot2 <- function(obj){
     qData <- Biobase::exprs(obj)
     labels <- Biobase::pData(obj)[,"Label"]
-    mvTypePlot2(qData, labels = labels, ...)
+    hc_mvTypePlot2(qData, labels = labels)
 }
 
 
@@ -760,14 +773,6 @@ plot(mTemp,
         main =  "Partially Observed Values repartition")
 
 
-    # points(c(mTemp),
-    #         jitter(c(nbNA), 0.3), 
-    #         col = alpha(c(colorTemp), 0.5),
-    #         pch = 16,
-    #         cex=0.8)
-
-  #  abline(v=threshold, col="blue", lwd=3)
-
 
 legend("topright"         
         , legend = unique(labels)
@@ -782,18 +787,37 @@ legend("topright"
 }
 
 
-mvTypePlot2 <- function(qData, labels, threshold=0, type = 'MV'){
-    #require(scales)
-    pal <- unique(getPaletteForLabels(labels))
-    color <- NULL
-    col.legend <- c(1:length(pal))
-    
+
+
+##' This method shows density plots which represents the repartition of
+##' Partial Observed Values for each replicate in the dataset.
+##' The colors correspond to the different conditions (slot Label in in the
+##' dataset of class \code{MSnSet}).
+##' The x-axis represent the mean of intensity for one condition and one
+##' entity in the dataset (i. e. a protein) 
+##' whereas the y-axis count the number of observed values for this entity
+##' and the considered condition.
+##' 
+##' @title Distribution of Observed values with respect to intensity values
+##' @param qData A dataframe that contains quantitative data.
+##' @param labels A vector of the conditions (labels) (one label per sample).
+##' @return Density plots
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qData <- Biobase::exprs(Exp1_R25_pept)
+##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+##' hc_mvTypePlot2(qData, labels)
+hc_mvTypePlot2 <- function(qData, labels){
     
     conditions <- labels
-    mTemp <- colorTemp <- nbNA <- nbValues <- matrix(rep(0,nrow(qData)*length(unique(conditions))), nrow=nrow(qData),
+    mTemp <- nbNA <- nbValues <- matrix(rep(0,nrow(qData)*length(unique(conditions))), nrow=nrow(qData),
                                                      dimnames=list(NULL,unique(conditions)))
     dataCond <- data.frame()
-    
+    ymax <- 0
+    series <- list()
+    j <- 1 
     for (iCond in unique(conditions)){
         if (length(which(conditions==iCond)) == 1){
             mTemp[,iCond] <- qData[,which(conditions==iCond)]
@@ -803,70 +827,47 @@ mvTypePlot2 <- function(qData, labels, threshold=0, type = 'MV'){
             mTemp[,iCond] <- apply(qData[,which(conditions==iCond)], 1, mean, na.rm=TRUE)
             nbNA[,iCond] <- apply(qData[,which(conditions==iCond)],1,function(x) length(which(is.na(x) == TRUE)))
             nbValues[,iCond] <- length(which(conditions==iCond)) - nbNA[,iCond]
-            
-            #dataCond[iCond]$A <- density(mTemp[which(nbValues[,iCond]==1),iCond])
-            
-            
-                               # B=density(mTemp[which(nbValues[,iCond]==2),iCond]),
-                               # C=density(mTemp[which(nbValues[,iCond]==3),iCond]))
+            for (i in 1:length(which(conditions==iCond))){
+                tmp <- data.frame(x = density(mTemp[which(nbValues[,iCond]==i),iCond])$x, 
+                                  y = i+density(mTemp[which(nbValues[,iCond]==i),iCond])$y)
+                if (max(tmp$y) > ymax) { ymax <- max(tmp$y)}
+                series[[j]] <- list(name = paste(conditions[j], " R",i, sep=""),
+                                                data = list_parse(tmp))
+                j <- j+1
+            }
         }
-        colorTemp[,iCond] <- pal[which( unique(conditions) ==iCond)]
     }
-    
-    data <- list(density(mTemp[which(nbValues[,1]==1),1]),
-               density(mTemp[which(nbValues[,1]==2),1]),
-               density(mTemp[which(nbValues[,1]==3),1]),
-               density(mTemp[which(nbValues[,2]==1),2]),
-               density(mTemp[which(nbValues[,2]==2),2]),
-               density(mTemp[which(nbValues[,2]==3),2])
-               )
-    #d1 <- density(mTemp[which(nbValues[,1]==1),1])
-    data[[1]]$y <- data[[1]]$y +1
-    data[[2]]$y <- data[[2]]$y +2
-    data[[3]]$y <- data[[3]]$y +3
-    data[[4]]$y <- data[[4]]$y +1
-    data[[5]]$y <- data[[5]]$y +2
-    data[[6]]$y <- data[[6]]$y +3
-    
-    
-    ymin <- ymax <-xmin <- xmax <- 0
-    for (i in 1:6){
-        ifelse(data[[i]]$y)
-    }
-    plot(data[[1]], col=pal[1], lwd=3,
-         ylim = range(min(data[[1]]$y, data[[2]]$y, data[[3]]$y,data[[4]]$y, data[[5]]$y, data[[6]]$y),max(data[[1]]$y, data[[2]]$y, data[[3]]$y,data[[4]]$y, data[[5]]$y, data[[6]]$y)),
-         xlim = range(min(data[[1]]$x, data[[2]]$x, data[[3]]$x,data[[4]]$x, data[[5]]$x, data[[6]]$x),max(data[[1]]$x, data[[2]]$x, data[[3]]$x,data[[4]]$x, data[[5]]$x, data[[6]]$x)),
-         main =  "Partially Observed Values repartition",
-         ylab = "Number of values",
-         xlab = "Mean of intensities"
-    )
-         
-    lines(data[[2]], col=pal[1], lwd=3) 
-    lines(data[[3]], col=pal[1], lwd=3)
-    
-    lines(data[[4]], col=pal[2], lwd=3) 
-    lines(data[[5]], col=pal[2], lwd=3) 
-    lines(data[[6]], col=pal[2], lwd=3)
-    
-    # points(c(mTemp),
-    #         jitter(c(nbNA), 0.3), 
-    #         col = alpha(c(colorTemp), 0.5),
-    #         pch = 16,
-    #         cex=0.8)
-    
-    #  abline(v=threshold, col="blue", lwd=3)
-    
-    
-    legend("topright"         
-           , legend = unique(labels)
-           , col = col.legend
-           , pch = 15 
-           , bty = "n"
-           , pt.cex = 2
-           , cex = 1
-           , horiz = FALSE
-           , inset=c(0,0)
-    )
+
+
+    hc <-  highchart() %>%
+        hc_title(text = "Partially Observed Values repartition") %>%
+        my_hc_chart(chartType = "spline", zoomType="x") %>%
+        hc_add_series_list(series)  %>%
+        hc_legend(enabled = TRUE) %>%
+        hc_xAxis(title = list(text = "Mean of intensities")) %>%
+        hc_yAxis(title = list(text = "Number ov values"),
+                 #categories = c(-1:3)
+                 min = 1, 
+                 max = ymax,
+                 tickInterval= 0.5
+                 ) %>%
+        hc_colors(getPaletteForLabels_HC(labels)) %>%
+        hc_tooltip(headerFormat= '',
+                   pointFormat = "<b> {series.name} </b>: {point.y} ",
+                   valueDecimals = 2) %>%
+        my_hc_ExportMenu(filename = "POV_repartition") %>%
+        hc_plotOptions(
+            series=list(
+                animation=list(
+                    duration = 100
+                ),
+                connectNulls= TRUE,
+                marker=list(
+                    enabled = FALSE)
+            )
+        )
+
+ return(hc)
 }
 
 

@@ -814,17 +814,8 @@ densityPlotD_HC <- function(qData, labelsForLegend=NULL,indData2Show=NULL,
     ##Colors definition
     if (group2Color == "Condition") {
       myColors <- getPaletteForLabels_HC(labelsForLegend)[indData2Show]
-      # legendColor <- unique(pal)
-      # txtLegend <- unique(labelsForLegend)
-      #myColors <-pal[indData2Show]
     } else { 
       myColors<- getPaletteForReplicates_HC(ncol(qData))[indData2Show]
-      # legendColor <- pal[indData2Show]
-      # txtLegend <- paste("Replicate", seq(1,ncol(qData)), 
-      #                    labelsForLegend,sep=" ")
-      # txtLegend <- txtLegend[indData2Show]
-      # 
-      # myColors <-pal
     }
 
     series <- list()
