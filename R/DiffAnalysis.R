@@ -1,3 +1,66 @@
+hc_FC_DensityPlot <-function(df_FC, threshold_pVal = 0){
+    
+    if (is.null(df_FC)){return()}
+    
+     myColors <- getPaletteForLabels_HC(ncol(df_FC))
+
+
+     hc <-  highchart() %>% 
+         hc_title(text = "log(FC) repartition") %>% 
+         my_hc_chart(chartType = "spline", zoomType="x") %>%
+         hc_legend(enabled = TRUE) %>%
+         hc_xAxis(title = list(text = "log(FC)"),
+                  plotLines=list(list(color= "grey" , width = 2, value = 0, zIndex = 5),
+                                 list(color= "red" , width = 2, value = threshold_pVal, zIndex = 5))) %>%
+         hc_yAxis(title = list(text="Density")) %>%
+         hc_colors(myColors) %>%
+         hc_tooltip(headerFormat= '',
+                    pointFormat = "<b> {series.name} </b>: {point.y} ",
+                    valueDecimals = 2) %>%
+         my_hc_ExportMenu(filename = "densityplot") %>%
+         hc_plotOptions(
+             series=list(
+                 animation=list(
+                     duration = 100
+                 ),
+                 connectNulls= TRUE,
+                 marker=list(
+                     enabled = FALSE)
+             )
+         )
+     
+     
+     
+    for (i in 1:ncol(df_FC)){
+        tmp <- density(df_FC[,i])
+        hc <- hc_add_series(hc,data.frame(x = tmp$x,  y = tmp$y), name=colnames(df_FC)[i], color=myColors[i])
+    }
+     
+     
+ return(hc)
+    
+}
+
+
+
+
+
+
+Get_Comparisons_FC <- function(qData, design, stattest, seuilFC = 0){
+    
+    # switch(design, 
+    #        case OnevsOne: {xxxx},
+    #        case OnevsAll){xxxx}
+    # )
+
+FCdata <- data.frame(A = rnorm(100, 0), B= rnorm(100, 0), C= rnorm(100, 0))
+return (FCdata)
+}
+
+
+
+
+
 ##' This function is a wrappper to the function adjust.p from the
 ##' cp4p package. It returns the FDR corresponding to the p-values of the 
 ##' differential analysis.

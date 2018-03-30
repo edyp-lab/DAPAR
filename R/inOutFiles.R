@@ -85,6 +85,7 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
     {metadata$Tech.Rep <-  as.factor(1:length(metadata$Tech.Rep))}
     if (!is.na(sum(match(metadata$Analyt.Rep," ")))) 
     {metadata$Analyt.Rep <-  as.factor(1:length(metadata$Analyt.Rep))}
+    
     pd <- as.data.frame(metadata)
     #rownames(pd) <- pd$Experiment
     rownames(pd) <- gsub(".", "_", pd$Experiment, fixed=TRUE)
