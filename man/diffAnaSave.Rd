@@ -5,9 +5,8 @@
 \title{Returns a \code{MSnSet} object with the results of
 the differential analysis performed with \code{\link{limma}} package.}
 \usage{
-diffAnaSave(obj, data, method = "limma", condition1, condition2,
-  threshold_pVal = 1e-60, threshold_logFC = 0, fdr = 0,
-  calibrationMethod = "pounds")
+diffAnaSave(obj, data, method = "limma", threshold_pVal = 1e-60,
+  threshold_logFC = 0, fdr = 0, calibrationMethod = "pounds")
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
@@ -17,12 +16,6 @@ by \code{\link{diffAna}}}
 
 \item{method}{The method used for differential analysis. 
 Available choices are : "limma", "Welch"}
-
-\item{condition1}{A vector containing the names (some values of the slot 
-"Label" of \code{pData()} of the first condition.}
-
-\item{condition2}{A vector containing the names (some values of the slot 
-"Label" of \code{pData()} of the second condition.}
 
 \item{threshold_pVal}{A float that indicates the threshold on p-value 
 choosen to discriminate differential proteins.}
@@ -46,12 +39,15 @@ of differential analysis.
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-condition1 <- '25fmol'
-condition2 <- '10fmol'
-limma <- wrapper.diffAnaLimma(Exp1_R25_pept[1:1000], 
-condition1, condition2)
-obj <- diffAnaSave(Exp1_R25_pept[1:1000], limma, "limma", 
-condition1, condition2)
+obj <- Exp1_R25_pept
+lapala <- findLapalaBlock(obj)
+obj <- wrapper.impute.detQuant(obj)
+obj <- reIntroduceLapala(obj, lapala)
+obj <- wrapper.impute.detQuant(obj)
+limma <- wrapper.limmaCompleteTest(obj, 1)
+fc <- limma$FC[1]
+pval <- limma$P_Value[1]
+diffAnaSave(obj, list(logFC=fc, P_Value = pval))
 }
 \author{
 Alexia Dorffer, Samuel Wieczorek

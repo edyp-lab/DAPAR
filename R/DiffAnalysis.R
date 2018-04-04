@@ -10,10 +10,11 @@ hc_FC_DensityPlot <-function(df_FC, threshold_pVal = 0){
          my_hc_chart(chartType = "spline", zoomType="x") %>%
          hc_legend(enabled = TRUE) %>%
          hc_xAxis(title = list(text = "log(FC)"),
-                  plotLines=list(list(color= "grey" , width = 2, value = 0, zIndex = 5),
-                                 list(color= "red" , width = 2, value = threshold_pVal, zIndex = 5))) %>%
+                  plotBands = list(list(from= -threshold_pVal, to = threshold_pVal, color = "lightgrey")))%>%
+       #           plotLines=list(list(color= "grey" , width = 2, value = 0, zIndex = 5),
+       #                          list(color= "red" , width = 2, value = threshold_pVal, zIndex = 5, style="dashed"),
+        #                         list(color= "red" , width = 2, value = - threshold_pVal, zIndex = 5, style="dashed"))) %>%
          hc_yAxis(title = list(text="Density")) %>%
-         hc_colors(myColors) %>%
          hc_tooltip(headerFormat= '',
                     pointFormat = "<b> {series.name} </b>: {point.y} ",
                     valueDecimals = 2) %>%
@@ -46,21 +47,6 @@ hc_FC_DensityPlot <-function(df_FC, threshold_pVal = 0){
 
 
 
-Get_Comparisons_FC <- function(qData, design, stattest, seuilFC = 0){
-    
-    # switch(design, 
-    #        case OnevsOne: {xxxx},
-    #        case OnevsAll){xxxx}
-    # )
-
-FCdata <- data.frame(A = rnorm(100, 0), B= rnorm(100, 0), C= rnorm(100, 0))
-return (FCdata)
-}
-
-
-
-
-
 ##' This function is a wrappper to the function adjust.p from the
 ##' cp4p package. It returns the FDR corresponding to the p-values of the 
 ##' differential analysis.
@@ -86,18 +72,15 @@ return (FCdata)
 ##' obj <- wrapper.impute.detQuant(obj)
 ##' obj <- reIntroduceLapala(obj, lapala)
 ##' obj <- wrapper.impute.detQuant(obj)
-##' condition1 <- '25fmol'
-##' condition2 <- '10fmol'
-##' qData <- Biobase::exprs(obj)
-##' samplesData <- Biobase::pData(obj)
-##' labels <- Biobase::pData(obj)[,"Label"]
-##' limma <- diffAnaLimma(qData,samplesData, labels, condition1, condition2)
-##' diffAnaComputeFDR(limma)
+##' limma <- wrapper.limmaCompleteTest(obj, 1)
+##' fc <- limma$FC[1]
+##' pval <- limma$P_Value[1]
+##' diffAnaComputeFDR(list(FC=fc, P_Value = pval))
 diffAnaComputeFDR <- function(data,threshold_PVal=0, threshold_LogFC = 0, 
                             pi0Method=1){
     upItems <- which(abs(data$logFC) >= threshold_LogFC)
     
-    selectedItems <- data[upItems,]$P_Value
+    selectedItems <- data$P_Value[upItems]
 
     padj <- adjust.p(selectedItems,  pi0Method)
     
@@ -109,6 +92,45 @@ diffAnaComputeFDR <- function(data,threshold_PVal=0, threshold_LogFC = 0,
 }
 
 
+
+
+##' This method returns a class \code{MSnSet} object with the RAW results
+##' of differential analysis.
+##' 
+##' @title Returns a \code{MSnSet} object with the RAW results of
+##' the differential analysis 
+##' @param obj An object of class \code{MSnSet}.
+##' @param data The result of the differential analysis processed 
+##' by \code{\link{diffAna}}
+##' @return A MSnSet
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' limma <- wrapper.limmaCompleteTest(Exp1_R25_pept[1:1000], 1)
+##' obj <- diffAnaSaveRAW_Data(Exp1_R25_pept[1:1000], limma)
+diffAnaSaveRAW_Data <- function(obj, data){
+    if (is.null(data)){
+        warning("The differential analysis has not been completed. Maybe there 
+                are some missing values in the dataset. If so, please impute before
+                running differential analysis")
+        return(NULL)}
+    
+    .fc <- as.data.frame(data$FC)
+    .pval <- as.data.frame(data$P_Value)
+    for (i in 1:ncol(.fc)){
+        Biobase::fData(obj) <- cbind(Biobase::fData(obj), .fc[,i], .pval[,i])
+        coln <- colnames(Biobase::fData(obj))
+        colnames(Biobase::fData(obj))[(length(coln)-1):length(coln)] <- c(colnames(data$FC)[i],colnames(data$P_Value)[i])
+    }
+   
+    text <- paste("Differential analysis with",method)
+    obj@processingData@processing <- c(obj@processingData@processing, text)
+    obj@experimentData@other$method = method
+    obj@experimentData@other$RawPValues <- TRUE
+    return(obj)
+}
+
 ##' This method returns a class \code{MSnSet} object with the results
 ##' of differential analysis.
 ##' 
@@ -119,10 +141,6 @@ diffAnaComputeFDR <- function(data,threshold_PVal=0, threshold_LogFC = 0,
 ##' by \code{\link{diffAna}} 
 ##' @param method The method used for differential analysis. 
 ##' Available choices are : "limma", "Welch"
-##' @param condition1 A vector containing the names (some values of the slot 
-##' "Label" of \code{pData()} of the first condition.
-##' @param condition2 A vector containing the names (some values of the slot 
-##' "Label" of \code{pData()} of the second condition.
 ##' @param threshold_pVal A float that indicates the threshold on p-value 
 ##' choosen to discriminate differential proteins.
 ##' @param threshold_logFC  A float that indicates the threshold on 
@@ -136,13 +154,16 @@ diffAnaComputeFDR <- function(data,threshold_PVal=0, threshold_LogFC = 0,
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' condition1 <- '25fmol'
-##' condition2 <- '10fmol'
-##' limma <- wrapper.diffAnaLimma(Exp1_R25_pept[1:1000], 
-##' condition1, condition2)
-##' obj <- diffAnaSave(Exp1_R25_pept[1:1000], limma, "limma", 
-##' condition1, condition2)
-diffAnaSave <- function (obj, data, method="limma", condition1, condition2, 
+##' obj <- Exp1_R25_pept
+##' lapala <- findLapalaBlock(obj)
+##' obj <- wrapper.impute.detQuant(obj)
+##' obj <- reIntroduceLapala(obj, lapala)
+##' obj <- wrapper.impute.detQuant(obj)
+##' limma <- wrapper.limmaCompleteTest(obj, 1)
+##' fc <- limma$FC[1]
+##' pval <- limma$P_Value[1]
+##' diffAnaSave(obj, list(logFC=fc, P_Value = pval))
+diffAnaSave <- function (obj, data, method="limma", 
                         threshold_pVal=1e-60, threshold_logFC=0, fdr=0, 
                         calibrationMethod = "pounds"){
     if (is.null(data)){
@@ -181,8 +202,8 @@ diffAnaSave <- function (obj, data, method="limma", condition1, condition2,
     # 
     
     obj@experimentData@other$method = method
-    obj@experimentData@other$condition1 = condition1
-    obj@experimentData@other$condition2 = condition2
+    obj@experimentData@other$condition1 = data$condition1
+    obj@experimentData@other$condition2 = data$condition2
     obj@experimentData@other$threshold_p_value = threshold_pVal
     obj@experimentData@other$threshold_logFC = threshold_logFC
     obj@experimentData@other$fdr = fdr
@@ -209,15 +230,16 @@ diffAnaSave <- function (obj, data, method="limma", condition1, condition2,
 ##' @author Alexia Dorffer
 ##' @examples
 ##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' condition1 <- "25fmol"
-##' condition2 <- "10fmol"
-##' resLimma <- wrapper.diffAnaLimma(Exp1_R25_pept[1:1000], 
-##' condition1, condition2)
-##' obj <-diffAnaSave(Exp1_R25_pept[1:1000], resLimma, "limma", 
-##' condition1, condition2)
+##' obj <- Exp1_R25_pept
+##' lapala <- findLapalaBlock(obj)
+##' obj <- wrapper.impute.detQuant(obj)
+##' obj <- reIntroduceLapala(obj, lapala)
+##' obj <- wrapper.impute.detQuant(obj)
+##' limma <- wrapper.limmaCompleteTest(obj, 1)
+##' fc <- limma$FC[1]
+##' pval <- limma$P_Value[1]
+##' obj <- diffAnaSave(obj, list(logFC=fc, P_Value = pval))
 ##' signif <- diffAnaGetSignificant(obj)
-
 diffAnaGetSignificant <- function (obj){
     if (is.null(obj)){
         warning("The dataset contains no data")
@@ -256,19 +278,19 @@ diffAnaGetSignificant <- function (obj){
 ##' indices <- getIndicesConditions(labels, "25fmol", "10fmol")
 ##' design[indices$iCond2,2] <- 1
 ##' diffAna(qData, design)
-diffAna <- function(qData, design){
-
-    fit <- lmFit(qData, design)
-    fit <- eBayes(fit)
-    #  fit$df.prior
-    diffAna.res <- topTable(fit,
-                            coef = 2, 
-                            sort.by = "none",
-                            number=nrow(qData))
-    names(diffAna.res) <- gsub(".", "_", names(diffAna.res), fixed=TRUE)
-    
-    return (diffAna.res)
-}
+# diffAna <- function(qData, design){
+# 
+#     fit <- lmFit(qData, design)
+#     fit <- eBayes(fit)
+#     #  fit$df.prior
+#     diffAna.res <- topTable(fit,
+#                             coef = 2, 
+#                             sort.by = "none",
+#                             number=nrow(qData))
+#     names(diffAna.res) <- gsub(".", "_", names(diffAna.res), fixed=TRUE)
+#     
+#     return (diffAna.res)
+# }
 
 
 
@@ -291,14 +313,14 @@ diffAna <- function(qData, design){
 ##' condition1 <- '25fmol'
 ##' condition2 <- '10fmol'
 ##' wrapper.diffAnaLimma(Exp1_R25_pept[1:1000], condition1, condition2)
-wrapper.diffAnaLimma <- function(obj, condition1, condition2){
-
-qData <- Biobase::exprs(obj)
-samplesData <- Biobase::pData(obj)
-labels <- Biobase::pData(obj)[,"Label"]
-p <- diffAnaLimma(qData, samplesData, labels, condition1, condition2)
-return(p)
-}
+# wrapper.diffAnaLimma <- function(obj, condition1, condition2){
+# 
+# qData <- Biobase::exprs(obj)
+# samplesData <- Biobase::pData(obj)
+# labels <- Biobase::pData(obj)[,"Label"]
+# p <- diffAnaLimma(qData, samplesData, labels, condition1, condition2)
+# return(p)
+# }
 
 
 
@@ -327,41 +349,41 @@ return(p)
 ##' samplesData <- Biobase::pData(Exp1_R25_pept[1:1000])
 ##' labels <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Label"]
 ##' diffAnaLimma(qData, samplesData, labels, condition1, condition2)
-diffAnaLimma <- function(qData, samplesData, labels, condition1, condition2){
-if( sum(is.na(qData == TRUE))>0) {
-    warning("There are some missing values. Please impute before.")
-    return (NULL)
-}
-# if (condition1 == condition2){
-#   warning("The two conditions are identical.")
-#   return (NULL)
+# diffAnaLimma <- function(qData, samplesData, labels, condition1, condition2){
+# if( sum(is.na(qData == TRUE))>0) {
+#     warning("There are some missing values. Please impute before.")
+#     return (NULL)
 # }
-
-indices <- getIndicesConditions(labels, condition1, condition2)
-flatIndices <- unlist(indices)
-
-tempexprs <- qData[,flatIndices]
-design <- cbind(cond1=1, cond2 = rep(0,length(flatIndices)))
-rownames(design) <- rownames(samplesData[flatIndices,])
-
-design[which(flatIndices == indices$iCond2), 2] <- 1
-#design[indices$iCond2, 2] <- 1
-
-
-
-
-
-res <- diffAna(tempexprs, design)
-#res <- limmaCompleteTest(tempexprs, 
-#labels, c(1:length(labels)), c(1:length(labels)))
-
-
-p <- data.frame(P_Value = res$P_Value, 
-                logFC = res$logFC,
-                row.names = rownames(qData))
-
-return(p)
-}
+# # if (condition1 == condition2){
+# #   warning("The two conditions are identical.")
+# #   return (NULL)
+# # }
+# 
+# indices <- getIndicesConditions(labels, condition1, condition2)
+# flatIndices <- unlist(indices)
+# 
+# tempexprs <- qData[,flatIndices]
+# design <- cbind(cond1=1, cond2 = rep(0,length(flatIndices)))
+# rownames(design) <- rownames(samplesData[flatIndices,])
+# 
+# design[which(flatIndices == indices$iCond2), 2] <- 1
+# #design[indices$iCond2, 2] <- 1
+# 
+# 
+# 
+# 
+# 
+# res <- diffAna(tempexprs, design)
+# #res <- limmaCompleteTest(tempexprs, 
+# #labels, c(1:length(labels)), c(1:length(labels)))
+# 
+# 
+# p <- data.frame(P_Value = res$P_Value, 
+#                 logFC = res$logFC,
+#                 row.names = rownames(qData))
+# 
+# return(p)
+# }
 
 
 ##' Computes differential analysis on
@@ -384,13 +406,13 @@ return(p)
 ##' condition1 <- '25fmol'
 ##' condition2 <- '10fmol'
 ##' wrapper.diffAnaWelch(Exp1_R25_pept[1:1000], condition1, condition2)
-wrapper.diffAnaWelch <- function(obj, condition1, condition2){
-
-qData <- Biobase::exprs(obj)
-labels <- Biobase::pData(obj)[,"Label"]
-p <- diffAnaWelch(qData, labels, condition1, condition2)
-return(p)
-}
+# wrapper.diffAnaWelch <- function(obj, condition1, condition2){
+# 
+# qData <- Biobase::exprs(obj)
+# labels <- Biobase::pData(obj)[,"Label"]
+# p <- diffAnaWelch(qData, labels, condition1, condition2)
+# return(p)
+# }
 
 
 
@@ -419,31 +441,31 @@ return(p)
 ##' qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
 ##' labels <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Label"]
 ##' diffAnaWelch(qData, labels, condition1, condition2)
-diffAnaWelch <- function(qData, labels, condition1, condition2){
-
-if( sum(is.na(qData == TRUE))>0) {
-    warning("There are some missing values. Please impute before.")
-    return (NULL)
-}
-# if (condition1 == condition2){
-#   warning("The two conditions are identical.")
-#   return (NULL)
+# diffAnaWelch <- function(qData, labels, condition1, condition2){
+# 
+# if( sum(is.na(qData == TRUE))>0) {
+#     warning("There are some missing values. Please impute before.")
+#     return (NULL)
 # }
-
-
-indices <- getIndicesConditions(labels, condition1, condition2)
-t <- NULL
-logRatio <- NULL
-for (i in 1:nrow(qData)){
-    res <- t.test(x=qData[i,indices$iCond1],
-                y=qData[i,indices$iCond2])
-    t <- c(t,res$p.value)
-    logRatio <- c(logRatio, (res$estimate[2] - res$estimate[1]))
-}
-
-p <- data.frame(P_Value=t, logFC = logRatio)
-return(p)
-}
+# # if (condition1 == condition2){
+# #   warning("The two conditions are identical.")
+# #   return (NULL)
+# # }
+# 
+# 
+# indices <- getIndicesConditions(labels, condition1, condition2)
+# t <- NULL
+# logRatio <- NULL
+# for (i in 1:nrow(qData)){
+#     res <- t.test(x=qData[i,indices$iCond1],
+#                 y=qData[i,indices$iCond2])
+#     t <- c(t,res$p.value)
+#     logRatio <- c(logRatio, (res$estimate[2] - res$estimate[1]))
+# }
+# 
+# p <- data.frame(P_Value=t, logFC = logRatio)
+# return(p)
+# }
 
 
 ##' This function is a wrapper to the calibration.plot method of the 

@@ -22,6 +22,7 @@ importFrom("AnnotationDbi", "keys")
 importFrom("parallel", "detectCores")
 import("Matrix")
 import(cp4p)
+import(stringr)
 import(tidyverse)
 import(imp4p)
 importFrom("graphics", "par", "boxplot", "axis", "mtext", "abline", "points", 
@@ -97,12 +98,16 @@ export(
 
 
 
-,"wrapper.diffAnaLimma","diffAnaLimma"
-,"wrapper.diffAnaWelch","diffAnaWelch"
+#,"wrapper.diffAnaLimma","diffAnaLimma"
+#,"wrapper.diffAnaWelch","diffAnaWelch"
+,"wrapper.limmaCompleteTest"
 ,"diffAnaVolcanoplot_rCharts"
-,"diffAnaSave"
+,"diffAnaSave","diffAnaSaveRAW_Data"
 ,"diffAnaComputeFDR"
 ,"wrapperCalibrationPlot"
+,"hc_FC_DensityPlot"
+,"Get_Comparisons_names"
+,"pvalue_FilterGetIndices"
 
 ,"getProcessingInfo"
 

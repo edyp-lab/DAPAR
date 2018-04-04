@@ -19,13 +19,15 @@ differential analysis.
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
-condition1 <- "25fmol"
-condition2 <- "10fmol"
-resLimma <- wrapper.diffAnaLimma(Exp1_R25_pept[1:1000], 
-condition1, condition2)
-obj <-diffAnaSave(Exp1_R25_pept[1:1000], resLimma, "limma", 
-condition1, condition2)
+obj <- Exp1_R25_pept
+lapala <- findLapalaBlock(obj)
+obj <- wrapper.impute.detQuant(obj)
+obj <- reIntroduceLapala(obj, lapala)
+obj <- wrapper.impute.detQuant(obj)
+limma <- wrapper.limmaCompleteTest(obj, 1)
+fc <- limma$FC[1]
+pval <- limma$P_Value[1]
+obj <- diffAnaSave(obj, list(logFC=fc, P_Value = pval))
 signif <- diffAnaGetSignificant(obj)
 }
 \author{
