@@ -284,16 +284,18 @@ limmaCompleteTest <- function(qData,Conditions, RepBio, RepTech, Contrast=1){
     }else{cat("Problem: the factor-vector Conditions must contain several replicates in each condition  !\n")}
     
     
+    
+    ##colnames (string treatment in R ...)
+    #how many comparisons have been done (and thus how many columns of pval)
+    Compa.Nb <- dim(fit$p.value)[2]
+    
     #pas topTable, ou adapt?. 
     #ramener ttes les pvalues et colnames corrects. 
     
     res.tmp <- topTable(fit,number=Inf, sort="none")
-    res <- cbind(res.tmp[,1:(dim(res.tmp)[2]-2)], fit$p.value)
+    res <- cbind(res.tmp[,1:Compa.Nb], fit$p.value)
     #names(res) <- gsub(".", "_", names(res), fixed=TRUE)
     
-    ##colnames (string treatment in R ...)
-    #how many comparisons have been done (and thus how many columns of pval)
-    Compa.Nb<-dim(fit$p.value)[2]
     
     #empty colnames vector
     cn<-c()
@@ -315,11 +317,15 @@ limmaCompleteTest <- function(qData,Conditions, RepBio, RepTech, Contrast=1){
         }
     }
     
-    colnames(res)[1:Compa.Nb] <- paste(cn, "logFC",sep="_")
-    colnames(res)[ (dim(res)[2]-(Compa.Nb-1)):dim(res)[2] ] <- paste(cn, "pval",sep="_")
-    ## end colnames
+     
+    res.l <- list(
+      FC = as.data.frame(res[,1:Compa.Nb]),
+      P_Value = as.data.frame(res[,-(1:Compa.Nb)] )
+    )
     
-    res.l <- list(FC=res[,1:Compa.Nb], P_Value=res[,(Compa.Nb+3):dim(res)[2]])
+    colnames(res.l$FC) <- paste(cn, "logFC",sep="_")
+    colnames(res.l$P_Value) <- paste(cn, "pval",sep="_")
+    ## end colnames
     
     return(res.l)
 }
