@@ -22,18 +22,23 @@
 ##############################################################
 
 
-##' This function is a wrapper of xxxxx for objects of class xxx
+##' This function is a wrapper of \code{limmaCompleteTest} for objects of class \code{MSnSet}
 ##'
 ##' @title Computation of the hierarchical design matrix : 2-level case : Bio-Tech or 
 ##' Bio-Analytical or Tech-Analytical.
-##' @param obj xxx
-##' @param design xxx
-##' @return xxx
+##' @param obj An object of class \code{MSnSet} with no missing values
+##' @param design An integer that reflects the type of comparisons. Available values are 1 (One vs One) or (One vs All)
+##' @return An object of class \code{MSnSet}
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' limma <- wrapper.limmaCompleteTest(Exp1_R25_pept, 1)
+##' obj <- Exp1_R25_pept[1:1000]
+##' lapala <- findLapalaBlock(obj)
+##' obj <- wrapper.impute.detQuant(obj)
+##' obj <- reIntroduceLapala(obj, lapala)
+##' obj <- wrapper.impute.detQuant(obj)
+##' limma <- wrapper.limmaCompleteTest(obj, 1)
 wrapper.limmaCompleteTest <- function(obj, design){
     
     qData <- Biobase::exprs(obj)
@@ -70,7 +75,10 @@ wrapper.limmaCompleteTest <- function(obj, design){
 ##' for example H0:"C1=C2" vs H1:"C1!=C2", etc.) 
 ##' or each condition versus all others (Contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
 ##'  H1:"C1!=(C2+C3)/2", etc. if there are three conditions).
-##' @return xxx
+##' @return A list of two items : FC and P_Value; both are dataframe. The first one contains
+##' the logFC values of all the comparisons (one column for one comparison), the second one contains
+##' the pvalue of all the comparisons (one column for one comparison). The names of the columns for those two dataframes
+##' are identical and correspond to the description of the comparison. 
 ##' @author Quentin Giai-Gianetto
 ##' @examples
 ##' require(DAPARdata)
@@ -84,9 +92,140 @@ wrapper.limmaCompleteTest <- function(obj, design){
 ##' condition2 <- '10fmol'
 ##' qData <- Biobase::exprs(obj)
 ##' RepBio <- RepTech <- factor(1:6)
-##' conds <- factor(pData(obj)[,"Label"])
+##' conds <- factor(Biobase::pData(obj)[,"Label"])
 ##' limma <- limmaCompleteTest(qData,conds,RepBio, RepTech)
 limmaCompleteTest <- function(qData,Conditions, RepBio, RepTech, Contrast=1){
+    
+     make.design.2=function(qData, Condition, RepBio){
+        #Renome the levels of factor
+        levels(Condition)=c(1:length(levels(Condition)))
+        levels(RepBio)=c(1:length(levels(RepBio)))
+        
+        #Initial design matrix
+        design=model.matrix(qData[1,]~0+Condition:RepBio)
+        
+        #Remove empty columns in the design matrix
+        design=design[,(apply(design,2,sum)>0)]
+        #Remove identical columns in the design matrix
+        coldel=-1
+        for (i in 1:(length(design[1,])-1)){
+            d2=as.matrix(design[,(i+1):length(design[1,])]);
+            for (j in 1:length(d2[1,])){
+                d2[,j]=d2[,j]-design[,i];
+            }
+            e=as.matrix(rnorm(length(design[,1]),10,1));
+            sd2=t(e)%*%d2
+            liste=which(sd2==0)
+            coldel=c(coldel,liste+i)
+        }
+        design=design[,(1:length(design[1,]))!=coldel]
+        colnames(design)=make.names(colnames(design))
+        return(design)
+    }
+    
+    
+    
+    #######################
+    make.design.3=function(qData,Condition,RepBio,RepTech){
+        #Rename the levels of factor
+        levels(Condition)=c(1:length(levels(Condition)))
+        levels(RepBio)=c(1:length(levels(RepBio)))
+        levels(RepTech)=c(1:length(levels(RepTech)))
+        
+        
+        #Initial design matrix
+        design=model.matrix(qData[1,]~0+Condition:RepBio:RepTech)
+        
+        #Remove empty columns in the design matrix
+        design=design[,(apply(design,2,sum)>0)]
+        
+        #Remove identical columns in the design matrix
+        coldel=-1
+        for (i in 1:(length(design[1,])-1)){
+            d2=as.matrix(design[,(i+1):length(design[1,])]);
+            for (j in 1:length(d2[1,])){
+                d2[,j]=d2[,j]-design[,i];
+            }
+            e=as.matrix(rnorm(length(design[,1]),10,1));
+            sd2=t(e)%*%d2
+            liste=which(sd2==0)
+            coldel=c(coldel,liste+i)
+        }
+        design=design[,(1:length(design[1,]))!=coldel]
+        colnames(design)=make.names(colnames(design))
+        return(design)
+    }
+    
+    
+    
+    aggreg.column.design=function(design,Condition){
+        nb.cond=length(levels(Condition))
+        name.col=colnames(design)
+        name.cond=NULL
+        nb.col=NULL
+        for (i in 1:nb.cond){
+            col.select=NULL
+            col.name.begin=paste("Condition",i, sep = "")
+            nc=nchar(col.name.begin)
+            for (j in 1:length(design[1,])){
+                if (substr(name.col[j], 1, nc)==col.name.begin){
+                    col.select=c(col.select,j)
+                }
+            }
+            name.aggreg=NULL
+            for (j in 1:length(col.select)){
+                name.aggreg=paste(name.aggreg,name.col[col.select[j]],sep="+")
+            }
+            name.aggreg=substr(name.aggreg, 2, nchar(name.aggreg))
+            name.cond=c(name.cond,name.aggreg)
+            nb.col=c(nb.col,length(col.select))
+        }
+        return(list(name.cond,nb.col))
+    }
+    
+    
+    make.contraste.1.1=function(design,Condition){
+        nb.cond=length(levels(Condition))
+        r=aggreg.column.design(design,Condition)
+        label.agg=r[[1]]
+        nb.agg=r[[2]]
+        k=1
+        contra=rep(0,sum(1:(nb.cond-1)))
+        for (i in 1:(nb.cond-1)){
+            for (j in (i+1):nb.cond){
+                contra[k]=c(paste("(",label.agg[i],")/",
+                                  nb.agg[i],"-(",label.agg[j],")/",
+                                  nb.agg[j]))
+                k=k+1
+            }
+        }
+        return(contra)
+    }
+    
+    
+    
+    make.contraste.2.1=function(design,Condition){
+        nb.cond=length(levels(Condition))
+        r=aggreg.column.design(design,Condition)
+        label.agg=r[[1]]
+        nb.agg=r[[2]]
+        k=1
+        contra=rep(0,sum(1:(nb.cond-1)))
+        for (i in 1:(nb.cond)){
+            contra[k]=c(paste("(",label.agg[i],")/",nb.agg[i]))
+            nb=sum(nb.agg[(1:nb.cond)[(1:nb.cond)!=i]])
+            for (j in (1:nb.cond)[(1:nb.cond)!=i]){
+                contra[k]=c(paste(contra[k],"-(",label.agg[j],")/",nb))
+            }
+            k=k+1
+        }
+        return(contra)
+    }
+    
+    
+    
+    
+    ### Begin of the main function
     
     Conditions <- factor(Conditions)
     RepBio <- factor(RepBio)
@@ -189,7 +328,7 @@ limmaCompleteTest <- function(qData,Conditions, RepBio, RepTech, Contrast=1){
     #pas topTable, ou adapt?. 
     #ramener ttes les pvalues et colnames corrects. 
     
-    res.tmp <- topTable(fit,number=Inf, sort="none")
+    res.tmp <- topTable(fit,number=Inf, sort.by="none")
     res <- cbind(res.tmp[,1:Compa.Nb], fit$p.value)
     #names(res) <- gsub(".", "_", names(res), fixed=TRUE)
     
@@ -200,8 +339,8 @@ limmaCompleteTest <- function(qData,Conditions, RepBio, RepTech, Contrast=1){
         
         #not the same syntax to pars if Contast=1 or Contrast=2
         if(Contrast==1){
-            compa<-str_match_all(colnames(fit$p.value)[i],"[[:space:]]Condition([[:digit:]]+)")[[1]]
-            cn[i]<-paste(levels(Conditions)[as.numeric(compa[1,2])], "-vs-",levels(Conditions)[as.numeric(compa[2,2])], sep="")
+            compa <- stringr::str_match_all(colnames(fit$p.value)[i],"[[:space:]]Condition([[:digit:]]+)")[[1]]
+            cn[i] <- paste(levels(Conditions)[as.numeric(compa[1,2])], "-vs-",levels(Conditions)[as.numeric(compa[2,2])], sep="")
         }
         if(Contrast==2){
             #hierarchic only
@@ -232,200 +371,4 @@ limmaCompleteTest <- function(qData,Conditions, RepBio, RepTech, Contrast=1){
 
 
 
-
-
-
-##' This function computes the hierarchical design matrix : 2-level case : Bio-Tech or 
-##' Bio-Analytical or Tech-Analytical.
-##'
-##' @title Computation of the hierarchical design matrix : 2-level case : Bio-Tech or 
-##' Bio-Analytical or Tech-Analytical.
-##' @param qData xxx
-##' @param Condition xxx
-##' @param RepBio xxx
-##' @return xxx
-##' @author Quentin Giai-Gianetto
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' xxx
-make.design.2=function(qData, Condition, RepBio){
-  #Renome the levels of factor
-  levels(Condition)=c(1:length(levels(Condition)))
-  levels(RepBio)=c(1:length(levels(RepBio)))
-  
-  #Initial design matrix
-  design=model.matrix(qData[1,]~0+Condition:RepBio)
-  
-  #Remove empty columns in the design matrix
-  design=design[,(apply(design,2,sum)>0)]
-  #Remove identical columns in the design matrix
-  coldel=-1
-  for (i in 1:(length(design[1,])-1)){
-    d2=as.matrix(design[,(i+1):length(design[1,])]);
-    for (j in 1:length(d2[1,])){
-      d2[,j]=d2[,j]-design[,i];
-    }
-    e=as.matrix(rnorm(length(design[,1]),10,1));
-    sd2=t(e)%*%d2
-    liste=which(sd2==0)
-    coldel=c(coldel,liste+i)
-  }
-  design=design[,(1:length(design[1,]))!=coldel]
-  colnames(design)=make.names(colnames(design))
-  return(design)
-}
-
-
-
-#######################
-#
-##' This function computes of the hierarchical design matrix : 3-levels case : Bio, 
-##' Tech and Analytical.
-##'
-##' @title Computes of the hierarchical design matrix : 3-levels case : Bio, 
-##' Tech and Analytical.
-##' @param qData xxx
-##' @param Condition xxx
-##' @param RepBio xxx
-##' @param RepTech
-##' @return xxx
-##' @author Quentin Giai-Gianetto
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' xxx
-make.design.3=function(qData,Condition,RepBio,RepTech){
-  #Rename the levels of factor
-  levels(Condition)=c(1:length(levels(Condition)))
-  levels(RepBio)=c(1:length(levels(RepBio)))
-  levels(RepTech)=c(1:length(levels(RepTech)))
-  
-  
-  #Initial design matrix
-  design=model.matrix(qData[1,]~0+Condition:RepBio:RepTech)
-  
-  #Remove empty columns in the design matrix
-  design=design[,(apply(design,2,sum)>0)]
-  
-  #Remove identical columns in the design matrix
-  coldel=-1
-  for (i in 1:(length(design[1,])-1)){
-    d2=as.matrix(design[,(i+1):length(design[1,])]);
-    for (j in 1:length(d2[1,])){
-      d2[,j]=d2[,j]-design[,i];
-    }
-    e=as.matrix(rnorm(length(design[,1]),10,1));
-    sd2=t(e)%*%d2
-    liste=which(sd2==0)
-    coldel=c(coldel,liste+i)
-  }
-  design=design[,(1:length(design[1,]))!=coldel]
-  colnames(design)=make.names(colnames(design))
-  return(design)
-}
-
-
-
-
-
-
-##' This function aggregates the columns from the same condition to build
-##'  the contrast matrix.
-##'
-##' @title Aggregation of the columns from the same condition to build
-##' the contrast matrix.
-##' @param design xxx
-##' @param Condition xxx
-##' @return xxx
-##' @author Quentin Giai-Gianetto
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' xxx
-aggreg.column.design=function(design,Condition){
-  nb.cond=length(levels(Condition))
-  name.col=colnames(design)
-  name.cond=NULL
-  nb.col=NULL
-  for (i in 1:nb.cond){
-    col.select=NULL
-    col.name.begin=paste("Condition",i, sep = "")
-    nc=nchar(col.name.begin)
-    for (j in 1:length(design[1,])){
-      if (substr(name.col[j], 1, nc)==col.name.begin){
-        col.select=c(col.select,j)
-      }
-    }
-    name.aggreg=NULL
-    for (j in 1:length(col.select)){
-      name.aggreg=paste(name.aggreg,name.col[col.select[j]],sep="+")
-    }
-    name.aggreg=substr(name.aggreg, 2, nchar(name.aggreg))
-    name.cond=c(name.cond,name.aggreg)
-    nb.col=c(nb.col,length(col.select))
-  }
-  return(list(name.cond,nb.col))
-}
-
-
-##' This function computes the contrast matrix: case a condition vs one condition.
-##'
-##' @title Computes the contrast matrix: case a condition vs one condition. 
-##' @param design xxx
-##' @param Condition xxx
-##' @return xxx
-##' @author Quentin Giai-Gianetto
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' xxx
-make.contraste.1.1=function(design,Condition){
-  nb.cond=length(levels(Condition))
-  r=aggreg.column.design(design,Condition)
-  label.agg=r[[1]]
-  nb.agg=r[[2]]
-  k=1
-  contra=rep(0,sum(1:(nb.cond-1)))
-  for (i in 1:(nb.cond-1)){
-    for (j in (i+1):nb.cond){
-      contra[k]=c(paste("(",label.agg[i],")/",
-                        nb.agg[i],"-(",label.agg[j],")/",
-                        nb.agg[j]))
-      k=k+1
-    }
-  }
-  return(contra)
-}
-
-
-
-##' This function computes the contrast matrix: case a condition vs all other conditions.
-##'
-##' @title Computes the contrast matrix: case a condition vs all other conditions. 
-##' @param design xxx
-##' @param Condition xxx
-##' @return xxx
-##' @author Quentin Giai-Gianetto
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' xxx
-make.contraste.2.1=function(design,Condition){
-  nb.cond=length(levels(Condition))
-  r=aggreg.column.design(design,Condition)
-  label.agg=r[[1]]
-  nb.agg=r[[2]]
-  k=1
-  contra=rep(0,sum(1:(nb.cond-1)))
-  for (i in 1:(nb.cond)){
-    contra[k]=c(paste("(",label.agg[i],")/",nb.agg[i]))
-    nb=sum(nb.agg[(1:nb.cond)[(1:nb.cond)!=i]])
-    for (j in (1:nb.cond)[(1:nb.cond)!=i]){
-      contra[k]=c(paste(contra[k],"-(",label.agg[j],")/",nb))
-    }
-    k=k+1
-  }
-  return(contra)
-}
 

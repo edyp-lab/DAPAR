@@ -5,20 +5,22 @@
 \title{Returns a \code{MSnSet} object with the RAW results of
 the differential analysis}
 \usage{
-diffAnaSaveRAW_Data(obj, data)
+diffAnaSaveRAW_Data(obj, data, method = "limma")
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
 
 \item{data}{The result of the differential analysis processed 
-by \code{\link{diffAna}}}
+by \code{\link{wrapper.limmaCompleteTest}}}
+
+\item{method}{The method used for differential analysis.}
 }
 \value{
 A MSnSet
 }
 \description{
-This method returns a class \code{MSnSet} object with the RAW results
-of differential analysis.
+This method returns a class \code{MSnSet} object with the RAW results (logFC and pValue for all
+comparisons) of a differential analysis processed by \code{\link{wrapper.limmaCompleteTest}}.
 }
 \examples{
 require(DAPARdata)

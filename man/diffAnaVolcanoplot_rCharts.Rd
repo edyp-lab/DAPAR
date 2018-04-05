@@ -49,29 +49,23 @@ library(tidyverse)
 require(DAPARdata)
 data(Exp1_R25_pept)
 obj <- Exp1_R25_pept[1:1000]
-condition1 <- '25fmol'
-condition2 <- '10fmol'
-cond <- c(condition1, condition2)
-keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', '6')
-obj <- mvFilterFromIndices(obj, keepThat, 
-       'Filtered with wholeMatrix (threshold = 6 ).')
-data <- wrapper.diffAnaLimma(obj, condition1, condition2)
-df <- data.frame(x=data$logFC, 
-y = -log10(data$P_Value),
-index = as.character(rownames(obj)))
+lapala <- findLapalaBlock(obj)
+obj <- wrapper.impute.detQuant(obj)
+obj <- reIntroduceLapala(obj, lapala)
+obj <- wrapper.impute.detQuant(obj)
+data <- wrapper.limmaCompleteTest(obj, 1)
+df <- data.frame(x=data$FC, y = -log10(data$P_Value),index = as.character(rownames(obj)))
+colnames(df) <- c("x", "y", "index")
 tooltipSlot <- c("Sequence", "Score")
 df <- cbind(df,Biobase::fData(obj)[tooltipSlot])
 colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
 if (ncol(df) > 3){
     colnames(df)[4:ncol(df)] <- 
-    paste("tooltip_", colnames(df)[4:ncol(df)], sep="")
-}
+    paste("tooltip_", colnames(df)[4:ncol(df)], sep="")}
 hc_clickFunction <- JS("function(event) {
 Shiny.onInputChange('eventPointClicked', [this.index]);}")
-diffAnaVolcanoplot_rCharts(df,threshold_logFC = 1,
-threshold_pVal = 3,
-conditions = cond,
-clickFunction=hc_clickFunction) 
+cond <- c("25fmol", "10fmol")
+diffAnaVolcanoplot_rCharts(df, 2.5, 1, cond,hc_clickFunction) 
 }
 \author{
 Samuel Wieczorek

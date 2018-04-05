@@ -26,7 +26,10 @@ or each condition versus all others (Contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
  H1:"C1!=(C2+C3)/2", etc. if there are three conditions).}
 }
 \value{
-fdsfdgfdg
+A list of two items : FC and P_Value; both are dataframe. The first one contains
+the logFC values of all the comparisons (one column for one comparison), the second one contains
+the pvalue of all the comparisons (one column for one comparison). The names of the columns for those two dataframes
+are identical and correspond to the description of the comparison.
 }
 \description{
 This function is a limmaCompleteTest
@@ -43,7 +46,7 @@ condition1 <- '25fmol'
 condition2 <- '10fmol'
 qData <- Biobase::exprs(obj)
 RepBio <- RepTech <- factor(1:6)
-conds <- factor(c(rep(condition1, 3), (rep(condition2, 3))))
+conds <- factor(Biobase::pData(obj)[,"Label"])
 limma <- limmaCompleteTest(qData,conds,RepBio, RepTech)
 }
 \author{

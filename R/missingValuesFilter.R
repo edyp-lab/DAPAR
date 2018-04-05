@@ -421,25 +421,30 @@ if (sum(is.na(match(th, paramth)==TRUE))>0){
 }
 
 keepThat <- NULL
+if (is.null(obj@experimentData@other$OriginOfValues)){
+    data <- Biobase::exprs(obj)
+} else {
+    data <- fData(obj)[,obj@experimentData@other$OriginOfValues]
+}
 
 if (type == "none"){
-    keepThat <- seq(1:nrow(Biobase::exprs(obj)))
+    keepThat <- seq(1:nrow(data))
 } else if (type == "wholeMatrix"){
-    keepThat <- which(apply(!is.na(Biobase::exprs(obj)), 1, sum) >= th)
+    keepThat <- which(apply(!is.na(data), 1, sum) >= th)
 } else if (type == "atLeastOneCond" || type == "allCond"){
     
     conditions <- unique(Biobase::pData(obj)$Label)
     nbCond <- length(conditions)
     keepThat <- NULL
-    s <- matrix(rep(0, nrow(Biobase::exprs(obj))*nbCond),nrow=nrow(Biobase::exprs(obj)), 
+    s <- matrix(rep(0, nrow(data)*nbCond),nrow=nrow(data), 
                 ncol=nbCond)
     
     for (c in 1:nbCond){
         ind <- which(Biobase::pData(obj)$Label == conditions[c])
         if (length(ind) == 1){
-            s[,c] <- (!is.na(Biobase::exprs(obj)[,ind]) >= th)}
+            s[,c] <- (!is.na(data[,ind]) >= th)}
         else {
-            s[,c] <- (apply(!is.na(Biobase::exprs(obj)[,ind]), 1, sum) >= th)
+            s[,c] <- (apply(!is.na(data[,ind]), 1, sum) >= th)
         }
     }
     

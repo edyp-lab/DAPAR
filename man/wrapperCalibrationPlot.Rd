@@ -2,8 +2,8 @@
 % Please edit documentation in R/DiffAnalysis.R
 \name{wrapperCalibrationPlot}
 \alias{wrapperCalibrationPlot}
-\title{This function performs a differential analysis on an MSnSet
-object (adapted from \code{\link{limma}})}
+\title{Performs a calibration plot on an \code{MSnSet} object, 
+calling the \code{cp4p} package functions.}
 \usage{
 wrapperCalibrationPlot(vPVal, pi0Method = "pounds")
 }
@@ -12,142 +12,25 @@ wrapperCalibrationPlot(vPVal, pi0Method = "pounds")
 
 \item{pi0Method}{A vector of the conditions (labels) (one label 
 per sample).}
-
-\item{qData}{A dataframe that contains quantitative data.}
-
-\item{design}{The design matrix as described in the limma package 
-documentation}
-
-\item{obj}{An object of class \code{MSnSet}.}
-
-\item{condition1}{A vector that contains the names of the conditions 
-considered as condition 1.}
-
-\item{condition2}{A vector that contains the names of the conditions 
-considered as condition 2.}
-
-\item{qData}{A dataframe that contains quantitative data.}
-
-\item{samplesData}{A dataframe where lines correspond to samples and 
-columns to the meta-data for those samples.}
-
-\item{labels}{A vector of the conditions (labels) (one label per sample).}
-
-\item{condition1}{A vector that contains the names of the conditions 
-considered as condition 1}
-
-\item{condition2}{A vector that contains the names of the conditions 
-considered as condition 2}
-
-\item{obj}{An object of class \code{MSnSet}.}
-
-\item{condition1}{A vector containing the names of the conditions 
-considered as condition 1.}
-
-\item{condition2}{A vector containing the names of the conditions 
-considered as condition 2.}
-
-\item{qData}{A dataframe that contains quantitative data.}
-
-\item{labels}{A vector of the conditions (labels) (one label per sample).}
-
-\item{condition1}{A vector containing the names of the conditions 
-qData as condition 1}
-
-\item{condition2}{A vector containing the names of the conditions 
-considered as condition 2}
 }
 \value{
-A dataframe with the p-value and log(Fold Change) associated 
-to each element (peptide/protein)
-
-A dataframe as returned by the \code{limma} package
-
-A dataframe as returned by the \code{limma} package
-
-A dataframe with two slots : P_Value (for the p-value) and logFC
-(the log of the Fold Change).
-
-A dataframe with two slots : P_Value (for the p-value) and logFC
-(the log of the Fold Change).
-
 A plot
 }
 \description{
-Performs a differential analysis on an \code{MSnSet} object,
-based on \code{\link{limma}} functions.
+This function is a wrapper to the calibration.plot method of the 
+\code{cp4p} package for use with \code{MSnSet} objects.
 }
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
-design <- cbind(cond1=1, 
-cond2 = rep(0,nrow(Biobase::pData(Exp1_R25_pept[1:1000]))))
-rownames(design) <- rownames(Biobase::pData(Exp1_R25_pept[1:1000]))
-labels <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Label"]
-indices <- getIndicesConditions(labels, "25fmol", "10fmol")
-design[indices$iCond2,2] <- 1
-diffAna(qData, design)
-Method to perform differential analysis on
-a \\code{MSnSet} object (calls the \\code{limma} package function).  
-
-require(DAPARdata)
-data(Exp1_R25_pept)
-condition1 <- '25fmol'
-condition2 <- '10fmol'
-wrapper.diffAnaLimma(Exp1_R25_pept[1:1000], condition1, condition2)
-Method to perform differential analysis on
-an \\code{MSnSet} object (calls the \\code{limma} package function).  
-
-require(DAPARdata)
-data(Exp1_R25_pept)
-condition1 <- '25fmol'
-condition2 <- '10fmol'
-qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
-samplesData <- Biobase::pData(Exp1_R25_pept[1:1000])
-labels <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Label"]
-diffAnaLimma(qData, samplesData, labels, condition1, condition2)
-Computes differential analysis on
-a \\code{MSnSet} object, using the Welch t-test
-(\\code{\\link{t.test}{stats}}). 
-
-require(DAPARdata)
-data(Exp1_R25_pept)
-condition1 <- '25fmol'
-condition2 <- '10fmol'
-wrapper.diffAnaWelch(Exp1_R25_pept[1:1000], condition1, condition2)
-Computes differential analysis on
-an \\code{MSnSet} object, using the Welch t-test
-(\\code{\\link{t.test}{stats}}). 
-
-require(DAPARdata)
-data(Exp1_R25_pept)
-condition1 <- '25fmol'
-condition2 <- '10fmol'
-qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
-labels <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Label"]
-diffAnaWelch(qData, labels, condition1, condition2)
-This function is a wrapper to the calibration.plot method of the 
-\\code{cp4p} package for use with \\code{MSnSet} objects.
-
-require(DAPARdata)
-data(Exp1_R25_pept)
-condition1 <- '25fmol'
-condition2 <- '10fmol'
-qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
-labels <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Label"]
-diffAnaWelch(qData, labels, condition1, condition2)
+obj <- Exp1_R25_pept[1:1000]
+lapala <- findLapalaBlock(obj)
+obj <- wrapper.impute.detQuant(obj)
+obj <- reIntroduceLapala(obj, lapala)
+obj <- wrapper.impute.detQuant(obj)
+limma <- wrapper.limmaCompleteTest(obj, 1)
+wrapperCalibrationPlot(limma$P_Value[,1])
 }
 \author{
-Florence Combes, Samuel Wieczorek
-
-Alexia Dorffer
-
-Florence Combes, Samuel Wieczorek
-
-Alexia Dorffer
-
-Florence Combes, Samuel Wieczorek
-
 Samuel Wieczorek
 }

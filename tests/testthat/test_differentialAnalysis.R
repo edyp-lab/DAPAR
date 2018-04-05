@@ -1,7 +1,7 @@
 context("Differential analysis FDR")
-require(DAPARdata)
-data(Exp1_R25_prot)
-test <- Exp1_R25_prot[1:10]
+# require(DAPARdata)
+# data(Exp1_R25_prot)
+# test <- Exp1_R25_prot[1:10]
 
 
 # 

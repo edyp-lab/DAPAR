@@ -1,8 +1,8 @@
 context("limma Analysis")
 
-require(DAPARdata)
-data(Exp1_R2_pept)
-test <- Exp1_R2_pept[170:180]
+# require(DAPARdata)
+# data(Exp1_R2_pept)
+# test <- Exp1_R2_pept[170:180]
 
 # 
 # 

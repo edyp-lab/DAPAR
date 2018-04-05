@@ -1,4 +1,3 @@
-
 ##' This function show the density plots of Fold Change (the same as calculated by limma) for a list 
 ##' of the comparisons of conditions in a differnetial analysis.
 ##' 
@@ -18,7 +17,7 @@
 ##' obj <- wrapper.impute.detQuant(obj)
 ##' limma <- wrapper.limmaCompleteTest(obj, 1)
 ##' hc_FC_DensityPlot(limma$FC)
-hc_FC_DensityPlot <-function(df_FC, threshold_pVal = 0){
+hc_FC_DensityPlot <-function(df_FC, threshold_LogFC = 0){
     
     if (is.null(df_FC)){return()}
 
@@ -27,7 +26,7 @@ hc_FC_DensityPlot <-function(df_FC, threshold_pVal = 0){
          my_hc_chart(chartType = "spline", zoomType="x") %>%
          hc_legend(enabled = TRUE) %>%
          hc_xAxis(title = list(text = "log(FC)"),
-                  plotBands = list(list(from= -threshold_pVal, to = threshold_pVal, color = "lightgrey")),
+                  plotBands = list(list(from= -threshold_LogFC, to = threshold_LogFC, color = "lightgrey")),
                   plotLines=list(list(color= "grey" , width = 2, value = 0, zIndex = 5)))%>%
         hc_yAxis(title = list(text="Density")) %>%
          hc_tooltip(headerFormat= '',
@@ -73,7 +72,7 @@ hc_FC_DensityPlot <-function(df_FC, threshold_pVal = 0){
 ##' @title Computes the FDR corresponding to the p-values of the 
 ##' differential analysis using 
 ##' @param data The result of the differential analysis processed 
-##' by \code{\link{diffAna}} 
+##' by \code{\link{wrapper.limmaCompleteTest}} 
 ##' @param threshold_PVal The threshold on p-pvalue to
 ##' distinguish between differential and non-differential data 
 ##' @param threshold_LogFC The threshold on log(Fold Change) to
@@ -96,9 +95,9 @@ hc_FC_DensityPlot <-function(df_FC, threshold_pVal = 0){
 ##' diffAnaComputeFDR(list(FC=fc, P_Value = pval))
 diffAnaComputeFDR <- function(data,threshold_PVal=0, threshold_LogFC = 0, 
                             pi0Method=1){
-    upItems <- which(abs(data$logFC) >= threshold_LogFC)
+    upItems <- which(abs(data$FC) >= threshold_LogFC)
     
-    selectedItems <- data$P_Value[upItems]
+    selectedItems <- data$P_Value[upItems,]
 
     padj <- adjust.p(selectedItems,  pi0Method)
     
@@ -113,13 +112,14 @@ diffAnaComputeFDR <- function(data,threshold_PVal=0, threshold_LogFC = 0,
 
 
 ##' This method returns a class \code{MSnSet} object with the RAW results (logFC and pValue for all
-##' comparisons) of a differential analysis processed by \code{\link{xxx}}.
+##' comparisons) of a differential analysis processed by \code{\link{wrapper.limmaCompleteTest}}.
 ##' 
 ##' @title Returns a \code{MSnSet} object with the RAW results of
 ##' the differential analysis 
 ##' @param obj An object of class \code{MSnSet}.
 ##' @param data The result of the differential analysis processed 
-##' by \code{\link{xxx}}
+##' by \code{\link{wrapper.limmaCompleteTest}}
+##' @param method The method used for differential analysis. 
 ##' @return A MSnSet
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -127,7 +127,7 @@ diffAnaComputeFDR <- function(data,threshold_PVal=0, threshold_LogFC = 0,
 ##' data(Exp1_R25_pept)
 ##' limma <- wrapper.limmaCompleteTest(Exp1_R25_pept[1:1000], 1)
 ##' obj <- diffAnaSaveRAW_Data(Exp1_R25_pept[1:1000], limma)
-diffAnaSaveRAW_Data <- function(obj, data){
+diffAnaSaveRAW_Data <- function(obj, data,method="limma"){
     if (is.null(data)){
         warning("The differential analysis has not been completed. Maybe there 
                 are some missing values in the dataset. If so, please impute before
@@ -156,7 +156,7 @@ diffAnaSaveRAW_Data <- function(obj, data){
 ##' the differential analysis performed with \code{\link{limma}} package. 
 ##' @param obj An object of class \code{MSnSet}.
 ##' @param data The result of the differential analysis processed 
-##' by \code{\link{diffAna}} 
+##' by \code{\link{wrapper.limmaCompleteTest}} 
 ##' @param method The method used for differential analysis. 
 ##' Available choices are : "limma", "Welch"
 ##' @param threshold_pVal A float that indicates the threshold on p-value 
@@ -248,6 +248,7 @@ diffAnaSave <- function (obj, data, method="limma",
 ##' @author Alexia Dorffer
 ##' @examples
 ##' require(DAPARdata)
+##' data(Exp1_R25_pept)
 ##' obj <- Exp1_R25_pept
 ##' lapala <- findLapalaBlock(obj)
 ##' obj <- wrapper.impute.detQuant(obj)
@@ -287,11 +288,13 @@ diffAnaGetSignificant <- function (obj){
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' condition1 <- '25fmol'
-##' condition2 <- '10fmol'
-##' qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
-##' labels <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Label"]
-##' diffAnaWelch(qData, labels, condition1, condition2)
+##' obj <- Exp1_R25_pept[1:1000]
+##' lapala <- findLapalaBlock(obj)
+##' obj <- wrapper.impute.detQuant(obj)
+##' obj <- reIntroduceLapala(obj, lapala)
+##' obj <- wrapper.impute.detQuant(obj)
+##' limma <- wrapper.limmaCompleteTest(obj, 1)
+##' wrapperCalibrationPlot(limma$P_Value[,1])
 wrapperCalibrationPlot <- function(vPVal, pi0Method="pounds"){
 
 if (is.null(vPVal)){return(NULL)}

@@ -12,7 +12,7 @@ diffAnaSave(obj, data, method = "limma", threshold_pVal = 1e-60,
 \item{obj}{An object of class \code{MSnSet}.}
 
 \item{data}{The result of the differential analysis processed 
-by \code{\link{diffAna}}}
+by \code{\link{wrapper.limmaCompleteTest}}}
 
 \item{method}{The method used for differential analysis. 
 Available choices are : "limma", "Welch"}

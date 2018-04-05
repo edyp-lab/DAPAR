@@ -22,7 +22,7 @@ importFrom("AnnotationDbi", "keys")
 importFrom("parallel", "detectCores")
 import("Matrix")
 import(cp4p)
-import(stringr)
+
 import(tidyverse)
 import(imp4p)
 importFrom("graphics", "par", "boxplot", "axis", "mtext", "abline", "points", 
@@ -45,7 +45,7 @@ importFrom("openxlsx", "getSheetNames", "createWorkbook", "addWorksheet", "write
 import("readxl")
 import("siggenes") # SAM
 import("graph")
-
+importFrom("stringr", "str_match_all")
 importFrom("clusterProfiler", "bitr", "enrichGO", "groupGO")
 
 export(

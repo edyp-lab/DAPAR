@@ -10,7 +10,7 @@ diffAnaComputeFDR(data, threshold_PVal = 0, threshold_LogFC = 0,
 }
 \arguments{
 \item{data}{The result of the differential analysis processed 
-by \code{\link{diffAna}}}
+by \code{\link{wrapper.limmaCompleteTest}}}
 
 \item{threshold_PVal}{The threshold on p-pvalue to
 distinguish between differential and non-differential data}

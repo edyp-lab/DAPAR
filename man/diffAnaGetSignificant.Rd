@@ -19,6 +19,7 @@ differential analysis.
 }
 \examples{
 require(DAPARdata)
+data(Exp1_R25_pept)
 obj <- Exp1_R25_pept
 lapala <- findLapalaBlock(obj)
 obj <- wrapper.impute.detQuant(obj)
