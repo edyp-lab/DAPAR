@@ -1,20 +1,35 @@
+
+##' This function show the density plots of Fold Change (the same as calculated by limma) for a list 
+##' of the comparisons of conditions in a differnetial analysis.
+##' 
+##' @title Density plots of FC values
+##' @param df_FC A dataframe that contains the FC values
+##' @param threshold_LogFC The threshold on log(Fold Change) to
+##' distinguish between differential and non-differential data 
+##' @return A highcharts density plot
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' obj <- Exp1_R25_pept[1:1000]
+##' lapala <- findLapalaBlock(obj)
+##' obj <- wrapper.impute.detQuant(obj)
+##' obj <- reIntroduceLapala(obj, lapala)
+##' obj <- wrapper.impute.detQuant(obj)
+##' limma <- wrapper.limmaCompleteTest(obj, 1)
+##' hc_FC_DensityPlot(limma$FC)
 hc_FC_DensityPlot <-function(df_FC, threshold_pVal = 0){
     
     if (is.null(df_FC)){return()}
-    
-     myColors <- getPaletteForLabels_HC(ncol(df_FC))
-
 
      hc <-  highchart() %>% 
          hc_title(text = "log(FC) repartition") %>% 
          my_hc_chart(chartType = "spline", zoomType="x") %>%
          hc_legend(enabled = TRUE) %>%
          hc_xAxis(title = list(text = "log(FC)"),
-                  plotBands = list(list(from= -threshold_pVal, to = threshold_pVal, color = "lightgrey")))%>%
-       #           plotLines=list(list(color= "grey" , width = 2, value = 0, zIndex = 5),
-       #                          list(color= "red" , width = 2, value = threshold_pVal, zIndex = 5, style="dashed"),
-        #                         list(color= "red" , width = 2, value = - threshold_pVal, zIndex = 5, style="dashed"))) %>%
-         hc_yAxis(title = list(text="Density")) %>%
+                  plotBands = list(list(from= -threshold_pVal, to = threshold_pVal, color = "lightgrey")),
+                  plotLines=list(list(color= "grey" , width = 2, value = 0, zIndex = 5)))%>%
+        hc_yAxis(title = list(text="Density")) %>%
          hc_tooltip(headerFormat= '',
                     pointFormat = "<b> {series.name} </b>: {point.y} ",
                     valueDecimals = 2) %>%
@@ -30,11 +45,14 @@ hc_FC_DensityPlot <-function(df_FC, threshold_pVal = 0){
              )
          )
      
-     
+     myColors <- getPaletteForLabels_HC(ncol(df_FC))
      
     for (i in 1:ncol(df_FC)){
         tmp <- density(df_FC[,i])
-        hc <- hc_add_series(hc,data.frame(x = tmp$x,  y = tmp$y), name=colnames(df_FC)[i], color=myColors[i])
+        hc <- hc_add_series(hc,
+                            data.frame(x = tmp$x,  y = tmp$y), 
+                            name=colnames(df_FC)[i], 
+                            color=myColors[i])
     }
      
      
@@ -94,14 +112,14 @@ diffAnaComputeFDR <- function(data,threshold_PVal=0, threshold_LogFC = 0,
 
 
 
-##' This method returns a class \code{MSnSet} object with the RAW results
-##' of differential analysis.
+##' This method returns a class \code{MSnSet} object with the RAW results (logFC and pValue for all
+##' comparisons) of a differential analysis processed by \code{\link{xxx}}.
 ##' 
 ##' @title Returns a \code{MSnSet} object with the RAW results of
 ##' the differential analysis 
 ##' @param obj An object of class \code{MSnSet}.
 ##' @param data The result of the differential analysis processed 
-##' by \code{\link{diffAna}}
+##' by \code{\link{xxx}}
 ##' @return A MSnSet
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -256,223 +274,11 @@ diffAnaGetSignificant <- function (obj){
 
 
 
-##' Performs a differential analysis on an \code{MSnSet} object,
-##' based on \code{\link{limma}} functions.
-##'
-##' @title This function performs a differential analysis on an MSnSet
-##' object (adapted from \code{\link{limma}})
-##' @param qData A dataframe that contains quantitative data.
-##' @param design The design matrix as described in the limma package 
-##' documentation
-##' @return A dataframe with the p-value and log(Fold Change) associated 
-##' to each element (peptide/protein)
-##' @author Florence Combes, Samuel Wieczorek
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
-##' design <- cbind(cond1=1, 
-##' cond2 = rep(0,nrow(Biobase::pData(Exp1_R25_pept[1:1000]))))
-##' rownames(design) <- rownames(Biobase::pData(Exp1_R25_pept[1:1000]))
-##' labels <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Label"]
-##' indices <- getIndicesConditions(labels, "25fmol", "10fmol")
-##' design[indices$iCond2,2] <- 1
-##' diffAna(qData, design)
-# diffAna <- function(qData, design){
-# 
-#     fit <- lmFit(qData, design)
-#     fit <- eBayes(fit)
-#     #  fit$df.prior
-#     diffAna.res <- topTable(fit,
-#                             coef = 2, 
-#                             sort.by = "none",
-#                             number=nrow(qData))
-#     names(diffAna.res) <- gsub(".", "_", names(diffAna.res), fixed=TRUE)
-#     
-#     return (diffAna.res)
-# }
-
-
-
-
-##' Method to perform differential analysis on
-##' a \code{MSnSet} object (calls the \code{limma} package function).  
-##' 
-##' @title Performs differential analysis on
-##' an MSnSet object, calling the \code{limma} package functions 
-##' @param obj An object of class \code{MSnSet}.
-##' @param condition1 A vector that contains the names of the conditions 
-##' considered as condition 1.
-##' @param condition2 A vector that contains the names of the conditions 
-##' considered as condition 2.
-##' @return A dataframe as returned by the \code{limma} package
-##' @author Alexia Dorffer
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' condition1 <- '25fmol'
-##' condition2 <- '10fmol'
-##' wrapper.diffAnaLimma(Exp1_R25_pept[1:1000], condition1, condition2)
-# wrapper.diffAnaLimma <- function(obj, condition1, condition2){
-# 
-# qData <- Biobase::exprs(obj)
-# samplesData <- Biobase::pData(obj)
-# labels <- Biobase::pData(obj)[,"Label"]
-# p <- diffAnaLimma(qData, samplesData, labels, condition1, condition2)
-# return(p)
-# }
-
-
-
-
-##' Method to perform differential analysis on
-##' an \code{MSnSet} object (calls the \code{limma} package function).  
-##' 
-##' @title Performs differential analysis on
-##' an MSnSet object, calling the \code{limma} package functions 
-##' @param qData A dataframe that contains quantitative data.
-##' @param samplesData A dataframe where lines correspond to samples and 
-##' columns to the meta-data for those samples.
-##' @param labels A vector of the conditions (labels) (one label per sample).
-##' @param condition1 A vector that contains the names of the conditions 
-##' considered as condition 1
-##' @param condition2 A vector that contains the names of the conditions 
-##' considered as condition 2
-##' @return A dataframe as returned by the \code{limma} package
-##' @author Florence Combes, Samuel Wieczorek
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' condition1 <- '25fmol'
-##' condition2 <- '10fmol'
-##' qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
-##' samplesData <- Biobase::pData(Exp1_R25_pept[1:1000])
-##' labels <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Label"]
-##' diffAnaLimma(qData, samplesData, labels, condition1, condition2)
-# diffAnaLimma <- function(qData, samplesData, labels, condition1, condition2){
-# if( sum(is.na(qData == TRUE))>0) {
-#     warning("There are some missing values. Please impute before.")
-#     return (NULL)
-# }
-# # if (condition1 == condition2){
-# #   warning("The two conditions are identical.")
-# #   return (NULL)
-# # }
-# 
-# indices <- getIndicesConditions(labels, condition1, condition2)
-# flatIndices <- unlist(indices)
-# 
-# tempexprs <- qData[,flatIndices]
-# design <- cbind(cond1=1, cond2 = rep(0,length(flatIndices)))
-# rownames(design) <- rownames(samplesData[flatIndices,])
-# 
-# design[which(flatIndices == indices$iCond2), 2] <- 1
-# #design[indices$iCond2, 2] <- 1
-# 
-# 
-# 
-# 
-# 
-# res <- diffAna(tempexprs, design)
-# #res <- limmaCompleteTest(tempexprs, 
-# #labels, c(1:length(labels)), c(1:length(labels)))
-# 
-# 
-# p <- data.frame(P_Value = res$P_Value, 
-#                 logFC = res$logFC,
-#                 row.names = rownames(qData))
-# 
-# return(p)
-# }
-
-
-##' Computes differential analysis on
-##' a \code{MSnSet} object, using the Welch t-test
-##' (\code{\link{t.test}{stats}}). 
-##' 
-##' @title Performs a differential analysis on a \code{MSnSet} object
-##' using the Welch t-test
-##' @param obj An object of class \code{MSnSet}.
-##' @param condition1 A vector containing the names of the conditions 
-##' considered as condition 1.
-##' @param condition2 A vector containing the names of the conditions 
-##' considered as condition 2.
-##' @return A dataframe with two slots : P_Value (for the p-value) and logFC
-##' (the log of the Fold Change).
-##' @author Alexia Dorffer
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' condition1 <- '25fmol'
-##' condition2 <- '10fmol'
-##' wrapper.diffAnaWelch(Exp1_R25_pept[1:1000], condition1, condition2)
-# wrapper.diffAnaWelch <- function(obj, condition1, condition2){
-# 
-# qData <- Biobase::exprs(obj)
-# labels <- Biobase::pData(obj)[,"Label"]
-# p <- diffAnaWelch(qData, labels, condition1, condition2)
-# return(p)
-# }
-
-
-
-
-
-##' Computes differential analysis on
-##' an \code{MSnSet} object, using the Welch t-test
-##' (\code{\link{t.test}{stats}}). 
-##' 
-##' @title Performs a differential analysis on a \code{MSnSet} object
-##' using the Welch t-test
-##' @param qData A dataframe that contains quantitative data.
-##' @param labels A vector of the conditions (labels) (one label per sample).
-##' @param condition1 A vector containing the names of the conditions 
-##' qData as condition 1
-##' @param condition2 A vector containing the names of the conditions 
-##' considered as condition 2
-##' @return A dataframe with two slots : P_Value (for the p-value) and logFC
-##' (the log of the Fold Change).
-##' @author Florence Combes, Samuel Wieczorek
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' condition1 <- '25fmol'
-##' condition2 <- '10fmol'
-##' qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
-##' labels <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Label"]
-##' diffAnaWelch(qData, labels, condition1, condition2)
-# diffAnaWelch <- function(qData, labels, condition1, condition2){
-# 
-# if( sum(is.na(qData == TRUE))>0) {
-#     warning("There are some missing values. Please impute before.")
-#     return (NULL)
-# }
-# # if (condition1 == condition2){
-# #   warning("The two conditions are identical.")
-# #   return (NULL)
-# # }
-# 
-# 
-# indices <- getIndicesConditions(labels, condition1, condition2)
-# t <- NULL
-# logRatio <- NULL
-# for (i in 1:nrow(qData)){
-#     res <- t.test(x=qData[i,indices$iCond1],
-#                 y=qData[i,indices$iCond2])
-#     t <- c(t,res$p.value)
-#     logRatio <- c(logRatio, (res$estimate[2] - res$estimate[1]))
-# }
-# 
-# p <- data.frame(P_Value=t, logFC = logRatio)
-# return(p)
-# }
-
-
 ##' This function is a wrapper to the calibration.plot method of the 
 ##' \code{cp4p} package for use with \code{MSnSet} objects.
 ##'
-##' @title Performs a calibration plot on
-##' an \code{MSnSet} object, calling the \code{cp4p} package functions. 
+##' @title Performs a calibration plot on an \code{MSnSet} object, 
+##' calling the \code{cp4p} package functions. 
 ##' @param vPVal A dataframe that contains quantitative data.
 ##' @param pi0Method A vector of the conditions (labels) (one label 
 ##' per sample).
