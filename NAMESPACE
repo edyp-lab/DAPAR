@@ -98,16 +98,14 @@ export(
 
 
 
-#,"wrapper.diffAnaLimma","diffAnaLimma"
-#,"wrapper.diffAnaWelch","diffAnaWelch"
+
 ,"wrapper.limmaCompleteTest"
 ,"diffAnaVolcanoplot_rCharts"
 ,"diffAnaSave","diffAnaSaveRAW_Data"
 ,"diffAnaComputeFDR"
 ,"wrapperCalibrationPlot"
 ,"hc_FC_DensityPlot"
-,"Get_Comparisons_names"
-,"pvalue_FilterGetIndices"
+
 
 ,"getProcessingInfo"
 
