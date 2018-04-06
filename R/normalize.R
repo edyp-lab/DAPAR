@@ -72,42 +72,53 @@ return(obj)
 ##' normalizeD(qData, labels, "Median Centering", "within conditions")
 normalizeD <- function(qData, labels, family, method){
 #Verification des parametres
-paramfamily<-c("Global Alignment", "Median Centering", "Mean Centering", 
-                "Mean Centering Scaling")
-if (sum(is.na(match(family, paramfamily)==TRUE))>0){
+  paramfamily<-c("Global quantile alignment", "Sum by columns", "Median Centering", "Mean Centering",
+                 "Mean Centering Scaling")
+  if (sum(is.na(match(family, paramfamily)==TRUE))>0){
     warning("Parameter family is not correct")
     return (NULL)
-}
+  }
 
-parammethod<-c("sum by columns", "quantile alignment", "overall", 
-                "within conditions")
-if (sum(is.na(match(method, parammethod)==TRUE))>0){
+  parammethod<-c(NULL, "overall", "within conditions")
+  if (sum(is.na(match(method, parammethod)==TRUE))>0){
     warning("Parameter method is not correct")
     return (NULL)
-}
+  }
 
-
-.temp <- qData
-if (!is.null(.temp)){
+  .temp <- qData
+  if (!is.null(.temp)){
     data <- .temp
-    
-    
-    
+
     ###############
-    if (family == "Global Alignment"){
-        if (method == "sum by columns"){
-            t <- 2^(.temp)
-            s <- colSums(t, na.rm=TRUE)
-            data <- t
-            for ( i in 1:nrow(data)) { data[i,] <- t[i,] / s}
-            .temp <- log2(data)
+    if (family == "Sum by columns"){
+      t <- 2^(.temp)
+
+      if (method == "overall"){
+        sums_cols <- colSums(t, na.rm=TRUE)
+        #normalisation
+        for ( i in 1:nrow(t)) {
+          t[i, ] <- (t[i, ] / sums_cols)*median(sums_cols)
         }
-    else if (method == "quantile alignment"){
+      }
+      else if  (method == "within conditions"){
+        for (l in unique(labels)) {
+          indices <- which(labels== l)
+          sums_cols <- colSums(t[,indices], na.rm=TRUE)
+          for (i in 1:nrow(t)){
+            t[i,indices] <- (t[i,indices]/sums_cols) * median(sums_cols)
+          }
+        }
+      }
+
+      .temp <- log2(t)
+    }
+    else if (family == "Global quantile alignment"){
         .temp <- normalize.quantiles(.temp)
         dimnames(.temp) <- list(rownames(qData),colnames(qData))
-        }
     }
-    
+
+
+
     
     
     ####################
