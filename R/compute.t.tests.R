@@ -39,7 +39,7 @@ wrapper.t_test_Complete <- function(obj, design){
 ##' @param Conditions xxxxx
 ##' @param Contrast xxxxx
 ##' @return xxxxxx
-##' @author Florence Combes
+##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
