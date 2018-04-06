@@ -99,7 +99,7 @@ diffAnaComputeFDR <- function(FC, pval,threshold_PVal=0, threshold_LogFC = 0,
     
     upItems <- which(abs(FC) >= threshold_LogFC)
     
-    selectedItems <- pval[upItems,1]
+    selectedItems <- pval[upItems]
 
     padj <- adjust.p(selectedItems,  pi0Method)
     
