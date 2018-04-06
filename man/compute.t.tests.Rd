@@ -4,7 +4,8 @@
 \alias{compute.t.tests}
 \title{xxxxxx}
 \usage{
-\method{compute}{t.tests}(qData, Conditions, Contrast = 1)
+\method{compute}{t.tests}(qData, Conditions, Contrast = "OnevsOne",
+  type = "Student")
 }
 \arguments{
 \item{qData}{A matrix of quantitative data, without any missing values.}
@@ -17,7 +18,9 @@ biological condition versus
 each of the other ones (Contrast=1; 
 for example H0:"C1=C2" vs H1:"C1!=C2", etc.) 
 or each condition versus all others (Contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
- H1:"C1!=(C2+C3)/2", etc. if there are three conditions).}
+H1:"C1!=(C2+C3)/2", etc. if there are three conditions).}
+
+\item{type}{xxxxx}
 }
 \value{
 A list of two items : FC and P_Value; both are dataframe. The first one contains

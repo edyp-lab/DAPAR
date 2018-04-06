@@ -4,12 +4,12 @@
 \alias{wrapper.t_test_Complete}
 \title{xxxxx}
 \usage{
-wrapper.t_test_Complete(obj, design)
+wrapper.t_test_Complete(obj, ...)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet} with no missing values}
 
-\item{design}{An integer that reflects the type of comparisons. Available values are 1 (One vs One) or (One vs All)}
+\item{...}{See \code{compute.t.tests}}
 }
 \value{
 xxxxxxx

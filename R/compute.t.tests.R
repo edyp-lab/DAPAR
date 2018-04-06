@@ -4,7 +4,7 @@
 ##'
 ##' @title xxxxx
 ##' @param obj An object of class \code{MSnSet} with no missing values
-##' @param design An integer that reflects the type of comparisons. Available values are 1 (One vs One) or (One vs All)
+##' @param ... See \code{compute.t.tests}
 ##' @return xxxxxxx
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -16,15 +16,12 @@
 ##' obj <- reIntroduceLapala(obj, lapala)
 ##' obj <- wrapper.impute.detQuant(obj)
 ##' ttest <- wrapper.t_test_Complete(obj, 1)
-wrapper.t_test_Complete <- function(obj, design){
+wrapper.t_test_Complete <- function(obj,...){
     
     qData <- Biobase::exprs(obj)
     conds <- pData(obj)[,"Label"]
-    switch(design,
-           OnevsOne=contrast <- 1,
-           OnevsAll=contrast <- 2)
     
-    ttest <- compute.t.tests(qData,conds, contrast)
+    ttest <- compute.t.tests(qData,conds,...)
     
     return (ttest)
 }
@@ -43,7 +40,8 @@ wrapper.t_test_Complete <- function(obj, design){
 ##' each of the other ones (Contrast=1; 
 ##' for example H0:"C1=C2" vs H1:"C1!=C2", etc.) 
 ##' or each condition versus all others (Contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
-##'  H1:"C1!=(C2+C3)/2", etc. if there are three conditions).
+##' H1:"C1!=(C2+C3)/2", etc. if there are three conditions).
+##' @param type xxxxx
 ##' @return A list of two items : FC and P_Value; both are dataframe. The first one contains
 ##' the logFC values of all the comparisons (one column for one comparison), the second one contains
 ##' the pvalue of all the comparisons (one column for one comparison). The names of the columns for those two dataframes
@@ -58,8 +56,15 @@ wrapper.t_test_Complete <- function(obj, design){
 ##' obj <- reIntroduceLapala(obj, lapala)
 ##' obj <- wrapper.impute.detQuant(obj)
 ##' ttest <- compute.t.tests(Biobase::exprs(obj), Biobase::pData(obj)[,"Label"],1)
-compute.t.tests <- function(qData,Conditions, Contrast=1){
+compute.t.tests <- function(qData,Conditions, Contrast="OnevsOne", type="Student"){
 
+    
+    switch(type,
+           Student=.type <- TRUE,
+           Welch=.type <- FALSE)
+    
+    
+    
 res<-list()
 FC <- list()
 P_Value <- list()
@@ -72,7 +77,7 @@ Conditions.f <- factor(Conditions)
 Cond.Nb<-length(levels(Conditions.f))
 
 
-    if(Contrast==1){
+    if(Contrast=="OnevsOne"){
         nbComp <- Cond.Nb*(Cond.Nb-1)/2
 
         for(i in 1:(Cond.Nb-1)){
@@ -83,7 +88,7 @@ Cond.Nb<-length(levels(Conditions.f))
     
                 res.tmp <- apply(qData[,c(c1Indice,c2Indice)], 1, 
                                  function(x) {
-                   t.test(x~Conditions[c(c1Indice,c2Indice)], data=qData, var.equal=F)
+                   t.test(x~Conditions[c(c1Indice,c2Indice)], data=qData, var.equal=.type)
                 })
                 p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))
                 m1.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[1])))
@@ -91,14 +96,14 @@ Cond.Nb<-length(levels(Conditions.f))
                 FC.tmp <- m1.tmp - m2.tmp
                 
                 txt <- paste(unique(Conditions[c1Indice]),"-vs-",unique(Conditions[c2Indice]), sep="")
-                
+
                 FC[[paste(txt, "logFC", sep="_")]] <- FC.tmp
                 P_Value[[paste(txt, "pval", sep="_")]] <- p.tmp
             }
         }
     } ##end Contrast==1
 
-    if(Contrast==2){
+    if(Contrast=="OnevsAll"){
         nbComp <- Cond.Nb
         
         for(i in 1:nbComp){
@@ -111,7 +116,7 @@ Cond.Nb<-length(levels(Conditions.f))
             
             res.tmp <- apply(qData, 1, 
                              function(x) {
-                                 t.test(x~Cond.t.all, data=qData, var.equal=FALSE)
+                                 t.test(x~Cond.t.all, data=qData, var.equal=.type)
                              })
             
             p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))
@@ -126,12 +131,14 @@ Cond.Nb<-length(levels(Conditions.f))
         }
     } # End Contrast=2
     
-    
+
     res.l <- list(
               FC = as.data.frame(FC),
               P_Value = as.data.frame(P_Value)
     )
-    
+    colnames(res.l$FC) <- names(FC)
+    colnames(res.l$P_Value) <- names(P_Value)
+
     return(res.l) 
     
 }
