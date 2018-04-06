@@ -28,7 +28,7 @@
 ##' Bio-Analytical or Tech-Analytical.
 ##' @param obj An object of class \code{MSnSet} with no missing values
 ##' @param design An integer that reflects the type of comparisons. Available values are 1 (One vs One) or (One vs All)
-##' @return An object of class \code{MSnSet}
+##' @return xxxxxxxxxx
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' require(DAPARdata)

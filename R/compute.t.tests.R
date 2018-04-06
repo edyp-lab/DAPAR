@@ -35,10 +35,19 @@ wrapper.t_test_Complete <- function(obj, design){
 ##' This function is xxxxxx
 ##'
 ##' @title xxxxxx
-##' @param qData xxxx
-##' @param Conditions xxxxx
-##' @param Contrast xxxxx
-##' @return xxxxxx
+##' @param qData A matrix of quantitative data, without any missing values.
+##' @param Conditions A vector of factor which indicates the name of the 
+##' biological condition for each replicate. 
+##' @param Contrast Indicates if the test consists of the comparison of each 
+##' biological condition versus 
+##' each of the other ones (Contrast=1; 
+##' for example H0:"C1=C2" vs H1:"C1!=C2", etc.) 
+##' or each condition versus all others (Contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
+##'  H1:"C1!=(C2+C3)/2", etc. if there are three conditions).
+##' @return A list of two items : FC and P_Value; both are dataframe. The first one contains
+##' the logFC values of all the comparisons (one column for one comparison), the second one contains
+##' the pvalue of all the comparisons (one column for one comparison). The names of the columns for those two dataframes
+##' are identical and correspond to the description of the comparison. 
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' require(DAPARdata)
@@ -48,7 +57,7 @@ wrapper.t_test_Complete <- function(obj, design){
 ##' obj <- wrapper.impute.detQuant(obj)
 ##' obj <- reIntroduceLapala(obj, lapala)
 ##' obj <- wrapper.impute.detQuant(obj)
-##' ttest <- wrapper.limmaCompleteTest(obj, 1)
+##' ttest <- compute.t.tests(obj, 1)
 compute.t.tests <- function(qData,Conditions, Contrast=1){
 
 res<-list()
@@ -64,8 +73,6 @@ Cond.Nb<-length(levels(Conditions.f))
 
 
     if(Contrast==1){
-
-       # nbCompa.1v1 <- Cond.Nb*(Cond.Nb-1)/2
         nbComp <- Cond.Nb*(Cond.Nb-1)/2
 
         for(i in 1:(Cond.Nb-1)){
@@ -85,19 +92,16 @@ Cond.Nb<-length(levels(Conditions.f))
                 
                 txt <- paste(unique(Conditions[c1Indice]),"-vs-",unique(Conditions[c2Indice]), sep="")
                 
-                FC[[paste(txt, "FC", sep="_")]] <- FC.tmp
+                FC[[paste(txt, "logFC", sep="_")]] <- FC.tmp
                 P_Value[[paste(txt, "pval", sep="_")]] <- p.tmp
             }
         }
- 
     } ##end Contrast==1
 
     if(Contrast==2){
+        nbComp <- Cond.Nb
         
-        #nbCompa.1vsAll<-Cond.Nb
-        nbComp <- nbCompa.1vsAll
-        
-        for(i in 1:nbCompa.1vsAll){
+        for(i in 1:nbComp){
             
             c1<-which(Conditions==levels(Conditions.f)[i])
            
@@ -105,20 +109,20 @@ Cond.Nb<-length(levels(Conditions.f))
             Cond.t.all[c1]<-levels(Conditions.f)[i]
             Cond.t.all[-c1]<-"all"
             
-            p.tmp <- m1.tmp <- m2.tmp <- FC.tmp <- c()
-            for(k in 1:dim(qData)[1]){
-                t<-t.test(as.numeric(qData[k,]) ~ Cond.t.all, data=qData, var.equal=FALSE)
-                p.tmp[k]<-t$p.value
-                m1.tmp[k]<-as.numeric(t$estimate[1])
-                m2.tmp[k]<-as.numeric(t$estimate[2])
-                FC.tmp[k] <- as.numeric(t$estimate[1])-as.numeric(t$estimate[2])
-            }
+            res.tmp <- apply(qData, 1, 
+                             function(x) {
+                                 t.test(x~Cond.t.all, data=qData, var.equal=FALSE)
+                             })
             
-            res.tmp<-cbind(p.tmp, m1.tmp, m2.tmp, FC.tmp)
-            txt <- paste(unique(Conditions[c1Indice]),"-vs-(all-",unique(Conditions[c1Indice]),")", sep="")
-            colnames(res.tmp)<-paste(txt, suffixes, sep="_")
+            p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))
+            m1.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[1])))
+            m2.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[2])))
+            FC.tmp <- m1.tmp - m2.tmp
             
-            res[[txt]]<-res.tmp
+            txt <- paste(unique(Conditions[c1]),"-vs-(all-",unique(Conditions[c1]),")", sep="")
+            
+            FC[[paste(txt, "logFC", sep="_")]] <- FC.tmp
+            P_Value[[paste(txt, "pval", sep="_")]] <- p.tmp
         }
     } # End Contrast=2
     
