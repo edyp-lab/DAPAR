@@ -36,7 +36,7 @@ data before and after normalization
 require(DAPARdata)
 data(Exp1_R25_pept)
 labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-objAfter <- wrapper.normalizeD(Exp1_R25_pept, "Median Centering", 
+objAfter <- wrapper.normalizeD(Exp1_R25_pept, "Quantile Centering", 
 "within conditions")
 wrapper.compareNormalizationD(Exp1_R25_pept, objAfter, labels)
 }

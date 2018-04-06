@@ -71,7 +71,9 @@ hc_FC_DensityPlot <-function(df_FC, threshold_LogFC = 0){
 ##' 
 ##' @title Computes the FDR corresponding to the p-values of the 
 ##' differential analysis using 
-##' @param data The result of the differential analysis processed 
+##' @param FC The result (FC values) of the differential analysis processed 
+##' by \code{\link{wrapper.limmaCompleteTest}} 
+##' @param pval The result (p-values) of the differential analysis processed 
 ##' by \code{\link{wrapper.limmaCompleteTest}} 
 ##' @param threshold_PVal The threshold on p-pvalue to
 ##' distinguish between differential and non-differential data 
@@ -90,14 +92,14 @@ hc_FC_DensityPlot <-function(df_FC, threshold_LogFC = 0){
 ##' obj <- reIntroduceLapala(obj, lapala)
 ##' obj <- wrapper.impute.detQuant(obj)
 ##' limma <- wrapper.limmaCompleteTest(obj, 1)
-##' fc <- limma$FC[1]
-##' pval <- limma$P_Value[1]
-##' diffAnaComputeFDR(list(FC=fc, P_Value = pval))
-diffAnaComputeFDR <- function(data,threshold_PVal=0, threshold_LogFC = 0, 
+##' diffAnaComputeFDR(limma$FC,limma$P_Value)
+diffAnaComputeFDR <- function(FC, pval,threshold_PVal=0, threshold_LogFC = 0, 
                             pi0Method=1){
-    upItems <- which(abs(data$FC) >= threshold_LogFC)
+    if (is.null(FC) || is.null(pval)){return()}
     
-    selectedItems <- data$P_Value[upItems,]
+    upItems <- which(abs(FC) >= threshold_LogFC)
+    
+    selectedItems <- pval[upItems,1]
 
     padj <- adjust.p(selectedItems,  pi0Method)
     
@@ -180,7 +182,7 @@ diffAnaSaveRAW_Data <- function(obj, data,method="limma"){
 ##' limma <- wrapper.limmaCompleteTest(obj, 1)
 ##' fc <- limma$FC[1]
 ##' pval <- limma$P_Value[1]
-##' diffAnaSave(obj, list(logFC=fc, P_Value = pval))
+##' diffAnaSave(obj, list(FC=fc, P_Value = pval))
 diffAnaSave <- function (obj, data, method="limma", 
                         threshold_pVal=1e-60, threshold_logFC=0, fdr=0, 
                         calibrationMethod = "pounds"){
@@ -194,7 +196,7 @@ diffAnaSave <- function (obj, data, method="limma",
     #####################################################################
     
     Biobase::fData(obj)$P_Value <- data$P_Value
-    Biobase::fData(obj)$logFC <- data$logFC
+    Biobase::fData(obj)$FC <- data$FC
     Biobase::fData(obj)$Significant <- 0
 
     text <- paste("Differential analysis with",method)
@@ -202,7 +204,7 @@ diffAnaSave <- function (obj, data, method="limma",
     
     
     ##setSignificant
-    x <- Biobase::fData(obj)$logFC
+    x <- Biobase::fData(obj)$FC
     y <- -log10(Biobase::fData(obj)$P_Value)
     
     ipval <- which(y >= threshold_pVal)
@@ -257,7 +259,7 @@ diffAnaSave <- function (obj, data, method="limma",
 ##' limma <- wrapper.limmaCompleteTest(obj, 1)
 ##' fc <- limma$FC[1]
 ##' pval <- limma$P_Value[1]
-##' obj <- diffAnaSave(obj, list(logFC=fc, P_Value = pval))
+##' obj <- diffAnaSave(obj, list(FC=fc, P_Value = pval))
 ##' signif <- diffAnaGetSignificant(obj)
 diffAnaGetSignificant <- function (obj){
     if (is.null(obj)){

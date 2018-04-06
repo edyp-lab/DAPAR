@@ -340,7 +340,7 @@ limmaCompleteTest <- function(qData,Conditions, RepBio, RepTech, Contrast=1){
         #not the same syntax to pars if Contast=1 or Contrast=2
         if(Contrast==1){
             compa <- stringr::str_match_all(colnames(fit$p.value)[i],"[[:space:]]Condition([[:digit:]]+)")[[1]]
-            cn[i] <- paste(levels(Conditions)[as.numeric(compa[1,2])], "-vs-",levels(Conditions)[as.numeric(compa[2,2])], sep="")
+            cn[i] <- paste(levels(Conditions)[as.numeric(compa[1,2])], "_vs_",levels(Conditions)[as.numeric(compa[2,2])], sep="")
         }
         if(Contrast==2){
             #hierarchic only
@@ -349,7 +349,7 @@ limmaCompleteTest <- function(qData,Conditions, RepBio, RepTech, Contrast=1){
             
             #hier and non hier
             compa<-str_match_all(colnames(fit$p.value)[i], "[[:space:]]Condition([[:digit:]]+)")[[1]]
-            cn[i]<-paste(levels(Conditions)[as.numeric(compa[1,2])], "-vs-(all-",levels(Conditions)[as.numeric(compa[1,2])], ")", sep="")
+            cn[i]<-paste(levels(Conditions)[as.numeric(compa[1,2])], "_vs_(all-",levels(Conditions)[as.numeric(compa[1,2])], ")", sep="")
         }
     }
     
@@ -359,7 +359,7 @@ limmaCompleteTest <- function(qData,Conditions, RepBio, RepTech, Contrast=1){
       P_Value = as.data.frame(res[,-(1:Compa.Nb)] )
     )
     
-    colnames(res.l$FC) <- paste(cn, "logFC",sep="_")
+    colnames(res.l$FC) <- paste(cn, "FC",sep="_")
     colnames(res.l$P_Value) <- paste(cn, "pval",sep="_")
     ## end colnames
     

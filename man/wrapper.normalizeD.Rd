@@ -2,28 +2,42 @@
 % Please edit documentation in R/normalize.R
 \name{wrapper.normalizeD}
 \alias{wrapper.normalizeD}
-\title{Normalization}
+\title{Normalisation}
 \usage{
-wrapper.normalizeD(obj, family, method)
+wrapper.normalizeD(obj, method, type = NULL, scaling = FALSE,
+  quantile = 0.15)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
 
-\item{family}{One of the following : Global Alignment, 
-Median Centering, Mean Centering, Mean Centering Scaling.}
+\item{method}{One of the following : Global Alignment (for normalizations 
+of important magnitude), Quantile Centering, Mean Centering.}
 
-\item{method}{"overall" or "within conditions".}
+\item{type}{For the method "Global Alignment", the parameters are:
+"sum by columns": operates on the original scale (not the log2 one) and propose 
+to normalize each abundance by the total abundance of the sample (so as to focus
+on the analyte proportions among each sample).
+"Alignment on all quantiles": proposes to align the quantiles of all the 
+replicates; practically it amounts to replace abundances by order statistics.
+For the two other methods, the parameters are "overall" (shift all the 
+sample distributions at once) or "within conditions" (shift the sample 
+distributions within each condition at a time).}
+
+\item{scaling}{A boolean that indicates if the variance of the data have to 
+be forced to unit (variance reduction) or not.}
+
+\item{quantile}{A float that corresponds to the quantile used to align the
+data.}
 }
 \value{
-An instance of class \code{MSnSet} 
-where the quantitative data in the \code{exprs()} tab
-has been normalized.
+An instance of class \code{MSnSet} where the quantitative 
+data in the \code{exprs()} tab has been normalized.
 }
 \description{
 Provides several methods to normalize quantitative data from
 a \code{MSnSet} object.
-They are organized in four main families : Global Alignment, 
-Median Centering, Mean Centering, Mean Centering Scaling.
+They are organized in four main families : Strong Rescaling, 
+Median Centering, Mean Centering, Mean CenteringScaling.
 For the first family, two sub-categories are available : the sum by columns
 and the quantiles method.
 For the three other families, two categories are available : 
@@ -36,8 +50,8 @@ by condition.
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-wrapper.normalizeD(Exp1_R25_pept[1:1000], "Median Centering", "within conditions")
+wrapper.normalizeD(Exp1_R25_pept[1:1000], "Quantile Centering", "within conditions")
 }
 \author{
-Alexia Dorffer
+Samuel Wieczorek
 }

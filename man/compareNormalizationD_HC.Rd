@@ -36,9 +36,10 @@ normalization using the library \code{highcharter}
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-qDataBefore <- Biobase::exprs(Exp1_R25_pept)
-labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-qDataAfter <- normalizeD(qDataBefore,labels,"Median Centering",
+obj <- Exp1_R25_pept[1:1000]
+qDataBefore <- Biobase::exprs(obj)
+labels <- Biobase::pData(obj)[,"Label"]
+qDataAfter <- normalizeD(qDataBefore,labels,"Quantile Centering",
 "within conditions")
 compareNormalizationD_HC(qDataBefore, qDataAfter, labels)
 }

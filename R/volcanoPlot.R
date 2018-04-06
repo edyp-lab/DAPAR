@@ -7,7 +7,7 @@
 ##' non differential data.
 ##' 
 ##' @title Volcanoplot of the differential analysis
-##' @param logFC A vector of the log(fold change) values of the differential
+##' @param FC A vector of the log(fold change) values of the differential
 ##' analysis.
 ##' @param pVal A vector of the p-value values returned by the differential
 ##' analysis.
@@ -29,7 +29,7 @@
 ##' obj <- wrapper.impute.detQuant(obj)
 ##' limma <- wrapper.limmaCompleteTest(obj, 1)
 ##' diffAnaVolcanoplot(limma$FC[,1], limma$P_Value[,1])
-diffAnaVolcanoplot <- function(logFC=NULL, 
+diffAnaVolcanoplot <- function(FC=NULL, 
                                 pVal=NULL, 
                                 threshold_pVal=1e-60, 
                                 threshold_logFC=0, 
@@ -39,7 +39,7 @@ xtitle <- paste("log2 ( mean(",conditions[2],") / mean(",conditions[1],") )",
                 sep="")
 
 
-if (is.null(logFC)||is.null(pVal)) {
+if (is.null(FC)||is.null(pVal)) {
 
     p <- plot(-1,-1
             , xlab = xtitle
@@ -51,7 +51,7 @@ if (is.null(logFC)||is.null(pVal)) {
     return (NULL)
 }
 
-x <- logFC
+x <- FC
 y <- -log10(pVal)
 
 colorCode <- c("gray", "orange")
@@ -180,7 +180,7 @@ diffAnaVolcanoplot_rCharts <- function(df,
         hc_yAxis(title = list(text="-log10(pValue)"),
                  plotLines=list(list(color= "red" , width = 2, value = threshold_pVal, zIndex = 5)),
                  plotLines=list(list(color= "grey" , width = 2, value = 0, zIndex = 5))) %>%
-        hc_xAxis(title = list(text = "logFC"),
+        hc_xAxis(title = list(text = "FC"),
                  plotBands = list(list(from= -threshold_logFC, to = threshold_logFC, color = "lightgrey")),
                  plotLines=list(list(color= "grey" , width = 2, value = 0, zIndex = 5))) %>%
         hc_tooltip(headerFormat= '',

@@ -4,7 +4,8 @@
 \alias{normalizeD}
 \title{Normalisation}
 \usage{
-normalizeD(qData, labels, family, method)
+normalizeD(qData, labels, method, type = NULL, scaling = FALSE,
+  quantile = 0.15)
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
@@ -12,10 +13,24 @@ normalizeD(qData, labels, family, method)
 \item{labels}{A vector of strings containing the column "Label" of 
 the \code{pData()}.}
 
-\item{family}{One of the following : Global Alignment, 
-Median Centering, Mean Centering, Mean Centering Scaling.}
+\item{method}{One of the following : Global Alignment, 
+Quantile Centering, Mean Centering.}
 
-\item{method}{"Overall" or "within conditions".}
+\item{type}{For the method "Global Alignment", the parameters are:
+"sum by columns": operates on the original scale (not the log2 one) and propose 
+to normalize each abundance by the total abundance of the sample (so as to focus
+on the analyte proportions among each sample).
+"Alignment on all quantiles": proposes to align the quantiles of all the 
+replicates; practically it amounts to replace abundances by order statistics.
+For the two other methods, the parameters are "overall" (shift all the 
+sample distributions at once) or "within conditions" (shift the sample 
+distributions within each condition at a time).}
+
+\item{scaling}{A boolean that indicates if the variance of the data have to 
+be forced to unit (variance reduction) or not.}
+
+\item{quantile}{A float that corresponds to the quantile used to align the
+data.}
 }
 \value{
 A matrix normalized
@@ -28,7 +43,7 @@ Median Centering, Mean Centering, Mean CenteringScaling.
 For the first family, two sub-categories are available : the sum by columns
 and the quantiles method.
 For the three other families, two categories are available : 
-"overall" which means that the value for each protein 
+"Overall" which means that the value for each protein 
 (ie line in the expression data tab) is computed over all the samples ;
 "within conditions" which means that the value for each protein 
 (ie line in the matrix) is computed condition
@@ -39,8 +54,8 @@ require(DAPARdata)
 data(Exp1_R25_pept)
 qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
 labels <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Label"]
-normalizeD(qData, labels, "Median Centering", "within conditions")
+normalizeD(qData, labels, "Quantile Centering", "within conditions", quantile = 0.15)
 }
 \author{
-Florence Combes, Samuel Wieczorek
+Samuel Wieczorek, Thomas Burger
 }

@@ -21,7 +21,7 @@ wrapper.t_test_Complete <- function(obj,...){
     qData <- Biobase::exprs(obj)
     conds <- pData(obj)[,"Label"]
     
-    ttest <- compute.t.tests(qData,conds,...)
+    ttest <- compute.t.tests(qData,Conditions=conds,...)
     
     return (ttest)
 }
@@ -70,7 +70,6 @@ FC <- list()
 P_Value <- list()
 
 nbComp <- NULL
-suffixes <- c("pval", "m1", "m2", "logFC")
 
 Conditions.f <- factor(Conditions)
 #Cond<-levels(Conditions.f)
@@ -95,9 +94,9 @@ Cond.Nb<-length(levels(Conditions.f))
                 m2.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[2])))
                 FC.tmp <- m1.tmp - m2.tmp
                 
-                txt <- paste(unique(Conditions[c1Indice]),"-vs-",unique(Conditions[c2Indice]), sep="")
+                txt <- paste(unique(Conditions[c1Indice]),"_vs_",unique(Conditions[c2Indice]), sep="")
 
-                FC[[paste(txt, "logFC", sep="_")]] <- FC.tmp
+                FC[[paste(txt, "FC", sep="_")]] <- FC.tmp
                 P_Value[[paste(txt, "pval", sep="_")]] <- p.tmp
             }
         }
@@ -124,9 +123,9 @@ Cond.Nb<-length(levels(Conditions.f))
             m2.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[2])))
             FC.tmp <- m1.tmp - m2.tmp
             
-            txt <- paste(unique(Conditions[c1]),"-vs-(all-",unique(Conditions[c1]),")", sep="")
+            txt <- paste(unique(Conditions[c1]),"_vs_(all-",unique(Conditions[c1]),")", sep="")
             
-            FC[[paste(txt, "logFC", sep="_")]] <- FC.tmp
+            FC[[paste(txt, "FC", sep="_")]] <- FC.tmp
             P_Value[[paste(txt, "pval", sep="_")]] <- p.tmp
         }
     } # End Contrast=2

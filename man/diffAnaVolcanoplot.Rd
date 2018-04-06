@@ -4,11 +4,11 @@
 \alias{diffAnaVolcanoplot}
 \title{Volcanoplot of the differential analysis}
 \usage{
-diffAnaVolcanoplot(logFC = NULL, pVal = NULL, threshold_pVal = 1e-60,
+diffAnaVolcanoplot(FC = NULL, pVal = NULL, threshold_pVal = 1e-60,
   threshold_logFC = 0, conditions = NULL)
 }
 \arguments{
-\item{logFC}{A vector of the log(fold change) values of the differential
+\item{FC}{A vector of the log(fold change) values of the differential
 analysis.}
 
 \item{pVal}{A vector of the p-value values returned by the differential

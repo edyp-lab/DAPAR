@@ -77,7 +77,7 @@ export(
 ,"deleteLinesFromIndices"
 ,"StringBasedFiltering"
 ,"getIndicesOfLinesToRemove"
-,"wrapper.normalizeD2","normalizeD2"
+,"wrapper.normalizeD","normalizeD"
 ,"wrapper.compareNormalizationD","compareNormalizationD"
 
 

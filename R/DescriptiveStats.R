@@ -373,7 +373,7 @@ violinPlotD <- function(qData,
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-##' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "Median Centering", 
+##' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "Quantile Centering", 
 ##' "within conditions")
 ##' wrapper.compareNormalizationD(Exp1_R25_pept, objAfter, labels)
 wrapper.compareNormalizationD <- function(objBefore, objAfter, 
@@ -413,7 +413,7 @@ compareNormalizationD(qDataBefore, qDataAfter, labelsForLegend, indData2Show,
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-##' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "Median Centering", 
+##' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "Quantile Centering", 
 ##' "within conditions")
 ##' wrapper.compareNormalizationD_HC(Exp1_R25_pept, objAfter, labels)
 wrapper.compareNormalizationD_HC <- function(objBefore, objAfter, 
@@ -451,7 +451,7 @@ wrapper.compareNormalizationD_HC <- function(objBefore, objAfter,
 ##' data(Exp1_R25_pept)
 ##' qDataBefore <- Biobase::exprs(Exp1_R25_pept)
 ##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-##' qDataAfter <- normalizeD(qDataBefore,labels,"Median Centering",
+##' qDataAfter <- normalizeD(qDataBefore,labels,"Quantile Centering",
 ##' "within conditions")
 ##' compareNormalizationD(qDataBefore, qDataAfter, labels)
 compareNormalizationD <- function(qDataBefore,
@@ -539,9 +539,10 @@ palette("default")
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' qDataBefore <- Biobase::exprs(Exp1_R25_pept)
-##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-##' qDataAfter <- normalizeD(qDataBefore,labels,"Median Centering",
+##' obj <- Exp1_R25_pept[1:1000]
+##' qDataBefore <- Biobase::exprs(obj)
+##' labels <- Biobase::pData(obj)[,"Label"]
+##' qDataAfter <- normalizeD(qDataBefore,labels,"Quantile Centering",
 ##' "within conditions")
 ##' compareNormalizationD_HC(qDataBefore, qDataAfter, labels)
 compareNormalizationD_HC <- function(qDataBefore,

@@ -28,7 +28,7 @@ obj <- wrapper.impute.detQuant(obj)
 limma <- wrapper.limmaCompleteTest(obj, 1)
 fc <- limma$FC[1]
 pval <- limma$P_Value[1]
-obj <- diffAnaSave(obj, list(logFC=fc, P_Value = pval))
+obj <- diffAnaSave(obj, list(FC=fc, P_Value = pval))
 signif <- diffAnaGetSignificant(obj)
 }
 \author{
