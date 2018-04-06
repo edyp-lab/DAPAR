@@ -57,7 +57,7 @@ wrapper.t_test_Complete <- function(obj, design){
 ##' obj <- wrapper.impute.detQuant(obj)
 ##' obj <- reIntroduceLapala(obj, lapala)
 ##' obj <- wrapper.impute.detQuant(obj)
-##' ttest <- compute.t.tests(obj, 1)
+##' ttest <- compute.t.tests(Biobase::exprs(obj), Biobase::pData(obj)[,"Label"],1)
 compute.t.tests <- function(qData,Conditions, Contrast=1){
 
 res<-list()

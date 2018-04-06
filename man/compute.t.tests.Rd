@@ -36,7 +36,7 @@ lapala <- findLapalaBlock(obj)
 obj <- wrapper.impute.detQuant(obj)
 obj <- reIntroduceLapala(obj, lapala)
 obj <- wrapper.impute.detQuant(obj)
-ttest <- compute.t.tests(obj, 1)
+ttest <- compute.t.tests(Biobase::exprs(obj), Biobase::pData(obj)[,"Label"],1)
 }
 \author{
 Florence Combes, Samuel Wieczorek
