@@ -30,6 +30,33 @@ return (n)
 }
 
 
+##' Returns the possible number of values in lines in a matrix.
+##' 
+##' @title Returns the possible number of values in lines in the data
+##' @param obj An object of class \code{MSnSet}
+##' @param type xxxxxxx
+##' @return An integer
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' qData <- Biobase::exprs(Exp1_R25_pept)
+##' getListNbValuesInLines(qData)
+getListNbValuesInLines <- function(obj, type="wholeMatrix"){
+  if (is.null(obj)){return()}
+  
+  if(is.null(obj@experimentData@other$OriginOfValues)){
+    ll <- seq(0,ncol(obj))
+  }
+  data <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
+  switch(type,
+         wholeMatrix= ll <- unique(ncol(data) - apply(is.na(data), 1, sum)),
+         byCond = {
+           
+         })
+  
+  return (sort(ll))
+}
 
 
 ##' Returns a list for the two conditions where each slot is a vector of 
