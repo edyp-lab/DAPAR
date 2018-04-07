@@ -79,7 +79,7 @@ export(
 ,"getIndicesOfLinesToRemove"
 ,"wrapper.normalizeD","normalizeD"
 ,"wrapper.compareNormalizationD","compareNormalizationD"
-
+,"getListNbValuesInLines"
 
 ,"reIntroduceLapala"
 ,"findLapalaBlock"
