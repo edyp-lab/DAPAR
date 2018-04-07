@@ -1,5 +1,6 @@
 
 
+
 ##' This function is a wrapper xxxxx
 ##'
 ##' @title xxxxx
@@ -87,7 +88,7 @@ Cond.Nb<-length(levels(Conditions.f))
     
                 res.tmp <- apply(qData[,c(c1Indice,c2Indice)], 1, 
                                  function(x) {
-                   t.test(x~Conditions[c(c1Indice,c2Indice)], data=qData, var.equal=.type)
+                   t.test(x~Conditions[c(c1Indice,c2Indice)],  var.equal=.type)
                 })
                 p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))
                 m1.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[1])))
@@ -115,7 +116,7 @@ Cond.Nb<-length(levels(Conditions.f))
             
             res.tmp <- apply(qData, 1, 
                              function(x) {
-                                 t.test(x~Cond.t.all, data=qData, var.equal=.type)
+                                 t.test(x~Cond.t.all, var.equal=.type)
                              })
             
             p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))
