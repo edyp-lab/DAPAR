@@ -30,6 +30,7 @@ return (n)
 }
 
 
+
 ##' Returns the possible number of values in lines in a matrix.
 ##' 
 ##' @title Returns the possible number of values in lines in the data
@@ -40,8 +41,7 @@ return (n)
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' getListNbValuesInLines(qData)
+##' getListNbValuesInLines(Exp1_R25_pept)
 getListNbValuesInLines <- function(obj, type="wholeMatrix"){
   if (is.null(obj)){return()}
   
@@ -51,12 +51,24 @@ getListNbValuesInLines <- function(obj, type="wholeMatrix"){
   data <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
   switch(type,
          wholeMatrix= ll <- unique(ncol(data) - apply(is.na(data), 1, sum)),
-         byCond = {
-           
+         allCond = {
+           tmp <- NULL
+           for (cond in unique(Biobase::pData(obj)$Label)){
+             tmp <- c(tmp, length(which(Biobase::pData(obj)$Label== cond)))
+           }
+           ll <- seq(0,min(tmp))
+         },
+         atLeastOneCond = {
+           tmp <- NULL
+           for (cond in unique(Biobase::pData(obj)$Label)){
+             tmp <- c(tmp, length(which(Biobase::pData(obj)$Label== cond)))
+           }
+           ll <- seq(0,min(tmp))
          })
   
   return (sort(ll))
 }
+
 
 
 ##' Returns a list for the two conditions where each slot is a vector of 
