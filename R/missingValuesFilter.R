@@ -226,6 +226,48 @@ StringBasedFiltering <- function(obj,
 
 
 
+
+
+
+
+##' StringBasedFiltering(Exp1_R25_pept, 'Potential.contaminant', '+', 'Reverse', '+')
+StringBasedFiltering2 <- function(obj, cname=NULL, tag=NULL){
+  
+  deleted <- NULL
+  
+  ##
+  ##Search for contaminants
+  ##
+  if ((!is.null(cname) || (cname != ""))) {
+    ind <- NULL
+    ind <- getIndicesOfLinesToRemove(obj,cname,  tag)
+    
+    if (!is.null(ind) && (length(ind) > 0)){
+      deleted <- obj[ind]
+      
+      obj <- deleteLinesFromIndices(obj, ind, 
+                                    paste("\"", 
+                                          length(ind), 
+                                          " contaminants were removed from dataset.\"",
+                                          sep="")
+      )
+      
+    }
+  }
+  
+  
+ 
+  
+  return(list(obj=obj, deleted=deleted))
+}
+
+
+
+
+
+
+
+
 ##' This function returns the indice of the lines to delete, based on a 
 ##' prefix string
 ##' 
