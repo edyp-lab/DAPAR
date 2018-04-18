@@ -192,11 +192,14 @@ writeMSnsetToExcel <- function(obj, filename)
     openxlsx::writeData(wb, sheet=n, cbind(ID = rownames(Biobase::exprs(obj)),
                                            Biobase::exprs(obj)), rowNames = FALSE)
     
-    mat <- obj@experimentData@other$OriginOfValues
-    if (!is.null(mat)){
-        test <- nonzero(mat)
+   
+    if (is.null(obj@experimentData@other$OriginOfValues)){
+        test <-  which(is.na(exprs(obj)), arr.ind=TRUE)
     } else {
-        test <- which(is.na(exprs(obj)), arr.ind=TRUE)
+        print(obj@experimentData@other$OriginOfValues)
+        print(colnames(fData(obj)))
+            mat <- fData(obj)[,obj@experimentData@other$OriginOfValues]
+        test <- which(is.na(mat), arr.ind=TRUE)
     }
     
     openxlsx::addStyle(wb, sheet=n, cols = test[,"col"]+1, rows = test[,"row"]+1, style = missValuesStyle)

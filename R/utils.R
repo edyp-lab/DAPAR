@@ -52,19 +52,20 @@ getListNbValuesInLines <- function(obj, type="wholeMatrix"){
   switch(type,
          wholeMatrix= ll <- unique(ncol(data) - apply(is.na(data), 1, sum)),
          allCond = {
-           tmp <- NULL
-           for (cond in unique(Biobase::pData(obj)$Label)){
-             tmp <- c(tmp, length(which(Biobase::pData(obj)$Label== cond)))
-           }
-           ll <- seq(0,min(tmp))
-         },
+                    tmp <- NULL
+                    for (cond in unique(Biobase::pData(obj)$Label)){
+                     tmp <- c(tmp, length(which(Biobase::pData(obj)$Label== cond)))
+                  }
+                  ll <- seq(0,min(tmp))
+                  },
          atLeastOneCond = {
-           tmp <- NULL
-           for (cond in unique(Biobase::pData(obj)$Label)){
-             tmp <- c(tmp, length(which(Biobase::pData(obj)$Label== cond)))
-           }
-           ll <- seq(0,min(tmp))
-         })
+                   tmp <- NULL
+                  for (cond in unique(Biobase::pData(obj)$Label)){
+                       tmp <- c(tmp, length(which(Biobase::pData(obj)$Label== cond)))
+                   }
+                   ll <- seq(0,max(tmp))
+                    }
+         )
   
   return (sort(ll))
 }

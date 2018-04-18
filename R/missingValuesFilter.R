@@ -230,7 +230,6 @@ StringBasedFiltering <- function(obj,
 
 
 
-##' StringBasedFiltering(Exp1_R25_pept, 'Potential.contaminant', '+', 'Reverse', '+')
 StringBasedFiltering2 <- function(obj, cname=NULL, tag=NULL){
   
   deleted <- NULL
@@ -254,10 +253,7 @@ StringBasedFiltering2 <- function(obj, cname=NULL, tag=NULL){
       
     }
   }
-  
-  
- 
-  
+
   return(list(obj=obj, deleted=deleted))
 }
 
