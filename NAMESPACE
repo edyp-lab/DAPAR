@@ -102,7 +102,7 @@ export(
 ,"wrapper.limmaCompleteTest"
 ,"wrapper.t_test_Complete"
 ,"diffAnaVolcanoplot_rCharts"
-,"diffAnaSave","diffAnaSaveRAW_Data"
+,"diffAnaSave"
 ,"diffAnaComputeFDR"
 ,"wrapperCalibrationPlot"
 ,"hc_FC_DensityPlot"

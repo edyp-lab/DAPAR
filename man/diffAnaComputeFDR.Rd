@@ -9,10 +9,10 @@ diffAnaComputeFDR(FC, pval, threshold_PVal = 0, threshold_LogFC = 0,
   pi0Method = 1)
 }
 \arguments{
-\item{FC}{The result of the differential analysis processed 
+\item{FC}{The result (FC values) of the differential analysis processed 
 by \code{\link{wrapper.limmaCompleteTest}}}
 
-\item{pval}{The result of the differential analysis processed 
+\item{pval}{The result (p-values) of the differential analysis processed 
 by \code{\link{wrapper.limmaCompleteTest}}}
 
 \item{threshold_PVal}{The threshold on p-pvalue to
@@ -42,7 +42,7 @@ obj <- wrapper.impute.detQuant(obj)
 obj <- reIntroduceLapala(obj, lapala)
 obj <- wrapper.impute.detQuant(obj)
 limma <- wrapper.limmaCompleteTest(obj, 1)
-diffAnaComputeFDR(limma$FC,limma$P_Value)
+diffAnaComputeFDR(limma$FC[,1],limma$P_Value[,1])
 }
 \author{
 Samuel Wieczorek

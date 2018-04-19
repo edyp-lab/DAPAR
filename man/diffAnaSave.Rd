@@ -5,29 +5,23 @@
 \title{Returns a \code{MSnSet} object with the results of
 the differential analysis performed with \code{\link{limma}} package.}
 \usage{
-diffAnaSave(obj, data, method = "limma", threshold_pVal = 1e-60,
-  threshold_logFC = 0, fdr = 0, calibrationMethod = "pounds")
+diffAnaSave(obj, allComp, data = NULL, l.params)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
 
+\item{allComp}{A list of two items which is the result of the function wrapper.limmaCompleteTest or xxxx}
+
 \item{data}{The result of the differential analysis processed 
 by \code{\link{wrapper.limmaCompleteTest}}}
 
-\item{method}{The method used for differential analysis. 
-Available choices are : "limma", "Welch"}
-
-\item{threshold_pVal}{A float that indicates the threshold on p-value 
-choosen to discriminate differential proteins.}
-
-\item{threshold_logFC}{A float that indicates the threshold on 
-log(Fold Change) to discriminatedifferential proteins.}
-
-\item{fdr}{The FDR based on the values of threshold_pVal and 
-threshold_logFC}
-
-\item{calibrationMethod}{The calibration method used to compute the 
-calibration plot}
+\item{l.params}{A list of parameters:
+comp The name of the comparison 
+th_pVal A float that indicates the threshold on p-value choosen to discriminate differential proteins.
+fdr The FDR based on the values of threshold_pVal and threshold_logFC
+calibMethod The calibration method used to compute the calibration plot
+design xxxxxx
+th_logFC xxxx}
 }
 \value{
 A MSnSet
@@ -44,10 +38,10 @@ lapala <- findLapalaBlock(obj)
 obj <- wrapper.impute.detQuant(obj)
 obj <- reIntroduceLapala(obj, lapala)
 obj <- wrapper.impute.detQuant(obj)
-limma <- wrapper.limmaCompleteTest(obj, 1)
-fc <- limma$FC[1]
-pval <- limma$P_Value[1]
-diffAnaSave(obj, list(FC=fc, P_Value = pval))
+allComp <- wrapper.limmaCompleteTest(obj, 1)
+data <- list(FC=allComp$FC[1], P_Value = allComp$P_Value[1])
+params <- list(design="OnevsOne", method="limma", th_logFC=0)
+diffAnaSave(obj, allComp, data, params)
 }
 \author{
 Alexia Dorffer, Samuel Wieczorek

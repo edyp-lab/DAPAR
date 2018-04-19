@@ -229,7 +229,20 @@ StringBasedFiltering <- function(obj,
 
 
 
-
+##' This function removes lines in the dataset based on prefix strings.
+##' 
+##' @title Removes lines in the dataset based on a prefix strings.
+##' @param obj An object of class \code{MSnSet}.
+##' @param cname The name of the column that correspond to the line to filter
+##' @param tag A character string that is the prefix for the contaminants to find in the data
+##' @return An list of 4 items :
+##' obj : an object of class \code{MSnSet} in which the lines have been deleted
+##' deleted : an object of class \code{MSnSet} which contains the deleted lines 
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' StringBasedFiltering2(Exp1_R25_pept, 'Potential.contaminant', '+')
 StringBasedFiltering2 <- function(obj, cname=NULL, tag=NULL){
   
   deleted <- NULL

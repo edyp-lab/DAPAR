@@ -142,7 +142,7 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
                                                 nrow=nrow(exprs(obj)),
                                                 ncol=ncol(exprs(obj))))
         }
-    OriginOfValues[is.na(obj)] <-  "NA"
+    #OriginOfValues[is.na(obj)] <-  "NA"
     #OriginOfValues[is.na(OriginOfValues)] <-  "unknown"
     rownames(OriginOfValues) <- rownames(exprs(obj))
     colnames(OriginOfValues) <- paste0("OriginOfValue",colnames(exprs(obj)))
@@ -196,9 +196,9 @@ writeMSnsetToExcel <- function(obj, filename)
     if (is.null(obj@experimentData@other$OriginOfValues)){
         test <-  which(is.na(exprs(obj)), arr.ind=TRUE)
     } else {
-        print(obj@experimentData@other$OriginOfValues)
-        print(colnames(fData(obj)))
-            mat <- fData(obj)[,obj@experimentData@other$OriginOfValues]
+        #print(obj@experimentData@other$OriginOfValues)
+        #print(colnames(fData(obj)))
+        mat <- fData(obj)[,obj@experimentData@other$OriginOfValues]
         test <- which(is.na(mat), arr.ind=TRUE)
     }
     
