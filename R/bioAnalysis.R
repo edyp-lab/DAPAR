@@ -80,7 +80,7 @@ enrich_GO <- function(data, idFrom, idTo="ENTREZID", orgdb, ont, readable=FALSE,
     
     ego <- enrichGO(gene = gene.id, OrgDb = orgdb, ont = ont, 
                   pAdjustMethod="BH", 
-                  pvalueCutoff=pval, 
+                  pvalueCutoff=pval,
                   readable=readable,
                   universe = NULL)   
     
