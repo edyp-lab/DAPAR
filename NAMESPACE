@@ -53,7 +53,8 @@ export(
 "writeMSnsetToCSV",
 "createMSnset",
 "readExcel",
-"listSheets"
+"listSheets",
+"addOriginOfValue"
 
 ,"wrapper.boxPlotD","boxPlotD"
 ,"wrapper.densityPlotD","densityPlotD"
