@@ -1,5 +1,13 @@
 
-
+##' Sets the MEC tag in the OriginOfValues
+##' @title Sets the MEC tag in the OriginOfValues
+##' @param obj An object of class \code{MSnSet}
+##' @return An instance of class \code{MSnSet}.
+##' @author Samuel Wieczorek
+##' @examples 
+##' require(DAPARdata)
+##' date(Exp1_R25_pept)
+##' setMEC(Exp1_R25_pept)
 setMEC <- function(obj){
   
   if (is.null( obj@experimentData@other$OriginOfValues)){return()}
@@ -20,7 +28,16 @@ setMEC <- function(obj){
 
 
 
-
+##' Sets the OriginOfValues dataframe in the fData table
+##' @title Sets the OriginOfValues dataframe
+##' @param obj An object of class \code{MSnSet}
+##' @param index A list of integer xxxxxxx
+##' @return An instance of class \code{MSnSet}.
+##' @author Samuel Wieczorek
+##' @examples 
+##' require(DAPARdata)
+##' date(Exp1_R25_pept)
+##' addOriginOfValue(Exp1_R25_pept)
 addOriginOfValue <- function(obj,index=NULL){
 
 if (!is.null(obj@experimentData@other$OriginOfValues)){
