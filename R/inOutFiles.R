@@ -1,3 +1,61 @@
+
+
+setMEC <- function(obj){
+  
+  if (is.null( obj@experimentData@other$OriginOfValues)){return()}
+  
+  conditions <- unique(Biobase::pData(obj)$Label)
+  nbCond <- length(conditions)
+  
+  for (cond in 1:nbCond){
+    ind <- which(Biobase::pData(obj)$Label == conditions[cond])
+    lNA <- which(apply(is.na(Biobase::exprs(obj)[,ind]), 1, sum)==length(ind))
+    if (length(lNA) > 0)
+    {
+      Biobase::fData(obj)[lNA,obj@experimentData@other$OriginOfValues[ind]] <- "MEC"
+    }
+  }
+  return(obj)
+}
+
+
+
+
+addOriginOfValue <- function(obj,index=NULL){
+
+if (!is.null(obj@experimentData@other$OriginOfValues)){
+ #No modification is made
+  return (obj)
+  }
+
+
+if (!is.null(index))
+{
+  OriginOfValues <- data[,index]
+}else {   
+  OriginOfValues <- data.frame(matrix(rep("unknown", nrow(exprs(obj))*ncol(exprs(obj))), 
+                                      nrow=nrow(exprs(obj)),
+                                      ncol=ncol(exprs(obj))),
+                               stringsAsFactors = FALSE)
+}
+OriginOfValues[is.na(obj)] <-  "MV"
+rownames(OriginOfValues) <- rownames(exprs(obj))
+colnames(OriginOfValues) <- paste0("OriginOfValue",colnames(exprs(obj)))
+colnames(OriginOfValues) <- gsub(".", "_", colnames(OriginOfValues), fixed=TRUE)
+
+indMin <- length(colnames(fData(obj)))
+indMax <- length(colnames(fData(obj))) + length(OriginOfValues)
+fData(obj) <- cbind(fData(obj), OriginOfValues)
+
+obj@experimentData@other$OriginOfValues <- colnames(OriginOfValues)
+
+obj <- setMEC(obj)
+
+return(obj)
+}
+
+
+
 ##' Builds an object of class \code{MSnSet} from a 
 ##' single tabulated-like file for quantitative and meta-data and a dataframe 
 ##' for the samples description. It differs from
@@ -125,34 +183,12 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
     if (!is.null(pep_prot_data)) {
         obj@experimentData@other$typeOfData <- pep_prot_data
     }
-    obj@experimentData@other$contaminantsRemoved <- FALSE
-    obj@experimentData@other$reverseRemoved <- FALSE
-    obj@experimentData@other$normalizationFamily <- NULL
-    obj@experimentData@other$normalizationMethod <- NULL
-    obj@experimentData@other$mvFilter.method <- NULL
-    obj@experimentData@other$mvFilter.threshold <-NULL
-    obj@experimentData@other$imputation.method <-NULL
+    
+    
     obj@experimentData@other$RawPValues <- FALSE
     
-   if (!is.null(indexForOriginOfValue))
-        {
-            OriginOfValues <- data[,indexForOriginOfValue]
-        }else {   
-            OriginOfValues <- data.frame(matrix(rep("unknown", dim(exprs(obj))[1]*dim(exprs(obj))[2]), 
-                                                nrow=nrow(exprs(obj)),
-                                                ncol=ncol(exprs(obj))))
-        }
-    #OriginOfValues[is.na(obj)] <-  "NA"
-    #OriginOfValues[is.na(OriginOfValues)] <-  "unknown"
-    rownames(OriginOfValues) <- rownames(exprs(obj))
-    colnames(OriginOfValues) <- paste0("OriginOfValue",colnames(exprs(obj)))
+    obj <- addOriginOfValue(obj,indexForOriginOfValue)
     
-    indMin <- length(colnames(fData(obj)))
-    indMax <- length(colnames(fData(obj))) + length(OriginOfValues)
-    fData(obj) <- cbind(fData(obj), OriginOfValues)
-          
-    #print(colnames(OriginOfValues))
-    obj@experimentData@other$OriginOfValues <- colnames(OriginOfValues)
     return(obj)
 }
 
@@ -182,7 +218,8 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
 writeMSnsetToExcel <- function(obj, filename)
 {
     #require(Matrix)
-    missValuesStyle <- openxlsx::createStyle(fgFill = "lightblue")
+    MV_Style <- openxlsx::createStyle(fgFill = "lightblue")
+    MEC_Style <- openxlsx::createStyle(fgFill = "green")
     
     #require(openxlsx)
     name <- paste(filename, ".xlsx", sep="")
@@ -194,15 +231,15 @@ writeMSnsetToExcel <- function(obj, filename)
     
    
     if (is.null(obj@experimentData@other$OriginOfValues)){
-        test <-  which(is.na(exprs(obj)), arr.ind=TRUE)
+      listMV <-  which(is.na(exprs(obj)), arr.ind=TRUE)
     } else {
-        #print(obj@experimentData@other$OriginOfValues)
-        #print(colnames(fData(obj)))
         mat <- fData(obj)[,obj@experimentData@other$OriginOfValues]
-        test <- which(is.na(mat), arr.ind=TRUE)
+        listMV <- which(mat=="MV", arr.ind=TRUE)
+        listMEC <- which(mat=="MEC", arr.ind=TRUE)
     }
     
-    openxlsx::addStyle(wb, sheet=n, cols = test[,"col"]+1, rows = test[,"row"]+1, style = missValuesStyle)
+    openxlsx::addStyle(wb, sheet=n, cols = listMV[,"col"]+1, rows = listMV[,"row"]+1, style = MV_Style)
+    openxlsx::addStyle(wb, sheet=n, cols = listMEC[,"col"]+1, rows = listMEC[,"row"]+1, style = MEC_Style)
     
     #bodyStyleNumber <- createStyle(numFmt = "NUMBER")
     #addStyle(wb, sheet=1, bodyStyleNumber, rows = 2:nrow(Biobase::exprs(obj)), 
