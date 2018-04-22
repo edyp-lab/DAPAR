@@ -1,3 +1,42 @@
+
+##' This method returns a class \code{MSnSet} object with the results
+##' of filtering.
+##' 
+##' @title Returns a \code{MSnSet} object with the results of
+##' the filtering tool. 
+##' @param obj An object of class \code{MSnSet}.
+##' @param mvFilterType xxxx 
+##' @param mvThNA xxxx
+##' @param stringFilter xxxx
+##' @return A MSnSet
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' obj <- Exp1_R25_pept
+
+##' allComp <- wrapper.limmaCompleteTest(obj, 1)
+##' data <- list(FC=allComp$FC[1], P_Value = allComp$P_Value[1])
+##' params <- list(design="OnevsOne", method="limma", th_logFC=0)
+##' saveFiltering(obj, allComp, data, params)
+saveFiltering <- function(obj, l.params=NULL){
+ 
+  if (is.null(l.params)) {
+    warning("No filter has been applied to the dataset.")
+    return()
+    }
+  
+  obj@experimentData@other$Params[["Filtering"]] <- l.params
+  
+  return(obj)
+  
+  
+}
+
+
+
+
+
 ##' Returns the percentage of missing values in the quantitative
 ##' data (\code{exprs()} table of the dataset).
 ##' 
