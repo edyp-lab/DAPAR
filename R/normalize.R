@@ -1,23 +1,6 @@
 
 
 
-saveNormalization <- function(obj,l.params ){
-  
-  
-  
-  if (is.null(l.params)) {
-    warning("No normalization has been applied to the dataset.")
-    return()
-  }
-  
-
-  obj@experimentData@other$Params[["Norm"]] <- l.params
-  
-  return(obj)
-  
-  
-}
-
 ##' Provides several methods to normalize quantitative data from
 ##' a \code{MSnSet} object.
 ##' They are organized in four main families : Strong Rescaling, 
