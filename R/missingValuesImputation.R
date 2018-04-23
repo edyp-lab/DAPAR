@@ -1,20 +1,6 @@
 
 
 
-
-
-
-saveImputation <- function(obj,l.params=NULL ){
-  if (is.null(l.params)) {
-    warning("No imputation has been applied to the dataset.")
-    return()
-  }
-  
-obj@experimentData@other$Params[["Imputation"]] <- l.params
-  return(obj)
-}
-
-
 ##' This method finds the LAPALA in a dataset.
 ##'
 ##' @title Finds the LAPALA into a \code{MSnSet} object
@@ -297,10 +283,3 @@ wrapper.impute.slsa <- function(obj){
     Biobase::exprs(obj) <-res
     return (obj)
 }
-
-
-
-
-
-
-
