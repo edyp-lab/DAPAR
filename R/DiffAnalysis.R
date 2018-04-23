@@ -206,8 +206,8 @@ diffAnaSave <- function (obj, allComp, data=NULL, l.params){
     # 
   }
   
-  obj@experimentData@other$Params[["anaDiff"]] <- l.params
-    return(obj)
+  obj <- saveParameters(obj, "anaDiff", l.params)
+  return(obj)
 }
 
 
