@@ -1,5 +1,4 @@
 
-
 ##' This function is a wrappper to the function groupGO from the
 ##' package \code{\link{clusterProfiler}}. Given a vector of genes/proteins, 
 ##' it returns the GO profile at a specific level. It returns a groupGOResult 
