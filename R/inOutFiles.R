@@ -1,4 +1,29 @@
 
+##' Saves the parameters of a tool in the pipeline of Prostar
+##' @title Saves the parameters of a tool in the pipeline of Prostar
+##' @param obj An object of class \code{MSnSet}
+##' @param name The name of the tool. Available values are: "Norm, Imputation, anaDiff, GOAnalysis,Aggregation"
+##' @param l.params A list that contains the parameters
+##' @return An instance of class \code{MSnSet}.
+##' @author Samuel Wieczorek
+##' @examples 
+##' require(DAPARdata)
+##' date(Exp1_R25_pept)
+##' l.params=list(method="xxxx", type="xxxx)
+##' saveParameters(Exp1_R25_pept, "Imputation",l.params)
+saveParameters <- function(obj,name=NULL,l.params=NULL){
+  if (is.null(l.params)|| is.null(name)) {
+    warning("No operation has been applied to the dataset.")
+    return()
+  }
+  obj@experimentData@other$Params[[name]] <- l.params
+  
+  return(obj)
+}
+
+
+
+
 ##' Sets the MEC tag in the OriginOfValues
 ##' @title Sets the MEC tag in the OriginOfValues
 ##' @param obj An object of class \code{MSnSet}
@@ -41,7 +66,7 @@ setMEC <- function(obj){
 addOriginOfValue <- function(obj,index=NULL){
 
 if (!is.null(obj@experimentData@other$OriginOfValues)){
- #No modification is made
+ warning("No modification has been made to the MSnset object.")
   return (obj)
   }
 
