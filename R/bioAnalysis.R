@@ -1,4 +1,5 @@
 
+
 ##' This function is a wrappper to the function groupGO from the
 ##' package \code{\link{clusterProfiler}}. Given a vector of genes/proteins, 
 ##' it returns the GO profile at a specific level. It returns a groupGOResult 
@@ -10,7 +11,6 @@
 ##' UNIGENE, UNIPROT -can be different according to organisms)
 ##' @param idFrom character indicating the input ID format (among ENSEMBL, 
 ##' ENTREZID, GENENAME, REFSEQ, UNIGENE, UNIPROT)
-##' @param idTo character indicating the output ID format (default "ENTREZID")
 ##' @param orgdb annotation Bioconductor package to use (character format)
 ##' @param ont on which ontology to perform the analysis (MF, BP or CC)
 ##' @param level level of the ontolofy to perform the analysis 
@@ -22,18 +22,25 @@
 ##' data(Exp1_R25_prot)
 ##' ggo<-group_GO(data=fData(Exp1_R25_prot)$Protein.IDs, idFrom="UNIPROT", 
 ##' orgdb="org.Sc.sgd.db", ont="MF", level=2)
-group_GO <- function(data, idFrom, idTo="ENTREZID", orgdb, ont, level, readable=FALSE){
+group_GO <- function(data, idFrom,  orgdb, ont, level, readable=FALSE){
     
-    if (idTo!="ENTREZID"){ idTo<-"ENTREZID" }
     
     require(as.character(orgdb),character.only = TRUE)
-    gene <- bitr(data, fromType=idFrom, toType=idTo, OrgDb=orgdb)
-    gene.id = gene$ENTREZID
+    
+    if (idFrom == "UNIPROT"){
+        gene <- bitr(data, fromType=idFrom, toType="ENTREZID", OrgDb=orgdb)
+        if (is.null(gene)){return (NULL)}
+        gene.id = gene$ENTREZID
+        
+    }else {
+        gene.id = data
+    }
+    
     ggo <- groupGO(gene = gene.id, 
-                 OrgDb = orgdb, 
-                 ont = ont, 
-                 level = level, 
-                 readable= readable)
+                   OrgDb = orgdb, 
+                   ont = ont, 
+                   level = level, 
+                   readable= readable)
     
     return(ggo)
 }
@@ -48,7 +55,6 @@ group_GO <- function(data, idFrom, idTo="ENTREZID", orgdb, ont, level, readable=
 ##' UNIGENE, UNIPROT -can be different according to organisms)
 ##' @param idFrom character indicating the input ID format (among ENSEMBL, 
 ##' ENTREZID, GENENAME, REFSEQ, UNIGENE, UNIPROT)
-##' @param idTo character indicating the output ID format (default "ENTREZID")
 ##' @param orgdb annotation Bioconductor package to use (character format)
 ##' @param ont One of "MF", "BP", and "CC" subontologies
 ##' @param readable TRUE or FALSE (default FALSE)
@@ -64,24 +70,28 @@ group_GO <- function(data, idFrom, idTo="ENTREZID", orgdb, ont, level, readable=
 ##' univ<-univ_AnnotDbPkg("org.Sc.sgd.db") #univ is the background
 ##' ego<-enrich_GO(data=fData(Exp1_R25_prot)$Protein.IDs, idFrom="UNIPROT", 
 ##' orgdb="org.Sc.sgd.db",ont="MF", pval=0.05, universe = univ)
-enrich_GO <- function(data, idFrom, idTo="ENTREZID", orgdb, ont, readable=FALSE, pval, universe)
+enrich_GO <- function(data, idFrom, orgdb, ont, readable=FALSE, pval, universe)
 {
-  tmp <- which(is.na(data))
-  if (length(tmp) > 0){
-      data <- data[-which(is.na(data))]
-  }
-  
-  if (idTo!="ENTREZID"){ idTo<-"ENTREZID" }
-  
-    gene <- bitr(data, fromType=idFrom, toType=idTo, OrgDb=orgdb)
-    if (is.null(gene)){return (NULL)}
-    gene.id = gene$ENTREZID
+    tmp <- which(is.na(data))
+    if (length(tmp) > 0){
+        data <- data[-which(is.na(data))]
+    }
+    
+    
+    if (idFrom == "UNIPROT"){
+        gene <- bitr(data, fromType=idFrom, toType="ENTREZID", OrgDb=orgdb)
+        if (is.null(gene)){return (NULL)}
+        gene.id = gene$ENTREZID
+        
+    }else {
+        gene.id = data
+    }
     
     ego <- enrichGO(gene = gene.id, OrgDb = orgdb, ont = ont, 
-                  pAdjustMethod="BH", 
-                  pvalueCutoff=pval,
-                  readable=readable,
-                  universe = NULL)   
+                    pAdjustMethod="BH", 
+                    pvalueCutoff=pval,
+                    readable=readable,
+                    universe = NULL)   
     
     return(ego)
 }
@@ -136,11 +146,11 @@ GOAnalysisSave <- function (obj, ggo_res=NULL, ego_res=NULL, organism, ontology,
     if (!is.null(ggo_res)){
         text <- paste("Group analysis on ", organism)
         obj@processingData@processing <- c(obj@processingData@processing, text)
-
+        
         obj@experimentData@other$GGO_analysis <- list(ggo_res = ggo_res,
-                                                    organism = organism,
-                                                    ontology = ontology,
-                                                    levels = levels)
+                                                      organism = organism,
+                                                      ontology = ontology,
+                                                      levels = levels)
     }
     
     if (!is.null(ego_res)){
@@ -181,17 +191,17 @@ barplotGroupGO_HC <- function(ggo, maxRes=5, title=""){
     dat <- dat[order(dat[,"Count"], decreasing=TRUE),]
     dat <- dat[seq(1:nRes),]
     
-        
+    
     h1 <-  highchart() %>%
-    my_hc_chart(chartType = "bar") %>%
-    hc_title(text =title) %>%
-    hc_add_series(dat[,"Count"]) %>%
-    hc_legend(enabled = FALSE) %>%
-    #hc_colors(myColors) %>%
+        my_hc_chart(chartType = "bar") %>%
+        hc_title(text =title) %>%
+        hc_add_series(dat[,"Count"]) %>%
+        hc_legend(enabled = FALSE) %>%
+        #hc_colors(myColors) %>%
         hc_tooltip(enabled = FALSE) %>%
-     hc_xAxis(categories = dat[,"Description"], title = list(text = ""))
-
-return(h1)
+        hc_xAxis(categories = dat[,"Description"], title = list(text = ""))
+    
+    return(h1)
 }
 
 
@@ -207,7 +217,7 @@ return(h1)
 ##' @return A barplot 
 ##' @author Samuel Wieczorek
 barplotEnrichGO_HC <- function(ego, maxRes = 5, title=NULL){
-   if (is.null(ego)){return(NULL)}
+    if (is.null(ego)){return(NULL)}
     dat <- ego@result
     nRes <- min(maxRes, nrow(dat))
     
@@ -230,8 +240,8 @@ barplotEnrichGO_HC <- function(ego, maxRes = 5, title=NULL){
     dat[,"pvalue"] <- format(dat[,"pvalue"], digits=2)
     
     df <- data.frame(y=dat[,"Count"],
-                           pvalue = format(dat$pvalue, digits=2),
-                           name = dat[,"Description"])
+                     pvalue = format(dat$pvalue, digits=2),
+                     name = dat[,"Description"])
     
     txt_tooltip <- paste("<b> pvalue </b>: {point.pvalue} <br> ", 
                          "<b> Count </b>: {point.y} <br> ",
@@ -254,7 +264,7 @@ barplotEnrichGO_HC <- function(ego, maxRes = 5, title=NULL){
             pointWidth=60,
             dataLabels = list(enabled = TRUE)))
     
-     return(h1)
+    return(h1)
 }
 
 
@@ -290,20 +300,20 @@ scatterplotEnrichGO_HC <- function(ego, maxRes = 10, title=NULL){
     d <- (max(t) - min(t))/nbColors
     base <- seq(from=min(t), to=max(t), by = d)
     tmpList <- lapply(t, function(x){
-                                  if (x == min(t)){ ind <- 1}
-                                  else {ind <- which(x > base)[length(which(x > base))]}
-                                  
+        if (x == min(t)){ ind <- 1}
+        else {ind <- which(x > base)[length(which(x > base))]}
+        
     })
     
     myColorsIndex <- unlist(tmpList)
     
     df <- data.frame(x=c(0:(nRes-1)),
-                        y=dat$GeneRatio,
-                        z=dat$Count,
-                        color=pal[myColorsIndex],
-                        colorSegment=pal[myColorsIndex],
-                        pAdjust = format(dat$p.adjust, digits=2),
-                        name = dat[,"Description"])
+                     y=dat$GeneRatio,
+                     z=dat$Count,
+                     color=pal[myColorsIndex],
+                     colorSegment=pal[myColorsIndex],
+                     pAdjust = format(dat$p.adjust, digits=2),
+                     name = dat[,"Description"])
     
     
     txt_tooltip <- paste("<b> p.adjust </b>: {point.pAdjust} <br> ", 
@@ -321,7 +331,7 @@ scatterplotEnrichGO_HC <- function(ego, maxRes = 10, title=NULL){
                    pointFormat = txt_tooltip) %>%
         my_hc_ExportMenu(filename = "GOEnrich_dotplot")
     
-
+    
     
     return(h1)
 }

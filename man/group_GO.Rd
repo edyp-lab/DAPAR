@@ -5,8 +5,7 @@
 \title{Calculates the GO profile of a vector of genes/proteins at a given 
 level of the Gene Ontology}
 \usage{
-group_GO(data, idFrom, idTo = "ENTREZID", orgdb, ont, level,
-  readable = FALSE)
+group_GO(data, idFrom, orgdb, ont, level, readable = FALSE)
 }
 \arguments{
 \item{data}{A vector of ID (among ENSEMBL, ENTREZID, GENENAME, REFSEQ, 
@@ -14,8 +13,6 @@ UNIGENE, UNIPROT -can be different according to organisms)}
 
 \item{idFrom}{character indicating the input ID format (among ENSEMBL, 
 ENTREZID, GENENAME, REFSEQ, UNIGENE, UNIPROT)}
-
-\item{idTo}{character indicating the output ID format (default "ENTREZID")}
 
 \item{orgdb}{annotation Bioconductor package to use (character format)}
 

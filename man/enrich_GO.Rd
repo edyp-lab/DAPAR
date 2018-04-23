@@ -5,8 +5,7 @@
 \title{Calculates GO enrichment classes for a given list of 
 proteins/genes ID. It results an enrichResult instance.}
 \usage{
-enrich_GO(data, idFrom, idTo = "ENTREZID", orgdb, ont, readable = FALSE,
-  pval, universe)
+enrich_GO(data, idFrom, orgdb, ont, readable = FALSE, pval, universe)
 }
 \arguments{
 \item{data}{A vector of ID (among ENSEMBL, ENTREZID, GENENAME, REFSEQ, 
@@ -14,8 +13,6 @@ UNIGENE, UNIPROT -can be different according to organisms)}
 
 \item{idFrom}{character indicating the input ID format (among ENSEMBL, 
 ENTREZID, GENENAME, REFSEQ, UNIGENE, UNIPROT)}
-
-\item{idTo}{character indicating the output ID format (default "ENTREZID")}
 
 \item{orgdb}{annotation Bioconductor package to use (character format)}
 

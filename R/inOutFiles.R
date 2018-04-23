@@ -8,8 +8,8 @@
 ##' @author Samuel Wieczorek
 ##' @examples 
 ##' require(DAPARdata)
-##' date(Exp1_R25_pept)
-##' l.params=list(method="xxxx", type="xxxx)
+##' data(Exp1_R25_pept)
+##' l.params=list(method="Global quantile alignment", type="overall")
 ##' saveParameters(Exp1_R25_pept, "Imputation",l.params)
 saveParameters <- function(obj,name=NULL,l.params=NULL){
   if (is.null(l.params)|| is.null(name)) {
@@ -31,7 +31,7 @@ saveParameters <- function(obj,name=NULL,l.params=NULL){
 ##' @author Samuel Wieczorek
 ##' @examples 
 ##' require(DAPARdata)
-##' date(Exp1_R25_pept)
+##' data(Exp1_R25_pept)
 ##' setMEC(Exp1_R25_pept)
 setMEC <- function(obj){
   
@@ -61,25 +61,26 @@ setMEC <- function(obj){
 ##' @author Samuel Wieczorek
 ##' @examples 
 ##' require(DAPARdata)
-##' date(Exp1_R25_pept)
+##' data(Exp1_R25_pept)
 ##' addOriginOfValue(Exp1_R25_pept)
 addOriginOfValue <- function(obj,index=NULL){
 
 if (!is.null(obj@experimentData@other$OriginOfValues)){
- warning("No modification has been made to the MSnset object.")
+ print("Dataframe already exists. No modification has been made to the MSnset object.")
   return (obj)
   }
 
 
 if (!is.null(index))
 {
-  OriginOfValues <- data[,index]
+  OriginOfValues <- Biobase::fData(obj)[,index]
 }else {   
-  OriginOfValues <- data.frame(matrix(rep("unknown", nrow(exprs(obj))*ncol(exprs(obj))), 
-                                      nrow=nrow(exprs(obj)),
-                                      ncol=ncol(exprs(obj))),
+  OriginOfValues <- data.frame(matrix(rep("unknown", nrow(Biobase::exprs(obj))*ncol(Biobase::exprs(obj))), 
+                                      nrow=nrow(Biobase::exprs(obj)),
+                                      ncol=ncol(Biobase::exprs(obj))),
                                stringsAsFactors = FALSE)
 }
+    
 OriginOfValues[is.na(obj)] <-  "MV"
 rownames(OriginOfValues) <- rownames(exprs(obj))
 colnames(OriginOfValues) <- paste0("OriginOfValue",colnames(exprs(obj)))
@@ -261,7 +262,7 @@ writeMSnsetToExcel <- function(obj, filename)
 {
     #require(Matrix)
     MV_Style <- openxlsx::createStyle(fgFill = "lightblue")
-    MEC_Style <- openxlsx::createStyle(fgFill = "green")
+    MEC_Style <- openxlsx::createStyle(fgFill = "orange")
     
     #require(openxlsx)
     name <- paste(filename, ".xlsx", sep="")
