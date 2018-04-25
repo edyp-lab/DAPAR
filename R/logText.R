@@ -3,18 +3,19 @@
 ##' @title  Build the text information to be saved
 ##' @param  name The name of the process in Prostar
 ##' @param l.params A list of parameters related to the process of the dataset
+##' @param ... Parameter for the function \code{getTextForImputation}
 ##' @return A string
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' buildLogText("Original", list(filename="foo.MSnset"))
-buildLogText <- function(name, l.params){
+buildLogText <- function(name, l.params,...){
     
     txt <- NULL
     switch(name, 
            Original = {txt <- getTextForNewDataset(l.params)},
            Filtering={txt <- getTextForFiltering(l.params)},
            Normalization = {txt <- getTextForNormalization(l.params)},
-           Imputation = {txt <- getTextForImputation(l.params)},
+           Imputation = {txt <- getTextForImputation(l.params, ...)},
            Aggregation = {txt <- getTextForAggregation(l.params)},
            anaDiff ={txt <- getTextForAnaDiff(l.params)},
            GOAnalysis = {txt <- getTextForGOAnalysis(l.params)}
@@ -33,7 +34,7 @@ buildLogText <- function(name, l.params){
 ##' @examples
 ##' getTextForNewDataset(list(filename="foo.MSnset"))
 getTextForNewDataset <- function(l.params){
-    txt <- paste("Open : file ",l.params$filename, " opened")
+    txt <- as.character(tags$li(paste("Open : file ",l.params$filename, " opened")))
     return (txt)
 }
 
@@ -54,10 +55,10 @@ getTextForFiltering <- function(l.params){
     txt <- NULL
     
     if (l.params$mvFilterType != "None"){
-        txt <- paste(txt, "MV filter with ", l.params$mvFilterType, ", and minimal nb of values per lines = ", l.params$mvThNA,".\n")
+        txt <- paste(txt, as.character(tags$li(paste("MV filter with ", l.params$mvFilterType, ", and minimal nb of values per lines = ", l.params$mvThNA))))
     }
     if (!is.null(l.params$stringFilter.df) && nrow(l.params$stringFilter.df) > 1){
-        txt <- paste(txt, "Text filtering based on", l.params$stringFilter.df$Filter)
+        txt <- paste(txt, as.character(tags$li(paste("Text filtering based on", l.params$stringFilter.df$Filter))))
     }
     
     return (txt)
@@ -86,17 +87,19 @@ getTextForNormalization <- function(l.params){
     txt <- NULL
     if (l.params$method=="None") return (NULL)
     else if (l.params$method == "Global quantile alignment"){
-        txt <- paste(txt,l.params$method)
+        txt <- paste(as.character(tags$li(paste(txt,l.params$method))))
     }
     
     else if  (l.params$method == "Sum by columns"){
-        txt <- paste(txt,l.params$method, " - ", l.params$type)
+        txt <- paste(txt,as.character(tags$li(paste(l.params$method, " - ", l.params$type))))
     }
     
     else if  (l.params$method == "Mean Centering"){
-        txt <- paste(txt,l.params$method, " - ", l.params$type)
+        
         if ( isTRUE(l.params$varReduction )){
-            txt <- paste(txt,"with variance reduction")
+            txt <- paste(txt,as.character(tags$li(paste(l.params$method, " - ", l.params$type, " with variance reduction"))))
+        } else {
+            txt <- paste(txt,as.character(tags$li(paste(l.params$method, " - ", l.params$type))))
         }
     }
     
@@ -115,56 +118,99 @@ getTextForNormalization <- function(l.params){
 ##' 
 ##' @title  Build the text information for the Imputation process
 ##' @param l.params A list of parameters related to the process of the dataset
+##' @param level The type of data (peptide or protein)
 ##' @return A string
 ##' @author Samuel Wieczorek
 ##' @examples
-##' getTextForImputation(list(POV_algorithm="slsa",MEC_algorithm="fixedValue", MEC_fixedValue = 0))
-getTextForImputation <- function(l.params){ 
-    # l.params <- list(
-    #    POV_algorithm,
-    #    POV_detQuant_quantile,
-    #    POV_detQuant_factor,
-    #    POV_KNN_n,
-    #    MEC_algorithm,
-    #    MEC_detQuant_quantile,
-    #    MEC_detQuant_factor,
-    #    MEC_fixedValue)
-    
-    
+##' getTextForImputation(list(POV_algorithm="slsa",MEC_algorithm="fixedValue", MEC_fixedValue = 0), level="protein")
+getTextForImputation <- function(l.params, level){ 
     
     txt <- NULL
-    if (!is.null(l.params$POV_algorithm)){
-        if (l.params$POV_algorithm=="None") {
-            return (NULL)
-        } else {
-            txt <- paste(txt,"POV imputed with ", l.params$POV_algorithm)
-        }
+    
+    
+    switch(level, 
+           
+           protein = {
+               # l.params <- list(
+            #    POV_algorithm,
+            #    POV_detQuant_quantile,
+            #    POV_detQuant_factor,
+            #    POV_KNN_n,
+            #    MEC_algorithm,
+            #    MEC_detQuant_quantile,
+            #    MEC_detQuant_factor,
+            #    MEC_fixedValue)
+    
+    
+    
+            if (!is.null(l.params$POV_algorithm)){
+                if (l.params$POV_algorithm=="None") {
+                    return (NULL)
+            } else {
+                txt <- paste(txt,"POV imputed with ", l.params$POV_algorithm)
+            }
         
-        switch(l.params$POV_algorithm,
+            switch(l.params$POV_algorithm,
                slsa = {},
                detQuantile = {txt <- paste(txt,"quantile= ", l.params$POV_detQuant_quantile, 
                                            ", factor=",l.params$POV_detQuant_factor)
                },
                KNN = {txt <- paste(txt,"neighbors= ", l.params$POV_KNN_n)}
-        )
-    }
+                )
+            }
     
-    if (!is.null(l.params$MEC_algorithm)){
-        if (l.params$MEC_algorithm=="None") {
-            return (NULL)
-        } else {
-            txt <- paste(txt,"POV imputed with ", l.params$MEC_algorithm)
-        }
+            if (!is.null(l.params$MEC_algorithm)){
+                if (l.params$MEC_algorithm=="None") {
+                return (NULL)
+            } else {
+                txt <- paste(txt,"POV imputed with ", l.params$MEC_algorithm)
+            }
         
-        switch(l.params$MEC_algorithm,
-               detQuantile = {txt <- paste(txt,"quantile= ", l.params$MEC_detQuant_quantile, 
+            switch(l.params$MEC_algorithm,
+                    detQuantile = {txt <- paste(txt,"quantile= ", l.params$MEC_detQuant_quantile, 
                                            ", factor=",l.params$MEC_detQuant_factor)
-               },
-               fixedValue = {txt <- paste(txt,"fixed value= ", l.params$MEC_fixedValue)}
-        )
+                                    },
+                    fixedValue = {txt <- paste(txt,"fixed value= ", l.params$MEC_fixedValue)}
+                )
         
+                }
+           },
+    peptide = {
+        # l.params <- list(pepLevel_algorithm
+        #                  pepLevel_basicAlgorithm,
+        #                  pepLevel_detQuantile,
+        #                  pepLevel_detQuant_factor,
+        #                  pepLevel_imp4p_nbiter,
+        #                  pepLevel_imp4p_withLapala,
+        #                  pepLevel_imp4p_qmin,
+        #                  pepLevel_imp4pLAPALA_distrib)
+        
+        if (!is.null(l.params$pepLevel_algorithm)){
+            
+         
+            if (l.params$pepLevel_algorithm=="None") {
+                return (NULL)
+            } else if (l.params$pepLevel_algorithm=="imp4p"){
+                txt <- paste(txt,"Dataset imputed with ", l.params$pepLevel_algorithm)
+                txt <- paste(txt,"nb iter = ", l.params$pepLevel_imp4p_nbiter)
+                if (!is.null(l.params$pepLevel_imp4p_withLapala) && isTRUE(l.params$pepLevel_imp4p_withLapala)){
+                    txt <- paste(txt,"Imputation of MEC: ")
+                    txt <- paste(txt,"Upper bound: ", l.params$pepLevel_imp4p_qmin)
+                    txt <- paste(txt,"DIstribution: ", l.params$pepLevel_imp4pLAPALA_distrib)
+                }
+            }
+            else if(!is.null(l.params$pepLevel_basicAlgorithm) && (l.params$pepLevel_algorithm=="Basic methods")){
+                txt <- paste(txt,"Dataset imputed with ", l.params$pepLevel_basicAlgorithm)
+                switch (l.params$pepLevel_basicAlgorithm,
+                    detQuantile = {txt <- paste(txt,"Quantile = ", l.params$pepLevel_detQuantile)
+                                    txt <- paste(txt,"Factor =", l.params$pepLevel_detQuant_factor)},
+                    KNN = {},
+                    MLE = {}
+                )
+            }
+        }      
     }
-    
+    )
     
     return (txt)
     

@@ -17,7 +17,7 @@ saveParameters <- function(obj,name=NULL,l.params=NULL){
     return()
   }
   obj@experimentData@other$Params[[name]] <- l.params
-  obj@processingData@processing <- c(obj@processingData@processing , buildLogText(name, l.params))
+  obj@processingData@processing <- c(obj@processingData@processing , buildLogText(name, l.params, level=obj@experimentData@other$typeOfData))
   
   return(obj)
 }

@@ -4,10 +4,12 @@
 \alias{getTextForImputation}
 \title{Build the text information for the Imputation process}
 \usage{
-getTextForImputation(l.params)
+getTextForImputation(l.params, level)
 }
 \arguments{
 \item{l.params}{A list of parameters related to the process of the dataset}
+
+\item{level}{The type of data (peptide or protein)}
 }
 \value{
 A string
@@ -16,7 +18,7 @@ A string
 Build the text information for the Imputation process
 }
 \examples{
-getTextForImputation(list(POV_algorithm="slsa",MEC_algorithm="fixedValue", MEC_fixedValue = 0))
+getTextForImputation(list(POV_algorithm="slsa",MEC_algorithm="fixedValue", MEC_fixedValue = 0), level="protein")
 }
 \author{
 Samuel Wieczorek

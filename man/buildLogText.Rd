@@ -4,12 +4,14 @@
 \alias{buildLogText}
 \title{Build the text information to be saved}
 \usage{
-buildLogText(name, l.params)
+buildLogText(name, l.params, ...)
 }
 \arguments{
 \item{name}{The name of the process in Prostar}
 
 \item{l.params}{A list of parameters related to the process of the dataset}
+
+\item{...}{Parameter for the function \code{getTextForImputation}}
 }
 \value{
 A string

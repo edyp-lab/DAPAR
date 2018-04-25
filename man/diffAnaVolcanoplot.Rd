@@ -38,9 +38,9 @@ non differential data.
 require(DAPARdata)
 data(Exp1_R25_pept)
 obj <- Exp1_R25_pept[1:1000]
-lapala <- findMECBlock(obj)
+MEC <- findMECBlock(obj)
 obj <- wrapper.impute.detQuant(obj)
-obj <- reIntroduceMEC(obj, lapala)
+obj <- reIntroduceMEC(obj, MEC)
 obj <- wrapper.impute.detQuant(obj)
 limma <- wrapper.limmaCompleteTest(obj, 1)
 diffAnaVolcanoplot(limma$FC[,1], limma$P_Value[,1])
