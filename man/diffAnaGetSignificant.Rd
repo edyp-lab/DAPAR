@@ -21,9 +21,9 @@ differential analysis.
 require(DAPARdata)
 data(Exp1_R25_pept)
 obj <- Exp1_R25_pept
-lapala <- findLapalaBlock(obj)
+lapala <- findMECBlock(obj)
 obj <- wrapper.impute.detQuant(obj)
-obj <- reIntroduceLapala(obj, lapala)
+obj <- reIntroduceMEC(obj, lapala)
 obj <- wrapper.impute.detQuant(obj)
 limma <- wrapper.limmaCompleteTest(obj, 1)
 fc <- limma$FC[1]

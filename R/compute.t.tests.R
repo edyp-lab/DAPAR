@@ -12,9 +12,9 @@
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' obj <- Exp1_R25_pept[1:1000]
-##' lapala <- findLapalaBlock(obj)
+##' lapala <- findMECBlock(obj)
 ##' obj <- wrapper.impute.detQuant(obj)
-##' obj <- reIntroduceLapala(obj, lapala)
+##' obj <- reIntroduceMEC(obj, lapala)
 ##' obj <- wrapper.impute.detQuant(obj)
 ##' ttest <- wrapper.t_test_Complete(obj, 1)
 wrapper.t_test_Complete <- function(obj,...){
@@ -52,9 +52,9 @@ wrapper.t_test_Complete <- function(obj,...){
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' obj <- Exp1_R25_pept[1:1000]
-##' lapala <- findLapalaBlock(obj)
+##' lapala <- findMECBlock(obj)
 ##' obj <- wrapper.impute.detQuant(obj)
-##' obj <- reIntroduceLapala(obj, lapala)
+##' obj <- reIntroduceMEC(obj, lapala)
 ##' obj <- wrapper.impute.detQuant(obj)
 ##' ttest <- compute.t.tests(Biobase::exprs(obj), Biobase::pData(obj)[,"Label"],1)
 compute.t.tests <- function(qData,Conditions, Contrast="OnevsOne", type="Student"){

@@ -51,10 +51,10 @@ is.OfType <- function(data, type){
 
 
 ##' Similar to the function \code{is.na} but focused on the equality with the missing 
-##' values in the dataset (type 'MV', 'POV' and 'MEC')
+##' values in the dataset (type 'POV' and 'MEC')
 ##' 
 ##' @title Similar to the function \code{is.na} but focused on the equality with the missing 
-##' values in the dataset (type 'MV', 'POV' and 'MEC')
+##' values in the dataset (type 'POV' and 'MEC')
 ##' @param data A data.frame
 ##' @return A boolean dataframe 
 ##' @author Samuel Wieczorek
@@ -65,11 +65,11 @@ is.OfType <- function(data, type){
 ##' data <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
 ##' is.MV(data)
 is.MV <- function(data){
-  MV=is.OfType(data, "MV")
+  #MV=is.OfType(data, "MV")
   POV=is.OfType(data, "POV")
   MEC=is.OfType(data, "MEC")
   
-  df <- MV | POV | MEC
+  df <- POV | MEC
   return (df)
 }
 

@@ -37,9 +37,9 @@ The FDR is computed with the function \code{p.adjust}\{stats\}..
 require(DAPARdata)
 data(Exp1_R25_pept)
 obj <- Exp1_R25_pept[1:1000]
-lapala <- findLapalaBlock(obj)
+lapala <- findMECBlock(obj)
 obj <- wrapper.impute.detQuant(obj)
-obj <- reIntroduceLapala(obj, lapala)
+obj <- reIntroduceMEC(obj, lapala)
 obj <- wrapper.impute.detQuant(obj)
 limma <- wrapper.limmaCompleteTest(obj, 1)
 diffAnaComputeFDR(limma$FC[,1],limma$P_Value[,1])

@@ -11,8 +11,8 @@
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' obj <- Exp1_R25_pept[1:1000]
-##' lapala <- findLapalaBlock(obj)
-findLapalaBlock <- function(obj){
+##' lapala <- findMECBlock(obj)
+findMECBlock <- function(obj){
     
     conditions <- unique(Biobase::pData(obj)$Label)
     nbCond <- length(conditions)
@@ -38,23 +38,23 @@ findLapalaBlock <- function(obj){
 ##'
 ##' @title Put back LAPALA into  a \code{MSnSet} object
 ##' @param obj An object of class \code{MSnSet}.
-##' @param lapalaIndex A data.frame that contains indexex of LAPALA (see findLapalaBlock) .
+##' @param MECIndex A data.frame that contains index of MEC (see findMECBlock) .
 ##' @return The object \code{obj} where LAPALA have been reintroduced
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' obj <- Exp1_R25_pept[1:1000]
-##' lapala <- findLapalaBlock(obj)
+##' lapala <- findMECBlock(obj)
 ##' obj <- wrapper.impute.detQuant(obj)
-##' obj <- reIntroduceLapala(obj, lapala)
-reIntroduceLapala <- function(obj, lapalaIndex){
+##' obj <- reIntroduceMEC(obj, lapala)
+reIntroduceMEC <- function(obj, MECIndex){
     
     for (i in 1:nrow(lapalaIndex))
     {
         conditions <- unique(Biobase::pData(obj)$Label)
-        replicates <- which(Biobase::pData(obj)$Label == conditions[lapalaIndex[i,"Condition"]])
-        Biobase::exprs(obj)[lapalaIndex[i,"Line"], as.vector(replicates)] <- NA
+        replicates <- which(Biobase::pData(obj)$Label == conditions[MECIndex[i,"Condition"]])
+        Biobase::exprs(obj)[MECIndex[i,"Line"], as.vector(replicates)] <- NA
     }
     return(obj)
 }
@@ -77,7 +77,7 @@ reIntroduceLapala <- function(obj, lapalaIndex){
 #     ##
 #     ## First step : compute of LAPALA blocks
 #     ##
-#     lapalaIndex <- findLapalaBlock(obj)
+#     MECIndex <- findMECBlock(obj)
 #     
 #     ##
 #     ## Second step :imputation of ALL missing values
@@ -90,7 +90,7 @@ reIntroduceLapala <- function(obj, lapalaIndex){
 #     ##
 #     ## Third step : reaffectation to NA for LAPALA blocks
 #     ##
-#     obj <- reIntroduceLapala(obj, lapalaIndex)
+#     obj <- reIntroduceMEC(obj, lapalaIndex)
 #     
 #     return(obj)
 #     

@@ -3,7 +3,7 @@
 \name{is.MV}
 \alias{is.MV}
 \title{Similar to the function \code{is.na} but focused on the equality with the missing 
-values in the dataset (type 'MV', 'POV' and 'MEC')}
+values in the dataset (type 'POV' and 'MEC')}
 \usage{
 is.MV(data)
 }
@@ -15,7 +15,7 @@ A boolean dataframe
 }
 \description{
 Similar to the function \code{is.na} but focused on the equality with the missing 
-values in the dataset (type 'MV', 'POV' and 'MEC')
+values in the dataset (type 'POV' and 'MEC')
 }
 \examples{
 require(DAPARdata)

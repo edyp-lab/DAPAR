@@ -23,9 +23,9 @@ of the comparisons of conditions in a differnetial analysis.
 require(DAPARdata)
 data(Exp1_R25_pept)
 obj <- Exp1_R25_pept[1:1000]
-lapala <- findLapalaBlock(obj)
+lapala <- findMECBlock(obj)
 obj <- wrapper.impute.detQuant(obj)
-obj <- reIntroduceLapala(obj, lapala)
+obj <- reIntroduceMEC(obj, lapala)
 obj <- wrapper.impute.detQuant(obj)
 limma <- wrapper.limmaCompleteTest(obj, 1)
 hc_FC_DensityPlot(limma$FC)

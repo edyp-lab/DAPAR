@@ -753,7 +753,7 @@ for (iCond in unique(conditions)){
 
 
 data <- NULL
-print(type)
+
 switch(type,
        MV = {data <- nbNA
             yAxisLabel = "Number of Missing Values"},

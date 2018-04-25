@@ -21,9 +21,9 @@ This function is a wrapper xxxxx
 require(DAPARdata)
 data(Exp1_R25_pept)
 obj <- Exp1_R25_pept[1:1000]
-lapala <- findLapalaBlock(obj)
+lapala <- findMECBlock(obj)
 obj <- wrapper.impute.detQuant(obj)
-obj <- reIntroduceLapala(obj, lapala)
+obj <- reIntroduceMEC(obj, lapala)
 obj <- wrapper.impute.detQuant(obj)
 ttest <- wrapper.t_test_Complete(obj, 1)
 }

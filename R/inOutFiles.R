@@ -81,7 +81,7 @@ if (!is.null(index))
                                stringsAsFactors = FALSE)
 }
     
-OriginOfValues[is.na(obj)] <-  "MV"
+OriginOfValues[is.na(obj)] <-  "POV"
 rownames(OriginOfValues) <- rownames(exprs(obj))
 colnames(OriginOfValues) <- paste0("OriginOfValue",colnames(exprs(obj)))
 colnames(OriginOfValues) <- gsub(".", "_", colnames(OriginOfValues), fixed=TRUE)
@@ -261,7 +261,7 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
 writeMSnsetToExcel <- function(obj, filename)
 {
     #require(Matrix)
-    MV_Style <- openxlsx::createStyle(fgFill = "lightblue")
+    POV_Style <- openxlsx::createStyle(fgFill = "lightblue")
     MEC_Style <- openxlsx::createStyle(fgFill = "orange")
     
     #require(openxlsx)
@@ -274,14 +274,14 @@ writeMSnsetToExcel <- function(obj, filename)
     
    
     if (is.null(obj@experimentData@other$OriginOfValues)){
-      listMV <-  which(is.na(exprs(obj)), arr.ind=TRUE)
+      listPOV <-  which(is.na(exprs(obj)), arr.ind=TRUE)
     } else {
         mat <- fData(obj)[,obj@experimentData@other$OriginOfValues]
-        listMV <- which(mat=="MV", arr.ind=TRUE)
+        listPOV <- which(mat=="POV", arr.ind=TRUE)
         listMEC <- which(mat=="MEC", arr.ind=TRUE)
     }
     
-    openxlsx::addStyle(wb, sheet=n, cols = listMV[,"col"]+1, rows = listMV[,"row"]+1, style = MV_Style)
+    openxlsx::addStyle(wb, sheet=n, cols = listPOV[,"col"]+1, rows = listPOV[,"row"]+1, style = POV_Style)
     openxlsx::addStyle(wb, sheet=n, cols = listMEC[,"col"]+1, rows = listMEC[,"row"]+1, style = MEC_Style)
     
     #bodyStyleNumber <- createStyle(numFmt = "NUMBER")
