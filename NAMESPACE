@@ -83,8 +83,8 @@ export(
 ,"wrapper.compareNormalizationD","compareNormalizationD"
 ,"getListNbValuesInLines"
 
-,"reIntroduceLapala"
-,"findLapalaBlock"
+,"reIntroduceMEC"
+,"findMECBlock"
 ,"wrapper.impute.fixedValue"
 ,"wrapper.impute.detQuant"
 ,"wrapper.impute.slsa"
