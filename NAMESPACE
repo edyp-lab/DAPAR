@@ -54,7 +54,8 @@ export(
 "createMSnset",
 "readExcel",
 "listSheets",
-"addOriginOfValue","saveParameters"
+"addOriginOfValue","saveParameters",
+"buildLogText"
 
 ,"wrapper.boxPlotD","boxPlotD"
 ,"wrapper.densityPlotD","densityPlotD"

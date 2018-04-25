@@ -29,7 +29,49 @@ n <- sum(apply(is.na(as.matrix(qData)), 1, all))
 return (n)
 }
 
+##' Similar to the function \code{is.na} but focused on the equality with the paramter 'type'.
+##' 
+##' @title Similar to the function \code{is.na} but focused on the equality with the paramter 'type'.
+##' @param data A data.frame
+##' @param type The value to search in the dataframe
+##' @return A boolean dataframe 
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' obj <- Exp1_R25_pept
+##' data <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
+##' is.OfType(data, "MEC")
+is.OfType <- function(data, type){
+  return (type == data)
+}
 
+
+
+
+
+##' Similar to the function \code{is.na} but focused on the equality with the missing 
+##' values in the dataset (type 'MV', 'POV' and 'MEC')
+##' 
+##' @title Similar to the function \code{is.na} but focused on the equality with the missing 
+##' values in the dataset (type 'MV', 'POV' and 'MEC')
+##' @param data A data.frame
+##' @return A boolean dataframe 
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' obj <- Exp1_R25_pept
+##' data <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
+##' is.MV(data)
+is.MV <- function(data){
+  MV=is.OfType(data, "MV")
+  POV=is.OfType(data, "POV")
+  MEC=is.OfType(data, "MEC")
+  
+  df <- MV | POV | MEC
+  return (df)
+}
 
 ##' Returns the possible number of values in lines in a matrix.
 ##' 
@@ -50,7 +92,9 @@ getListNbValuesInLines <- function(obj, type="wholeMatrix"){
   }
   data <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
   switch(type,
-         wholeMatrix= ll <- unique(ncol(data) - apply(is.na(data), 1, sum)),
+         wholeMatrix= {
+           ll <- unique(ncol(data) - apply(is.MV(data), 1, sum))
+           },
          allCond = {
                     tmp <- NULL
                     for (cond in unique(Biobase::pData(obj)$Label)){

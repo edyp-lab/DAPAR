@@ -14,11 +14,14 @@
 ##' getPourcentageOfMV(Exp1_R25_pept)
 getPourcentageOfMV <- function(obj){
 
-NA.count<-apply(data.frame(Biobase::exprs(obj)), 2, 
+  df <- data.frame(Biobase::exprs(obj))
+  
+NA.count<-apply(df, 2, 
                 function(x) length(which(is.na(data.frame(x))==TRUE)) )
+
+
 pourcentage <- 100 * round(sum(NA.count)
-                            /(dim(Biobase::exprs(obj))[1]*
-                                  dim(Biobase::exprs(obj))[2]), 
+                            /(nrow(df)* ncol(df)), 
                             digits=4)
 
 return(pourcentage)
@@ -484,7 +487,7 @@ if (is.null(obj@experimentData@other$OriginOfValues)){
 if (type == "none"){
     keepThat <- seq(1:nrow(data))
 } else if (type == "wholeMatrix"){
-    keepThat <- which(apply(!is.na(data), 1, sum) >= th)
+    keepThat <- which(apply(!is.MV(data), 1, sum) >= th)
 } else if (type == "atLeastOneCond" || type == "allCond"){
     
     conditions <- unique(Biobase::pData(obj)$Label)
@@ -496,9 +499,9 @@ if (type == "none"){
     for (c in 1:nbCond){
         ind <- which(Biobase::pData(obj)$Label == conditions[c])
         if (length(ind) == 1){
-            s[,c] <- (!is.na(data[,ind]) >= th)}
+            s[,c] <- (!is.MV(data[,ind]) >= th)}
         else {
-            s[,c] <- (apply(!is.na(data[,ind]), 1, sum) >= th)
+            s[,c] <- (apply(!is.MV(data[,ind]), 1, sum) >= th)
         }
     }
     

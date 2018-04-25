@@ -157,18 +157,22 @@ diffAnaSave <- function (obj, allComp, data=NULL, l.params){
           is.null(l.params$th_logFC)
 
   if (is.null(l.params$th_pval)) l.params$th_pval<-0
-  if (is.null(l.params$th_logFC)) l.params$th_pval<-0
+  if (is.null(l.params$th_logFC)) l.params$th_logFC<-0
   
     
-  ####### SAVE THE ALL PAIRWISE COMPARISON RESULTS
+  ####### SAVE ALL THEPAIRWISE COMPARISON RESULTS
   
   .fc <- as.data.frame(allComp$FC)
   .pval <- as.data.frame(allComp$P_Value)
+  cnames <- c(colnames(allComp$FC), colnames(allComp$P_Value))
+  ind <- which(colnames(fData(obj)) %in% cnames)
+  if (length(ind) > 0) {
+      Biobase::fData(obj) <- Biobase::fData(obj)[,-ind]
+  }
   for (i in 1:ncol(.fc)){
     Biobase::fData(obj) <- cbind(Biobase::fData(obj), .fc[,i], .pval[,i])
     coln <- colnames(Biobase::fData(obj))
     colnames(Biobase::fData(obj))[(length(coln)-1):length(coln)] <- c(colnames(allComp$FC)[i],colnames(allComp$P_Value)[i])
-
   }
   
   text <- paste("Differential analysis with",l.params$method)
@@ -177,34 +181,33 @@ diffAnaSave <- function (obj, allComp, data=NULL, l.params){
   
   obj@experimentData@other$RawPValues <- TRUE
   
+  #### SAVE A COMPARISON ANALYSIS IF EXISTS
+  if (!(is.null(data$FC) && is.null(data$P_Value))){
   
-  #### SAVE A COMPARISON ANALYSIS
-  if (!is.null(data)){
-  
-    Biobase::fData(obj)$P_Value <- data$P_Value
-    Biobase::fData(obj)$FC <- data$FC
-    Biobase::fData(obj)$Significant <- 0
+        Biobase::fData(obj)$P_Value <- data$P_Value
+        Biobase::fData(obj)$FC <- data$FC
+        Biobase::fData(obj)$Significant <- 0
 
-    ##setSignificant info
-    x <- Biobase::fData(obj)$FC
-    y <- -log10(Biobase::fData(obj)$P_Value)
+        ##setSignificant info
+        x <- data$FC
+        y <- -log10(data$P_Value)
     
-    ipval <- which(y >= l.params$th_pval)
-    ilogfc <- which(abs(x) >= l.params$th_logFC)
-    Biobase::fData(obj)[intersect(ipval, ilogfc),]$Significant <- 1
+        ipval <- which(y >= l.params$th_pval)
+        ilogfc <- which(abs(x) >= l.params$th_logFC)
+        Biobase::fData(obj)[intersect(ipval, ilogfc),]$Significant <- 1
    
 
-    l.params[["condition1"]] <-  data$condition1
-    l.params[["condition2"]] <-  data$condition2
+        l.params[["condition1"]] <-  data$condition1
+        l.params[["condition2"]] <-  data$condition2
     
-    # text <- paste("Differential analysis : Selection with the following 
-    #                 threshold values :logFC =",threshold_logFC,
-    #                 ", -log10(p-value) = ", threshold_pVal,
-    #                 ", FDR = ", fdr, sep=" ")
-    # 
-    # obj@processingData@processing <- c(obj@processingData@processing, text)
-    # 
-  }
+        # text <- paste("Differential analysis : Selection with the following 
+        #                 threshold values :logFC =",threshold_logFC,
+        #                 ", -log10(p-value) = ", threshold_pVal,
+        #                 ", FDR = ", fdr, sep=" ")
+        # 
+        # obj@processingData@processing <- c(obj@processingData@processing, text)
+        # 
+    }
   
   obj <- saveParameters(obj, "anaDiff", l.params)
   return(obj)
