@@ -13,7 +13,7 @@ getTextForAnaDiff(l.params)
 A string
 }
 \description{
-Build the text information for the Aggregation process
+Build the text information for the differential Analysis process
 }
 \examples{
 getTextForAnaDiff(list(design="OnevsOne",method="Limma"))

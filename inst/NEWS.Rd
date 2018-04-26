@@ -1,5 +1,14 @@
-\name{Prostar-NEWS}
-\title{Prostar News}
+\name{DAPAR-NEWS}
+\title{DAPAR News}
+
+
+
+\section{CHANGES IN VERSION 1.11.15}{
+
+\itemize{
+   \item See changes in version 1.11.13 of the package Prostar
+   }
+}
 
 
 

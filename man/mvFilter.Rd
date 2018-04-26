@@ -11,7 +11,7 @@ mvFilter(obj, type, th, processText = NULL)
 quantitative data.}
 
 \item{type}{Method used to choose the lines to delete.
-Values are : "none", "wholeMatrix", "allCond", "atLeastOneCond"}
+Values are : "None", "wholeMatrix", "allCond", "atLeastOneCond"}
 
 \item{th}{An integer value of the threshold}
 

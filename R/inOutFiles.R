@@ -393,3 +393,37 @@ writeMSnsetToCSV <- function(obj, fname){
     
     return(fname)
 }
+
+
+##' Similar to the function \code{rbind} but applies on two subsets of the same \code{MSnSet} object.
+##' 
+##' @title Similar to the function \code{rbind} but applies on two subsets of the same \code{MSnSet} object.
+##' @param df1 An object (or subset of) of class \code{MSnSet}. May be NULL
+##' @param df2 A subset of the same object as df1
+##' @return An instance of class \code{MSnSet}.
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R2_pept)
+##' df1 <- Exp1_R2_pept[1:100]
+##' df2 <- Exp1_R2_pept[200:250]
+##' rbindMSnset(df1, df2)
+rbindMSnset <- function(df1=NULL, df2){
+  
+  if (is.null(df1)){
+    obj <- df2
+    return(obj)
+  }
+  if (is.null(df1) && is.null(df2)){return(NULL)}
+    
+  tmp.exprs <- rbind(exprs(df1), exprs(df2))
+  tmp.fData <- rbind(fData(df1), fData(df2))
+  tmp.pData <- pData(df1)
+  
+  obj <-  MSnSet(exprs = tmp.exprs, fData = tmp.fData, pData = tmp.pData)
+  obj@protocolData <- df1@protocolData
+  obj@experimentData <- df1@experimentData
+  
+  return(obj)
+  
+}

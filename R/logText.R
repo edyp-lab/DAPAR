@@ -104,9 +104,9 @@ getTextForNormalization <- function(l.params){
     }
     
     else if  (l.params$method == "Quantile Centering"){
-        txt <- paste(txt,l.params$method, " - ", l.params$type)
+        txt <- paste(txt,as.character(tags$li(l.params$method, " - ", l.params$type)))
         quant <- ifelse (l.params$quantile == "Other",l.params$otherQuantile, l.params$quantile)
-        txt <- paste(txt,"with quantile =", quant)
+        txt <- paste(txt,as.character(tags$li("with quantile =", quant)))
     }
     
     return (txt)
@@ -147,15 +147,15 @@ getTextForImputation <- function(l.params, level){
                 if (l.params$POV_algorithm=="None") {
                     return (NULL)
             } else {
-                txt <- paste(txt,"POV imputed with ", l.params$POV_algorithm)
+                txt <- paste(txt,as.character(tags$li(paste("POV imputed with ", l.params$POV_algorithm))))
             }
         
             switch(l.params$POV_algorithm,
                slsa = {},
-               detQuantile = {txt <- paste(txt,"quantile= ", l.params$POV_detQuant_quantile, 
-                                           ", factor=",l.params$POV_detQuant_factor)
+               detQuantile = {txt <- paste(txt,as.character(tags$li(paste("quantile= ", l.params$POV_detQuant_quantile, 
+                                           ", factor=",l.params$POV_detQuant_factor))))
                },
-               KNN = {txt <- paste(txt,"neighbors= ", l.params$POV_KNN_n)}
+               KNN = {txt <- paste(txt,as.character(tags$li(paste("neighbors= ", l.params$POV_KNN_n))))}
                 )
             }
     
@@ -163,14 +163,14 @@ getTextForImputation <- function(l.params, level){
                 if (l.params$MEC_algorithm=="None") {
                 return (NULL)
             } else {
-                txt <- paste(txt,"POV imputed with ", l.params$MEC_algorithm)
+                txt <- paste(txt,as.character(tags$li(paste("MEC imputed with ", l.params$MEC_algorithm))))
             }
         
             switch(l.params$MEC_algorithm,
-                    detQuantile = {txt <- paste(txt,"quantile= ", l.params$MEC_detQuant_quantile, 
-                                           ", factor=",l.params$MEC_detQuant_factor)
+                    detQuantile = {txt <- paste(txt,as.character(tags$li(paste("quantile= ", l.params$MEC_detQuant_quantile, 
+                                           ", factor=",l.params$MEC_detQuant_factor))))
                                     },
-                    fixedValue = {txt <- paste(txt,"fixed value= ", l.params$MEC_fixedValue)}
+                    fixedValue = {txt <- paste(txt,as.character(tags$li(paste("fixed value= ", l.params$MEC_fixedValue))))}
                 )
         
                 }
@@ -191,19 +191,21 @@ getTextForImputation <- function(l.params, level){
             if (l.params$pepLevel_algorithm=="None") {
                 return (NULL)
             } else if (l.params$pepLevel_algorithm=="imp4p"){
-                txt <- paste(txt,"Dataset imputed with ", l.params$pepLevel_algorithm)
-                txt <- paste(txt,"nb iter = ", l.params$pepLevel_imp4p_nbiter)
+                txt <- paste(txt,as.character(tags$li(paste("Missing values imputed with ", l.params$pepLevel_algorithm,
+                                                            ", nb iter = ", l.params$pepLevel_imp4p_nbiter ))))
                 if (!is.null(l.params$pepLevel_imp4p_withLapala) && isTRUE(l.params$pepLevel_imp4p_withLapala)){
-                    txt <- paste(txt,"Imputation of MEC: ")
-                    txt <- paste(txt,"Upper bound: ", l.params$pepLevel_imp4p_qmin)
-                    txt <- paste(txt,"DIstribution: ", l.params$pepLevel_imp4pLAPALA_distrib)
+                    txt <- paste(txt,as.character(tags$li(paste("Imputation of MEC: "))))
+                    txt <- paste(txt,as.character(tags$li(paste("Upper bound: ", l.params$pepLevel_imp4p_qmin))))
+                    txt <- paste(txt,as.character(tags$li(paste("DIstribution: ", l.params$pepLevel_imp4pLAPALA_distrib))))
                 }
             }
             else if(!is.null(l.params$pepLevel_basicAlgorithm) && (l.params$pepLevel_algorithm=="Basic methods")){
-                txt <- paste(txt,"Dataset imputed with ", l.params$pepLevel_basicAlgorithm)
+                txt <- paste(txt,as.character(tags$li(paste("Dataset imputed with ", l.params$pepLevel_basicAlgorithm))))
                 switch (l.params$pepLevel_basicAlgorithm,
-                    detQuantile = {txt <- paste(txt,"Quantile = ", l.params$pepLevel_detQuantile)
-                                    txt <- paste(txt,"Factor =", l.params$pepLevel_detQuant_factor)},
+                    detQuantile = {
+                      txt <- paste(txt,as.character(tags$li(paste("Quantile = ", l.params$pepLevel_detQuantile,
+                                                                  ", Factor =", l.params$pepLevel_detQuant_factor))))
+                                   },
                     KNN = {},
                     MLE = {}
                 )
@@ -253,7 +255,7 @@ getTextForAggregation <- function(l.params){
 }
 
 
-##' Build the text information for the Aggregation process
+##' Build the text information for the differential Analysis process
 ##' 
 ##' @title  Build the text information for the Aggregation process
 ##' @param l.params A list of parameters related to the process of the dataset
@@ -283,37 +285,39 @@ getTextForAnaDiff <- function(l.params){
     
     if (is.null(l.params$design) || (l.params$design =="None")) { return (NULL)}
     
-    txt <- paste(txt, "design:", l.params$design, ", method:", l.params$method, "<br>")
+    txt <- paste(txt, as.character(tags$li(paste("Design:", l.params$design)))) 
+    txt <- paste(txt, as.character(tags$li(paste("Method:", l.params$method))))
     
     if (!is.null(l.params$ttest_options)){
-        txt <- paste(txt, "t-test:", l.params$ttest_options, "<br>")
+      txt <- paste(txt, as.character(tags$li(paste("t-test:", l.params$ttest_options))))
     } 
     
-    txt <- paste(txt, "Threshold logFC = ", l.params$th_logFC, "<br>")
+    txt <- paste(txt, as.character(tags$li(paste("Threshold logFC = ", l.params$th_logFC))))
     
     if (!is.null(l.params$comp)){
-        txt <- paste(txt, "Comparison: ", l.params$comp)
+      txt <- paste(txt, as.character(tags$li(paste("Comparison: ", l.params$comp))))
         
     }
     
     if (!is.null(l.params$filterType) && (l.params$filterType != "None")){
-        txt <- paste(txt, "Filter type: ", l.params$filterType)
-        txt <- paste(txt, "min nb values / lines: ", l.params$filter_th_NA)
+      txt <- paste(txt, as.character(tags$li(paste("Filter type: ", l.params$filterType, 
+                                                   ", min nb values / lines: ", l.params$filter_th_NA))))
     }
     
     if (!is.null(l.params$swapVolcano) && (isTRUE(l.params$swapVolcano))){
-        txt <- paste(txt, "Swap volcano")
+      txt <- paste(txt, as.character(tags$li("Swap volcano")))
     }
     
     if (!is.null(l.params$calibMethod) ){
-        txt <- paste(txt, "Calibration with ", l.params$calibMethod)
         if (!is.null(l.params$numValCalibMethod)){
-            txt <- paste(txt, "num value = ", l.params$numValCalibMethod)
+          txt <- paste(txt, as.character(tags$li(paste("Calibration with ", l.params$calibMethod, ", num value = ", l.params$numValCalibMethod))))
+        } else {
+          txt <- paste(txt, as.character(tags$li(paste("Calibration with ", l.params$calibMethod))))
         }
     }
     
     if (!is.null(l.params$th_pval)){
-        txt <- paste(txt, "Threshold pvalue = ", l.params$th_pval)
+      txt <- paste(txt, as.character(tags$li(paste("Threshold pvalue = ", l.params$th_pval))))
     }
     
     return (txt)
@@ -334,20 +338,20 @@ getTextForGOAnalysis <-  function(l.params){
       switch(l.params$whichGO2Save,
            Both =
               {
-              text <- paste(textGOParams,", GO grouping for level(s):",
-                           input$GO_level,
-                           ", GO enrichment with",
+                txt <- paste(txt, as.character(tags$li(paste(textGOParams,", GO grouping for level(s):",
+                           input$GO_level))))
+                txt <- paste(txt, as.character(tags$li(paste("GO enrichment with",
                            ", adj p-value cutoff = ", input$pvalueCutoff,
-                           ", universe =", input$universe, sep= " ")
+                           ", universe =", input$universe))))
               },
            Enrichment ={
-             text <- paste(textGOParams, " GO enrichment with",
+             txt <- paste(txt, as.character(tags$li(paste(textGOParams, " GO enrichment with",
                            ", adj p-value cutoff = ", input$pvalueCutoff,
-                           ", universe =", input$universe, sep= " ")
+                           ", universe =", input$universe, sep= " "))))
               },
            Classification= {
-             text <- paste(textGOParams,", GO grouping for level(s):",
-                           input$GO_level,sep=" ")
+             txt <- paste(txt, as.character(tags$li(paste(textGOParams,", GO grouping for level(s):",
+                           input$GO_level,sep=" "))))
             }
   )
   }

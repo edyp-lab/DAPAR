@@ -56,7 +56,8 @@ export(
 "readExcel",
 "listSheets",
 "addOriginOfValue","saveParameters",
-"buildLogText"
+"buildLogText",
+"rbindMSnset"
 
 ,"wrapper.boxPlotD","boxPlotD"
 ,"wrapper.densityPlotD","densityPlotD"

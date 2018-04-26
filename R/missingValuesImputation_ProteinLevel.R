@@ -64,7 +64,7 @@ reIntroduceMEC <- function(obj, MECIndex){
 # ##' @title Missing values imputation from a \code{MSnSet} object
 # ##' @param obj An object of class \code{MSnSet}.
 # ##' @param method The imputation method to be used for LAPALA
-# ##' Choices are none, detQuantile, fixedValue. 
+# ##' Choices are None, detQuantile, fixedValue. 
 # ##' @return The object \code{obj} which has been imputed
 # ##' @author Thomas Burger, Samuel Wieczorek
 # ##' @examples
@@ -103,7 +103,7 @@ reIntroduceMEC <- function(obj, MECIndex){
 # ##' @title Missing values imputation from a \code{MSnSet} object
 # ##' @param obj An object of class \code{MSnSet}.
 # ##' @param lapalaMethod The imputation method to be used for LAPALA
-# ##' Choices are none, detQuantile, fixedValue. 
+# ##' Choices are None, detQuantile, fixedValue. 
 # ##' @param classicMVMethod The imputation method used for missing values that are not 
 # ##' LAPALA. Available choices are slsa, detQuantile
 # ##' @return The object \code{obj} which has been imputed
@@ -119,7 +119,7 @@ reIntroduceMEC <- function(obj, MECIndex){
 #     switch (method,
 #             detQuantile = {obj <- wrapper.impute.detQuant(obj, ...)},
 #             fixedValue = {obj <- wrapper.impute.fixedValue(obj, ...)},
-#             none = {}
+#             None = {}
 #     )
 #     
 #     return(obj)

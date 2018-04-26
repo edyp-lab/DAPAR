@@ -325,7 +325,7 @@ return(ind)
 ##' @param obj An object of class \code{MSnSet} containing
 ##' quantitative data.
 ##' @param type Method used to choose the lines to delete.
-##' Values are : "none", "wholeMatrix", "allCond", "atLeastOneCond"
+##' Values are : "None", "wholeMatrix", "allCond", "atLeastOneCond"
 ##' @param th An integer value of the threshold
 ##' @param processText A string to be included in the \code{MSnSet}
 ##' object for log. 
@@ -338,7 +338,7 @@ return(ind)
 mvFilter <- function(obj,type, th, processText=NULL )
 {
     #Check parameters
-    paramtype<-c("none", "wholeMatrix", "allCond", "atLeastOneCond") 
+    paramtype<-c("None", "wholeMatrix", "allCond", "atLeastOneCond") 
     if (sum(is.na(match(type, paramtype)==TRUE))>0){
         warning("Param type is not correct.")
         return (NULL)
@@ -454,7 +454,7 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
 ##' @param obj An object of class \code{MSnSet} containing
 ##' quantitative data.
 ##' @param type Method used to choose the lines to delete.
-##' Values are : "none", "wholeMatrix", "allCond", "atLeastOneCond"
+##' Values are : "None", "wholeMatrix", "allCond", "atLeastOneCond"
 ##' @param th An integer value of the threshold
 ##' @return An vector of indices that correspond to the lines to keep.
 ##' @author Florence Combes, Samuel Wieczorek
@@ -465,7 +465,7 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
 mvFilterGetIndices <- function(obj,type, th)
 {
 #Check parameters
-paramtype<-c("none", "wholeMatrix", "allCond", "atLeastOneCond") 
+paramtype<-c("None", "wholeMatrix", "allCond", "atLeastOneCond") 
 if (sum(is.na(match(type, paramtype)==TRUE))>0){
     warning("Param type is not correct.")
     return (NULL)
@@ -484,7 +484,7 @@ if (is.null(obj@experimentData@other$OriginOfValues)){
     data <- fData(obj)[,obj@experimentData@other$OriginOfValues]
 }
 
-if (type == "none"){
+if (type == "None"){
     keepThat <- seq(1:nrow(data))
 } else if (type == "wholeMatrix"){
     keepThat <- which(apply(!is.MV(data), 1, sum) >= th)
