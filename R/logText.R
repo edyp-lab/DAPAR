@@ -34,7 +34,7 @@ buildLogText <- function(name, l.params,...){
 ##' @examples
 ##' getTextForNewDataset(list(filename="foo.MSnset"))
 getTextForNewDataset <- function(l.params){
-    txt <- as.character(tags$li(paste("Open : file ",l.params$filename, " opened")))
+    txt <- as.character(tags$li(paste("Open dataset: ",l.params$filename)))
     return (txt)
 }
 
@@ -58,7 +58,8 @@ getTextForFiltering <- function(l.params){
         txt <- paste(txt, as.character(tags$li(paste("MV filter with ", l.params$mvFilterType, ", and minimal nb of values per lines = ", l.params$mvThNA))))
     }
     if (!is.null(l.params$stringFilter.df) && nrow(l.params$stringFilter.df) > 1){
-        txt <- paste(txt, as.character(tags$li(paste("Text filtering based on", l.params$stringFilter.df$Filter))))
+        ll <- l.params$stringFilter.df$Filter
+        txt <- paste(txt, as.character(tags$li(paste("Text filtering based on", paste(ll[-1], collapse=", ")))))
     }
     
     return (txt)
@@ -238,17 +239,20 @@ getTextForAggregation <- function(l.params){
     txt <- NULL
     if (is.null(l.params$proteinId) || (l.params$proteinId =="None")) { return (NULL)}
     
-    txt <- paste(txt, "proteinId:", l.params$proteinId, " ")
+    txt <- paste(txt,as.character(tags$li(paste("proteinId:", l.params$proteinId, " "))))
     if (!is.null(l.params$agregMethod) && (l.params$agregMethod =="none")) {
-        txt <- paste(txt, "method:", l.params$agregMethod," ")
+        txt <- paste(txt,as.character(tags$li(paste("method:", l.params$agregMethod," "))))
         if (l.params$agregMethod =="sum on top n"){
-            txt <- paste(txt, "n=", l.params$topN," ")
+            txt <- paste(txt,as.character(tags$li(paste("n=", l.params$topN," "))))
         }
     }
     
     if (!is.null(l.params$withSharedPeptides) ){
-        term <- ifelse(isTRUE(l.params$withSharedPeptides), "with", "without")
-        txt <- paste(txt, term," shared peptides")
+        if(isTRUE(l.params$withSharedPeptides)){
+        txt <- paste(txt,as.character(tags$li(paste("with shared peptides"))))
+    } else {
+        txt <- paste(txt,as.character(tags$li(paste("without shared peptides"))))
+    }
     }
     return (txt)
     
