@@ -42,7 +42,11 @@ setMEC <- function(obj){
   
   for (cond in 1:nbCond){
     ind <- which(Biobase::pData(obj)$Label == conditions[cond])
-    lNA <- which(apply(is.na(Biobase::exprs(obj)[,ind]), 1, sum)==length(ind))
+    if (length(ind) == 1) {
+      lNA <- which(is.na(Biobase::exprs(obj)[,ind]))
+      } else {
+        lNA <- which(apply(is.na(Biobase::exprs(obj)[,ind]), 1, sum)==length(ind))
+      }
     if (length(lNA) > 0)
     {
       Biobase::fData(obj)[lNA,obj@experimentData@other$OriginOfValues[ind]] <- "MEC"
@@ -82,13 +86,13 @@ if (!is.null(index))
 }
     
 OriginOfValues[is.na(obj)] <-  "POV"
-rownames(OriginOfValues) <- rownames(exprs(obj))
-colnames(OriginOfValues) <- paste0("OriginOfValue",colnames(exprs(obj)))
+rownames(OriginOfValues) <- rownames(Biobase::fData(obj))
+colnames(OriginOfValues) <- paste0("OriginOfValue",colnames(Biobase::exprs(obj)))
 colnames(OriginOfValues) <- gsub(".", "_", colnames(OriginOfValues), fixed=TRUE)
 
-indMin <- length(colnames(fData(obj)))
-indMax <- length(colnames(fData(obj))) + length(OriginOfValues)
-fData(obj) <- cbind(fData(obj), OriginOfValues)
+#indMin <- length(colnames(fData(obj)))
+#indMax <- length(colnames(fData(obj))) + length(OriginOfValues)
+Biobase::fData(obj) <- cbind(Biobase::fData(obj), OriginOfValues, deparse.level = 0)
 
 obj@experimentData@other$OriginOfValues <- colnames(OriginOfValues)
 
@@ -157,25 +161,24 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
                         , ncol=length(indExpData)
                         , byrow=FALSE)
     
-    #colnames(Intensity) <- colnames(data)[indExpData]
     colnames(Intensity) <- gsub(".", "_", colnames(data)[indExpData], fixed=TRUE)
     
     ##the name of lines are the same as the data of the first column
-    if (is.null(indiceID)) {
-        rownames(Intensity) <- rep(paste(pep_prot_data, "_", 1:nrow(Intensity), 
-                                         sep=""))
-    }else{rownames(Intensity) <- data[,indiceID]}
+    # if (is.null(indiceID)) {
+    #     rownames(Intensity) <- rep(paste(pep_prot_data, "_", 1:nrow(Intensity), sep=""))
+    # }else{rownames(Intensity) <- data[,indiceID]}
     
     ##building fData of MSnSet file
     fd <- data.frame( data[,indFData])
+    
     if (is.null(indiceID)) {
         rownames(fd) <- rep(paste(pep_prot_data, "_", 1:nrow(fd), sep=""))
+        rownames(Intensity) <- rep(paste(pep_prot_data, "_", 1:nrow(Intensity), sep=""))
     }else{
         rownames(fd) <- data[,indiceID]
+        rownames(Intensity) <- data[,indiceID]
     }
     
-    #rownames(fd) <- data[,indiceID]
-    #colnames(fd) <- colnames(data)[indFData]
     colnames(fd) <- gsub(".", "_", colnames(data)[indFData], fixed=TRUE)
     
     
@@ -194,7 +197,6 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
         }
     
     pd <- as.data.frame(metadata)
-    #rownames(pd) <- pd$Experiment
     rownames(pd) <- gsub(".", "_", pd$Experiment, fixed=TRUE)
     
     ##Integrity tests
