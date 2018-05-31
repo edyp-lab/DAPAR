@@ -27,7 +27,7 @@
 ##' @title Computation of the hierarchical design matrix : 2-level case : Bio-Tech or 
 ##' Bio-Analytical or Tech-Analytical.
 ##' @param obj An object of class \code{MSnSet} with no missing values
-##' @param design An integer that reflects the type of comparisons. Available values are 1 (One vs One) or (One vs All)
+##' @param design An integer that reflects the type of comparisons. Available values are 1 (One vs One) or 2 (One vs All)
 ##' @return xxxxxxxxxx
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -210,7 +210,8 @@ limmaCompleteTest <- function(qData,Conditions, RepBio, RepTech, Contrast=1){
         label.agg=r[[1]]
         nb.agg=r[[2]]
         k=1
-        contra=rep(0,sum(1:(nb.cond-1)))
+        #contra=rep(0,sum(1:(nb.cond-1)))
+        contra=rep(0,nb.cond)
         for (i in 1:(nb.cond)){
             contra[k]=c(paste("(",label.agg[i],")/",nb.agg[i]))
             nb=sum(nb.agg[(1:nb.cond)[(1:nb.cond)!=i]])
@@ -248,8 +249,12 @@ limmaCompleteTest <- function(qData,Conditions, RepBio, RepTech, Contrast=1){
                         if (length(levels(RepBio))<=length(levels(RepTech))){
                             #Get the number of hierarchical levels
                             if (length(levels(RepBio))==lt){niveau=1;}
-                            else{ if (length(levels(RepTech))==lt){niveau=2;}
-                                else{niveau=3;}
+                            else{ 
+                              if (length(levels(RepTech))==lt){niveau=2;}
+                                else{
+                                  if (length(levels(RepTech))==length(levels(RepBio))){niveau=2;}
+                                 else { niveau=3;}
+                                }
                             }
                             #Non hierarchical case (only one type of replicate)
                             if (niveau==1){
