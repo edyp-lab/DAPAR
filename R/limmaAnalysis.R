@@ -1,5 +1,4 @@
 
-
 ##############################################################
 #Fonction realisant un test de contrastes entre conditions a l'aide du 
 #package LIMMA.
@@ -43,6 +42,7 @@ wrapper.limmaCompleteTest <- function(obj, design){
     
     qData <- Biobase::exprs(obj)
     RepBio <- RepTech <- factor(1:nrow(pData(obj)))
+    #RepBio <- RepTech <- factor(1:nrow(pData(obj)))
     conds <- factor(pData(obj)[,"Label"])
     switch(design,
            OnevsOne=contrast <- 1,
