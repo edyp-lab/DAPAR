@@ -1021,14 +1021,14 @@ CVDistD_HC <- function(qData, labels=NULL){
         hc_tooltip(headerFormat= '',
                    pointFormat = "<b>{series.name}</b>: {point.y} ",
                    valueDecimals = 2) %>%
-      my_hc_ExportMenu(filename = "logIntensity") %>%
         hc_plotOptions(
             series=list(
                 connectNulls= TRUE,
                 marker=list(
                     enabled = FALSE)
             )
-        )
+        ) %>%
+        my_hc_ExportMenu(filename = "logIntensity")
     
     return(h1)
 
