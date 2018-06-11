@@ -266,13 +266,11 @@ return(pal)
 ##' hc_add_series(hc,data = c(29, 71, 40))
 ##' my_hc_ExportMenu(hc,filename='foo')
 my_hc_ExportMenu <- function(hc, filename){
-  hc_exporting(hc, 
+  hc_exporting(hc, enabled=TRUE,
                filename = filename,
-               enabled=TRUE,
-               #fallbackToExportServer=TRUE,
                buttons= list(
                  contextButton= list(
-                   menuItems= list("downloadPNG", "downloadSVG","downloadPDF")
+                   menuItems= list('downloadPNG', 'downloadSVG','downloadPDF')
                  )
                )
   )
