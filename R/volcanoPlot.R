@@ -157,9 +157,9 @@ diffAnaVolcanoplot_rCharts <- function(df,
     }
     
     
-   # df <- cbind(df, 
-   #             g=ifelse(df$y >= threshold_pVal & abs(df$x) >= threshold_logFC, "g1", "g2")
-   # )
+    df <- cbind(df, 
+                g=ifelse(df$y >= threshold_pVal & abs(df$x) >= threshold_logFC, "g1", "g2")
+    )
     
     
     i_tooltip <- which(startsWith(colnames(df),"tooltip"))
@@ -173,8 +173,8 @@ diffAnaVolcanoplot_rCharts <- function(df,
                                  sep="")
     }
     
-    h1 <-  hchart(df, "scatter") %>%
-        hc_colors("orange") %>%
+    h1 <-  hchart(df, "scatter", hcaes(x,y,group=g)) %>%
+        hc_colors(c("orange", "grey")) %>%
         my_hc_chart(zoomType = "xy",chartType="scatter") %>%
         hc_legend(enabled = FALSE) %>%
         hc_yAxis(title = list(text="-log10(pValue)"),
