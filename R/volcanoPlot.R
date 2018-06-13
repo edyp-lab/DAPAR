@@ -153,7 +153,7 @@ diffAnaVolcanoplot_rCharts <- function(df,
     
     if (is.null(clickFunction)){
         clickFunction <- 
-            JS("function(event) {Shiny.onInputChange('eventPointClicked', [this.name]);}")
+            JS("function(event) {Shiny.onInputChange('eventPointClicked', [this.index]);}")
     }
     
     
@@ -173,7 +173,7 @@ diffAnaVolcanoplot_rCharts <- function(df,
                                  sep="")
     }
     
-    h1 <-  hchart(df, "scatter", hcaes(x,y,group=g)) %>%
+    h1 <-  hchart(df, "scatter") %>%
         hc_colors(c("orange", "grey")) %>%
         my_hc_chart(zoomType = "xy",chartType="scatter") %>%
         hc_legend(enabled = FALSE) %>%
@@ -181,7 +181,9 @@ diffAnaVolcanoplot_rCharts <- function(df,
                  plotLines=list(list(color= "red" , width = 2, value = threshold_pVal, zIndex = 5)),
                  plotLines=list(list(color= "grey" , width = 2, value = 0, zIndex = 5))) %>%
         hc_xAxis(title = list(text = "FC"),
-                 plotBands = list(list(from= -threshold_logFC, to = threshold_logFC, color = "lightgrey")),
+                 #plotBands = list(list(from= -threshold_logFC, to = threshold_logFC, color = "lightgrey")),
+                 plotLines=list(list(color= "grey" , width = 2, value = -threshold_logFC, zIndex = 5)),
+                 plotLines=list(list(color= "grey" , width = 2, value = threshold_logFC, zIndex = 5)),
                  plotLines=list(list(color= "grey" , width = 2, value = 0, zIndex = 5))) %>%
         hc_tooltip(headerFormat= '',
                    pointFormat = txt_tooltip) %>%
