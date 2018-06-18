@@ -27,7 +27,7 @@ of class \code{MSnSet}
 require(DAPARdata)
 data(Exp1_R25_pept)
 library(vioplot)
-types <- c("Label","Analyt.Rep")
+types <- c("Label","Bio.Rep")
 wrapper.violinPlotD(Exp1_R25_pept, types)
 }
 \seealso{

@@ -32,10 +32,12 @@ it returns the GO profile at a specific level. It returns a groupGOResult
 instance.
 }
 \examples{
+\donttest{
 require(DAPARdata)
 data(Exp1_R25_prot)
 ggo<-group_GO(data=fData(Exp1_R25_prot)$Protein.IDs, idFrom="UNIPROT", 
 orgdb="org.Sc.sgd.db", ont="MF", level=2)
+}
 }
 \author{
 Florence Combes

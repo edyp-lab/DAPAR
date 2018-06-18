@@ -14,7 +14,7 @@
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' types <- c("Label","Analyt.Rep")
+##' types <- c("Label","Bio.Rep")
 ##' wrapper.boxPlotD(Exp1_R25_pept, types)
 wrapper.boxPlotD <- function(obj, 
                             dataForXAxis="Label", 
@@ -52,7 +52,7 @@ boxPlotD(qData, dataForXAxis, labels, group2Color)
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' types <- c("Label","Analyt.Rep")
+##' types <- c("Label","Bio.Rep")
 ##' wrapper.boxPlotD_HC(Exp1_R25_pept, types)
 wrapper.boxPlotD_HC <- function(obj, 
                              dataForXAxis="Label", 
@@ -80,7 +80,7 @@ wrapper.boxPlotD_HC <- function(obj,
 ##' @title Builds a boxplot from a dataframe
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param dataForXAxis A vector containing the types of replicates 
-##' to use as X-axis. Available values are: Label, Analyt.Rep,
+##' to use as X-axis. Available values are: Label, Bio.Rep,
 ##' Bio.Rep and Tech.Rep. Default is "Label".
 ##' @param labels A vector of the conditions (labels) (one label per sample).
 ##' @param group2Color A string that indicates how to color the replicates: 
@@ -93,7 +93,7 @@ wrapper.boxPlotD_HC <- function(obj,
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' types <- c("Label","Analyt.Rep")
+##' types <- c("Label","Bio.Rep")
 ##' dataForXAxis <- Biobase::pData(Exp1_R25_pept)[,types]
 ##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 ##' boxPlotD(qData, dataForXAxis, labels)
@@ -156,7 +156,7 @@ palette("default")
 ##' @title Builds a boxplot from a dataframe using the library \code{highcharter}
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param dataForXAxis A vector containing the types of replicates 
-##' to use as X-axis. Available values are: Label, Analyt.Rep,
+##' to use as X-axis. Available values are: Label, Bio.Rep,
 ##' Bio.Rep and Tech.Rep. Default is "Label".
 ##' @param labels A vector of the conditions (labels) (one label per sample).
 ##' @param group2Color A string that indicates how to color the replicates: 
@@ -169,7 +169,7 @@ palette("default")
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' types <- c("Label","Analyt.Rep")
+##' types <- c("Label","Bio.Rep")
 ##' dataForXAxis <- Biobase::pData(Exp1_R25_pept)[,types]
 ##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 ##' boxPlotD_HC(qData, dataForXAxis, labels)
@@ -265,7 +265,7 @@ hcboxplot(x=df$values, var = df$samples,
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' library(vioplot)
-##' types <- c("Label","Analyt.Rep")
+##' types <- c("Label","Bio.Rep")
 ##' wrapper.violinPlotD(Exp1_R25_pept, types)
 wrapper.violinPlotD <- function(obj, 
                              dataForXAxis="Label", 
@@ -287,7 +287,7 @@ wrapper.violinPlotD <- function(obj,
 ##' @title Builds a violinplot from a dataframe
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param dataForXAxis A vector containing the types of replicates 
-##' to use as X-axis. Available values are: Label, Analyt.Rep,
+##' to use as X-axis. Available values are: Label, Bio.Rep,
 ##' Bio.Rep and Tech.Rep. Default is "Label".
 ##' @param labels A vector of the conditions (labels) (one label per sample).
 ##' @param group2Color A string that indicates how to color the replicates: 
@@ -301,7 +301,7 @@ wrapper.violinPlotD <- function(obj,
 ##' data(Exp1_R25_pept)
 ##' library(vioplot)
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' types <- c("Label","Analyt.Rep")
+##' types <- c("Label","Bio.Rep")
 ##' dataForXAxis <- Biobase::pData(Exp1_R25_pept)[,types]
 ##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 ##' violinPlotD(qData, dataForXAxis, labels)
@@ -1100,7 +1100,7 @@ corrMatrixD <- function(qData, samplesData, gradientRate = 5){
 Var1 <- Var2 <- value <- NULL
 
 for (j in 1:length(colnames(qData))){
-    colnames(qData)[j] <- paste(as.character(samplesData[j,2:5]), 
+    colnames(qData)[j] <- paste(as.character(samplesData[j,2:ncol(samplesData)]), 
                                 collapse =" ")
 }
 
@@ -1153,7 +1153,7 @@ corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
     
     if (!is.null(samplesData)){
         for (j in 1:ncol(df)){
-            names(df)[j] <- paste(as.character(samplesData[j,2:5]), 
+            names(df)[j] <- paste(as.character(samplesData[j,2:ncol(samplesData)]), 
                                         collapse =" ")
         }
         }
@@ -1228,7 +1228,7 @@ wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete",
                             dendro = FALSE){
 qData <- Biobase::exprs(obj)
 for (j in 1:length(colnames(qData))){
-    colnames(qData)[j] <- paste(as.character(Biobase::pData(obj)[j,2:5]), 
+    colnames(qData)[j] <- paste(as.character(Biobase::pData(obj)[j,2:ncol(Biobase::pData(obj))]), 
                                 collapse =" ")
 }
 

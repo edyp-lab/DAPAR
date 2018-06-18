@@ -11,7 +11,7 @@ boxPlotD(qData, dataForXAxis = NULL, labels = NULL,
 \item{qData}{A dataframe that contains quantitative data.}
 
 \item{dataForXAxis}{A vector containing the types of replicates 
-to use as X-axis. Available values are: Label, Analyt.Rep,
+to use as X-axis. Available values are: Label, Bio.Rep,
 Bio.Rep and Tech.Rep. Default is "Label".}
 
 \item{labels}{A vector of the conditions (labels) (one label per sample).}
@@ -30,7 +30,7 @@ Boxplot for quantitative proteomics data
 require(DAPARdata)
 data(Exp1_R25_pept)
 qData <- Biobase::exprs(Exp1_R25_pept)
-types <- c("Label","Analyt.Rep")
+types <- c("Label","Bio.Rep")
 dataForXAxis <- Biobase::pData(Exp1_R25_pept)[,types]
 labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
 boxPlotD(qData, dataForXAxis, labels)

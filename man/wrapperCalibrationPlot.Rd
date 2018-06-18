@@ -24,11 +24,11 @@ This function is a wrapper to the calibration.plot method of the
 require(DAPARdata)
 data(Exp1_R25_pept)
 obj <- Exp1_R25_pept[1:1000]
-lapala <- findMECBlock(obj)
-obj <- wrapper.impute.detQuant(obj)
-obj <- reIntroduceMEC(obj, lapala)
-obj <- wrapper.impute.detQuant(obj)
-limma <- wrapper.limmaCompleteTest(obj, 1)
+keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+obj <- mvFilterFromIndices(obj, keepThat)
+qData <- Biobase::exprs(obj)
+sTab <- Biobase::pData(obj)
+limma <- limmaCompleteTest(qData,sTab)
 wrapperCalibrationPlot(limma$P_Value[,1])
 }
 \author{

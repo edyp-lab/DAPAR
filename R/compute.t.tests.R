@@ -93,7 +93,7 @@ Cond.Nb<-length(levels(Conditions.f))
                 p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))
                 m1.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[1])))
                 m2.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[2])))
-                FC.tmp <- m2.tmp - m1.tmp
+                FC.tmp <- m1.tmp - m2.tmp
                 
                 txt <- paste(unique(Conditions[c1Indice]),"_vs_",unique(Conditions[c2Indice]), sep="")
 
@@ -122,7 +122,7 @@ Cond.Nb<-length(levels(Conditions.f))
             p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))
             m1.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[1])))
             m2.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[2])))
-            FC.tmp <- m2.tmp - m1.tmp
+            FC.tmp <- m1.tmp - m2.tmp
             
             txt <- paste(unique(Conditions[c1]),"_vs_(all-",unique(Conditions[c1]),")", sep="")
             

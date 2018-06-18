@@ -1,10 +1,420 @@
 
+
+##' This function check xxxxx
+##' 
+##' @title Check if xxxxxx
+##' @param tab A data.frame which correspond to xxxxxx
+##' @return A list of two items
+##' @author Thomas Burger, Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' test.design(Biobase::pData(Exp1_R25_pept)[,1:3])
+test.design <- function(tab){
+  valid <- TRUE
+  txt <- NULL
+  level <- NULL
+  
+  level.a  <- factor(tab[,1], ordered = TRUE)
+  level.b <- factor(tab[,2], ordered = TRUE)
+  name.level.a <- colnames(tab)[1]
+  name.level.b <-colnames(tab)[2]
+    
+  level.c <- NULL
+  level.c <- if(ncol(tab)==3) factor(tab[,3], ordered = TRUE) else NULL
+  name.level.c <- if(ncol(tab)==3) colnames(tab)[3] else NULL
+    
+
+  # verification intersection sur B
+  ##verification de la non redondance'intersection vide entre les groupes
+  uniqueA <- unique(level.a)
+  ll <- lapply(uniqueA, function(x){as.character(level.b)[which(level.a==x)]})
+  n <- NULL
+  for (i in 1:(length(uniqueA)-1)){
+    for (j in (i+1):length(uniqueA)){
+      n <- c(n,intersect(ll[[i]], ll[[j]]))
+    }
+  }
+  if (length(n) > 0){
+    valid <- FALSE
+    txt <- c(txt,paste0("The value ", n, " in column '", colnames(tab)[2], "' is not correctly set.\n"))
+  }
+  
+  
+  #verification si niveau hierarchique inf
+  if (length(levels(level.a)) == length(levels(level.b))){
+      ## c'est un design de niveau n-1 en fait
+      valid <- FALSE
+      txt <- c(txt,paste0("The column ",name.level.b, " is not informative. Thus, the design is not of level (n-1).\n"))
+    } 
+  else if (!is.null(level.c)){
+    if (length(levels(level.b)) == length(levels(level.c))){
+      ## c'est un design de niveau n-1 en fait
+      valid <- FALSE
+      txt <- c(txt,paste0("The column ",name.level.c, " is not informative. Thus, the design is of level (n-1).\n"))
+    }
+  } 
+  
+  #verification si niveau non informatif
+  return(list(valid=valid, warn=txt))
+}
+
+
+##' This function check the validity of the conditions
+##' 
+##' @title Check if the design is valid
+##' @param conds A vector
+##' @return A list
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' check.conditions(Biobase::pData(Exp1_R25_pept)$Label)
+check.conditions <- function(conds){
+  res <- list(valid=TRUE,warn=NULL)
+  
+  if (("" %in% conds) || (NA %in% conds)){
+      res <- list(valid=FALSE,warn="The conditions are note full filled.")
+      return(res)
+  }
+  
+  # Check if there is at least two conditions
+  if (length(unique(conds)) < 2){
+    res <- list(valid=FALSE,warn="The design must contain at least two conditions.")
+    return(res)
+  }
+  
+  
+  # check if each condition has at least two values
+  nValPerCond <- unlist(lapply(unique(conds), function(x){length(conds[which(conds==x)])}))
+  if (all(nValPerCond < 2)){
+    res <- list(valid=FALSE,warn="The design must contain at least two values per condition.")
+    return(res)
+  }
+  
+  return(res)
+}
+
+
+##' This function check the validity of the experimental design
+##' 
+##' @title Check if the design is valid
+##' @param sTab The data.frame which correspond to the pData function of MSnbase
+##' @return A boolean
+##' @author Thomas Burger, Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' check.design(Biobase::pData(Exp1_R25_pept)[,1:3])
+check.design <- function(sTab){
+  res <- list(valid=FALSE,warn=NULL)
+  
+  names <- colnames(sTab)
+  level.design <- ncol(sTab)-2
+  
+  
+  res <- check.conditions(sTab$Label)
+  if (!res$valid){
+    return(res)
+  }
+  # Check if all the column are fullfilled
+  
+  if (level.design == 1){
+      if (("" %in% sTab$Bio.Rep) || (NA %in% sTab$Bio.Rep)){
+          res <- list(valid=FALSE,warn="The Bio.Rep colmumn are not full filled.")
+          return(res)
+      }
+      }
+  else if (level.design == 2){
+      if (("" %in% sTab$Bio.Rep) || (NA %in% sTab$Bio.Rep)){
+          res <- list(valid=FALSE,warn="The Bio.Rep colmumn are not full filled.")
+          return(res)
+      }else if (("" %in% sTab$Tech.Rep) || (NA %in% sTab$Tech.Rep)){
+          res <- list(valid=FALSE,warn="The Tech.Rep colmumn are not full filled.")
+          return(res)
+      }
+      }
+  else if (level.design == 3){
+      if (("" %in% sTab$Bio.Rep) || (NA %in% sTab$Bio.Rep)){
+          res <- list(valid=FALSE,warn="The Bio.Rep colmumn are not full filled.")
+          return(res)
+      } else if (("" %in% sTab$Tech.Rep) || (NA %in% sTab$Tech.Rep)){
+          res <- list(valid=FALSE,warn="The Tech.Rep colmumn are not full filled.")
+          return(res)
+      } else if (("" %in% sTab$Analyt.Rep) || (NA %in% sTab$Analyt.Rep)){
+          res <- list(valid=FALSE,warn="The Analyt.Rep colmumn are not full filled.")
+          return(res)
+      }
+  }
+  
+  # Check if the hierarchy of the design is correct
+  if (level.design == 1){res <- test.design(sTab[,c("Label", "Bio.Rep")])}
+  else if (level.design == 2){res <- test.design(sTab[,c("Label", "Bio.Rep","Tech.Rep")])}
+  else if (level.design == 3){
+    res <- test.design(sTab[,c("Label", "Bio.Rep","Tech.Rep")])
+    if (res$valid)
+    {
+      res <- test.design(sTab[,c("Bio.Rep","Tech.Rep", "Analyt.Rep")])
+      
+    }
+      }
+  
+  return(res)
+}
+
+
+
+##' This function builds the design matrix 
+##' 
+##' @title Builds the design matrix
+##' @param sTab The data.frame which correspond to the pData function of MSnbase
+##' @return A design matrix
+##' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' make.design(Biobase::pData(Exp1_R25_pept))
+make.design <- function(sTab){
+  
+    if (!check.design(sTab)$valid){
+      warning("The design matrix is not correct.")
+      warning(check.design(sTab)$warn)
+      return(NULL)
+      }
+  
+  n <- ncol(sTab)
+  if (n==1 || n==2){
+    stop("Error in design matrix dimensions which must have at least 3 columns.")
+  } 
+  
+  res <- do.call(paste0("make.design.", (n-2)),list(sTab))
+ 
+  return(res)
+}
+
+
+##' This function builds the design matrix for design of level 1
+##' 
+##' @title Builds the design matrix for designs of level 1
+##' @param sTab The data.frame which correspond to the pData function of MSnbase
+##' @return A design matrix
+##' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' make.design.1(Biobase::pData(Exp1_R25_pept))
+make.design.1 <- function(sTab){
+  
+  Conditions <- factor(sTab$Label, ordered = TRUE)
+  nb_cond=length(levels(Conditions))
+  nb_samples <- nrow(sTab)
+  
+  #CGet the number of replicates per condition
+  nb_Rep=rep(0,nb_cond)
+  for (i in 1:nb_cond){
+    nb_Rep[i]=sum((Conditions==levels(Conditions)[i]))
+  }
+  
+  design=matrix(0,nb_samples,nb_cond)
+  n0=1
+  coln=NULL
+  for (j in 1:nb_cond){
+    coln=c(coln,paste("Condition",j,collapse=NULL,sep=""))
+    design[(n0:(n0+nb_Rep[j]-1)),j]=rep(1,length((n0:(n0+nb_Rep[j]-1))))
+    n0=n0+nb_Rep[j]
+  }
+  colnames(design)=coln
+  
+  return(design)
+}
+
+
+##' This function builds the design matrix for design of level 2
+##' 
+##' @title Builds the design matrix for designs of level 2
+##' @param sTab The data.frame which correspond to the pData function of MSnbase
+##' @return A design matrix
+##' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
+##' @examples
+##' \donttest{
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' make.design.2(Biobase::pData(Exp1_R25_pept))
+##' }
+make.design.2=function(sTab){
+  Condition <- factor(sTab$Label, ordered = TRUE)
+  RepBio <- factor(sTab$Bio.Rep, ordered = TRUE)
+  
+  #Renome the levels of factor
+  levels(Condition)=c(1:length(levels(Condition)))
+  levels(RepBio)=c(1:length(levels(RepBio)))
+  
+  #Initial design matrix
+  df <- rep(0,nrow(sTab))
+  names(df) <- rownames(sTab)
+  design=model.matrix(df~0+Condition:RepBio)
+  
+  #Remove empty columns in the design matrix
+  design=design[,(apply(design,2,sum)>0)]
+  #Remove identical columns in the design matrix
+  coldel=-1
+  for (i in 1:(length(design[1,])-1)){
+    d2=as.matrix(design[,(i+1):length(design[1,])]);
+    for (j in 1:length(d2[1,])){
+      d2[,j]=d2[,j]-design[,i];
+    }
+    e=as.matrix(rnorm(length(design[,1]),10,1));
+    sd2=t(e)%*%d2
+    liste=which(sd2==0)
+    coldel=c(coldel,liste+i)
+  }
+  design=design[,(1:length(design[1,]))!=coldel]
+  colnames(design)=make.names(colnames(design))
+  return(design)
+}
+
+
+
+##' This function builds the design matrix for design of level 3
+##' 
+##' @title Builds the design matrix for designs of level 3
+##' @param sTab The data.frame which correspond to the pData function of MSnbase
+##' @return A design matrix
+##' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
+##' @examples
+##' \donttest{
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' make.design.3(Biobase::pData(Exp1_R25_pept))
+##' }
+make.design.3=function(sTab){
+  
+  Condition <- factor(sTab$Label, ordered = TRUE)
+  RepBio <- factor(sTab$Bio.Rep, ordered = TRUE)
+  RepTech <- factor(sTab$Tech.Rep, ordered = TRUE)
+  
+  
+  #Rename the levels of factor
+  levels(Condition)=c(1:length(levels(Condition)))
+  levels(RepBio)=c(1:length(levels(RepBio)))
+  levels(RepTech)=c(1:length(levels(RepTech)))
+  
+  
+  #Initial design matrix
+  df <- rep(0,nrow(sTab))
+  names(df) <- rownames(sTab)
+  design=model.matrix(df~0+Condition:RepBio:RepTech)
+  
+  #Remove empty columns in the design matrix
+  design=design[,(apply(design,2,sum)>0)]
+  
+  #Remove identical columns in the design matrix
+  coldel=-1
+  for (i in 1:(length(design[1,])-1)){
+    d2=as.matrix(design[,(i+1):length(design[1,])]);
+    for (j in 1:length(d2[1,])){
+      d2[,j]=d2[,j]-design[,i];
+    }
+    e=as.matrix(rnorm(length(design[,1]),10,1));
+    sd2=t(e)%*%d2
+    liste=which(sd2==0)
+    coldel=c(coldel,liste+i)
+  }
+  design=design[,(1:length(design[1,]))!=coldel]
+  colnames(design)=make.names(colnames(design))
+  return(design)
+}
+
+
+
+##' This function builds the contrast matrix
+##' 
+##' @title Builds the contrast matrix
+##' @param design The data.frame which correspond to the pData function of MSnbase
+##' @param condition xxxxx
+##' @param contrast An integer that Indicates if the test consists of the comparison of each 
+##' biological condition versus each of the other ones (Contrast=1; 
+##' for example H0:"C1=C2" vs H1:"C1!=C2", etc.) 
+##' or each condition versus all others (Contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
+##'  H1:"C1!=(C2+C3)/2", etc. if there are three conditions).
+##' @return A constrat matrix
+##' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' design <- make.design(Biobase::pData(Exp1_R25_pept))
+##' conds <- Biobase::pData(Exp1_R25_pept)$Label
+##' make.contrast(design, conds)
+make.contrast <- function(design,condition, contrast=1){
+  
+  #######################################################
+  aggreg.column.design=function(design,Condition){
+    nb.cond=length(levels(Condition))
+    name.col=colnames(design)
+    name.cond=NULL
+    nb.col=NULL
+    for (i in 1:nb.cond){
+      col.select=NULL
+      col.name.begin=paste("Condition",i, sep = "")
+      nc=nchar(col.name.begin)
+      for (j in 1:length(design[1,])){
+        if (substr(name.col[j], 1, nc)==col.name.begin){
+          col.select=c(col.select,j)
+        }
+      }
+      name.aggreg=NULL
+      for (j in 1:length(col.select)){
+        name.aggreg=paste(name.aggreg,name.col[col.select[j]],sep="+")
+      }
+      name.aggreg=substr(name.aggreg, 2, nchar(name.aggreg))
+      name.cond=c(name.cond,name.aggreg)
+      nb.col=c(nb.col,length(col.select))
+    }
+    return(list(name.cond,nb.col))
+  }
+  
+  
+  
+  nb.cond=length(levels(condition))
+  r=aggreg.column.design(design,condition)
+  label.agg=r[[1]]
+  nb.agg=r[[2]]
+  k=1
+  
+  if (contrast == 1){
+  ## Contrast for One vs One
+    contra=rep(0,sum(1:(nb.cond-1)))
+    for (i in 1:(nb.cond-1)){
+      for (j in (i+1):nb.cond){
+        contra[k]=c(paste("(",label.agg[i],")/",
+                          nb.agg[i],"-(",label.agg[j],")/",
+                          nb.agg[j]))
+        k=k+1
+      }
+    }
+  } else if (contrast==2){
+   ## Contrast for One vs All
+    contra=rep(0,nb.cond)
+    for (i in 1:(nb.cond)){
+      contra[k]=c(paste("(",label.agg[i],")/",nb.agg[i]))
+      nb=sum(nb.agg[(1:nb.cond)[(1:nb.cond)!=i]])
+      for (j in (1:nb.cond)[(1:nb.cond)!=i]){
+        contra[k]=c(paste(contra[k],"-(",label.agg[j],")/",nb))
+      }
+      k=k+1
+    }
+  }
+ 
+  return(contra)
+}
+
+
 ##############################################################
 #Fonction realisant un test de contrastes entre conditions a l'aide du 
 #package LIMMA.
 #
 #En entree:
-#qData: tableau de donn?es sans valeurs manquantes avec chaque replicat en 
+#qData: tableau de donnees sans valeurs manquantes avec chaque replicat en 
 #colonne
 #Conditions: indique le numero/la lettre de la condition biologique auquel 
 #appartient chaque replicat
@@ -21,37 +431,6 @@
 ##############################################################
 
 
-##' This function is a wrapper of \code{limmaCompleteTest} for objects of class \code{MSnSet}
-##'
-##' @title Computation of the hierarchical design matrix : 2-level case : Bio-Tech or 
-##' Bio-Analytical or Tech-Analytical.
-##' @param obj An object of class \code{MSnSet} with no missing values
-##' @param design An integer that reflects the type of comparisons. Available values are 1 (One vs One) or 2 (One vs All)
-##' @return xxxxxxxxxx
-##' @author Samuel Wieczorek
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' obj <- Exp1_R25_pept[1:1000]
-##' lapala <- findMECBlock(obj)
-##' obj <- wrapper.impute.detQuant(obj)
-##' obj <- reIntroduceMEC(obj, lapala)
-##' obj <- wrapper.impute.detQuant(obj)
-##' limma <- wrapper.limmaCompleteTest(obj, 1)
-wrapper.limmaCompleteTest <- function(obj, design){
-    
-    qData <- Biobase::exprs(obj)
-    RepBio <- RepTech <- factor(1:nrow(pData(obj)))
-    #RepBio <- RepTech <- factor(1:nrow(pData(obj)))
-    conds <- factor(pData(obj)[,"Label"])
-    switch(design,
-           OnevsOne=contrast <- 1,
-           OnevsAll=contrast <- 2)
-    
-    limma <- limmaCompleteTest(qData,conds,RepBio, RepTech, contrast)
-    
-    return (limma)
-}
 
 
 
@@ -59,322 +438,108 @@ wrapper.limmaCompleteTest <- function(obj, design){
 ##' 
 ##' @title Computes a hierarchical differential analysis
 ##' @param qData A matrix of quantitative data, without any missing values.
-##' @param Conditions A vector of factor which indicates the name of the 
-##' biological condition for each replicate. 
-##' @param RepBio A vector of factor which indicates the number of the bio rep 
-##' for each replicate. 
-##' @param RepTech A vector of factor which indicates the number of the tech 
-##' rep for each replicate.
-##' @param Contrast Indicates if the test consists of the comparison of each 
-##' biological condition versus 
-##' each of the other ones (Contrast=1; 
-##' for example H0:"C1=C2" vs H1:"C1!=C2", etc.) 
-##' or each condition versus all others (Contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
-##'  H1:"C1!=(C2+C3)/2", etc. if there are three conditions).
-##' @return A list of two items : FC and P_Value; both are dataframe. The first one contains
+##' @param sTab A dataframe of experimental design (pData()). 
+##' @param comp.type A string that corresponds to the type of comparison. 
+##' Values are: 'OnevsOne' and 'OnevsAll'; default is 'OnevsOne'.
+##' @return A list of two dataframes : FC and P_Value. The first one contains
 ##' the logFC values of all the comparisons (one column for one comparison), the second one contains
 ##' the pvalue of all the comparisons (one column for one comparison). The names of the columns for those two dataframes
 ##' are identical and correspond to the description of the comparison. 
-##' @author Quentin Giai-Gianetto
+##' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' obj <- Exp1_R25_pept[1:1000]
-##' lapala <- findMECBlock(obj)
-##' obj <- wrapper.impute.detQuant(obj)
-##' obj <- reIntroduceMEC(obj, lapala)
-##' obj <- wrapper.impute.detQuant(obj)
-##' condition1 <- '25fmol'
-##' condition2 <- '10fmol'
+##' obj <- Exp1_R25_pept
+##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+##' obj <- mvFilterFromIndices(obj, keepThat)
 ##' qData <- Biobase::exprs(obj)
-##' RepBio <- RepTech <- factor(1:6)
-##' conds <- factor(Biobase::pData(obj)[,"Label"])
-##' limma <- limmaCompleteTest(qData,conds,RepBio, RepTech)
-limmaCompleteTest <- function(qData,Conditions, RepBio, RepTech, Contrast=1){
+##' sTab <- Biobase::pData(obj)
+##' limma <- limmaCompleteTest(qData,sTab)
+limmaCompleteTest <- function(qData, sTab, comp.type="OnevsOne"){
     
-     make.design.2=function(qData, Condition, RepBio){
-        #Renome the levels of factor
-        levels(Condition)=c(1:length(levels(Condition)))
-        levels(RepBio)=c(1:length(levels(RepBio)))
-        
-        #Initial design matrix
-        design=model.matrix(qData[1,]~0+Condition:RepBio)
-        
-        #Remove empty columns in the design matrix
-        design=design[,(apply(design,2,sum)>0)]
-        #Remove identical columns in the design matrix
-        coldel=-1
-        for (i in 1:(length(design[1,])-1)){
-            d2=as.matrix(design[,(i+1):length(design[1,])]);
-            for (j in 1:length(d2[1,])){
-                d2[,j]=d2[,j]-design[,i];
-            }
-            e=as.matrix(rnorm(length(design[,1]),10,1));
-            sd2=t(e)%*%d2
-            liste=which(sd2==0)
-            coldel=c(coldel,liste+i)
-        }
-        design=design[,(1:length(design[1,]))!=coldel]
-        colnames(design)=make.names(colnames(design))
-        return(design)
-    }
-    
-    
-    
-    #######################
-    make.design.3=function(qData,Condition,RepBio,RepTech){
-        #Rename the levels of factor
-        levels(Condition)=c(1:length(levels(Condition)))
-        levels(RepBio)=c(1:length(levels(RepBio)))
-        levels(RepTech)=c(1:length(levels(RepTech)))
-        
-        
-        #Initial design matrix
-        design=model.matrix(qData[1,]~0+Condition:RepBio:RepTech)
-        
-        #Remove empty columns in the design matrix
-        design=design[,(apply(design,2,sum)>0)]
-        
-        #Remove identical columns in the design matrix
-        coldel=-1
-        for (i in 1:(length(design[1,])-1)){
-            d2=as.matrix(design[,(i+1):length(design[1,])]);
-            for (j in 1:length(d2[1,])){
-                d2[,j]=d2[,j]-design[,i];
-            }
-            e=as.matrix(rnorm(length(design[,1]),10,1));
-            sd2=t(e)%*%d2
-            liste=which(sd2==0)
-            coldel=c(coldel,liste+i)
-        }
-        design=design[,(1:length(design[1,]))!=coldel]
-        colnames(design)=make.names(colnames(design))
-        return(design)
-    }
-    
-    
-    
-    aggreg.column.design=function(design,Condition){
-        nb.cond=length(levels(Condition))
-        name.col=colnames(design)
-        name.cond=NULL
-        nb.col=NULL
-        for (i in 1:nb.cond){
-            col.select=NULL
-            col.name.begin=paste("Condition",i, sep = "")
-            nc=nchar(col.name.begin)
-            for (j in 1:length(design[1,])){
-                if (substr(name.col[j], 1, nc)==col.name.begin){
-                    col.select=c(col.select,j)
-                }
-            }
-            name.aggreg=NULL
-            for (j in 1:length(col.select)){
-                name.aggreg=paste(name.aggreg,name.col[col.select[j]],sep="+")
-            }
-            name.aggreg=substr(name.aggreg, 2, nchar(name.aggreg))
-            name.cond=c(name.cond,name.aggreg)
-            nb.col=c(nb.col,length(col.select))
-        }
-        return(list(name.cond,nb.col))
-    }
-    
-    
-    make.contraste.1.1=function(design,Condition){
-        nb.cond=length(levels(Condition))
-        r=aggreg.column.design(design,Condition)
-        label.agg=r[[1]]
-        nb.agg=r[[2]]
-        k=1
-        contra=rep(0,sum(1:(nb.cond-1)))
-        for (i in 1:(nb.cond-1)){
-            for (j in (i+1):nb.cond){
-                contra[k]=c(paste("(",label.agg[i],")/",
-                                  nb.agg[i],"-(",label.agg[j],")/",
-                                  nb.agg[j]))
-                k=k+1
-            }
-        }
-        return(contra)
-    }
-    
-    
-    
-    make.contraste.2.1=function(design,Condition){
-        nb.cond=length(levels(Condition))
-        r=aggreg.column.design(design,Condition)
-        label.agg=r[[1]]
-        nb.agg=r[[2]]
-        k=1
-        #contra=rep(0,sum(1:(nb.cond-1)))
-        contra=rep(0,nb.cond)
-        for (i in 1:(nb.cond)){
-            contra[k]=c(paste("(",label.agg[i],")/",nb.agg[i]))
-            nb=sum(nb.agg[(1:nb.cond)[(1:nb.cond)!=i]])
-            for (j in (1:nb.cond)[(1:nb.cond)!=i]){
-                contra[k]=c(paste(contra[k],"-(",label.agg[j],")/",nb))
-            }
-            k=k+1
-        }
-        return(contra)
-    }
-    
-    
-    
-    
-    ### Begin of the main function
-    
-    Conditions <- factor(Conditions)
-    RepBio <- factor(RepBio)
-    RepTech <- factor(RepTech)
-    
-    lt=length(qData[1,])
-    lc=length(Conditions)
-    lb=length(RepBio)
-    lte=length(RepTech)
-    
-    #Check the correct length of vectors
-    if (length(levels(Conditions))!=lc){
-        if(lt==lc){
-            if (lb==lc){
-                if (lte==lc){  
-                    #CHeck if the number of factors in Conditions is less than 
-                    #the one in Bio.Rep, itself must
-                    #be less than tech.Rep
-                    if (length(levels(Conditions))<=length(levels(RepBio))){
-                        if (length(levels(RepBio))<=length(levels(RepTech))){
-                            #Get the number of hierarchical levels
-                            if (length(levels(RepBio))==lt){niveau=1;}
-                            else{ 
-                              if (length(levels(RepTech))==lt){niveau=2;}
-                                else{
-                                  if (length(levels(RepTech))==length(levels(RepBio))){niveau=2;}
-                                 else { niveau=3;}
-                                }
-                            }
-                            #Non hierarchical case (only one type of replicate)
-                            if (niveau==1){
-                                nb_cond=length(levels(Conditions))
-                                #CGet the number of replicates per condition
-                                nb_Rep=rep(0,nb_cond)
-                                for (i in 1:nb_cond){
-                                    nb_Rep[i]=sum((Conditions==levels(Conditions)[i]))
-                                }
-                                #####################
-                                #Compute the design matrix
-                                design=matrix(0,lt,nb_cond)
-                                n0=1
-                                coln=NULL
-                                for (j in 1:nb_cond){
-                                    coln=c(coln,paste("Condition",j,collapse=NULL,sep=""))
-                                    design[(n0:(n0+nb_Rep[j]-1)),j]=rep(1,length((n0:(n0+nb_Rep[j]-1))))
-                                    n0=n0+nb_Rep[j]
-                                }
-                                colnames(design)=coln
-                                
-                                #####################
-                                #Compute the contrast matrices
-                                if (Contrast==1){contra=make.contraste.1.1(design,Condition=Conditions);}
-                                if (Contrast==2){contra=make.contraste.2.1(design,Condition=Conditions);}
-                                cmtx=makeContrasts(contrasts=contra,levels=make.names(colnames(design)))
-                                fit=eBayes(contrasts.fit(lmFit(qData, design), cmtx))
-                                # return(fit)  
-                            }
-                            if (niveau==2){
-                                #####################
-                                #Compute the design matrix
-                                design=make.design.2(qData,Condition=Conditions,RepBio=RepBio)
-                                #####################
-                                #Compute the contrast matrices
-                                if (Contrast==1){
-                                    contra=make.contraste.1.1(design,Condition=Conditions);}
-                                if (Contrast==2){
-                                    contra=make.contraste.2.1(design,Condition=Conditions);}
-                                cmtx=makeContrasts(contrasts=contra,levels=make.names(colnames(design)))
-                                fit <- eBayes(contrasts.fit(lmFit(qData, design), cmtx))
-                                #return(fit)
-                            }
-                            if (niveau==3){
-                                #####################
-                                #Compute the design matrix
-                                design=make.design.3(qData,Condition=Conditions,RepBio=RepBio,RepTech=RepTech)
-                                #####################
-                                #Compute the contrast matrices
-                                if (Contrast==1){
-                                    contra=make.contraste.1.1(design,Condition=Conditions);}
-                                if (Contrast==2){
-                                    contra=make.contraste.2.1(design,Condition=Conditions);}
-                                cmtx=makeContrasts(contrasts=contra,levels=make.names(colnames(design)))
-                                fit <- eBayes(contrasts.fit(lmFit(qData, design), cmtx))
-                                #return(fit)
-                            }
-                        }else{cat("Problem: the number of factors in Bio.Rep has to be less or equal to the number of factor in tech.Rep.!\n")}
-                        
-                    }else{cat("Problem: the number of factors in Conditions has to be less or equal to the number of factor in bio.Rep.!\n")}
-                    
-                }else{cat("Problem: the length of the vector tech.Rep must be equal to the length of the vector bio.Rep!\n")}
-                
-            }else{cat("Problem: the length of the vector bio.Rep must be equal to the length of the vector Conditions!\n")}
-            
-        }else{cat("Problem: the length of the vector Conditions must be equal to the length of the input matrix!\n")}
-        
-    }else{cat("Problem: the factor-vector Conditions must contain several replicates in each condition  !\n")}
-    
-    
-    
-    ##colnames (string treatment in R ...)
-    #how many comparisons have been done (and thus how many columns of pval)
-    Compa.Nb <- dim(fit$p.value)[2]
-    
-    #pas topTable, ou adapt?. 
-    #ramener ttes les pvalues et colnames corrects. 
-    
-    res.tmp <- topTable(fit,number=Inf, sort.by="none")
-    res <- cbind(res.tmp[,1:Compa.Nb], fit$p.value)
-    #names(res) <- gsub(".", "_", names(res), fixed=TRUE)
-    
-    
-    #empty colnames vector
-    cn<-c()
-    for (i in 1:Compa.Nb){
-        
-        #not the same syntax to pars if Contast=1 or Contrast=2
-        if(Contrast==1){
-            compa <- stringr::str_match_all(colnames(fit$p.value)[i],"[[:space:]]Condition([[:digit:]]+)")[[1]]
-            #cn[i] <- paste(levels(Conditions)[as.numeric(compa[1,2])], 
-            #               "_vs_",
-            #               levels(Conditions)[as.numeric(compa[2,2])], sep="")
-            cn[i] <- paste(unique(Conditions)[as.numeric(compa[1,2])], 
-                           "_vs_",
-                           unique(Conditions)[as.numeric(compa[2,2])], sep="")
-        }
-        if(Contrast==2){
-            #hierarchic only
-            #compa<-str_match_all(colnames(fit$p.value)[i], "[[:space:]]Condition([[:digit:]]+)[[:space:]]")[[1]]
-            #cn[i]<-paste(levels(Conditions)[as.numeric(compa[1,2])], "vs(all-",levels(Conditions)[as.numeric(compa[1,2])], ")", sep="")
-            
-            #hier and non hier
-            compa<-str_match_all(colnames(fit$p.value)[i], "[[:space:]]Condition([[:digit:]]+)")[[1]]
-            #cn[i]<-paste(levels(Conditions)[as.numeric(compa[1,2])], "_vs_(all-",levels(Conditions)[as.numeric(compa[1,2])], ")", sep="")
-            cn[i]<-paste(unique(Conditions)[as.numeric(compa[1,2])], "_vs_(all-",unique(Conditions)[as.numeric(compa[1,2])], ")", sep="")
-        }
-    }
-    
-     
-    res.l <- list(
-      FC = as.data.frame(res[,1:Compa.Nb]),
-      P_Value = as.data.frame(res[,-(1:Compa.Nb)] )
-    )
-    
-    colnames(res.l$FC) <- paste(cn, "FC",sep="_")
-    colnames(res.l$P_Value) <- paste(cn, "pval",sep="_")
-    ## end colnames
-    
-    return(res.l)
+  switch(comp.type,
+         OnevsOne = contrast <- 1,
+         OnevsAll = contrast <- 2)
+  
+  conds <- factor(sTab$Label, ordered = TRUE)
+  res.l <- NULL
+  design.matrix <- make.design(sTab)
+  if(!is.null(design.matrix)) {
+    contra <- make.contrast(design.matrix,condition=conds, contrast)
+    cmtx=makeContrasts(contrasts=contra,levels=make.names(colnames(design.matrix)))
+    fit <- eBayes(contrasts.fit(lmFit(qData, design.matrix), cmtx))
+    res.l <- formatLimmaResult(fit, conds, contrast)
+  }
+  
+  return(res.l)
 }
 
 
 
+##' This function is xxxx
+##' 
+##' @title xxxx
+##' @param fit xxxx
+##' @param conds xxxx
+##' @param contrast xxxx
+##' @return A list of two dataframes : FC and P_Value. The first one contains
+##' the logFC values of all the comparisons (one column for one comparison), the second one contains
+##' the pvalue of all the comparisons (one column for one comparison). The names of the columns for those two dataframes
+##' are identical and correspond to the description of the comparison. 
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' obj <- Exp1_R25_pept
+##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+##' obj <- mvFilterFromIndices(obj, keepThat)
+##' qData <- Biobase::exprs(obj)
+##' sTab <- Biobase::pData(obj)
+##' limma <- limmaCompleteTest(qData,sTab)
+
+
+
+formatLimmaResult <- function(fit, conds, contrast){
+  
+  #res.tmp <- topTable(fit,number=Inf, sort.by="none")
+  #res <- cbind(res.tmp[,1:Compa.Nb], fit$p.value)
+  #names(res) <- gsub(".", "_", names(res), fixed=TRUE)
+  res <- cbind(fit$coefficients, fit$p.value)
+  
+  #how many comparisons have been done (and thus how many columns of pval)
+  Compa.Nb <- dim(fit$p.value)[2]
+  #empty colnames vector
+  cn<-c()
+  for (i in 1:Compa.Nb){
+    
+    #not the same syntax to pars if Contast=1 or Contrast=2
+    if(contrast==1){
+      compa <- stringr::str_match_all(colnames(fit$p.value)[i],"[[:space:]]Condition([[:digit:]]+)")[[1]]
+      cn[i] <- paste(unique(conds)[as.numeric(compa[1,2])], "_vs_",unique(conds)[as.numeric(compa[2,2])], sep="")
+    }
+    if(contrast==2){
+      #hierarchic only
+      #compa<-str_match_all(colnames(fit$p.value)[i], "[[:space:]]Condition([[:digit:]]+)[[:space:]]")[[1]]
+      #cn[i]<-paste(levels(Conditions)[as.numeric(compa[1,2])], "vs(all-",levels(Conditions)[as.numeric(compa[1,2])], ")", sep="")
+      
+      #hier and non hier
+      compa<-str_match_all(colnames(fit$p.value)[i], "[[:space:]]Condition([[:digit:]]+)")[[1]]
+      cn[i]<-paste(unique(conds)[as.numeric(compa[1,2])], "_vs_(all-",unique(conds)[as.numeric(compa[1,2])], ")", sep="")
+    }
+  }
+  
+  
+  res.l <- list(
+    FC = as.data.frame(res[,1:Compa.Nb]),
+    P_Value = as.data.frame(res[,-(1:Compa.Nb)] )
+  )
+  
+  colnames(res.l$FC) <- paste(cn, "FC",sep="_")
+  colnames(res.l$P_Value) <- paste(cn, "pval",sep="_")
+  ## end colnames
+  
+  return(res.l)
+}
 
 
 

@@ -11,11 +11,11 @@
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' obj <- Exp1_R25_pept[1:1000]
-##' lapala <- findMECBlock(obj)
-##' obj <- wrapper.impute.detQuant(obj)
-##' obj <- reIntroduceMEC(obj, lapala)
-##' obj <- wrapper.impute.detQuant(obj)
-##' limma <- wrapper.limmaCompleteTest(obj, 1)
+##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+##' obj <- mvFilterFromIndices(obj, keepThat)
+##' qData <- Biobase::exprs(obj)
+##' sTab <- Biobase::pData(obj)
+##' limma <- limmaCompleteTest(qData,sTab)
 ##' hc_FC_DensityPlot(limma$FC)
 hc_FC_DensityPlot <-function(df_FC, threshold_LogFC = 0){
     
@@ -72,9 +72,9 @@ hc_FC_DensityPlot <-function(df_FC, threshold_LogFC = 0){
 ##' @title Computes the FDR corresponding to the p-values of the 
 ##' differential analysis using 
 ##' @param FC The result (FC values) of the differential analysis processed 
-##' by \code{\link{wrapper.limmaCompleteTest}} 
+##' by \code{\link{limmaCompleteTest}} 
 ##' @param pval The result (p-values) of the differential analysis processed 
-##' by \code{\link{wrapper.limmaCompleteTest}} 
+##' by \code{\link{limmaCompleteTest}} 
 ##' @param threshold_PVal The threshold on p-pvalue to
 ##' distinguish between differential and non-differential data 
 ##' @param threshold_LogFC The threshold on log(Fold Change) to
@@ -87,11 +87,11 @@ hc_FC_DensityPlot <-function(df_FC, threshold_LogFC = 0){
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' obj <- Exp1_R25_pept[1:1000]
-##' lapala <- findMECBlock(obj)
-##' obj <- wrapper.impute.detQuant(obj)
-##' obj <- reIntroduceMEC(obj, lapala)
-##' obj <- wrapper.impute.detQuant(obj)
-##' limma <- wrapper.limmaCompleteTest(obj, 1)
+##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+##' obj <- mvFilterFromIndices(obj, keepThat)
+##' qData <- Biobase::exprs(obj)
+##' sTab <- Biobase::pData(obj)
+##' limma <- limmaCompleteTest(qData,sTab)
 ##' diffAnaComputeFDR(limma$FC[,1],limma$P_Value[,1])
 diffAnaComputeFDR <- function(FC, pval,threshold_PVal=0, threshold_LogFC = 0, 
                             pi0Method=1){
@@ -121,7 +121,7 @@ diffAnaComputeFDR <- function(FC, pval,threshold_PVal=0, threshold_LogFC = 0,
 ##' @param obj An object of class \code{MSnSet}.
 ##' @param allComp A list of two items which is the result of the function wrapper.limmaCompleteTest or xxxx 
 ##' @param data The result of the differential analysis processed 
-##' by \code{\link{wrapper.limmaCompleteTest}} 
+##' by \code{\link{limmaCompleteTest}} 
 ##' @param l.params A list of parameters:
 ##' comp The name of the comparison 
 ##' th_pVal A float that indicates the threshold on p-value choosen to discriminate differential proteins.
@@ -135,11 +135,11 @@ diffAnaComputeFDR <- function(FC, pval,threshold_PVal=0, threshold_LogFC = 0,
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' obj <- Exp1_R25_pept
-##' lapala <- findMECBlock(obj)
-##' obj <- wrapper.impute.detQuant(obj)
-##' obj <- reIntroduceMEC(obj, lapala)
-##' obj <- wrapper.impute.detQuant(obj)
-##' allComp <- wrapper.limmaCompleteTest(obj, 1)
+##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+##' obj <- mvFilterFromIndices(obj, keepThat)
+##' qData <- Biobase::exprs(obj)
+##' sTab <- Biobase::pData(obj)
+##' allComp <- limmaCompleteTest(qData,sTab)
 ##' data <- list(FC=allComp$FC[1], P_Value = allComp$P_Value[1])
 ##' params <- list(design="OnevsOne", method="limma", th_logFC=0)
 ##' diffAnaSave(obj, allComp, data, params)
@@ -226,11 +226,11 @@ diffAnaSave <- function (obj, allComp, data=NULL, l.params){
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' obj <- Exp1_R25_pept
-##' lapala <- findMECBlock(obj)
-##' obj <- wrapper.impute.detQuant(obj)
-##' obj <- reIntroduceMEC(obj, lapala)
-##' obj <- wrapper.impute.detQuant(obj)
-##' limma <- wrapper.limmaCompleteTest(obj, 1)
+##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+##' obj <- mvFilterFromIndices(obj, keepThat)
+##' qData <- Biobase::exprs(obj)
+##' sTab <- Biobase::pData(obj)
+##' limma <- limmaCompleteTest(qData,sTab)
 ##' fc <- limma$FC[1]
 ##' pval <- limma$P_Value[1]
 ##' params <- list(design="OnevsOne", method="limma", th_logFC=0)
@@ -266,11 +266,11 @@ diffAnaGetSignificant <- function (obj){
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' obj <- Exp1_R25_pept[1:1000]
-##' lapala <- findMECBlock(obj)
-##' obj <- wrapper.impute.detQuant(obj)
-##' obj <- reIntroduceMEC(obj, lapala)
-##' obj <- wrapper.impute.detQuant(obj)
-##' limma <- wrapper.limmaCompleteTest(obj, 1)
+##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+##' obj <- mvFilterFromIndices(obj, keepThat)
+##' qData <- Biobase::exprs(obj)
+##' sTab <- Biobase::pData(obj)
+##' limma <- limmaCompleteTest(qData,sTab)
 ##' wrapperCalibrationPlot(limma$P_Value[,1])
 wrapperCalibrationPlot <- function(vPVal, pi0Method="pounds"){
 

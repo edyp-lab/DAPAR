@@ -11,7 +11,7 @@ mvFilterGetIndices(obj, type, th)
 quantitative data.}
 
 \item{type}{Method used to choose the lines to delete.
-Values are : "None", "wholeMatrix", "allCond", "atLeastOneCond"}
+Values are : "None", "EmptyLines", "wholeMatrix", "allCond", "atLeastOneCond"}
 
 \item{th}{An integer value of the threshold}
 }

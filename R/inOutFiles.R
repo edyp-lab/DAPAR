@@ -127,6 +127,7 @@ return(obj)
 ##' @param replaceZeros A boolean value to indicate if the 0 and NaN values of
 ##' intensity have to be replaced by NA (Default is FALSE)
 ##' @param pep_prot_data A string that indicates whether the dataset is about 
+##' @param versions A list of the following items: Prostar_Version, DAPAR_Version
 ##' peptides or proteins.
 ##' @return An instance of class \code{MSnSet}.
 ##' @author Florence Combes, Samuel Wieczorek
@@ -143,7 +144,8 @@ return(obj)
 createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
                          indexForOriginOfValue = NULL,
                          logData=FALSE, replaceZeros=FALSE,
-                         pep_prot_data=NULL){
+                         pep_prot_data=NULL,
+                         versions=NULL){
     
     if (!is.data.frame(file)){ #the variable is a path to a text file
         data <- read.table(file, header=TRUE, sep="\t",colClasses="character")
@@ -183,19 +185,19 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
     
     
     ##building pData of MSnSet file
-    if (!is.na(sum(match(metadata$Bio.Rep," ")))) 
-        {
-        metadata$Bio.Rep <-  as.factor(1:length(metadata$Bio.Rep))
-        }
-    if (!is.na(sum(match(metadata$Tech.Rep," ")))) 
-        {
-        metadata$Tech.Rep <-  as.factor(1:length(metadata$Tech.Rep))
-        }
-    if (!is.na(sum(match(metadata$Analyt.Rep," ")))) 
-        {
-        metadata$Analyt.Rep <-  as.factor(1:length(metadata$Analyt.Rep))
-        }
-    
+    # if (length(grep(" ",metadata$Bio.Rep)) > 0) 
+    #     {
+    #     metadata$Bio.Rep <-  as.factor(1:length(metadata$Bio.Rep))
+    #     }
+    # if (length(grep(" ",metadata$Tech.Rep)) > 0) 
+    #     {
+    #     metadata$Tech.Rep <-  as.factor(1:length(metadata$Tech.Rep))
+    #     }
+    # if (length(grep(" ",metadata$Analyt.Rep)) > 0) 
+    #     {
+    #     metadata$Analyt.Rep <-  as.factor(1:length(metadata$Analyt.Rep))
+    #     }
+    # 
     pd <- as.data.frame(metadata)
     rownames(pd) <- gsub(".", "_", pd$Experiment, fixed=TRUE)
     
@@ -228,6 +230,9 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
     if (!is.null(pep_prot_data)) {
         obj@experimentData@other$typeOfData <- pep_prot_data
     }
+    
+    obj@experimentData@other$Prostar_Version <- versions$Prostar_Version
+    obj@experimentData@other$DAPAR_Version <- versions$DAPAR_Version
     
     
     obj@experimentData@other$RawPValues <- FALSE
