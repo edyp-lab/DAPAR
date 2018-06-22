@@ -10,10 +10,10 @@ diffAnaComputeFDR(FC, pval, threshold_PVal = 0, threshold_LogFC = 0,
 }
 \arguments{
 \item{FC}{The result (FC values) of the differential analysis processed 
-by \code{\link{wrapper.limmaCompleteTest}}}
+by \code{\link{limmaCompleteTest}}}
 
 \item{pval}{The result (p-values) of the differential analysis processed 
-by \code{\link{wrapper.limmaCompleteTest}}}
+by \code{\link{limmaCompleteTest}}}
 
 \item{threshold_PVal}{The threshold on p-pvalue to
 distinguish between differential and non-differential data}
@@ -37,11 +37,11 @@ The FDR is computed with the function \code{p.adjust}\{stats\}..
 require(DAPARdata)
 data(Exp1_R25_pept)
 obj <- Exp1_R25_pept[1:1000]
-lapala <- findMECBlock(obj)
-obj <- wrapper.impute.detQuant(obj)
-obj <- reIntroduceMEC(obj, lapala)
-obj <- wrapper.impute.detQuant(obj)
-limma <- wrapper.limmaCompleteTest(obj, 1)
+keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+obj <- mvFilterFromIndices(obj, keepThat)
+qData <- Biobase::exprs(obj)
+sTab <- Biobase::pData(obj)
+limma <- limmaCompleteTest(qData,sTab)
 diffAnaComputeFDR(limma$FC[,1],limma$P_Value[,1])
 }
 \author{

@@ -26,7 +26,7 @@ class \code{MSnSet}
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-types <- c("Label","Analyt.Rep")
+types <- c("Label","Bio.Rep")
 wrapper.boxPlotD_HC(Exp1_R25_pept, types)
 }
 \seealso{

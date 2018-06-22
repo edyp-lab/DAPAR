@@ -42,7 +42,11 @@ setMEC <- function(obj){
   
   for (cond in 1:nbCond){
     ind <- which(Biobase::pData(obj)$Label == conditions[cond])
-    lNA <- which(apply(is.na(Biobase::exprs(obj)[,ind]), 1, sum)==length(ind))
+    if (length(ind) == 1) {
+      lNA <- which(is.na(Biobase::exprs(obj)[,ind]))
+      } else {
+        lNA <- which(apply(is.na(Biobase::exprs(obj)[,ind]), 1, sum)==length(ind))
+      }
     if (length(lNA) > 0)
     {
       Biobase::fData(obj)[lNA,obj@experimentData@other$OriginOfValues[ind]] <- "MEC"
@@ -82,13 +86,13 @@ if (!is.null(index))
 }
     
 OriginOfValues[is.na(obj)] <-  "POV"
-rownames(OriginOfValues) <- rownames(exprs(obj))
-colnames(OriginOfValues) <- paste0("OriginOfValue",colnames(exprs(obj)))
+rownames(OriginOfValues) <- rownames(Biobase::fData(obj))
+colnames(OriginOfValues) <- paste0("OriginOfValue",colnames(Biobase::exprs(obj)))
 colnames(OriginOfValues) <- gsub(".", "_", colnames(OriginOfValues), fixed=TRUE)
 
-indMin <- length(colnames(fData(obj)))
-indMax <- length(colnames(fData(obj))) + length(OriginOfValues)
-fData(obj) <- cbind(fData(obj), OriginOfValues)
+#indMin <- length(colnames(fData(obj)))
+#indMax <- length(colnames(fData(obj))) + length(OriginOfValues)
+Biobase::fData(obj) <- cbind(Biobase::fData(obj), OriginOfValues, deparse.level = 0)
 
 obj@experimentData@other$OriginOfValues <- colnames(OriginOfValues)
 
@@ -123,6 +127,7 @@ return(obj)
 ##' @param replaceZeros A boolean value to indicate if the 0 and NaN values of
 ##' intensity have to be replaced by NA (Default is FALSE)
 ##' @param pep_prot_data A string that indicates whether the dataset is about 
+##' @param versions A list of the following items: Prostar_Version, DAPAR_Version
 ##' peptides or proteins.
 ##' @return An instance of class \code{MSnSet}.
 ##' @author Florence Combes, Samuel Wieczorek
@@ -139,7 +144,8 @@ return(obj)
 createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
                          indexForOriginOfValue = NULL,
                          logData=FALSE, replaceZeros=FALSE,
-                         pep_prot_data=NULL){
+                         pep_prot_data=NULL,
+                         versions=NULL){
     
     if (!is.data.frame(file)){ #the variable is a path to a text file
         data <- read.table(file, header=TRUE, sep="\t",colClasses="character")
@@ -157,44 +163,42 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
                         , ncol=length(indExpData)
                         , byrow=FALSE)
     
-    #colnames(Intensity) <- colnames(data)[indExpData]
     colnames(Intensity) <- gsub(".", "_", colnames(data)[indExpData], fixed=TRUE)
     
     ##the name of lines are the same as the data of the first column
-    if (is.null(indiceID)) {
-        rownames(Intensity) <- rep(paste(pep_prot_data, "_", 1:nrow(Intensity), 
-                                         sep=""))
-    }else{rownames(Intensity) <- data[,indiceID]}
+    # if (is.null(indiceID)) {
+    #     rownames(Intensity) <- rep(paste(pep_prot_data, "_", 1:nrow(Intensity), sep=""))
+    # }else{rownames(Intensity) <- data[,indiceID]}
     
     ##building fData of MSnSet file
     fd <- data.frame( data[,indFData])
+    
     if (is.null(indiceID)) {
         rownames(fd) <- rep(paste(pep_prot_data, "_", 1:nrow(fd), sep=""))
+        rownames(Intensity) <- rep(paste(pep_prot_data, "_", 1:nrow(Intensity), sep=""))
     }else{
         rownames(fd) <- data[,indiceID]
+        rownames(Intensity) <- data[,indiceID]
     }
     
-    #rownames(fd) <- data[,indiceID]
-    #colnames(fd) <- colnames(data)[indFData]
     colnames(fd) <- gsub(".", "_", colnames(data)[indFData], fixed=TRUE)
     
     
     ##building pData of MSnSet file
-    if (!is.na(sum(match(metadata$Bio.Rep," ")))) 
-        {
-        metadata$Bio.Rep <-  as.factor(1:length(metadata$Bio.Rep))
-        }
-    if (!is.na(sum(match(metadata$Tech.Rep," ")))) 
-        {
-        metadata$Tech.Rep <-  as.factor(1:length(metadata$Tech.Rep))
-        }
-    if (!is.na(sum(match(metadata$Analyt.Rep," ")))) 
-        {
-        metadata$Analyt.Rep <-  as.factor(1:length(metadata$Analyt.Rep))
-        }
-    
+    # if (length(grep(" ",metadata$Bio.Rep)) > 0) 
+    #     {
+    #     metadata$Bio.Rep <-  as.factor(1:length(metadata$Bio.Rep))
+    #     }
+    # if (length(grep(" ",metadata$Tech.Rep)) > 0) 
+    #     {
+    #     metadata$Tech.Rep <-  as.factor(1:length(metadata$Tech.Rep))
+    #     }
+    # if (length(grep(" ",metadata$Analyt.Rep)) > 0) 
+    #     {
+    #     metadata$Analyt.Rep <-  as.factor(1:length(metadata$Analyt.Rep))
+    #     }
+    # 
     pd <- as.data.frame(metadata)
-    #rownames(pd) <- pd$Experiment
     rownames(pd) <- gsub(".", "_", pd$Experiment, fixed=TRUE)
     
     ##Integrity tests
@@ -226,6 +230,9 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
     if (!is.null(pep_prot_data)) {
         obj@experimentData@other$typeOfData <- pep_prot_data
     }
+    
+    obj@experimentData@other$Prostar_Version <- versions$Prostar_Version
+    obj@experimentData@other$DAPAR_Version <- versions$DAPAR_Version
     
     
     obj@experimentData@other$RawPValues <- FALSE
