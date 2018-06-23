@@ -35,7 +35,7 @@ importFrom("stats", "lowess", "cor", "density","pexp", "mad",
            "quantile", "rbeta", "runif", "sd", "pchisq", "residuals","formula", "lm", "logLik")
 importFrom("preprocessCore", "normalize.quantiles")
 importFrom("gplots", "heatmap.2")
-import("limma")
+#import("limma")
 importFrom("pcaMethods", "completeObs", "pca")
 importFrom("scales", "alpha")
 importFrom("grDevices", "colorRampPalette", "palette", "heat.colors")
@@ -115,7 +115,7 @@ export(
 ,"diffAnaSave"
 ,"diffAnaComputeFDR"
 ,"wrapperCalibrationPlot"
-,"hc_FC_DensityPlot"
+,"hc_logFC_DensityPlot"
 
 
 ,"getProcessingInfo"

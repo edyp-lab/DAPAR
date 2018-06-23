@@ -7,7 +7,7 @@
 ##' non differential data.
 ##' 
 ##' @title Volcanoplot of the differential analysis
-##' @param FC A vector of the log(fold change) values of the differential
+##' @param logFC A vector of the log(fold change) values of the differential
 ##' analysis.
 ##' @param pVal A vector of the p-value values returned by the differential
 ##' analysis.
@@ -28,8 +28,8 @@
 ##' qData <- Biobase::exprs(obj)
 ##' sTab <- Biobase::pData(obj)
 ##' limma <- limmaCompleteTest(qData,sTab)
-##' diffAnaVolcanoplot(limma$FC[,1], limma$P_Value[,1])
-diffAnaVolcanoplot <- function(FC=NULL, 
+##' diffAnaVolcanoplot(limma$logFC[,1], limma$P_Value[,1])
+diffAnaVolcanoplot <- function(logFC=NULL, 
                                 pVal=NULL, 
                                 threshold_pVal=1e-60, 
                                 threshold_logFC=0, 
@@ -39,7 +39,7 @@ xtitle <- paste("log2 ( mean(",conditions[2],") / mean(",conditions[1],") )",
                 sep="")
 
 
-if (is.null(FC)||is.null(pVal)) {
+if (is.null(logFC)||is.null(pVal)) {
 
     p <- plot(-1,-1
             , xlab = xtitle
@@ -51,7 +51,7 @@ if (is.null(FC)||is.null(pVal)) {
     return (NULL)
 }
 
-x <- FC
+x <- logFC
 y <- -log10(pVal)
 
 colorCode <- c("gray", "orange")
@@ -126,7 +126,7 @@ return(p)
 ##' qData <- Biobase::exprs(obj)
 ##' sTab <- Biobase::pData(obj)
 ##' data <- limmaCompleteTest(qData,sTab)
-##' df <- data.frame(x=data$FC, y = -log10(data$P_Value),index = as.character(rownames(obj)))
+##' df <- data.frame(x=data$logFC, y = -log10(data$P_Value),index = as.character(rownames(obj)))
 ##' colnames(df) <- c("x", "y", "index")
 ##' tooltipSlot <- c("Sequence", "Score")
 ##' df <- cbind(df,Biobase::fData(obj)[tooltipSlot])
@@ -179,7 +179,7 @@ diffAnaVolcanoplot_rCharts <- function(df,
         hc_yAxis(title = list(text="-log10(pValue)"),
                  plotBands = list(list(from= 0, to = threshold_pVal, color = "lightgrey")),
                  plotLines=list(list(color= "grey" , width = 2, value = 0, zIndex = 5))) %>%
-        hc_xAxis(title = list(text = "FC"),
+        hc_xAxis(title = list(text = "logFC"),
                  plotBands = list(list(from= -threshold_logFC, to = threshold_logFC, color = "lightgrey")),
                  plotLines=list(list(color= "grey" , width = 2, value = 0, zIndex = 5))) %>%
         hc_tooltip(headerFormat= '',pointFormat = txt_tooltip) %>%

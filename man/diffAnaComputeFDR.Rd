@@ -5,11 +5,11 @@
 \title{Computes the FDR corresponding to the p-values of the 
 differential analysis using}
 \usage{
-diffAnaComputeFDR(FC, pval, threshold_PVal = 0, threshold_LogFC = 0,
+diffAnaComputeFDR(logFC, pval, threshold_PVal = 0, threshold_LogFC = 0,
   pi0Method = 1)
 }
 \arguments{
-\item{FC}{The result (FC values) of the differential analysis processed 
+\item{logFC}{The result (logFC values) of the differential analysis processed 
 by \code{\link{limmaCompleteTest}}}
 
 \item{pval}{The result (p-values) of the differential analysis processed 
@@ -42,7 +42,7 @@ obj <- mvFilterFromIndices(obj, keepThat)
 qData <- Biobase::exprs(obj)
 sTab <- Biobase::pData(obj)
 limma <- limmaCompleteTest(qData,sTab)
-diffAnaComputeFDR(limma$FC[,1],limma$P_Value[,1])
+diffAnaComputeFDR(limma$logFC[,1],limma$P_Value[,1])
 }
 \author{
 Samuel Wieczorek

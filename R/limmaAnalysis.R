@@ -441,7 +441,7 @@ make.contrast <- function(design,condition, contrast=1){
 ##' @param sTab A dataframe of experimental design (pData()). 
 ##' @param comp.type A string that corresponds to the type of comparison. 
 ##' Values are: 'OnevsOne' and 'OnevsAll'; default is 'OnevsOne'.
-##' @return A list of two dataframes : FC and P_Value. The first one contains
+##' @return A list of two dataframes : logFC and P_Value. The first one contains
 ##' the logFC values of all the comparisons (one column for one comparison), the second one contains
 ##' the pvalue of all the comparisons (one column for one comparison). The names of the columns for those two dataframes
 ##' are identical and correspond to the description of the comparison. 
@@ -456,7 +456,7 @@ make.contrast <- function(design,condition, contrast=1){
 ##' sTab <- Biobase::pData(obj)
 ##' limma <- limmaCompleteTest(qData,sTab)
 limmaCompleteTest <- function(qData, sTab, comp.type="OnevsOne"){
-    
+   
   switch(comp.type,
          OnevsOne = contrast <- 1,
          OnevsAll = contrast <- 2)
@@ -466,8 +466,8 @@ limmaCompleteTest <- function(qData, sTab, comp.type="OnevsOne"){
   design.matrix <- make.design(sTab)
   if(!is.null(design.matrix)) {
     contra <- make.contrast(design.matrix,condition=conds, contrast)
-    cmtx=makeContrasts(contrasts=contra,levels=make.names(colnames(design.matrix)))
-    fit <- eBayes(contrasts.fit(lmFit(qData, design.matrix), cmtx))
+    cmtx <- limma::makeContrasts(contrasts=contra,levels=make.names(colnames(design.matrix)))
+    fit <- limma::eBayes(limma::contrasts.fit(limma::lmFit(qData, design.matrix), cmtx))
     res.l <- formatLimmaResult(fit, conds, contrast)
   }
   
@@ -482,7 +482,7 @@ limmaCompleteTest <- function(qData, sTab, comp.type="OnevsOne"){
 ##' @param fit xxxx
 ##' @param conds xxxx
 ##' @param contrast xxxx
-##' @return A list of two dataframes : FC and P_Value. The first one contains
+##' @return A list of two dataframes : logFC and P_Value. The first one contains
 ##' the logFC values of all the comparisons (one column for one comparison), the second one contains
 ##' the pvalue of all the comparisons (one column for one comparison). The names of the columns for those two dataframes
 ##' are identical and correspond to the description of the comparison. 
@@ -530,11 +530,11 @@ formatLimmaResult <- function(fit, conds, contrast){
   
   
   res.l <- list(
-    FC = as.data.frame(res[,1:Compa.Nb]),
+    logFC = as.data.frame(res[,1:Compa.Nb]),
     P_Value = as.data.frame(res[,-(1:Compa.Nb)] )
   )
   
-  colnames(res.l$FC) <- paste(cn, "FC",sep="_")
+  colnames(res.l$logFC) <- paste(cn, "logFC",sep="_")
   colnames(res.l$P_Value) <- paste(cn, "pval",sep="_")
   ## end colnames
   

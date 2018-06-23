@@ -4,11 +4,11 @@
 \alias{diffAnaVolcanoplot}
 \title{Volcanoplot of the differential analysis}
 \usage{
-diffAnaVolcanoplot(FC = NULL, pVal = NULL, threshold_pVal = 1e-60,
+diffAnaVolcanoplot(logFC = NULL, pVal = NULL, threshold_pVal = 1e-60,
   threshold_logFC = 0, conditions = NULL)
 }
 \arguments{
-\item{FC}{A vector of the log(fold change) values of the differential
+\item{logFC}{A vector of the log(fold change) values of the differential
 analysis.}
 
 \item{pVal}{A vector of the p-value values returned by the differential
@@ -43,7 +43,7 @@ obj <- mvFilterFromIndices(obj, keepThat)
 qData <- Biobase::exprs(obj)
 sTab <- Biobase::pData(obj)
 limma <- limmaCompleteTest(qData,sTab)
-diffAnaVolcanoplot(limma$FC[,1], limma$P_Value[,1])
+diffAnaVolcanoplot(limma$logFC[,1], limma$P_Value[,1])
 }
 \author{
 Florence Combes, Samuel Wieczorek

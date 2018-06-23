@@ -39,7 +39,7 @@ obj <- mvFilterFromIndices(obj, keepThat)
 qData <- Biobase::exprs(obj)
 sTab <- Biobase::pData(obj)
 allComp <- limmaCompleteTest(qData,sTab)
-data <- list(FC=allComp$FC[1], P_Value = allComp$P_Value[1])
+data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
 params <- list(design="OnevsOne", method="limma", th_logFC=0)
 diffAnaSave(obj, allComp, data, params)
 }

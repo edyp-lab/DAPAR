@@ -26,10 +26,10 @@ obj <- mvFilterFromIndices(obj, keepThat)
 qData <- Biobase::exprs(obj)
 sTab <- Biobase::pData(obj)
 limma <- limmaCompleteTest(qData,sTab)
-fc <- limma$FC[1]
+fc <- limma$logFC[1]
 pval <- limma$P_Value[1]
 params <- list(design="OnevsOne", method="limma", th_logFC=0)
-obj <- diffAnaSave(obj, limma,list(FC=fc, P_Value = pval), params)
+obj <- diffAnaSave(obj, limma,list(logFC=fc, P_Value = pval), params)
 signif <- diffAnaGetSignificant(obj)
 }
 \author{

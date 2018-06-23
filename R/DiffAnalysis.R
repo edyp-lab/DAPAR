@@ -1,8 +1,8 @@
 ##' This function show the density plots of Fold Change (the same as calculated by limma) for a list 
 ##' of the comparisons of conditions in a differnetial analysis.
 ##' 
-##' @title Density plots of FC values
-##' @param df_FC A dataframe that contains the FC values
+##' @title Density plots of logFC values
+##' @param df_logFC A dataframe that contains the logFC values
 ##' @param threshold_LogFC The threshold on log(Fold Change) to
 ##' distinguish between differential and non-differential data 
 ##' @return A highcharts density plot
@@ -16,10 +16,10 @@
 ##' qData <- Biobase::exprs(obj)
 ##' sTab <- Biobase::pData(obj)
 ##' limma <- limmaCompleteTest(qData,sTab)
-##' hc_FC_DensityPlot(limma$FC)
-hc_FC_DensityPlot <-function(df_FC, threshold_LogFC = 0){
+##' hc_logFC_DensityPlot(limma$logFC)
+hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0){
     
-    if (is.null(df_FC)){return()}
+    if (is.null(df_logFC)){return()}
 
      hc <-  highchart() %>% 
          hc_title(text = "log(FC) repartition") %>% 
@@ -44,13 +44,13 @@ hc_FC_DensityPlot <-function(df_FC, threshold_LogFC = 0){
              )
          )
      
-     myColors <- getPaletteForLabels_HC(ncol(df_FC))
+     myColors <- getPaletteForLabels_HC(ncol(df_logFC))
      
-    for (i in 1:ncol(df_FC)){
-        tmp <- density(df_FC[,i])
+    for (i in 1:ncol(df_logFC)){
+        tmp <- density(df_logFC[,i])
         hc <- hc_add_series(hc,
                             data.frame(x = tmp$x,  y = tmp$y), 
-                            name=colnames(df_FC)[i], 
+                            name=colnames(df_logFC)[i], 
                             color=myColors[i])
     }
      
@@ -71,7 +71,7 @@ hc_FC_DensityPlot <-function(df_FC, threshold_LogFC = 0){
 ##' 
 ##' @title Computes the FDR corresponding to the p-values of the 
 ##' differential analysis using 
-##' @param FC The result (FC values) of the differential analysis processed 
+##' @param logFC The result (logFC values) of the differential analysis processed 
 ##' by \code{\link{limmaCompleteTest}} 
 ##' @param pval The result (p-values) of the differential analysis processed 
 ##' by \code{\link{limmaCompleteTest}} 
@@ -92,12 +92,12 @@ hc_FC_DensityPlot <-function(df_FC, threshold_LogFC = 0){
 ##' qData <- Biobase::exprs(obj)
 ##' sTab <- Biobase::pData(obj)
 ##' limma <- limmaCompleteTest(qData,sTab)
-##' diffAnaComputeFDR(limma$FC[,1],limma$P_Value[,1])
-diffAnaComputeFDR <- function(FC, pval,threshold_PVal=0, threshold_LogFC = 0, 
+##' diffAnaComputeFDR(limma$logFC[,1],limma$P_Value[,1])
+diffAnaComputeFDR <- function(logFC, pval,threshold_PVal=0, threshold_LogFC = 0, 
                             pi0Method=1){
-    if (is.null(FC) || is.null(pval)){return()}
+    if (is.null(logFC) || is.null(pval)){return()}
     
-    upItems <- which(abs(FC) >= threshold_LogFC)
+    upItems <- which(abs(logFC) >= threshold_LogFC)
     
     selectedItems <- pval[upItems]
 
@@ -140,7 +140,7 @@ diffAnaComputeFDR <- function(FC, pval,threshold_PVal=0, threshold_LogFC = 0,
 ##' qData <- Biobase::exprs(obj)
 ##' sTab <- Biobase::pData(obj)
 ##' allComp <- limmaCompleteTest(qData,sTab)
-##' data <- list(FC=allComp$FC[1], P_Value = allComp$P_Value[1])
+##' data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
 ##' params <- list(design="OnevsOne", method="limma", th_logFC=0)
 ##' diffAnaSave(obj, allComp, data, params)
 diffAnaSave <- function (obj, allComp, data=NULL, l.params){
@@ -162,9 +162,9 @@ diffAnaSave <- function (obj, allComp, data=NULL, l.params){
     
   ####### SAVE ALL THEPAIRWISE COMPARISON RESULTS
   
-  .fc <- as.data.frame(allComp$FC)
+  .fc <- as.data.frame(allComp$logFC)
   .pval <- as.data.frame(allComp$P_Value)
-  cnames <- c(colnames(allComp$FC), colnames(allComp$P_Value))
+  cnames <- c(colnames(allComp$logFC), colnames(allComp$P_Value))
   ind <- which(colnames(fData(obj)) %in% cnames)
   if (length(ind) > 0) {
       Biobase::fData(obj) <- Biobase::fData(obj)[,-ind]
@@ -172,7 +172,7 @@ diffAnaSave <- function (obj, allComp, data=NULL, l.params){
   for (i in 1:ncol(.fc)){
     Biobase::fData(obj) <- cbind(Biobase::fData(obj), .fc[,i], .pval[,i])
     coln <- colnames(Biobase::fData(obj))
-    colnames(Biobase::fData(obj))[(length(coln)-1):length(coln)] <- c(colnames(allComp$FC)[i],colnames(allComp$P_Value)[i])
+    colnames(Biobase::fData(obj))[(length(coln)-1):length(coln)] <- c(colnames(allComp$logFC)[i],colnames(allComp$P_Value)[i])
   }
   
   text <- paste("Differential analysis with",l.params$method)
@@ -182,14 +182,14 @@ diffAnaSave <- function (obj, allComp, data=NULL, l.params){
   obj@experimentData@other$RawPValues <- TRUE
   
   #### SAVE A COMPARISON ANALYSIS IF EXISTS
-  if (!(is.null(data$FC) && is.null(data$P_Value))){
+  if (!(is.null(data$logFC) && is.null(data$P_Value))){
   
         Biobase::fData(obj)$P_Value <- data$P_Value
-        Biobase::fData(obj)$FC <- data$FC
+        Biobase::fData(obj)$logFC <- data$logFC
         Biobase::fData(obj)$Significant <- 0
 
         ##setSignificant info
-        x <- data$FC
+        x <- data$logFC
         y <- -log10(data$P_Value)
     
         ipval <- which(y >= l.params$th_pval)
@@ -231,10 +231,10 @@ diffAnaSave <- function (obj, allComp, data=NULL, l.params){
 ##' qData <- Biobase::exprs(obj)
 ##' sTab <- Biobase::pData(obj)
 ##' limma <- limmaCompleteTest(qData,sTab)
-##' fc <- limma$FC[1]
+##' fc <- limma$logFC[1]
 ##' pval <- limma$P_Value[1]
 ##' params <- list(design="OnevsOne", method="limma", th_logFC=0)
-##' obj <- diffAnaSave(obj, limma,list(FC=fc, P_Value = pval), params)
+##' obj <- diffAnaSave(obj, limma,list(logFC=fc, P_Value = pval), params)
 ##' signif <- diffAnaGetSignificant(obj)
 diffAnaGetSignificant <- function (obj){
     if (is.null(obj)){
