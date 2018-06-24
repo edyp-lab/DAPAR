@@ -69,7 +69,7 @@ test.design <- function(tab){
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' check.conditions(Biobase::pData(Exp1_R25_pept)$Label)
+##' check.conditions(Biobase::pData(Exp1_R25_pept)$Condition)
 check.conditions <- function(conds){
   res <- list(valid=TRUE,warn=NULL)
   
@@ -113,7 +113,7 @@ check.design <- function(sTab){
   level.design <- ncol(sTab)-2
   
   
-  res <- check.conditions(sTab$Label)
+  res <- check.conditions(sTab$Condition)
   if (!res$valid){
     return(res)
   }
@@ -148,10 +148,10 @@ check.design <- function(sTab){
   }
   
   # Check if the hierarchy of the design is correct
-  if (level.design == 1){res <- test.design(sTab[,c("Label", "Bio.Rep")])}
-  else if (level.design == 2){res <- test.design(sTab[,c("Label", "Bio.Rep","Tech.Rep")])}
+  if (level.design == 1){res <- test.design(sTab[,c("Condition", "Bio.Rep")])}
+  else if (level.design == 2){res <- test.design(sTab[,c("Condition", "Bio.Rep","Tech.Rep")])}
   else if (level.design == 3){
-    res <- test.design(sTab[,c("Label", "Bio.Rep","Tech.Rep")])
+    res <- test.design(sTab[,c("Condition", "Bio.Rep","Tech.Rep")])
     if (res$valid)
     {
       res <- test.design(sTab[,c("Bio.Rep","Tech.Rep", "Analyt.Rep")])
@@ -205,7 +205,7 @@ make.design <- function(sTab){
 ##' make.design.1(Biobase::pData(Exp1_R25_pept))
 make.design.1 <- function(sTab){
   
-  Conditions <- factor(sTab$Label, ordered = TRUE)
+  Conditions <- factor(sTab$Condition, ordered = TRUE)
   nb_cond=length(levels(Conditions))
   nb_samples <- nrow(sTab)
   
@@ -242,7 +242,7 @@ make.design.1 <- function(sTab){
 ##' make.design.2(Biobase::pData(Exp1_R25_pept))
 ##' }
 make.design.2=function(sTab){
-  Condition <- factor(sTab$Label, ordered = TRUE)
+  Condition <- factor(sTab$Condition, ordered = TRUE)
   RepBio <- factor(sTab$Bio.Rep, ordered = TRUE)
   
   #Renome the levels of factor
@@ -289,7 +289,7 @@ make.design.2=function(sTab){
 ##' }
 make.design.3=function(sTab){
   
-  Condition <- factor(sTab$Label, ordered = TRUE)
+  Condition <- factor(sTab$Condition, ordered = TRUE)
   RepBio <- factor(sTab$Bio.Rep, ordered = TRUE)
   RepTech <- factor(sTab$Tech.Rep, ordered = TRUE)
   
@@ -343,7 +343,7 @@ make.design.3=function(sTab){
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' design <- make.design(Biobase::pData(Exp1_R25_pept))
-##' conds <- Biobase::pData(Exp1_R25_pept)$Label
+##' conds <- Biobase::pData(Exp1_R25_pept)$Condition
 ##' make.contrast(design, conds)
 make.contrast <- function(design,condition, contrast=1){
   
@@ -461,7 +461,7 @@ limmaCompleteTest <- function(qData, sTab, comp.type="OnevsOne"){
          OnevsOne = contrast <- 1,
          OnevsAll = contrast <- 2)
   
-  conds <- factor(sTab$Label, ordered = TRUE)
+  conds <- factor(sTab$Condition, ordered = TRUE)
   res.l <- NULL
   design.matrix <- make.design(sTab)
   if(!is.null(design.matrix)) {

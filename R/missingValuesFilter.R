@@ -489,14 +489,14 @@ if (type == "None"){
     keepThat <- which(apply(!is.MV(data), 1, sum) >= th)
 } else if (type == "atLeastOneCond" || type == "allCond"){
     
-    conditions <- unique(Biobase::pData(obj)$Label)
+    conditions <- unique(Biobase::pData(obj)$Condition)
     nbCond <- length(conditions)
     keepThat <- NULL
     s <- matrix(rep(0, nrow(data)*nbCond),nrow=nrow(data), 
                 ncol=nbCond)
     
     for (c in 1:nbCond){
-        ind <- which(Biobase::pData(obj)$Label == conditions[c])
+        ind <- which(Biobase::pData(obj)$Condition == conditions[c])
         if (length(ind) == 1){
             s[,c] <- (!is.MV(data[,ind]) >= th)}
         else {

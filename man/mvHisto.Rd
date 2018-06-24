@@ -4,7 +4,7 @@
 \alias{mvHisto}
 \title{Histogram of missing values}
 \usage{
-mvHisto(qData, samplesData, labels, indLegend = "auto", showValues = FALSE)
+mvHisto(qData, samplesData, conds, indLegend = "auto", showValues = FALSE)
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
@@ -12,7 +12,7 @@ mvHisto(qData, samplesData, labels, indLegend = "auto", showValues = FALSE)
 \item{samplesData}{A dataframe where lines correspond to samples and 
 columns to the meta-data for those samples.}
 
-\item{labels}{A vector of the conditions (labels) (one label per sample).}
+\item{conds}{A vector of the conditions (one condition per sample).}
 
 \item{indLegend}{The indices of the column name's in \code{pData()} tab}
 
@@ -30,8 +30,8 @@ require(DAPARdata)
 data(Exp1_R25_pept)
 qData <- Biobase::exprs(Exp1_R25_pept)
 samplesData <- Biobase::pData(Exp1_R25_pept)
-labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-mvHisto(qData, samplesData, labels, indLegend="auto", showValues=TRUE)
+conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+mvHisto(qData, samplesData, conds, indLegend="auto", showValues=TRUE)
 }
 \author{
 Florence Combes, Samuel Wieczorek

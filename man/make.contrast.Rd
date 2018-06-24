@@ -27,7 +27,7 @@ This function builds the contrast matrix
 require(DAPARdata)
 data(Exp1_R25_pept)
 design <- make.design(Biobase::pData(Exp1_R25_pept))
-conds <- Biobase::pData(Exp1_R25_pept)$Label
+conds <- Biobase::pData(Exp1_R25_pept)$Condition
 make.contrast(design, conds)
 }
 \author{

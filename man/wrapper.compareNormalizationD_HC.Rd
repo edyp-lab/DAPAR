@@ -4,7 +4,7 @@
 \alias{wrapper.compareNormalizationD_HC}
 \title{Builds a plot from a dataframe}
 \usage{
-wrapper.compareNormalizationD_HC(objBefore, objAfter, labelsForLegend = NULL,
+wrapper.compareNormalizationD_HC(objBefore, objAfter, condsForLegend = NULL,
   indData2Show = NULL, group2Color = "Condition")
 }
 \arguments{
@@ -14,7 +14,7 @@ normalization.}
 \item{objAfter}{A dataframe that contains quantitative data after 
 normalization.}
 
-\item{labelsForLegend}{A vector of the conditions (labels) (one label 
+\item{condsForLegend}{A vector of the conditions (one condition 
 per sample).}
 
 \item{indData2Show}{A vector of the indices of the columns to show in the 
@@ -36,10 +36,10 @@ but uses the package \code{highcharter}
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 objAfter <- wrapper.normalizeD(Exp1_R25_pept, "Quantile Centering", 
 "within conditions")
-wrapper.compareNormalizationD_HC(Exp1_R25_pept, objAfter, labels)
+wrapper.compareNormalizationD_HC(Exp1_R25_pept, objAfter, conds)
 }
 \author{
 Samuel Wieczorek

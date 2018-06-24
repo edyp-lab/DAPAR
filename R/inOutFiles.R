@@ -37,11 +37,11 @@ setMEC <- function(obj){
   
   if (is.null( obj@experimentData@other$OriginOfValues)){return()}
   
-  conditions <- unique(Biobase::pData(obj)$Label)
+  conditions <- unique(Biobase::pData(obj)$Condition)
   nbCond <- length(conditions)
   
   for (cond in 1:nbCond){
-    ind <- which(Biobase::pData(obj)$Label == conditions[cond])
+    ind <- which(Biobase::pData(obj)$Condition == conditions[cond])
     if (length(ind) == 1) {
       lNA <- which(is.na(Biobase::exprs(obj)[,ind]))
       } else {
@@ -199,7 +199,7 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
     #     }
     # 
     pd <- as.data.frame(metadata)
-    rownames(pd) <- gsub(".", "_", pd$Experiment, fixed=TRUE)
+    rownames(pd) <- gsub(".", "_", pd$Sample.name, fixed=TRUE)
     
     ##Integrity tests
     if(identical(rownames(Intensity), rownames(fd))==FALSE)

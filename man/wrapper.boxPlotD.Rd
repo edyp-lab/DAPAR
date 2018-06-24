@@ -4,13 +4,13 @@
 \alias{wrapper.boxPlotD}
 \title{Wrapper to the boxplotD function on an object \code{MSnSet}}
 \usage{
-wrapper.boxPlotD(obj, dataForXAxis = "Label", group2Color = "Condition")
+wrapper.boxPlotD(obj, dataForXAxis = "Condition", group2Color = "Condition")
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
 
 \item{dataForXAxis}{A vector of strings containing the names of columns 
-in \code{pData()} to print labels on X-axis (Default is "Label").}
+in \code{pData()} to print conditions on X-axis (Default is "Condition").}
 
 \item{group2Color}{A string that indicates how to color the replicates: one
 color per condition (value "Condition") or one 
@@ -26,7 +26,7 @@ class \code{MSnSet}
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-types <- c("Label","Bio.Rep")
+types <- c("Condition","Bio.Rep")
 wrapper.boxPlotD(Exp1_R25_pept, types)
 }
 \seealso{

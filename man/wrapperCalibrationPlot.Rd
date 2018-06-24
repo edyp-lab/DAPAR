@@ -10,8 +10,7 @@ wrapperCalibrationPlot(vPVal, pi0Method = "pounds")
 \arguments{
 \item{vPVal}{A dataframe that contains quantitative data.}
 
-\item{pi0Method}{A vector of the conditions (labels) (one label 
-per sample).}
+\item{pi0Method}{A vector of the conditions (one condition per sample).}
 }
 \value{
 A plot

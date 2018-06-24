@@ -4,16 +4,16 @@
 \alias{getIndicesConditions}
 \title{Gets the conditions indices.}
 \usage{
-getIndicesConditions(labels, cond1, cond2)
+getIndicesConditions(conds, cond1, cond2)
 }
 \arguments{
-\item{labels}{A vector of strings containing the column "Label" of 
+\item{conds}{A vector of strings containing the column "Condition" of 
 the \code{pData()}.}
 
-\item{cond1}{A vector of Labels (a slot in the \code{pData()} table) for
+\item{cond1}{A vector of Conditions (a slot in the \code{pData()} table) for
 the condition 1.}
 
-\item{cond2}{A vector of Labels (a slot in the \code{pData()} table) for
+\item{cond2}{A vector of Conditions (a slot in the \code{pData()} table) for
 the condition 2.}
 }
 \value{
@@ -28,8 +28,8 @@ indices for the samples.
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-getIndicesConditions(labels, "25fmol", "10fmol")
+conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+getIndicesConditions(conds, "25fmol", "10fmol")
 }
 \author{
 Florence Combes, Samuel Wieczorek

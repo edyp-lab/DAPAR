@@ -4,13 +4,13 @@
 \alias{wrapper.densityPlotD}
 \title{Builds a densityplot from an object of class \code{MSnSet}}
 \usage{
-wrapper.densityPlotD(obj, labelsForLegend = NULL, indData2Show = NULL,
+wrapper.densityPlotD(obj, condsForLegend = NULL, indData2Show = NULL,
   group2Color = "Condition")
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
 
-\item{labelsForLegend}{A vector of labels to show in densityplot.}
+\item{condsForLegend}{A vector of conditions to show in densityplot.}
 
 \item{indData2Show}{A vector of the indices of the columns to show in 
 the plot. The indices are those of indices of the columns int the data
@@ -30,8 +30,8 @@ objects of class \code{MSnSet}
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-wrapper.densityPlotD(Exp1_R25_pept, labels)
+conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+wrapper.densityPlotD(Exp1_R25_pept, conds)
 }
 \seealso{
 \code{\link{wrapper.boxPlotD}}, 

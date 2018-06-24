@@ -14,13 +14,13 @@
 ##' lapala <- findMECBlock(obj)
 findMECBlock <- function(obj){
     
-    conditions <- unique(Biobase::pData(obj)$Label)
+    conditions <- unique(Biobase::pData(obj)$Condition)
     nbCond <- length(conditions)
     
     s <- data.frame()
     
     for (cond in 1:nbCond){
-        ind <- which(Biobase::pData(obj)$Label == conditions[cond])
+        ind <- which(Biobase::pData(obj)$Condition == conditions[cond])
         lNA <- which(apply(is.na(Biobase::exprs(obj)[,ind]), 1, sum)==length(ind))
         if (length(lNA) > 0)
         {
@@ -52,8 +52,8 @@ reIntroduceMEC <- function(obj, MECIndex){
     
     for (i in 1:nrow(MECIndex))
     {
-        conditions <- unique(Biobase::pData(obj)$Label)
-        replicates <- which(Biobase::pData(obj)$Label == conditions[MECIndex[i,"Condition"]])
+        conditions <- unique(Biobase::pData(obj)$Condition)
+        replicates <- which(Biobase::pData(obj)$Condition == conditions[MECIndex[i,"Condition"]])
         Biobase::exprs(obj)[MECIndex[i,"Line"], as.vector(replicates)] <- NA
     }
     return(obj)
@@ -79,12 +79,12 @@ wrapper.impute.KNN <- function(obj, K){
     if (is.null(obj)){return(NULL)}
     data <- Biobase::exprs(obj)
     
-    conditions <- unique(Biobase::pData(obj)$Label)
+    conditions <- unique(Biobase::pData(obj)$Condition)
     nbCond <- length(conditions)
     
     
     for (cond in 1:nbCond){
-        ind <- which(Biobase::pData(obj)$Label == conditions[cond])
+        ind <- which(Biobase::pData(obj)$Condition == conditions[cond])
         resKNN <- impute.knn(Biobase::exprs(obj)[,ind] ,k = K, rowmax = 0.99, colmax = 0.99, maxp = 1500, rng.seed = sample(1:1000,1))
         Biobase::exprs(obj)[,ind] <- resKNN[[1]]
     }
@@ -142,7 +142,7 @@ wrapper.impute.fixedValue <- function(obj, fixVal){
 ##' dat <- mvFilter(Exp1_R25_pept[1:1000], type="allCond", th = 1)
 ##' dat <- wrapper.impute.pa(dat)
 wrapper.impute.pa <- function(obj, q.min = 0.025){
-    cond <- as.factor(Biobase::pData(obj)$Label)
+    cond <- as.factor(Biobase::pData(obj)$Condition)
     res <- impute.pa(Biobase::exprs(obj), conditions=cond, q.min = q.min, q.norm=3,  eps=0)
     Biobase::exprs(obj) <- res[["tab.imp"]]
     return (obj)
@@ -240,7 +240,7 @@ impute.detQuant <- function(qData, values){
 ##' dat <- mvFilter(Exp1_R25_pept[1:1000], type="allCond", th = 1)
 ##' dat <- wrapper.impute.slsa(dat)
 wrapper.impute.slsa <- function(obj){
-    cond <- as.factor(Biobase::pData(obj)$Label)
+    cond <- as.factor(Biobase::pData(obj)$Condition)
     
     res <- impute.slsa(Biobase::exprs(obj), conditions=cond, nknn=15, selec="all", weight=1,
                        ind.comp=1)

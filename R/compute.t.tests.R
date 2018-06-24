@@ -20,7 +20,7 @@
 wrapper.t_test_Complete <- function(obj,...){
     
     qData <- Biobase::exprs(obj)
-    conds <- pData(obj)[,"Label"]
+    conds <- pData(obj)[,"Condition"]
     
     ttest <- compute.t.tests(qData,Conditions=conds,...)
     
@@ -56,7 +56,7 @@ wrapper.t_test_Complete <- function(obj,...){
 ##' obj <- wrapper.impute.detQuant(obj)
 ##' obj <- reIntroduceMEC(obj, lapala)
 ##' obj <- wrapper.impute.detQuant(obj)
-##' ttest <- compute.t.tests(Biobase::exprs(obj), Biobase::pData(obj)[,"Label"],1)
+##' ttest <- compute.t.tests(Biobase::exprs(obj), Biobase::pData(obj)[,"Condition"],1)
 compute.t.tests <- function(qData,Conditions, Contrast="OnevsOne", type="Student"){
 
     
@@ -97,7 +97,7 @@ Cond.Nb<-length(levels(Conditions.f))
                 
                 txt <- paste(unique(Conditions[c1Indice]),"_vs_",unique(Conditions[c2Indice]), sep="")
 
-                logFC[[paste(txt, "logFC", sep="_")]] <- FC.tmp
+                logFC[[paste(txt, "logFC", sep="_")]] <- logFC.tmp
                 P_Value[[paste(txt, "pval", sep="_")]] <- p.tmp
             }
         }

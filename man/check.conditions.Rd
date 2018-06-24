@@ -4,7 +4,7 @@
 \alias{check.conditions}
 \title{Check if the design is valid}
 \usage{
-\method{check}{conditions}(conds)
+check.conditions(conds)
 }
 \arguments{
 \item{conds}{A vector}
@@ -18,7 +18,7 @@ This function check the validity of the conditions
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-check.conditions(Biobase::pData(Exp1_R25_pept)$Label)
+check.conditions(Biobase::pData(Exp1_R25_pept)$Condition)
 }
 \author{
 Samuel Wieczorek

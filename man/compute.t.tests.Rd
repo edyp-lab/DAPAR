@@ -39,7 +39,7 @@ lapala <- findMECBlock(obj)
 obj <- wrapper.impute.detQuant(obj)
 obj <- reIntroduceMEC(obj, lapala)
 obj <- wrapper.impute.detQuant(obj)
-ttest <- compute.t.tests(Biobase::exprs(obj), Biobase::pData(obj)[,"Label"],1)
+ttest <- compute.t.tests(Biobase::exprs(obj), Biobase::pData(obj)[,"Condition"],1)
 }
 \author{
 Florence Combes, Samuel Wieczorek

@@ -4,17 +4,17 @@
 \alias{boxPlotD}
 \title{Builds a boxplot from a dataframe}
 \usage{
-boxPlotD(qData, dataForXAxis = NULL, labels = NULL,
+boxPlotD(qData, dataForXAxis = NULL, conds = NULL,
   group2Color = "Condition")
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
 
 \item{dataForXAxis}{A vector containing the types of replicates 
-to use as X-axis. Available values are: Label, Bio.Rep,
-Bio.Rep and Tech.Rep. Default is "Label".}
+to use as X-axis. Available values are: Condition, Bio.Rep,
+Bio.Rep and Tech.Rep. Default is "Condition".}
 
-\item{labels}{A vector of the conditions (labels) (one label per sample).}
+\item{conds}{A vector of the conditions (one string per sample).}
 
 \item{group2Color}{A string that indicates how to color the replicates: 
 one color per condition (value "Condition") or one 
@@ -30,10 +30,10 @@ Boxplot for quantitative proteomics data
 require(DAPARdata)
 data(Exp1_R25_pept)
 qData <- Biobase::exprs(Exp1_R25_pept)
-types <- c("Label","Bio.Rep")
+types <- c("Condition","Bio.Rep")
 dataForXAxis <- Biobase::pData(Exp1_R25_pept)[,types]
-labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-boxPlotD(qData, dataForXAxis, labels)
+conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+boxPlotD(qData, dataForXAxis, conds)
 }
 \seealso{
 \code{\link{densityPlotD}}

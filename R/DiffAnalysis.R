@@ -44,7 +44,7 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0){
              )
          )
      
-     myColors <- getPaletteForLabels_HC(ncol(df_logFC))
+     myColors <- getPaletteForConditions_HC(ncol(df_logFC))
      
     for (i in 1:ncol(df_logFC)){
         tmp <- density(df_logFC[,i])
@@ -258,8 +258,7 @@ diffAnaGetSignificant <- function (obj){
 ##' @title Performs a calibration plot on an \code{MSnSet} object, 
 ##' calling the \code{cp4p} package functions. 
 ##' @param vPVal A dataframe that contains quantitative data.
-##' @param pi0Method A vector of the conditions (labels) (one label 
-##' per sample).
+##' @param pi0Method A vector of the conditions (one condition per sample).
 ##' @return A plot
 ##' @author Samuel Wieczorek
 ##' @examples

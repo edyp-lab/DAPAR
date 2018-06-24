@@ -16,11 +16,11 @@ heatmap.DAPAR(x, col = heat.colors(100), srtCol = NULL, labCol = NULL,
 
 \item{col}{colors used for the image. Defaults to heat colors (heat.colors).}
 
-\item{srtCol}{angle of column labels, in degrees from horizontal}
+\item{srtCol}{angle of column conds, in degrees from horizontal}
 
-\item{labCol}{character vectors with column labels to use.}
+\item{labCol}{character vectors with column conds to use.}
 
-\item{labRow}{character vectors with row labels to use.}
+\item{labRow}{character vectors with row conds to use.}
 
 \item{key}{logical indicating whether a color-key should be shown.}
 

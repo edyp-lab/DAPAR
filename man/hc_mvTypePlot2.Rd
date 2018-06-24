@@ -4,12 +4,12 @@
 \alias{hc_mvTypePlot2}
 \title{Distribution of Observed values with respect to intensity values}
 \usage{
-hc_mvTypePlot2(qData, labels)
+hc_mvTypePlot2(qData, conds)
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
 
-\item{labels}{A vector of the conditions (labels) (one label per sample).}
+\item{conds}{A vector of the conditions (one condition per sample).}
 }
 \value{
 Density plots
@@ -17,7 +17,7 @@ Density plots
 \description{
 This method shows density plots which represents the repartition of
 Partial Observed Values for each replicate in the dataset.
-The colors correspond to the different conditions (slot Label in in the
+The colors correspond to the different conditions (slot Condition in in the
 dataset of class \code{MSnSet}).
 The x-axis represent the mean of intensity for one condition and one
 entity in the dataset (i. e. a protein) 
@@ -28,8 +28,8 @@ and the considered condition.
 require(DAPARdata)
 data(Exp1_R25_pept)
 qData <- Biobase::exprs(Exp1_R25_pept)
-labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-hc_mvTypePlot2(qData, labels)
+conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+hc_mvTypePlot2(qData, conds)
 }
 \author{
 Samuel Wieczorek

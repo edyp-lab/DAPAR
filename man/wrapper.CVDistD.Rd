@@ -15,8 +15,8 @@ A density plot
 \description{
 Builds a densityplot of the CV of entities in the exprs() table
 of an object \code{MSnSet}. The variance is calculated for each 
-condition (Label) present
-in the dataset (see the slot \code{'Label'} in the \code{pData()} table).
+condition present
+in the dataset (see the slot \code{'Condition'} in the \code{pData()} table).
 }
 \examples{
 require(DAPARdata)

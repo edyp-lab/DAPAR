@@ -4,17 +4,17 @@
 \alias{violinPlotD}
 \title{Builds a violinplot from a dataframe}
 \usage{
-violinPlotD(qData, dataForXAxis = NULL, labels = NULL,
+violinPlotD(qData, dataForXAxis = NULL, conds = NULL,
   group2Color = "Condition")
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
 
 \item{dataForXAxis}{A vector containing the types of replicates 
-to use as X-axis. Available values are: Label, Bio.Rep,
-Bio.Rep and Tech.Rep. Default is "Label".}
+to use as X-axis. Available values are: Condition, Bio.Rep,
+Bio.Rep and Tech.Rep. Default is "Condition".}
 
-\item{labels}{A vector of the conditions (labels) (one label per sample).}
+\item{conds}{A vector of the conditions (one condition per sample).}
 
 \item{group2Color}{A string that indicates how to color the replicates: 
 one color per condition (value "Condition") or one 
@@ -31,10 +31,10 @@ require(DAPARdata)
 data(Exp1_R25_pept)
 library(vioplot)
 qData <- Biobase::exprs(Exp1_R25_pept)
-types <- c("Label","Bio.Rep")
+types <- c("Condition","Bio.Rep")
 dataForXAxis <- Biobase::pData(Exp1_R25_pept)[,types]
-labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-violinPlotD(qData, dataForXAxis, labels)
+conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+violinPlotD(qData, dataForXAxis, conds)
 }
 \seealso{
 \code{\link{densityPlotD}}
