@@ -461,7 +461,7 @@ x <- barplot(NbNAPerCol,
 
 par(xpd = TRUE)
 graphics::text(x, -3,
-        conds = colnames(qData),
+        label = colnames(qData),
         srt = 45,
         adj=1,
         cex=1.4)

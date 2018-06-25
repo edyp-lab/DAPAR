@@ -174,8 +174,11 @@ GraphPepProt <- function(mat){
     #par(mar=c(6,4,4,8) + 0.1)#, mgp=c(3,0.5,0)
     barplot(tab, 
             xlim=c(1, length(tab)),
-            xlab="Nb of peptides", ylab="Nb of proteins",
-            names.arg=conds, xaxp=c(1, length(tab), 3), las=1
+            xlab="Nb of peptides", 
+            ylab="Nb of proteins",
+            names.arg=conds, 
+            xaxp=c(1, length(tab), 3), 
+            las=1
             , col = "orange")
 
 }
