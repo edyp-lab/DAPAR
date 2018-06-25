@@ -58,7 +58,6 @@ wrapper.boxPlotD_HC <- function(obj,
                              group2Color="Condition"){
     
     qData <- Biobase::exprs(obj)
-    #dataForXAxis <- as.matrix(Biobase::pData(obj)[,dataForXAxis])
     dataForXAxis <- as.matrix(Biobase::pData(obj)[,dataForXAxis])
     
     conds <- Biobase::pData(obj)[,"Condition"]
@@ -107,7 +106,6 @@ if (group2Color == "Condition") {
         pal <- getPaletteForReplicates(ncol(qData))}
 
     if (is.null(conds)){size <- 2}else{size <- 2*length(conds)}
-   #par(mar=c(size,4,2,2))
         
 boxplot(qData
         ,las = 1
@@ -125,17 +123,13 @@ if( !is.null(dataForXAxis))
 {
 if (is.vector(dataForXAxis) ){
     xAxisLegend <- dataForXAxis
-    } 
-    else{ 
-        xAxisLegend <- NULL
-        N <- nrow(dataForXAxis)
-        for (i in 1:N){
-            xAxisLegend <- c(xAxisLegend, paste(dataForXAxis[i,], collapse="_"))
-        }
+    }else{ 
+            xAxisLegend <- apply(dataForXAxis, 1, function(x){paste(x, collapse="_")})
+
     }
     axis(side=1,
          at = 1:ncol(qData),
-         conds = xAxisLegend)
+         label = xAxisLegend)
 
 mtext("Samples", 
     side=1, 
@@ -332,7 +326,7 @@ violinPlotD <- function(qData,
         for (i in 1:N){
             axis(side=1,
                  at = 1:ncol(qData),
-                 conds = if (is.vector(dataForXAxis) ) 
+                 label = if (is.vector(dataForXAxis) ) 
                      {dataForXAxis} else {dataForXAxis[,i]},
                  line= 2*i-1
             )
@@ -810,11 +804,10 @@ densityPlotD_HC <- function(qData, condsForLegend=NULL,indData2Show=NULL,
     
     myColors <- NULL
     ##Colors definition
-    if (group2Color == "Condition") {
-      myColors <- getPaletteForConditions_HC(condsForLegend)[indData2Show]
-    } else { 
-      myColors<- getPaletteForReplicates_HC(ncol(qData))[indData2Show]
-    }
+    switch(group2Color,
+      Condition = myColors <- getPaletteForConditions_HC(condsForLegend)[indData2Show],
+     Replicate = myColors<- getPaletteForReplicates_HC(ncol(qData))[indData2Show]
+    )
 
     series <- list()
     for (i in 1:length(indData2Show)){
@@ -1411,7 +1404,7 @@ heatmap.DAPAR <-
         
         if (!is.null(labCol)) 
         {
-            axis(1, 1:nc, conds = labCol, las = 2, line = -0.5 + 
+            axis(1, 1:nc, label = labCol, las = 2, line = -0.5 + 
                      offsetCol, tick = 0, cex.axis = cexCol, hadj = NA, 
                  padj = 0)
         }
@@ -1419,26 +1412,26 @@ heatmap.DAPAR <-
                 adjCol = c(1, NA)
                 xpd.orig <- par("xpd")
                 par(xpd = NA)
-                xpos <- axis(1, 1:nc, conds = rep("", nc), las = 2, 
+                xpos <- axis(1, 1:nc, label = rep("", nc), las = 2, 
                              tick = 0)
                 text(x = xpos, y = par("usr")[3] - (1 + offsetCol) * 
-                         strheight("M"), conds = labCol, adj = adjCol, 
+                         strheight("M"), label = labCol, adj = adjCol, 
                      cex = cexCol, srt = srtCol, col = colCol)
                 par(xpd = xpd.orig)
         }
         
         
         if (!is.null(labRow) ) {
-            axis(4, iy, conds = labRow, las = 5, line = -0.5 + offsetRow, 
+            axis(4, iy, label = labRow, las = 5, line = -0.5 + offsetRow, 
                  tick = 0, cex.axis = cexRow, hadj = 0, padj = NA)
         }
         else {
                 xpd.orig <- par("xpd")
                 par(xpd = NA)
-                ypos <- axis(4, iy, conds = rep("", nr), las = 2, 
+                ypos <- axis(4, iy, label = rep("", nr), las = 2, 
                              line = -0.5, tick = 0)
                 text(x = par("usr")[2] + (1 + offsetRow) * strwidth("M"), 
-                     y = ypos, conds = labRow, adj = c(0,NA), cex = cexRow, 
+                     y = ypos, label = labRow, adj = c(0,NA), cex = cexRow, 
                      srt = srtRow, col = colRow)
                 par(xpd = xpd.orig)
         }
@@ -1471,7 +1464,7 @@ heatmap.DAPAR <-
             par(usr = c(0, 1, 0, 1))
             lv <- pretty(breaks)
             xv <- scale01(as.numeric(lv), min.raw, max.raw)
-            xargs <- list(at = xv, conds = lv)
+            xargs <- list(at = xv, label = lv)
             
             xargs$side <- 1
             do.call(axis, xargs)
