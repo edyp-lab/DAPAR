@@ -1183,7 +1183,8 @@ corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
         hc_plotOptions(
             series = list(
                 boderWidth = 0,
-                dataConditions = list(enabled = TRUE)
+                dataConditions = list(enabled = TRUE),
+                dataLabels = list(enabled = TRUE)
             )) %>% 
         hc_tooltip(formatter = fntltp) %>% 
         hc_legend(align = "right", layout = "vertical",
