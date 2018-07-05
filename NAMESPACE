@@ -25,17 +25,17 @@ import(cp4p)
 
 import(tidyverse)
 import(imp4p)
-importFrom("graphics", "par", "boxplot", "axis", "mtext", "abline", "points", 
+importFrom("graphics", "par", "boxplot", "axis", "mtext", "abline", "points",
             "legend", "lines",  "barplot", "text",
            "layout", "plot.new", "strheight", "strwidth", "title","plot.window")
- 
-importFrom("stats", "lowess", "cor", "density","pexp", "mad", 
-            "var", "t.test", "dist", "hclust", "setNames", 
+
+importFrom("stats", "lowess", "cor", "density","pexp", "mad",
+            "var", "t.test", "dist", "hclust", "setNames",
             "median", "p.adjust", "model.matrix", "rnorm","na.omit",
            "quantile", "rbeta", "runif", "sd", "pchisq", "residuals","formula", "lm", "logLik")
 importFrom("preprocessCore", "normalize.quantiles")
 importFrom("gplots", "heatmap.2")
-#import("limma")
+importFrom("limma", "lmFit", "eBayes", "topTable", "makeContrasts", "contrasts.fit", "normalizeCyclicLoess", "loessFit")
 importFrom("pcaMethods", "completeObs", "pca")
 importFrom("scales", "alpha")
 importFrom("grDevices", "colorRampPalette", "palette", "heat.colors")
@@ -48,6 +48,7 @@ import("graph")
 importFrom("stringr", "str_match_all")
 importFrom("clusterProfiler", "bitr", "enrichGO", "groupGO")
 import("imputeLCMD")
+importFrom("vsn","vsn2","predict")
 
 export(
 "writeMSnsetToExcel",
@@ -102,20 +103,14 @@ export(
 
 
 
-## limma Complete test
-,"limmaCompleteTest"
-,"check.design"
-,"check.conditions"
 
-
-
-
+,"wrapper.limmaCompleteTest"
 ,"wrapper.t_test_Complete"
 ,"diffAnaVolcanoplot_rCharts"
 ,"diffAnaSave"
 ,"diffAnaComputeFDR"
 ,"wrapperCalibrationPlot"
-,"hc_logFC_DensityPlot"
+,"hc_FC_DensityPlot"
 
 
 ,"getProcessingInfo"
