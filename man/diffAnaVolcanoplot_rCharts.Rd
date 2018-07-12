@@ -44,6 +44,7 @@ customizable tooltip appears when the user put the mouse's pointer over
 a point of the scatter plot.
 }
 \examples{
+\donttest{
 library(highcharter) 
 library(tidyverse)
 require(DAPARdata)
@@ -65,7 +66,8 @@ if (ncol(df) > 3){
 hc_clickFunction <- JS("function(event) {
 Shiny.onInputChange('eventPointClicked', [this.index]);}")
 cond <- c("25fmol", "10fmol")
-diffAnaVolcanoplot_rCharts(df, 2.5, 1, cond,hc_clickFunction) 
+diffAnaVolcanoplot_rCharts(df, 2.5, 1, cond,hc_clickFunction)
+}
 }
 \author{
 Samuel Wieczorek

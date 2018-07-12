@@ -20,7 +20,7 @@
 hc_FC_DensityPlot <-function(df_FC, threshold_LogFC = 0){
     
     if (is.null(df_FC)){return()}
-
+    df_FC <- as.data.frame(df_FC)
      hc <-  highchart() %>% 
          hc_title(text = "log(FC) repartition") %>% 
          my_hc_chart(chartType = "spline", zoomType="x") %>%
@@ -160,7 +160,7 @@ diffAnaSave <- function (obj, allComp, data=NULL, l.params){
   if (is.null(l.params$th_logFC)) l.params$th_logFC<-0
   
     
-  ####### SAVE ALL THEPAIRWISE COMPARISON RESULTS
+  ####### SAVE ALL THE PAIRWISE COMPARISON RESULTS
   
   .fc <- as.data.frame(allComp$FC)
   .pval <- as.data.frame(allComp$P_Value)

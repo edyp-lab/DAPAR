@@ -116,6 +116,7 @@ return(p)
 ##' @return An interactive volcanoplot
 ##' @author Samuel Wieczorek
 ##' @examples
+##' \donttest{
 ##' library(highcharter) 
 ##' library(tidyverse)
 ##' require(DAPARdata)
@@ -137,7 +138,8 @@ return(p)
 ##' hc_clickFunction <- JS("function(event) {
 ##' Shiny.onInputChange('eventPointClicked', [this.index]);}")
 ##' cond <- c("25fmol", "10fmol")
-##' diffAnaVolcanoplot_rCharts(df, 2.5, 1, cond,hc_clickFunction) 
+##' diffAnaVolcanoplot_rCharts(df, 2.5, 1, cond,hc_clickFunction)
+##' }
 diffAnaVolcanoplot_rCharts <- function(df, 
                                         threshold_pVal=1e-60, 
                                         threshold_logFC=0, 
