@@ -6,7 +6,7 @@
 \usage{
 createMSnset(file, metadata = NULL, indExpData, indFData, indiceID = NULL,
   indexForOriginOfValue = NULL, logData = FALSE, replaceZeros = FALSE,
-  pep_prot_data = NULL)
+  pep_prot_data = NULL, versions = NULL)
 }
 \arguments{
 \item{file}{The name of a tab-separated file that contains the data.}
@@ -32,7 +32,9 @@ log-transformed (Default is FALSE)}
 \item{replaceZeros}{A boolean value to indicate if the 0 and NaN values of
 intensity have to be replaced by NA (Default is FALSE)}
 
-\item{pep_prot_data}{A string that indicates whether the dataset is about 
+\item{pep_prot_data}{A string that indicates whether the dataset is about}
+
+\item{versions}{A list of the following items: Prostar_Version, DAPAR_Version
 peptides or proteins.}
 }
 \value{

@@ -4,13 +4,13 @@
 \alias{normalizeD}
 \title{Normalisation}
 \usage{
-normalizeD(qData, labels, method, type = NULL, scaling = FALSE,
+normalizeD(qData, conds, method, type = NULL, scaling = FALSE,
   quantile = 0.15)
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
 
-\item{labels}{A vector of strings containing the column "Label" of 
+\item{conds}{A vector of strings containing the column "Condition" of 
 the \code{pData()}.}
 
 \item{method}{One of the following : Global Alignment, 
@@ -53,8 +53,8 @@ by condition.
 require(DAPARdata)
 data(Exp1_R25_pept)
 qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
-labels <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Label"]
-normalizeD(qData, labels, "Quantile Centering", "within conditions", quantile = 0.15)
+conds <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Condition"]
+normalizeD(qData, conds, "Quantile Centering", "within conditions", quantile = 0.15)
 }
 \author{
 Samuel Wieczorek, Thomas Burger

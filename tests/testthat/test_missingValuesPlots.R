@@ -104,7 +104,7 @@ test_that("wrapper.mvHisto showValues = TRUE", {
 test_that("mvHisto showValues = FALSE", {
     qData <- Biobase::exprs(test)
     samplesData <- Biobase::pData(test)
-    labels <- Biobase::pData(test)[,"Label"]
+    labels <- Biobase::pData(test)[,"Condition"]
     t <- mvHisto(qData, samplesData, labels, indLegend="auto", showValues=FALSE)
     expect_null(t)
     dev.off()
@@ -116,7 +116,7 @@ test_that("mvHisto showValues = FALSE", {
 test_that("mvHisto showValues = TRUE", {
     qData <- Biobase::exprs(test)
     samplesData <- Biobase::pData(test)
-    labels <- Biobase::pData(test)[,"Label"]
+    labels <- Biobase::pData(test)[,"Condition"]
     t <- mvHisto(qData, samplesData, labels, indLegend="auto", showValues=TRUE)
     expect_null(t)
     dev.off()
@@ -136,7 +136,7 @@ test_that("wrapper.mvImage", {
 
 
 test_that("wrapper.mvImage", {
-    labels <- Biobase::pData(test)[,"Label"]
+    labels <- Biobase::pData(test)[,"Condition"]
     t <- mvImage(Biobase::exprs(test), labels)
     expect_null(t)
     dev.off()
@@ -154,7 +154,7 @@ test_that("wrapper.mvTypePlot", {
 
 test_that("mvTypePlot", {
     qData <- Biobase::exprs(test)
-    labels <- Biobase::pData(test)[,"Label"]
+    labels <- Biobase::pData(test)[,"Condition"]
     
     t <- mvTypePlot(qData, labels)
     expect_equal(t$text$x, c(33.5225, 33.5225), tolerance=1e-2)

@@ -35,7 +35,7 @@ importFrom("stats", "lowess", "cor", "density","pexp", "mad",
            "quantile", "rbeta", "runif", "sd", "pchisq", "residuals","formula", "lm", "logLik")
 importFrom("preprocessCore", "normalize.quantiles")
 importFrom("gplots", "heatmap.2")
-importFrom("limma", "lmFit", "eBayes", "topTable", "makeContrasts", "contrasts.fit")
+#import("limma")
 importFrom("pcaMethods", "completeObs", "pca")
 importFrom("scales", "alpha")
 importFrom("grDevices", "colorRampPalette", "palette", "heat.colors")
@@ -102,14 +102,20 @@ export(
 
 
 
+## limma Complete test
+,"limmaCompleteTest"
+,"check.design"
+,"check.conditions"
 
-,"wrapper.limmaCompleteTest"
+
+
+
 ,"wrapper.t_test_Complete"
 ,"diffAnaVolcanoplot_rCharts"
 ,"diffAnaSave"
 ,"diffAnaComputeFDR"
 ,"wrapperCalibrationPlot"
-,"hc_FC_DensityPlot"
+,"hc_logFC_DensityPlot"
 
 
 ,"getProcessingInfo"

@@ -97,15 +97,15 @@ getListNbValuesInLines <- function(obj, type="wholeMatrix"){
            },
          allCond = {
                     tmp <- NULL
-                    for (cond in unique(Biobase::pData(obj)$Label)){
-                     tmp <- c(tmp, length(which(Biobase::pData(obj)$Label== cond)))
+                    for (cond in unique(Biobase::pData(obj)$Condition)){
+                     tmp <- c(tmp, length(which(Biobase::pData(obj)$Condition== cond)))
                   }
                   ll <- seq(0,min(tmp))
                   },
          atLeastOneCond = {
                    tmp <- NULL
-                  for (cond in unique(Biobase::pData(obj)$Label)){
-                       tmp <- c(tmp, length(which(Biobase::pData(obj)$Label== cond)))
+                  for (cond in unique(Biobase::pData(obj)$Condition)){
+                       tmp <- c(tmp, length(which(Biobase::pData(obj)$Condition== cond)))
                    }
                    ll <- seq(0,max(tmp))
                     }
@@ -120,11 +120,11 @@ getListNbValuesInLines <- function(obj, type="wholeMatrix"){
 ##' indices for the samples.
 ##' 
 ##' @title Gets the conditions indices.
-##' @param labels A vector of strings containing the column "Label" of 
+##' @param conds A vector of strings containing the column "Condition" of 
 ##' the \code{pData()}.
-##' @param cond1 A vector of Labels (a slot in the \code{pData()} table) for
+##' @param cond1 A vector of Conditions (a slot in the \code{pData()} table) for
 ##' the condition 1.
-##' @param cond2 A vector of Labels (a slot in the \code{pData()} table) for
+##' @param cond2 A vector of Conditions (a slot in the \code{pData()} table) for
 ##' the condition 2.
 ##' @return A list with two slots \code{iCond1} and \code{iCond2} containing
 ##' respectively the indices of samples in the \code{pData()} table of the
@@ -133,18 +133,18 @@ getListNbValuesInLines <- function(obj, type="wholeMatrix"){
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-##' getIndicesConditions(labels, "25fmol", "10fmol")
-getIndicesConditions <- function(labels, cond1, cond2){
+##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+##' getIndicesConditions(conds, "25fmol", "10fmol")
+getIndicesConditions <- function(conds, cond1, cond2){
 indCondition1 <- indCondition2 <- NULL
 
 for(i in 1:length(cond1)){
     indCondition1 <- c(indCondition1,
-                        which(labels == cond1[i]))
+                        which(conds == cond1[i]))
 }
 for(i in 1:length(cond2)){
     indCondition2 <- c(indCondition2,
-                        which(labels == cond2[i]))
+                        which(conds == cond2[i]))
 }
 
 return(list(iCond1 = indCondition1, iCond2 = indCondition2))
@@ -157,23 +157,23 @@ return(list(iCond1 = indCondition1, iCond2 = indCondition2))
 ##' the brewer palette "Dark2" (see \code{\link{RColorBrewer}}).
 ##' 
 ##' @title Palette for plots in \code{DAPAR}
-##' @param labels A vector of labels (strings).
+##' @param conds A vector of conditions (strings).
 ##' @return A palette designed for the data manipulated in \code{DAPAR}
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-##' getPaletteForLabels(labels)
-getPaletteForLabels <- function(labels){
+##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+##' getPaletteForConditions(conds)
+getPaletteForConditions <- function(conds){
     nColors <- 8
     col <- c(1:nColors)
     palette(brewer.pal(nColors,"Dark2"))
     
-    ## Define one color per label/condition
+    ## Define one color per condition
     col.boxplot <- NULL
-    for (i in 1:length(labels)){
-        col.boxplot[which(labels == unique(labels)[i])] <- col[i]
+    for (i in 1:length(conds)){
+        col.boxplot[which(conds == unique(conds)[i])] <- col[i]
     }
     
     return (col.boxplot)
@@ -185,24 +185,24 @@ getPaletteForLabels <- function(labels){
 ##' the brewer palette "Dark2" (see \code{\link{RColorBrewer}}).
 ##' 
 ##' @title Palette for highcharter plots used in \code{DAPAR}
-##' @param labels A vector of labels (strings).
+##' @param conds A vector of conditions (strings).
 ##' @return A palette designed for the data manipulated in \code{DAPAR}
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-##' getPaletteForLabels_HC(labels)
-getPaletteForLabels_HC <- function(labels){
+##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+##' getPaletteForConditions_HC(conds)
+getPaletteForConditions_HC <- function(conds){
   nColors <- 8
   #col <- c(1:nColors)
   #pal <- c('#7cb5ec', '#434348', '#90ed7d', '#f7a35c', '#8085e9', '#f15c80', '#e4d354', '#2b908f', '#f45b5b', '#91e8e1')
   #pal <- c("#002F80", "#002F80","#002F80","#002F80","#F9AF38","#F9AF38","#F9AF38","#F9AF38")
   pal <- brewer.pal(nColors, "Dark2")
-  ## Define one color per label/condition
+  ## Define one color per condition
   col.boxplot <- NULL
-  for (i in 1:length(labels)){
-    col.boxplot[which(labels == unique(labels)[i])] <- pal[i]
+  for (i in 1:length(conds)){
+    col.boxplot[which(conds == unique(conds)[i])] <- pal[i]
   }
   
   return (col.boxplot)

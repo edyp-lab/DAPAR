@@ -4,12 +4,12 @@
 \alias{mvTypePlot}
 \title{Distribution of missing values with respect to intensity values}
 \usage{
-mvTypePlot(qData, labels, threshold = 0, type = "MV")
+mvTypePlot(qData, conds, threshold = 0, type = "MV")
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
 
-\item{labels}{A vector of the conditions (labels) (one label per sample).}
+\item{conds}{A vector of the conditions (one condition per sample).}
 
 \item{threshold}{An integer for the intensity that delimits MNAR and 
 MCAR missing values.}
@@ -23,7 +23,7 @@ A scatter plot
 \description{
 This method plots a scatter plot which represents the distribution of
 missing values.
-The colors correspond to the different conditions (slot Label in in the
+The colors correspond to the different conditions (slot Condition in in the
 dataset of class \code{MSnSet}).
 The x-axis represent the mean of intensity for one condition and one
 entity in the dataset (i. e. a protein) 
@@ -35,8 +35,8 @@ The data have been jittered for an easier vizualisation.
 require(DAPARdata)
 data(Exp1_R25_pept)
 qData <- Biobase::exprs(Exp1_R25_pept)
-labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-mvTypePlot(qData, labels, threshold=0)
+conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+mvTypePlot(qData, conds, threshold=0)
 }
 \author{
 Florence Combes, Samuel Wieczorek

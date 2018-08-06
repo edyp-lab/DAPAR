@@ -13,7 +13,7 @@ diffAnaSave(obj, allComp, data = NULL, l.params)
 \item{allComp}{A list of two items which is the result of the function wrapper.limmaCompleteTest or xxxx}
 
 \item{data}{The result of the differential analysis processed 
-by \code{\link{wrapper.limmaCompleteTest}}}
+by \code{\link{limmaCompleteTest}}}
 
 \item{l.params}{A list of parameters:
 comp The name of the comparison 
@@ -34,12 +34,12 @@ of differential analysis.
 require(DAPARdata)
 data(Exp1_R25_pept)
 obj <- Exp1_R25_pept
-lapala <- findMECBlock(obj)
-obj <- wrapper.impute.detQuant(obj)
-obj <- reIntroduceMEC(obj, lapala)
-obj <- wrapper.impute.detQuant(obj)
-allComp <- wrapper.limmaCompleteTest(obj, 1)
-data <- list(FC=allComp$FC[1], P_Value = allComp$P_Value[1])
+keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+obj <- mvFilterFromIndices(obj, keepThat)
+qData <- Biobase::exprs(obj)
+sTab <- Biobase::pData(obj)
+allComp <- limmaCompleteTest(qData,sTab)
+data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
 params <- list(design="OnevsOne", method="limma", th_logFC=0)
 diffAnaSave(obj, allComp, data, params)
 }

@@ -20,7 +20,7 @@
 wrapper.t_test_Complete <- function(obj,...){
     
     qData <- Biobase::exprs(obj)
-    conds <- pData(obj)[,"Label"]
+    conds <- pData(obj)[,"Condition"]
     
     ttest <- compute.t.tests(qData,Conditions=conds,...)
     
@@ -43,7 +43,7 @@ wrapper.t_test_Complete <- function(obj,...){
 ##' or each condition versus all others (Contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
 ##' H1:"C1!=(C2+C3)/2", etc. if there are three conditions).
 ##' @param type xxxxx
-##' @return A list of two items : FC and P_Value; both are dataframe. The first one contains
+##' @return A list of two items : logFC and P_Value; both are dataframe. The first one contains
 ##' the logFC values of all the comparisons (one column for one comparison), the second one contains
 ##' the pvalue of all the comparisons (one column for one comparison). The names of the columns for those two dataframes
 ##' are identical and correspond to the description of the comparison. 
@@ -56,7 +56,7 @@ wrapper.t_test_Complete <- function(obj,...){
 ##' obj <- wrapper.impute.detQuant(obj)
 ##' obj <- reIntroduceMEC(obj, lapala)
 ##' obj <- wrapper.impute.detQuant(obj)
-##' ttest <- compute.t.tests(Biobase::exprs(obj), Biobase::pData(obj)[,"Label"],1)
+##' ttest <- compute.t.tests(Biobase::exprs(obj), Biobase::pData(obj)[,"Condition"],1)
 compute.t.tests <- function(qData,Conditions, Contrast="OnevsOne", type="Student"){
 
     
@@ -67,7 +67,7 @@ compute.t.tests <- function(qData,Conditions, Contrast="OnevsOne", type="Student
     
     
 res<-list()
-FC <- list()
+logFC <- list()
 P_Value <- list()
 
 nbComp <- NULL
@@ -93,11 +93,11 @@ Cond.Nb<-length(levels(Conditions.f))
                 p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))
                 m1.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[1])))
                 m2.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[2])))
-                FC.tmp <- m1.tmp - m2.tmp
+                logFC.tmp <- m1.tmp - m2.tmp
                 
                 txt <- paste(unique(Conditions[c1Indice]),"_vs_",unique(Conditions[c2Indice]), sep="")
 
-                FC[[paste(txt, "FC", sep="_")]] <- FC.tmp
+                logFC[[paste(txt, "logFC", sep="_")]] <- logFC.tmp
                 P_Value[[paste(txt, "pval", sep="_")]] <- p.tmp
             }
         }
@@ -122,21 +122,21 @@ Cond.Nb<-length(levels(Conditions.f))
             p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))
             m1.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[1])))
             m2.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[2])))
-            FC.tmp <- m1.tmp - m2.tmp
+            logFC.tmp <- m1.tmp - m2.tmp
             
             txt <- paste(unique(Conditions[c1]),"_vs_(all-",unique(Conditions[c1]),")", sep="")
             
-            FC[[paste(txt, "FC", sep="_")]] <- FC.tmp
+            logFC[[paste(txt, "logFC", sep="_")]] <- logFC.tmp
             P_Value[[paste(txt, "pval", sep="_")]] <- p.tmp
         }
     } # End Contrast=2
     
 
     res.l <- list(
-              FC = as.data.frame(FC),
+              logFC = as.data.frame(logFC),
               P_Value = as.data.frame(P_Value)
     )
-    colnames(res.l$FC) <- names(FC)
+    colnames(res.l$logFC) <- names(logFC)
     colnames(res.l$P_Value) <- names(P_Value)
 
     return(res.l) 

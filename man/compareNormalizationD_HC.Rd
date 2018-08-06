@@ -5,7 +5,7 @@
 \title{Builds a plot from a dataframe. Same as compareNormalizationD but 
 uses the library \code{highcharter}}
 \usage{
-compareNormalizationD_HC(qDataBefore, qDataAfter, labelsForLegend = NULL,
+compareNormalizationD_HC(qDataBefore, qDataAfter, condsForLegend = NULL,
   indData2Show = NULL, group2Color = "Condition")
 }
 \arguments{
@@ -15,7 +15,7 @@ normalization.}
 \item{qDataAfter}{A dataframe that contains quantitative data after 
 normalization.}
 
-\item{labelsForLegend}{A vector of the conditions (labels) (one label 
+\item{condsForLegend}{A vector of the conditions (one condition 
 per sample).}
 
 \item{indData2Show}{A vector of the indices of the columns to show in 
@@ -38,10 +38,10 @@ require(DAPARdata)
 data(Exp1_R25_pept)
 obj <- Exp1_R25_pept[1:1000]
 qDataBefore <- Biobase::exprs(obj)
-labels <- Biobase::pData(obj)[,"Label"]
-qDataAfter <- normalizeD(qDataBefore,labels,"Quantile Centering",
+conds <- Biobase::pData(obj)[,"Condition"]
+qDataAfter <- normalizeD(qDataBefore,conds,"Quantile Centering",
 "within conditions")
-compareNormalizationD_HC(qDataBefore, qDataAfter, labels)
+compareNormalizationD_HC(qDataBefore, qDataAfter, conds)
 }
 \author{
 Samuel Wieczorek

@@ -120,7 +120,7 @@ wrapper.dapar.impute.mi <- function (obj, nb.iter = 3,
                                      distribution="unif") 
 {
     
-    conditions <- as.factor(Biobase::pData(obj)$Label)
+    conditions <- as.factor(Biobase::pData(obj)$Condition)
     repbio <- as.factor(Biobase::pData(obj)$Bio.Rep)
     reptech <-as.factor(Biobase::pData(obj)$Tech.Rep)
     
@@ -226,7 +226,7 @@ translatedRandomBeta <- function(n, min, max, param1=3, param2=1){
 ##' wrapper.impute.pa2(Exp1_R25_pept[1:1000], distribution="beta")
 wrapper.impute.pa2 <- function (obj, q.min = 0, q.norm = 3, eps = 0, distribution = "unif"){
     tab <- Biobase::exprs(obj)
-    conditions <- as.factor(Biobase::pData(obj)$Label)
+    conditions <- as.factor(Biobase::pData(obj)$Condition)
     
     tab_imp <- impute.pa2(tab, conditions, q.min, q.norm, eps, distribution)
     Biobase::exprs(obj) <- tab_imp

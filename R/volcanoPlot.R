@@ -7,7 +7,7 @@
 ##' non differential data.
 ##' 
 ##' @title Volcanoplot of the differential analysis
-##' @param FC A vector of the log(fold change) values of the differential
+##' @param logFC A vector of the log(fold change) values of the differential
 ##' analysis.
 ##' @param pVal A vector of the p-value values returned by the differential
 ##' analysis.
@@ -23,13 +23,13 @@
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' obj <- Exp1_R25_pept[1:1000]
-##' MEC <- findMECBlock(obj)
-##' obj <- wrapper.impute.detQuant(obj)
-##' obj <- reIntroduceMEC(obj, MEC)
-##' obj <- wrapper.impute.detQuant(obj)
-##' limma <- wrapper.limmaCompleteTest(obj, 1)
-##' diffAnaVolcanoplot(limma$FC[,1], limma$P_Value[,1])
-diffAnaVolcanoplot <- function(FC=NULL, 
+##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+##' obj <- mvFilterFromIndices(obj, keepThat)
+##' qData <- Biobase::exprs(obj)
+##' sTab <- Biobase::pData(obj)
+##' limma <- limmaCompleteTest(qData,sTab)
+##' diffAnaVolcanoplot(limma$logFC[,1], limma$P_Value[,1])
+diffAnaVolcanoplot <- function(logFC=NULL, 
                                 pVal=NULL, 
                                 threshold_pVal=1e-60, 
                                 threshold_logFC=0, 
@@ -39,7 +39,7 @@ xtitle <- paste("log2 ( mean(",conditions[2],") / mean(",conditions[1],") )",
                 sep="")
 
 
-if (is.null(FC)||is.null(pVal)) {
+if (is.null(logFC)||is.null(pVal)) {
 
     p <- plot(-1,-1
             , xlab = xtitle
@@ -51,7 +51,7 @@ if (is.null(FC)||is.null(pVal)) {
     return (NULL)
 }
 
-x <- FC
+x <- logFC
 y <- -log10(pVal)
 
 colorCode <- c("gray", "orange")
@@ -121,12 +121,12 @@ return(p)
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' obj <- Exp1_R25_pept[1:1000]
-##' MEC <- findMECBlock(obj)
-##' obj <- wrapper.impute.detQuant(obj)
-##' obj <- reIntroduceMEC(obj, MEC)
-##' obj <- wrapper.impute.detQuant(obj)
-##' data <- wrapper.limmaCompleteTest(obj, 1)
-##' df <- data.frame(x=data$FC, y = -log10(data$P_Value),index = as.character(rownames(obj)))
+##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+##' obj <- mvFilterFromIndices(obj, keepThat)
+##' qData <- Biobase::exprs(obj)
+##' sTab <- Biobase::pData(obj)
+##' data <- limmaCompleteTest(qData,sTab)
+##' df <- data.frame(x=data$logFC, y = -log10(data$P_Value),index = as.character(rownames(obj)))
 ##' colnames(df) <- c("x", "y", "index")
 ##' tooltipSlot <- c("Sequence", "Score")
 ##' df <- cbind(df,Biobase::fData(obj)[tooltipSlot])
@@ -153,7 +153,7 @@ diffAnaVolcanoplot_rCharts <- function(df,
     
     if (is.null(clickFunction)){
         clickFunction <- 
-            JS("function(event) {Shiny.onInputChange('eventPointClicked', [this.name]);}")
+            JS("function(event) {Shiny.onInputChange('eventPointClicked', [this.index]+'_'+ [this.series.name]);}")
     }
     
     
@@ -165,8 +165,7 @@ diffAnaVolcanoplot_rCharts <- function(df,
     i_tooltip <- which(startsWith(colnames(df),"tooltip"))
     txt_tooltip <- NULL
     for (i in i_tooltip){
-        t <- 
-            txt_tooltip <- paste(txt_tooltip,"<b>",gsub("tooltip_", "", 
+        t <- txt_tooltip <- paste(txt_tooltip,"<b>",gsub("tooltip_", "", 
                                                         colnames(df)[i], 
                                                         fixed=TRUE), 
                                  " </b>: {point.", colnames(df)[i],"} <br> ", 
@@ -178,13 +177,12 @@ diffAnaVolcanoplot_rCharts <- function(df,
         my_hc_chart(zoomType = "xy",chartType="scatter") %>%
         hc_legend(enabled = FALSE) %>%
         hc_yAxis(title = list(text="-log10(pValue)"),
-                 plotLines=list(list(color= "red" , width = 2, value = threshold_pVal, zIndex = 5)),
+                 plotBands = list(list(from= 0, to = threshold_pVal, color = "lightgrey")),
                  plotLines=list(list(color= "grey" , width = 2, value = 0, zIndex = 5))) %>%
-        hc_xAxis(title = list(text = "FC"),
+        hc_xAxis(title = list(text = "logFC"),
                  plotBands = list(list(from= -threshold_logFC, to = threshold_logFC, color = "lightgrey")),
                  plotLines=list(list(color= "grey" , width = 2, value = 0, zIndex = 5))) %>%
-        hc_tooltip(headerFormat= '',
-                   pointFormat = txt_tooltip) %>%
+        hc_tooltip(headerFormat= '',pointFormat = txt_tooltip) %>%
         hc_plotOptions( series = list( animation=list(duration = 100),
                                        cursor = "pointer", 
                                        point = list( events = list( 

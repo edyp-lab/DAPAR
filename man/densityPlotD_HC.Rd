@@ -4,17 +4,17 @@
 \alias{densityPlotD_HC}
 \title{Builds a densityplot from a dataframe}
 \usage{
-densityPlotD_HC(qData, labelsForLegend = NULL, indData2Show = NULL,
+densityPlotD_HC(qData, condsForLegend = NULL, indData2Show = NULL,
   group2Color = "Condition")
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
 
-\item{labelsForLegend}{A vector of the conditions (labels) (one label 
+\item{condsForLegend}{A vector of the conditions (one condition 
 per sample).}
 
 \item{indData2Show}{A vector of indices to show in densityplot. If NULL, 
-then all labels are displayed.}
+then all conditions are displayed.}
 
 \item{group2Color}{A string that indicates how to color the replicates: 
 one color per condition (value "Condition") or one 
@@ -31,8 +31,8 @@ but uses the package \code{highcharter}
 require(DAPARdata)
 data(Exp1_R25_pept)
 qData <- Biobase::exprs(Exp1_R25_pept)
-labels <- lab2Show <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-densityPlotD_HC(qData, labels)
+conds <- lab2Show <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+densityPlotD_HC(qData, conds)
 }
 \seealso{
 \code{\link{boxPlotD}}, \code{\link{CVDistD}}

@@ -4,13 +4,13 @@
 \alias{wrapper.densityPlotD_HC}
 \title{Builds a densityplot from an object of class \code{MSnSet}}
 \usage{
-wrapper.densityPlotD_HC(obj, labelsForLegend = NULL, indData2Show = NULL,
+wrapper.densityPlotD_HC(obj, condsForLegend = NULL, indData2Show = NULL,
   group2Color = "Condition")
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
 
-\item{labelsForLegend}{A vector of labels to show in densityplot.}
+\item{condsForLegend}{A vector of conds to show in densityplot.}
 
 \item{indData2Show}{A vector of the indices of the columns to show in 
 the plot. The indices are those of indices of the columns int the data
@@ -31,8 +31,8 @@ but uses the package \code{highcharter}
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-wrapper.densityPlotD_HC(Exp1_R25_pept, labels)
+conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+wrapper.densityPlotD_HC(Exp1_R25_pept, conds)
 }
 \seealso{
 \code{\link{wrapper.boxPlotD}}, 

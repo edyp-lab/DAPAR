@@ -4,7 +4,7 @@ data(Exp1_R25_prot)
 test <- Exp1_R25_prot[1:10]
 
 # test_that("wrapper boxplot", {
-#     types <- c("Label","Analyt.Rep")
+#     types <- c("Condition","Analyt.Rep")
 #     t <- wrapper.boxPlotD(test, types,group2Color="Replicate")
 #     expect_is(t, "character")
 #     expect_equal(t, c("black", "red","green3","blue","cyan","magenta", "yellow",  "gray"))
@@ -12,7 +12,7 @@ test <- Exp1_R25_prot[1:10]
 # })
 
 # test_that("wrapper boxplot", {
-#     types <- c("Label","Analyt.Rep")
+#     types <- c("Condition","Analyt.Rep")
 #     t <- wrapper.boxPlotD(test, types,group2Color="Condition")
 #     expect_is(t, "character")
 #     expect_equal(length(t), 8)
@@ -21,8 +21,8 @@ test <- Exp1_R25_prot[1:10]
 # })
 
 # test_that("boxplotD", {
-#     labels <- Biobase::pData(test)[,"Label"]
-#     types <- c("Label","Analyt.Rep")
+#     labels <- Biobase::pData(test)[,"Condition"]
+#     types <- c("Condition","Analyt.Rep")
 #     dataForXAxis <- Biobase::pData(test)[,types]
 #     t <- boxPlotD(exprs(test), dataForXAxis, labels,group2Color="Condition")
 #     expect_is(t, "character")
@@ -33,8 +33,8 @@ test <- Exp1_R25_prot[1:10]
 
 
 # test_that("boxplotD", {
-#     labels <- Biobase::pData(test)[,"Label"]
-#     types <- c("Label","Analyt.Rep")
+#     labels <- Biobase::pData(test)[,"Condition"]
+#     types <- c("Condition","Analyt.Rep")
 #     dataForXAxis <- Biobase::pData(test)[,types]
 #     t <- boxPlotD(exprs(test), dataForXAxis, labels,group2Color="Replicate")
 #     expect_is(t, "character")
@@ -44,7 +44,7 @@ test <- Exp1_R25_prot[1:10]
 # })
 
 # test_that("wrapper density plot", {
-#     types <- c("Label","Analyt.Rep")
+#     types <- c("Condition","Analyt.Rep")
 #     t <- wrapper.densityPlotD(test, types)
 #     expect_is(t, "list")
 #     expect_equal(t$rect$w, 4.122479, tolerance=1e-2)
@@ -54,8 +54,8 @@ test <- Exp1_R25_prot[1:10]
 
 
 # test_that("density plot", {
-#     types <- c("Label","Analyt.Rep")
-#     labels <- lab2Show <- Biobase::pData(test)[,"Label"]
+#     types <- c("Condition","Analyt.Rep")
+#     labels <- lab2Show <- Biobase::pData(test)[,"Condition"]
 #     qData <- Biobase::exprs(test)
 #     dataForXAxis <- Biobase::pData(test)[,types]
 #     t <-densityPlotD(qData, labels)
@@ -69,7 +69,7 @@ test <- Exp1_R25_prot[1:10]
 # test_that("wrapper violinPlot", {
 #     require(vioplot)
 #     require(sm)
-#     types <- c("Label","Analyt.Rep")
+#     types <- c("Condition","Analyt.Rep")
 #     t <- wrapper.violinPlotD(test, types,group2Color="Condition")
 #     expect_is(t, "character")
 #     expect_equal(length(t), 8)
@@ -80,7 +80,7 @@ test <- Exp1_R25_prot[1:10]
 # test_that("wrapper violinPlot", {
 #     require(vioplot)
 #     require(sm)
-#     types <- c("Label","Analyt.Rep")
+#     types <- c("Condition","Analyt.Rep")
 #     t <- wrapper.violinPlotD(test, types,group2Color="Replicate")
 #     expect_is(t, "character")
 #     expect_equal(length(t), 8)
@@ -89,8 +89,8 @@ test <- Exp1_R25_prot[1:10]
 # })
 
 # test_that("violinPlotD", {
-#     labels <- Biobase::pData(test)[,"Label"]
-#     types <- c("Label","Analyt.Rep")
+#     labels <- Biobase::pData(test)[,"Condition"]
+#     types <- c("Condition","Analyt.Rep")
 #     dataForXAxis <- Biobase::pData(test)[,types]
 #     t <- violinPlotD(exprs(test), dataForXAxis, labels,group2Color="Condition")
 #     expect_is(t, "character")
@@ -101,8 +101,8 @@ test <- Exp1_R25_prot[1:10]
 
 
 # test_that("violinPlotD", {
-#     labels <- Biobase::pData(test)[,"Label"]
-#     types <- c("Label","Analyt.Rep")
+#     labels <- Biobase::pData(test)[,"Condition"]
+#     types <- c("Condition","Analyt.Rep")
 #     dataForXAxis <- Biobase::pData(test)[,types]
 #     t <- violinPlotD(exprs(test), dataForXAxis, labels,group2Color="Replicate")
 # expect_is(t, "character")
@@ -113,7 +113,7 @@ test <- Exp1_R25_prot[1:10]
 
 
 # test_that("wrapper.compareNormalizationD", {
-#     labels <- Biobase::pData(test)[,"Label"]
+#     labels <- Biobase::pData(test)[,"Condition"]
 #     objAfter <- wrapper.normalizeD2(test, "Mean Centering", "within conditions")
 #    t <-  wrapper.compareNormalizationD(test, objAfter, labels)
 #     expect_is(t, "character")
@@ -125,7 +125,7 @@ test <- Exp1_R25_prot[1:10]
 
 # test_that("compareNormalizationD", {
 #     qDataBefore <- Biobase::exprs(test)
-#     labels <- Biobase::pData(test)[,"Label"]
+#     labels <- Biobase::pData(test)[,"Condition"]
 #     qDataAfter <- normalizeD2(qDataBefore,labels,"Quantile Centering","within conditions")
 #     t <- compareNormalizationD(qDataBefore, qDataAfter, labels)
 #     expect_is(t, "character")
@@ -146,7 +146,7 @@ test <- Exp1_R25_prot[1:10]
 
 
 # test_that("CVDistD", {
-#     t <- CVDistD(exprs(test), Biobase::pData(test)[,"Label"])
+#     t <- CVDistD(exprs(test), Biobase::pData(test)[,"Condition"])
 #     expect_is(t, "list")
 #     expect_equal(t$text$x, c(2.492999, 2.492999), tolerance=1e-1)
 #     expect_equal(t$text$y, c(2.470089, 2.379125), tolerance=1e-1)

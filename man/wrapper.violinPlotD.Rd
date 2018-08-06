@@ -4,13 +4,14 @@
 \alias{wrapper.violinPlotD}
 \title{Wrapper to the violinPlotD function on an object \code{MSnSet}}
 \usage{
-wrapper.violinPlotD(obj, dataForXAxis = "Label", group2Color = "Condition")
+wrapper.violinPlotD(obj, dataForXAxis = "Condition",
+  group2Color = "Condition")
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
 
 \item{dataForXAxis}{A vector of strings containing the names of columns 
-in \code{pData()} to print labels on X-axis (Default is "Label").}
+in \code{pData()} to print conditions on X-axis (Default is "Condition").}
 
 \item{group2Color}{A string that indicates how to color the replicates: one
 color per condition (value "Condition") or one 
@@ -27,7 +28,7 @@ of class \code{MSnSet}
 require(DAPARdata)
 data(Exp1_R25_pept)
 library(vioplot)
-types <- c("Label","Analyt.Rep")
+types <- c("Condition","Bio.Rep")
 wrapper.violinPlotD(Exp1_R25_pept, types)
 }
 \seealso{

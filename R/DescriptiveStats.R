@@ -4,7 +4,7 @@
 ##' @title Wrapper to the boxplotD function on an object \code{MSnSet}
 ##' @param obj An object of class \code{MSnSet}.
 ##' @param dataForXAxis A vector of strings containing the names of columns 
-##' in \code{pData()} to print labels on X-axis (Default is "Label").
+##' in \code{pData()} to print conditions on X-axis (Default is "Condition").
 ##' @param group2Color A string that indicates how to color the replicates: one
 ##' color per condition (value "Condition") or one 
 ##' color per replicate (value "Replicate"). Default value is by Condition.
@@ -14,19 +14,18 @@
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' types <- c("Label","Analyt.Rep")
+##' types <- c("Condition","Bio.Rep")
 ##' wrapper.boxPlotD(Exp1_R25_pept, types)
 wrapper.boxPlotD <- function(obj, 
-                            dataForXAxis="Label", 
+                            dataForXAxis="Condition", 
                             group2Color="Condition"){
 
 qData <- Biobase::exprs(obj)
-#dataForXAxis <- as.matrix(Biobase::pData(obj)[,dataForXAxis])
 dataForXAxis <- as.matrix(Biobase::pData(obj)[,dataForXAxis])
 
-labels <- Biobase::pData(obj)[,"Label"]
+conds <- Biobase::pData(obj)[,"Condition"]
 
-boxPlotD(qData, dataForXAxis, labels, group2Color)
+boxPlotD(qData, dataForXAxis, conds, group2Color)
 
 }
 
@@ -42,7 +41,7 @@ boxPlotD(qData, dataForXAxis, labels, group2Color)
 ##' @title Wrapper to the boxplotD_HC function on an object \code{MSnSet}
 ##' @param obj An object of class \code{MSnSet}.
 ##' @param dataForXAxis A vector of strings containing the names of columns 
-##' in \code{pData()} to print labels on X-axis (Default is "Label").
+##' in \code{pData()} to print conditions on X-axis (Default is "Condition").
 ##' @param group2Color A string that indicates how to color the replicates: one
 ##' color per condition (value "Condition") or one 
 ##' color per replicate (value "Replicate"). Default value is by Condition.
@@ -52,19 +51,18 @@ boxPlotD(qData, dataForXAxis, labels, group2Color)
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' types <- c("Label","Analyt.Rep")
+##' types <- c("Condition","Bio.Rep")
 ##' wrapper.boxPlotD_HC(Exp1_R25_pept, types)
 wrapper.boxPlotD_HC <- function(obj, 
-                             dataForXAxis="Label", 
+                             dataForXAxis="Condition", 
                              group2Color="Condition"){
     
     qData <- Biobase::exprs(obj)
-    #dataForXAxis <- as.matrix(Biobase::pData(obj)[,dataForXAxis])
     dataForXAxis <- as.matrix(Biobase::pData(obj)[,dataForXAxis])
     
-    labels <- Biobase::pData(obj)[,"Label"]
+    conds <- Biobase::pData(obj)[,"Condition"]
     
-    boxPlotD_HC(qData, dataForXAxis, labels, group2Color)
+    boxPlotD_HC(qData, dataForXAxis, conds, group2Color)
     
 }
 
@@ -80,9 +78,9 @@ wrapper.boxPlotD_HC <- function(obj,
 ##' @title Builds a boxplot from a dataframe
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param dataForXAxis A vector containing the types of replicates 
-##' to use as X-axis. Available values are: Label, Analyt.Rep,
-##' Bio.Rep and Tech.Rep. Default is "Label".
-##' @param labels A vector of the conditions (labels) (one label per sample).
+##' to use as X-axis. Available values are: Condition, Bio.Rep,
+##' Bio.Rep and Tech.Rep. Default is "Condition".
+##' @param conds A vector of the conditions (one string per sample).
 ##' @param group2Color A string that indicates how to color the replicates: 
 ##' one color per condition (value "Condition") or one 
 ##' color per replicate (value "Replicate"). Default value is by Condition.
@@ -93,22 +91,21 @@ wrapper.boxPlotD_HC <- function(obj,
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' types <- c("Label","Analyt.Rep")
+##' types <- c("Condition","Bio.Rep")
 ##' dataForXAxis <- Biobase::pData(Exp1_R25_pept)[,types]
-##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-##' boxPlotD(qData, dataForXAxis, labels)
+##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+##' boxPlotD(qData, dataForXAxis, conds)
 boxPlotD <- function(qData, 
                     dataForXAxis=NULL, 
-                    labels=NULL, 
+                    conds=NULL, 
                     group2Color="Condition"){
 
 if (group2Color == "Condition") {
-    pal <- getPaletteForLabels(labels)
+    pal <- getPaletteForConditions(conds)
 }else { 
         pal <- getPaletteForReplicates(ncol(qData))}
 
-    if (is.null(labels)){size <- 2}else{size <- 2*length(labels)}
-   #par(mar=c(size,4,2,2))
+    if (is.null(conds)){size <- 2}else{size <- 2*length(conds)}
         
 boxplot(qData
         ,las = 1
@@ -126,17 +123,13 @@ if( !is.null(dataForXAxis))
 {
 if (is.vector(dataForXAxis) ){
     xAxisLegend <- dataForXAxis
-    } 
-    else{ 
-        xAxisLegend <- NULL
-        N <- nrow(dataForXAxis)
-        for (i in 1:N){
-            xAxisLegend <- c(xAxisLegend, paste(dataForXAxis[i,], collapse="_"))
-        }
+    }else{ 
+            xAxisLegend <- apply(dataForXAxis, 1, function(x){paste(x, collapse="_")})
+
     }
     axis(side=1,
          at = 1:ncol(qData),
-         labels = xAxisLegend)
+         label = xAxisLegend)
 
 mtext("Samples", 
     side=1, 
@@ -156,9 +149,9 @@ palette("default")
 ##' @title Builds a boxplot from a dataframe using the library \code{highcharter}
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param dataForXAxis A vector containing the types of replicates 
-##' to use as X-axis. Available values are: Label, Analyt.Rep,
-##' Bio.Rep and Tech.Rep. Default is "Label".
-##' @param labels A vector of the conditions (labels) (one label per sample).
+##' to use as X-axis. Available values are: Condition, Bio.Rep,
+##' Bio.Rep and Tech.Rep. Default is "Condition".
+##' @param conds A vector of the conditions (one condition per sample).
 ##' @param group2Color A string that indicates how to color the replicates: 
 ##' one color per condition (value "Condition") or one 
 ##' color per replicate (value "Replicate"). Default value is by Condition.
@@ -169,18 +162,18 @@ palette("default")
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' types <- c("Label","Analyt.Rep")
+##' types <- c("Condition","Bio.Rep")
 ##' dataForXAxis <- Biobase::pData(Exp1_R25_pept)[,types]
-##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-##' boxPlotD_HC(qData, dataForXAxis, labels)
+##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+##' boxPlotD_HC(qData, dataForXAxis, conds)
 boxPlotD_HC <- function(qData, 
-                     dataForXAxis="Label", 
-                     labels=NULL, 
+                     dataForXAxis="Condition", 
+                     conds=NULL, 
                      group2Color="Condition"){
 
     
-    if (is.null(labels) ) {
-        labels <- rep("",ncol(qData))
+    if (is.null(conds) ) {
+        conds <- rep("",ncol(qData))
     }
 
     
@@ -202,7 +195,7 @@ pal <- c("#002F80", "#002F80","#002F80","#002F80","#F9AF38","#F9AF38","#F9AF38",
 myColors <- NULL
 ##Colors definition
 if (group2Color == "Condition") {
-    myColors <- getPaletteForLabels_HC(labels)
+    myColors <- getPaletteForConditions_HC(conds)
 }else { 
     myColors <- getPaletteForReplicates_HC(ncol(qData))}
 
@@ -254,7 +247,7 @@ hcboxplot(x=df$values, var = df$samples,
 ##' @title Wrapper to the violinPlotD function on an object \code{MSnSet}
 ##' @param obj An object of class \code{MSnSet}.
 ##' @param dataForXAxis A vector of strings containing the names of columns 
-##' in \code{pData()} to print labels on X-axis (Default is "Label").
+##' in \code{pData()} to print conditions on X-axis (Default is "Condition").
 ##' @param group2Color A string that indicates how to color the replicates: one
 ##' color per condition (value "Condition") or one 
 ##' color per replicate (value "Replicate"). Default value is by Condition.
@@ -265,17 +258,17 @@ hcboxplot(x=df$values, var = df$samples,
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' library(vioplot)
-##' types <- c("Label","Analyt.Rep")
+##' types <- c("Condition","Bio.Rep")
 ##' wrapper.violinPlotD(Exp1_R25_pept, types)
 wrapper.violinPlotD <- function(obj, 
-                             dataForXAxis="Label", 
+                             dataForXAxis="Condition", 
                              group2Color="Condition"){
     
     qData <- Biobase::exprs(obj)
     dataForXAxis <- as.matrix(Biobase::pData(obj)[,dataForXAxis])
-    labels <- Biobase::pData(obj)[,"Label"]
+    conds <- Biobase::pData(obj)[,"Condition"]
     
-    violinPlotD(qData, dataForXAxis, labels, group2Color)
+    violinPlotD(qData, dataForXAxis, conds, group2Color)
     
 }
 
@@ -287,9 +280,9 @@ wrapper.violinPlotD <- function(obj,
 ##' @title Builds a violinplot from a dataframe
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param dataForXAxis A vector containing the types of replicates 
-##' to use as X-axis. Available values are: Label, Analyt.Rep,
-##' Bio.Rep and Tech.Rep. Default is "Label".
-##' @param labels A vector of the conditions (labels) (one label per sample).
+##' to use as X-axis. Available values are: Condition, Bio.Rep,
+##' Bio.Rep and Tech.Rep. Default is "Condition".
+##' @param conds A vector of the conditions (one condition per sample).
 ##' @param group2Color A string that indicates how to color the replicates: 
 ##' one color per condition (value "Condition") or one 
 ##' color per replicate (value "Replicate"). Default value is by Condition.
@@ -301,18 +294,18 @@ wrapper.violinPlotD <- function(obj,
 ##' data(Exp1_R25_pept)
 ##' library(vioplot)
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' types <- c("Label","Analyt.Rep")
+##' types <- c("Condition","Bio.Rep")
 ##' dataForXAxis <- Biobase::pData(Exp1_R25_pept)[,types]
-##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-##' violinPlotD(qData, dataForXAxis, labels)
+##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+##' violinPlotD(qData, dataForXAxis, conds)
 violinPlotD <- function(qData, 
                      dataForXAxis=NULL, 
-                     labels=NULL, 
+                     conds=NULL, 
                      group2Color="Condition"){
 
     plot.new()
     if (group2Color == "Condition") {
-        pal <- getPaletteForLabels(labels)
+        pal <- getPaletteForConditions(conds)
     }else { pal <- getPaletteForReplicates(ncol(qData))}
     
     plot.window(xlim=c(0,ncol(qData)+1),
@@ -333,7 +326,7 @@ violinPlotD <- function(qData,
         for (i in 1:N){
             axis(side=1,
                  at = 1:ncol(qData),
-                 labels = if (is.vector(dataForXAxis) ) 
+                 label = if (is.vector(dataForXAxis) ) 
                      {dataForXAxis} else {dataForXAxis[,i]},
                  line= 2*i-1
             )
@@ -359,8 +352,7 @@ violinPlotD <- function(qData,
 ##' normalization.
 ##' @param objAfter A dataframe that contains quantitative data after 
 ##' normalization.
-##' @param labelsForLegend A vector of the conditions (labels) (one label 
-##' per sample).
+##' @param condsForLegend A vector of the conditions (one condition per sample).
 ##' @param indData2Show A vector of the indices of the columns to show in the 
 ##' plot. The indices are those of indices of 
 ##' the columns int the data.frame qDataBefore.
@@ -372,21 +364,21 @@ violinPlotD <- function(qData,
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "Quantile Centering", 
 ##' "within conditions")
-##' wrapper.compareNormalizationD(Exp1_R25_pept, objAfter, labels)
+##' wrapper.compareNormalizationD(Exp1_R25_pept, objAfter, conds)
 wrapper.compareNormalizationD <- function(objBefore, objAfter, 
-                                        labelsForLegend=NULL,
+                                        condsForLegend=NULL,
                                         indData2Show=NULL,
                                         group2Color="Condition"){
 
 qDataBefore <- Biobase::exprs(objBefore)
 qDataAfter <- Biobase::exprs(objAfter)
-if (is.null(labelsForLegend)){
-  labelsForLegend <- Biobase::pData(objBefore)[,"Label"]}
+if (is.null(condsForLegend)){
+  condsForLegend <- Biobase::pData(objBefore)[,"Condition"]}
 
-compareNormalizationD(qDataBefore, qDataAfter, labelsForLegend, indData2Show, 
+compareNormalizationD(qDataBefore, qDataAfter, condsForLegend, indData2Show, 
                     group2Color)
 }
 
@@ -399,7 +391,7 @@ compareNormalizationD(qDataBefore, qDataAfter, labelsForLegend, indData2Show,
 ##' normalization.
 ##' @param objAfter A dataframe that contains quantitative data after 
 ##' normalization.
-##' @param labelsForLegend A vector of the conditions (labels) (one label 
+##' @param condsForLegend A vector of the conditions (one condition 
 ##' per sample).
 ##' @param indData2Show A vector of the indices of the columns to show in the 
 ##' plot. The indices are those of indices of 
@@ -412,19 +404,19 @@ compareNormalizationD(qDataBefore, qDataAfter, labelsForLegend, indData2Show,
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
+##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "Quantile Centering", 
 ##' "within conditions")
-##' wrapper.compareNormalizationD_HC(Exp1_R25_pept, objAfter, labels)
+##' wrapper.compareNormalizationD_HC(Exp1_R25_pept, objAfter, conds)
 wrapper.compareNormalizationD_HC <- function(objBefore, objAfter, 
-                                          labelsForLegend=NULL,
+                                          condsForLegend=NULL,
                                           indData2Show=NULL,
                                           group2Color="Condition"){
     
     qDataBefore <- Biobase::exprs(objBefore)
     qDataAfter <- Biobase::exprs(objAfter)
     
-    compareNormalizationD_HC(qDataBefore, qDataAfter, labelsForLegend, indData2Show, 
+    compareNormalizationD_HC(qDataBefore, qDataAfter, condsForLegend, indData2Show, 
                           group2Color)
 }
 
@@ -436,7 +428,7 @@ wrapper.compareNormalizationD_HC <- function(objBefore, objAfter,
 ##' normalization.
 ##' @param qDataAfter A dataframe that contains quantitative data after 
 ##' normalization.
-##' @param labelsForLegend A vector of the conditions (labels) (one label 
+##' @param condsForLegend A vector of the conditions (one condition 
 ##' per sample).
 ##' @param indData2Show A vector of the indices of the columns to show in 
 ##' the plot. The indices are those of indices of 
@@ -450,17 +442,17 @@ wrapper.compareNormalizationD_HC <- function(objBefore, objAfter,
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' qDataBefore <- Biobase::exprs(Exp1_R25_pept)
-##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-##' qDataAfter <- normalizeD(qDataBefore,labels,"Quantile Centering",
+##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+##' qDataAfter <- normalizeD(qDataBefore,conds,"Quantile Centering",
 ##' "within conditions")
-##' compareNormalizationD(qDataBefore, qDataAfter, labels)
+##' compareNormalizationD(qDataBefore, qDataAfter, conds)
 compareNormalizationD <- function(qDataBefore,
                                 qDataAfter,
-                                labelsForLegend=NULL,
+                                condsForLegend=NULL,
                                 indData2Show=NULL,
                                 group2Color="Condition"){
 
-if (is.null(labelsForLegend)) return(NULL)
+if (is.null(condsForLegend)) return(NULL)
 if (is.null(indData2Show)) {indData2Show <- c(1:ncol(qDataAfter)) }
 
 x <- qDataBefore
@@ -472,13 +464,13 @@ lim.y <- range(min(y, na.rm=TRUE), max(y, na.rm=TRUE))
 
 ##Colors definition
 if (group2Color == "Condition") {
-    pal <- getPaletteForLabels(labelsForLegend)
+    pal <- getPaletteForConditions(condsForLegend)
     legendColor <- unique(pal)
-    txtLegend <- unique(labelsForLegend)
+    txtLegend <- unique(condsForLegend)
 }else { 
     pal <- getPaletteForReplicates(ncol(x))
     legendColor <- pal[indData2Show]
-    txtLegend <- paste("Replicate", seq(1,ncol(x)), labelsForLegend,sep=" ")
+    txtLegend <- paste("Replicate", seq(1,ncol(x)), condsForLegend,sep=" ")
     txtLegend <- txtLegend[indData2Show]
 }
 
@@ -526,7 +518,7 @@ palette("default")
 ##' normalization.
 ##' @param qDataAfter A dataframe that contains quantitative data after 
 ##' normalization.
-##' @param labelsForLegend A vector of the conditions (labels) (one label 
+##' @param condsForLegend A vector of the conditions (one condition 
 ##' per sample).
 ##' @param indData2Show A vector of the indices of the columns to show in 
 ##' the plot. The indices are those of indices of 
@@ -541,17 +533,17 @@ palette("default")
 ##' data(Exp1_R25_pept)
 ##' obj <- Exp1_R25_pept[1:1000]
 ##' qDataBefore <- Biobase::exprs(obj)
-##' labels <- Biobase::pData(obj)[,"Label"]
-##' qDataAfter <- normalizeD(qDataBefore,labels,"Quantile Centering",
+##' conds <- Biobase::pData(obj)[,"Condition"]
+##' qDataAfter <- normalizeD(qDataBefore,conds,"Quantile Centering",
 ##' "within conditions")
-##' compareNormalizationD_HC(qDataBefore, qDataAfter, labels)
+##' compareNormalizationD_HC(qDataBefore, qDataAfter, conds)
 compareNormalizationD_HC <- function(qDataBefore,
                                   qDataAfter,
-                                  labelsForLegend=NULL,
+                                  condsForLegend=NULL,
                                   indData2Show=NULL,
                                   group2Color="Condition"){
     
-    if (is.null(labelsForLegend)) return(NULL)
+    if (is.null(condsForLegend)) return(NULL)
     if (is.null(indData2Show)) {indData2Show <- c(1:ncol(qDataAfter)) }
     
     x <- qDataBefore
@@ -559,20 +551,20 @@ compareNormalizationD_HC <- function(qDataBefore,
    
     ##Colors definition
     if (group2Color == "Condition") {
-        pal <- getPaletteForLabels(labelsForLegend)
+        pal <- getPaletteForConditions(condsForLegend)
         legendColor <- unique(pal)
-        txtLegend <- unique(labelsForLegend)
+        txtLegend <- unique(condsForLegend)
     }else { 
         pal <- getPaletteForReplicates(ncol(x))
         legendColor <- pal[indData2Show]
-        txtLegend <- paste("Replicate", seq(1,ncol(x)), labelsForLegend,sep=" ")
+        txtLegend <- paste("Replicate", seq(1,ncol(x)), condsForLegend,sep=" ")
         txtLegend <- txtLegend[indData2Show]
     }
     
     
     series <- list()
     for (i in 1:length(indData2Show)){
-        tmp <- list(name=labelsForLegend[i], data =list_parse(data.frame(x=x[,indData2Show[i]],y=y[,indData2Show[i]])))
+        tmp <- list(name=condsForLegend[i], data =list_parse(data.frame(x=x[,indData2Show[i]],y=y[,indData2Show[i]])))
         series[[i]] <- tmp
     }
    
@@ -628,7 +620,7 @@ compareNormalizationD_HC <- function(qDataBefore,
 ##' 
 ##' @title Builds a densityplot from an object of class \code{MSnSet}
 ##' @param obj An object of class \code{MSnSet}.
-##' @param labelsForLegend A vector of labels to show in densityplot.
+##' @param condsForLegend A vector of conditions to show in densityplot.
 ##' @param indData2Show A vector of the indices of the columns to show in 
 ##' the plot. The indices are those of indices of the columns int the data
 ##' frame qDataBefore in the density plot.
@@ -642,15 +634,15 @@ compareNormalizationD_HC <- function(qDataBefore,
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-##' wrapper.densityPlotD(Exp1_R25_pept, labels)
-wrapper.densityPlotD <- function(obj, labelsForLegend=NULL,  indData2Show=NULL,
+##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+##' wrapper.densityPlotD(Exp1_R25_pept, conds)
+wrapper.densityPlotD <- function(obj, condsForLegend=NULL,  indData2Show=NULL,
                                 group2Color = "Condition"){
 qData <- Biobase::exprs(obj)
-if (is.null(labelsForLegend) ) {
-  labelsForLegend <- Biobase::pData(obj)[,"Label"]}
+if (is.null(condsForLegend) ) {
+  condsForLegend <- Biobase::pData(obj)[,"Condition"]}
 
-densityPlotD(qData, labelsForLegend, indData2Show,group2Color)
+densityPlotD(qData, condsForLegend, indData2Show,group2Color)
 }
 
 ##' This function is a wrapper for using the densityPlotD function with 
@@ -659,7 +651,7 @@ densityPlotD(qData, labelsForLegend, indData2Show,group2Color)
 ##' 
 ##' @title Builds a densityplot from an object of class \code{MSnSet}
 ##' @param obj An object of class \code{MSnSet}.
-##' @param labelsForLegend A vector of labels to show in densityplot.
+##' @param condsForLegend A vector of conds to show in densityplot.
 ##' @param indData2Show A vector of the indices of the columns to show in 
 ##' the plot. The indices are those of indices of the columns int the data
 ##' frame qDataBefore in the density plot.
@@ -673,16 +665,16 @@ densityPlotD(qData, labelsForLegend, indData2Show,group2Color)
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-##' wrapper.densityPlotD_HC(Exp1_R25_pept, labels)
-wrapper.densityPlotD_HC <- function(obj, labelsForLegend=NULL,  indData2Show=NULL,
+##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+##' wrapper.densityPlotD_HC(Exp1_R25_pept, conds)
+wrapper.densityPlotD_HC <- function(obj, condsForLegend=NULL,  indData2Show=NULL,
                                  group2Color = "Condition"){
     qData <- Biobase::exprs(obj)
     
-    if (is.null(labelsForLegend) ) {
-      labelsForLegend <- Biobase::pData(obj)[,"Label"]}
+    if (is.null(condsForLegend) ) {
+      condsForLegend <- Biobase::pData(obj)[,"Condition"]}
     
-    densityPlotD_HC(qData, labelsForLegend, indData2Show,group2Color)
+    densityPlotD_HC(qData, condsForLegend, indData2Show,group2Color)
 }
 
 
@@ -691,10 +683,9 @@ wrapper.densityPlotD_HC <- function(obj, labelsForLegend=NULL,  indData2Show=NUL
 ##' 
 ##' @title Builds a densityplot from a dataframe
 ##' @param qData A dataframe that contains quantitative data.
-##' @param labelsForLegend A vector of the conditions (labels) (one label 
-##' per sample).
+##' @param condsForLegend A vector of the conditions (one condition per sample).
 ##' @param indData2Show A vector of indices to show in densityplot. If NULL, 
-##' then all labels are displayed.
+##' then all conds are displayed.
 ##' @param group2Color A string that indicates how to color the replicates: 
 ##' one color per condition (value "Condition") or one 
 ##' color per replicate (value "Replicate"). Default value is by Condition.
@@ -705,13 +696,13 @@ wrapper.densityPlotD_HC <- function(obj, labelsForLegend=NULL,  indData2Show=NUL
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' labels <- lab2Show <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-##' densityPlotD(qData, labels)
-densityPlotD <- function(qData, labelsForLegend=NULL,indData2Show=NULL,
+##' conds <- lab2Show <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+##' densityPlotD(qData, conds)
+densityPlotD <- function(qData, condsForLegend=NULL,indData2Show=NULL,
                         group2Color = "Condition"){
     
-#if (is.null(labelsForLegend) ) {
-#  labelsForLegend <- Biobase::pData(rv$current.obj)[,"Label"]}
+#if (is.null(condsForLegend) ) {
+#  condsForLegend <- Biobase::pData(rv$current.obj)[,"Condition"]}
 
 if (is.null(indData2Show)) {indData2Show <- c(1:ncol(qData)) }
 
@@ -727,22 +718,22 @@ lim.y <- range(min(axis.limits[3,]), max(axis.limits[4,]))
 
 ##Colors definition
 if (group2Color == "Condition") {
-    pal <- getPaletteForLabels(labelsForLegend)
+    pal <- getPaletteForConditions(condsForLegend)
     legendColor <- unique(pal)
-    txtLegend <- unique(labelsForLegend)
+    txtLegend <- unique(condsForLegend)
 }else { 
     pal <- getPaletteForReplicates(ncol(qData))
     legendColor <- pal[indData2Show]
     txtLegend <- paste("Replicate", seq(1,ncol(qData)), 
-                        labelsForLegend,sep=" ")
+                        condsForLegend,sep=" ")
     txtLegend <- txtLegend[indData2Show]
 }
 
 ###Erase data not to show (color in white)
 # lineWD <- NULL
 # lineWD <- c(rep(1, length(colnames(qData))))
-# if (!is.null(highLightLabel)) {
-#   lineWD[which(labels == highLightLabel)] <- 3
+# if (!is.null(highLightCondition)) {
+#   lineWD[which(conds == highLightCondition)] <- 3
 # }
 # 
 plot(x =NULL
@@ -781,10 +772,10 @@ legend("topleft"
 ##' 
 ##' @title Builds a densityplot from a dataframe
 ##' @param qData A dataframe that contains quantitative data.
-##' @param labelsForLegend A vector of the conditions (labels) (one label 
+##' @param condsForLegend A vector of the conditions (one condition 
 ##' per sample).
 ##' @param indData2Show A vector of indices to show in densityplot. If NULL, 
-##' then all labels are displayed.
+##' then all conditions are displayed.
 ##' @param group2Color A string that indicates how to color the replicates: 
 ##' one color per condition (value "Condition") or one 
 ##' color per replicate (value "Replicate"). Default value is by Condition.
@@ -795,14 +786,14 @@ legend("topleft"
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' labels <- lab2Show <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-##' densityPlotD_HC(qData, labels)
-densityPlotD_HC <- function(qData, labelsForLegend=NULL,indData2Show=NULL,
+##' conds <- lab2Show <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+##' densityPlotD_HC(qData, conds)
+densityPlotD_HC <- function(qData, condsForLegend=NULL,indData2Show=NULL,
                             group2Color = "Condition"){
     
     
-    if (is.null(labelsForLegend) ) {
-      labelsForLegend <- rep("",ncol(qData))
+    if (is.null(condsForLegend) ) {
+      condsForLegend <- rep("",ncol(qData))
       }
     
     if (is.null(indData2Show)) {
@@ -813,18 +804,17 @@ densityPlotD_HC <- function(qData, labelsForLegend=NULL,indData2Show=NULL,
     
     myColors <- NULL
     ##Colors definition
-    if (group2Color == "Condition") {
-      myColors <- getPaletteForLabels_HC(labelsForLegend)[indData2Show]
-    } else { 
-      myColors<- getPaletteForReplicates_HC(ncol(qData))[indData2Show]
-    }
+    switch(group2Color,
+      Condition = myColors <- getPaletteForConditions_HC(condsForLegend)[indData2Show],
+     Replicate = myColors<- getPaletteForReplicates_HC(ncol(qData))[indData2Show]
+    )
 
     series <- list()
     for (i in 1:length(indData2Show)){
   
     tmp <- data.frame(x = density(qData[,indData2Show[i]], na.rm = TRUE)$x, 
                 y = density(qData[,indData2Show[i]], na.rm = TRUE)$y)
-    series[[i]] <- list(name = labelsForLegend[i],
+    series[[i]] <- list(name = condsForLegend[i],
                               data = list_parse(tmp))
 }
 
@@ -862,8 +852,8 @@ densityPlotD_HC <- function(qData, labelsForLegend=NULL,indData2Show=NULL,
 
 ##' Builds a densityplot of the CV of entities in the exprs() table
 ##' of an object \code{MSnSet}. The variance is calculated for each 
-##' condition (Label) present
-##' in the dataset (see the slot \code{'Label'} in the \code{pData()} table).
+##' condition present
+##' in the dataset (see the slot \code{'Condition'} in the \code{pData()} table).
 ##' 
 ##' @title Distribution of CV of entities
 ##' @param obj An object of class \code{MSnSet}.
@@ -876,15 +866,15 @@ densityPlotD_HC <- function(qData, labelsForLegend=NULL,indData2Show=NULL,
 ##' wrapper.CVDistD(Exp1_R25_pept)
 wrapper.CVDistD <- function(obj){
 qData <- Biobase::exprs(obj)
-labels <- Biobase::pData(obj)[,"Label"]
-CVDistD(qData, labels)
+conds <- Biobase::pData(obj)[,"Condition"]
+CVDistD(qData, conds)
 }
 
 
 ##' Builds a densityplot of the CV of entities in the exprs() table. 
 ##' of an object \code{MSnSet}. The variance is calculated for each 
-##' condition (Label) present
-##' in the dataset (see the slot \code{'Label'} in the \code{pData()} table).
+##' condition present
+##' in the dataset (see the slot \code{'Condition'} in the \code{pData()} table).
 ##' Same as the function \code{\link{wrapper.CVDistD}} but uses the package \code{highcharter}
 ##' 
 ##' @title Distribution of CV of entities
@@ -898,35 +888,35 @@ CVDistD(qData, labels)
 ##' wrapper.CVDistD_HC(Exp1_R25_pept)
 wrapper.CVDistD_HC <- function(obj){
     qData <- Biobase::exprs(obj)
-    labels <- Biobase::pData(obj)[,"Label"]
-    CVDistD_HC(qData, labels)
+    conds <- Biobase::pData(obj)[,"Condition"]
+    CVDistD_HC(qData, conds)
 }
 
 
 ##' Builds a densityplot of the CV of entities in the exprs() table
-##' of a object. The CV is calculated for each condition (Label) present
-##' in the dataset (see the slot \code{'Label'} in the \code{pData()} table)
+##' of a object. The CV is calculated for each condition present
+##' in the dataset (see the slot \code{'Condition'} in the \code{pData()} table)
 ##' 
 ##' @title Distribution of CV of entities
 ##' @param qData A dataframe that contains quantitative data.
-##' @param labels A vector of the conditions (labels) (one label per sample).
+##' @param conds A vector of the conditions (one condition per sample).
 ##' @return A density plot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{densityPlotD}}.
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-##' CVDistD(Biobase::exprs(Exp1_R25_pept), labels)
-CVDistD <- function(qData, labels=NULL){
+##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+##' CVDistD(Biobase::exprs(Exp1_R25_pept), conds)
+CVDistD <- function(qData, conds=NULL){
     
-if (is.null(labels)) {return(NULL)}
-conditions <- unique(labels)
+if (is.null(conds)) {return(NULL)}
+conditions <- unique(conds)
 n <- length(conditions)
 axis.limits <- matrix(data = 0, nrow = 4, ncol = n)
 for (i in conditions){
-    if (length(which(labels == i)) > 1){
-    t <- density(apply(qData[,which(labels == i)], 1, 
+    if (length(which(conds == i)) > 1){
+    t <- density(apply(qData[,which(conds == i)], 1, 
                     function(x) 100*var(x, na.rm=TRUE)/mean(x, na.rm=TRUE)), 
                  na.rm=TRUE)
 
@@ -948,12 +938,12 @@ plot(x = NULL
 )
 
 # density by condition
-pal <- getPaletteForLabels(labels)
-conditions <- unique(labels)
+pal <- getPaletteForConditions(conds)
+conditions <- unique(conds)
 col.density = c(1:length(conditions))
 for (i in conditions){
-    if (length(which(labels == i)) > 1){
-        t <- apply(qData[,which(labels == i)], 1, 
+    if (length(which(conds == i)) > 1){
+        t <- apply(qData[,which(conds == i)], 1, 
                 function(x) 100*var(x, na.rm=TRUE)/mean(x, na.rm=TRUE))
     lines(density(t, na.rm = TRUE)
         , xlab=""
@@ -979,31 +969,31 @@ legend("topright"
 
 
 ##' Builds a densityplot of the CV of entities in the exprs() table
-##' of a object. The CV is calculated for each condition (Label) present
-##' in the dataset (see the slot \code{'Label'} in the \code{pData()} table)
+##' of a object. The CV is calculated for each condition present
+##' in the dataset (see the slot \code{'Condition'} in the \code{pData()} table)
 ##' Same as the function \code{CVDistD} but uses the package \code{highcharter}
 ##' @title Distribution of CV of entities
 ##' @param qData A dataframe that contains quantitative data.
-##' @param labels A vector of the conditions (labels) (one label per sample).
+##' @param conds A vector of the conditions (one condition per sample).
 ##' @return A density plot
 ##' @author Samuel Wieczorek
 ##' @seealso \code{\link{densityPlotD}}.
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-##' CVDistD_HC(Biobase::exprs(Exp1_R25_pept), labels)
-CVDistD_HC <- function(qData, labels=NULL){
+##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+##' CVDistD_HC(Biobase::exprs(Exp1_R25_pept), conds)
+CVDistD_HC <- function(qData, conds=NULL){
     
-    if (is.null(labels)) {return(NULL)}
-    conditions <- unique(labels)
+    if (is.null(conds)) {return(NULL)}
+    conditions <- unique(conds)
     n <- length(conditions)
     
     nbSeries = n
     series <- list()
     for (i in 1:length(conditions)){
-        if (length(which(labels == conditions[i])) > 1){
-            t <- apply(qData[,which(labels == conditions[i])], 1, 
+        if (length(which(conds == conditions[i])) > 1){
+            t <- apply(qData[,which(conds == conditions[i])], 1, 
                        function(x) 100*var(x, na.rm=TRUE)/mean(x, na.rm=TRUE))
             tmp <- data.frame(x = density(t, na.rm = TRUE)$x,
                               y = density(t, na.rm = TRUE)$y)
@@ -1100,7 +1090,7 @@ corrMatrixD <- function(qData, samplesData, gradientRate = 5){
 Var1 <- Var2 <- value <- NULL
 
 for (j in 1:length(colnames(qData))){
-    colnames(qData)[j] <- paste(as.character(samplesData[j,2:5]), 
+    colnames(qData)[j] <- paste(as.character(samplesData[j,2:ncol(samplesData)]), 
                                 collapse =" ")
 }
 
@@ -1153,7 +1143,7 @@ corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
     
     if (!is.null(samplesData)){
         for (j in 1:ncol(df)){
-            names(df)[j] <- paste(as.character(samplesData[j,2:5]), 
+            names(df)[j] <- paste(as.character(samplesData[j,2:ncol(samplesData)]), 
                                         collapse =" ")
         }
         }
@@ -1193,6 +1183,7 @@ corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
         hc_plotOptions(
             series = list(
                 boderWidth = 0,
+                dataConditions = list(enabled = TRUE),
                 dataLabels = list(enabled = TRUE)
             )) %>% 
         hc_tooltip(formatter = fntltp) %>% 
@@ -1228,7 +1219,7 @@ wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete",
                             dendro = FALSE){
 qData <- Biobase::exprs(obj)
 for (j in 1:length(colnames(qData))){
-    colnames(qData)[j] <- paste(as.character(Biobase::pData(obj)[j,2:5]), 
+    colnames(qData)[j] <- paste(as.character(Biobase::pData(obj)[j,2:ncol(Biobase::pData(obj))]), 
                                 collapse =" ")
 }
 
@@ -1326,9 +1317,9 @@ heatmapD <- function(qData, distance="euclidean", cluster="complete",
 ##' of the heatmap.2 function.
 ##' @param x A dataframe that contains quantitative data.
 ##' @param col colors used for the image. Defaults to heat colors (heat.colors).
-##' @param srtCol angle of column labels, in degrees from horizontal 
-##' @param labCol character vectors with column labels to use.
-##' @param labRow character vectors with row labels to use.
+##' @param srtCol angle of column conds, in degrees from horizontal 
+##' @param labCol character vectors with column conds to use.
+##' @param labRow character vectors with row conds to use.
 ##' @param key logical indicating whether a color-key should be shown.
 ##' @param key.title main title of the color key. If set to NA no title will 
 ##' be plotted.
@@ -1414,7 +1405,7 @@ heatmap.DAPAR <-
         
         if (!is.null(labCol)) 
         {
-            axis(1, 1:nc, labels = labCol, las = 2, line = -0.5 + 
+            axis(1, 1:nc, label = labCol, las = 2, line = -0.5 + 
                      offsetCol, tick = 0, cex.axis = cexCol, hadj = NA, 
                  padj = 0)
         }
@@ -1422,26 +1413,26 @@ heatmap.DAPAR <-
                 adjCol = c(1, NA)
                 xpd.orig <- par("xpd")
                 par(xpd = NA)
-                xpos <- axis(1, 1:nc, labels = rep("", nc), las = 2, 
+                xpos <- axis(1, 1:nc, label = rep("", nc), las = 2, 
                              tick = 0)
                 text(x = xpos, y = par("usr")[3] - (1 + offsetCol) * 
-                         strheight("M"), labels = labCol, adj = adjCol, 
+                         strheight("M"), label = labCol, adj = adjCol, 
                      cex = cexCol, srt = srtCol, col = colCol)
                 par(xpd = xpd.orig)
         }
         
         
         if (!is.null(labRow) ) {
-            axis(4, iy, labels = labRow, las = 5, line = -0.5 + offsetRow, 
+            axis(4, iy, label = labRow, las = 5, line = -0.5 + offsetRow, 
                  tick = 0, cex.axis = cexRow, hadj = 0, padj = NA)
         }
         else {
                 xpd.orig <- par("xpd")
                 par(xpd = NA)
-                ypos <- axis(4, iy, labels = rep("", nr), las = 2, 
+                ypos <- axis(4, iy, label = rep("", nr), las = 2, 
                              line = -0.5, tick = 0)
                 text(x = par("usr")[2] + (1 + offsetRow) * strwidth("M"), 
-                     y = ypos, labels = labRow, adj = c(0,NA), cex = cexRow, 
+                     y = ypos, label = labRow, adj = c(0,NA), cex = cexRow, 
                      srt = srtRow, col = colRow)
                 par(xpd = xpd.orig)
         }
@@ -1474,7 +1465,7 @@ heatmap.DAPAR <-
             par(usr = c(0, 1, 0, 1))
             lv <- pretty(breaks)
             xv <- scale01(as.numeric(lv), min.raw, max.raw)
-            xargs <- list(at = xv, labels = lv)
+            xargs <- list(at = xv, label = lv)
             
             xargs$side <- 1
             do.call(axis, xargs)

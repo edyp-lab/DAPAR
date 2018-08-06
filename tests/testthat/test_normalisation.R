@@ -26,7 +26,7 @@ test <- Exp1_R25_prot[1:10]
 #     funcNorm <- wrapper.normalizeD2(test, "Global Alignment", "Alignment on all quantiles")
 #     expect_equal(round(Biobase::exprs(funcNorm),4), norm)
 #     
-#     labels <- Biobase::pData(test)[,"Label"]
+#     labels <- Biobase::pData(test)[,"Condition"]
 #     funcNorm <- normalizeD2(Biobase::exprs(test), labels, 
 #                             "Global Alignment", "Alignment on all quantiles")
 #     expect_equal(round(funcNorm,4), norm)
@@ -55,7 +55,7 @@ test <- Exp1_R25_prot[1:10]
 # #     funcNorm <- wrapper.normalizeD2(test, "Global Alignment", "sum by columns")
 # #     expect_equal(round(Biobase::exprs(funcNorm),4), norm)
 # #     
-# #     labels <- Biobase::pData(test)[,"Label"]
+# #     labels <- Biobase::pData(test)[,"Condition"]
 # #     funcNorm <- normalizeD2(Biobase::exprs(test), labels, 
 # #                             "Global Alignment", "sum by columns")
 # #     expect_equal(round(funcNorm,4), norm)
@@ -84,7 +84,7 @@ test <- Exp1_R25_prot[1:10]
 #     funcNorm <- wrapper.normalizeD2(test, "Quantile Centering", "overall", quantile=0.25)
 #     expect_equal(round(Biobase::exprs(funcNorm),4), norm)
 #     
-#     labels <- Biobase::pData(test)[,"Label"]
+#     labels <- Biobase::pData(test)[,"Condition"]
 #     funcNorm <- normalizeD2(Biobase::exprs(test), labels, 
 #                             "Quantile Centering", "overall", quantile=0.25)
 #     expect_equal(round(funcNorm,4), norm)
@@ -115,7 +115,7 @@ test <- Exp1_R25_prot[1:10]
 #     funcNorm <- wrapper.normalizeD2(test, "Quantile Centering", "within conditions", quantile=0.25)
 #     expect_equal(round(Biobase::exprs(funcNorm),4), norm)
 #     
-#     labels <- Biobase::pData(test)[,"Label"]
+#     labels <- Biobase::pData(test)[,"Condition"]
 #     funcNorm <- normalizeD2(Biobase::exprs(test), labels, 
 #                            "Quantile Centering", "within conditions", quantile=0.25)
 #     expect_equal(round(funcNorm,4), norm)
@@ -142,7 +142,7 @@ test <- Exp1_R25_prot[1:10]
 #     rownames(norm) <- c(0:9)
 #     
 #     
-#     labels <- Biobase::pData(test)[,"Label"]
+#     labels <- Biobase::pData(test)[,"Condition"]
 #     funcNorm <- normalizeD2(Biobase::exprs(test), labels, 
 #                             "Mean Centering", "within conditions", scaling=TRUE)
 #     expect_equal(round(funcNorm,4), norm)
@@ -171,7 +171,7 @@ test <- Exp1_R25_prot[1:10]
 #     rownames(norm) <- c(0:9)
 #     
 #     
-#     labels <- Biobase::pData(test)[,"Label"]
+#     labels <- Biobase::pData(test)[,"Condition"]
 #     funcNorm <- normalizeD2(Biobase::exprs(test), labels, 
 #                             "Mean Centering", "within conditions", scaling=FALSE)
 #     expect_equal(round(funcNorm,4), norm)
@@ -199,7 +199,7 @@ test <- Exp1_R25_prot[1:10]
 #     rownames(norm) <- c(0:9)
 #     
 #     
-#     labels <- Biobase::pData(test)[,"Label"]
+#     labels <- Biobase::pData(test)[,"Condition"]
 #     funcNorm <- normalizeD2(Biobase::exprs(test), labels, 
 #                             "Mean Centering", "overall", scaling=FALSE)
 #     expect_equal(round(funcNorm,4), norm)
@@ -229,7 +229,7 @@ test <- Exp1_R25_prot[1:10]
 #     rownames(norm) <- c(0:9)
 #     
 #     
-#     labels <- Biobase::pData(test)[,"Label"]
+#     labels <- Biobase::pData(test)[,"Condition"]
 #     funcNorm <- normalizeD2(Biobase::exprs(test), labels, 
 #                             "Mean Centering", "overall", scaling=TRUE)
 #     expect_equal(round(funcNorm,4), norm)

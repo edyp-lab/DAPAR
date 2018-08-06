@@ -4,27 +4,27 @@
 \alias{CVDistD_HC}
 \title{Distribution of CV of entities}
 \usage{
-CVDistD_HC(qData, labels = NULL)
+CVDistD_HC(qData, conds = NULL)
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
 
-\item{labels}{A vector of the conditions (labels) (one label per sample).}
+\item{conds}{A vector of the conditions (one condition per sample).}
 }
 \value{
 A density plot
 }
 \description{
 Builds a densityplot of the CV of entities in the exprs() table
-of a object. The CV is calculated for each condition (Label) present
-in the dataset (see the slot \code{'Label'} in the \code{pData()} table)
+of a object. The CV is calculated for each condition present
+in the dataset (see the slot \code{'Condition'} in the \code{pData()} table)
 Same as the function \code{CVDistD} but uses the package \code{highcharter}
 }
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-CVDistD_HC(Biobase::exprs(Exp1_R25_pept), labels)
+conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+CVDistD_HC(Biobase::exprs(Exp1_R25_pept), conds)
 }
 \seealso{
 \code{\link{densityPlotD}}.

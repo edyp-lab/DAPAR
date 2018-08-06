@@ -18,10 +18,12 @@
 ##' @return GO profile at a specific level 
 ##' @author Florence Combes
 ##' @examples
+##' \donttest{
 ##' require(DAPARdata)
 ##' data(Exp1_R25_prot)
 ##' ggo<-group_GO(data=fData(Exp1_R25_prot)$Protein.IDs, idFrom="UNIPROT", 
 ##' orgdb="org.Sc.sgd.db", ont="MF", level=2)
+##' }
 group_GO <- function(data, idFrom,  orgdb, ont, level, readable=FALSE){
     
     
@@ -65,11 +67,13 @@ group_GO <- function(data, idFrom,  orgdb, ont, level, readable=FALSE){
 ##' @return A groupGOResult instance.
 ##' @author Florence Combes
 ##' @examples
+##' \donttest{
 ##' require(DAPARdata)
 ##' data(Exp1_R25_prot)
 ##' univ<-univ_AnnotDbPkg("org.Sc.sgd.db") #univ is the background
 ##' ego<-enrich_GO(data=fData(Exp1_R25_prot)$Protein.IDs, idFrom="UNIPROT", 
 ##' orgdb="org.Sc.sgd.db",ont="MF", pval=0.05, universe = univ)
+##' }
 enrich_GO <- function(data, idFrom, orgdb, ont, readable=FALSE, pval, universe)
 {
     tmp <- which(is.na(data))

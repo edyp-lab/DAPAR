@@ -23,7 +23,7 @@ H1:"C1!=(C2+C3)/2", etc. if there are three conditions).}
 \item{type}{xxxxx}
 }
 \value{
-A list of two items : FC and P_Value; both are dataframe. The first one contains
+A list of two items : logFC and P_Value; both are dataframe. The first one contains
 the logFC values of all the comparisons (one column for one comparison), the second one contains
 the pvalue of all the comparisons (one column for one comparison). The names of the columns for those two dataframes
 are identical and correspond to the description of the comparison.
@@ -39,7 +39,7 @@ lapala <- findMECBlock(obj)
 obj <- wrapper.impute.detQuant(obj)
 obj <- reIntroduceMEC(obj, lapala)
 obj <- wrapper.impute.detQuant(obj)
-ttest <- compute.t.tests(Biobase::exprs(obj), Biobase::pData(obj)[,"Label"],1)
+ttest <- compute.t.tests(Biobase::exprs(obj), Biobase::pData(obj)[,"Condition"],1)
 }
 \author{
 Florence Combes, Samuel Wieczorek

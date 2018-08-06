@@ -401,9 +401,6 @@ obj <- obj[keepThat]
 obj@processingData@processing <- 
     c(obj@processingData@processing, processText)
 
-txt <- unlist(strsplit(processText, split=" "))
-obj@experimentData@other$mvFilter.method <- txt[3]
-obj@experimentData@other$mvFilter.threshold <- txt[6]
 return(obj)
 }
 
@@ -454,7 +451,7 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
 ##' @param obj An object of class \code{MSnSet} containing
 ##' quantitative data.
 ##' @param type Method used to choose the lines to delete.
-##' Values are : "None", "wholeMatrix", "allCond", "atLeastOneCond"
+##' Values are : "None", "EmptyLines", "wholeMatrix", "allCond", "atLeastOneCond"
 ##' @param th An integer value of the threshold
 ##' @return An vector of indices that correspond to the lines to keep.
 ##' @author Florence Combes, Samuel Wieczorek
@@ -465,7 +462,7 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
 mvFilterGetIndices <- function(obj,type, th)
 {
 #Check parameters
-paramtype<-c("None", "wholeMatrix", "allCond", "atLeastOneCond") 
+paramtype<-c("None", "EmptyLines", "wholeMatrix", "allCond", "atLeastOneCond") 
 if (sum(is.na(match(type, paramtype)==TRUE))>0){
     warning("Param type is not correct.")
     return (NULL)
@@ -486,18 +483,20 @@ if (is.null(obj@experimentData@other$OriginOfValues)){
 
 if (type == "None"){
     keepThat <- seq(1:nrow(data))
+} else if (type == "EmptyLines"){
+    keepThat <- which(apply(!is.MV(data), 1, sum) >= 1)
 } else if (type == "wholeMatrix"){
     keepThat <- which(apply(!is.MV(data), 1, sum) >= th)
 } else if (type == "atLeastOneCond" || type == "allCond"){
     
-    conditions <- unique(Biobase::pData(obj)$Label)
+    conditions <- unique(Biobase::pData(obj)$Condition)
     nbCond <- length(conditions)
     keepThat <- NULL
     s <- matrix(rep(0, nrow(data)*nbCond),nrow=nrow(data), 
                 ncol=nbCond)
     
     for (c in 1:nbCond){
-        ind <- which(Biobase::pData(obj)$Label == conditions[c])
+        ind <- which(Biobase::pData(obj)$Condition == conditions[c])
         if (length(ind) == 1){
             s[,c] <- (!is.MV(data[,ind]) >= th)}
         else {

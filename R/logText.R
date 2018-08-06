@@ -281,7 +281,10 @@ getTextForAnaDiff <- function(l.params){
     #                  swapVolcano,
     #                  filterType,
     #                  filter_th_NA,
-    #                  numValCalibMethod)
+    #                  numValCalibMethod
+    #                  condition1,
+    #                  condition2
+    #)
     
     
     

@@ -169,13 +169,16 @@ GraphPepProt <- function(mat){
     t <- apply(mat, 2, sum, na.rm=TRUE)
     tab <- table(t)
     position <- seq(1, length(tab),by=3)
-    label <- names(tab)
+    conds <- names(tab)
 
     #par(mar=c(6,4,4,8) + 0.1)#, mgp=c(3,0.5,0)
     barplot(tab, 
             xlim=c(1, length(tab)),
-            xlab="Nb of peptides", ylab="Nb of proteins",
-            names.arg=label, xaxp=c(1, length(tab), 3), las=1
+            xlab="Nb of peptides", 
+            ylab="Nb of proteins",
+            names.arg=conds, 
+            xaxp=c(1, length(tab), 3), 
+            las=1
             , col = "orange")
 
 }
@@ -382,7 +385,7 @@ pepAgregate <- function (obj.pep, protID, method="sum overall",
         warning("With the top n method, the parameter n must not be NULL.")
         return (NULL)}
     
-    condname <- Biobase::pData(obj.pep)$Experiment
+    condname <- Biobase::pData(obj.pep)$Sample.name
     condition <- Biobase::pData(obj.pep)
     expr <- 2^(Biobase::exprs(obj.pep))
     

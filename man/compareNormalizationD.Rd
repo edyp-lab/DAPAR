@@ -4,7 +4,7 @@
 \alias{compareNormalizationD}
 \title{Builds a plot from a dataframe}
 \usage{
-compareNormalizationD(qDataBefore, qDataAfter, labelsForLegend = NULL,
+compareNormalizationD(qDataBefore, qDataAfter, condsForLegend = NULL,
   indData2Show = NULL, group2Color = "Condition")
 }
 \arguments{
@@ -14,7 +14,7 @@ normalization.}
 \item{qDataAfter}{A dataframe that contains quantitative data after 
 normalization.}
 
-\item{labelsForLegend}{A vector of the conditions (labels) (one label 
+\item{condsForLegend}{A vector of the conditions (one condition 
 per sample).}
 
 \item{indData2Show}{A vector of the indices of the columns to show in 
@@ -36,10 +36,10 @@ normalization
 require(DAPARdata)
 data(Exp1_R25_pept)
 qDataBefore <- Biobase::exprs(Exp1_R25_pept)
-labels <- Biobase::pData(Exp1_R25_pept)[,"Label"]
-qDataAfter <- normalizeD(qDataBefore,labels,"Quantile Centering",
+conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+qDataAfter <- normalizeD(qDataBefore,conds,"Quantile Centering",
 "within conditions")
-compareNormalizationD(qDataBefore, qDataAfter, labels)
+compareNormalizationD(qDataBefore, qDataAfter, conds)
 }
 \author{
 Samuel Wieczorek

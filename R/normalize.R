@@ -41,8 +41,8 @@
 wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0.15){
     
     qData <- Biobase::exprs(obj)
-    labels <- Biobase::pData(obj)[,"Label"]
-    Biobase::exprs(obj) <- normalizeD(qData, labels, method, type, scaling, quantile)
+    conds <- Biobase::pData(obj)[,"Condition"]
+    Biobase::exprs(obj) <- normalizeD(qData, conds, method, type, scaling, quantile)
     
     msg_method <- paste("Normalisation using method =", method,  sep="")
     msg_type <- paste("With type =", type,  sep="")
@@ -92,7 +92,7 @@ wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0
 ##' 
 ##' @title Normalisation
 ##' @param qData A dataframe that contains quantitative data.
-##' @param labels A vector of strings containing the column "Label" of 
+##' @param conds A vector of strings containing the column "Condition" of 
 ##' the \code{pData()}.
 ##' @param method One of the following : Global Alignment, 
 ##' Quantile Centering, Mean Centering.
@@ -115,9 +115,9 @@ wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
-##' labels <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Label"]
-##' normalizeD(qData, labels, "Quantile Centering", "within conditions", quantile = 0.15)
-normalizeD <- function(qData, labels, method, type=NULL, scaling=FALSE, quantile=0.15){
+##' conds <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Condition"]
+##' normalizeD(qData, conds, "Quantile Centering", "within conditions", quantile = 0.15)
+normalizeD <- function(qData, conds, method, type=NULL, scaling=FALSE, quantile=0.15){
     parammethod<-c("Global quantile alignment", 
                    "Sum by columns", 
                    "Quantile Centering", 
@@ -160,8 +160,8 @@ normalizeD <- function(qData, labels, method, type=NULL, scaling=FALSE, quantile
                 }
             }
             else if  (type == "within conditions"){
-                for (l in unique(labels)) {
-                    indices <- which(labels== l)
+                for (l in unique(conds)) {
+                    indices <- which(conds== l)
                     sums_cols <- colSums(t[,indices], na.rm=TRUE)
                     for (i in 1:nrow(t)){
                         t[i,indices] <- (t[i,indices]/sums_cols) * median(sums_cols)
@@ -188,9 +188,9 @@ normalizeD <- function(qData, labels, method, type=NULL, scaling=FALSE, quantile
                 .temp <- sweep(.temp, 2, medianOverSamples)
                 
                 cCond <- NULL
-                for (l in unique(labels))
+                for (l in unique(conds))
                 {
-                    indices <- which(labels== l)
+                    indices <- which(conds== l)
                     cCond[l] <- q(medianOverSamples[indices])
                     .temp[,indices] <- .temp[,indices] + cCond[l]
                 }
@@ -219,9 +219,9 @@ normalizeD <- function(qData, labels, method, type=NULL, scaling=FALSE, quantile
                     attr(.temp,"scaled:scale")<-NULL
                     }
                 cCond <- NULL
-                for (l in unique(labels))
+                for (l in unique(conds))
                 {
-                    indices <- which(labels== l)
+                    indices <- which(conds== l)
                     cCond[l] <- mean(meanOverSamples[indices])
                     .temp[,indices] <- .temp[,indices] + cCond[l]
                 }

@@ -21,15 +21,15 @@ differential analysis.
 require(DAPARdata)
 data(Exp1_R25_pept)
 obj <- Exp1_R25_pept
-lapala <- findMECBlock(obj)
-obj <- wrapper.impute.detQuant(obj)
-obj <- reIntroduceMEC(obj, lapala)
-obj <- wrapper.impute.detQuant(obj)
-limma <- wrapper.limmaCompleteTest(obj, 1)
-fc <- limma$FC[1]
+keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+obj <- mvFilterFromIndices(obj, keepThat)
+qData <- Biobase::exprs(obj)
+sTab <- Biobase::pData(obj)
+limma <- limmaCompleteTest(qData,sTab)
+fc <- limma$logFC[1]
 pval <- limma$P_Value[1]
 params <- list(design="OnevsOne", method="limma", th_logFC=0)
-obj <- diffAnaSave(obj, limma,list(FC=fc, P_Value = pval), params)
+obj <- diffAnaSave(obj, limma,list(logFC=fc, P_Value = pval), params)
 signif <- diffAnaGetSignificant(obj)
 }
 \author{

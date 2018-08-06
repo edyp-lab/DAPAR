@@ -20,15 +20,15 @@ test_that("getNumberOfEmptyLines", {
 
 
 test_that("getIndicesConditions", {
-    labels <- Biobase::pData(Exp1_R2_pept)[,"Label"]
+    labels <- Biobase::pData(Exp1_R2_pept)[,"Condition"]
     l <- list(iCond1=c(1,2,3), iCond2=c(4,5,6))
     expect_equal(getIndicesConditions(labels, "10fmol", "5fmol"), l)
 })
 
 
-# test_that("getPaletteForLabels", {
-#     labels <- Biobase::pData(Exp1_R2_pept)[,"Label"]
-#     expect_equal(getPaletteForLabels(labels), c("#1B9E77", "#1B9E77", "#1B9E77", "#D95F02", "#D95F02", "#D95F02"))
+# test_that("getPaletteForConditions", {
+#     labels <- Biobase::pData(Exp1_R2_pept)[,"Condition"]
+#     expect_equal(getPaletteForConditions(labels), c("#1B9E77", "#1B9E77", "#1B9E77", "#D95F02", "#D95F02", "#D95F02"))
 # })
 
 
