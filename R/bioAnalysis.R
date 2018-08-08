@@ -203,7 +203,8 @@ barplotGroupGO_HC <- function(ggo, maxRes=5, title=""){
         hc_legend(enabled = FALSE) %>%
         #hc_colors(myColors) %>%
         hc_tooltip(enabled = FALSE) %>%
-        hc_xAxis(categories = dat[,"Description"], title = list(text = ""))
+        hc_xAxis(categories = dat[,"Description"], title = list(text = "")) %>%
+        my_hc_ExportMenu(filename="GOGroup_barplot")
     
     return(h1)
 }
