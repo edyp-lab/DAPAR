@@ -77,10 +77,17 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0){
      if(threshold_LogFC != 0) {
       hc <- hc %>% hc_add_annotation(
        labelOptions = list(
+         shape='connector',
          backgroundColor = 'lightgrey',
-         verticalAlign = 'top',
-         borderWidth = 1,
-         y = -30
+         #verticalAlign = 'bottom',
+         align='left',
+         #distance=0,
+         style=list(
+           fontSize= '1.5em',
+           textOutline= '1px white'
+         ),
+         borderWidth = 0,
+         x = 20
        ),
        labels = list(
          list(
@@ -99,9 +106,16 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0){
        hc <- hc %>%
          hc_add_annotation(
            labelOptions = list(
+             shape='connector',
              backgroundColor = 'rgba(255,255,255,0.5)',
              verticalAlign = 'top',
-             borderWidth = 1,
+             borderWidth = 0,
+             crop=TRUE,
+             style=list(
+               color = 'blue',
+               fontSize= '1.5em',
+               textOutline= '1px white'
+             ),
              y = -10
            ),
            labels = list(
@@ -121,9 +135,15 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0){
      if (threshold_LogFC <= maxX){
        hc <- hc %>% hc_add_annotation(
          labelOptions = list(
-           backgroundColor = 'rgba(255,255,255,0.5)',
+           shape='connector',
+           backgroundColor = 'blue',
            verticalAlign = 'top',
-           borderWidth = 1,
+           borderWidth = 0,
+           style=list(
+             color = 'blue',
+             fontSize= '1.5em',
+             textOutline= '1px white'
+           ),
            y = -5
          ),
          labels = list(
@@ -140,9 +160,6 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0){
        )
        
      }
-     
-     
-         
      
      
      
