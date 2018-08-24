@@ -4,8 +4,9 @@
 \alias{wrapper.compareNormalizationD_HC}
 \title{Builds a plot from a dataframe}
 \usage{
-wrapper.compareNormalizationD_HC(objBefore, objAfter, condsForLegend = NULL,
-  indData2Show = NULL, group2Color = "Condition")
+wrapper.compareNormalizationD_HC(objBefore, objAfter,
+  condsForLegend = NULL, indData2Show = NULL,
+  group2Color = "Condition")
 }
 \arguments{
 \item{objBefore}{A dataframe that contains quantitative data before 

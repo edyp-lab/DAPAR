@@ -541,6 +541,3 @@ formatLimmaResult <- function(fit, conds, contrast){
   return(res.l)
 }
 
-
-
-

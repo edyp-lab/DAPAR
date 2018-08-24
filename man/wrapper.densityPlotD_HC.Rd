@@ -4,8 +4,8 @@
 \alias{wrapper.densityPlotD_HC}
 \title{Builds a densityplot from an object of class \code{MSnSet}}
 \usage{
-wrapper.densityPlotD_HC(obj, condsForLegend = NULL, indData2Show = NULL,
-  group2Color = "Condition")
+wrapper.densityPlotD_HC(obj, condsForLegend = NULL,
+  indData2Show = NULL, group2Color = "Condition")
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}

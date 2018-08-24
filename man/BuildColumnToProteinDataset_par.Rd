@@ -5,7 +5,8 @@
 \title{creates a column for the protein dataset after agregation by
  using the previous peptide dataset.}
 \usage{
-BuildColumnToProteinDataset_par(peptideData, matAdj, columnName, proteinNames)
+BuildColumnToProteinDataset_par(peptideData, matAdj, columnName,
+  proteinNames)
 }
 \arguments{
 \item{peptideData}{A data.frame of meta data of peptides. It is the fData 

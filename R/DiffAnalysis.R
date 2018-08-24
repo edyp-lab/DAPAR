@@ -15,12 +15,18 @@
 ##' obj <- mvFilterFromIndices(obj, keepThat)
 ##' qData <- Biobase::exprs(obj)
 ##' sTab <- Biobase::pData(obj)
-##' limma <- limmaCompleteTest(qData,sTab)
-##' hc_logFC_DensityPlot(limma$logFC)
+##' res <- limmaCompleteTest(qData,sTab)
+##' hc_logFC_DensityPlot(res$logFC)
 hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0){
     
     if (is.null(df_logFC)){return()}
-
+    if (threshold_LogFC < 0){return()}
+  
+  nValues <- nrow(df_logFC)*ncol(df_logFC)
+  nInf <- length(which(df_logFC <= -threshold_LogFC))
+  nSup <- length(which(df_logFC >= threshold_LogFC))
+  nInside <- length(which(abs(df_logFC) < threshold_LogFC))
+  
      hc <-  highchart() %>% 
          hc_title(text = "log(FC) repartition") %>% 
          my_hc_chart(chartType = "spline", zoomType="x") %>%
@@ -35,24 +41,126 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0){
          my_hc_ExportMenu(filename = "densityplot") %>%
          hc_plotOptions(
              series=list(
-                 animation=list(
-                     duration = 100
-                 ),
+                 animation=list(duration = 100),
                  connectNulls= TRUE,
-                 marker=list(
-                     enabled = FALSE)
+                 marker=list(enabled = FALSE)
              )
          )
      
      myColors <- getPaletteForConditions_HC(ncol(df_logFC))
      
+     maxY.inf <- NULL
+     maxY.inside <- NULL
+     maxY.sup <- NULL
+     minX <- NULL
+     maxX<- NULL
+     
+     
     for (i in 1:ncol(df_logFC)){
         tmp <- density(df_logFC[,i])
+        ind <- tmp$y[which(tmp$x <= -threshold_LogFC)]
+        maxY.inf <- max(maxY.inf, ifelse(length(ind)==0,0,ind))
+        maxY.inside <- max(maxY.inf, tmp$y[intersect(which(tmp$x > -threshold_LogFC),which(tmp$x < threshold_LogFC))])
+        ind <- tmp$y[which(tmp$x > threshold_LogFC)]
+        maxY.sup <- max(maxY.sup, ifelse(length(ind)==0,tmp$y[length(tmp$y)],ind))
+        minX <- min(minX,tmp$x)
+        maxX <- max(maxX,tmp$x)
+        
+        
         hc <- hc_add_series(hc,
                             data.frame(x = tmp$x,  y = tmp$y), 
                             name=colnames(df_logFC)[i], 
                             color=myColors[i])
     }
+     
+     
+     if(threshold_LogFC != 0) {
+      hc <- hc %>% hc_add_annotation(
+       labelOptions = list(
+         shape='connector',
+         backgroundColor = 'lightgrey',
+         #verticalAlign = 'bottom',
+         align='left',
+         #distance=0,
+         style=list(
+           fontSize= '1.5em',
+           textOutline= '1px white'
+         ),
+         borderWidth = 0,
+         x = 20
+       ),
+       labels = list(
+         list(
+           point = list(
+             xAxis = 0,
+             yAxis = 0,
+             x = 0,
+             y = maxY.inside
+           ),
+           text = paste0("Filtered out<br><strong>",round(100*nInside/nValues, digits=2), " %</strong>")
+         )
+       )
+     )
+}
+     if (threshold_LogFC >= minX){
+       hc <- hc %>%
+         hc_add_annotation(
+           labelOptions = list(
+             shape='connector',
+             backgroundColor = 'rgba(255,255,255,0.5)',
+             verticalAlign = 'top',
+             borderWidth = 0,
+             crop=TRUE,
+             style=list(
+               color = 'blue',
+               fontSize= '1.5em',
+               textOutline= '1px white'
+             ),
+             y = -10
+           ),
+           labels = list(
+             list(
+               point = list(
+                 xAxis = 0,
+                 yAxis = 0,
+                 x = mean(c(minX,-threshold_LogFC)),
+                 y = maxY.inf
+               ),
+               text = paste0("Inf<br><strong>",round(100*nInf/nValues, digits=2), " %</strong>")
+             )
+           )
+         )
+     }
+     
+     if (threshold_LogFC <= maxX){
+       hc <- hc %>% hc_add_annotation(
+         labelOptions = list(
+           shape='connector',
+           backgroundColor = 'blue',
+           verticalAlign = 'top',
+           borderWidth = 0,
+           style=list(
+             color = 'blue',
+             fontSize= '1.5em',
+             textOutline= '1px white'
+           ),
+           y = -5
+         ),
+         labels = list(
+           list(
+             point = list(
+               xAxis = 0,
+               yAxis = 0,
+               x =  mean(c(maxX,threshold_LogFC)),
+               y = maxY.sup
+             ),
+             text = paste0("Sup<br><strong>",round(100*nSup/nValues, digits=2), " %</strong>")
+           )
+         )
+       )
+       
+     }
+     
      
      
  return(hc)
@@ -272,7 +380,7 @@ diffAnaGetSignificant <- function (obj){
 ##' limma <- limmaCompleteTest(qData,sTab)
 ##' wrapperCalibrationPlot(limma$P_Value[,1])
 wrapperCalibrationPlot <- function(vPVal, pi0Method="pounds"){
-
+require(cp4p)
 if (is.null(vPVal)){return(NULL)}
 
 p <- calibration.plot(vPVal, pi0.method=pi0Method)

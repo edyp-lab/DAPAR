@@ -1,82 +1,25 @@
-##' This method is a wrapper to the \code{imputeLCMD} package adapted to 
-##' objects of class \code{MSnSet}.
-##' 
-##' @title Missing values imputation from a \code{MSnSet} object
+
+
+##' This method is a wrapper to the function \code{impute.mle} of the package
+##' \code{imp4p} adapted to an object of class \code{MSnSet}.
+##'
+##' @title Imputation of peptides having no values in a biological condition.
 ##' @param obj An object of class \code{MSnSet}.
-##' @param method The imputation method to be used.
-##' Choices are QRILC, KNN, BPCA and MLE. 
-##' @return The object \code{obj} which has been imputed
-##' @author Alexia Dorffer
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' wrapper.mvImputation(Exp1_R25_pept[1:1000], "MLE")
-wrapper.mvImputation <- function(obj, method){
-    qData <- Biobase::exprs(obj)
-    Biobase::exprs(obj) <- mvImputation(qData, method)
-    msg <- paste("Missing values imputation using ", method,  sep="")
-    obj@processingData@processing <- c(obj@processingData@processing,msg)
-    
-    obj@experimentData@other$imputation.method <- method
-    return(obj)
-}
-
-
-
-
-##' This method is a wrapper to the \code{imputeLCMD} package adapted to 
-##' a matrix.
-##' 
-##' @title Missing values imputation from a matrix
-##' @param qData A dataframe that contains quantitative data.
-##' @param method The imputation method to be used.
-##' Choices are QRILC, KNN, BPCA and MLE. 
-##' @return The matrix imputed
+##' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' qData <- Biobase::exprs(Exp1_R25_pept)[1:1000]
-##' mvImputation(qData, "MLE")
-mvImputation <- function(qData, method){
-    #Check parameters
-    param<-c("BPCA", "KNN", "MLE")
-    if (sum(is.na(match(method, param)==TRUE))>0){
-        warning("Param method is not correct.")
-        return (NULL)
-    }
-    
-    qData <- as.matrix(qData)
-    ## BPCA impute imputation at peptide level
-    
-    if (method == "BPCA"){
-        if (getNumberOfEmptyLines(qData) > 0) {
-            stop("Data contains rows in which 
-                 all elements are 'NA'. Remove them first")}
-        ## replace all 0's by NAs
-        tmp.data <- qData
-        nSamples <- dim(qData)[2]
-        resultBPCA <- pca(qData, method="bpca", nPcs=(nSamples-1))
-        exprs <- completeObs(resultBPCA)
-        #     msg <- "Missing values imputation using bpca algorithm"
-        #     obj@processingData@processing <- c(obj@processingData@processing,msg)
-        } else if (method == "KNN"){
-            if (getNumberOfEmptyLines(qData) > 0) {
-                stop("Data contains rows in which all elements are 'NA'. 
-                     Remove them first")}
-            exprs <- impute.wrapper.KNN(qData, 3)
-            #     msg <- "Missing values imputation using KNN algorithm"
-            #     obj@processingData@processing <- c(obj@processingData@processing,msg)
-            } else if (method == "MLE"){
-                exprs <- impute.wrapper.MLE(qData)
-                #     msg <- "Missing values imputation using MLE algorithm"
-                #     obj@processingData@processing <- c(obj@processingData@processing,msg)
-            }
-    
-    
-    return (exprs)
+##' dat <- mvFilter(Exp1_R25_pept[1:1000,], type="allCond", th = 1)
+##' dat <- wrapper.impute.mle(dat)
+wrapper.impute.mle <- function(obj){
+  cond <- as.factor(Biobase::pData(obj)$Condition)
+  
+  res <- impute.mle(Biobase::exprs(obj), conditions=cond)
+  
+  Biobase::exprs(obj) <-res
+  return (obj)
 }
-
 
 
 

@@ -27,8 +27,8 @@ keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 obj <- mvFilterFromIndices(obj, keepThat)
 qData <- Biobase::exprs(obj)
 sTab <- Biobase::pData(obj)
-limma <- limmaCompleteTest(qData,sTab)
-hc_logFC_DensityPlot(limma$logFC)
+res <- limmaCompleteTest(qData,sTab)
+hc_logFC_DensityPlot(res$logFC)
 }
 \author{
 Samuel Wieczorek

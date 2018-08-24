@@ -47,7 +47,6 @@ import("siggenes") # SAM
 import("graph")
 importFrom("stringr", "str_match_all")
 importFrom("clusterProfiler", "bitr", "enrichGO", "groupGO")
-import("imputeLCMD")
 
 export(
 "writeMSnsetToExcel",
@@ -91,6 +90,9 @@ export(
 ,"wrapper.impute.detQuant"
 ,"wrapper.impute.slsa"
 ,"getQuantile4Imp"
+,"wrapper.impute.KNN"
+,"wrapper.impute.mle"
+
 
 
 ,"pepAgregate"

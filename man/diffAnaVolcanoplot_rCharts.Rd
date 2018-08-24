@@ -4,8 +4,8 @@
 \alias{diffAnaVolcanoplot_rCharts}
 \title{Volcanoplot of the differential analysis}
 \usage{
-diffAnaVolcanoplot_rCharts(df, threshold_pVal = 1e-60, threshold_logFC = 0,
-  conditions = NULL, clickFunction = NULL)
+diffAnaVolcanoplot_rCharts(df, threshold_pVal = 1e-60,
+  threshold_logFC = 0, conditions = NULL, clickFunction = NULL)
 }
 \arguments{
 \item{df}{A dataframe which contains the following slots :
@@ -44,6 +44,7 @@ customizable tooltip appears when the user put the mouse's pointer over
 a point of the scatter plot.
 }
 \examples{
+\donttest{
 library(highcharter) 
 library(tidyverse)
 require(DAPARdata)
@@ -62,10 +63,10 @@ colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
 if (ncol(df) > 3){
     colnames(df)[4:ncol(df)] <- 
     paste("tooltip_", colnames(df)[4:ncol(df)], sep="")}
-hc_clickFunction <- JS("function(event) {
-Shiny.onInputChange('eventPointClicked', [this.index]);}")
+hc_clickFunction <- JS("function(event) {Shiny.onInputChange('eventPointClicked', [this.index]+'_'+ [this.series.name]);}")
 cond <- c("25fmol", "10fmol")
 diffAnaVolcanoplot_rCharts(df, 2.5, 1, cond,hc_clickFunction) 
+}
 }
 \author{
 Samuel Wieczorek

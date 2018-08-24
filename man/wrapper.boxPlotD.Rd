@@ -4,7 +4,8 @@
 \alias{wrapper.boxPlotD}
 \title{Wrapper to the boxplotD function on an object \code{MSnSet}}
 \usage{
-wrapper.boxPlotD(obj, dataForXAxis = "Condition", group2Color = "Condition")
+wrapper.boxPlotD(obj, dataForXAxis = "Condition",
+  group2Color = "Condition")
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
