@@ -203,13 +203,14 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0){
 ##' diffAnaComputeFDR(limma$logFC[,1],limma$P_Value[,1])
 diffAnaComputeFDR <- function(logFC, pval,threshold_PVal=0, threshold_LogFC = 0, 
                             pi0Method=1){
+  #require(cp4p)
     if (is.null(logFC) || is.null(pval)){return()}
     
     upItems <- which(abs(logFC) >= threshold_LogFC)
     
     selectedItems <- pval[upItems]
 
-    padj <- adjust.p(selectedItems,  pi0Method)
+    padj <- cp4p::adjust.p(selectedItems,  pi0Method)
     
     items <- which(-log10(padj$adjp[,1]) >= threshold_PVal)
     
@@ -380,10 +381,10 @@ diffAnaGetSignificant <- function (obj){
 ##' limma <- limmaCompleteTest(qData,sTab)
 ##' wrapperCalibrationPlot(limma$P_Value[,1])
 wrapperCalibrationPlot <- function(vPVal, pi0Method="pounds"){
-require(cp4p)
+#require(cp4p)
 if (is.null(vPVal)){return(NULL)}
 
-p <- calibration.plot(vPVal, pi0.method=pi0Method)
+p <- cp4p::calibration.plot(vPVal, pi0.method=pi0Method)
 
 return(p)
 }
