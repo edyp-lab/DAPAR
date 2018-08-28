@@ -48,11 +48,7 @@ import("siggenes") # SAM
 import("graph")
 importFrom("stringr", "str_match_all")
 importFrom("clusterProfiler", "bitr", "enrichGO", "groupGO")
-<<<<<<< HEAD
-=======
-import("imputeLCMD")
 importFrom("vsn","vsn2","predict")
->>>>>>> origin/LOESS
 
 export(
 "writeMSnsetToExcel",
