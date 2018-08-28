@@ -27,6 +27,8 @@ be forced to unit (variance reduction) or not.}
 
 \item{quantile}{A float that corresponds to the quantile used to align the
 data.}
+
+\item{...}{span parameter for LOESS method}
 }
 \value{
 A matrix normalized
@@ -49,7 +51,7 @@ require(DAPARdata)
 data(Exp1_R25_pept)
 qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
 conds <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Condition"]
-normalizeD(qData, conds, "Quantile Centering", "within conditions", quantile = 0.15, ...)
+normalizeD(qData, conds, "Quantile Centering", "within conditions", quantile = 0.15)
 }
 \author{
 Samuel Wieczorek, Thomas Burger, Helene Borges

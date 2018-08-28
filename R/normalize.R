@@ -28,6 +28,7 @@
 ##' be forced to unit (variance reduction) or not.
 ##' @param quantile A float that corresponds to the quantile used to align the
 ##' data.
+##' @param ... span parameter for LOESS method
 ##' @return An instance of class \code{MSnSet} where the quantitative
 ##' data in the \code{exprs()} tab has been normalized.
 ##' @author Samuel Wieczorek
@@ -112,6 +113,7 @@ wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0
 ##' be forced to unit (variance reduction) or not.
 ##' @param quantile A float that corresponds to the quantile used to align the
 ##' data.
+##' @param ... span parameter for LOESS method
 ##' @return A matrix normalized
 ##' @author Samuel Wieczorek, Thomas Burger, Helene Borges
 ##' @examples
@@ -119,7 +121,7 @@ wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0
 ##' data(Exp1_R25_pept)
 ##' qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
 ##' conds <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Condition"]
-##' normalizeD(qData, conds, "Quantile Centering", "within conditions", quantile = 0.15, ...)
+##' normalizeD(qData, conds, "Quantile Centering", "within conditions", quantile = 0.15)
 normalizeD <- function(qData, conds, method, type=NULL, scaling=FALSE, quantile=0.15, ...){
   parammethod<-c("Global quantile alignment",
                  "Sum by columns",

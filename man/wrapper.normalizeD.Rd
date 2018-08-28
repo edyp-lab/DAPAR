@@ -29,6 +29,8 @@ be forced to unit (variance reduction) or not.}
 
 \item{quantile}{A float that corresponds to the quantile used to align the
 data.}
+
+\item{...}{span parameter for LOESS method}
 }
 \value{
 An instance of class \code{MSnSet} where the quantitative
