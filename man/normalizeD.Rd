@@ -5,28 +5,24 @@
 \title{Normalisation}
 \usage{
 normalizeD(qData, conds, method, type = NULL, scaling = FALSE,
-  quantile = 0.15)
+  quantile = 0.15, ...)
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
 
-\item{conds}{A vector of strings containing the column "Condition" of 
+\item{conds}{A vector of strings containing the column "Condition" of
 the \code{pData()}.}
 
-\item{method}{One of the following : Global Alignment, 
-Quantile Centering, Mean Centering.}
+\item{method}{One of the following : "Global quantile Alignment", "Sum by
+columns", "Quantile Centering", "Mean Centering"", "Mean Centering Scaling",
+"LOESS", "vsn".}
 
-\item{type}{For the method "Global Alignment", the parameters are:
-"sum by columns": operates on the original scale (not the log2 one) and propose 
-to normalize each abundance by the total abundance of the sample (so as to focus
-on the analyte proportions among each sample).
-"Alignment on all quantiles": proposes to align the quantiles of all the 
-replicates; practically it amounts to replace abundances by order statistics.
-For the two other methods, the parameters are "overall" (shift all the 
-sample distributions at once) or "within conditions" (shift the sample 
+\item{type}{For the method "Global quantile alignment" there is no associated type.
+For the six other methods, the parameters are "overall" (shift all the
+sample distributions at once) or "within conditions" (shift the sample
 distributions within each condition at a time).}
 
-\item{scaling}{A boolean that indicates if the variance of the data have to 
+\item{scaling}{A boolean that indicates if the variance of the data have to
 be forced to unit (variance reduction) or not.}
 
 \item{quantile}{A float that corresponds to the quantile used to align the
@@ -38,14 +34,13 @@ A matrix normalized
 \description{
 Provides several methods to normalize data from
 a matrix.
-They are organized in four main families : Strong Rescaling, 
-Median Centering, Mean Centering, Mean CenteringScaling.
-For the first family, two sub-categories are available : the sum by columns
-and the quantiles method.
-For the three other families, two categories are available : 
-"Overall" which means that the value for each protein 
+They are organized in 6 main families : Global quantile alignment, sum bu
+columns, Quantile Centering, Mean Centering, LOESS and vsn.
+For the first famlily there is no type.
+For the five other families, two categories are available :
+"Overall" which means that the value for each protein
 (ie line in the expression data tab) is computed over all the samples ;
-"within conditions" which means that the value for each protein 
+"within conditions" which means that the value for each protein
 (ie line in the matrix) is computed condition
 by condition.
 }
@@ -54,8 +49,8 @@ require(DAPARdata)
 data(Exp1_R25_pept)
 qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
 conds <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Condition"]
-normalizeD(qData, conds, "Quantile Centering", "within conditions", quantile = 0.15)
+normalizeD(qData, conds, "Quantile Centering", "within conditions", quantile = 0.15, ...)
 }
 \author{
-Samuel Wieczorek, Thomas Burger
+Samuel Wieczorek, Thomas Burger, Helene Borges
 }

@@ -5,45 +5,45 @@
 \title{Normalisation}
 \usage{
 wrapper.normalizeD(obj, method, type = NULL, scaling = FALSE,
-  quantile = 0.15)
+  quantile = 0.15, ...)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
 
-\item{method}{One of the following : Global Alignment (for normalizations 
-of important magnitude), Quantile Centering, Mean Centering.}
+\item{method}{One of the following : "Global quantile Alignment" (for
+normalizations of important magnitude), "Sum by columns", "Quantile Centering",
+"Mean Centering", "LOESS" and "vsn".}
 
 \item{type}{For the method "Global Alignment", the parameters are:
-"sum by columns": operates on the original scale (not the log2 one) and propose 
+"sum by columns": operates on the original scale (not the log2 one) and propose
 to normalize each abundance by the total abundance of the sample (so as to focus
 on the analyte proportions among each sample).
-"Alignment on all quantiles": proposes to align the quantiles of all the 
+"Alignment on all quantiles": proposes to align the quantiles of all the
 replicates; practically it amounts to replace abundances by order statistics.
-For the two other methods, the parameters are "overall" (shift all the 
-sample distributions at once) or "within conditions" (shift the sample 
+For the two other methods, the parameters are "overall" (shift all the
+sample distributions at once) or "within conditions" (shift the sample
 distributions within each condition at a time).}
 
-\item{scaling}{A boolean that indicates if the variance of the data have to 
+\item{scaling}{A boolean that indicates if the variance of the data have to
 be forced to unit (variance reduction) or not.}
 
 \item{quantile}{A float that corresponds to the quantile used to align the
 data.}
 }
 \value{
-An instance of class \code{MSnSet} where the quantitative 
+An instance of class \code{MSnSet} where the quantitative
 data in the \code{exprs()} tab has been normalized.
 }
 \description{
 Provides several methods to normalize quantitative data from
 a \code{MSnSet} object.
-They are organized in four main families : Strong Rescaling, 
-Median Centering, Mean Centering, Mean CenteringScaling.
-For the first family, two sub-categories are available : the sum by columns
-and the quantiles method.
-For the three other families, two categories are available : 
-"Overall" which means that the value for each protein 
+They are organized in six main families : Global quantile alignement, sum
+by columns, Quantile Centering, Mean Centering, LOESS, vsn
+For the first family, there is no type.
+For the five other families, two type categories are available :
+"Overall" which means that the value for each protein
 (ie line in the expression data tab) is computed over all the samples ;
-"within conditions" which means that the value for each protein 
+"within conditions" which means that the value for each protein
 (ie line in the \code{exprs()} data tab) is computed condition
 by condition.
 }

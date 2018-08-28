@@ -36,7 +36,7 @@ importFrom("stats", "lowess", "cor", "density","pexp", "mad",
            "quantile", "rbeta", "runif", "sd", "pchisq", "residuals","formula", "lm", "logLik")
 importFrom("preprocessCore", "normalize.quantiles")
 importFrom("gplots", "heatmap.2")
-#import("limma")
+importFrom("limma", "lmFit", "eBayes", "topTable", "makeContrasts", "contrasts.fit", "normalizeCyclicLoess", "loessFit")
 importFrom("pcaMethods", "completeObs", "pca")
 importFrom("scales", "alpha")
 importFrom("grDevices", "colorRampPalette", "palette", "heat.colors")
@@ -48,6 +48,8 @@ import("siggenes") # SAM
 import("graph")
 importFrom("stringr", "str_match_all")
 importFrom("clusterProfiler", "bitr", "enrichGO", "groupGO")
+importFrom("vsn","vsn2","predict")
+
 
 export(
 "writeMSnsetToExcel",
