@@ -10,8 +10,8 @@ wrapper.normalizeD(obj, method, type = NULL, scaling = FALSE,
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
 
-\item{method}{One of the following : "Global quantile Alignment" (for
-normalizations of important magnitude), "Sum by columns", "Quantile Centering",
+\item{method}{One of the following : "GlobalQuantileAlignment" (for
+normalizations of important magnitude), "SumByColumns", "QuantileCentering",
 "Mean Centering", "LOESS" and "vsn".}
 
 \item{type}{For the method "Global Alignment", the parameters are:
@@ -39,8 +39,7 @@ data in the \code{exprs()} tab has been normalized.
 \description{
 Provides several methods to normalize quantitative data from
 a \code{MSnSet} object.
-They are organized in six main families : Global quantile alignement, sum
-by columns, Quantile Centering, Mean Centering, LOESS, vsn
+They are organized in six main families : GlobalQuantileAlignement, sumByColumns, QuantileCentering, MeanCentering, LOESS, vsn
 For the first family, there is no type.
 For the five other families, two type categories are available :
 "Overall" which means that the value for each protein
@@ -52,7 +51,7 @@ by condition.
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-wrapper.normalizeD(Exp1_R25_pept[1:1000], "Quantile Centering", "within conditions")
+wrapper.normalizeD(Exp1_R25_pept[1:1000], "QuantileCentering", "within conditions")
 }
 \author{
 Samuel Wieczorek

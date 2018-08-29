@@ -365,7 +365,7 @@ violinPlotD <- function(qData,
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "Quantile Centering", 
+##' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering", 
 ##' "within conditions")
 ##' wrapper.compareNormalizationD(Exp1_R25_pept, objAfter, conds)
 wrapper.compareNormalizationD <- function(objBefore, objAfter, 
@@ -405,7 +405,7 @@ compareNormalizationD(qDataBefore, qDataAfter, condsForLegend, indData2Show,
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "Quantile Centering", 
+##' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering", 
 ##' "within conditions")
 ##' wrapper.compareNormalizationD_HC(Exp1_R25_pept, objAfter, conds)
 wrapper.compareNormalizationD_HC <- function(objBefore, objAfter, 
@@ -443,7 +443,7 @@ wrapper.compareNormalizationD_HC <- function(objBefore, objAfter,
 ##' data(Exp1_R25_pept)
 ##' qDataBefore <- Biobase::exprs(Exp1_R25_pept)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' qDataAfter <- normalizeD(qDataBefore,conds,"Quantile Centering",
+##' qDataAfter <- normalizeD(qDataBefore,conds,"QuantileCentering",
 ##' "within conditions")
 ##' compareNormalizationD(qDataBefore, qDataAfter, conds)
 compareNormalizationD <- function(qDataBefore,
@@ -534,7 +534,7 @@ palette("default")
 ##' obj <- Exp1_R25_pept[1:1000]
 ##' qDataBefore <- Biobase::exprs(obj)
 ##' conds <- Biobase::pData(obj)[,"Condition"]
-##' qDataAfter <- normalizeD(qDataBefore,conds,"Quantile Centering",
+##' qDataAfter <- normalizeD(qDataBefore,conds,"QuantileCentering",
 ##' "within conditions")
 ##' compareNormalizationD_HC(qDataBefore, qDataAfter, conds)
 compareNormalizationD_HC <- function(qDataBefore,

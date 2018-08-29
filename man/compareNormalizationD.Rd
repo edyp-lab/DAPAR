@@ -37,7 +37,7 @@ require(DAPARdata)
 data(Exp1_R25_pept)
 qDataBefore <- Biobase::exprs(Exp1_R25_pept)
 conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-qDataAfter <- normalizeD(qDataBefore,conds,"Quantile Centering",
+qDataAfter <- normalizeD(qDataBefore,conds,"QuantileCentering",
 "within conditions")
 compareNormalizationD(qDataBefore, qDataAfter, conds)
 }

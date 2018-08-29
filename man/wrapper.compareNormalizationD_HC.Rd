@@ -38,7 +38,7 @@ but uses the package \code{highcharter}
 require(DAPARdata)
 data(Exp1_R25_pept)
 conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-objAfter <- wrapper.normalizeD(Exp1_R25_pept, "Quantile Centering", 
+objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering", 
 "within conditions")
 wrapper.compareNormalizationD_HC(Exp1_R25_pept, objAfter, conds)
 }

@@ -75,7 +75,7 @@ getTextForFiltering <- function(l.params){
 ##' @return A string
 ##' @author Samuel Wieczorek
 ##' @examples
-##' getTextForNormalization(list(method="Sum by columns"))
+##' getTextForNormalization(list(method="SumByColumns"))
 getTextForNormalization <- function(l.params){ 
     
     # str(l.params) = list(method ,
@@ -86,30 +86,36 @@ getTextForNormalization <- function(l.params){
     
     
     txt <- NULL
-    if (l.params$method=="None") return (NULL)
-    else if (l.params$method == "Global quantile alignment"){
+    
+    switch(l.params$method,
+    None =return (NULL),
+    GlobalQuantileAlignment ={
         txt <- paste(as.character(tags$li(paste(txt,l.params$method))))
-    }
-    
-    else if  (l.params$method == "Sum by columns"){
+    },
+    SumByColumns = {
         txt <- paste(txt,as.character(tags$li(paste(l.params$method, " - ", l.params$type))))
-    }
-    
-    else if  (l.params$method == "Mean Centering"){
-        
+    },
+    MeanCentering ={
         if ( isTRUE(l.params$varReduction )){
             txt <- paste(txt,as.character(tags$li(paste(l.params$method, " - ", l.params$type, " with variance reduction"))))
         } else {
             txt <- paste(txt,as.character(tags$li(paste(l.params$method, " - ", l.params$type))))
         }
-    }
-    
-    else if  (l.params$method == "Quantile Centering"){
+    },
+    QuantileCentering ={
         txt <- paste(txt,as.character(tags$li(l.params$method, " - ", l.params$type)))
-        quant <- ifelse (l.params$quantile == "Other",l.params$otherQuantile, l.params$quantile)
+        quant <- l.params$quantile
         txt <- paste(txt,as.character(tags$li("with quantile =", quant)))
+    },
+    LOESS ={
+      txt <- paste(txt,as.character(tags$li(l.params$method, " - ", l.params$type)))
+      span <- l.params$spanLOESS
+      txt <- paste(txt,as.character(tags$li("with span =", span)))
+    },
+    vsn ={
+      txt <- paste(txt,as.character(tags$li(paste(l.params$method, " - ", l.params$type))))
     }
-    
+    )
     return (txt)
 }
 

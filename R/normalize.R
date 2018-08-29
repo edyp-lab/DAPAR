@@ -1,7 +1,6 @@
 ##' Provides several methods to normalize quantitative data from
 ##' a \code{MSnSet} object.
-##' They are organized in six main families : Global quantile alignement, sum
-##' by columns, Quantile Centering, Mean Centering, LOESS, vsn
+##' They are organized in six main families : GlobalQuantileAlignement, sumByColumns, QuantileCentering, MeanCentering, LOESS, vsn
 ##' For the first family, there is no type.
 ##' For the five other families, two type categories are available :
 ##' "Overall" which means that the value for each protein
@@ -12,8 +11,8 @@
 ##'
 ##' @title Normalisation
 ##' @param obj An object of class \code{MSnSet}.
-##' @param method One of the following : "Global quantile Alignment" (for
-##' normalizations of important magnitude), "Sum by columns", "Quantile Centering",
+##' @param method One of the following : "GlobalQuantileAlignment" (for
+##' normalizations of important magnitude), "SumByColumns", "QuantileCentering",
 ##' "Mean Centering", "LOESS" and "vsn".
 ##' @param type For the method "Global Alignment", the parameters are:
 ##' "sum by columns": operates on the original scale (not the log2 one) and propose
@@ -35,7 +34,7 @@
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' wrapper.normalizeD(Exp1_R25_pept[1:1000], "Quantile Centering", "within conditions")
+##' wrapper.normalizeD(Exp1_R25_pept[1:1000], "QuantileCentering", "within conditions")
 wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0.15, ...){
   
   qData <- Biobase::exprs(obj)
@@ -45,41 +44,42 @@ wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0
   msg_method <- paste("Normalisation using method =", method,  sep="")
   msg_type <- paste("With type =", type,  sep="")
   
-  if (method == "Global quantile alignment"){
+  switch(method,
+  GlobalQuantileAlignment ={
     obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type)
     obj@experimentData@other$normalizationMethod <- method
-  }
-  else if (method =="Sum by columns"){
+            },
+  SumByColumns= {
     obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type)
     obj@experimentData@other$normalizationMethod <- method
     obj@experimentData@other$normalizationType <- type
-  }
-  else if (method =="Quantile Centering"){
+            },
+  QuantileCentering = {
     msg_quantile <- paste("With quantile =", quantile,  sep="")
     obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type, msg_quantile)
     obj@experimentData@other$normalizationMethod <- method
     obj@experimentData@other$normalizationType <- type
     obj@experimentData@other$normalizationQuantile <- quantile
-  }
-  else if (method =="Mean Centering"){
+            },
+  MeanCentering = {
     msg_scaling <- paste("With scaling =", scaling,  sep="")
     obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type, msg_scaling)
     obj@experimentData@other$normalizationMethod <- msg_method
     obj@experimentData@other$normalizationType <- type
     obj@experimentData@other$normalizationScaling <- scaling
-  }
-  else if (method == "LOESS"){
+          },
+  LOESS = {
     msg_loess <- paste("With span =", ...,  sep="")
     obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type, msg_loess)
     obj@experimentData@other$normalizationMethod <- msg_method
     obj@experimentData@other$normalizationType <- type
-  }
-  else if (method == "vsn"){
+          },
+  vsn ={
     obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type)
     obj@experimentData@other$normalizationMethod <- method
     obj@experimentData@other$normalizationType <- type
   }
-  
+  )
   return(obj)
 }
 
@@ -88,8 +88,7 @@ wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0
 
 ##' Provides several methods to normalize data from
 ##' a matrix.
-##' They are organized in 6 main families : Global quantile alignment, sum bu
-##' columns, Quantile Centering, Mean Centering, LOESS and vsn.
+##' They are organized in 6 main families : GlobalQuantileAlignment, sumByColumns, QuantileCentering, MeanCentering, LOESS and vsn.
 ##' For the first famlily there is no type.
 ##' For the five other families, two categories are available :
 ##' "Overall" which means that the value for each protein
@@ -102,10 +101,9 @@ wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param conds A vector of strings containing the column "Condition" of
 ##' the \code{pData()}.
-##' @param method One of the following : "Global quantile Alignment", "Sum by
-##' columns", "Quantile Centering", "Mean Centering"", "Mean Centering Scaling",
+##' @param method One of the following : "GlobalQuantileAlignment", "SumByColumns", "QuantileCentering", "MeanCentering",
 ##' "LOESS", "vsn".
-##' @param type For the method "Global quantile alignment" there is no associated type.
+##' @param type For the method "GlobalQuantileAlignment" there is no associated type.
 ##' For the six other methods, the parameters are "overall" (shift all the
 ##' sample distributions at once) or "within conditions" (shift the sample
 ##' distributions within each condition at a time).
@@ -121,12 +119,12 @@ wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0
 ##' data(Exp1_R25_pept)
 ##' qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
 ##' conds <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Condition"]
-##' normalizeD(qData, conds, "Quantile Centering", "within conditions", quantile = 0.15)
+##' normalizeD(qData, conds, "QuantileCentering", "within conditions", quantile = 0.15)
 normalizeD <- function(qData, conds, method, type=NULL, scaling=FALSE, quantile=0.15, ...){
-  parammethod<-c("Global quantile alignment",
-                 "Sum by columns",
-                 "Quantile Centering",
-                 "Mean Centering",
+  parammethod<-c("GlobalQuantileAlignment",
+                 "SumByColumns",
+                 "QuantileCentering",
+                 "MeanCentering",
                  "LOESS",
                  "vsn")
   
@@ -149,38 +147,34 @@ normalizeD <- function(qData, conds, method, type=NULL, scaling=FALSE, quantile=
     
     ###############
     
-    if (method == "Global quantile alignment"){
-      .temp <- normalize.quantiles(.temp)
-      dimnames(.temp) <- list(rownames(qData),colnames(qData))
-    }
-    
-    
-    else if (method == "Sum by columns"){
-      t <- 2^(.temp)
+    switch(method,
+      GlobalQuantileAlignment = {
+              .temp <- normalize.quantiles(.temp)
+              dimnames(.temp) <- list(rownames(qData),colnames(qData))
+              },
+    SumByColumns = {
+              t <- 2^(.temp)
       
-      if (type == "overall"){
-        sums_cols <- colSums(t, na.rm=TRUE)
-        #normalisation
-        for ( i in 1:nrow(t)) {
-          t[i, ] <- (t[i, ] / sums_cols)*median(sums_cols)
-        }
-      }
-      else if  (type == "within conditions"){
-        for (l in unique(conds)) {
-          indices <- which(conds== l)
-          sums_cols <- colSums(t[,indices], na.rm=TRUE)
-          for (i in 1:nrow(t)){
-            t[i,indices] <- (t[i,indices]/sums_cols) * median(sums_cols)
-          }
-        }
-      }
+              if (type == "overall"){
+                  sums_cols <- colSums(t, na.rm=TRUE)
+                  #normalisation
+                  for ( i in 1:nrow(t)) {
+                    t[i, ] <- (t[i, ] / sums_cols)*median(sums_cols)
+                    }
+              } else if (type == "within conditions"){
+                  for (l in unique(conds)) {
+                    indices <- which(conds== l)
+                    sums_cols <- colSums(t[,indices], na.rm=TRUE)
+                    for (i in 1:nrow(t)){
+                      t[i,indices] <- (t[i,indices]/sums_cols) * median(sums_cols)
+                    }
+                  }
+              }
       
-      .temp <- log2(t)
-    }
+          .temp <- log2(t)
+        },
     
-    
-    ####################
-    else if (method =="Quantile Centering"){
+    QuantileCentering = {
       q <- function(x) { quantile(x, probs=quantile, na.rm=TRUE) }
       medianOverSamples <- apply(.temp, 2, q)
       
@@ -188,25 +182,18 @@ normalizeD <- function(qData, conds, method, type=NULL, scaling=FALSE, quantile=
         cOverall <- q(medianOverSamples)
         .temp <- sweep(.temp, 2, medianOverSamples)
         .temp <- .temp + cOverall
-        
-      }
-      else if (type == "within conditions"){
+      } else if (type == "within conditions"){
         .temp <- sweep(.temp, 2, medianOverSamples)
-        
-        cCond <- NULL
+         cCond <- NULL
         for (l in unique(conds))
-        {
+          {
           indices <- which(conds== l)
           cCond[l] <- q(medianOverSamples[indices])
           .temp[,indices] <- .temp[,indices] + cCond[l]
+          }
         }
-      }
-    }
-    
-    
-    
-    ######################
-    else if (method =="Mean Centering"){
+    },
+    MeanCentering = {
       meanOverSamples <- apply(.temp, 2, mean, na.rm = TRUE)
       
       if (type == "overall"){
@@ -232,10 +219,8 @@ normalizeD <- function(qData, conds, method, type=NULL, scaling=FALSE, quantile=
           .temp[,indices] <- .temp[,indices] + cCond[l]
         }
       }
-    }
-    ###############
-    # data must not be log-expressed.
-    else if(method == "vsn"){
+    },
+    vsn = {
       if(type == "overall"){
         vsn.fit <- vsn::vsnMatrix(2^(.temp))
         .temp <- vsn::predict(vsn.fit, 2^(.temp))
@@ -248,10 +233,11 @@ normalizeD <- function(qData, conds, method, type=NULL, scaling=FALSE, quantile=
         }
       }
       
-    }
+    },
+    
     ###############
     # data must be log-expressed.
-    else if(method == "LOESS"){
+    LOESS = {
       if(type == "overall"){
         # "..." to pass the span parameter to the loess function
         .temp <- normalizeCyclicLoess(x = .temp, method = "fast", ...)
@@ -265,7 +251,7 @@ normalizeD <- function(qData, conds, method, type=NULL, scaling=FALSE, quantile=
       }
       
     }
-    
+    )
     
     #
     #              msg <- paste("Normalisation using ", method, " and ", type, sep="")

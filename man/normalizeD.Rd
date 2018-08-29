@@ -13,11 +13,10 @@ normalizeD(qData, conds, method, type = NULL, scaling = FALSE,
 \item{conds}{A vector of strings containing the column "Condition" of
 the \code{pData()}.}
 
-\item{method}{One of the following : "Global quantile Alignment", "Sum by
-columns", "Quantile Centering", "Mean Centering"", "Mean Centering Scaling",
+\item{method}{One of the following : "GlobalQuantileAlignment", "SumByColumns", "QuantileCentering", "MeanCentering",
 "LOESS", "vsn".}
 
-\item{type}{For the method "Global quantile alignment" there is no associated type.
+\item{type}{For the method "GlobalQuantileAlignment" there is no associated type.
 For the six other methods, the parameters are "overall" (shift all the
 sample distributions at once) or "within conditions" (shift the sample
 distributions within each condition at a time).}
@@ -36,8 +35,7 @@ A matrix normalized
 \description{
 Provides several methods to normalize data from
 a matrix.
-They are organized in 6 main families : Global quantile alignment, sum bu
-columns, Quantile Centering, Mean Centering, LOESS and vsn.
+They are organized in 6 main families : GlobalQuantileAlignment, sumByColumns, QuantileCentering, MeanCentering, LOESS and vsn.
 For the first famlily there is no type.
 For the five other families, two categories are available :
 "Overall" which means that the value for each protein
@@ -51,7 +49,7 @@ require(DAPARdata)
 data(Exp1_R25_pept)
 qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
 conds <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Condition"]
-normalizeD(qData, conds, "Quantile Centering", "within conditions", quantile = 0.15)
+normalizeD(qData, conds, "QuantileCentering", "within conditions", quantile = 0.15)
 }
 \author{
 Samuel Wieczorek, Thomas Burger, Helene Borges
