@@ -27,100 +27,16 @@
 ##' be forced to unit (variance reduction) or not.
 ##' @param quantile A float that corresponds to the quantile used to align the
 ##' data.
-##' @param ... span parameter for LOESS method
+##' @param span parameter for LOESS method
 ##' @return An instance of class \code{MSnSet} where the quantitative
 ##' data in the \code{exprs()} tab has been normalized.
-##' @author Samuel Wieczorek
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' wrapper.normalizeD(Exp1_R25_pept[1:1000], "QuantileCentering", "within conditions")
-wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0.15, ...){
-  
-  qData <- Biobase::exprs(obj)
-  conds <- Biobase::pData(obj)[,"Condition"]
-  Biobase::exprs(obj) <- normalizeD(qData, conds, method, type, scaling, quantile, ...)
-  
-  msg_method <- paste("Normalisation using method =", method,  sep="")
-  msg_type <- paste("With type =", type,  sep="")
-  
-  switch(method,
-  GlobalQuantileAlignment ={
-    obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type)
-    obj@experimentData@other$normalizationMethod <- method
-            },
-  SumByColumns= {
-    obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type)
-    obj@experimentData@other$normalizationMethod <- method
-    obj@experimentData@other$normalizationType <- type
-            },
-  QuantileCentering = {
-    msg_quantile <- paste("With quantile =", quantile,  sep="")
-    obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type, msg_quantile)
-    obj@experimentData@other$normalizationMethod <- method
-    obj@experimentData@other$normalizationType <- type
-    obj@experimentData@other$normalizationQuantile <- quantile
-            },
-  MeanCentering = {
-    msg_scaling <- paste("With scaling =", scaling,  sep="")
-    obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type, msg_scaling)
-    obj@experimentData@other$normalizationMethod <- msg_method
-    obj@experimentData@other$normalizationType <- type
-    obj@experimentData@other$normalizationScaling <- scaling
-          },
-  LOESS = {
-    msg_loess <- paste("With span =", ...,  sep="")
-    obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type, msg_loess)
-    obj@experimentData@other$normalizationMethod <- msg_method
-    obj@experimentData@other$normalizationType <- type
-          },
-  vsn ={
-    obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type)
-    obj@experimentData@other$normalizationMethod <- method
-    obj@experimentData@other$normalizationType <- type
-  }
-  )
-  return(obj)
-}
-
-
-
-
-##' Provides several methods to normalize data from
-##' a matrix.
-##' They are organized in 6 main families : GlobalQuantileAlignment, sumByColumns, QuantileCentering, MeanCentering, LOESS and vsn.
-##' For the first famlily there is no type.
-##' For the five other families, two categories are available :
-##' "Overall" which means that the value for each protein
-##' (ie line in the expression data tab) is computed over all the samples ;
-##' "within conditions" which means that the value for each protein
-##' (ie line in the matrix) is computed condition
-##' by condition.
-##'
-##' @title Normalisation
-##' @param qData A dataframe that contains quantitative data.
-##' @param conds A vector of strings containing the column "Condition" of
-##' the \code{pData()}.
-##' @param method One of the following : "GlobalQuantileAlignment", "SumByColumns", "QuantileCentering", "MeanCentering",
-##' "LOESS", "vsn".
-##' @param type For the method "GlobalQuantileAlignment" there is no associated type.
-##' For the six other methods, the parameters are "overall" (shift all the
-##' sample distributions at once) or "within conditions" (shift the sample
-##' distributions within each condition at a time).
-##' @param scaling A boolean that indicates if the variance of the data have to
-##' be forced to unit (variance reduction) or not.
-##' @param quantile A float that corresponds to the quantile used to align the
-##' data.
-##' @param ... span parameter for LOESS method
-##' @return A matrix normalized
 ##' @author Samuel Wieczorek, Thomas Burger, Helene Borges
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' qData <- Biobase::exprs(Exp1_R25_pept[1:1000])
-##' conds <- Biobase::pData(Exp1_R25_pept[1:1000])[,"Condition"]
-##' normalizeD(qData, conds, "QuantileCentering", "within conditions", quantile = 0.15)
-normalizeD <- function(qData, conds, method, type=NULL, scaling=FALSE, quantile=0.15, ...){
+##' wrapper.normalizeD(Exp1_R25_pept[1:1000], "QuantileCentering", "within conditions")
+wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0.15, span = 0){
+  
   parammethod<-c("GlobalQuantileAlignment",
                  "SumByColumns",
                  "QuantileCentering",
@@ -133,130 +49,161 @@ normalizeD <- function(qData, conds, method, type=NULL, scaling=FALSE, quantile=
     return (NULL)
   }
   
-  paramtype<-c(NULL,
-               "overall",
-               "within conditions")
+  paramtype<-c(NULL,"overall", "within conditions")
   if (sum(is.na(match(type, paramtype)==TRUE))>0){
     warning("Parameter type is not correct")
     return (NULL)
   }
   
-  .temp <- qData
-  if (!is.null(.temp)){
-    data <- .temp
+  #.temp <- qData
+  #if (!is.null(.temp)){
+  #  data <- .temp
     
-    ###############
     
-    switch(method,
-      GlobalQuantileAlignment = {
-              .temp <- normalize.quantiles(.temp)
-              dimnames(.temp) <- list(rownames(qData),colnames(qData))
-              },
-    SumByColumns = {
-              t <- 2^(.temp)
-      
-              if (type == "overall"){
-                  sums_cols <- colSums(t, na.rm=TRUE)
-                  #normalisation
-                  for ( i in 1:nrow(t)) {
-                    t[i, ] <- (t[i, ] / sums_cols)*median(sums_cols)
-                    }
-              } else if (type == "within conditions"){
-                  for (l in unique(conds)) {
-                    indices <- which(conds== l)
-                    sums_cols <- colSums(t[,indices], na.rm=TRUE)
-                    for (i in 1:nrow(t)){
-                      t[i,indices] <- (t[i,indices]/sums_cols) * median(sums_cols)
-                    }
-                  }
-              }
-      
-          .temp <- log2(t)
-        },
     
-    QuantileCentering = {
-      q <- function(x) { quantile(x, probs=quantile, na.rm=TRUE) }
-      medianOverSamples <- apply(.temp, 2, q)
-      
-      if (type == "overall"){
-        cOverall <- q(medianOverSamples)
-        .temp <- sweep(.temp, 2, medianOverSamples)
-        .temp <- .temp + cOverall
-      } else if (type == "within conditions"){
-        .temp <- sweep(.temp, 2, medianOverSamples)
-         cCond <- NULL
-        for (l in unique(conds))
-          {
-          indices <- which(conds== l)
-          cCond[l] <- q(medianOverSamples[indices])
-          .temp[,indices] <- .temp[,indices] + cCond[l]
-          }
-        }
-    },
-    MeanCentering = {
-      meanOverSamples <- apply(.temp, 2, mean, na.rm = TRUE)
-      
-      if (type == "overall"){
-        cOverall <- mean(meanOverSamples)
-        .temp <- sweep(.temp, 2, meanOverSamples)
-        if (scaling){
-          .temp <- scale(.temp,center=FALSE,scale=TRUE)
-          attr(.temp,"scaled:scale")<-NULL
-        }
-        .temp <- .temp + cOverall
-      }
-      else if (type == "within conditions"){
-        .temp <- sweep(.temp, 2, meanOverSamples)
-        if (scaling){
-          .temp <- scale(.temp,center=FALSE, scale=TRUE)
-          attr(.temp,"scaled:scale")<-NULL
-        }
-        cCond <- NULL
-        for (l in unique(conds))
-        {
-          indices <- which(conds== l)
-          cCond[l] <- mean(meanOverSamples[indices])
-          .temp[,indices] <- .temp[,indices] + cCond[l]
-        }
-      }
-    },
-    vsn = {
-      if(type == "overall"){
-        vsn.fit <- vsn::vsnMatrix(2^(.temp))
-        .temp <- vsn::predict(vsn.fit, 2^(.temp))
-      }else if(type == "within conditions"){
-        for (l in unique(labels)) {
-          indices <- which(labels == l)
-          vsn.fit <- vsn::vsnMatrix(2^(.temp[,indices]))
-          .temp[,indices] <- vsn::predict(vsn.fit, 2^(.temp[,indices]))
-          
-        }
-      }
-      
-    },
     
-    ###############
-    # data must be log-expressed.
-    LOESS = {
-      if(type == "overall"){
-        # "..." to pass the span parameter to the loess function
-        .temp <- normalizeCyclicLoess(x = .temp, method = "fast", ...)
-        
-      }else if(type == "within conditions"){
-        for (l in unique(labels)) {
-          indices <- which(labels == l)
-          .temp[,indices] <- normalizeCyclicLoess(x = .temp[,indices],
-                                                  method = "fast", ...)
-        }
-      }
-      
-    }
-    )
-    
-    #
-    #              msg <- paste("Normalisation using ", method, " and ", type, sep="")
-    #              .temp@processingData@processing <- c(.temp@processingData@processing,
-    #                                                   msg)
-  }
-  return(.temp)
+  #qData <- Biobase::exprs(obj)
+  conds <- Biobase::pData(obj)[,"Condition"]
+  
+  msg_method <- paste("Normalisation using method =", method,  sep="")
+  msg_type <- paste("With type =", type,  sep="")
+  
+  switch(method,
+  GlobalQuantileAlignment = {
+           Biobase::exprs(obj) <- normalize.quantiles(Biobase::exprs(obj))
+           dimnames(Biobase::exprs(obj)) <- list(rownames(qData),colnames(qData))
+           obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type)
+           obj@experimentData@other$normalizationMethod <- method
+           
+         },
+  SumByColumns = {
+           t <- 2^(Biobase::exprs(obj))
+           
+           if (type == "overall"){
+             sums_cols <- colSums(t, na.rm=TRUE)
+             #normalisation
+             for ( i in 1:nrow(t)) {
+               t[i, ] <- (t[i, ] / sums_cols)*median(sums_cols)
+             }
+           } else if (type == "within conditions"){
+             for (l in unique(conds)) {
+               indices <- which(conds== l)
+               sums_cols <- colSums(t[,indices], na.rm=TRUE)
+               for (i in 1:nrow(t)){
+                 t[i,indices] <- (t[i,indices]/sums_cols) * median(sums_cols)
+               }
+             }
+           }
+           
+           Biobase::exprs(obj) <- log2(t)
+           
+           obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type)
+           obj@experimentData@other$normalizationMethod <- method
+           obj@experimentData@other$normalizationType <- type
+          },
+         
+QuantileCentering = {
+           q <- function(x) { quantile(x, probs=quantile, na.rm=TRUE) }
+           medianOverSamples <- apply(Biobase::exprs(obj), 2, q)
+           
+           if (type == "overall"){
+             cOverall <- q(medianOverSamples)
+             Biobase::exprs(obj) <- sweep(Biobase::exprs(obj), 2, medianOverSamples)
+             Biobase::exprs(obj) <- Biobase::exprs(obj) + cOverall
+           } else if (type == "within conditions"){
+             Biobase::exprs(obj) <- sweep(Biobase::exprs(obj), 2, medianOverSamples)
+             cCond <- NULL
+             for (l in unique(conds))
+             {
+               indices <- which(conds== l)
+               cCond[l] <- q(medianOverSamples[indices])
+               Biobase::exprs(obj)[,indices] <- Biobase::exprs(obj)[,indices] + cCond[l]
+             }
+           }
+           
+           msg_quantile <- paste("With quantile =", quantile,  sep="")
+           obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type, msg_quantile)
+           obj@experimentData@other$normalizationMethod <- method
+           obj@experimentData@other$normalizationType <- type
+           obj@experimentData@other$normalizationQuantile <- quantile
+           
+         },
+MeanCentering = {
+           meanOverSamples <- apply(Biobase::exprs(obj), 2, mean, na.rm = TRUE)
+           
+           if (type == "overall"){
+             cOverall <- mean(meanOverSamples)
+             Biobase::exprs(obj) <- sweep(.temp, 2, meanOverSamples)
+             if (scaling){
+               Biobase::exprs(obj) <- scale(Biobase::exprs(obj),center=FALSE,scale=TRUE)
+               attr(Biobase::exprs(obj),"scaled:scale")<-NULL
+             }
+             Biobase::exprs(obj) <- Biobase::exprs(obj) + cOverall
+           }
+           else if (type == "within conditions"){
+             .temp <- sweep(Biobase::exprs(obj), 2, meanOverSamples)
+             if (scaling){
+               Biobase::exprs(obj) <- scale(Biobase::exprs(obj),center=FALSE, scale=TRUE)
+               attr(Biobase::exprs(obj),"scaled:scale")<-NULL
+             }
+             cCond <- NULL
+             for (l in unique(conds))
+             {
+               indices <- which(conds== l)
+               cCond[l] <- mean(meanOverSamples[indices])
+               Biobase::exprs(obj)[,indices] <- Biobase::exprs(obj)[,indices] + cCond[l]
+             }
+           }
+           
+           msg_scaling <- paste("With scaling =", scaling,  sep="")
+           obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type, msg_scaling)
+           obj@experimentData@other$normalizationMethod <- msg_method
+           obj@experimentData@other$normalizationType <- type
+           obj@experimentData@other$normalizationScaling <- scaling
+           
+         },
+         vsn = {
+           if(type == "overall"){
+             vsn.fit <- vsn::vsnMatrix(2^(Biobase::exprs(obj)))
+             Biobase::exprs(obj) <- vsn::predict(vsn.fit, 2^(Biobase::exprs(obj)))
+           }else if(type == "within conditions"){
+             for (l in unique(conds)) {
+               indices <- which(conds == l)
+               vsn.fit <- vsn::vsnMatrix(2^(Biobase::exprs(obj)[,indices]))
+               Biobase::exprs(obj)[,indices] <- vsn::predict(vsn.fit, 2^(Biobase::exprs(obj)[,indices]))
+               
+             }
+           }
+           obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type)
+           obj@experimentData@other$normalizationMethod <- method
+           obj@experimentData@other$normalizationType <- type
+         },
+         
+         ###############
+         # data must be log-expressed.
+         LOESS = {
+           if(type == "overall"){
+             # "..." to pass the span parameter to the loess function
+             Biobase::exprs(obj) <- limma::normalizeCyclicLoess(x = Biobase::exprs(obj), method = "fast", span = span)
+             
+           }else if(type == "within conditions"){
+             for (l in unique(conds)) {
+               indices <- which(conds == l)
+               Biobase::exprs(obj)[,indices] <- limma::normalizeCyclicLoess(x = Biobase::exprs(obj)[,indices],method = "fast", span = span)
+             }
+           }
+           
+           msg_loess <- paste("With span =", span,  sep="")
+           obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type, msg_loess)
+           obj@experimentData@other$normalizationMethod <- msg_method
+           obj@experimentData@other$normalizationType <- type
+           
+         }
+  )
+
+  return(obj)
+  
+  
 }
+
+

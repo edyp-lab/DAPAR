@@ -1107,7 +1107,6 @@ versions". All plots and tables in other menus are automatically updated.
 
 The corresponding functions for the normalization are:
 \begin{itemize}
-\item for the dataframe parameter: \Rfunction{normalizeD()},
 \item for an object of class MSnSet: \Rfunction{wrapper.normalizeD()}.
 \end{itemize}
 

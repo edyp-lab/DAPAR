@@ -365,8 +365,7 @@ violinPlotD <- function(qData,
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering", 
-##' "within conditions")
+##' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering","within conditions")
 ##' wrapper.compareNormalizationD(Exp1_R25_pept, objAfter, conds)
 wrapper.compareNormalizationD <- function(objBefore, objAfter, 
                                         condsForLegend=NULL,
@@ -378,8 +377,7 @@ qDataAfter <- Biobase::exprs(objAfter)
 if (is.null(condsForLegend)){
   condsForLegend <- Biobase::pData(objBefore)[,"Condition"]}
 
-compareNormalizationD(qDataBefore, qDataAfter, condsForLegend, indData2Show, 
-                    group2Color)
+compareNormalizationD(qDataBefore, qDataAfter, condsForLegend, indData2Show, group2Color)
 }
 
 ##' Wrapper to the function that plot to compare the quantitative proteomics 
@@ -443,9 +441,8 @@ wrapper.compareNormalizationD_HC <- function(objBefore, objAfter,
 ##' data(Exp1_R25_pept)
 ##' qDataBefore <- Biobase::exprs(Exp1_R25_pept)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' qDataAfter <- normalizeD(qDataBefore,conds,"QuantileCentering",
-##' "within conditions")
-##' compareNormalizationD(qDataBefore, qDataAfter, conds)
+##' objAfter <- wrapper.normalizeD(Exp1_R25_pept,"QuantileCentering","within conditions")
+##' compareNormalizationD(qDataBefore, Biobase::exprs(objAfter), conds)
 compareNormalizationD <- function(qDataBefore,
                                 qDataAfter,
                                 condsForLegend=NULL,
@@ -534,9 +531,8 @@ palette("default")
 ##' obj <- Exp1_R25_pept[1:1000]
 ##' qDataBefore <- Biobase::exprs(obj)
 ##' conds <- Biobase::pData(obj)[,"Condition"]
-##' qDataAfter <- normalizeD(qDataBefore,conds,"QuantileCentering",
-##' "within conditions")
-##' compareNormalizationD_HC(qDataBefore, qDataAfter, conds)
+##' objAfter <- wrapper.normalizeD(obj,"QuantileCentering","within conditions")
+##' compareNormalizationD_HC(qDataBefore, Biobase::exprs(objAfter), conds)
 compareNormalizationD_HC <- function(qDataBefore,
                                   qDataAfter,
                                   condsForLegend=NULL,

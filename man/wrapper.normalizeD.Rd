@@ -5,7 +5,7 @@
 \title{Normalisation}
 \usage{
 wrapper.normalizeD(obj, method, type = NULL, scaling = FALSE,
-  quantile = 0.15, ...)
+  quantile = 0.15, span = 0)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
@@ -30,7 +30,7 @@ be forced to unit (variance reduction) or not.}
 \item{quantile}{A float that corresponds to the quantile used to align the
 data.}
 
-\item{...}{span parameter for LOESS method}
+\item{span}{parameter for LOESS method}
 }
 \value{
 An instance of class \code{MSnSet} where the quantitative
@@ -54,5 +54,5 @@ data(Exp1_R25_pept)
 wrapper.normalizeD(Exp1_R25_pept[1:1000], "QuantileCentering", "within conditions")
 }
 \author{
-Samuel Wieczorek
+Samuel Wieczorek, Thomas Burger, Helene Borges
 }
