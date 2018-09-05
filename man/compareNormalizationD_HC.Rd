@@ -6,7 +6,7 @@
 uses the library \code{highcharter}}
 \usage{
 compareNormalizationD_HC(qDataBefore, qDataAfter, condsForLegend = NULL,
-  indData2Show = NULL, group2Color = "Condition")
+  indData2Show = NULL, palette = NULL)
 }
 \arguments{
 \item{qDataBefore}{A dataframe that contains quantitative data before 
@@ -22,9 +22,7 @@ per sample).}
 the plot. The indices are those of indices of 
 the columns int the data.frame qDataBefore.}
 
-\item{group2Color}{A string that indicates how to color the replicates:
-one color per condition (value "Condition") or one 
-color per replicate (value "Replicate"). Default value is by Condition.}
+\item{palette}{xxx}
 }
 \value{
 A plot

@@ -5,7 +5,7 @@
 \title{Histogram of missing values}
 \usage{
 mvHisto_HC(qData, samplesData, conds, indLegend = "auto",
-  showValues = FALSE)
+  showValues = FALSE, palette = NULL)
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
@@ -19,6 +19,8 @@ columns to the meta-data for those samples.}
 
 \item{showValues}{A logical that indicates wether numeric values should be
 drawn above the bars.}
+
+\item{palette}{xxx}
 }
 \value{
 A histogram

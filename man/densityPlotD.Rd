@@ -5,19 +5,16 @@
 \title{Builds a densityplot from a dataframe}
 \usage{
 densityPlotD(qData, condsForLegend = NULL, indData2Show = NULL,
-  group2Color = "Condition")
+  palette = NULL)
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
 
 \item{condsForLegend}{A vector of the conditions (one condition per sample).}
 
-\item{indData2Show}{A vector of indices to show in densityplot. If NULL, 
-then all conds are displayed.}
+\item{indData2Show}{A vector of indices to show in densityplot. If NULL, then all conds are displayed.}
 
-\item{group2Color}{A string that indicates how to color the replicates: 
-one color per condition (value "Condition") or one 
-color per replicate (value "Replicate"). Default value is by Condition.}
+\item{palette}{xxx}
 }
 \value{
 A density plot

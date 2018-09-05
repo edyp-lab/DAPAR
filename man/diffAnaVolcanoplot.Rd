@@ -5,7 +5,7 @@
 \title{Volcanoplot of the differential analysis}
 \usage{
 diffAnaVolcanoplot(logFC = NULL, pVal = NULL, threshold_pVal = 1e-60,
-  threshold_logFC = 0, conditions = NULL)
+  threshold_logFC = 0, conditions = NULL, colors = NULL)
 }
 \arguments{
 \item{logFC}{A vector of the log(fold change) values of the differential
@@ -22,6 +22,8 @@ Fold Change that separates differential and non-differential data.}
 
 \item{conditions}{A list of the names of condition 1 and 2 used for the
 differential analysis.}
+
+\item{colors}{xxx}
 }
 \value{
 A volcanoplot

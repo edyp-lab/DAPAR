@@ -5,7 +5,7 @@
 \title{Bar plot of missing values per lines and per condition}
 \usage{
 mvPerLinesHistoPerCondition_HC(qData, samplesData, indLegend = "auto",
-  showValues = FALSE)
+  showValues = FALSE, palette = NULL)
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
@@ -17,6 +17,8 @@ columns to the meta-data for those samples.}
 
 \item{showValues}{A logical that indicates wether numeric values should be
 drawn above the bars.}
+
+\item{palette}{xxx}
 }
 \value{
 A bar plot

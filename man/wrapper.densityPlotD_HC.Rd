@@ -5,7 +5,7 @@
 \title{Builds a densityplot from an object of class \code{MSnSet}}
 \usage{
 wrapper.densityPlotD_HC(obj, condsForLegend = NULL,
-  indData2Show = NULL, group2Color = "Condition")
+  indData2Show = NULL, ...)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
@@ -16,9 +16,7 @@ wrapper.densityPlotD_HC(obj, condsForLegend = NULL,
 the plot. The indices are those of indices of the columns int the data
 frame qDataBefore in the density plot.}
 
-\item{group2Color}{A string that indicates how to color the replicates: 
-one color per condition (value "Condition") or one color per replicate
-(value "Replicate"). Default value is by Condition.}
+\item{...}{arguments for palette}
 }
 \value{
 A density plot

@@ -214,17 +214,18 @@ mvPerLinesHistoPerCondition(qData, samplesData, indLegend, showValues)
 ##' @param indLegend The indice of the column name's in \code{pData()} tab .
 ##' @param showValues A logical that indicates wether numeric values should be
 ##' drawn above the bars.
+##' @param ... xxx
 ##' @return A bar plot
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' wrapper.mvPerLinesHistoPerCondition(Exp1_R25_pept)
+##' wrapper.mvPerLinesHistoPerCondition_HC(Exp1_R25_pept)
 wrapper.mvPerLinesHistoPerCondition_HC <- function(obj, indLegend="auto", 
-                                                showValues=FALSE){
+                                                showValues=FALSE, ...){
     qData <- Biobase::exprs(obj)
     samplesData <- Biobase::pData(obj)
-    mvPerLinesHistoPerCondition_HC(qData, samplesData, indLegend, showValues)
+    mvPerLinesHistoPerCondition_HC(qData, samplesData, indLegend, showValues, ...)
 }
 
 
@@ -238,6 +239,7 @@ wrapper.mvPerLinesHistoPerCondition_HC <- function(obj, indLegend="auto",
 ##' @param indLegend The indice of the column name's in \code{pData()} tab 
 ##' @param showValues A logical that indicates wether numeric values should be
 ##' drawn above the bars.
+##' @param palette xxx
 ##' @return A bar plot
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -247,9 +249,17 @@ wrapper.mvPerLinesHistoPerCondition_HC <- function(obj, indLegend="auto",
 ##' samplesData <- Biobase::pData(Exp1_R25_pept)
 ##' mvPerLinesHistoPerCondition(qData, samplesData)
 mvPerLinesHistoPerCondition <- function(qData, samplesData, indLegend="auto", 
-                                        showValues=FALSE){
+                                        showValues=FALSE, palette=NULL){
 
-pal <- getPaletteForConditions(samplesData[,"Condition"])
+  
+  if (is.null(palette)){
+    palette <- brewer.pal(ncol(qData),"Dark2")[1:ncol(qData)]
+  }else{
+    if (length(palette) != ncol(qData)){
+      warning("The color palette has not the same dimension as the number of samples")
+      return(NULL)
+    }
+  }
 if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
 
 nbConditions <- length(unique(samplesData[,"Condition"]))
@@ -276,7 +286,7 @@ x <- barplot(m,
                 main = "# lines by # of NA",
                 xlab = "# NA per lines",
                 names.arg = as.character(0:ncolMatrix), 
-                col = unique(pal),
+                col = palette,
                 ylim = c(0, 1.2*max(m)), 
                 xpd = FALSE,
                 las=1,
@@ -302,6 +312,7 @@ x <- barplot(m,
 ##' @param indLegend The indice of the column name's in \code{pData()} tab 
 ##' @param showValues A logical that indicates wether numeric values should be
 ##' drawn above the bars.
+##' @param palette xxx
 ##' @return A bar plot
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -311,10 +322,19 @@ x <- barplot(m,
 ##' samplesData <- Biobase::pData(Exp1_R25_pept)
 ##' mvPerLinesHistoPerCondition_HC(qData, samplesData)
 mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto", 
-                                        showValues=FALSE){
+                                        showValues=FALSE, palette=NULL){
     
     conds <- samplesData[,"Condition"]
-        pal <- getPaletteForConditions(samplesData[,"Condition"])
+    if (is.null(palette)){
+      palette <- brewer.pal(length(unique(conds)),"Dark2")
+    }else{
+      if (length(palette) != ncol(qData)){
+        warning("The color palette has not the same dimension as the number of samples")
+        return(NULL)
+      }
+    }
+    
+    
     if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
     
     nbConditions <- length(unique(samplesData[,"Condition"]))
@@ -334,30 +354,26 @@ mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto",
         
         m[as.integer(names(t))+1,i] <- t
     }
+    m <- as.data.frame(m)
     
-    
-    colnames(m) <- unique(conds)
-    rownames(m) <- 0:(nrow(m)-1)
-    
-    nbSeries = length(unique(conds))
-    series <- list()
-    for (i in 1:nbSeries){
-        tmp <- list(data = m[,i], name=(unique(conds))[i])
-        names(tmp$data) <- c()
-        series[[i]] <- tmp
-    }
+     rownames(m) <- 0:(nrow(m)-1)
     
     h1 <-  highchart() %>% 
         hc_title(text = "#[lines] with X NA values (condition-wise)") %>% 
         my_hc_chart(chartType = "column") %>%
         hc_plotOptions( column = list(stacking = ""),
+                        dataLabels = list(enabled = FALSE),
                         animation=list(duration = 100)) %>%
-        hc_add_series_list(series) %>%
+        hc_colors(unique(palette)) %>%
         hc_legend(enabled = FALSE) %>%
         hc_xAxis(categories = row.names(m), title = list(text = "#[NA values] per line (condition-wise)")) %>%
       my_hc_ExportMenu(filename = "missingValuesPlot_2") %>%
         hc_tooltip(headerFormat= '',
                    pointFormat = "{point.y} ")
+    
+    for (i in 1:nbConditions){
+    h1 <- h1 %>% hc_add_series(data=m[,unique(samplesData[,"Condition"])[i]]) }
+      
     
     return(h1)
     
@@ -396,17 +412,18 @@ mvHisto(qData, samplesData, conds, indLegend, showValues)
 ##' @param indLegend The indices of the column name's in \code{pData()} tab.
 ##' @param showValues A logical that indicates wether numeric values should be
 ##' drawn above the bars.
+##' @param ... xxx
 ##' @return A histogram
 ##' @author Alexia Dorffer
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' wrapper.mvHisto(Exp1_R25_pept, showValues=TRUE)
-wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE){
+##' wrapper.mvHisto_HC(Exp1_R25_pept, showValues=TRUE)
+wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
     qData <- Biobase::exprs(obj)
     samplesData <- Biobase::pData(obj)
     conds <- samplesData[,"Condition"]
-    mvHisto_HC(qData, samplesData, conds, indLegend, showValues)
+    mvHisto_HC(qData, samplesData, conds, indLegend, showValues, ...)
 }
 
 
@@ -421,6 +438,7 @@ wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE){
 ##' @param indLegend The indices of the column name's in \code{pData()} tab
 ##' @param showValues A logical that indicates wether numeric values should be
 ##' drawn above the bars.
+##' @param palette xxx
 ##' @return A histogram
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
@@ -430,8 +448,17 @@ wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE){
 ##' samplesData <- Biobase::pData(Exp1_R25_pept)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' mvHisto(qData, samplesData, conds, indLegend="auto", showValues=TRUE)
-mvHisto <- function(qData, samplesData, conds, indLegend="auto", showValues=FALSE){
+mvHisto <- function(qData, samplesData, conds, indLegend="auto", showValues=FALSE, palette=NULL){
 
+  if (is.null(palette)){
+    palette <- brewer.pal(length(unique(conds)),"Dark2")
+  }else{
+    if (length(palette) != ncol(qData)){
+      warning("The color palette has not the same dimension as the number of samples")
+      return(NULL)
+    }
+  }
+  
 if (identical(indLegend,"auto")) { 
     indLegend <- c(2:length(colnames(samplesData)))
 }
@@ -440,7 +467,6 @@ if (identical(indLegend,"auto")) {
 colnames(qData) <- samplesData[,"Condition"]
 
 coeffMax <- .1
-pal <- getPaletteForConditions(conds)
 
 NbNAPerCol <- colSums(is.na(qData))
 NbNAPerRow <- rowSums(is.na(qData))
@@ -450,7 +476,7 @@ if (sum(NbNAPerCol) == 0) {if (sum(NbNAPerCol) == 0){
 }} 
 x <- barplot(NbNAPerCol, 
                 main = "# NA per columns",
-                col=pal,
+                col=palette,
                 las=1,
                 ylim = c(0, 1.2*max(1,NbNAPerCol)),
                 names.arg = c(1:18), 
@@ -481,6 +507,7 @@ graphics::text(x, -3,
 ##' @param indLegend The indices of the column name's in \code{pData()} tab
 ##' @param showValues A logical that indicates wether numeric values should be
 ##' drawn above the bars.
+##' @param palette xxx
 ##' @return A histogram
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
@@ -491,41 +518,34 @@ graphics::text(x, -3,
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' mvHisto_HC(qData, samplesData, conds, indLegend="auto", showValues=TRUE)
 mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto", 
-                    showValues=FALSE){
-    
+                    showValues=FALSE, palette = NULL){
+  if (is.null(palette)){
+    palette <- brewer.pal(length(unique(conds)),"Dark2")
+  }else{
+    if (length(palette) != ncol(qData)){
+      warning("The color palette has not the same dimension as the number of samples")
+      return(NULL)
+    }
+  }
+  
+  
     if (identical(indLegend,"auto")) { 
         indLegend <- c(2:length(colnames(samplesData)))
     }
     
-    
-    colnames(qData) <- samplesData[,"Condition"]
-    
-    coeffMax <- .1
-    pal <- getPaletteForConditions(conds)
-    
+   
     NbNAPerCol <- colSums(is.na(qData))
     NbNAPerRow <- rowSums(is.na(qData))
     
-    # if (sum(NbNAPerCol) == 0){
-    #     NbNAPerCol <- rep(0,1+ncol(qData))
-    # }
+    df <- data.frame(NbNAPerCol)
+    names(df) <- 'y'
     
-    
-    nbSeries = length(unique(conds))
-    series <- list()
-    for (i in 1:nbSeries){
-        data <- rep(0, length(NbNAPerCol))
-        data[which((unique(conds))[i] == conds)] <- NbNAPerCol[which(conds == (unique(conds))[i])]
-        
-        tmp <- list(data = data, name=(unique(conds))[i])
-        names(tmp$data) <- c()
-        series[[i]] <- tmp
-    }
     
     h1 <-  highchart() %>%
          my_hc_chart(chartType = "column") %>%
          hc_title(text = "#[non-NA values] by replicate") %>%
-        hc_add_series_list(series) %>%
+        hc_add_series(df,type="column", colorByPoint = TRUE) %>%
+      hc_colors(palette) %>%
         hc_plotOptions( column = list(stacking = "normal"),
                         animation=list(duration = 100)) %>%
         hc_legend(enabled = FALSE) %>%
@@ -628,32 +648,6 @@ heatmap.DAPAR(exprso,
 
 
 
-##' This method plots a scatter plot which represents the distribution of
-##' missing values.
-##' The colors correspond to the different conditions (slot Condition in in the
-##' dataset of class \code{MSnSet}).
-##' The x-axis represent the mean of intensity for one condition and one
-##' entity in the dataset (i. e. a protein) 
-##' whereas the y-axis count the number of missing values for this entity
-##' and the considered condition.
-##' The data have been jittered for an easier vizualisation.
-##' 
-##' @title Distribution of missing values with respect to intensity values 
-##' from a \code{MSnSet} object
-##' @param obj An object of class \code{MSnSet}.
-##' @param ... See \code{\link{mvTypePlot}} 
-##' @return A scatter plot
-##' @author Florence Combes, Samuel Wieczorek
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' wrapper.mvTypePlot(Exp1_R25_pept)
-wrapper.mvTypePlot <- function(obj, ...){
-qData <- Biobase::exprs(obj)
-conds <- Biobase::pData(obj)[,"Condition"]
-mvTypePlot(qData, conds = conds, ...)
-}
-
 
 ##' This method is a wrapper for the function \code{\link{hc_mvTypePlot2}} adapted to objects
 ##' of class \code{MSnSet}).
@@ -668,95 +662,10 @@ mvTypePlot(qData, conds = conds, ...)
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' wrapper.hc_mvTypePlot2(Exp1_R25_pept)
-wrapper.hc_mvTypePlot2 <- function(obj){
+wrapper.hc_mvTypePlot2 <- function(obj,...){
     qData <- Biobase::exprs(obj)
     conds <- Biobase::pData(obj)[,"Condition"]
     hc_mvTypePlot2(qData, conds = conds)
-}
-
-
-##' This method plots a scatter plot which represents the distribution of
-##' missing values.
-##' The colors correspond to the different conditions (slot Condition in in the
-##' dataset of class \code{MSnSet}).
-##' The x-axis represent the mean of intensity for one condition and one
-##' entity in the dataset (i. e. a protein) 
-##' whereas the y-axis count the number of missing values for this entity
-##' and the considered condition.
-##' The data have been jittered for an easier vizualisation.
-##' 
-##' @title Distribution of missing values with respect to intensity values
-##' @param qData A dataframe that contains quantitative data.
-##' @param conds A vector of the conditions (one condition per sample).
-##' @param threshold An integer for the intensity that delimits MNAR and 
-##' MCAR missing values.
-##' @param type A string to indicate wether to show nb of mising values (MV)
-##' or nb of values (values)
-##' @return A scatter plot
-##' @author Florence Combes, Samuel Wieczorek
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' mvTypePlot(qData, conds, threshold=0)
-mvTypePlot <- function(qData, conds, threshold=0, type = 'MV'){
-#require(scales)
-pal <- unique(getPaletteForConditions(conds))
-color <- NULL
-col.legend <- c(1:length(pal))
-
-
-conditions <- conds
-mTemp <- colorTemp <- nbNA <- nbValues <- matrix(rep(0,nrow(qData)*length(unique(conditions))), nrow=nrow(qData),
-                dimnames=list(NULL,unique(conditions)))
-
-for (iCond in unique(conditions)){
-    if (length(which(conditions==iCond)) == 1){
-        mTemp[,iCond] <- qData[,which(conditions==iCond)]
-        nbNA[,iCond] <- as.integer(is.na(qData[,which(conditions==iCond)]))
-        nbValues[,iCond] <- length(which(conditions==iCond)) - nbNA[,iCond]
-    }else {
-        mTemp[,iCond] <- apply(qData[,which(conditions==iCond)], 1, mean, na.rm=TRUE)
-        nbNA[,iCond] <- apply(qData[,which(conditions==iCond)],1,function(x) length(which(is.na(x) == TRUE)))
-        nbValues[,iCond] <- length(which(conditions==iCond)) - nbNA[,iCond]
-    }
-    colorTemp[,iCond] <- pal[which( unique(conditions) ==iCond)]
-}
-
-
-data <- NULL
-
-switch(type,
-       MV = {data <- nbNA
-            yAxisCondition = "Number of Missing Values"},
-       values = {data <- nbValues
-       yAxisCondition = "Number of Observed Values"})
-
-
-plot(mTemp,
-     jitter(data, amount=0.3), 
-     col = alpha(c(colorTemp), 0.5),
-     pch = 16,
-     cex=0.8,
-        xlim = range(c(mTemp), na.rm = TRUE),
-        ylim = c(0, ncol(qData)/length(unique(conditions))),
-        xlab = "Mean of quantity values", 
-        ylab = yAxisCondition,
-        main =  "Partially Observed Values repartition")
-
-
-
-legend("topright"         
-        , legend = unique(conds)
-        , col = col.legend
-        , pch = 15 
-        , bty = "n"
-        , pt.cex = 2
-        , cex = 1
-        , horiz = FALSE
-        , inset=c(0,0)
-)
 }
 
 
@@ -774,6 +683,7 @@ legend("topright"
 ##' @title Distribution of Observed values with respect to intensity values
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param conds A vector of the conditions (one condition per sample).
+##' @param palette xxx
 ##' @return Density plots
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -782,8 +692,18 @@ legend("topright"
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' hc_mvTypePlot2(qData, conds)
-hc_mvTypePlot2 <- function(qData, conds){
-    pal <-    getPaletteForConditions_HC(unique(conds))
+hc_mvTypePlot2 <- function(qData, conds, palette = NULL){
+  if (is.null(conds)){return(NULL)}
+    if (is.null(palette)){
+              palette <- brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
+    }else{
+      if (length(palette) != ncol(qData)){
+        warning("The color palette has not the same dimension as the number of samples")
+        return(NULL)
+      }
+    }
+  
+  
     conditions <- conds
     mTemp <- nbNA <- nbValues <- matrix(rep(0,nrow(qData)*length(unique(conditions))), nrow=nrow(qData),
                                                      dimnames=list(NULL,unique(conditions)))
@@ -792,27 +712,7 @@ hc_mvTypePlot2 <- function(qData, conds){
     series <- list()
     myColors <- NULL
     j <- 1 
-    # for (iCond in unique(conditions)){
-    # #iCond <- unique(conditions)[1]
-    #     if (length(which(conditions==iCond)) == 1){
-    #         mTemp[,iCond] <- qData[,which(conditions==iCond)]
-    #         nbNA[,iCond] <- as.integer(is.na(qData[,which(conditions==iCond)]))
-    #         nbValues[,iCond] <- length(which(conditions==iCond)) - nbNA[,iCond]
-    #     }else {
-    #         mTemp[,iCond] <- apply(qData[,which(conditions==iCond)], 1, mean, na.rm=TRUE)
-    #         nbNA[,iCond] <- apply(qData[,which(conditions==iCond)],1,function(x) length(which(is.na(x) == TRUE)))
-    #         nbValues[,iCond] <- length(which(conditions==iCond)) - nbNA[,iCond]
-    #         for (i in 1:length(which(conditions==iCond))){
-    #             tmp <- data.frame(x = density(mTemp[which(nbValues[,iCond]==i),iCond])$x, 
-    #                               y = i+density(mTemp[which(nbValues[,iCond]==i),iCond])$y)
-    #             if (max(tmp$y) > ymax) { ymax <- max(tmp$y)}
-    #             series[[j]] <- list(name = colnames(qData)[which(conditions==iCond)][j],data = list_parse(tmp))
-    #             myColors <- c(myColors, pal[which(unique(conditions)==iCond)])
-    #             j <- j+1
-    #         }
-    #     }
-    # }
-
+    
     
     for (iCond in unique(conditions)){
         if (length(which(conditions==iCond)) == 1){
@@ -836,7 +736,7 @@ hc_mvTypePlot2 <- function(qData, conds){
                         if (max(tmp$y) > ymax) { ymax <- max(tmp$y)}
                     }
                         series[[j]] <- tmp
-                        myColors <- c(myColors, pal[which(unique(conditions)==iCond)])
+                        myColors <- c(myColors, palette[which(unique(conditions)==iCond)])
                 j <- j+1
             }
         #}
@@ -856,7 +756,7 @@ hc_mvTypePlot2 <- function(qData, conds){
                 # max = ymax,
                  tickInterval= 0.5
                  ) %>%
-        hc_colors(myColors) %>%
+        hc_colors(palette) %>%
         hc_tooltip(headerFormat= '',
                    pointFormat = "<b> {series.name} </b>: {point.y} ",
                    valueDecimals = 2) %>%
@@ -881,7 +781,7 @@ for (i in 1:length(series)){
     
     # add three empty series for the legend entries. Change color and marker symbol
 for (c in 1:length(unique(conds))){
-      hc <-  hc_add_series(hc,data = data.frame(), name = unique(conds)[c], color = pal[c], marker = list(symbol = "circle"), type = "line")
+      hc <-  hc_add_series(hc,data = data.frame(), name = unique(conds)[c], color = palette[c], marker = list(symbol = "circle"), type = "line")
 }
         
 hc

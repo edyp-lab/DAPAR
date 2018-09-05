@@ -5,7 +5,7 @@
 \title{Builds a plot from a dataframe}
 \usage{
 wrapper.compareNormalizationD(objBefore, objAfter, condsForLegend = NULL,
-  indData2Show = NULL, group2Color = "Condition")
+  indData2Show = NULL, ...)
 }
 \arguments{
 \item{objBefore}{A dataframe that contains quantitative data before 
@@ -20,9 +20,7 @@ normalization.}
 plot. The indices are those of indices of 
 the columns int the data.frame qDataBefore.}
 
-\item{group2Color}{A string that indicates how to color the replicates: 
-one color per condition (value "Condition") or one 
-color per replicate (value "Replicate"). Default value is by Condition.}
+\item{...}{arguments for palette}
 }
 \value{
 A plot

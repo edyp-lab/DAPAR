@@ -5,6 +5,7 @@
 ##' @param df_logFC A dataframe that contains the logFC values
 ##' @param threshold_LogFC The threshold on log(Fold Change) to
 ##' distinguish between differential and non-differential data 
+##' @param palette xxx
 ##' @return A highcharts density plot
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -17,10 +18,20 @@
 ##' sTab <- Biobase::pData(obj)
 ##' res <- limmaCompleteTest(qData,sTab)
 ##' hc_logFC_DensityPlot(res$logFC)
-hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0){
+hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0, palette=NULL){
     
     if (is.null(df_logFC)){return()}
     if (threshold_LogFC < 0){return()}
+  
+  
+  if (is.null(palette)){
+    palette <- brewer.pal(ncol(df_logFC),"Paired")[1:ncol(df_logFC)]
+  }else{
+    if (length(palette) != ncol(df_logFC)){
+      warning("The color palette has not the same dimension as the number of samples")
+      return(NULL)
+    }
+  }
   
   nValues <- nrow(df_logFC)*ncol(df_logFC)
   nInf <- length(which(df_logFC <= -threshold_LogFC))
@@ -31,6 +42,7 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0){
          hc_title(text = "log(FC) repartition") %>% 
          my_hc_chart(chartType = "spline", zoomType="x") %>%
          hc_legend(enabled = TRUE) %>%
+       hc_colors(palette) %>%
          hc_xAxis(title = list(text = "log(FC)"),
                   plotBands = list(list(from= -threshold_LogFC, to = threshold_LogFC, color = "lightgrey")),
                   plotLines=list(list(color= "grey" , width = 2, value = 0, zIndex = 5)))%>%
@@ -46,8 +58,6 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0){
                  marker=list(enabled = FALSE)
              )
          )
-     
-     myColors <- getPaletteForConditions_HC(ncol(df_logFC))
      
      maxY.inf <- NULL
      maxY.inside <- NULL
@@ -69,8 +79,7 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0){
         
         hc <- hc_add_series(hc,
                             data.frame(x = tmp$x,  y = tmp$y), 
-                            name=colnames(df_logFC)[i], 
-                            color=myColors[i])
+                            name=colnames(df_logFC)[i])
     }
      
      

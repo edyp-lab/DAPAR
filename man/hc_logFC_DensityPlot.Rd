@@ -4,13 +4,15 @@
 \alias{hc_logFC_DensityPlot}
 \title{Density plots of logFC values}
 \usage{
-hc_logFC_DensityPlot(df_logFC, threshold_LogFC = 0)
+hc_logFC_DensityPlot(df_logFC, threshold_LogFC = 0, palette = NULL)
 }
 \arguments{
 \item{df_logFC}{A dataframe that contains the logFC values}
 
 \item{threshold_LogFC}{The threshold on log(Fold Change) to
 distinguish between differential and non-differential data}
+
+\item{palette}{xxx}
 }
 \value{
 A highcharts density plot

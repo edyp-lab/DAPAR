@@ -4,8 +4,7 @@
 \alias{wrapper.violinPlotD}
 \title{Wrapper to the violinPlotD function on an object \code{MSnSet}}
 \usage{
-wrapper.violinPlotD(obj, dataForXAxis = "Condition",
-  group2Color = "Condition")
+wrapper.violinPlotD(obj, dataForXAxis = "Condition", ...)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
@@ -13,9 +12,7 @@ wrapper.violinPlotD(obj, dataForXAxis = "Condition",
 \item{dataForXAxis}{A vector of strings containing the names of columns 
 in \code{pData()} to print conditions on X-axis (Default is "Condition").}
 
-\item{group2Color}{A string that indicates how to color the replicates: one
-color per condition (value "Condition") or one 
-color per replicate (value "Replicate"). Default value is by Condition.}
+\item{...}{arguments for palette}
 }
 \value{
 A violin plot

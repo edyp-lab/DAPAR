@@ -5,7 +5,7 @@
 \title{Distribution of observed values with respect to intensity values 
 from a \code{MSnSet} object}
 \usage{
-wrapper.hc_mvTypePlot2(obj)
+wrapper.hc_mvTypePlot2(obj, ...)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}

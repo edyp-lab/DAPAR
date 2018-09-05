@@ -5,9 +5,7 @@
 ##' @param obj An object of class \code{MSnSet}.
 ##' @param dataForXAxis A vector of strings containing the names of columns 
 ##' in \code{pData()} to print conditions on X-axis (Default is "Condition").
-##' @param group2Color A string that indicates how to color the replicates: one
-##' color per condition (value "Condition") or one 
-##' color per replicate (value "Replicate"). Default value is by Condition.
+##' @param ... arguments for palette
 ##' @return A boxplot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{wrapper.densityPlotD}}
@@ -18,14 +16,14 @@
 ##' wrapper.boxPlotD(Exp1_R25_pept, types)
 wrapper.boxPlotD <- function(obj, 
                             dataForXAxis="Condition", 
-                            group2Color="Condition"){
+                             ...){
 
 qData <- Biobase::exprs(obj)
 dataForXAxis <- as.matrix(Biobase::pData(obj)[,dataForXAxis])
 
 conds <- Biobase::pData(obj)[,"Condition"]
 
-boxPlotD(qData, dataForXAxis, conds, group2Color)
+boxPlotD(qData, dataForXAxis, conds,...)
 
 }
 
@@ -42,9 +40,7 @@ boxPlotD(qData, dataForXAxis, conds, group2Color)
 ##' @param obj An object of class \code{MSnSet}.
 ##' @param dataForXAxis A vector of strings containing the names of columns 
 ##' in \code{pData()} to print conditions on X-axis (Default is "Condition").
-##' @param group2Color A string that indicates how to color the replicates: one
-##' color per condition (value "Condition") or one 
-##' color per replicate (value "Replicate"). Default value is by Condition.
+##' @param ... xxx
 ##' @return A boxplot
 ##' @author Samuel Wieczorek
 ##' @seealso \code{\link{wrapper.densityPlotD}}
@@ -53,16 +49,14 @@ boxPlotD(qData, dataForXAxis, conds, group2Color)
 ##' data(Exp1_R25_pept)
 ##' types <- c("Condition","Bio.Rep")
 ##' wrapper.boxPlotD_HC(Exp1_R25_pept, types)
-wrapper.boxPlotD_HC <- function(obj, 
-                             dataForXAxis="Condition", 
-                             group2Color="Condition"){
+wrapper.boxPlotD_HC <- function(obj, dataForXAxis="Condition", ...){
     
     qData <- Biobase::exprs(obj)
     dataForXAxis <- as.matrix(Biobase::pData(obj)[,dataForXAxis])
     
     conds <- Biobase::pData(obj)[,"Condition"]
     
-    boxPlotD_HC(qData, dataForXAxis, conds, group2Color)
+    boxPlotD_HC(qData, dataForXAxis, conds,...)
     
 }
 
@@ -81,9 +75,7 @@ wrapper.boxPlotD_HC <- function(obj,
 ##' to use as X-axis. Available values are: Condition, Bio.Rep,
 ##' Bio.Rep and Tech.Rep. Default is "Condition".
 ##' @param conds A vector of the conditions (one string per sample).
-##' @param group2Color A string that indicates how to color the replicates: 
-##' one color per condition (value "Condition") or one 
-##' color per replicate (value "Replicate"). Default value is by Condition.
+##' @param palette xxx
 ##' @return A boxplot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{densityPlotD}}
@@ -98,18 +90,27 @@ wrapper.boxPlotD_HC <- function(obj,
 boxPlotD <- function(qData, 
                     dataForXAxis=NULL, 
                     conds=NULL, 
-                    group2Color="Condition"){
+                    palette=NULL){
 
-if (group2Color == "Condition") {
-    pal <- getPaletteForConditions(conds)
-}else { 
-        pal <- getPaletteForReplicates(ncol(qData))}
+  if (is.null(palette)){
+    pal <- brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
+    
+    for (i in 1:ncol(qData)){
+      palette[i] <- pal[ which(conds[i] == unique(conds))]
+    }
+    
+  }else{
+    if (length(palette) != ncol(qData)){
+      warning("The color palette has not the same dimension as the number of samples")
+      return(NULL)
+    }
+  }
 
     if (is.null(conds)){size <- 2}else{size <- 2*length(conds)}
         
 boxplot(qData
         ,las = 1
-        , col = pal
+        , col = palette
         , cex = 2
         , axes=TRUE
         , xaxt = "n"
@@ -138,7 +139,7 @@ mtext("Samples",
 }
 
 abline(h=0) 
-palette("default")
+
 }
 
 
@@ -152,9 +153,7 @@ palette("default")
 ##' to use as X-axis. Available values are: Condition, Bio.Rep,
 ##' Bio.Rep and Tech.Rep. Default is "Condition".
 ##' @param conds A vector of the conditions (one condition per sample).
-##' @param group2Color A string that indicates how to color the replicates: 
-##' one color per condition (value "Condition") or one 
-##' color per replicate (value "Replicate"). Default value is by Condition.
+##' @param palette xxx
 ##' @return A boxplot
 ##' @author Samuel Wieczorek
 ##' @seealso \code{\link{densityPlotD_HC}}
@@ -168,14 +167,23 @@ palette("default")
 ##' boxPlotD_HC(qData, dataForXAxis, conds)
 boxPlotD_HC <- function(qData, 
                      dataForXAxis="Condition", 
-                     conds=NULL, 
-                     group2Color="Condition"){
+                     conds=NULL, palette = NULL){
 
     
-    if (is.null(conds) ) {
-        conds <- rep("",ncol(qData))
+    if (is.null(conds) ) { conds <- rep("",ncol(qData)) }
+  if (is.null(palette)){
+    tmp <- brewer.pal(3,"Dark2")[1:length(unique(conds))]
+    
+    for (i in 1:ncol(qData)){
+      palette[i] <- tmp[ which(conds[i] == unique(conds))]
     }
-
+    
+  }else{
+    if (length(palette) != ncol(qData)){
+      warning("The color palette has not the same dimension as the number of samples")
+      return(NULL)
+    }
+  }
     
 bx <-boxplot(qData, na.rm=TRUE)
 
@@ -187,18 +195,7 @@ for (i in 1:nc){
     titi <- c(titi, rep(colnames(qData)[i],nrow(qData)))
 }
 
-df <- data.frame(values = as.vector(qData,mode='numeric'),
-                 samples = titi)
-
-pal <- c("#002F80", "#002F80","#002F80","#002F80","#F9AF38","#F9AF38","#F9AF38","#F9AF38")
-
-myColors <- NULL
-##Colors definition
-if (group2Color == "Condition") {
-    myColors <- getPaletteForConditions_HC(conds)
-}else { 
-    myColors <- getPaletteForReplicates_HC(ncol(qData))}
-
+df <- data.frame(values = as.vector(qData,mode='numeric'),samples = titi)
 
 
 hcboxplot(x=df$values, var = df$samples, 
@@ -208,13 +205,16 @@ hcboxplot(x=df$values, var = df$samples,
     hc_chart(type="column") %>%
     hc_yAxis(title = list(text = "Log (intensity)")) %>%
     hc_xAxis(title = list(text = "Samples")) %>%
-    hc_colors(myColors) %>%
+    hc_colors(palette) %>%
     hc_add_series(type= "scatter",df_outlier) %>%
     hc_tooltip(enabled = FALSE) %>%
     hc_plotOptions(
+      
         boxplot= list(
-            fillColor= myColors,
-            lineWidth= 3,
+          colorByPoint = TRUE, 
+          
+            fillColor= 'lightgrey',
+            lineWidth= 10,
             medianColor= 'grey',
             medianWidth= 3,
             stemColor= '#A63400',
@@ -248,9 +248,7 @@ hcboxplot(x=df$values, var = df$samples,
 ##' @param obj An object of class \code{MSnSet}.
 ##' @param dataForXAxis A vector of strings containing the names of columns 
 ##' in \code{pData()} to print conditions on X-axis (Default is "Condition").
-##' @param group2Color A string that indicates how to color the replicates: one
-##' color per condition (value "Condition") or one 
-##' color per replicate (value "Replicate"). Default value is by Condition.
+##' @param ... arguments for palette
 ##' @return A violin plot
 ##' @author Samuel Wieczorek
 ##' @seealso \code{\link{wrapper.densityPlotD}}, \code{\link{wrapper.boxPlotD}}
@@ -261,14 +259,13 @@ hcboxplot(x=df$values, var = df$samples,
 ##' types <- c("Condition","Bio.Rep")
 ##' wrapper.violinPlotD(Exp1_R25_pept, types)
 wrapper.violinPlotD <- function(obj, 
-                             dataForXAxis="Condition", 
-                             group2Color="Condition"){
+                             dataForXAxis="Condition", ...){
     
     qData <- Biobase::exprs(obj)
     dataForXAxis <- as.matrix(Biobase::pData(obj)[,dataForXAxis])
     conds <- Biobase::pData(obj)[,"Condition"]
     
-    violinPlotD(qData, dataForXAxis, conds, group2Color)
+    violinPlotD(qData, dataForXAxis, conds, ...)
     
 }
 
@@ -283,9 +280,7 @@ wrapper.violinPlotD <- function(obj,
 ##' to use as X-axis. Available values are: Condition, Bio.Rep,
 ##' Bio.Rep and Tech.Rep. Default is "Condition".
 ##' @param conds A vector of the conditions (one condition per sample).
-##' @param group2Color A string that indicates how to color the replicates: 
-##' one color per condition (value "Condition") or one 
-##' color per replicate (value "Replicate"). Default value is by Condition.
+##' @param palette xxx
 ##' @return A violinplot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{densityPlotD}}
@@ -301,18 +296,23 @@ wrapper.violinPlotD <- function(obj,
 violinPlotD <- function(qData, 
                      dataForXAxis=NULL, 
                      conds=NULL, 
-                     group2Color="Condition"){
+                     palette = NULL){
 
     plot.new()
-    if (group2Color == "Condition") {
-        pal <- getPaletteForConditions(conds)
-    }else { pal <- getPaletteForReplicates(ncol(qData))}
-    
+  if (is.null(palette)){
+    palette <- brewer.pal(length(unique(conds)),"Dark2")
+  }else{
+    if (length(palette) != ncol(qData)){
+      warning("The color palette has not the same dimension as the number of samples")
+      return(NULL)
+    }
+  }
+  
     plot.window(xlim=c(0,ncol(qData)+1),
                 ylim=c(min(na.omit(qData)),max(na.omit(qData))))
     title( ylab="Log (intensity)")
     for (i in 1:ncol(qData)) {
-        vioplot(na.omit(qData[,i]), col = pal[i], add=TRUE, at=i)}
+        vioplot(na.omit(qData[,i]), col = palette[i], add=TRUE, at=i)}
     
     
     axis(2, yaxp = c(floor(min(na.omit(qData))), 
@@ -332,14 +332,9 @@ violinPlotD <- function(qData,
             )
         }
 
-        mtext("Samples",
-              side=1,
-              line=6+length(colnames(dataForXAxis)),
-              cex.lab=1, las=1)
+        mtext("Samples",side=1,line=6+length(colnames(dataForXAxis)), cex.lab=1, las=1)
     }
 
-
-     palette("default")
 }
 
 
@@ -356,9 +351,7 @@ violinPlotD <- function(qData,
 ##' @param indData2Show A vector of the indices of the columns to show in the 
 ##' plot. The indices are those of indices of 
 ##' the columns int the data.frame qDataBefore.
-##' @param group2Color A string that indicates how to color the replicates: 
-##' one color per condition (value "Condition") or one 
-##' color per replicate (value "Replicate"). Default value is by Condition.
+##' @param ... arguments for palette
 ##' @return A plot
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -370,14 +363,14 @@ violinPlotD <- function(qData,
 wrapper.compareNormalizationD <- function(objBefore, objAfter, 
                                         condsForLegend=NULL,
                                         indData2Show=NULL,
-                                        group2Color="Condition"){
+                                        ...){
 
 qDataBefore <- Biobase::exprs(objBefore)
 qDataAfter <- Biobase::exprs(objAfter)
 if (is.null(condsForLegend)){
   condsForLegend <- Biobase::pData(objBefore)[,"Condition"]}
 
-compareNormalizationD(qDataBefore, qDataAfter, condsForLegend, indData2Show, group2Color)
+compareNormalizationD(qDataBefore, qDataAfter, condsForLegend, indData2Show, ...)
 }
 
 ##' Wrapper to the function that plot to compare the quantitative proteomics 
@@ -394,9 +387,7 @@ compareNormalizationD(qDataBefore, qDataAfter, condsForLegend, indData2Show, gro
 ##' @param indData2Show A vector of the indices of the columns to show in the 
 ##' plot. The indices are those of indices of 
 ##' the columns int the data.frame qDataBefore.
-##' @param group2Color A string that indicates how to color the replicates: 
-##' one color per condition (value "Condition") or one 
-##' color per replicate (value "Replicate"). Default value is by Condition.
+##' @param ... arguments for palette
 ##' @return A plot
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -409,13 +400,12 @@ compareNormalizationD(qDataBefore, qDataAfter, condsForLegend, indData2Show, gro
 wrapper.compareNormalizationD_HC <- function(objBefore, objAfter, 
                                           condsForLegend=NULL,
                                           indData2Show=NULL,
-                                          group2Color="Condition"){
+                                           ...){
     
     qDataBefore <- Biobase::exprs(objBefore)
     qDataAfter <- Biobase::exprs(objAfter)
     
-    compareNormalizationD_HC(qDataBefore, qDataAfter, condsForLegend, indData2Show, 
-                          group2Color)
+    compareNormalizationD_HC(qDataBefore, qDataAfter, condsForLegend, indData2Show,...)
 }
 
 ##' Plot to compare the quantitative proteomics data before and after 
@@ -431,9 +421,7 @@ wrapper.compareNormalizationD_HC <- function(objBefore, objAfter,
 ##' @param indData2Show A vector of the indices of the columns to show in 
 ##' the plot. The indices are those of indices of 
 ##' the columns int the data.frame qDataBefore.
-##' @param group2Color A string that indicates how to color the replicates:
-##' one color per condition (value "Condition") or one 
-##' color per replicate (value "Replicate"). Default value is by Condition.
+##' @param palette xxx
 ##' @return A plot
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -447,11 +435,25 @@ compareNormalizationD <- function(qDataBefore,
                                 qDataAfter,
                                 condsForLegend=NULL,
                                 indData2Show=NULL,
-                                group2Color="Condition"){
+                                palette = NULL){
 
 if (is.null(condsForLegend)) return(NULL)
 if (is.null(indData2Show)) {indData2Show <- c(1:ncol(qDataAfter)) }
 
+  if (is.null(palette)){
+    tmp <- brewer.pal(length(unique(condsForLegend)),"Dark2")[1:length(unique(condsForLegend))]
+    
+    for (i in 1:ncol(qDataBefore)){
+      palette[i] <- tmp[ which(condsForLegend[i] == unique(condsForLegend))]
+    }
+    
+  }else{
+    if (length(palette) != ncol(qDataBefore)){
+      warning("The color palette has not the same dimension as the number of samples")
+      return(NULL)
+    }
+  }
+  
 x <- qDataBefore
 y <- qDataAfter/qDataBefore
 
@@ -460,16 +462,9 @@ lim.y <- range(min(y, na.rm=TRUE), max(y, na.rm=TRUE))
 
 
 ##Colors definition
-if (group2Color == "Condition") {
-    pal <- getPaletteForConditions(condsForLegend)
-    legendColor <- unique(pal)
+    legendColor <- unique(palette)
     txtLegend <- unique(condsForLegend)
-}else { 
-    pal <- getPaletteForReplicates(ncol(x))
-    legendColor <- pal[indData2Show]
-    txtLegend <- paste("Replicate", seq(1,ncol(x)), condsForLegend,sep=" ")
-    txtLegend <- txtLegend[indData2Show]
-}
+
 
 
 plot(x=NULL
@@ -486,7 +481,7 @@ plot(x=NULL
 
 
 for (i in indData2Show){
-    points(x[,i], y[,i], col = pal[i], cex = 1,pch=16)
+    points(x[,i], y[,i], col = palette[i], cex = 1,pch=16)
 }
 
 legend("topleft"
@@ -501,7 +496,6 @@ legend("topleft"
 )
 
 
-palette("default")
 }
 
 
@@ -520,9 +514,7 @@ palette("default")
 ##' @param indData2Show A vector of the indices of the columns to show in 
 ##' the plot. The indices are those of indices of 
 ##' the columns int the data.frame qDataBefore.
-##' @param group2Color A string that indicates how to color the replicates:
-##' one color per condition (value "Condition") or one 
-##' color per replicate (value "Replicate"). Default value is by Condition.
+##' @param palette xxx
 ##' @return A plot
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -537,74 +529,49 @@ compareNormalizationD_HC <- function(qDataBefore,
                                   qDataAfter,
                                   condsForLegend=NULL,
                                   indData2Show=NULL,
-                                  group2Color="Condition"){
+                                  palette = NULL){
     
     if (is.null(condsForLegend)) return(NULL)
     if (is.null(indData2Show)) {indData2Show <- c(1:ncol(qDataAfter)) }
     
+  
+  if (is.null(palette)){
+    tmp <- brewer.pal(length(unique(condsForLegend)),"Dark2")[1:length(unique(condsForLegend))]
+    
+    for (i in 1:ncol(qDataBefore)){
+      palette[i] <- tmp[ which(condsForLegend[i] == unique(condsForLegend))]
+    }
+    
+  }else{
+    if (length(palette) != ncol(qDataBefore)){
+      warning("The color palette has not the same dimension as the number of samples")
+      return(NULL)
+    }
+  }
+  
     x <- qDataBefore
     y <- qDataAfter/qDataBefore
    
     ##Colors definition
-    if (group2Color == "Condition") {
-        pal <- getPaletteForConditions(condsForLegend)
-        legendColor <- unique(pal)
+        legendColor <- unique(palette)
         txtLegend <- unique(condsForLegend)
-    }else { 
-        pal <- getPaletteForReplicates(ncol(x))
-        legendColor <- pal[indData2Show]
-        txtLegend <- paste("Replicate", seq(1,ncol(x)), condsForLegend,sep=" ")
-        txtLegend <- txtLegend[indData2Show]
-    }
     
     
     series <- list()
     for (i in 1:length(indData2Show)){
-        tmp <- list(name=condsForLegend[i], data =list_parse(data.frame(x=x[,indData2Show[i]],y=y[,indData2Show[i]])))
+        tmp <- list(name=condsForLegend[i], data =list_parse(data.frame(x=x[,indData2Show[i]],
+                                                                        y=y[,indData2Show[i]])))
         series[[i]] <- tmp
     }
    
-    h1 <-  highchart() %>% 
+    h1 <-  highchart2() %>% 
         my_hc_chart( chartType = "scatter") %>%
         hc_add_series_list(series) %>%
         hc_tooltip(enabled= "false" ) %>%
         my_hc_ExportMenu(filename = "compareNormalization")
     h1
     return(h1)
-    
-    
-    
-    # 
-    # plot(x=NULL
-    #      ,xlim = lim.x
-    #      ,ylim = lim.y
-    #      , cex = 1
-    #      , axes=TRUE
-    #      , xlab = "Intensities before normalization"
-    #      , ylab = "Intensities after normalization / Intensities before 
-    #      normalization"
-    #      ,cex.lab = 1
-    #      ,cex.axis = 1
-    #      ,cex.main = 3)
-    # 
-    # 
-    # for (i in indData2Show){
-    #     points(x[,i], y[,i], col = pal[i], cex = 1,pch=16)
-    # }
-    # 
-    # legend("topleft"
-    #        , legend = txtLegend
-    #        , col = legendColor
-    #        , pch = 15 
-    #        , bty = "n"
-    #        , pt.cex = 2
-    #        , cex = 1
-    #        , horiz = FALSE
-    #        , inset=c(0,0)
-    # )
-    # 
-    # 
-    # palette("default")
+
 }
 
 
@@ -620,9 +587,7 @@ compareNormalizationD_HC <- function(qDataBefore,
 ##' @param indData2Show A vector of the indices of the columns to show in 
 ##' the plot. The indices are those of indices of the columns int the data
 ##' frame qDataBefore in the density plot.
-##' @param group2Color A string that indicates how to color the replicates: 
-##' one color per condition (value "Condition") or one color per replicate
-##' (value "Replicate"). Default value is by Condition.
+##' @param ... arguments for palette
 ##' @return A density plot
 ##' @author Alexia Dorffer
 ##' @seealso \code{\link{wrapper.boxPlotD}}, 
@@ -632,13 +597,12 @@ compareNormalizationD_HC <- function(qDataBefore,
 ##' data(Exp1_R25_pept)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' wrapper.densityPlotD(Exp1_R25_pept, conds)
-wrapper.densityPlotD <- function(obj, condsForLegend=NULL,  indData2Show=NULL,
-                                group2Color = "Condition"){
+wrapper.densityPlotD <- function(obj, condsForLegend=NULL,  indData2Show=NULL, ...){
 qData <- Biobase::exprs(obj)
 if (is.null(condsForLegend) ) {
   condsForLegend <- Biobase::pData(obj)[,"Condition"]}
 
-densityPlotD(qData, condsForLegend, indData2Show,group2Color)
+densityPlotD(qData, condsForLegend, indData2Show, ...)
 }
 
 ##' This function is a wrapper for using the densityPlotD function with 
@@ -651,9 +615,7 @@ densityPlotD(qData, condsForLegend, indData2Show,group2Color)
 ##' @param indData2Show A vector of the indices of the columns to show in 
 ##' the plot. The indices are those of indices of the columns int the data
 ##' frame qDataBefore in the density plot.
-##' @param group2Color A string that indicates how to color the replicates: 
-##' one color per condition (value "Condition") or one color per replicate
-##' (value "Replicate"). Default value is by Condition.
+##' @param ... arguments for palette
 ##' @return A density plot
 ##' @author Samuel Wieczorek
 ##' @seealso \code{\link{wrapper.boxPlotD}}, 
@@ -663,14 +625,13 @@ densityPlotD(qData, condsForLegend, indData2Show,group2Color)
 ##' data(Exp1_R25_pept)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' wrapper.densityPlotD_HC(Exp1_R25_pept, conds)
-wrapper.densityPlotD_HC <- function(obj, condsForLegend=NULL,  indData2Show=NULL,
-                                 group2Color = "Condition"){
+wrapper.densityPlotD_HC <- function(obj, condsForLegend=NULL,  indData2Show=NULL, ...){
     qData <- Biobase::exprs(obj)
     
     if (is.null(condsForLegend) ) {
       condsForLegend <- Biobase::pData(obj)[,"Condition"]}
     
-    densityPlotD_HC(qData, condsForLegend, indData2Show,group2Color)
+    densityPlotD_HC(qData, condsForLegend, indData2Show, ...)
 }
 
 
@@ -680,11 +641,8 @@ wrapper.densityPlotD_HC <- function(obj, condsForLegend=NULL,  indData2Show=NULL
 ##' @title Builds a densityplot from a dataframe
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param condsForLegend A vector of the conditions (one condition per sample).
-##' @param indData2Show A vector of indices to show in densityplot. If NULL, 
-##' then all conds are displayed.
-##' @param group2Color A string that indicates how to color the replicates: 
-##' one color per condition (value "Condition") or one 
-##' color per replicate (value "Replicate"). Default value is by Condition.
+##' @param indData2Show A vector of indices to show in densityplot. If NULL, then all conds are displayed.
+##' @param palette xxx
 ##' @return A density plot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{boxPlotD}}, \code{\link{CVDistD}}
@@ -694,13 +652,21 @@ wrapper.densityPlotD_HC <- function(obj, condsForLegend=NULL,  indData2Show=NULL
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' conds <- lab2Show <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' densityPlotD(qData, conds)
-densityPlotD <- function(qData, condsForLegend=NULL,indData2Show=NULL,
-                        group2Color = "Condition"){
+densityPlotD <- function(qData, condsForLegend=NULL,indData2Show=NULL,palette = NULL){
     
 #if (is.null(condsForLegend) ) {
 #  condsForLegend <- Biobase::pData(rv$current.obj)[,"Condition"]}
 
 if (is.null(indData2Show)) {indData2Show <- c(1:ncol(qData)) }
+  if (is.null(palette)){
+    palette <- brewer.pal(length(unique(conds)),"Dark2")
+  }else{
+    if (length(palette) != ncol(qData)){
+      warning("The color palette has not the same dimension as the number of samples")
+      return(NULL)
+    }
+  }
+  
 
 ### Range of axis definition
 axis.limits <- matrix(data = 0, nrow = 4, ncol = ncol(qData))
@@ -713,17 +679,9 @@ lim.y <- range(min(axis.limits[3,]), max(axis.limits[4,]))
 
 
 ##Colors definition
-if (group2Color == "Condition") {
-    pal <- getPaletteForConditions(condsForLegend)
-    legendColor <- unique(pal)
+    legendColor <- unique(palette)
     txtLegend <- unique(condsForLegend)
-}else { 
-    pal <- getPaletteForReplicates(ncol(qData))
-    legendColor <- pal[indData2Show]
-    txtLegend <- paste("Replicate", seq(1,ncol(qData)), 
-                        condsForLegend,sep=" ")
-    txtLegend <- txtLegend[indData2Show]
-}
+
 
 ###Erase data not to show (color in white)
 # lineWD <- NULL
@@ -735,7 +693,7 @@ if (group2Color == "Condition") {
 plot(x =NULL
     , ylab ="Density"
     , xlab = "log(intensity)"
-    , col = pal
+    , col = palette
     ,xlim = lim.x
     ,ylim = lim.y
     ,las = 1
@@ -744,7 +702,7 @@ plot(x =NULL
     ,cex.main = 3)
 
 for (i in indData2Show){
-    lines(density(qData[,i], na.rm=TRUE), col = pal[i])
+    lines(density(qData[,i], na.rm=TRUE), col = palette[i])
 }
 
 
@@ -772,9 +730,7 @@ legend("topleft"
 ##' per sample).
 ##' @param indData2Show A vector of indices to show in densityplot. If NULL, 
 ##' then all conditions are displayed.
-##' @param group2Color A string that indicates how to color the replicates: 
-##' one color per condition (value "Condition") or one 
-##' color per replicate (value "Replicate"). Default value is by Condition.
+##' @param palette xxx
 ##' @return A density plot
 ##' @author Samuel Wieczorek
 ##' @seealso \code{\link{boxPlotD}}, \code{\link{CVDistD}}
@@ -784,45 +740,35 @@ legend("topleft"
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' conds <- lab2Show <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' densityPlotD_HC(qData, conds)
-densityPlotD_HC <- function(qData, condsForLegend=NULL,indData2Show=NULL,
-                            group2Color = "Condition"){
+densityPlotD_HC <- function(qData, condsForLegend=NULL,indData2Show=NULL, palette = NULL){
+    if (is.null(condsForLegend) ) {condsForLegend <- rep("",ncol(qData))}
+    if (is.null(indData2Show)) {indData2Show <- c(1:ncol(qData)) }
     
+  if (is.null(palette)){
+    #palette <- brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(condsForLegend))]
     
-    if (is.null(condsForLegend) ) {
-      condsForLegend <- rep("",ncol(qData))
-      }
+    nbConds <- length(unique(condsForLegend))
+    palette <- brewer.pal(nbConds, "Dark2")[1:nbConds]
+     temp <- NULL
+    for (i in 1:ncol(qData)){
+      temp[i] <- palette[ which(condsForLegend[i] == unique(condsForLegend))]
+    }
+    palette <- temp
     
-    if (is.null(indData2Show)) {
-      indData2Show <- c(1:ncol(qData)) 
-      }
+  }else{
+    if (length(palette) != ncol(qData)){
+      warning("The color palette has not the same dimension as the number of samples")
+      return(NULL)
+    }
+  }
     
-    pal <- c("#002F80", "#002F80","#002F80","#002F80","#F9AF38","#F9AF38","#F9AF38","#F9AF38")
-    
-    myColors <- NULL
-    ##Colors definition
-    switch(group2Color,
-      Condition = myColors <- getPaletteForConditions_HC(condsForLegend)[indData2Show],
-     Replicate = myColors<- getPaletteForReplicates_HC(ncol(qData))[indData2Show]
-    )
-
-    series <- list()
-    for (i in 1:length(indData2Show)){
-  
-    tmp <- data.frame(x = density(qData[,indData2Show[i]], na.rm = TRUE)$x, 
-                y = density(qData[,indData2Show[i]], na.rm = TRUE)$y)
-    series[[i]] <- list(name = condsForLegend[i],
-                              data = list_parse(tmp))
-}
-
-
     h1 <-  highchart() %>% 
         hc_title(text = "Density plot") %>% 
         my_hc_chart(chartType = "spline", zoomType="x") %>%
-        hc_add_series_list(series) %>%
-        hc_legend(enabled = TRUE) %>%
+         hc_legend(enabled = TRUE) %>%
         hc_xAxis(title = list(text = "log(Intensity)")) %>%
         hc_yAxis(title = list(text = "Density")) %>%
-        hc_colors(myColors) %>%
+        hc_colors(palette) %>%
         hc_tooltip(headerFormat= '',
                    pointFormat = "<b> {series.name} </b>: {point.y} ",
                    valueDecimals = 2) %>%
@@ -839,6 +785,15 @@ densityPlotD_HC <- function(qData, condsForLegend=NULL,indData2Show=NULL,
         )
     
     
+   for (i in 1:length(indData2Show)){
+      
+      tmp <- data.frame(x = density(qData[,indData2Show[i]], na.rm = TRUE)$x, 
+                        y = density(qData[,indData2Show[i]], na.rm = TRUE)$y)
+      h1 <- h1 %>% hc_add_series(data=list_parse(tmp), name=condsForLegend[i]) 
+    
+    }
+    
+    
     return(h1)
 
 }
@@ -853,6 +808,7 @@ densityPlotD_HC <- function(qData, condsForLegend=NULL,indData2Show=NULL,
 ##' 
 ##' @title Distribution of CV of entities
 ##' @param obj An object of class \code{MSnSet}.
+##' @param ... arguments for palette
 ##' @return A density plot
 ##' @author Alexia Dorffer
 ##' @seealso \code{\link{wrapper.densityPlotD}}
@@ -860,10 +816,10 @@ densityPlotD_HC <- function(qData, condsForLegend=NULL,indData2Show=NULL,
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' wrapper.CVDistD(Exp1_R25_pept)
-wrapper.CVDistD <- function(obj){
+wrapper.CVDistD <- function(obj, ...){
 qData <- Biobase::exprs(obj)
 conds <- Biobase::pData(obj)[,"Condition"]
-CVDistD(qData, conds)
+CVDistD(qData, conds, ...)
 }
 
 
@@ -874,7 +830,8 @@ CVDistD(qData, conds)
 ##' Same as the function \code{\link{wrapper.CVDistD}} but uses the package \code{highcharter}
 ##' 
 ##' @title Distribution of CV of entities
-##' @param obj An object of class \code{MSnSet}.
+##' @param obj An object of class \code{MSnSet}
+##' @param ... arguments for palette.
 ##' @return A density plot
 ##' @author Samuel Wieczorek
 ##' @seealso \code{\link{wrapper.densityPlotD}}
@@ -882,10 +839,10 @@ CVDistD(qData, conds)
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' wrapper.CVDistD_HC(Exp1_R25_pept)
-wrapper.CVDistD_HC <- function(obj){
+wrapper.CVDistD_HC <- function(obj, ...){
     qData <- Biobase::exprs(obj)
     conds <- Biobase::pData(obj)[,"Condition"]
-    CVDistD_HC(qData, conds)
+    CVDistD_HC(qData, conds, ...)
 }
 
 
@@ -896,6 +853,7 @@ wrapper.CVDistD_HC <- function(obj){
 ##' @title Distribution of CV of entities
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param conds A vector of the conditions (one condition per sample).
+##' @param palette xxx
 ##' @return A density plot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{densityPlotD}}.
@@ -904,9 +862,18 @@ wrapper.CVDistD_HC <- function(obj){
 ##' data(Exp1_R25_pept)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' CVDistD(Biobase::exprs(Exp1_R25_pept), conds)
-CVDistD <- function(qData, conds=NULL){
+CVDistD <- function(qData, conds=NULL, palette = NULL){
     
 if (is.null(conds)) {return(NULL)}
+  if (is.null(palette)){
+    palette <- brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
+  }else{
+    if (length(palette) != ncol(qData)){
+      warning("The color palette has not the same dimension as the number of samples")
+      return(NULL)
+    }
+  }
+  
 conditions <- unique(conds)
 n <- length(conditions)
 axis.limits <- matrix(data = 0, nrow = 4, ncol = n)
@@ -916,8 +883,7 @@ for (i in conditions){
                     function(x) 100*var(x, na.rm=TRUE)/mean(x, na.rm=TRUE)), 
                  na.rm=TRUE)
 
-    axis.limits[,which(conditions == i)]<- c(min(t$x), max(t$x), min(t$y),
-                                            max(t$y))
+    axis.limits[,which(conditions == i)]<- c(min(t$x), max(t$x), min(t$y),max(t$y))
     }
 }
 
@@ -934,7 +900,6 @@ plot(x = NULL
 )
 
 # density by condition
-pal <- getPaletteForConditions(conds)
 conditions <- unique(conds)
 col.density = c(1:length(conditions))
 for (i in conditions){
@@ -971,6 +936,7 @@ legend("topright"
 ##' @title Distribution of CV of entities
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param conds A vector of the conditions (one condition per sample).
+##' @param palette xxx
 ##' @return A density plot
 ##' @author Samuel Wieczorek
 ##' @seealso \code{\link{densityPlotD}}.
@@ -979,28 +945,39 @@ legend("topright"
 ##' data(Exp1_R25_pept)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' CVDistD_HC(Biobase::exprs(Exp1_R25_pept), conds)
-CVDistD_HC <- function(qData, conds=NULL){
+CVDistD_HC <- function(qData, conds=NULL, palette = NULL){
     
     if (is.null(conds)) {return(NULL)}
-    conditions <- unique(conds)
-    n <- length(conditions)
-    
-    nbSeries = n
-    series <- list()
-    for (i in 1:length(conditions)){
-        if (length(which(conds == conditions[i])) > 1){
-            t <- apply(qData[,which(conds == conditions[i])], 1, 
-                       function(x) 100*var(x, na.rm=TRUE)/mean(x, na.rm=TRUE))
-            tmp <- data.frame(x = density(t, na.rm = TRUE)$x,
-                              y = density(t, na.rm = TRUE)$y)
-            series[[i]] <- list(name = conditions[i],
-                                data = list_parse(tmp))
-        }
+  conditions <- unique(conds)
+  n <- length(conditions)
+  
+  if (is.null(palette)){
+    palette <- brewer.pal(length(unique(conds)),"Dark2")[1:n]
+  }else{
+    if (length(palette) != ncol(qData)){
+      warning("The color palette has not the same dimension as the number of samples")
+      return(NULL)
     }
+  }
+  
+  
+    
+    # nbSeries = n
+    # series <- list()
+    # for (i in 1:length(conditions)){
+    #     if (length(which(conds == conditions[i])) > 1){
+    #         t <- apply(qData[,which(conds == conditions[i])], 1, 
+    #                    function(x) 100*var(x, na.rm=TRUE)/mean(x, na.rm=TRUE))
+    #         tmp <- data.frame(x = density(t, na.rm = TRUE)$x,
+    #                           y = density(t, na.rm = TRUE)$y)
+    #         series[[i]] <- list(name = conditions[i],
+    #                             data = list_parse(tmp))
+    #     }
+    # }
 
     h1 <-  highchart() %>% 
         my_hc_chart(chartType = "spline", zoomType="x") %>%
-        hc_add_series_list(series) %>%
+        hc_colors(unique(palette)) %>%
         hc_legend(enabled = TRUE) %>%
         hc_xAxis(title = list(text = "CV(log(Intensity))")) %>%
         hc_yAxis(title = list(text = "Density")) %>%
@@ -1015,6 +992,17 @@ CVDistD_HC <- function(qData, conds=NULL){
                     enabled = FALSE)
             )
         )
+    
+    for (i in 1:n){
+      if (length(which(conds == conditions[i])) > 1){
+        t <- apply(qData[,which(conds == conditions[i])], 1, 
+                   function(x) 100*var(x, na.rm=TRUE)/mean(x, na.rm=TRUE))
+        tmp <- data.frame(x = density(t, na.rm = TRUE)$x,
+                          y = density(t, na.rm = TRUE)$y)
+        
+      
+      h1 <- h1 %>% hc_add_series(data=tmp, name=conditions[i]) }
+    }
     
     return(h1)
 

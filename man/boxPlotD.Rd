@@ -4,8 +4,7 @@
 \alias{boxPlotD}
 \title{Builds a boxplot from a dataframe}
 \usage{
-boxPlotD(qData, dataForXAxis = NULL, conds = NULL,
-  group2Color = "Condition")
+boxPlotD(qData, dataForXAxis = NULL, conds = NULL, palette = NULL)
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
@@ -16,9 +15,7 @@ Bio.Rep and Tech.Rep. Default is "Condition".}
 
 \item{conds}{A vector of the conditions (one string per sample).}
 
-\item{group2Color}{A string that indicates how to color the replicates: 
-one color per condition (value "Condition") or one 
-color per replicate (value "Replicate"). Default value is by Condition.}
+\item{palette}{xxx}
 }
 \value{
 A boxplot

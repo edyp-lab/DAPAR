@@ -5,7 +5,7 @@
 \title{Builds a boxplot from a dataframe using the library \code{highcharter}}
 \usage{
 boxPlotD_HC(qData, dataForXAxis = "Condition", conds = NULL,
-  group2Color = "Condition")
+  palette = NULL)
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
@@ -16,9 +16,7 @@ Bio.Rep and Tech.Rep. Default is "Condition".}
 
 \item{conds}{A vector of the conditions (one condition per sample).}
 
-\item{group2Color}{A string that indicates how to color the replicates: 
-one color per condition (value "Condition") or one 
-color per replicate (value "Replicate"). Default value is by Condition.}
+\item{palette}{xxx}
 }
 \value{
 A boxplot

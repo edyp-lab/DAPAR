@@ -72,7 +72,7 @@ export(
 ,"wrapper.mvHisto", "mvHisto"
 
 
-,"wrapper.mvTypePlot","mvTypePlot"
+,"wrapper.hc_mvTypePlot2","hc_mvTypePlot2"
 ,"wrapper.mvImage","mvImage"
 ,"heatmap.DAPAR"
 

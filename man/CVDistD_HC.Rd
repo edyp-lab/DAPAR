@@ -4,12 +4,14 @@
 \alias{CVDistD_HC}
 \title{Distribution of CV of entities}
 \usage{
-CVDistD_HC(qData, conds = NULL)
+CVDistD_HC(qData, conds = NULL, palette = NULL)
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
 
 \item{conds}{A vector of the conditions (one condition per sample).}
+
+\item{palette}{xxx}
 }
 \value{
 A density plot

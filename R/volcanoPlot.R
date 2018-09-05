@@ -17,6 +17,7 @@
 ##' Fold Change that separates differential and non-differential data.
 ##' @param conditions A list of the names of condition 1 and 2 used for the
 ##' differential analysis.
+##' @param colors xxx
 ##' @return A volcanoplot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
@@ -33,11 +34,12 @@ diffAnaVolcanoplot <- function(logFC=NULL,
                                 pVal=NULL, 
                                 threshold_pVal=1e-60, 
                                 threshold_logFC=0, 
-                                conditions=NULL){
+                                conditions=NULL, colors=NULL){
 
 xtitle <- paste("log2 ( mean(",conditions[2],") / mean(",conditions[1],") )",
                 sep="")
 
+if(is.null(colors)){ colors <- list(In = "orange", Out = "grey")}
 
 if (is.null(logFC)||is.null(pVal)) {
 
@@ -54,7 +56,7 @@ if (is.null(logFC)||is.null(pVal)) {
 x <- logFC
 y <- -log10(pVal)
 
-colorCode <- c("gray", "orange")
+colorCode <- c(colors$Out, colors$In)
 color <- rep(colorCode[1], length(y))
 
 for (i in 1:length(y)){
@@ -112,7 +114,8 @@ return(p)
 ##' differential analysis.
 ##' @param clickFunction A string that contains a JavaScript function used to 
 ##' show info from slots in df. The variable this.index refers to the slot 
-##' named index and allows to retrieve the right row to show in the tooltip
+##' named index and allows to retrieve the right row to show in the tooltip.
+##' @param palette xxx
 ##' @return An interactive volcanoplot
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -143,7 +146,8 @@ diffAnaVolcanoplot_rCharts <- function(df,
                                         threshold_pVal=1e-60, 
                                         threshold_logFC=0, 
                                         conditions=NULL, 
-                                        clickFunction=NULL){
+                                        clickFunction=NULL,
+                                       palette=NULL){
     
     xtitle <- paste("log2 ( mean(",
                     conditions[2],
@@ -157,6 +161,10 @@ diffAnaVolcanoplot_rCharts <- function(df,
             JS("function(event) {Shiny.onInputChange('eventPointClicked', [this.index]+'_'+ [this.series.name]);}")
     }
     
+    if(is.null(palette)){
+      palette <- list(In = "orange",
+                     Out = "grey")
+    }
     
     df <- cbind(df, 
                 g=ifelse(df$y >= threshold_pVal & abs(df$x) >= threshold_logFC, "g1", "g2")
@@ -173,8 +181,8 @@ diffAnaVolcanoplot_rCharts <- function(df,
                                  sep="")
     }
     
-    h1 <-  hchart(df, "scatter", hcaes(x,y,group=g)) %>%
-        hc_colors(c("orange", "grey")) %>%
+    h1 <-  highchart2(df, "scatter", hcaes(x,y,group=g)) %>%
+        hc_colors(c(palette$In, palette$Out)) %>%
         my_hc_chart(zoomType = "xy",chartType="scatter") %>%
         hc_legend(enabled = FALSE) %>%
         hc_yAxis(title = list(text="-log10(pValue)"),

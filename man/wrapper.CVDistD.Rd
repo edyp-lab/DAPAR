@@ -4,10 +4,12 @@
 \alias{wrapper.CVDistD}
 \title{Distribution of CV of entities}
 \usage{
-wrapper.CVDistD(obj)
+wrapper.CVDistD(obj, ...)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
+
+\item{...}{arguments for palette}
 }
 \value{
 A density plot

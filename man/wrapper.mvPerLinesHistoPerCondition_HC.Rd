@@ -6,7 +6,7 @@
 object \code{MSnSet}}
 \usage{
 wrapper.mvPerLinesHistoPerCondition_HC(obj, indLegend = "auto",
-  showValues = FALSE)
+  showValues = FALSE, ...)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
@@ -15,6 +15,8 @@ wrapper.mvPerLinesHistoPerCondition_HC(obj, indLegend = "auto",
 
 \item{showValues}{A logical that indicates wether numeric values should be
 drawn above the bars.}
+
+\item{...}{xxx}
 }
 \value{
 A bar plot
@@ -27,7 +29,7 @@ number of missing values (NA) per lines (ie proteins) and per conditions.
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-wrapper.mvPerLinesHistoPerCondition(Exp1_R25_pept)
+wrapper.mvPerLinesHistoPerCondition_HC(Exp1_R25_pept)
 }
 \author{
 Samuel Wieczorek

@@ -4,7 +4,7 @@
 \alias{wrapper.mvHisto_HC}
 \title{Histogram of missing values from a \code{MSnSet} object}
 \usage{
-wrapper.mvHisto_HC(obj, indLegend = "auto", showValues = FALSE)
+wrapper.mvHisto_HC(obj, indLegend = "auto", showValues = FALSE, ...)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
@@ -13,6 +13,8 @@ wrapper.mvHisto_HC(obj, indLegend = "auto", showValues = FALSE)
 
 \item{showValues}{A logical that indicates wether numeric values should be
 drawn above the bars.}
+
+\item{...}{xxx}
 }
 \value{
 A histogram
@@ -24,7 +26,7 @@ missing values.
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-wrapper.mvHisto(Exp1_R25_pept, showValues=TRUE)
+wrapper.mvHisto_HC(Exp1_R25_pept, showValues=TRUE)
 }
 \author{
 Alexia Dorffer

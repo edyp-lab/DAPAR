@@ -5,7 +5,8 @@
 \title{Volcanoplot of the differential analysis}
 \usage{
 diffAnaVolcanoplot_rCharts(df, threshold_pVal = 1e-60,
-  threshold_logFC = 0, conditions = NULL, clickFunction = NULL)
+  threshold_logFC = 0, conditions = NULL, clickFunction = NULL,
+  palette = NULL)
 }
 \arguments{
 \item{df}{A dataframe which contains the following slots :
@@ -28,7 +29,9 @@ differential analysis.}
 
 \item{clickFunction}{A string that contains a JavaScript function used to 
 show info from slots in df. The variable this.index refers to the slot 
-named index and allows to retrieve the right row to show in the tooltip}
+named index and allows to retrieve the right row to show in the tooltip.}
+
+\item{palette}{xxx}
 }
 \value{
 An interactive volcanoplot
