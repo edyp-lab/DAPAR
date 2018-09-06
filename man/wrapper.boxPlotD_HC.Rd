@@ -4,7 +4,7 @@
 \alias{wrapper.boxPlotD_HC}
 \title{Wrapper to the boxplotD_HC function on an object \code{MSnSet}}
 \usage{
-wrapper.boxPlotD_HC(obj, dataForXAxis = "Condition", ...)
+wrapper.boxPlotD_HC(obj, dataForXAxis = "Condition")
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
