@@ -37,6 +37,7 @@ boxPlotD(qData, dataForXAxis, conds,...)
 ##' class \code{MSnSet}
 ##' 
 ##' @title Wrapper to the boxplotD_HC function on an object \code{MSnSet}
+##' @param hc xxxx
 ##' @param obj An object of class \code{MSnSet}.
 ##' @param dataForXAxis A vector of strings containing the names of columns 
 ##' in \code{pData()} to print conditions on X-axis (Default is "Condition").
@@ -48,7 +49,7 @@ boxPlotD(qData, dataForXAxis, conds,...)
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' types <- c("Condition","Bio.Rep")
-##' wrapper.boxPlotD_HC(Exp1_R25_pept, types)
+##' wrapper.boxPlotD_HC(hc=NULL,Exp1_R25_pept, types)
 wrapper.boxPlotD_HC <- function(obj, dataForXAxis="Condition", ...){
     
     qData <- Biobase::exprs(obj)
@@ -148,6 +149,7 @@ abline(h=0)
 ##' Boxplot for quantitative proteomics data using the library \code{highcharter}
 ##' 
 ##' @title Builds a boxplot from a dataframe using the library \code{highcharter}
+##' @param hc xxx
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param dataForXAxis A vector containing the types of replicates 
 ##' to use as X-axis. Available values are: Condition, Bio.Rep,
@@ -165,11 +167,11 @@ abline(h=0)
 ##' dataForXAxis <- Biobase::pData(Exp1_R25_pept)[,types]
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' boxPlotD_HC(qData, dataForXAxis, conds)
-boxPlotD_HC <- function(qData, 
+boxPlotD_HC <- function(hc=NULL,qData, 
                      dataForXAxis="Condition", 
                      conds=NULL, palette = NULL){
 
-    
+  
     if (is.null(conds) ) { conds <- rep("",ncol(qData)) }
   if (is.null(palette)){
     tmp <- brewer.pal(3,"Dark2")[1:length(unique(conds))]
@@ -198,7 +200,7 @@ for (i in 1:nc){
 df <- data.frame(values = as.vector(qData,mode='numeric'),samples = titi)
 
 
-hcboxplot(x=df$values, var = df$samples, 
+hc <- hcboxplot(x=df$values, var = df$samples, 
           colorByPoint = TRUE, 
           outliers = FALSE) %>%
     
@@ -214,7 +216,7 @@ hcboxplot(x=df$values, var = df$samples,
           colorByPoint = TRUE, 
           
             fillColor= 'lightgrey',
-            lineWidth= 10,
+            lineWidth= 3,
             medianColor= 'grey',
             medianWidth= 3,
             stemColor= '#A63400',
@@ -234,7 +236,7 @@ hcboxplot(x=df$values, var = df$samples,
     )
 
 
-
+hc
 
 
 }
