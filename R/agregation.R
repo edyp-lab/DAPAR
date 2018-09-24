@@ -216,9 +216,8 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
                      dimnames=list(rownames(data),as.character(unique(Un1))))
     
     if (unique == TRUE){
-        X <- X[which(rowSums(as.matrix(X))==1),]
-        X <- X[,which(colSums(as.matrix(X))>0)]
-    }
+        X[which(rowSums(as.matrix(X))>1),] <- 0
+         }
     
     return(X)
 }
@@ -244,8 +243,8 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
 ##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 ##' DAPAR::aggregateSum(obj.pep, X)
 aggregateSum <- function(obj.pep, X,...){
-  expr <- 2^(Biobase::exprs(obj.pep))
-  qData <- expr[rownames(X),]
+  qData <- 2^(Biobase::exprs(obj.pep))
+  #qData <- expr[rownames(X),]
   Mp <- inner.sum(qData, X)
   obj.prot <- finalizeAggregation(obj.pep, qData, X, Mp, ...)
   return(obj.prot)
@@ -265,17 +264,16 @@ aggregateSum <- function(obj.pep, X,...){
 ##' @author Samuel Wieczorek
 aggregateIterParallel <- function(obj.pep, X, init.method='sum', method='mean', ...){
   doParallel::registerDoParallel()
-  
   ### a reproduire iterativement pour chaque condition
   # Initialisation: presque aucune dépendance à l'initialisation prendre "sum overall" et  matAdj = X par simplicité
   #X <- as.matrix(X)
-  expr <- 2^(Biobase::exprs(obj.pep))
-  qData.pep <- expr[rownames(X),]
+  qData.pep <- 2^(Biobase::exprs(obj.pep))
+  #qData.pep <- expr[rownames(X),]
   
   finalX <- matrix(rep(0,ncol(X)*ncol(obj.pep)), nrow=ncol(X))
   
-  finalX <- foreach (cond=1:length(unique(Biobase::pData(obj.pep)$Condition)), .combine=cbind) %dopar% {
-    #require(MSnbase)
+  finalX <- foreach (cond=1:length(unique(Biobase::pData(obj.pep)$Condition)), 
+                     .combine=cbind,.packages = "MSnbase") %dopar% {
     condsIndices <- which(Biobase::pData(obj.pep)$Condition == unique(Biobase::pData(obj.pep)$Condition)[cond])
     qData <- qData.pep[,condsIndices]
     #print(paste0("Condition ", cond))
@@ -357,8 +355,8 @@ aggregateIter <- function(obj.pep, X, init.method='sum', method='mean',  ...){
   ### a reproduire iterativement pour chaque condition
     # Initialisation: presque aucune dépendance à l'initialisation prendre "sum overall" et  matAdj = X par simplicité
     #X <- as.matrix(X)
-    expr <- 2^(Biobase::exprs(obj.pep))
-    qData.pep <- expr[rownames(X),]
+  qData.pep <- 2^(Biobase::exprs(obj.pep))
+    #qData.pep <- expr[rownames(X),]
   
     finalX <- matrix(rep(0,ncol(X)*ncol(obj.pep)), nrow=ncol(X))
     for (cond in unique(pData(obj.pep)$Condition)){
@@ -410,8 +408,8 @@ GetNbPeptidesUsed <- function(X, qData){
 ##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 ##' aggregateMean(obj.pep, X)
 aggregateMean <- function(obj.pep, X, ...){
-  expr <- 2^(Biobase::exprs(obj.pep))
-  qData <- expr[rownames(X),]
+  qData <- 2^(Biobase::exprs(obj.pep))
+  #qData <- expr[rownames(X),]
   
   
   Mp <- inner.mean(qData, X)
@@ -511,8 +509,8 @@ inner.aggregate.topn <-function(qData,X, n, method='mean'){
 aggregateTopn <- function(obj.pep,X, n=10, method='mean', ...){
     
   #Get the indices of the n peptides with the best median
-  expr <- 2^(Biobase::exprs(obj.pep))
-  qData <- expr[rownames(X),]
+  qData <- 2^(Biobase::exprs(obj.pep))
+  #qData <- expr[rownames(X),]
   
   finalX <- inner.aggregate.topn(qData, X, n, method='mean')
   
@@ -554,6 +552,8 @@ finalizeAggregation <- function(obj.pep, qData, X, finalX, lib.loc=NULL){
   obj.prot <- addOriginOfValue(obj.prot)
   obj.prot@experimentData@other$Prostar_Version <- installed.packages(lib.loc = lib.loc$Prostar.loc)["Prostar","Version"]
   obj.prot@experimentData@other$DAPAR_Version <- installed.packages(lib.loc = lib.loc$DAPAR.loc)["DAPAR","Version"]
+  
+  #obj.prot <- xxxx
   
   return (obj.prot)
 }
