@@ -5,7 +5,7 @@
 \title{Returns a \code{MSnSet} object with the results of
 the differential analysis performed with \code{\link{limma}} package.}
 \usage{
-diffAnaSave(obj, allComp, data = NULL, l.params)
+diffAnaSave(obj, allComp, data = NULL, th_pval = 0, th_logFC = 0)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
@@ -15,13 +15,9 @@ diffAnaSave(obj, allComp, data = NULL, l.params)
 \item{data}{The result of the differential analysis processed 
 by \code{\link{limmaCompleteTest}}}
 
-\item{l.params}{A list of parameters:
-comp The name of the comparison 
-th_pVal A float that indicates the threshold on p-value choosen to discriminate differential proteins.
-fdr The FDR based on the values of threshold_pVal and threshold_logFC
-calibMethod The calibration method used to compute the calibration plot
-design xxxxxx
-th_logFC xxxx}
+\item{th_pval}{xxx}
+
+\item{th_logFC}{xxx}
 }
 \value{
 A MSnSet
@@ -40,8 +36,7 @@ qData <- Biobase::exprs(obj)
 sTab <- Biobase::pData(obj)
 allComp <- limmaCompleteTest(qData,sTab)
 data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
-params <- list(design="OnevsOne", method="limma", th_logFC=0)
-diffAnaSave(obj, allComp, data, params)
+diffAnaSave(obj, allComp, data)
 }
 \author{
 Alexia Dorffer, Samuel Wieczorek

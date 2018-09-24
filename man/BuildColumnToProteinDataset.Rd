@@ -29,9 +29,10 @@ by using the previous peptide dataset.
 require(DAPARdata)
 data(Exp1_R25_pept)
 protID <- "Protein.group.IDs"
-M <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
-data <- Biobase::fData(Exp1_R25_pept[1:1000])
-protData <- pepAgregate(Exp1_R25_pept[1:1000], 'Protein_group_IDs', 'sum overall', M)
+obj.pep <- Exp1_R25_pept[1:1000]
+M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+data <- Biobase::fData(obj.pep)
+protData <- DAPAR::aggregateMean(obj.pep, M)
 name <- "Protein.group.IDs"
 proteinNames <- rownames(Biobase::fData(protData))
 BuildColumnToProteinDataset(data, M, name,proteinNames )

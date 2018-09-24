@@ -64,9 +64,10 @@ getProteinsStats <- function(matUnique, matShared){
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' protID <- "Protein.group.IDs"
-##' M <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
-##' data <- Biobase::fData(Exp1_R25_pept[1:1000])
-##' protData <- pepAgregate(Exp1_R25_pept[1:1000], 'Protein_group_IDs', 'sum overall', M)
+##' obj.pep <- Exp1_R25_pept[1:1000]
+##' M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+##' data <- Biobase::fData(obj.pep)
+##' protData <- DAPAR::aggregateMean(obj.pep, M)
 ##' name <- "Protein.group.IDs"
 ##' proteinNames <- rownames(Biobase::fData(protData))
 ##' BuildColumnToProteinDataset(data, M, name,proteinNames )
@@ -104,9 +105,10 @@ return(newCol)
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' protID <- "Protein.group.IDs"
-##' M <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
-##' data <- Biobase::fData(Exp1_R25_pept[1:1000])
-##' protData <- pepAgregate(Exp1_R25_pept[1:1000], ProtID, 'sum overall', M)
+##' obj.pep <- Exp1_R25_pept[1:1000]
+##' M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+##' data <- Biobase::fData(obj.pep)
+##' protData <- DAPAR::aggregateSum(obj.pep, M)
 ##' name <- "Protein.group.IDs"
 ##' proteinNames <- rownames(Biobase::fData(protData))
 ##' BuildColumnToProteinDataset_par(data, M, name,proteinNames )
@@ -228,32 +230,165 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
 ##' 
 ##' @title Compute the intensity of proteins with the sum of the intensities
 ##' of their peptides.
-##' @param matAdj An adjacency matrix in which lines and columns correspond 
+##' @param obj.pep A matrix of intensities of peptides
+##' @param X An adjacency matrix in which lines and columns correspond 
 ##' respectively to peptides and proteins.
-##' @param expr A matrix of intensities of peptides
+##' @param ... xxx
 ##' @return A matrix of intensities of proteins
 ##' @author Alexia Dorffer
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' protID <- "Protein.group.IDs"
-##' M <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
-##' SumPeptides(M, Biobase::exprs(Exp1_R25_pept[1:1000]))
-SumPeptides <- function(matAdj, expr){
-    expr <- expr[rownames(matAdj),]
-    expr[is.na(expr)] <- 0
-    Mp <- t(matAdj) %*% expr
-    .temp <- expr
-    .temp[!is.na(.temp)] <- 1
-    .temp[is.na(.temp)] <- 0
-    pep <- t(matAdj) %*% .temp
+##' obj.pep <- Exp1_R25_pept[1:1000]
+##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+##' DAPAR::aggregateSum(obj.pep, X)
+aggregateSum <- function(obj.pep, X,...){
+  expr <- 2^(Biobase::exprs(obj.pep))
+  qData <- expr[rownames(X),]
+  Mp <- inner.sum(qData, X)
+  obj.prot <- finalizeAggregation(obj.pep, qData, X, Mp, ...)
+  return(obj.prot)
+}
+
+
+
+##' Method to xxxxx
+##' 
+##' @title xxxx 
+##' @param obj.pep xxxxx
+##' @param X xxxx
+##' @param init.method xxxxx
+##' @param method xxxxx
+##' @param ... xxxx
+##' @return xxxxx
+##' @author Samuel Wieczorek
+aggregateIterParallel <- function(obj.pep, X, init.method='sum', method='mean', ...){
+  doParallel::registerDoParallel()
+  
+  ### a reproduire iterativement pour chaque condition
+  # Initialisation: presque aucune dépendance à l'initialisation prendre "sum overall" et  matAdj = X par simplicité
+  #X <- as.matrix(X)
+  expr <- 2^(Biobase::exprs(obj.pep))
+  qData.pep <- expr[rownames(X),]
+  
+  finalX <- matrix(rep(0,ncol(X)*ncol(obj.pep)), nrow=ncol(X))
+  
+  finalX <- foreach (cond=1:length(unique(Biobase::pData(obj.pep)$Condition)), .combine=cbind) %dopar% {
+    #require(MSnbase)
+    condsIndices <- which(Biobase::pData(obj.pep)$Condition == unique(Biobase::pData(obj.pep)$Condition)[cond])
+    qData <- qData.pep[,condsIndices]
+    #print(paste0("Condition ", cond))
+    DAPAR::inner.aggregate.iter(qData, X, init.method, method)
+   }
+  
+  
+  finalX <- finalX[,colnames(Biobase::exprs(obj.pep))]
+  
+  obj.prot <- finalizeAggregation(obj.pep, qData, X, finalX, ...)
+  return(obj.prot)
+  
+  #return(yprot)
+}
+
+
+##' Method to xxxxx
+##' 
+##' @title xxxx 
+##' @param qData xxxxx
+##' @param X xxxx
+##' @param init.method xxx
+##' @param method xxx
+##' @param ... xxxx
+##' @return xxxxx
+##' @author Samuel Wieczorek
+inner.aggregate.iter <- function(qData, X,...,init.method, method){
+  yprot <- NULL
+  switch(init.method,
+         sum= yprot <- inner.sum(qData, X),
+         mean= yprot <- inner.mean(qData, X)
+  )
+  conv <- 1
+  
+  while(conv > 10**(-10)){
+    mean.prot <- rowMeans(as.matrix(yprot), na.rm = TRUE)
+    mean.prot[is.na(mean.prot)] <- 0
     
-    colnames(pep) <- paste("nb.pep.used.", colnames(expr), sep="")
-    rownames(pep) <- colnames(matAdj)
+    X.tmp <- mean.prot*X
+    X.new <- X.tmp/rowSums(as.matrix(X.tmp), na.rm = TRUE)
+    X.new[is.na(X.new)] <- 0
     
-    res <- list("idprot" = colnames(matAdj), "matfin"=Mp, "nbpep"=pep)
-    return(res)
+    method <- 'mean'
+    # l'appel à la fonction ci-dessous dépend des paramètres choisis par l'utilisateur
+    switch(method,
+           mean = yprot <- inner.mean(qData, X.new),
+           mean.topn = yprot <- DAPAR::aggregateTopn(qData,X.new,n=n, method=method)
+    )
     
+    mean.prot.new <- rowMeans(as.matrix(yprot), na.rm = TRUE)
+    mean.prot.new[is.na(mean.prot.new)] <- 0
+    
+    conv <- mean(abs(mean.prot.new - mean.prot))
+    print(paste0("conv : ", conv))
+  }
+  return(as.matrix(yprot))
+}
+
+
+
+##' Method to xxxxx
+##' 
+##' @title xxxx 
+##' @param obj.pep xxxxx
+##' @param X xxxx
+##' @param init.method xxxxx
+##' @param method xxxxx
+##' @param ... xxxx
+##' @return xxxxx
+##' @author Samuel Wieczorek
+##' @example 
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' protID <- "Protein.group.IDs"
+##' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
+##' aggregateIter(Exp1_R25_pept[1:1000],X=X)
+aggregateIter <- function(obj.pep, X, init.method='sum', method='mean',  ...){
+  
+  ### a reproduire iterativement pour chaque condition
+    # Initialisation: presque aucune dépendance à l'initialisation prendre "sum overall" et  matAdj = X par simplicité
+    #X <- as.matrix(X)
+    expr <- 2^(Biobase::exprs(obj.pep))
+    qData.pep <- expr[rownames(X),]
+  
+    finalX <- matrix(rep(0,ncol(X)*ncol(obj.pep)), nrow=ncol(X))
+    for (cond in unique(pData(obj.pep)$Condition)){
+      condsIndices <- which(pData(obj.pep)$Condition == cond)
+      qData <- qData.pep[,condsIndices]
+      print(paste0("Condition ", cond))
+    finalX[,condsIndices]  <- inner.aggregate.iter(qData, X, init.method, method)
+     }
+    
+    obj.prot <- finalizeAggregation(obj.pep, qData, X, finalX, ...)
+    return(obj.prot)
+    
+  #return(yprot)
+}
+
+
+
+##' Method to xxxxx
+##' 
+##' @title xxxx 
+##' @param qData xxxxx
+##' @param X xxxx
+##' @return xxxxx
+##' @author Samuel Wieczorek
+GetNbPeptidesUsed <- function(X, qData){
+   qData[!is.na(qData)] <- 1
+  qData[is.na(qData)] <- 0
+  pep <- t(X) %*% qData
+  
+  return(pep)
 }
 
 ##' This function computes the intensity of proteins as the mean of the 
@@ -261,155 +396,165 @@ SumPeptides <- function(matAdj, expr){
 ##' 
 ##' @title Compute the intensity of proteins as the mean of the intensities
 ##' of their peptides.
-##' @param matAdj An adjacency matrix in which lines and columns correspond 
+##' @param obj.pep A matrix of intensities of peptides
+##' @param X An adjacency matrix in which lines and columns correspond 
 ##' respectively to peptides and proteins.
-##' @param expr A matrix of intensities of peptides
+##' @param ... xxxxx
 ##' @return A matrix of intensities of proteins
 ##' @author Alexia Dorffer
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
+##' obj.pep <- Exp1_R25_pept[1:1000]
 ##' protID <- "Protein.group.IDs"
-##' matAdj <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
-##' MeanPeptides(matAdj, Biobase::exprs(Exp1_R25_pept[1:1000]))
-MeanPeptides <- function(matAdj, expr){
-    expr <- expr[rownames(matAdj),]
-    expr[is.na(expr)] <- 0
-    Mp <- t(matAdj) %*% expr
-    .temp <- expr
-    .temp[!is.na(.temp)] <- 1
-    .temp[is.na(.temp)] <- 0
-    pep <- t(matAdj) %*% .temp
-    Mp <- Mp / pep
+##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+##' aggregateMean(obj.pep, X)
+aggregateMean <- function(obj.pep, X, ...){
+  expr <- 2^(Biobase::exprs(obj.pep))
+  qData <- expr[rownames(X),]
+  
+  
+  Mp <- inner.mean(qData, X)
+   
+    obj.prot <- finalizeAggregation(obj.pep, qData, X, Mp, ...)
     
-    colnames(pep) <- paste("nb.pep.used.", colnames(expr), sep="")
-    rownames(pep) <- colnames(matAdj)
-    
-    res <- list("idprot" = colnames(matAdj), "matfin"=Mp, "nbpep"=pep)
-    return(res)
+    return(obj.prot)
     
 }
 
+##' Method to xxxxx
+##' 
+##' @title xxxx 
+##' @param qData xxxxx
+##' @param X xxxx
+##' @return xxxxx
+##' @author Samuel Wieczorek
+inner.sum <- function(qData, X){
+  qData[is.na(qData)] <- 0
+  Mp <- t(X) %*% qData
+  return(Mp)
+}
+
+
+##' Method to xxxxx
+##' 
+##' @title xxxx 
+##' @param qData xxxxx
+##' @param X xxxx
+##' @return xxxxx
+##' @author Samuel Wieczorek
+inner.mean <- function(qData, X){
+  Mp <- inner.sum(qData, X)
+  Mp <- Mp / GetNbPeptidesUsed(X, qData)
+  
+  return(Mp)
+  
+}
+
+
+
+
+##' Method to xxxxx
+##' 
+##' @title xxxx 
+##' @param qData xxxxx
+##' @param X xxxx
+##' @param n xxxxx
+##' @param method xxxxx
+##' @return xxxxx
+##' @author Samuel Wieczorek
+inner.aggregate.topn <-function(qData,X, n, method='mean'){
+  #qData <- expr[rownames(X),]
+  #qData[is.na(qData)] <- 0
+  
+  med <- apply(qData, 1, median)
+  xmed <- as(X * med, "dgCMatrix")
+  for (c in 1:ncol(X)){
+    v <- order(xmed[,c],decreasing=TRUE)[1:n]
+    l <- v[which((xmed[,c])[v] != 0)]
+    
+    if (length(l) > 0){
+      diff <- setdiff( which(X[,c] == 1), l)
+      if (length(diff)) {X[diff,c] <- 0}
+    }
+  }
+  
+  Mp <- NULL
+  switch(method,
+         mean= Mp <- inner.mean(qData, X),
+         sum= Mp <- inner.sum(qData, X)
+  )
+  
+  return(Mp)
+}
 
 ##' This function computes the intensity of proteins as the sum of the 
 ##' intensities of their n best peptides.
 ##' 
 ##' @title Compute the intensity of proteins as the sum of the 
 ##' intensities of their n best peptides.
-##' @param matAdj An adjacency matrix in which lines and columns correspond 
+##' @param obj.pep A matrix of intensities of peptides
+##' @param X An adjacency matrix in which lines and columns correspond 
 ##' respectively to peptides and proteins.
-##' @param expr A matrix of intensities of peptides
 ##' @param n The maximum number of peptides used to aggregate a protein.
+##' @param method xxx
+##' @param ... xxx
 ##' @return A matrix of intensities of proteins
-##' @author Alexia Dorffer
+##' @author Alexia Dorffer, Samuel Wieczorek
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
+##' obj.pep <- Exp1_R25_pept[1:1000]
 ##' protID <- "Protein.group.IDs"
-##' matAdj <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
-##' TopnPeptides(matAdj, Biobase::exprs(Exp1_R25_pept[1:1000]), 3)
-TopnPeptides <-function(matAdj,expr,n){
+##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+##' DAPAR::aggregateTopn(obj.pep, X, n=3)
+aggregateTopn <- function(obj.pep,X, n=10, method='mean', ...){
     
-    #Get the indices of the n peptides with the best median
-    med <- apply(expr[rownames(matAdj),], 1, median)
-    xmed <- as(matAdj * med, "dgCMatrix")
-    
-
-
-   for (c in 1:ncol(matAdj)){
-        v <- order(xmed[,c],decreasing=TRUE)[1:n]
-       l <- v[which((xmed[,c])[v] != 0)]
-       
-       if (length(l) > 0){
-            diff <- setdiff( which(matAdj[,c] == 1), l)
-            if (length(diff)) {matAdj[diff,c] <- 0}
-       }
-    }
-
-    
-#     test <- function(A,B,n){
-#         v <- order(B,decreasing=TRUE)[1:n]
-#         l <- v[which((B)[v] != 0)]
-# 
-#         if (length(l) > 0){
-#             diff <- setdiff( which(A == 1), l)
-#             if (length(diff)) {A[diff] <- 0}
-#         }
-#     return(A)
-#     }
-# 
-#     time1 <- system.time(t <- mapply(test, 
-    #split(matAdj, col(matAdj)), split(xmed, col(xmed)),n))
-# 
-# print(time0)
-# print(time1)
-#     
-    
-    
-    res <- SumPeptides(matAdj, expr)
-
-    return(res)
+  #Get the indices of the n peptides with the best median
+  expr <- 2^(Biobase::exprs(obj.pep))
+  qData <- expr[rownames(X),]
+  
+  finalX <- inner.aggregate.topn(qData, X, n, method='mean')
+  
+  obj.prot <- finalizeAggregation(obj.pep, qData, X, finalX, ...)
+  return(obj.prot)
 }
 
 
 
-##' Method to agregate with a method peptides to proteins on
-##' a \code{MSnSet} object (peptides)
+
+##' Method to xxxxx
 ##' 
-##' @title Function agregate peptides to proteins 
-##' @param obj.pep An object (peptides) of class \code{MSnSet}.
-##' @param protID The name of proteins ID column 
-##' @param method The method used to aggregate the peptides into proteins.
-##' Values are "sum", "mean" or "sum on top n" : do the sum / mean of intensity
-##' on all peptides belonging to proteins. Default is "sum"
-##' @param matAdj An adjacency matrix
-##' @param n The number of peptides considered for the aggregation.
-##' @return An object of class \code{MSnSet} with proteins  
-##' @author Alexia Dorffer, Samuel Wieczorek
-##' @examples 
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' protID <- "Protein.group.IDs"
-##' mat <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, TRUE)
-##' pepAgregate(Exp1_R25_pept[1:1000], protID, "sum overall", mat)
-pepAgregate <- function (obj.pep, protID, method="sum overall", 
-                         matAdj=NULL, 
-                         n=NULL){
-    #Check the validity of parameters
-    parammethod <- c("sum overall", "mean", "sum on top n") 
-    if (sum(is.na(match(method, parammethod) == TRUE)) > 0){return (NULL)}
-    if (is.null(matAdj)){warning("Adjacency matrix is missing.")
-        return (NULL)}
-    
-    if (!is.na(match(method, "sum on top n")) && is.null(n)){
-        warning("With the top n method, the parameter n must not be NULL.")
-        return (NULL)}
-    
-    condname <- Biobase::pData(obj.pep)$Sample.name
-    condition <- Biobase::pData(obj.pep)
-    expr <- 2^(Biobase::exprs(obj.pep))
-    
-    if(method == "sum overall"){ res <- SumPeptides(matAdj, expr)}
-    else if  (method == "mean"){ res <- MeanPeptides(matAdj, expr)}
-    else if (method == "sum on top n"){ res <- TopnPeptides(matAdj, expr, n) }
-    
-    Mp <- as.matrix(res$matfin)
-    Mp[Mp == 0] <- NA
-    Mp[is.nan(Mp)] <- NA
-    Mp[is.infinite(Mp)] <-NA
-    
-    
-    
-    pep <- as.matrix(res$nbpep)
-    protId <- res$idprot
-    fd <- data.frame(protId, pep)
-    
-    obj <- MSnSet(exprs = log2(Mp), 
-                  fData = fd, 
-                  pData = Biobase::pData(obj.pep))
-    obj@experimentData@other  <- list(obj@experimentData@other,
-                                      typeOfData ="protein")
-    
-    return(obj)
+##' @title xxxx 
+##' @param obj.pep xxxxx
+##' @param qData xxxx
+##' @param X xxxxx
+##' @param finalX xxxxx
+##' @param lib.loc xxxx
+##' @return xxxxx
+##' @author Samuel Wieczorek
+finalizeAggregation <- function(obj.pep, qData, X, finalX, lib.loc=NULL){
+ 
+  finalX <- as.matrix(finalX)
+  finalX[finalX==0] <- NA
+  finalX[is.nan(finalX)] <- NA
+  finalX[is.infinite(finalX)] <-NA
+  
+  
+  pep <- as.matrix(GetNbPeptidesUsed(X, qData))
+  colnames(pep) <- paste("nb.pep.used.", colnames(qData), sep="")
+  rownames(pep) <- colnames(X)
+  
+   fd <- data.frame(colnames(X), pep)
+  
+  obj.prot <- MSnSet(exprs = log2(finalX), 
+                fData = fd, 
+                pData = Biobase::pData(obj.pep))
+  obj.prot@experimentData@other  <- list(obj.prot@experimentData@other, typeOfData ="protein")
+  obj.prot <- addOriginOfValue(obj.prot)
+  obj.prot@experimentData@other$Prostar_Version <- installed.packages(lib.loc = lib.loc$Prostar.loc)["Prostar","Version"]
+  obj.prot@experimentData@other$DAPAR_Version <- installed.packages(lib.loc = lib.loc$DAPAR.loc)["DAPAR","Version"]
+  
+  return (obj.prot)
 }
 

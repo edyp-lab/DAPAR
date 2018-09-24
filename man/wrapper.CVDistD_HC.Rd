@@ -26,9 +26,6 @@ require(DAPARdata)
 data(Exp1_R25_pept)
 wrapper.CVDistD_HC(Exp1_R25_pept)
 }
-\seealso{
-\code{\link{wrapper.densityPlotD}}
-}
 \author{
 Samuel Wieczorek
 }

@@ -31,9 +31,10 @@ by using the previous peptide dataset. It is a parallel version of the function
 require(DAPARdata)
 data(Exp1_R25_pept)
 protID <- "Protein.group.IDs"
-M <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
-data <- Biobase::fData(Exp1_R25_pept[1:1000])
-protData <- pepAgregate(Exp1_R25_pept[1:1000], ProtID, 'sum overall', M)
+obj.pep <- Exp1_R25_pept[1:1000]
+M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+data <- Biobase::fData(obj.pep)
+protData <- DAPAR::aggregateSum(obj.pep, M)
 name <- "Protein.group.IDs"
 proteinNames <- rownames(Biobase::fData(protData))
 BuildColumnToProteinDataset_par(data, M, name,proteinNames )

@@ -181,7 +181,8 @@ diffAnaVolcanoplot_rCharts <- function(df,
                                  sep="")
     }
     
-    h1 <-  highchart2(df, "scatter", hcaes(x,y,group=g)) %>%
+    h1 <-  highchart() %>%
+        hc_add_series(data = df, type = "scatter", hcaes(x,y,group=g)) %>%
         hc_colors(c(palette$In, palette$Out)) %>%
         my_hc_chart(zoomType = "xy",chartType="scatter") %>%
         hc_legend(enabled = FALSE) %>%

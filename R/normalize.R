@@ -64,13 +64,13 @@ wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0
     
   #qData <- Biobase::exprs(obj)
   conds <- Biobase::pData(obj)[,"Condition"]
-  
+  qData <- Biobase::exprs(obj)
   msg_method <- paste("Normalisation using method =", method,  sep="")
   msg_type <- paste("With type =", type,  sep="")
   
   switch(method,
   GlobalQuantileAlignment = {
-           Biobase::exprs(obj) <- normalize.quantiles(Biobase::exprs(obj))
+           Biobase::exprs(obj) <- normalize.quantiles(qData)
            dimnames(Biobase::exprs(obj)) <- list(rownames(qData),colnames(qData))
            obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type)
            obj@experimentData@other$normalizationMethod <- method

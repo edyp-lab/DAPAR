@@ -240,13 +240,8 @@ diffAnaComputeFDR <- function(logFC, pval,threshold_PVal=0, threshold_LogFC = 0,
 ##' @param allComp A list of two items which is the result of the function wrapper.limmaCompleteTest or xxxx 
 ##' @param data The result of the differential analysis processed 
 ##' by \code{\link{limmaCompleteTest}} 
-##' @param l.params A list of parameters:
-##' comp The name of the comparison 
-##' th_pVal A float that indicates the threshold on p-value choosen to discriminate differential proteins.
-##' fdr The FDR based on the values of threshold_pVal and threshold_logFC
-##' calibMethod The calibration method used to compute the calibration plot
-##' design xxxxxx
-##' th_logFC xxxx
+##' @param th_pval xxx
+##' @param th_logFC xxx
 ##' @return A MSnSet
 ##' @author Alexia Dorffer, Samuel Wieczorek
 ##' @examples
@@ -259,9 +254,8 @@ diffAnaComputeFDR <- function(logFC, pval,threshold_PVal=0, threshold_LogFC = 0,
 ##' sTab <- Biobase::pData(obj)
 ##' allComp <- limmaCompleteTest(qData,sTab)
 ##' data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
-##' params <- list(design="OnevsOne", method="limma", th_logFC=0)
-##' diffAnaSave(obj, allComp, data, params)
-diffAnaSave <- function (obj, allComp, data=NULL, l.params){
+##' diffAnaSave(obj, allComp, data)
+diffAnaSave <- function (obj, allComp, data=NULL,th_pval=0,th_logFC=0){
     if (is.null(allComp)){
         warning("The differential analysis has not been completed. Maybe there 
             are some missing values in the dataset. If so, please impute before
@@ -269,15 +263,6 @@ diffAnaSave <- function (obj, allComp, data=NULL, l.params){
         return(NULL)}
   
   
-  #### Check parameters in l.params
-  checkRaw <- is.null(l.params$design) &&
-            is.null(l.params$method) &&
-          is.null(l.params$th_logFC)
-
-  if (is.null(l.params$th_pval)) l.params$th_pval<-0
-  if (is.null(l.params$th_logFC)) l.params$th_logFC<-0
-  
-    
   ####### SAVE ALL THEPAIRWISE COMPARISON RESULTS
   
   .fc <- as.data.frame(allComp$logFC)
@@ -293,7 +278,7 @@ diffAnaSave <- function (obj, allComp, data=NULL, l.params){
     colnames(Biobase::fData(obj))[(length(coln)-1):length(coln)] <- c(colnames(allComp$logFC)[i],colnames(allComp$P_Value)[i])
   }
   
-  text <- paste("Differential analysis with",l.params$method)
+  text <- paste("Null hypothesis test")
   obj@processingData@processing <- c(obj@processingData@processing, text)
   #Save parameters
   
@@ -310,14 +295,12 @@ diffAnaSave <- function (obj, allComp, data=NULL, l.params){
         x <- data$logFC
         y <- -log10(data$P_Value)
     
-        ipval <- which(y >= l.params$th_pval)
-        ilogfc <- which(abs(x) >= l.params$th_logFC)
+        ipval <- which(y >= th_pval)
+        ilogfc <- which(abs(x) >= th_logFC)
         Biobase::fData(obj)[intersect(ipval, ilogfc),]$Significant <- 1
    
 
-        l.params[["condition1"]] <-  data$condition1
-        l.params[["condition2"]] <-  data$condition2
-    
+        
         # text <- paste("Differential analysis : Selection with the following 
         #                 threshold values :logFC =",threshold_logFC,
         #                 ", -log10(p-value) = ", threshold_pVal,
@@ -327,7 +310,7 @@ diffAnaSave <- function (obj, allComp, data=NULL, l.params){
         # 
     }
   
-  obj <- saveParameters(obj, "anaDiff", l.params)
+  
   return(obj)
 }
 
@@ -348,11 +331,9 @@ diffAnaSave <- function (obj, allComp, data=NULL, l.params){
 ##' obj <- mvFilterFromIndices(obj, keepThat)
 ##' qData <- Biobase::exprs(obj)
 ##' sTab <- Biobase::pData(obj)
-##' limma <- limmaCompleteTest(qData,sTab)
-##' fc <- limma$logFC[1]
-##' pval <- limma$P_Value[1]
-##' params <- list(design="OnevsOne", method="limma", th_logFC=0)
-##' obj <- diffAnaSave(obj, limma,list(logFC=fc, P_Value = pval), params)
+##' allComp <- limmaCompleteTest(qData,sTab)
+##' data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
+##' obj <- diffAnaSave(obj, allComp, data)
 ##' signif <- diffAnaGetSignificant(obj)
 diffAnaGetSignificant <- function (obj){
     if (is.null(obj)){

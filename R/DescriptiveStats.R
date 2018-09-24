@@ -1,80 +1,9 @@
-##' This function is a wrapper for using the boxPlotD function with objects of 
-##' class \code{MSnSet}
-##' 
-##' @title Wrapper to the boxplotD function on an object \code{MSnSet}
-##' @param obj An object of class \code{MSnSet}.
-##' @param dataForXAxis A vector of strings containing the names of columns 
-##' in \code{pData()} to print conditions on X-axis (Default is "Condition").
-##' @param ... arguments for palette
-##' @return A boxplot
-##' @author Florence Combes, Samuel Wieczorek
-##' @seealso \code{\link{wrapper.densityPlotD}}
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' types <- c("Condition","Bio.Rep")
-##' wrapper.boxPlotD(Exp1_R25_pept, types)
-wrapper.boxPlotD <- function(obj, 
-                            dataForXAxis="Condition", 
-                             ...){
-
-qData <- Biobase::exprs(obj)
-dataForXAxis <- as.matrix(Biobase::pData(obj)[,dataForXAxis])
-
-conds <- Biobase::pData(obj)[,"Condition"]
-
-boxPlotD(qData, dataForXAxis, conds,...)
-
-}
-
-
-
-
-
-
-
-##' This function is a wrapper for using the boxPlotD_HC function with objects of 
-##' class \code{MSnSet}
-##' 
-##' @title Wrapper to the boxplotD_HC function on an object \code{MSnSet}
-##' @param obj An object of class \code{MSnSet}.
-##' @param dataForXAxis A vector of strings containing the names of columns 
-##' in \code{pData()} to print conditions on X-axis (Default is "Condition").
-##' @param ... xxx
-##' @return A boxplot
-##' @author Samuel Wieczorek
-##' @seealso \code{\link{wrapper.densityPlotD}}
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' types <- c("Condition","Bio.Rep")
-##' wrapper.boxPlotD_HC(Exp1_R25_pept, types)
-wrapper.boxPlotD_HC <- function(obj, dataForXAxis="Condition"){
-    
-    qData <- Biobase::exprs(obj)
-    dataForXAxis <- as.matrix(Biobase::pData(obj)[,dataForXAxis])
-    
-    conds <- Biobase::pData(obj)[,"Condition"]
-    
-    boxPlotD_HC(qData, dataForXAxis, conds)
-    
-}
-
-
-
-
-
-
-
 
 ##' Boxplot for quantitative proteomics data
 ##' 
 ##' @title Builds a boxplot from a dataframe
-##' @param qData A dataframe that contains quantitative data.
-##' @param dataForXAxis A vector containing the types of replicates 
-##' to use as X-axis. Available values are: Condition, Bio.Rep,
-##' Bio.Rep and Tech.Rep. Default is "Condition".
-##' @param conds A vector of the conditions (one string per sample).
+##' @param obj xxx
+##' @param legend A vector of the conditions (one string per sample).
 ##' @param palette xxx
 ##' @return A boxplot
 ##' @author Florence Combes, Samuel Wieczorek
@@ -82,16 +11,10 @@ wrapper.boxPlotD_HC <- function(obj, dataForXAxis="Condition"){
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' types <- c("Condition","Bio.Rep")
-##' dataForXAxis <- Biobase::pData(Exp1_R25_pept)[,types]
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' boxPlotD(qData, dataForXAxis, conds)
-boxPlotD <- function(qData, 
-                    dataForXAxis=NULL, 
-                    conds=NULL, 
-                    palette=NULL){
-
+##' boxPlotD(Exp1_R25_pept, legend = conds)
+boxPlotD <- function(obj,legend=NULL,palette=NULL){
+  qData <- Biobase::exprs(obj)
   if (is.null(palette)){
     pal <- brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
     
@@ -106,7 +29,6 @@ boxPlotD <- function(qData,
     }
   }
 
-    if (is.null(conds)){size <- 2}else{size <- 2*length(conds)}
         
 boxplot(qData
         ,las = 1
@@ -120,23 +42,9 @@ boxplot(qData
 )
 
 
-if( !is.null(dataForXAxis))
-{
-if (is.vector(dataForXAxis) ){
-    xAxisLegend <- dataForXAxis
-    }else{ 
-            xAxisLegend <- apply(dataForXAxis, 1, function(x){paste(x, collapse="_")})
-
-    }
-    axis(side=1,
-         at = 1:ncol(qData),
-         label = xAxisLegend)
-
-mtext("Samples", 
-    side=1, 
-    line=6+length(colnames(dataForXAxis)), 
-    cex.lab=1, las=1)
-}
+if( is.null(legend)){legend <- Biobase::pData(obj)$Condition}
+axis(side=1,at = 1:ncol(qData), label = legend)
+#mtext("Samples", side=1,  line=(6+ncol(legend)), cex.lab=1, las=1)
 
 abline(h=0) 
 
@@ -148,11 +56,8 @@ abline(h=0)
 ##' Boxplot for quantitative proteomics data using the library \code{highcharter}
 ##' 
 ##' @title Builds a boxplot from a dataframe using the library \code{highcharter}
-##' @param qData A dataframe that contains quantitative data.
-##' @param dataForXAxis A vector containing the types of replicates 
-##' to use as X-axis. Available values are: Condition, Bio.Rep,
-##' Bio.Rep and Tech.Rep. Default is "Condition".
-##' @param conds A vector of the conditions (one condition per sample).
+##' @param obj xxx
+##' @param legend A vector of the conditions (one condition per sample).
 ##' @param palette xxx
 ##' @return A boxplot
 ##' @author Samuel Wieczorek
@@ -160,25 +65,15 @@ abline(h=0)
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' types <- c("Condition","Bio.Rep")
-##' dataForXAxis <- Biobase::pData(Exp1_R25_pept)[,types]
-##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' boxPlotD_HC(qData, dataForXAxis, conds)
-boxPlotD_HC <- function(qData, 
-                     dataForXAxis="Condition", 
-                     conds=NULL, palette = NULL){
+##' legend <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+##' boxPlotD_HC(Exp1_R25_pept, legend)
+boxPlotD_HC <- function(obj, legend=NULL, palette = NULL){
 
+  qData <- Biobase::exprs(obj)
+  if( is.null(legend)){legend <- Biobase::pData(obj)$Condition}
   
-    if (is.null(conds) ) { conds <- rep("",ncol(qData)) }
-  if (is.null(palette)){
-    tmp <- brewer.pal(3,"Dark2")[1:length(unique(conds))]
-    
-    for (i in 1:ncol(qData)){
-      palette[i] <- tmp[ which(conds[i] == unique(conds))]
-    }
-    
-  }else{
+  if (is.null(palette)){palette <- rep("#FFFFFF", ncol(qData))
+  } else {
     if (length(palette) != ncol(qData)){
       warning("The color palette has not the same dimension as the number of samples")
       return(NULL)
@@ -186,22 +81,19 @@ boxPlotD_HC <- function(qData,
   }
     
 bx <-boxplot(qData, na.rm=TRUE)
-
 df_outlier <- data.frame(x=bx$group-1,y = bx$out)
 
-titi <- NULL
-nc <- ncol(qData)
-for (i in 1:nc){
-    titi <- c(titi, rep(colnames(qData)[i],nrow(qData)))
+tmp <- NULL
+for (i in 1:ncol(qData)){
+  tmp <- c(tmp, rep(paste("S",i,legend[i], collapse="_"),nrow(qData)))
 }
 
-df <- data.frame(values = as.vector(qData,mode='numeric'),samples = titi)
+df <- data.frame(values = as.vector(qData,mode='numeric'),samples = tmp, stringsAsFactors = FALSE)
 
 
-hc <- hcboxplot(x=df$values, var = df$samples, 
-          colorByPoint = TRUE, 
-          outliers = FALSE) %>%
-    
+hc <- hcboxplot(x=df$values, var = df$samples, colorByPoint = TRUE, 
+                
+          outliers = TRUE) %>%
     hc_chart(type="column") %>%
     hc_yAxis(title = list(text = "Log (intensity)")) %>%
     hc_xAxis(title = list(text = "Samples")) %>%
@@ -211,9 +103,8 @@ hc <- hcboxplot(x=df$values, var = df$samples,
     hc_plotOptions(
       
         boxplot= list(
-          colorByPoint = TRUE, 
           
-            fillColor= 'lightgrey',
+            fillColor= c('lightgrey'),
             lineWidth= 3,
             medianColor= 'grey',
             medianWidth= 3,
@@ -241,76 +132,41 @@ hc
 
 
 
-##' This function is a wrapper for using the violinPlotD function with objects 
-##' of class \code{MSnSet}
-##' 
-##' @title Wrapper to the violinPlotD function on an object \code{MSnSet}
-##' @param obj An object of class \code{MSnSet}.
-##' @param dataForXAxis A vector of strings containing the names of columns 
-##' in \code{pData()} to print conditions on X-axis (Default is "Condition").
-##' @param ... arguments for palette
-##' @return A violin plot
-##' @author Samuel Wieczorek
-##' @seealso \code{\link{wrapper.densityPlotD}}, \code{\link{wrapper.boxPlotD}}
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' library(vioplot)
-##' types <- c("Condition","Bio.Rep")
-##' wrapper.violinPlotD(Exp1_R25_pept, types)
-wrapper.violinPlotD <- function(obj, 
-                             dataForXAxis="Condition", ...){
-    
-    qData <- Biobase::exprs(obj)
-    dataForXAxis <- as.matrix(Biobase::pData(obj)[,dataForXAxis])
-    conds <- Biobase::pData(obj)[,"Condition"]
-    
-    violinPlotD(qData, dataForXAxis, conds, ...)
-    
-}
-
-
-
 
 ##' ViolinPlot for quantitative proteomics data
 ##' 
 ##' @title Builds a violinplot from a dataframe
-##' @param qData A dataframe that contains quantitative data.
-##' @param dataForXAxis A vector containing the types of replicates 
-##' to use as X-axis. Available values are: Condition, Bio.Rep,
-##' Bio.Rep and Tech.Rep. Default is "Condition".
-##' @param conds A vector of the conditions (one condition per sample).
+##' @param obj xxx
+##' @param legend A vector of the conditions (one condition per sample).
 ##' @param palette xxx
 ##' @return A violinplot
-##' @author Florence Combes, Samuel Wieczorek
+##' @author Samuel Wieczorek
 ##' @seealso \code{\link{densityPlotD}}
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' library(vioplot)
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' types <- c("Condition","Bio.Rep")
-##' dataForXAxis <- Biobase::pData(Exp1_R25_pept)[,types]
-##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' violinPlotD(qData, dataForXAxis, conds)
-violinPlotD <- function(qData, 
-                     dataForXAxis=NULL, 
-                     conds=NULL, 
-                     palette = NULL){
-
+##' legend <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+##' violinPlotD(Exp1_R25_pept, legend=legend)
+violinPlotD <- function(obj, legend=NULL, palette = NULL){
+  print(legend)
     plot.new()
-  if (is.null(palette)){
-    palette <- brewer.pal(length(unique(conds)),"Dark2")
-  }else{
-    if (length(palette) != ncol(qData)){
-      warning("The color palette has not the same dimension as the number of samples")
+  qData <- Biobase::exprs(obj)
+  
+    if (!is.null(palette)) {
+      if (length(palette) != ncol(qData)){
+        warning("The color palette has not the same dimension as the number of samples")
       return(NULL)
+      }
+    } else {
+      palette <- rep('#FFFFFF',ncol(qData))
     }
-  }
+ 
   
     plot.window(xlim=c(0,ncol(qData)+1),
                 ylim=c(min(na.omit(qData)),max(na.omit(qData))))
     title( ylab="Log (intensity)")
+    
     for (i in 1:ncol(qData)) {
         vioplot(na.omit(qData[,i]), col = palette[i], add=TRUE, at=i)}
     
@@ -318,21 +174,21 @@ violinPlotD <- function(qData,
     axis(2, yaxp = c(floor(min(na.omit(qData))), 
                      floor(max(na.omit(qData))), 5), las=1)
     
-     if( !is.null(dataForXAxis))
+     if( !is.null(legend))
      {
-        if (is.vector(dataForXAxis) ){
-            N <- 1} else{ N <- ncol(dataForXAxis)}
+        if (is.vector(legend) ){
+            N <- 1} else{ N <- ncol(legend)}
          
         for (i in 1:N){
             axis(side=1,
                  at = 1:ncol(qData),
-                 label = if (is.vector(dataForXAxis) ) 
-                     {dataForXAxis} else {dataForXAxis[,i]},
+                 label = if (is.vector(legend) ) 
+                     {legend} else {legend[,i]},
                  line= 2*i-1
             )
         }
 
-        mtext("Samples",side=1,line=6+length(colnames(dataForXAxis)), cex.lab=1, las=1)
+        mtext("Samples",side=1,line=6+length(colnames(legend)), cex.lab=1, las=1)
     }
 
 }
@@ -575,73 +431,11 @@ compareNormalizationD_HC <- function(qDataBefore,
 }
 
 
-
-
-
-##' This function is a wrapper for using the densityPlotD function with 
-##' objects of class \code{MSnSet}
-##' 
-##' @title Builds a densityplot from an object of class \code{MSnSet}
-##' @param obj An object of class \code{MSnSet}.
-##' @param condsForLegend A vector of conditions to show in densityplot.
-##' @param indData2Show A vector of the indices of the columns to show in 
-##' the plot. The indices are those of indices of the columns int the data
-##' frame qDataBefore in the density plot.
-##' @param ... arguments for palette
-##' @return A density plot
-##' @author Alexia Dorffer
-##' @seealso \code{\link{wrapper.boxPlotD}}, 
-##' \code{\link{wrapper.CVDistD}}
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' wrapper.densityPlotD(Exp1_R25_pept, conds)
-wrapper.densityPlotD <- function(obj, condsForLegend=NULL,  indData2Show=NULL, ...){
-qData <- Biobase::exprs(obj)
-if (is.null(condsForLegend) ) {
-  condsForLegend <- Biobase::pData(obj)[,"Condition"]}
-
-densityPlotD(qData, condsForLegend, indData2Show, ...)
-}
-
-##' This function is a wrapper for using the densityPlotD function with 
-##' objects of class \code{MSnSet}. Same as the function \code{\link{wrapper.densityPlotD}}
-##' but uses the package \code{highcharter}
-##' 
-##' @title Builds a densityplot from an object of class \code{MSnSet}
-##' @param obj An object of class \code{MSnSet}.
-##' @param condsForLegend A vector of conds to show in densityplot.
-##' @param indData2Show A vector of the indices of the columns to show in 
-##' the plot. The indices are those of indices of the columns int the data
-##' frame qDataBefore in the density plot.
-##' @param ... arguments for palette
-##' @return A density plot
-##' @author Samuel Wieczorek
-##' @seealso \code{\link{wrapper.boxPlotD}}, 
-##' \code{\link{wrapper.CVDistD}}
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' wrapper.densityPlotD_HC(Exp1_R25_pept, conds)
-wrapper.densityPlotD_HC <- function(obj, condsForLegend=NULL,  indData2Show=NULL, ...){
-    qData <- Biobase::exprs(obj)
-    
-    if (is.null(condsForLegend) ) {
-      condsForLegend <- Biobase::pData(obj)[,"Condition"]}
-    
-    densityPlotD_HC(qData, condsForLegend, indData2Show, ...)
-}
-
-
-
 ##' Densityplot of quantitative proteomics data over samples.
 ##' 
 ##' @title Builds a densityplot from a dataframe
-##' @param qData A dataframe that contains quantitative data.
-##' @param condsForLegend A vector of the conditions (one condition per sample).
-##' @param indData2Show A vector of indices to show in densityplot. If NULL, then all conds are displayed.
+##' @param obj xxx
+##' @param legend A vector of the conditions (one condition per sample).
 ##' @param palette xxx
 ##' @return A density plot
 ##' @author Florence Combes, Samuel Wieczorek
@@ -649,15 +443,14 @@ wrapper.densityPlotD_HC <- function(obj, condsForLegend=NULL,  indData2Show=NULL
 ##' @examples 
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' conds <- lab2Show <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' densityPlotD(qData, conds)
-densityPlotD <- function(qData, condsForLegend=NULL,indData2Show=NULL,palette = NULL){
+##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+##' densityPlotD(Exp1_R25_pept, conds)
+densityPlotD <- function(obj, legend=NULL,palette = NULL){
     
-#if (is.null(condsForLegend) ) {
-#  condsForLegend <- Biobase::pData(rv$current.obj)[,"Condition"]}
-
-if (is.null(indData2Show)) {indData2Show <- c(1:ncol(qData)) }
+  qData <- Biobase::exprs(obj)
+  
+  if (is.null(legend) ) { legend <- Biobase::pData(obj)[,"Condition"]}
+  
   if (is.null(palette)){
     palette <- brewer.pal(length(unique(conds)),"Dark2")
   }else{
@@ -678,18 +471,7 @@ lim.x <- range(min(axis.limits[1,]), max(axis.limits[2,]))
 lim.y <- range(min(axis.limits[3,]), max(axis.limits[4,]))
 
 
-##Colors definition
-    legendColor <- unique(palette)
-    txtLegend <- unique(condsForLegend)
 
-
-###Erase data not to show (color in white)
-# lineWD <- NULL
-# lineWD <- c(rep(1, length(colnames(qData))))
-# if (!is.null(highLightCondition)) {
-#   lineWD[which(conds == highLightCondition)] <- 3
-# }
-# 
 plot(x =NULL
     , ylab ="Density"
     , xlab = "log(intensity)"
@@ -701,14 +483,14 @@ plot(x =NULL
     ,cex.axis = 1
     ,cex.main = 3)
 
-for (i in indData2Show){
+for (i in ncol(qData)){
     lines(density(qData[,i], na.rm=TRUE), col = palette[i])
 }
 
 
 legend("topleft"         
-        , legend = txtLegend
-        , col = legendColor
+        , legend = unique(legend)
+        , col = unique(palette)
         , pch = 15 
         , bty = "n"
         , pt.cex = 2
@@ -725,11 +507,9 @@ legend("topleft"
 ##' but uses the package \code{highcharter}
 ##' 
 ##' @title Builds a densityplot from a dataframe
-##' @param qData A dataframe that contains quantitative data.
-##' @param condsForLegend A vector of the conditions (one condition 
+##' @param obj xxx
+##' @param legend A vector of the conditions (one condition 
 ##' per sample).
-##' @param indData2Show A vector of indices to show in densityplot. If NULL, 
-##' then all conditions are displayed.
 ##' @param palette xxx
 ##' @return A density plot
 ##' @author Samuel Wieczorek
@@ -737,30 +517,25 @@ legend("topleft"
 ##' @examples 
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' conds <- lab2Show <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' densityPlotD_HC(qData, conds)
-densityPlotD_HC <- function(qData, condsForLegend=NULL,indData2Show=NULL, palette = NULL){
-    if (is.null(condsForLegend) ) {condsForLegend <- rep("",ncol(qData))}
-    if (is.null(indData2Show)) {indData2Show <- c(1:ncol(qData)) }
-    
-  if (is.null(palette)){
-    #palette <- brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(condsForLegend))]
-    
-    nbConds <- length(unique(condsForLegend))
-    palette <- brewer.pal(nbConds, "Dark2")[1:nbConds]
-     temp <- NULL
-    for (i in 1:ncol(qData)){
-      temp[i] <- palette[ which(condsForLegend[i] == unique(condsForLegend))]
-    }
-    palette <- temp
-    
-  }else{
-    if (length(palette) != ncol(qData)){
-      warning("The color palette has not the same dimension as the number of samples")
-      return(NULL)
-    }
-  }
+##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+##' densityPlotD_HC(Exp1_R25_pept, conds)
+densityPlotD_HC <- function(obj, legend=NULL, palette = NULL){
+  
+  qData <- Biobase::exprs(obj)
+  
+  if (is.null(legend) ) { legend<- Biobase::pData(obj)[,"Condition"]}
+  
+  # if (is.null(palette)){
+  #   nbConds <- length(unique(condsForLegend))
+  #   palette <- brewer.pal(nbConds, "Dark2")[1:nbConds]
+  #    temp <- NULL
+  #   for (i in 1:ncol(qData)){
+  #     temp[i] <- palette[ which(condsForLegend[i] == unique(condsForLegend))]
+  #   }
+  #   palette <- temp
+  #   
+  # }else{
+   
     
     h1 <-  highchart() %>% 
         hc_title(text = "Density plot") %>% 
@@ -768,8 +543,7 @@ densityPlotD_HC <- function(qData, condsForLegend=NULL,indData2Show=NULL, palett
          hc_legend(enabled = TRUE) %>%
         hc_xAxis(title = list(text = "log(Intensity)")) %>%
         hc_yAxis(title = list(text = "Density")) %>%
-        hc_colors(palette) %>%
-        hc_tooltip(headerFormat= '',
+       hc_tooltip(headerFormat= '',
                    pointFormat = "<b> {series.name} </b>: {point.y} ",
                    valueDecimals = 2) %>%
       my_hc_ExportMenu(filename = "densityplot") %>%
@@ -784,12 +558,24 @@ densityPlotD_HC <- function(qData, condsForLegend=NULL,indData2Show=NULL, palett
             )
         )
     
+    if (!is.null(palette)) {
+      if (length(palette) != ncol(qData)){
+        warning("The color palette has not the same dimension as the number of samples")
+        return(NULL)
+      }
+      h1 <- h1 %>% hc_colors(palette)
+    }
     
-   for (i in 1:length(indData2Show)){
+    if (is.null(legend)) {
+      legend <- paste0("series", 1:ncol(qData))
+    }
+    
+   for (i in 1:ncol(qData)){
       
-      tmp <- data.frame(x = density(qData[,indData2Show[i]], na.rm = TRUE)$x, 
-                        y = density(qData[,indData2Show[i]], na.rm = TRUE)$y)
-      h1 <- h1 %>% hc_add_series(data=list_parse(tmp), name=condsForLegend[i]) 
+      tmp <- data.frame(x = density(qData[,i], na.rm = TRUE)$x, 
+                        y = density(qData[,i], na.rm = TRUE)$y)
+      
+      h1 <- h1 %>% hc_add_series(data=list_parse(tmp), name=legend[i]) 
     
     }
     
@@ -811,7 +597,6 @@ densityPlotD_HC <- function(qData, condsForLegend=NULL,indData2Show=NULL, palett
 ##' @param ... arguments for palette
 ##' @return A density plot
 ##' @author Alexia Dorffer
-##' @seealso \code{\link{wrapper.densityPlotD}}
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
@@ -834,7 +619,6 @@ CVDistD(qData, conds, ...)
 ##' @param ... arguments for palette.
 ##' @return A density plot
 ##' @author Samuel Wieczorek
-##' @seealso \code{\link{wrapper.densityPlotD}}
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)

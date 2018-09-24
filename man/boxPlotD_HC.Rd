@@ -4,17 +4,12 @@
 \alias{boxPlotD_HC}
 \title{Builds a boxplot from a dataframe using the library \code{highcharter}}
 \usage{
-boxPlotD_HC(qData, dataForXAxis = "Condition", conds = NULL,
-  palette = NULL)
+boxPlotD_HC(obj, legend = NULL, palette = NULL)
 }
 \arguments{
-\item{qData}{A dataframe that contains quantitative data.}
+\item{obj}{xxx}
 
-\item{dataForXAxis}{A vector containing the types of replicates 
-to use as X-axis. Available values are: Condition, Bio.Rep,
-Bio.Rep and Tech.Rep. Default is "Condition".}
-
-\item{conds}{A vector of the conditions (one condition per sample).}
+\item{legend}{A vector of the conditions (one condition per sample).}
 
 \item{palette}{xxx}
 }
@@ -27,11 +22,8 @@ Boxplot for quantitative proteomics data using the library \code{highcharter}
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-qData <- Biobase::exprs(Exp1_R25_pept)
-types <- c("Condition","Bio.Rep")
-dataForXAxis <- Biobase::pData(Exp1_R25_pept)[,types]
-conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-boxPlotD_HC(qData, dataForXAxis, conds)
+legend <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+boxPlotD_HC(Exp1_R25_pept, legend)
 }
 \seealso{
 \code{\link{densityPlotD_HC}}

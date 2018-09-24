@@ -4,15 +4,12 @@
 \alias{densityPlotD}
 \title{Builds a densityplot from a dataframe}
 \usage{
-densityPlotD(qData, condsForLegend = NULL, indData2Show = NULL,
-  palette = NULL)
+densityPlotD(obj, legend = NULL, palette = NULL)
 }
 \arguments{
-\item{qData}{A dataframe that contains quantitative data.}
+\item{obj}{xxx}
 
-\item{condsForLegend}{A vector of the conditions (one condition per sample).}
-
-\item{indData2Show}{A vector of indices to show in densityplot. If NULL, then all conds are displayed.}
+\item{legend}{A vector of the conditions (one condition per sample).}
 
 \item{palette}{xxx}
 }
@@ -25,9 +22,8 @@ Densityplot of quantitative proteomics data over samples.
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-qData <- Biobase::exprs(Exp1_R25_pept)
-conds <- lab2Show <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-densityPlotD(qData, conds)
+conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+densityPlotD(Exp1_R25_pept, conds)
 }
 \seealso{
 \code{\link{boxPlotD}}, \code{\link{CVDistD}}

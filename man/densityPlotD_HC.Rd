@@ -4,17 +4,13 @@
 \alias{densityPlotD_HC}
 \title{Builds a densityplot from a dataframe}
 \usage{
-densityPlotD_HC(qData, condsForLegend = NULL, indData2Show = NULL,
-  palette = NULL)
+densityPlotD_HC(obj, legend = NULL, palette = NULL)
 }
 \arguments{
-\item{qData}{A dataframe that contains quantitative data.}
+\item{obj}{xxx}
 
-\item{condsForLegend}{A vector of the conditions (one condition 
+\item{legend}{A vector of the conditions (one condition 
 per sample).}
-
-\item{indData2Show}{A vector of indices to show in densityplot. If NULL, 
-then all conditions are displayed.}
 
 \item{palette}{xxx}
 }
@@ -28,9 +24,8 @@ but uses the package \code{highcharter}
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-qData <- Biobase::exprs(Exp1_R25_pept)
-conds <- lab2Show <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-densityPlotD_HC(qData, conds)
+conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+densityPlotD_HC(Exp1_R25_pept, conds)
 }
 \seealso{
 \code{\link{boxPlotD}}, \code{\link{CVDistD}}

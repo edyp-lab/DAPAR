@@ -40,7 +40,7 @@ importFrom("limma", "lmFit", "eBayes", "topTable", "makeContrasts", "contrasts.f
 importFrom("pcaMethods", "completeObs", "pca")
 importFrom("scales", "alpha")
 importFrom("grDevices", "colorRampPalette", "palette", "heat.colors")
-importFrom("utils", "read.csv", "read.table", "de", "str","write.csv", "zip")
+importFrom("utils", "read.csv", "read.table", "de", "str","write.csv", "zip", "installed.packages")
 #importFrom("lme4", "getME")
 importFrom("openxlsx", "getSheetNames", "createWorkbook", "addWorksheet", "writeData", "saveWorkbook")
 import("readxl")
@@ -58,11 +58,10 @@ export(
 "readExcel",
 "listSheets",
 "addOriginOfValue","saveParameters",
-"buildLogText",
-"rbindMSnset"
+"rbindMSnset",
 
-,"wrapper.boxPlotD","boxPlotD"
-,"wrapper.densityPlotD","densityPlotD"
+"boxPlotD",
+"densityPlotD"
 ,"wrapper.CVDistD","CVDistD"
 ,"wrapper.corrMatrixD","corrMatrixD"
 ,"wrapper.heatmapD","heatmapD"
@@ -98,7 +97,11 @@ export(
 
 
 
-,"pepAgregate"
+,"aggregateTopn"
+,"aggregateMean"
+,"aggregateSum"
+,"aggregateIterParallel"
+,"aggregateIter"
 ,"BuildAdjacencyMatrix"
 ,"GraphPepProt"
 ,"BuildColumnToProteinDataset"

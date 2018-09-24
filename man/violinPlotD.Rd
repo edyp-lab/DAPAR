@@ -4,16 +4,12 @@
 \alias{violinPlotD}
 \title{Builds a violinplot from a dataframe}
 \usage{
-violinPlotD(qData, dataForXAxis = NULL, conds = NULL, palette = NULL)
+violinPlotD(obj, legend = NULL, palette = NULL)
 }
 \arguments{
-\item{qData}{A dataframe that contains quantitative data.}
+\item{obj}{xxx}
 
-\item{dataForXAxis}{A vector containing the types of replicates 
-to use as X-axis. Available values are: Condition, Bio.Rep,
-Bio.Rep and Tech.Rep. Default is "Condition".}
-
-\item{conds}{A vector of the conditions (one condition per sample).}
+\item{legend}{A vector of the conditions (one condition per sample).}
 
 \item{palette}{xxx}
 }
@@ -27,15 +23,12 @@ ViolinPlot for quantitative proteomics data
 require(DAPARdata)
 data(Exp1_R25_pept)
 library(vioplot)
-qData <- Biobase::exprs(Exp1_R25_pept)
-types <- c("Condition","Bio.Rep")
-dataForXAxis <- Biobase::pData(Exp1_R25_pept)[,types]
-conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-violinPlotD(qData, dataForXAxis, conds)
+legend <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+violinPlotD(Exp1_R25_pept, legend=legend)
 }
 \seealso{
 \code{\link{densityPlotD}}
 }
 \author{
-Florence Combes, Samuel Wieczorek
+Samuel Wieczorek
 }

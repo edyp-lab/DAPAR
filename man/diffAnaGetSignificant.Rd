@@ -25,11 +25,9 @@ keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 obj <- mvFilterFromIndices(obj, keepThat)
 qData <- Biobase::exprs(obj)
 sTab <- Biobase::pData(obj)
-limma <- limmaCompleteTest(qData,sTab)
-fc <- limma$logFC[1]
-pval <- limma$P_Value[1]
-params <- list(design="OnevsOne", method="limma", th_logFC=0)
-obj <- diffAnaSave(obj, limma,list(logFC=fc, P_Value = pval), params)
+allComp <- limmaCompleteTest(qData,sTab)
+data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
+obj <- diffAnaSave(obj, allComp, data)
 signif <- diffAnaGetSignificant(obj)
 }
 \author{

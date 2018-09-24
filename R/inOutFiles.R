@@ -17,7 +17,7 @@ saveParameters <- function(obj,name=NULL,l.params=NULL){
     return()
   }
   obj@experimentData@other$Params[[name]] <- l.params
-  obj@processingData@processing <- c(obj@processingData@processing , buildLogText(name, l.params, level=obj@experimentData@other$typeOfData))
+  #obj@processingData@processing <- c(obj@processingData@processing , buildLogText(name, l.params, level=obj@experimentData@other$typeOfData))
   
   return(obj)
 }
@@ -126,7 +126,8 @@ return(obj)
 ##' log-transformed (Default is FALSE)
 ##' @param replaceZeros A boolean value to indicate if the 0 and NaN values of
 ##' intensity have to be replaced by NA (Default is FALSE)
-##' @param pep_prot_data A string that indicates whether the dataset is about 
+##' @param pep_prot_data A string that indicates whether the dataset is about
+##' @param proteinId xxxx
 ##' @param versions A list of the following items: Prostar_Version, DAPAR_Version
 ##' peptides or proteins.
 ##' @return An instance of class \code{MSnSet}.
@@ -145,6 +146,7 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
                          indexForOriginOfValue = NULL,
                          logData=FALSE, replaceZeros=FALSE,
                          pep_prot_data=NULL,
+                         proteinId = NULL,
                          versions=NULL){
     
     if (!is.data.frame(file)){ #the variable is a path to a text file
@@ -183,22 +185,7 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
     
     colnames(fd) <- gsub(".", "_", colnames(data)[indFData], fixed=TRUE)
     
-    
-    ##building pData of MSnSet file
-    # if (length(grep(" ",metadata$Bio.Rep)) > 0) 
-    #     {
-    #     metadata$Bio.Rep <-  as.factor(1:length(metadata$Bio.Rep))
-    #     }
-    # if (length(grep(" ",metadata$Tech.Rep)) > 0) 
-    #     {
-    #     metadata$Tech.Rep <-  as.factor(1:length(metadata$Tech.Rep))
-    #     }
-    # if (length(grep(" ",metadata$Analyt.Rep)) > 0) 
-    #     {
-    #     metadata$Analyt.Rep <-  as.factor(1:length(metadata$Analyt.Rep))
-    #     }
-    # 
-    pd <- as.data.frame(metadata)
+     pd <- as.data.frame(metadata)
     rownames(pd) <- gsub(".", "_", pd$Sample.name, fixed=TRUE)
     
     ##Integrity tests
@@ -215,15 +202,14 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
     if (logData) {
         Biobase::exprs(obj) <- log2(Biobase::exprs(obj))
         obj@processingData@processing <- 
-            c(obj@processingData@processing, "Log2 tranformed data")
+            c(obj@processingData@processing, "Data has been Log2 tranformed")
     }
     
     if (replaceZeros) {
         Biobase::exprs(obj)[Biobase::exprs(obj) == 0] <- NA
         Biobase::exprs(obj)[is.nan(Biobase::exprs(obj))] <- NA
         Biobase::exprs(obj)[is.infinite(Biobase::exprs(obj))] <-NA
-        obj@processingData@processing <- c(obj@processingData@processing, 
-                                           "All zeros were replaced by NA")
+        obj@processingData@processing <- c(obj@processingData@processing, "All zeros were replaced by NA")
     }
     
     
@@ -233,6 +219,7 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
     
     obj@experimentData@other$Prostar_Version <- versions$Prostar_Version
     obj@experimentData@other$DAPAR_Version <- versions$DAPAR_Version
+    obj@experimentData@other$proteinId <- proteinId
     
     
     obj@experimentData@other$RawPValues <- FALSE

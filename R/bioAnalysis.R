@@ -149,7 +149,7 @@ GOAnalysisSave <- function (obj, ggo_res=NULL, ego_res=NULL, organism, ontology,
     
     if (!is.null(ggo_res)){
         text <- paste("Group analysis on ", organism)
-        obj@processingData@processing <- c(obj@processingData@processing, text)
+        #obj@processingData@processing <- c(obj@processingData@processing, text)
         
         obj@experimentData@other$GGO_analysis <- list(ggo_res = ggo_res,
                                                       organism = organism,
@@ -159,7 +159,7 @@ GOAnalysisSave <- function (obj, ggo_res=NULL, ego_res=NULL, organism, ontology,
     
     if (!is.null(ego_res)){
         text <- paste("Enrichment analysis on", organism)
-        obj@processingData@processing <- c(obj@processingData@processing, text)
+        #obj@processingData@processing <- c(obj@processingData@processing, text)
         
         obj@experimentData@other$EGO_analysis <- list(ego_res = ego_res,
                                                       organism = organism,
