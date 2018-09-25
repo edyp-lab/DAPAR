@@ -5,15 +5,13 @@
 \title{Compute the intensity of proteins with the sum of the intensities
 of their peptides.}
 \usage{
-aggregateSum(obj.pep, X, ...)
+aggregateSum(obj.pep, X)
 }
 \arguments{
 \item{obj.pep}{A matrix of intensities of peptides}
 
 \item{X}{An adjacency matrix in which lines and columns correspond 
 respectively to peptides and proteins.}
-
-\item{...}{xxx}
 }
 \value{
 A matrix of intensities of proteins

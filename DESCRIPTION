@@ -28,12 +28,12 @@ Description: This package contains a collection of functions for the
     visualisation and the statistical analysis of proteomic data.
 License: Artistic-2.0
 VignetteBuilder: knitr
-Depends: R (>= 3.5)
+Depends: R (>= 3.5), foreach, parallel, doParallel
 Suggests: BiocGenerics, Biobase, testthat, BiocStyle
 Imports: MSnbase, RColorBrewer,stats,preprocessCore,Cairo,png,
         lattice,reshape2,gplots,pcaMethods,ggplot2,
-        limma,knitr,tmvtnorm,norm,impute, doParallel, stringr,
-        parallel, foreach,grDevices, graphics, openxlsx, utils, cp4p
+        limma,knitr,tmvtnorm,norm,impute, stringr,
+        grDevices, graphics, openxlsx, utils, cp4p
         (>= 0.3.5), scales, Matrix, vioplot, imp4p (>= 0.7),
         highcharter (>= 0.5.0), DAPARdata (>= 1.11.1), siggenes, graph, lme4, readxl,
         clusterProfiler, dplyr, tidyr,AnnotationDbi, tidyverse, vsn

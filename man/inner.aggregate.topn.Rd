@@ -4,16 +4,16 @@
 \alias{inner.aggregate.topn}
 \title{xxxx}
 \usage{
-inner.aggregate.topn(qData, X, n, method = "mean")
+inner.aggregate.topn(pepData, X, method = "Mean", n = 10)
 }
 \arguments{
-\item{qData}{xxxxx}
+\item{pepData}{A data.frame of quantitative data}
 
-\item{X}{xxxx}
-
-\item{n}{xxxxx}
+\item{X}{An adjacency matrix}
 
 \item{method}{xxxxx}
+
+\item{n}{xxxxx}
 }
 \value{
 xxxxx

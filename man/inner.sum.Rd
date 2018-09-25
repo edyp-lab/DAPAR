@@ -4,15 +4,15 @@
 \alias{inner.sum}
 \title{xxxx}
 \usage{
-inner.sum(qData, X)
+inner.sum(pepData, X)
 }
 \arguments{
-\item{qData}{xxxxx}
+\item{pepData}{A data.frame of quantitative data}
 
-\item{X}{xxxx}
+\item{X}{An adjacency matrix}
 }
 \value{
-xxxxx
+A matrix
 }
 \description{
 Method to xxxxx

@@ -5,7 +5,7 @@
 \title{Compute the intensity of proteins as the sum of the 
 intensities of their n best peptides.}
 \usage{
-aggregateTopn(obj.pep, X, n = 10, method = "mean", ...)
+aggregateTopn(obj.pep, X, method = "Mean", n = 10)
 }
 \arguments{
 \item{obj.pep}{A matrix of intensities of peptides}
@@ -13,11 +13,9 @@ aggregateTopn(obj.pep, X, n = 10, method = "mean", ...)
 \item{X}{An adjacency matrix in which lines and columns correspond 
 respectively to peptides and proteins.}
 
-\item{n}{The maximum number of peptides used to aggregate a protein.}
-
 \item{method}{xxx}
 
-\item{...}{xxx}
+\item{n}{The maximum number of peptides used to aggregate a protein.}
 }
 \value{
 A matrix of intensities of proteins

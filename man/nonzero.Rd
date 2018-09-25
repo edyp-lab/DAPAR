@@ -14,7 +14,8 @@ A two-column matrix
 }
 \description{
 This function retrieves the indices of non-zero elements in sparse matrices
-of class dgCMatrix from package Matrix. Thi
+of class dgCMatrix from package Matrix. This function is largely inspired from 
+the package \code{RINGO}
 }
 \examples{
 library(Matrix)

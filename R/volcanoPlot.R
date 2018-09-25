@@ -149,12 +149,7 @@ diffAnaVolcanoplot_rCharts <- function(df,
                                         clickFunction=NULL,
                                        palette=NULL){
     
-    xtitle <- paste("log2 ( mean(",
-                    conditions[2],
-                    ") / mean(",
-                    conditions[1],
-                    ") )",
-                    sep="")
+    xtitle <- paste("log2 ( mean(",conditions[2],") / mean(",conditions[1],") )",sep="")
     
     if (is.null(clickFunction)){
         clickFunction <- 
@@ -162,8 +157,7 @@ diffAnaVolcanoplot_rCharts <- function(df,
     }
     
     if(is.null(palette)){
-      palette <- list(In = "orange",
-                     Out = "grey")
+      palette <- list(In = "orange",Out = "grey")
     }
     
     df <- cbind(df, 
@@ -201,3 +195,4 @@ diffAnaVolcanoplot_rCharts <- function(df,
     
     return(h1)
 }
+

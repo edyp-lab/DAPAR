@@ -2,20 +2,20 @@
 % Please edit documentation in R/agregation.R
 \name{GetNbPeptidesUsed}
 \alias{GetNbPeptidesUsed}
-\title{xxxx}
+\title{Computes the number of peptides used for aggregating each protein}
 \usage{
-GetNbPeptidesUsed(X, qData)
+GetNbPeptidesUsed(X, pepData)
 }
 \arguments{
-\item{X}{xxxx}
+\item{X}{An adjacency matrix}
 
-\item{qData}{xxxxx}
+\item{pepData}{A data.frame of quantitative data}
 }
 \value{
-xxxxx
+A data.frame
 }
 \description{
-Method to xxxxx
+Method to compute the number of quantified peptides used for aggregating each protein
 }
 \author{
 Samuel Wieczorek

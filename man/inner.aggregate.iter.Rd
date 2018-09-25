@@ -4,18 +4,19 @@
 \alias{inner.aggregate.iter}
 \title{xxxx}
 \usage{
-inner.aggregate.iter(qData, X, ..., init.method, method)
+inner.aggregate.iter(pepData, X, init.method = "Sum", method = "Mean",
+  n = NULL)
 }
 \arguments{
-\item{qData}{xxxxx}
+\item{pepData}{xxxxx}
 
 \item{X}{xxxx}
-
-\item{...}{xxxx}
 
 \item{init.method}{xxx}
 
 \item{method}{xxx}
+
+\item{n}{xxxx}
 }
 \value{
 xxxxx
@@ -25,4 +26,10 @@ Method to xxxxx
 }
 \author{
 Samuel Wieczorek
+require(DAPARdata)
+data(Exp1_R25_pept)
+protID <- "Protein.group.IDs"
+obj.pep <- Exp1_R25_pept[1:1000]
+X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+DAPAR::inner.aggregate.iter(exprs(obj.pep), X)
 }

@@ -206,13 +206,13 @@ my_hc_chart <- function(hc,  chartType,zoomType="None"){
 
 
 ##' This function retrieves the indices of non-zero elements in sparse matrices
-##' of class dgCMatrix from package Matrix. Thi
+##' of class dgCMatrix from package Matrix. This function is largely inspired from 
+##' the package \code{RINGO}
 ##' 
 ##' @title Retrieve the indices of non-zero elements in sparse matrices
 ##' @param x A sparse matrix of class dgCMatrix
 ##' @return A two-column matrix
 ##' @author Samuel Wieczorek
-##' @cite This function is largely inspired from the package RINGO
 ##' @examples
 ##' library(Matrix)
 ##' mat <- Matrix(c(0,0,0,0,0,1,0,0,1,1,0,0,0,0,1),nrow=5, byrow=TRUE, sparse=TRUE)

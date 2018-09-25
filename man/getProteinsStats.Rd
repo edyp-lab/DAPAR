@@ -2,7 +2,7 @@
 % Please edit documentation in R/agregation.R
 \name{getProteinsStats}
 \alias{getProteinsStats}
-\title{computes the number of proteins that are only defined by 
+\title{Computes the number of proteins that are only defined by 
 specific peptides, shared peptides or a mixture of two.}
 \usage{
 getProteinsStats(matUnique, matShared)
@@ -24,8 +24,9 @@ specific peptides, shared peptides or a mixture of two.
 require(DAPARdata)
 data(Exp1_R25_pept)
 protID <- "Protein.group.IDs"
-MShared <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
-MUnique <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, TRUE)
+obj <- Exp1_R25_pept[1:1000]
+MShared <- BuildAdjacencyMatrix(obj, protID, FALSE)
+MUnique <- BuildAdjacencyMatrix(obj, protID, TRUE)
 getProteinsStats(MUnique,MShared)
 }
 \author{

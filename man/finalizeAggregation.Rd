@@ -2,26 +2,28 @@
 % Please edit documentation in R/agregation.R
 \name{finalizeAggregation}
 \alias{finalizeAggregation}
-\title{xxxx}
+\title{Finalizes the aggregation process}
 \usage{
-finalizeAggregation(obj.pep, qData, X, finalX, lib.loc = NULL)
+finalizeAggregation(obj.pep, pepData, protData, X, lib.loc = NULL)
 }
 \arguments{
-\item{obj.pep}{xxxxx}
+\item{obj.pep}{A peptide object of class \code{MSnset}}
 
-\item{qData}{xxxx}
+\item{pepData}{xxxx}
 
-\item{X}{xxxxx}
+\item{protData}{xxxxx}
 
-\item{finalX}{xxxxx}
+\item{X}{An adjacency matrix in which lines and columns correspond 
+respectively to peptides and proteins.}
 
-\item{lib.loc}{xxxx}
+\item{lib.loc}{A list of two items (lib.loc$Prostar.loc and lib.loc$DAPAR.loc) to provide the 
+location of the installed packages}
 }
 \value{
-xxxxx
+A protein object of class \code{MSnset}
 }
 \description{
-Method to xxxxx
+Method to finalize the aggregation process
 }
 \author{
 Samuel Wieczorek

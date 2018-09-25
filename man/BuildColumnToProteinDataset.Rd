@@ -22,7 +22,7 @@ the user wants to keep in the new protein data.frame.}
 A vector
 }
 \description{
-This function creates a column for the protein dataset after agregation 
+This function creates a column for the protein dataset after aggregation 
 by using the previous peptide dataset.
 }
 \examples{

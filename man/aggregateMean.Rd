@@ -5,15 +5,13 @@
 \title{Compute the intensity of proteins as the mean of the intensities
 of their peptides.}
 \usage{
-aggregateMean(obj.pep, X, ...)
+aggregateMean(obj.pep, X)
 }
 \arguments{
-\item{obj.pep}{A matrix of intensities of peptides}
+\item{obj.pep}{A peptide object of class \code{MSnset}}
 
 \item{X}{An adjacency matrix in which lines and columns correspond 
 respectively to peptides and proteins.}
-
-\item{...}{xxxxx}
 }
 \value{
 A matrix of intensities of proteins

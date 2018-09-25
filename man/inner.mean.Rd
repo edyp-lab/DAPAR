@@ -4,12 +4,12 @@
 \alias{inner.mean}
 \title{xxxx}
 \usage{
-inner.mean(qData, X)
+inner.mean(pepData, X)
 }
 \arguments{
-\item{qData}{xxxxx}
+\item{pepData}{A data.frame of quantitative data}
 
-\item{X}{xxxx}
+\item{X}{An adjacency matrix}
 }
 \value{
 xxxxx
