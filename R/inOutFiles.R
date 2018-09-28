@@ -2,6 +2,7 @@
 ##' Saves the parameters of a tool in the pipeline of Prostar
 ##' @title Saves the parameters of a tool in the pipeline of Prostar
 ##' @param obj An object of class \code{MSnSet}
+##' @param name.dataset The name of the dataset
 ##' @param name The name of the tool. Available values are: "Norm, Imputation, anaDiff, GOAnalysis,Aggregation"
 ##' @param l.params A list that contains the parameters
 ##' @return An instance of class \code{MSnSet}.
@@ -10,13 +11,15 @@
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' l.params=list(method="Global quantile alignment", type="overall")
-##' saveParameters(Exp1_R25_pept, "Imputation",l.params)
-saveParameters <- function(obj,name=NULL,l.params=NULL){
-  if (is.null(l.params)|| is.null(name)) {
+##' saveParameters(Exp1_R25_pept, "Filtered.peptide", "Imputation",l.params)
+saveParameters <- function(obj,name.dataset=NULL,name=NULL,l.params=NULL){
+  if ( is.null(name) || is.null(name.dataset)) {
     warning("No operation has been applied to the dataset.")
     return()
   }
-  obj@experimentData@other$Params[[name]] <- l.params
+  tmp <- list()
+  tmp[[name]] <- l.params
+  obj@experimentData@other$Params[[name.dataset]] <- tmp
   #obj@processingData@processing <- c(obj@processingData@processing , buildLogText(name, l.params, level=obj@experimentData@other$typeOfData))
   
   return(obj)

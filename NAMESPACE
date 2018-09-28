@@ -24,6 +24,9 @@ import("parallel")
 import("doParallel")
 import("Matrix")
 import(cp4p)
+import(FactoMineR)
+import(factoextra)
+
 
 import(tidyverse)
 import(imp4p)
@@ -70,6 +73,9 @@ export(
 ,"wrapper.mvPerLinesHisto_HC", "mvPerLinesHisto_HC"
 ,"wrapper.mvPerLinesHistoPerCondition", "mvPerLinesHistoPerCondition"
 ,"wrapper.mvHisto", "mvHisto"
+,"wrapper.pca",
+"plotPCA_Eigen_hc"
+,"plotPCA_Var", "plotPCA_Ind"
 
 
 ,"wrapper.hc_mvTypePlot2","hc_mvTypePlot2"

@@ -559,7 +559,8 @@ finalizeAggregation <- function(obj.pep, pepData, protData,X, lib.loc=NULL){
   obj.prot <- MSnSet(exprs = log2(protData), 
                 fData = fd, 
                 pData = Biobase::pData(obj.pep))
-  obj.prot@experimentData@other  <- list(obj.prot@experimentData@other, typeOfData ="protein")
+  obj.prot@experimentData@other <- obj.pep@experimentData@other
+  obj.prot@experimentData@other$typeOfData <-"protein"
   obj.prot <- addOriginOfValue(obj.prot)
   obj.prot@experimentData@other$Prostar_Version <- installed.packages(lib.loc = lib.loc$Prostar.loc)["Prostar","Version"]
   obj.prot@experimentData@other$DAPAR_Version <- installed.packages(lib.loc = lib.loc$DAPAR.loc)["DAPAR","Version"]

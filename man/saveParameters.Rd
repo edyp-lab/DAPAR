@@ -4,10 +4,13 @@
 \alias{saveParameters}
 \title{Saves the parameters of a tool in the pipeline of Prostar}
 \usage{
-saveParameters(obj, name = NULL, l.params = NULL)
+saveParameters(obj, name.dataset = NULL, name = NULL,
+  l.params = NULL)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}}
+
+\item{name.dataset}{The name of the dataset}
 
 \item{name}{The name of the tool. Available values are: "Norm, Imputation, anaDiff, GOAnalysis,Aggregation"}
 
@@ -23,7 +26,7 @@ Saves the parameters of a tool in the pipeline of Prostar
 require(DAPARdata)
 data(Exp1_R25_pept)
 l.params=list(method="Global quantile alignment", type="overall")
-saveParameters(Exp1_R25_pept, "Imputation",l.params)
+saveParameters(Exp1_R25_pept, "Filtered.peptide", "Imputation",l.params)
 }
 \author{
 Samuel Wieczorek
