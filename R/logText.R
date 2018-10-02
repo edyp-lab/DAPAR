@@ -36,7 +36,7 @@ getTextForFiltering <- function(l.params){
   txt <- paste(txt,"<li>Filter type: ", l.params$mvFilterType,"</li>")
   
   if (! (l.params$mvFilterType %in% c("None", "EmptyLines"))){
-    txt <- paste(txt,"<li>, and minimal nb of values per lines = ", l.params$mvThNA,"</li>")
+    txt <- paste(txt,"<li>Minimal nb of values: ", l.params$mvThNA,"</li>")
     }
   
   if (!is.null(l.params$stringFilter.df) && nrow(l.params$stringFilter.df) > 1){
@@ -72,15 +72,15 @@ getTextForNormalization <- function(l.params){
   
   txt <- "<ul>"
   
-  txt <- paste(txt,"<li>The method is ", l.params$method,"</li>")
+  txt <- paste(txt,"<li>Norm. method: ", l.params$method,"</li>")
   if (l.params$method != "GlobalQuantileAlignment"){
-    txt <-  paste(txt,"<li>The type is ", l.params$type,"</li>")
+    txt <-  paste(txt,"<li>Application: ", l.params$type,"</li>")
   }
   
   switch(l.params$method,
     GlobalQuantileAlignment ={ },
     SumByColumns = {},
-    MeanCentering ={ txt <-  paste(txt,"<li>With variance reduction: ", l.params$varReduction,"</li>")},
+    MeanCentering ={ txt <-  paste(txt,"<li>Variance reduction: ", l.params$varReduction,"</li>")},
     QuantileCentering ={ txt <-  paste(txt,"<li>Quantile: ", l.params$quantile,"</li>")},
     LOESS ={ txt <-  paste(txt,"<li>Span: ", l.params$spanLOESS,"</li>")},
     vsn ={}
@@ -117,18 +117,18 @@ getTextForpeptideImputation <- function(l.params){
 
  
   if (l.params$pepLevel_algorithm == "imp4p"){
-    txt <- paste(txt,"<li>The algorithm used is ", l.params$pepLevel_algorithm,"</li>")
-    txt <-  paste(txt,"<li>The number of iterations is ", l.params$pepLevel_imp4p_nbiter,"</li>")
-    txt <-  paste(txt,"<li>The MEC are imputed ", l.params$pepLevel_imp4p_withLapala,"</li>")
+    txt <- paste(txt,"<li>Algorithm: ", l.params$pepLevel_algorithm,"</li>")
+    txt <-  paste(txt,"<li>Number of iterations: ", l.params$pepLevel_imp4p_nbiter,"</li>")
+    txt <-  paste(txt,"<li>MEC imputation: ", l.params$pepLevel_imp4p_withLapala,"</li>")
     if (l.params$pepLevel_imp4p_withLapala){
-      txt <-  paste(txt,"<li>The Upper lapala bound ", l.params$pepLevel_imp4p_qmin,"</li>")
-      txt <-  paste(txt,"<li>The distribution type is ", l.params$pepLevel_imp4pLAPALA_distrib,"</li>")
+      txt <-  paste(txt,"<li>Upper lapala bound: ", l.params$pepLevel_imp4p_qmin,"</li>")
+      txt <-  paste(txt,"<li>Distribution: ", l.params$pepLevel_imp4pLAPALA_distrib,"</li>")
     }
   } else {
-  txt <-  paste(txt,"<li>The algorithm used is", l.params$pepLevel_basicAlgorithm,"</li>")
+  txt <-  paste(txt,"<li>Algorithm: ", l.params$pepLevel_basicAlgorithm,"</li>")
   if (l.params$pepLevel_basicAlgorithm == "detQuantile"){
-    txt <-  paste(txt,"<li>Quantile ", l.params$pepLevel_detQuantile,"</li>")
-    txt <-  paste(txt,"<li>Factor ", l.params$pepLevel_detQuant_factor,"</li>")
+    txt <-  paste(txt,"<li>Quantile: ", l.params$pepLevel_detQuantile,"</li>")
+    txt <-  paste(txt,"<li>Factor: ", l.params$pepLevel_detQuant_factor,"</li>")
   }
 }
 
@@ -167,22 +167,22 @@ getTextForproteinImputation <- function(l.params){
     txt <- "<ul>"
     
    
-    txt <- paste(txt,"<li>POV imputed with ", l.params$POV_algorithm,"</li>")
+    txt <- paste(txt,"<li>POV imputation: ", l.params$POV_algorithm,"</li>")
     if (l.params$POV_algorithm == 'detQuantile'){
-      txt <- paste(txt,"<li>Quantile ", l.params$POV_detQuant_quantile,"</li>")
-      txt <- paste(txt,"<li>Factor ", l.params$POV_detQuant_factor,"</li>")
+      txt <- paste(txt,"<li>Quantile: ", l.params$POV_detQuant_quantile,"</li>")
+      txt <- paste(txt,"<li>Factor: ", l.params$POV_detQuant_factor,"</li>")
      }
     if (l.params$POV_algorithm == 'KNN'){
-      txt <- paste(txt,"<li>n = ", l.params$POV_KNN_n,"</li>")
+      txt <- paste(txt,"<li>N = ", l.params$POV_KNN_n,"</li>")
     }
     
     
-    txt <- paste(txt,"<li>MEC imputed with ", l.params$MEC_algorithm,"</li>")
+    txt <- paste(txt,"<li>MEC imputation: ", l.params$MEC_algorithm,"</li>")
     if (l.params$MEC_algorithm == 'detQuantile'){
-      txt <- paste(txt,"<li>Quantile ", l.params$MEC_detQuant_quantile,"</li>")
-      txt <- paste(txt,"<li>Factor ", l.params$MEC_detQuant_factor,"</li>")
+      txt <- paste(txt,"<li>Quantile: ", l.params$MEC_detQuant_quantile,"</li>")
+      txt <- paste(txt,"<li>Factor: ", l.params$MEC_detQuant_factor,"</li>")
       } else if (l.params$MEC_algorithm == 'fixedValue'){
-        txt <- paste(txt,"<li>Fixed value ", l.params$MEC_fixedValue,"</li>")
+        txt <- paste(txt,"<li>Fixed value: ", l.params$MEC_fixedValue,"</li>")
         
     }
     
@@ -213,13 +213,13 @@ getTextForAggregation <- function(l.params){
   
     txt <- "<ul>"
     
-    txt <- paste(txt,"<li>The protein Id is ", l.params$proteinId,"</li>")
+    txt <- paste(txt,"<li>Protein IDs: ", l.params$proteinId,"</li>")
     txt <- paste(txt,"<li>Include shared peptides: ", l.params$includeSharedPeptides,"</li>")
     txt <- paste(txt,"<li>Which peptides to consider: ", l.params$considerPeptides,"</li>")
-    txt <- paste(txt,"<li>Internal aggregation operator ", l.params$operator,"</li>")
+    txt <- paste(txt,"<li>Operator: ", l.params$operator,"</li>")
     
     if (l.params$considerPeptides == 'onlyN'){
-      txt <- paste(txt,"<li>n most abundant peptides=", l.params$topN,"</li>")
+      txt <- paste(txt,"<li>N (most abundant peptides) =", l.params$topN,"</li>")
     }
     txt <- paste(txt,"</ul>")
     
@@ -250,15 +250,15 @@ getTextForHypothesisTest <- function(l.params){
   if (is.null(l.params) || length(l.params)==0) return(NULL)
   
   txt <- "<ul>"
-  txt <- paste(txt,"<li>The design is ", l.params$design,"</li>")
+  txt <- paste(txt,"<li>Constrast: ", l.params$design,"</li>")
   if (l.params$method == "ttests"){
-    txt <- paste(txt,"<li>The method is ", l.params$ttest_options,"</li>")
+    txt <- paste(txt,"<li>Test: ", l.params$ttest_options,"</li>")
     
   } else {
-    txt <- paste(txt,"<li>The method is ", l.params$method,"</li>")
+    txt <- paste(txt,"<li>Test: ", l.params$method,"</li>")
   }
   
-  txt <- paste(txt,"<li>logFC threshold = ", l.params$th_logFC,"</li>")
+  txt <- paste(txt,"<li>logFC threshold: ", l.params$th_logFC,"</li>")
   txt <- paste(txt,"</ul>")
   
   return (txt)
