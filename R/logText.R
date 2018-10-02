@@ -28,7 +28,7 @@ getTextForFiltering <- function(l.params){
     #                 mvThNA,
     #                 stringFilter.df)
     
-  if (is.null(l.params) || length(l.params)==0) return(NULL)
+  if (is.null(l.params) || length(l.params)==0) {return(NULL)}
   
   
   txt <- "<ul>"

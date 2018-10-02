@@ -15,10 +15,15 @@
 saveParameters <- function(obj,name.dataset=NULL,name=NULL,l.params=NULL){
   if ( is.null(name) || is.null(name.dataset)) {
     warning("No operation has been applied to the dataset.")
-    return()
+    return(obj)
   }
   tmp <- list()
-  tmp[[name]] <- l.params
+  if(is.null(l.params)){
+    tmp[[name]] <- list()
+  } else {
+    tmp[[name]] <- l.params
+  }
+  
   obj@experimentData@other$Params[[name.dataset]] <- tmp
   #obj@processingData@processing <- c(obj@processingData@processing , buildLogText(name, l.params, level=obj@experimentData@other$typeOfData))
   

@@ -16,6 +16,8 @@
 wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
  # require(FactoMineR)
   
+  
+  if (length(which(is.na(Biobase::exprs(obj)))) > 0){return(NULL)}
   if (is.null(ncp)){
     nmax <- 12
     y <- Biobase::exprs(obj)
@@ -56,6 +58,7 @@ plotPCA_Var <- function(res.pca, chosen.axes=c(1,2)){
   #plot.PCA(res.pca, choix="var", axes = chosen.axes, title="Sample factor map (PCA)")
   #require(factoextra)
   # Colorer en fonction du cos2: qualité de représentation
+  if (is.null(res.pca)){return(NULL)}
   factoextra::fviz_pca_var(res.pca, axes = chosen.axes, col.var = "cos2",
                gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
                repel = TRUE # Évite le chevauchement de texte
@@ -78,7 +81,7 @@ plotPCA_Var <- function(res.pca, chosen.axes=c(1,2)){
 ##' plotPCA_Ind(res.pca)
 plotPCA_Ind <- function(res.pca, chosen.axes=c(1,2)){
   #plot.PCA(res.pca, choix="ind", axes = chosen.axes, select = 0:-1, title="Protein factor map (PCA)")
-
+  if (is.null(res.pca)){return(NULL)}
   #require(factoextra)
   factoextra::fviz_pca_ind(res.pca,  axes = chosen.axes, geom="point")
   
@@ -97,7 +100,7 @@ plotPCA_Ind <- function(res.pca, chosen.axes=c(1,2)){
 ##' res.pca <- wrapper.pca(Exp1_R25_pept, ncp=6)
 ##' plotPCA_Eigen(res.pca)
 plotPCA_Eigen <- function(res.pca){
-  
+  if (is.null(res.pca)){return(NULL)}
   eig.val <- res.pca$eig
   barplot(eig.val[, 2], 
           names.arg = 1:nrow(eig.val), 
@@ -124,7 +127,7 @@ plotPCA_Eigen <- function(res.pca){
 ##' res.pca <- wrapper.pca(Exp1_R25_pept, ncp=6)
 ##' plotPCA_Eigen_hc(res.pca)
 plotPCA_Eigen_hc <- function(res.pca){
-  
+  if (is.null(res.pca)){return(NULL)}
   hc <- highchart() %>%
     hc_yAxis_multiples(list(title = list(text = "% of variances"),lineWidth = 0, labels = list(format = "{value}%"), max = 100), 
                        list(title = list(text = "Cumulative % of variances"), opposite = FALSE, max = 100),
