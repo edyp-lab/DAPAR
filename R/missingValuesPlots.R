@@ -760,7 +760,7 @@ hc_mvTypePlot2 <- function(qData, conds, palette = NULL){
         hc_tooltip(headerFormat= '',
                    pointFormat = "<b> {series.name} </b>: {point.y} ",
                    valueDecimals = 2) %>%
-        my_hc_ExportMenu(filename = "POV_repartition") %>%
+        my_hc_ExportMenu(filename = "POV_distribution") %>%
         hc_plotOptions(
             series=list(
                 showInLegend = TRUE,
