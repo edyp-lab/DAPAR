@@ -196,6 +196,7 @@ my_hc_chart <- function(hc,  chartType,zoomType="None"){
   hc %>% 
     hc_chart(type = chartType, 
            zoomType=zoomType,
+           showAxes = TRUE,
            resetZoomButton= list(
              position = list(
                align= 'left',

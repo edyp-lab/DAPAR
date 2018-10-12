@@ -43,7 +43,7 @@ getTextForFiltering <- function(l.params){
         ll <- l.params$stringFilter.df$Filter
         txt <- paste(txt,"<li>Text filtering based on: ",  paste(ll[-1], collapse=", "),"</li>")
          }
-    
+  txt <- paste(txt,"</ul>" ) 
     return (txt)
     
 }
@@ -278,66 +278,54 @@ getTextForHypothesisTest <- function(l.params){
 ##' getTextForAnaDiff(list(design="OnevsOne",method="Limma"))
 getTextForAnaDiff <- function(l.params){ 
   
-    # l.params <- list(design,
-    #                  method,
-    #                  ttest_options,
-    #                  th_logFC,
-    #                  AllPairwiseCompNames,
-    #                  comp,
-    #                  th_pval,
-    #                  calibMethod,
-    #                  fdr,
-    #                  swapVolcano,
-    #                  filterType,
-    #                  filter_th_NA,
-    #                  numValCalibMethod
-    #                  condition1,
-    #                  condition2
-    #)
+  # param
+  # Condition1
+  # Condition2
+  # Comparison
+  # swapVolcano
+  # filterType
+  # filter_th_NA
+  # calibMethod
+  # numValCalibMethod
+  # th_pval
+  # FDR
+  # NbSelected
     
   if (is.null(l.params) || length(l.params)==0) return(NULL)
+  txt <- "<ul>"
+  txt <- paste(txt,"<li>The comparison is ", gsub("_", " ",l.params$Comparison, fixed=TRUE),"</li>")
+  txt <- paste(txt,"<li>The conditions are ", gsub("_", " ",l.params$Condition1, fixed=TRUE), " and ", gsub("_", " ",l.params$Condition2, fixed=TRUE), "</li>")
   
-    
-    txt <- NULL                 
-    
-    if (is.null(l.params$design) || (l.params$design =="None")) { return (NULL)}
-    
-    txt <- paste(txt, as.character(tags$li(paste("Design:", l.params$design)))) 
-    txt <- paste(txt, as.character(tags$li(paste("Method:", l.params$method))))
-    
-    if (!is.null(l.params$ttest_options)){
-      txt <- paste(txt, as.character(tags$li(paste("t-test:", l.params$ttest_options))))
-    } 
-    
-    txt <- paste(txt, as.character(tags$li(paste("Threshold logFC = ", l.params$th_logFC))))
-    
-    if (!is.null(l.params$comp)){
-      txt <- paste(txt, as.character(tags$li(paste("Comparison: ", l.params$comp))))
-        
-    }
-    
-    if (!is.null(l.params$filterType) && (l.params$filterType != "None")){
-      txt <- paste(txt, as.character(tags$li(paste("Filter type: ", l.params$filterType, 
-                                                   ", min nb values / lines: ", l.params$filter_th_NA))))
-    }
-    
-    if (!is.null(l.params$swapVolcano) && (isTRUE(l.params$swapVolcano))){
-      txt <- paste(txt, as.character(tags$li("Swap volcano")))
-    }
-    
-    if (!is.null(l.params$calibMethod) ){
-        if (!is.null(l.params$numValCalibMethod)){
-          txt <- paste(txt, as.character(tags$li(paste("Calibration with ", l.params$calibMethod, ", num value = ", l.params$numValCalibMethod))))
-        } else {
-          txt <- paste(txt, as.character(tags$li(paste("Calibration with ", l.params$calibMethod))))
-        }
-    }
-    
-    if (!is.null(l.params$th_pval)){
-      txt <- paste(txt, as.character(tags$li(paste("Threshold pvalue = ", l.params$th_pval))))
-    }
-    
-    return (txt)
+  if (!is.null(l.params$filterType) && (l.params$filterType != "None")){
+    txt <- paste(txt,"<li>The filter used is ", l.params$filterType, 
+                 "with min nb values / lines: ", l.params$filter_th_NA,"</li>")
+  }
+  
+  if (!is.null(l.params$swapVolcano) ){
+    txt <- paste(txt, "<li>Swap volcano: ",l.params$swapVolcano , "</li>")
+  }
+  
+  
+if (!is.null(l.params$calibMethod) ){
+  if (!is.null(l.params$numValCalibMethod)){
+    txt <- paste(txt, "<li>The calibration method is ", l.params$calibMethod, ", with num value = ", l.params$numValCalibMethod, "</li>")
+  } else {
+    txt <- paste(txt, "<li>The calibration method is ", l.params$calibMethod, "</li>")
+  }
+}
+
+if (!is.null(l.params$th_pval)){
+  txt <- paste(txt, "<li>The pvalue threshold is ", l.params$th_pval, "</li>")
+}
+  
+
+if (!is.null(l.params$FDR)){
+  txt <- paste(txt, "<li>FDR = ", l.params$FDR, "</li>")
+}
+  txt <- paste(txt,"</ul>")
+  
+  return (txt)
+ 
 }
 
 

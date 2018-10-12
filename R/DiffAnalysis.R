@@ -106,7 +106,7 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0, palette=NULL){
              x = 0,
              y = maxY.inside
            ),
-           text = paste0("Filtered out<br><strong>",round(100*nInside/nValues, digits=2), " %</strong>")
+           text = paste0("n Filtered out = ",nInside, "<br>(", round(100*nInside/nValues, digits=2), "%)")
          )
        )
      )
@@ -135,7 +135,7 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0, palette=NULL){
                  x = mean(c(minX,-threshold_LogFC)),
                  y = maxY.inf
                ),
-               text = paste0("Inf<br><strong>",round(100*nInf/nValues, digits=2), " %</strong>")
+               text = paste0("nInf = ",nInf, "<br>(", round(100*nInf/nValues, digits=2), ")%")
              )
            )
          )
@@ -163,7 +163,7 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0, palette=NULL){
                x =  mean(c(maxX,threshold_LogFC)),
                y = maxY.sup
              ),
-             text = paste0("Sup<br><strong>",round(100*nSup/nValues, digits=2), " %</strong>")
+             text = paste0("nSup = ",nSup, "<br>(", round(100*nSup/nValues, digits=2), ")%")
            )
          )
        )

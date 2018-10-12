@@ -157,8 +157,8 @@ diffAnaVolcanoplot_rCharts <- function(df,
     }
     
     if(is.null(palette)){
-      palette <- list(In = "orange",Out = "grey")
-    }
+      palette <- list(In='orange', Out='gray')
+    } 
     
     df <- cbind(df, 
                 g=ifelse(df$y >= threshold_pVal & abs(df$x) >= threshold_logFC, "g1", "g2")
@@ -175,23 +175,29 @@ diffAnaVolcanoplot_rCharts <- function(df,
                                  sep="")
     }
     
+    leftBorder <- data.frame(x=c(min(df$x), -threshold_logFC,-threshold_logFC),
+                             y = c(threshold_pVal,threshold_pVal,max(df$y)))
+    rightBorder <- data.frame(x=c(max(df$x), threshold_logFC,threshold_logFC),
+                             y = c(threshold_pVal,threshold_pVal,max(df$y)))
+    
     h1 <-  highchart() %>%
         hc_add_series(data = df, type = "scatter", hcaes(x,y,group=g)) %>%
         hc_colors(c(palette$In, palette$Out)) %>%
         my_hc_chart(zoomType = "xy",chartType="scatter") %>%
         hc_legend(enabled = FALSE) %>%
-        hc_yAxis(title = list(text="-log10(pValue)"),
-                 plotBands = list(list(from= 0, to = threshold_pVal, color = "lightgrey")),
-                 plotLines=list(list(color= "grey" , width = 2, value = 0, zIndex = 5))) %>%
+        hc_yAxis(title = list(text="-log10(pValue)")) %>%
         hc_xAxis(title = list(text = "logFC"),
-                 plotBands = list(list(from= -threshold_logFC, to = threshold_logFC, color = "lightgrey")),
-                 plotLines=list(list(color= "grey" , width = 2, value = 0, zIndex = 5))) %>%
+                 plotLines=list(list(color= "grey" , width = 1, value = 0, zIndex = 5))) %>%
         hc_tooltip(headerFormat= '',pointFormat = txt_tooltip) %>%
-        hc_plotOptions( series = list( animation=list(duration = 100),
+        hc_plotOptions( line = list(marker=list(enabled=FALSE),
+                                    dashStyle="Dash"),
+                        series = list( animation=list(duration = 100),
                                        cursor = "pointer", 
                                        point = list( events = list( 
                                            click = clickFunction ) ) ) ) %>%
-        my_hc_ExportMenu(filename = "volcanoplot")
+        my_hc_ExportMenu(filename = "volcanoplot") %>%
+      hc_add_series(data = leftBorder, type = "line", color='grey') %>%
+      hc_add_series(data = rightBorder, type = "line", color='grey')
     
     return(h1)
 }
