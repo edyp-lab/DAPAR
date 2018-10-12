@@ -744,7 +744,7 @@ hc_mvTypePlot2 <- function(qData, conds, palette = NULL){
     
 
     hc <-  highchart() %>%
-        hc_title(text = "Partially Observed Values repartition") %>%
+        hc_title(text = "Partially Observed Values distribution") %>%
         my_hc_chart(chartType = "spline", zoomType="xy") %>%
 
         hc_legend(align = "left", verticalAlign = "top",
