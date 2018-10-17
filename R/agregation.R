@@ -211,7 +211,7 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
     PG.l <- strsplit(as.character(PG), split=";", fixed=TRUE)
     
     Un1 <- unlist(PG.l)
-    X<- sparseMatrix(i = rep(seq_along(PG.l), lengths(PG.l)),
+    X<- Matrix::sparseMatrix(i = rep(seq_along(PG.l), lengths(PG.l)),
                      j=as.integer(factor(Un1, levels = unique(Un1))),
                      x=1, 
                      dimnames=list(rownames(data),as.character(unique(Un1))))
@@ -561,7 +561,8 @@ finalizeAggregation <- function(obj.pep, pepData, protData,X, lib.loc=NULL){
                 pData = Biobase::pData(obj.pep))
   obj.prot@experimentData@other <- obj.pep@experimentData@other
   obj.prot@experimentData@other$typeOfData <-"protein"
-  obj.prot <- addOriginOfValue(obj.prot)
+  #obj.prot <- addOriginOfValue(obj.prot)
+  obj.prot@experimentData@other$OriginOfValues <- NULL
   obj.prot@experimentData@other$Prostar_Version <- installed.packages(lib.loc = lib.loc$Prostar.loc)["Prostar","Version"]
   obj.prot@experimentData@other$DAPAR_Version <- installed.packages(lib.loc = lib.loc$DAPAR.loc)["DAPAR","Version"]
   return (obj.prot)
