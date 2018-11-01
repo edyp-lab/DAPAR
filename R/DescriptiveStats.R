@@ -921,6 +921,8 @@ CVDistD_HC <- function(qData, conds=NULL, palette = NULL){
             )
         )
     
+    minX <- maxX <- 0
+    maxY <- 0
     for (i in 1:n){
       if (length(which(conds == conditions[i])) > 1){
         t <- apply(qData[,which(conds == conditions[i])], 1, 
@@ -928,10 +930,24 @@ CVDistD_HC <- function(qData, conds=NULL, palette = NULL){
         tmp <- data.frame(x = density(t, na.rm = TRUE)$x,
                           y = density(t, na.rm = TRUE)$y)
         
-      
+        minX <- min(minX, quantile(tmp$x, 0))
+        maxX <- max(maxX, quantile(tmp$x, 0.02))
+        ymaxY <- max(maxY,tmp$y)
+        xmaxY <- tmp$x[which(tmp$y==ymaxY)]
+        
       h1 <- h1 %>% hc_add_series(data=tmp, name=conditions[i]) }
     }
     
+    h1 <- h1 %>%
+      hc_chart(
+      events = list(
+        load = JS(paste0("function(){
+                         var chart = this;
+                         this.xAxis[0].setExtremes(",minX,",",maxX, ");
+                         this.showResetZoom();}"))
+        )
+        )
+
     return(h1)
 
 }
