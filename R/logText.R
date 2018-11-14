@@ -130,9 +130,6 @@ getTextForpeptideImputation <- function(l.params){
     txt <-  paste(txt,"<li>Quantile: ", l.params$pepLevel_detQuantile,"</li>")
     txt <-  paste(txt,"<li>Factor: ", l.params$pepLevel_detQuant_factor,"</li>")
   }
-  if (l.params$pepLevel_basicAlgorithm == "KNN"){
-    txt <-  paste(txt,"<li>Nb neighnors: ", l.params$pepLevel_KNN_n,"</li>")
-  }
 }
 
 txt <- paste(txt,"</ul>")
