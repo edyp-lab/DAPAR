@@ -665,7 +665,7 @@ heatmap.DAPAR(exprso,
 wrapper.hc_mvTypePlot2 <- function(obj,...){
     qData <- Biobase::exprs(obj)
     conds <- Biobase::pData(obj)[,"Condition"]
-    hc_mvTypePlot2(qData, conds = conds)
+    hc_mvTypePlot2(qData, conds = conds,...)
 }
 
 
@@ -684,6 +684,7 @@ wrapper.hc_mvTypePlot2 <- function(obj,...){
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param conds A vector of the conditions (one condition per sample).
 ##' @param palette xxx
+##' @param title xxx
 ##' @return Density plots
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -692,7 +693,7 @@ wrapper.hc_mvTypePlot2 <- function(obj,...){
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' hc_mvTypePlot2(qData, conds)
-hc_mvTypePlot2 <- function(qData, conds, palette = NULL){
+hc_mvTypePlot2 <- function(qData, conds, palette = NULL, title=NULL){
   if (is.null(conds)){return(NULL)}
     if (is.null(palette)){
               palette <- brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
@@ -703,6 +704,10 @@ hc_mvTypePlot2 <- function(qData, conds, palette = NULL){
       }
     }
   
+  
+  if (is.null(title)){
+    title <- "Missing values distribution"
+  }
   
     conditions <- conds
     mTemp <- nbNA <- nbValues <- matrix(rep(0,nrow(qData)*length(unique(conditions))), nrow=nrow(qData),
@@ -744,7 +749,7 @@ hc_mvTypePlot2 <- function(qData, conds, palette = NULL){
     
 
     hc <-  highchart() %>%
-        hc_title(text = "Partially Observed Values distribution") %>%
+        hc_title(text = title) %>%
         my_hc_chart(chartType = "spline", zoomType="xy") %>%
 
         hc_legend(align = "left", verticalAlign = "top",
