@@ -693,7 +693,7 @@ wrapper.hc_mvTypePlot2 <- function(obj,...){
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' hc_mvTypePlot2(qData, conds)
-hc_mvTypePlot2 <- function(qData, conds, palette = NULLL){
+hc_mvTypePlot2 <- function(qData, conds, palette = NULL){
   if (is.null(conds)){return(NULL)}
   if (is.null(palette)){
     palette <- brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
