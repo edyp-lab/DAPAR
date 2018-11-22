@@ -579,11 +579,17 @@ mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto",
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' wrapper.mvImage(Exp1_R25_pept)
+##' obj <- Exp1_R25_pept
+##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', 1)
+##' obj <- mvFilterFromIndices(obj, keepThat)
+##' wrapper.mvImage(obj)
 wrapper.mvImage <- function(obj){
 qData <- Biobase::exprs(obj)
 conds <- Biobase::pData(obj)[,"Condition"]
-mvImage(qData, conds)
+originValues <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
+indices <- which(apply(is.OfType(originValues, "MEC"),1,sum) >0)
+
+mvImage(qData[indices,], conds)
 }
 
 
@@ -607,6 +613,7 @@ mvImage(qData, conds)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' mvImage(qData, conds)
 mvImage <- function(qData, conds){
+  
 ### build indices of conditions
 indCond <- list()
 ConditionNames <- unique(conds)
@@ -633,16 +640,19 @@ for (i in 1:nrow(exprso)){
             which(!is.na(exprso[i,indCond$cond2]))] <- .temp
 }
 
-colfunc <- colorRampPalette(c("yellow", "red"))
 
 heatmap.DAPAR(exprso,
-                col = colfunc(100),
+                col = colorRampPalette(c("yellow", "red"))(100),
                 key=TRUE,
                 srtCol= 0,
                 labCol=conds,
                 ylab = "Peptides / proteins",
-                main = "Missing values heatmap"
-) 
+                main = "MEC heatmap"
+)
+
+#heatmap_HC(exprso,col = colfunc(100),labCol=conds)
+           
+           
 }
 
 
@@ -684,7 +694,7 @@ wrapper.hc_mvTypePlot2 <- function(obj,...){
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param conds A vector of the conditions (one condition per sample).
 ##' @param palette xxx
-##' @param title xxx
+##' @param typeofMV xxx
 ##' @return Density plots
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -693,7 +703,7 @@ wrapper.hc_mvTypePlot2 <- function(obj,...){
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' hc_mvTypePlot2(qData, conds)
-hc_mvTypePlot2 <- function(qData, conds, palette = NULL, title=NULL){
+hc_mvTypePlot2 <- function(qData, conds, palette = NULL, typeofMV=NULL){
   if (is.null(conds)){return(NULL)}
     if (is.null(palette)){
               palette <- brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
@@ -707,6 +717,8 @@ hc_mvTypePlot2 <- function(qData, conds, palette = NULL, title=NULL){
   
   if (is.null(title)){
     title <- "Missing values distribution"
+  } else {
+    title <- paste0(typeofMV, " values distribution")
   }
   
     conditions <- conds
@@ -718,13 +730,13 @@ hc_mvTypePlot2 <- function(qData, conds, palette = NULL, title=NULL){
     myColors <- NULL
     j <- 1 
     
-    
     for (iCond in unique(conditions)){
         if (length(which(conditions==iCond)) == 1){
+           
             mTemp[,iCond] <- qData[,which(conditions==iCond)]
-            nbNA[,iCond] <- as.integer(is.na(qData[,which(conditions==iCond)]))
+            nbNA[,iCond] <- as.integer(is.OfType(qData[,which(conditions==iCond)]))
             nbValues[,iCond] <- length(which(conditions==iCond)) - nbNA[,iCond]
-        }else {
+        } else {
             mTemp[,iCond] <- apply(qData[,which(conditions==iCond)], 1, mean, na.rm=TRUE)
             nbNA[,iCond] <- apply(qData[,which(conditions==iCond)],1,function(x) length(which(is.na(x) == TRUE)))
             nbValues[,iCond] <- length(which(conditions==iCond)) - nbNA[,iCond]
@@ -744,12 +756,12 @@ hc_mvTypePlot2 <- function(qData, conds, palette = NULL, title=NULL){
                         myColors <- c(myColors, palette[which(unique(conditions)==iCond)])
                 j <- j+1
             }
-        #}
+
     }
     
 
     hc <-  highchart() %>%
-        hc_title(text = title) %>%
+        hc_title(text = "POV distribution") %>%
         my_hc_chart(chartType = "spline", zoomType="xy") %>%
 
         hc_legend(align = "left", verticalAlign = "top",

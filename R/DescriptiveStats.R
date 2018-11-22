@@ -930,10 +930,11 @@ CVDistD_HC <- function(qData, conds=NULL, palette = NULL){
         tmp <- data.frame(x = density(t, na.rm = TRUE)$x,
                           y = density(t, na.rm = TRUE)$y)
         
-        minX <- min(minX, quantile(tmp$x, 0))
-        maxX <- max(maxX, quantile(tmp$x, 0.02))
         ymaxY <- max(maxY,tmp$y)
-        xmaxY <- tmp$x[which(tmp$y==ymaxY)]
+        xmaxY <- tmp$x[which(tmp$y==max(tmp$y))]
+        minX <- min(minX, tmp$x)
+        maxX <- max(maxX, 10*(xmaxY-minX))
+        
         
       h1 <- h1 %>% hc_add_series(data=tmp, name=conditions[i]) }
     }
@@ -1176,8 +1177,7 @@ heatmapD(qData, distance, cluster, dendro)
 ##' obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
 ##' qData <- Biobase::exprs(obj)
 ##' heatmapD(qData)
-heatmapD <- function(qData, distance="euclidean", cluster="complete", 
-                    dendro = FALSE){
+heatmapD <- function(qData, distance="euclidean", cluster="complete", dendro = FALSE){
 ##Check parameters
 # paramdist <- c("euclidean", "manhattan") 
 # if (!(distance %in% paramdist)){
@@ -1231,7 +1231,12 @@ heatmapD <- function(qData, distance="euclidean", cluster="complete",
         #srtCol=45,
         labCol="",
         margins=c(4,12),
-        cexRow=1.5
+        cexRow=1.5,
+        keysize = 1.5,
+        lhei = c(1.5, 9),
+        lwid = c(1.5, 4),
+        lmat = rbind(4:3, 2:1)
+        
     )
 #    }
 }
@@ -1407,3 +1412,47 @@ heatmap.DAPAR <-
         }
         
     }
+
+
+
+rep.row <-function(x,n){
+  matrix(rep(x,each=n),nrow=n)
+}
+
+rep.col<-function(x,n){
+  matrix(rep(x,each=n), ncol=n, byrow=TRUE)
+}
+
+###--------------------------------------------------------------------
+heatmap_HC <- function(qData, col=heat.colors(100),labCol)
+{
+  conds_v <- c(rep.row(colnames(qData), nrow(qData)))
+  lines_v <- c(rep.col(1:nrow(qData), ncol(qData)))
+  data <- tibble(id=lines_v, condition=conds_v, value=round(c(qData), digits=2 ))
+  
+#   fntltp <- JS("function(){
+#                return this.point.x + ' ' +  this.series.yAxis.categories[this.point.y] + ':<br>' +
+#                Highcharts.numberFormat(this.point.value, 2);
+# }")
+
+  # plotline <- list(
+  #   color = "#fde725", value = 3, width = 2, zIndex = 5,
+  #   label = list(
+  #     text = "", verticalAlign = "top",
+  #     style = list(color = "black"), textAlign = "left",
+  #     rotation = 0, y = -5)
+  # )
+  
+ # highchart2() %>%
+    hchart(data, "heatmap", hcaes(x = condition, y = id, value = value)) %>% 
+    hc_colorAxis(stops = color_stops(100, col),type = "linear") %>% 
+    # hc_yAxis(reversed = FALSE, offset = -20, tickLength = 0,
+    #          gridLineWidth = 0, minorGridLineWidth = 0,
+    #          labels = list(style = list(fontSize = "8px"))) %>% 
+    hc_tooltip(enabled = FALSE) %>% 
+    #hc_xAxis(plotLines = list(plotline)) %>%
+    hc_title(text = "MEC repartition") %>% 
+    hc_legend(layout = "vertical", verticalAlign = "top",
+              align = "left", valueDecimals = 0)
+  
+}
