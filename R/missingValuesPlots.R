@@ -685,7 +685,6 @@ wrapper.hc_mvTypePlot2 <- function(obj,...){
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param conds A vector of the conditions (one condition per sample).
 ##' @param palette xxx
-##' @param title xxx
 ##' @return Density plots
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -694,7 +693,7 @@ wrapper.hc_mvTypePlot2 <- function(obj,...){
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' hc_mvTypePlot2(qData, conds)
-hc_mvTypePlot2 <- function(qData, conds, palette = NULL, title=NULL){
+hc_mvTypePlot2 <- function(qData, conds, palette = NULLL){
   if (is.null(conds)){return(NULL)}
   if (is.null(palette)){
     palette <- brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
@@ -704,12 +703,7 @@ hc_mvTypePlot2 <- function(qData, conds, palette = NULL, title=NULL){
       return(NULL)
     }
   }
-  
-  
-  if (is.null(title)){
-    title <- "Missing values distribution"
-  }
-  
+ 
   conditions <- conds
   mTemp <- nbNA <- nbValues <- matrix(rep(0,nrow(qData)*length(unique(conditions))), nrow=nrow(qData),
                                       dimnames=list(NULL,unique(conditions)))
@@ -750,7 +744,7 @@ hc_mvTypePlot2 <- function(qData, conds, palette = NULL, title=NULL){
   
   
   hc <-  highchart() %>%
-    hc_title(text = title) %>%
+    hc_title(text = "Partially Observed Values distribution") %>%
     my_hc_chart(chartType = "spline", zoomType="xy") %>%
     
     hc_legend(align = "left", verticalAlign = "top",
