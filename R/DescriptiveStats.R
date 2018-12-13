@@ -212,9 +212,9 @@ abline(h=0)
 ##' legend <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' boxPlotD_HC(Exp1_R25_pept, legend)
 boxPlotD_HC <- function(obj, legend=NULL, palette = NULL){
-
+  
   qData <- Biobase::exprs(obj)
-  if( is.null(legend)){legend <- Biobase::pData(obj)$Condition}
+  if( is.null(legend)){legend <- Biobase::pData(obj)[,"Sample.name"]}
   
   if (is.null(palette)){palette <- rep("#FFFFFF", ncol(qData))
   } else {
@@ -223,54 +223,58 @@ boxPlotD_HC <- function(obj, legend=NULL, palette = NULL){
       return(NULL)
     }
   }
-    
-bx <-boxplot(qData, na.rm=TRUE)
-df_outlier <- data.frame(x=bx$group-1,y = bx$out)
-
-tmp <- NULL
-for (i in 1:ncol(qData)){
-  tmp <- c(tmp, rep(paste("S",i,legend[i], collapse="_"),nrow(qData)))
-}
-
-df <- data.frame(values = as.vector(qData,mode='numeric'),samples = tmp, stringsAsFactors = FALSE)
-
-
-hc <- hcboxplot(x=df$values, var = df$samples, colorByPoint = TRUE, 
-                
-          outliers = TRUE) %>%
+  
+  bx <-boxplot(qData, na.rm=TRUE)
+  df_outlier <- data.frame(x=bx$group-1,y = bx$out)
+  
+  #tmp <- NULL
+  #for (i in 1:ncol(qData)){
+  #  tmp <- c(tmp, rep(paste("S",i,legend[i], collapse="_"),nrow(qData)))
+  #}
+  tmp <- NULL
+  for (i in 1:ncol(qData)){
+    tmp <- c(tmp, rep(paste(paste0(rep("A", i), collapse=""),legend[i], sep='_'),nrow(qData)))
+  }
+  
+  df <- data.frame(values = as.vector(qData,mode='numeric'),samples = tmp, stringsAsFactors = FALSE)
+  
+  
+  hc <- hcboxplot(x=df$values, var = df$samples, colorByPoint = TRUE, 
+                  
+                  outliers = TRUE) %>%
     hc_chart(type="column") %>%
     hc_yAxis(title = list(text = "Log (intensity)")) %>%
-    hc_xAxis(title = list(text = "Samples")) %>%
+    hc_xAxis(title = list(text = "Samples"), categories=legend) %>%
     hc_colors(palette) %>%
     hc_add_series(type= "scatter",df_outlier) %>%
     hc_tooltip(enabled = FALSE) %>%
     hc_plotOptions(
       
-        boxplot= list(
-          
-            fillColor= c('lightgrey'),
-            lineWidth= 3,
-            medianColor= 'grey',
-            medianWidth= 3,
-            stemColor= '#A63400',
-            stemDashStyle= 'dot',
-            stemWidth= 1,
-            whiskerColor= '#3D9200',
-            whiskerLength= '20%',
-            whiskerWidth= 3
-        ),
-        scatter = list(
-            marker=list(
-                fillColor = 'white',
-                lineWidth = 0.5,
-                lineColor = 'grey'
-            )
+      boxplot= list(
+        
+        fillColor= c('lightgrey'),
+        lineWidth= 3,
+        medianColor= 'grey',
+        medianWidth= 3,
+        stemColor= '#A63400',
+        stemDashStyle= 'dot',
+        stemWidth= 1,
+        whiskerColor= '#3D9200',
+        whiskerLength= '20%',
+        whiskerWidth= 3
+      ),
+      scatter = list(
+        marker=list(
+          fillColor = 'white',
+          lineWidth = 0.5,
+          lineColor = 'grey'
         )
+      )
     )
-
-
-hc
-
+  
+  
+  hc
+  
 
 }
 
