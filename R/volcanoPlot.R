@@ -149,6 +149,9 @@ diffAnaVolcanoplot_rCharts <- function(df,
                                         clickFunction=NULL,
                                        palette=NULL){
     
+  
+  print("In DAPAR::diffAnaVolcanoplot_rCharts")
+  print(str(df))
     xtitle <- paste("log2 ( mean(",conditions[2],") / mean(",conditions[1],") )",sep="")
     
     if (is.null(clickFunction)){
