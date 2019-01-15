@@ -392,7 +392,7 @@ return(p)
 ##' allComp <- limmaCompleteTest(qData,sTab)
 ##' histPValue_HC(allComp$P_Value[1])
 histPValue_HC <- function(pval_ll, bins=80, pi0=1){
-  h <- hist(sort(1-unlist(pval_ll)), freq=F,breaks=bins)
+  h <- hist(sort(unlist(pval_ll)), freq=F,breaks=bins)
   
   serieInf <- sapply(h$density, function(x)min(pi0, x) )
   serieSup <- sapply(h$density, function(x)max(0, x-pi0) )
@@ -401,11 +401,11 @@ histPValue_HC <- function(pval_ll, bins=80, pi0=1){
     hc_chart(type = "column") %>%
     hc_add_series(data = serieSup, name="p-value density") %>%
     hc_add_series(data = serieInf, name="p-value density") %>%
-    hc_title(text = "Distribution of 1-p-value") %>% 
+    hc_title(text = "P-value histogram") %>% 
      hc_legend(enabled = FALSE) %>%
     hc_colors(c("green", "red")) %>%
-    hc_xAxis(title = list(text = "p-value"), categories=h$breaks)%>%
-    hc_yAxis(title = list(text="Distribution of 1-p-value"),
+    hc_xAxis(title = list(text = "P-value"), categories=h$breaks)%>%
+    hc_yAxis(title = list(text="Density"),
              plotLines=list(list(color= "blue" , width = 2, value = pi0, zIndex = 5))) %>%
     hc_tooltip(headerFormat= '',
                pointFormat = "<b> {series.name} </b>: {point.y} ",
@@ -442,10 +442,10 @@ histPValue_HC <- function(pval_ll, bins=80, pi0=1){
           point = list(
             xAxis = 0,
             yAxis = 0,
-            x = 0.5,
+            x = 80,
             y = pi0
           ),
-          text = "pi0"
+          text = paste0("pi0=", pi0)
         )
       )
     )
