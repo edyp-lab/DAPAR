@@ -584,7 +584,10 @@ mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto",
 ##' obj <- mvFilterFromIndices(obj, keepThat)
 ##' wrapper.mvImage(obj)
 wrapper.mvImage <- function(obj){
-qData <- Biobase::exprs(obj)
+  qData <- Biobase::exprs(obj) 
+  if (sum(is.na(qData))==0) {return(NULL)}
+  
+
 conds <- Biobase::pData(obj)[,"Condition"]
 originValues <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
 indices <- which(apply(is.OfType(originValues, "MEC"),1,sum) >0)
