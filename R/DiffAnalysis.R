@@ -403,7 +403,7 @@ histPValue_HC <- function(pval_ll, bins=80, pi0=1){
     hc_add_series(data = serieInf, name="p-value density") %>%
     hc_title(text = "P-value histogram") %>% 
      hc_legend(enabled = FALSE) %>%
-    hc_colors(c("green", "red")) %>%
+    hc_colors(c("#C1FFC1", "red")) %>%
     hc_xAxis(title = list(text = "P-value"), categories=h$breaks)%>%
     hc_yAxis(title = list(text="Density"),
              plotLines=list(list(color= "blue" , width = 2, value = pi0, zIndex = 5))) %>%
