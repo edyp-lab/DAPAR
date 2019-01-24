@@ -579,11 +579,20 @@ mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto",
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' wrapper.mvImage(Exp1_R25_pept)
+##' obj <- Exp1_R25_pept
+##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', 1)
+##' obj <- mvFilterFromIndices(obj, keepThat)
+##' wrapper.mvImage(obj)
 wrapper.mvImage <- function(obj){
-qData <- Biobase::exprs(obj)
+  qData <- Biobase::exprs(obj) 
+  if (sum(is.na(qData))==0) {return(NULL)}
+  
+
 conds <- Biobase::pData(obj)[,"Condition"]
-mvImage(qData, conds)
+originValues <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
+indices <- which(apply(is.OfType(originValues, "MEC"),1,sum) >0)
+
+mvImage(qData[indices,], conds)
 }
 
 
@@ -607,6 +616,7 @@ mvImage(qData, conds)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' mvImage(qData, conds)
 mvImage <- function(qData, conds){
+  
 ### build indices of conditions
 indCond <- list()
 ConditionNames <- unique(conds)
@@ -633,16 +643,19 @@ for (i in 1:nrow(exprso)){
             which(!is.na(exprso[i,indCond$cond2]))] <- .temp
 }
 
-colfunc <- colorRampPalette(c("yellow", "red"))
 
 heatmap.DAPAR(exprso,
-                col = colfunc(100),
+                col = colorRampPalette(c("yellow", "red"))(100),
                 key=TRUE,
                 srtCol= 0,
                 labCol=conds,
                 ylab = "Peptides / proteins",
-                main = "Missing values heatmap"
-) 
+                main = "MEC heatmap"
+)
+
+#heatmap_HC(exprso,col = colfunc(100),labCol=conds)
+           
+           
 }
 
 
@@ -663,9 +676,9 @@ heatmap.DAPAR(exprso,
 ##' data(Exp1_R25_pept)
 ##' wrapper.hc_mvTypePlot2(Exp1_R25_pept)
 wrapper.hc_mvTypePlot2 <- function(obj,...){
-  qData <- Biobase::exprs(obj)
-  conds <- Biobase::pData(obj)[,"Condition"]
-  hc_mvTypePlot2(qData, conds = conds,...)
+    qData <- Biobase::exprs(obj)
+    conds <- Biobase::pData(obj)[,"Condition"]
+    hc_mvTypePlot2(qData, conds = conds,...)
 }
 
 
@@ -684,6 +697,7 @@ wrapper.hc_mvTypePlot2 <- function(obj,...){
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param conds A vector of the conditions (one condition per sample).
 ##' @param palette xxx
+##' @param typeofMV xxx
 ##' @return Density plots
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -692,100 +706,106 @@ wrapper.hc_mvTypePlot2 <- function(obj,...){
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' hc_mvTypePlot2(qData, conds)
-hc_mvTypePlot2 <- function(qData, conds, palette = NULL){
+hc_mvTypePlot2 <- function(qData, conds, palette = NULL, typeofMV=NULL){
   if (is.null(conds)){return(NULL)}
-  if (is.null(palette)){
-    palette <- brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
-  }else{
-    if (length(palette) != ncol(qData)){
-      warning("The color palette has not the same dimension as the number of samples")
-      return(NULL)
-    }
-  }
-  
-  
-  conditions <- conds
-  mTemp <- nbNA <- nbValues <- matrix(rep(0,nrow(qData)*length(unique(conditions))), nrow=nrow(qData),
-                                      dimnames=list(NULL,unique(conditions)))
-  dataCond <- data.frame()
-  ymax <- 0
-  series <- list()
-  myColors <- NULL
-  j <- 1 
-  
-  
-  for (iCond in unique(conditions)){
-    if (length(which(conditions==iCond)) == 1){
-      mTemp[,iCond] <- qData[,which(conditions==iCond)]
-      nbNA[,iCond] <- as.integer(is.na(qData[,which(conditions==iCond)]))
-      nbValues[,iCond] <- length(which(conditions==iCond)) - nbNA[,iCond]
-    }else {
-      mTemp[,iCond] <- apply(qData[,which(conditions==iCond)], 1, mean, na.rm=TRUE)
-      nbNA[,iCond] <- apply(qData[,which(conditions==iCond)],1,function(x) length(which(is.na(x) == TRUE)))
-      nbValues[,iCond] <- length(which(conditions==iCond)) - nbNA[,iCond]
-    }
-    
-    
-    for (i in 1:length(which(conditions==iCond))){
-      data <- mTemp[which(nbValues[, iCond] == i), iCond]
-      tmp <- NULL    
-      if (length(data) >= 2)
-      {
-        tmp <- density(mTemp[which(nbValues[,iCond]==i),iCond])
-        tmp$y <- tmp$y + i
-        if (max(tmp$y) > ymax) { ymax <- max(tmp$y)}
+    if (is.null(palette)){
+              palette <- brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
+    }else{
+      if (length(palette) != ncol(qData)){
+        warning("The color palette has not the same dimension as the number of samples")
+        return(NULL)
       }
-      series[[j]] <- tmp
-      myColors <- c(myColors, palette[which(unique(conditions)==iCond)])
-      j <- j+1
     }
-    #}
+  
+  
+  if (is.null(title)){
+    title <- "Missing values distribution"
+  } else {
+    title <- paste0(typeofMV, " values distribution")
   }
   
-  
-  hc <-  highchart() %>%
-    hc_title(text = "Partially Observed Values distribution") %>%
-    my_hc_chart(chartType = "spline", zoomType="xy") %>%
+    conditions <- conds
+    mTemp <- nbNA <- nbValues <- matrix(rep(0,nrow(qData)*length(unique(conditions))), nrow=nrow(qData),
+                                                     dimnames=list(NULL,unique(conditions)))
+    dataCond <- data.frame()
+    ymax <- 0
+    series <- list()
+    myColors <- NULL
+    j <- 1 
     
-    hc_legend(align = "left", verticalAlign = "top",
-              layout = "vertical") %>%
-    hc_xAxis(title = list(text = "Mean of intensities")) %>%
-    hc_yAxis(title = list(text = "Number ov values"),
-             #categories = c(-1:3)
-             #min = 1, 
-             # max = ymax,
-             tickInterval= 0.5
-    ) %>%
-    hc_colors(palette) %>%
-    hc_tooltip(headerFormat= '',
-               pointFormat = "<b> {series.name} </b>: {point.y} ",
-               valueDecimals = 2) %>%
-    my_hc_ExportMenu(filename = "POV_distribution") %>%
-    hc_plotOptions(
-      series=list(
-        showInLegend = TRUE,
-        animation=list(
-          duration = 100
-        ),
-        connectNulls= TRUE,
-        marker=list(
-          enabled = FALSE)
+    for (iCond in unique(conditions)){
+        if (length(which(conditions==iCond)) == 1){
+           
+            mTemp[,iCond] <- qData[,which(conditions==iCond)]
+            nbNA[,iCond] <- as.integer(is.OfType(qData[,which(conditions==iCond)]))
+            nbValues[,iCond] <- length(which(conditions==iCond)) - nbNA[,iCond]
+        } else {
+            mTemp[,iCond] <- apply(qData[,which(conditions==iCond)], 1, mean, na.rm=TRUE)
+            nbNA[,iCond] <- apply(qData[,which(conditions==iCond)],1,function(x) length(which(is.na(x) == TRUE)))
+            nbValues[,iCond] <- length(which(conditions==iCond)) - nbNA[,iCond]
+        }
         
-      )
-    )
-  
-  for (i in 1:length(series)){
-    hc <- hc_add_series(hc,data = list_parse(data.frame(cbind(x = series[[i]]$x, y = series[[i]]$y))), 
-                        showInLegend=FALSE, name=conds[i])
-  }
-  
-  # add three empty series for the legend entries. Change color and marker symbol
-  for (c in 1:length(unique(conds))){
-    hc <-  hc_add_series(hc,data = data.frame(), name = unique(conds)[c], color = palette[c], marker = list(symbol = "circle"), type = "line")
-  }
-  
-  hc
-  return(hc)
+        
+        for (i in 1:length(which(conditions==iCond))){
+                data <- mTemp[which(nbValues[, iCond] == i), iCond]
+                tmp <- NULL    
+                    if (length(data) >= 2)
+                        {
+                        tmp <- density(mTemp[which(nbValues[,iCond]==i),iCond])
+                        tmp$y <- tmp$y + i
+                        if (max(tmp$y) > ymax) { ymax <- max(tmp$y)}
+                    }
+                        series[[j]] <- tmp
+                        myColors <- c(myColors, palette[which(unique(conditions)==iCond)])
+                j <- j+1
+            }
+
+    }
+    
+
+    hc <-  highchart() %>%
+        hc_title(text = "POV distribution") %>%
+        my_hc_chart(chartType = "spline", zoomType="xy") %>%
+
+        hc_legend(align = "left", verticalAlign = "top",
+                  layout = "vertical") %>%
+        hc_xAxis(title = list(text = "Mean of intensities")) %>%
+        hc_yAxis(title = list(text = "Number ov values"),
+                 #categories = c(-1:3)
+                 #min = 1, 
+                # max = ymax,
+                 tickInterval= 0.5
+                 ) %>%
+        hc_colors(palette) %>%
+        hc_tooltip(headerFormat= '',
+                   pointFormat = "<b> {series.name} </b>: {point.y} ",
+                   valueDecimals = 2) %>%
+        my_hc_ExportMenu(filename = "POV_distribution") %>%
+        hc_plotOptions(
+            series=list(
+                showInLegend = TRUE,
+                animation=list(
+                    duration = 100
+                ),
+                connectNulls= TRUE,
+                marker=list(
+                    enabled = FALSE)
+                
+            )
+        )
+    
+for (i in 1:length(series)){
+        hc <- hc_add_series(hc,data = list_parse(data.frame(cbind(x = series[[i]]$x, y = series[[i]]$y))), 
+                            showInLegend=FALSE, name=conds[i])
+}
+    
+    # add three empty series for the legend entries. Change color and marker symbol
+for (c in 1:length(unique(conds))){
+      hc <-  hc_add_series(hc,data = data.frame(), name = unique(conds)[c], color = palette[c], marker = list(symbol = "circle"), type = "line")
+}
+        
+hc
+ return(hc)
 }
 
 

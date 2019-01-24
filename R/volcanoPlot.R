@@ -34,7 +34,8 @@ diffAnaVolcanoplot <- function(logFC=NULL,
                                 pVal=NULL, 
                                 threshold_pVal=1e-60, 
                                 threshold_logFC=0, 
-                                conditions=NULL, colors=NULL){
+                                conditions=NULL, 
+                               colors=NULL){
 
 xtitle <- paste("log2 ( mean(",conditions[2],") / mean(",conditions[1],") )",
                 sep="")
@@ -147,9 +148,12 @@ diffAnaVolcanoplot_rCharts <- function(df,
                                         threshold_logFC=0, 
                                         conditions=NULL, 
                                         clickFunction=NULL,
-                                       palette=NULL){
+                                       palette=NULL, 
+                                       swap = FALSE){
     
-    xtitle <- paste("log2 ( mean(",conditions[2],") / mean(",conditions[1],") )",sep="")
+  
+   xAxisTitle <- ifelse(swap, "-log(FC)","log(FC)")
+   xtitle <- paste("log2 ( mean(",conditions[2],") / mean(",conditions[1],") )",sep="")
     
     if (is.null(clickFunction)){
         clickFunction <- 
@@ -186,7 +190,7 @@ diffAnaVolcanoplot_rCharts <- function(df,
         my_hc_chart(zoomType = "xy",chartType="scatter") %>%
         hc_legend(enabled = FALSE) %>%
         hc_yAxis(title = list(text="-log10(pValue)")) %>%
-        hc_xAxis(title = list(text = "logFC"),
+        hc_xAxis(title = list(text = xAxisTitle),
                  plotLines=list(list(color= "grey" , width = 1, value = 0, zIndex = 5))) %>%
         hc_tooltip(headerFormat= '',pointFormat = txt_tooltip) %>%
         hc_plotOptions( line = list(marker=list(enabled=FALSE),
