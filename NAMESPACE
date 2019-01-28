@@ -16,7 +16,7 @@ import(vioplot)
 import(impute)
 import(knitr)
 importFrom("doParallel", "registerDoParallel")
-importFrom("dplyr", "left_join", "mutate","tbl_df", "select_","data_frame", "last")
+importFrom("dplyr", "left_join", "mutate","tbl_df", "select_","data_frame", "last", "tibble")
 importFrom("tidyr", "gather")
 import("foreach")
 importFrom("AnnotationDbi", "keys")
@@ -31,7 +31,7 @@ import(factoextra)
 import(tidyverse)
 import(imp4p)
 importFrom("graphics", "par", "boxplot", "axis", "mtext", "abline", "points", 
-            "legend", "lines",  "barplot", "text",
+            "legend", "lines",  "barplot", "text","hist",
            "layout", "plot.new", "strheight", "strwidth", "title","plot.window")
  
 importFrom("stats", "lowess", "cor", "density","pexp", "mad", 

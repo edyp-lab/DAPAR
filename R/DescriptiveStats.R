@@ -1143,10 +1143,12 @@ corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
 ##' @return A heatmap
 ##' @author Alexia Dorffer
 ##' @examples
+##' \dontrun{
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
 ##' wrapper.heatmapD(obj)
+##' }
 wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete", 
                             dendro = FALSE){
 qData <- Biobase::exprs(obj)
@@ -1175,11 +1177,13 @@ heatmapD(qData, distance, cluster, dendro)
 ##' @return A heatmap
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
+##' \dontrun{
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
 ##' qData <- Biobase::exprs(obj)
 ##' heatmapD(qData)
+##' }
 heatmapD <- function(qData, distance="euclidean", cluster="complete", dendro = FALSE){
 ##Check parameters
 # paramdist <- c("euclidean", "manhattan") 
@@ -1417,27 +1421,64 @@ heatmap.DAPAR <-
     }
 
 
-
-rep.row <-function(x,n){
+###--------------------------------------------------------------------
+##' fill a matrix by row
+##' 
+##' @title Same as rep function but on a matrix.
+##' @param x The data to repeat
+##' @param n The number of repetitions.
+##' @return A matrix
+##' @author Samuel Wieczorek
+##' @examples
+##' rep_row('foo', 4)
+rep_row <-function(x,n){
   matrix(rep(x,each=n),nrow=n)
 }
 
-rep.col<-function(x,n){
+###--------------------------------------------------------------------
+##' fill a matrix by column
+##' 
+##' @title Same as rep function but on a matrix.
+##' @param x The data to repeat
+##' @param n The number of repetitions.
+##' @return A matrix
+##' @author Samuel Wieczorek
+##' @examples
+##' rep_col('foo', 4)
+rep_col<-function(x,n){
   matrix(rep(x,each=n), ncol=n, byrow=TRUE)
 }
 
 ###--------------------------------------------------------------------
+##' Heatmap inspired by the heatmap.2 function and uses the highcharts library
+##' 
+##' @title This function is inspired from the function \code{\link{heatmap.2}} 
+##' that displays quantitative data in the \code{exprs()} table of an object of
+##' class \code{MSnSet}. For more information, please refer to the help 
+##' of the heatmap.2 function.
+##' @param qData A dataframe that contains quantitative data.
+##' @param col colors used for the image. Defaults to heat colors (heat.colors).
+##' @param labCol character vectors with column conds to use.
+##' @return A heatmap
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' obj <- Exp1_R25_pept[1:100,]
+##' obj <- mvFilter(obj, "wholeMatrix", 6)
+##' qData <- Biobase::exprs(obj)
+##' heatmap_HC(qData)
 heatmap_HC <- function(qData, col=heat.colors(100),labCol)
 {
-  conds_v <- c(rep.row(colnames(qData), nrow(qData)))
-  lines_v <- c(rep.col(1:nrow(qData), ncol(qData)))
-  data <- tibble(id=lines_v, condition=conds_v, value=round(c(qData), digits=2 ))
+  conds_v <- c(rep_row(colnames(qData), nrow(qData)))
+  lines_v <- c(rep_col(1:nrow(qData), ncol(qData)))
+  data <- dplyr::tibble(id=lines_v, condition=conds_v, value=round(c(qData), digits=2 ))
   
 #   fntltp <- JS("function(){
 #                return this.point.x + ' ' +  this.series.yAxis.categories[this.point.y] + ':<br>' +
 #                Highcharts.numberFormat(this.point.value, 2);
 # }")
-
+Exp1_R25_pept
   # plotline <- list(
   #   color = "#fde725", value = 3, width = 2, zIndex = 5,
   #   label = list(

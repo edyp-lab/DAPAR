@@ -381,7 +381,15 @@ return(p)
 
 
 
-
+##' This function plots a distribution of the p-values.
+##'
+##' @title Distribution of p-values (histogram) 
+##' @param pval_ll A list that contains the data
+##' @param bins An integer that is the number of bins of the histogram.
+##' @param pi0 A float that is the threshold
+##' @return A plot
+##' @author Samuel Wieczorek
+##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' obj <- Exp1_R25_pept

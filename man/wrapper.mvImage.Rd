@@ -23,7 +23,10 @@ number of missing values. A white square is plotted for missing values.
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-wrapper.mvImage(Exp1_R25_pept)
+obj <- Exp1_R25_pept
+keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', 1)
+obj <- mvFilterFromIndices(obj, keepThat)
+wrapper.mvImage(obj)
 }
 \author{
 Alexia Dorffer

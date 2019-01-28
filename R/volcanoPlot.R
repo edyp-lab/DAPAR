@@ -117,6 +117,7 @@ return(p)
 ##' show info from slots in df. The variable this.index refers to the slot 
 ##' named index and allows to retrieve the right row to show in the tooltip.
 ##' @param palette xxx
+##' @param swap A boolean that indicates if the data has been swaped (inversion on the x-axis)
 ##' @return An interactive volcanoplot
 ##' @author Samuel Wieczorek
 ##' @examples

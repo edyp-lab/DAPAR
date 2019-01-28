@@ -4,7 +4,7 @@
 \alias{check.conditions}
 \title{Check if the design is valid}
 \usage{
-\method{check}{conditions}(conds)
+check.conditions(conds)
 }
 \arguments{
 \item{conds}{A vector}
