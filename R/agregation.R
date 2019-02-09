@@ -14,33 +14,34 @@
 ##' protID <- "Protein.group.IDs"
 ##' obj <- Exp1_R25_pept[1:1000]
 ##' MShared <- BuildAdjacencyMatrix(obj, protID, FALSE)
-##' MUnique <- BuildAdjacencyMatrix(obj, protID, TRUE)
-##' getProteinsStats(MUnique,MShared)
-getProteinsStats <- function(matUnique, matShared){
-    if (is.null(matUnique) || is.null(matShared) ||
-        !is.matrix(matUnique) || !is.matrix(matShared)){return(NULL)}
+##' getProteinsStats(MShared)
+getProteinsStats <- function(matShared){
+    if (is.null(matUnique)){return(NULL)}
+    #if(!is.matrix(matUnique) || !is.matrix(matShared)){return(NULL)}
     
-    t <- setdiff(union(rownames(matUnique), rownames(matShared)), 
-                 intersect(rownames(matUnique), rownames(matShared)))
-    sharedPeptides <- matShared[t,]
-    sharedPeptides <- sharedPeptides[,-which(colSums(sharedPeptides)==0)]
-    protOnlyUnique <- setdiff(union(colnames(sharedPeptides), 
-                                    colnames(matShared)), 
-                              intersect(colnames(sharedPeptides), 
-                                        colnames(matShared)))
     
-    protOnlyShared <- setdiff(union(colnames(matUnique), 
-                                    colnames(matShared)), 
-                              intersect(colnames(matUnique), 
-                                        colnames(matShared)))
-    a <- union(protOnlyUnique, protOnlyShared)
-    b <- colnames(matShared)
-    protMix <- setdiff(union(union(protOnlyUnique, protOnlyShared),
-                             colnames(matShared)),
-                       intersect(union(protOnlyUnique, protOnlyShared),
-                                 colnames(matShared)))
+    ind.shared.Pep <- which(rowSums(as.matrix(matShared))>1)
+    ind.unique.Pep <- which(rowSums(as.matrix(matShared))==1)
+    
+    M.shared.Pep <- matShared[ind.shared.Pep,]
+    M.shared.Pep <- M.shared.Pep[,-which(colSums(M.shared.Pep)==0)]
+    
+    M.unique.Pep <- matShared[ind.unique.Pep,]
+    M.unique.Pep <- M.unique.Pep[,-which(colSums(M.unique.Pep)==0)]
+    
+    
+    pep.names.shared <- colnames(M.shared.Pep)
+    pep.names.unique <- colnames(M.unique.Pep)
+    protOnlyShared <- setdiff(pep.names.shared, intersect(pep.names.shared, pep.names.unique))
+    protOnlyUnique <- setdiff(pep.names.unique, intersect(pep.names.shared, pep.names.unique))
+    protMix <- intersect(pep.names.shared, pep.names.unique)
+    
 
-    return (list(protOnlyUniquePep =protOnlyUnique,
+    return (list(nbPeptides = nrow(M.unique.Pep)+nrow(M.shared.Pep),
+                 nbSpecificPeptides = nrow(M.unique.Pep),
+                 nbSharedPeptides = nrow(M.shared.Pep),
+                 nbProt = length(protOnlyShared)+length(protOnlyUnique)+length(protMix),
+                 protOnlyUniquePep =protOnlyUnique,
                   protOnlySharedPep =protOnlyShared,
                   protMixPep = protMix))
 }
