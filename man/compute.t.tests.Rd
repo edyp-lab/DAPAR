@@ -4,7 +4,7 @@
 \alias{compute.t.tests}
 \title{xxxxxx}
 \usage{
-compute.t.tests(qData, Conditions, Contrast = "OnevsOne",
+\method{compute}{t.tests}(qData, Conditions, Contrast = "OnevsOne",
   type = "Student")
 }
 \arguments{
