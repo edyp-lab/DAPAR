@@ -4,7 +4,7 @@
 \alias{hc_mvTypePlot2}
 \title{Distribution of Observed values with respect to intensity values}
 \usage{
-hc_mvTypePlot2(qData, conds, palette = NULL, title = NULL)
+hc_mvTypePlot2(qData, conds, palette = NULL)
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
@@ -12,8 +12,6 @@ hc_mvTypePlot2(qData, conds, palette = NULL, title = NULL)
 \item{conds}{A vector of the conditions (one condition per sample).}
 
 \item{palette}{xxx}
-
-\item{title}{xxx}
 }
 \value{
 Density plots
