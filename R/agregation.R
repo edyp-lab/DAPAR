@@ -542,6 +542,15 @@ aggregateTopn <- function(obj.pep,X,  method='Mean', n=10){
 ##' location of the installed packages
 ##' @return A protein object of class \code{MSnset}
 ##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' obj.pep <- Exp1_R25_pept[1:1000]
+##' pepData <- 2^(Biobase::exprs(obj.pep))
+##' protID <- "Protein.group.IDs"
+##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+##' protData <- inner.mean(pepData,X)
+##' finalizeAggregation(obj.pep, pepData, protData, X)
 finalizeAggregation <- function(obj.pep, pepData, protData,X, lib.loc=NULL){
  
   protData <- as.matrix(protData)

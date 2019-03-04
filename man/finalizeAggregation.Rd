@@ -25,6 +25,16 @@ A protein object of class \code{MSnset}
 \description{
 Method to finalize the aggregation process
 }
+\examples{
+require(DAPARdata)
+data(Exp1_R25_pept)
+obj.pep <- Exp1_R25_pept[1:1000]
+pepData <- 2^(Biobase::exprs(obj.pep))
+protID <- "Protein.group.IDs"
+X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+protData <- inner.mean(pepData,X)
+finalizeAggregation(obj.pep, pepData, protData, X)
+}
 \author{
 Samuel Wieczorek
 }
