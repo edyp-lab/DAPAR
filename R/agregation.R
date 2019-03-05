@@ -340,7 +340,7 @@ inner.aggregate.iter <- function(pepData, X,init.method='Sum', method='Mean', n=
     X.new <- X.tmp/rowSums(as.matrix(X.tmp), na.rm = TRUE)
     X.new[is.na(X.new)] <- 0
     
-    # l'appel à la fonction ci-dessous dépend des paramètres choisis par l'utilisateur
+    # l'appel ? la fonction ci-dessous d?pend des param?tres choisis par l'utilisateur
     switch(method,
            Mean = yprot <- inner.mean(pepData, X.new),
            onlyN = yprot <- inner.aggregate.topn(pepData,X.new,'Mean', n)
@@ -376,7 +376,7 @@ inner.aggregate.iter <- function(pepData, X,init.method='Sum', method='Mean', n=
 aggregateIter <- function(obj.pep, X, init.method='Sum', method='Mean', n=NULL){
   
   ### a reproduire iterativement pour chaque condition
-    # Initialisation: presque aucune dépendance à l'initialisation prendre "sum overall" et  matAdj = X par simplicité
+    # Initialisation: presque aucune d?pendance ? l'initialisation prendre "sum overall" et  matAdj = X par simplicit?
     #X <- as.matrix(X)
   qData.pep <- 2^(Biobase::exprs(obj.pep))
   
@@ -538,8 +538,6 @@ aggregateTopn <- function(obj.pep,X,  method='Mean', n=10){
 ##' @param X An adjacency matrix in which lines and columns correspond 
 ##' respectively to peptides and proteins.
 ##' @param protData xxxxx
-##' @param lib.loc A list of two items (lib.loc$Prostar.loc and lib.loc$DAPAR.loc) to provide the 
-##' location of the installed packages
 ##' @return A protein object of class \code{MSnset}
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -551,7 +549,7 @@ aggregateTopn <- function(obj.pep,X,  method='Mean', n=10){
 ##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 ##' protData <- inner.mean(pepData,X)
 ##' finalizeAggregation(obj.pep, pepData, protData, X)
-finalizeAggregation <- function(obj.pep, pepData, protData,X, lib.loc=NULL){
+finalizeAggregation <- function(obj.pep, pepData, protData,X){
  
   protData <- as.matrix(protData)
   protData[protData==0] <- NA
@@ -572,8 +570,8 @@ finalizeAggregation <- function(obj.pep, pepData, protData,X, lib.loc=NULL){
   obj.prot@experimentData@other$typeOfData <-"protein"
   #obj.prot <- addOriginOfValue(obj.prot)
   obj.prot@experimentData@other$OriginOfValues <- NULL
-  obj.prot@experimentData@other$Prostar_Version <- installed.packages(lib.loc = lib.loc$Prostar.loc)["Prostar","Version"]
-  obj.prot@experimentData@other$DAPAR_Version <- installed.packages(lib.loc = lib.loc$DAPAR.loc)["DAPAR","Version"]
+  #obj.prot@experimentData@other$Prostar_Version <- installed.packages(lib.loc = lib.loc$Prostar.loc)["Prostar","Version"]
+  #obj.prot@experimentData@other$DAPAR_Version <- installed.packages(lib.loc = lib.loc$DAPAR.loc)["DAPAR","Version"]
   return (obj.prot)
 }
 
