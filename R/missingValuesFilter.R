@@ -20,9 +20,7 @@ NA.count<-apply(df, 2,
                 function(x) length(which(is.na(data.frame(x))==TRUE)) )
 
 
-pourcentage <- 100 * round(sum(NA.count)
-                            /(nrow(df)* ncol(df)), 
-                            digits=4)
+pourcentage <- 100 * round(sum(NA.count)/(nrow(df)* ncol(df)), digits=4)
 
 return(pourcentage)
 }
@@ -232,16 +230,13 @@ StringBasedFiltering <- function(obj,
 
 
 
-
-
-
 ##' This function removes lines in the dataset based on prefix strings.
 ##' 
 ##' @title Removes lines in the dataset based on a prefix strings.
 ##' @param obj An object of class \code{MSnSet}.
 ##' @param cname The name of the column that correspond to the line to filter
 ##' @param tag A character string that is the prefix for the contaminants to find in the data
-##' @return An list of 4 items :
+##' @return An list of 2 items :
 ##' obj : an object of class \code{MSnSet} in which the lines have been deleted
 ##' deleted : an object of class \code{MSnSet} which contains the deleted lines 
 ##' @author Samuel Wieczorek
@@ -279,9 +274,71 @@ StringBasedFiltering2 <- function(obj, cname=NULL, tag=NULL){
 
 
 
+##' This function removes lines in the dataset based on numerical conditions.
+##' 
+##' @title Removes lines in the dataset based on numerical conditions.
+##' @param obj An object of class \code{MSnSet}.
+##' @param name The name of the column that correspond to the line to filter
+##' @param value A number 
+##' @param operator A string
+##' @return An list of 2 items :
+##' obj : an object of class \code{MSnSet} in which the lines have been deleted
+##' deleted : an object of class \code{MSnSet} which contains the deleted lines 
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' NumericalFiltering(Exp1_R25_pept, 'A.Count', '6', '==')
+NumericalFiltering <- function(obj, name=NULL, value=NULL, operator=NULL){
+  if ((is.null(name) || (name == ""))) {return(NULL)}
+  
+  deleted <- NULL
+  ind <- NULL
+  ind <- NumericalgetIndicesOfLinesToRemove(obj,name, value, operator)
+    
+  if (!is.null(ind) && (length(ind) > 0)){
+      deleted <- obj[ind]
+      
+      obj <- deleteLinesFromIndices(obj, ind, 
+                                    paste("\"", 
+                                          length(ind), 
+                                          " lines were removed from dataset.\"",
+                                          sep="")
+                                  )
+      
+    }
+
+  return(list(obj=obj, deleted=deleted))
+}
 
 
 
+
+##' This function returns the indice of the lines to delete, based on a 
+##' prefix string
+##' 
+##' @title Get the indices of the lines to delete, based on a prefix string
+##' @param obj An object of class \code{MSnSet}.
+##' @param name The name of the column that correspond to the data to filter
+##' @param value xxxx
+##' @param operator A xxxx
+##' @return A vector of integers.
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' NumericalgetIndicesOfLinesToRemove(Exp1_R25_pept, "A.Count", value="6", operator='==')
+NumericalgetIndicesOfLinesToRemove <- function(obj, name=NULL, value=NULL, operator=NULL)
+{
+  if ((value == "") || is.null(value)|| (operator=="") || is.null(operator)) {
+    # warning ("No change was made")
+    return (NULL)}
+  
+  data <- Biobase::fData(obj)[,name]
+  ind <- which(eval(parse(text=paste0("data", operator, value))))
+  
+  return(ind)
+}
 
 ##' This function returns the indice of the lines to delete, based on a 
 ##' prefix string
