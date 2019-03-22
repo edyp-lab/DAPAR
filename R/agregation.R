@@ -394,7 +394,59 @@ aggregateIter <- function(obj.pep, X, init.method='Sum', method='Mean', n=NULL){
   #return(yprot)
 }
 
+##' Method to split an adjacency matrix into specific and shared
+##' 
+##' @title splits an adjacency matrix into specific and shared 
+##' @param X An adjacency matrix
+##' @return A list of two adjacency matrices
+##' @author Samuel Wieczorek
+splitAdjacencyMat <- function(X){
+  hasShared <- length( which(rowSums(X) > 1)) > 0
+  hasSpec <- length( which(rowSums(X) == 1)) > 0
+  
+  
+  if (hasShared && !hasSpec){
+    tmpShared <- X
+    tmpSpec <- X
+    tmpSpec[which(rowSums(tmpSpec) > 1),] <- 0
+  }
+  else if (!hasShared && hasSpec){
+    tmpSpec <- X
+    tmpShared <- X
+    tmpShared[which(rowSums(tmpShared) == 1),] <- 0
+  }
+  else if (hasShared && hasSpec){
+    tmpSpec <- X
+    tmpShared <- X
+    tmpShared[which(rowSums(tmpShared) == 1),] <- 0
+    tmpSpec[which(rowSums(tmpSpec) > 1),] <- 0
+  } else {
+    tmpSpec <- X
+    tmpShared <- X
+  }
+  
+  
+  return (list(Xshared = tmpShared, Xspec = tmpSpec))
+  
+}
 
+
+##' Method to compute the detailed number of quantified peptides used for aggregating each protein
+##' 
+##' @title Computes the detailed number of peptides used for aggregating each protein 
+##' @param X An adjacency matrix
+##' @param pepData A data.frame of quantitative data
+##' @return A data.frame
+##' @author Samuel Wieczorek
+GetDetailedNbPeptidesUsed <- function(X, pepData){
+  pepData[!is.na(pepData)] <- 1
+  pepData[is.na(pepData)] <- 0
+  
+  mat <- splitAdjacencyMat(X)
+  return(list(nShared=t(mat$Xshared) %*% pepData, 
+              nSpec=t(mat$Xspec) %*% pepData))
+  
+}
 
 ##' Method to compute the number of quantified peptides used for aggregating each protein
 ##' 
@@ -549,19 +601,28 @@ aggregateTopn <- function(obj.pep,X,  method='Mean', n=10){
 ##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 ##' protData <- inner.mean(pepData,X)
 ##' finalizeAggregation(obj.pep, pepData, protData, X)
-finalizeAggregation <- function(obj.pep, pepData, protData,X){
+finalizeAggregation <- function(obj.pep, pepData, protData, X){
  
   protData <- as.matrix(protData)
   protData[protData==0] <- NA
   protData[is.nan(protData)] <- NA
   protData[is.infinite(protData)] <-NA
   
+  temp <- GetDetailedNbPeptidesUsed(X, pepData)
   
-  pep <- as.matrix(GetNbPeptidesUsed(X, pepData))
-  colnames(pep) <- paste("nb.pep.used.", colnames(pepData), sep="")
-  rownames(pep) <- colnames(X)
+  pepShared <- as.matrix(temp$nShared)
+  colnames(pepShared) <- paste("pepShared.used.", colnames(pepData), sep="")
+  rownames(pepShared) <- colnames(X)
   
-   fd <- data.frame(colnames(X), pep)
+  pepSpec <- as.matrix(temp$nSpec)
+  colnames(pepSpec) <- paste("pepSpec.used.", colnames(pepData), sep="")
+  rownames(pepSpec) <- colnames(X)
+  
+  pepTotal <- as.matrix(GetNbPeptidesUsed(X, pepData))
+  colnames(pepTotal) <- paste("pepTotal.used.", colnames(pepData), sep="")
+  rownames(pepTotal) <- colnames(X)
+  
+   fd <- data.frame(colnames(X), pepSpec, pepShared, pepTotal)
   
   obj.prot <- MSnSet(exprs = log2(protData), 
                 fData = fd, 

@@ -16,7 +16,7 @@
 wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
  # require(FactoMineR)
   
-  
+  if (is.null(var.scaling)) {var.scaling <- TRUE}
   if (length(which(is.na(Biobase::exprs(obj)))) > 0){return(NULL)}
   if (is.null(ncp)){
     nmax <- 12
@@ -27,10 +27,10 @@ wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
     if (n > nmax){
       n <- length(unique(Biobase::pData(obj)$Condition))
     }
-    
-    
     ncp <- min(n, nmax)
   }
+  
+  
   # parameters available to the user
   variance.scaling <- TRUE
   
