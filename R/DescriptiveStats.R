@@ -16,7 +16,7 @@
 wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
  # require(FactoMineR)
   
-  
+  if (is.null(var.scaling)) {var.scaling <- TRUE}
   if (length(which(is.na(Biobase::exprs(obj)))) > 0){return(NULL)}
   if (is.null(ncp)){
     nmax <- 12
@@ -57,11 +57,11 @@ wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
 plotPCA_Var <- function(res.pca, chosen.axes=c(1,2)){
   #plot.PCA(res.pca, choix="var", axes = chosen.axes, title="Sample factor map (PCA)")
   #require(factoextra)
-  # Colorer en fonction du cos2: qualité de représentation
+  # Colorer en fonction du cos2: qualit? de repr?sentation
   if (is.null(res.pca)){return(NULL)}
   factoextra::fviz_pca_var(res.pca, axes = chosen.axes, col.var = "cos2",
                gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-               repel = TRUE # Évite le chevauchement de texte
+               repel = TRUE # ?vite le chevauchement de texte
   )
   
 }

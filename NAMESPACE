@@ -63,7 +63,7 @@ export(
 "listSheets",
 "addOriginOfValue","saveParameters",
 "rbindMSnset",
-
+"NumericalFiltering",
 "boxPlotD",
 "densityPlotD"
 ,"wrapper.CVDistD","CVDistD"
