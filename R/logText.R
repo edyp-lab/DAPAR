@@ -26,8 +26,7 @@ getTextForNewDataset <- function(l.params){
 getTextForFiltering <- function(l.params){ 
     # str(l.params) = list(mvFilterType ,
     #                 mvThNA,
-    #                 stringFilter.df,
-    #                 numericFilter.df)
+    #                 stringFilter.df)
     
   if (is.null(l.params) || length(l.params)==0) {return(NULL)}
   
@@ -43,12 +42,7 @@ getTextForFiltering <- function(l.params){
   if (!is.null(l.params$stringFilter.df) && nrow(l.params$stringFilter.df) > 1){
         ll <- l.params$stringFilter.df$Filter
         txt <- paste(txt,"<li>Text filtering based on: ",  paste(ll[-1], collapse=", "),"</li>")
-  }
-  
-  if (!is.null(l.params$numericFilter.df) && nrow(l.params$numericFilter.df) > 1){
-    ll <- l.params$numericFilter.df$Filter
-    txt <- paste(txt,"<li>Text filtering based on: ",  paste(ll[-1], collapse=", "),"</li>")
-  }
+         }
   txt <- paste(txt,"</ul>" ) 
     return (txt)
     

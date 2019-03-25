@@ -14,7 +14,7 @@ StringBasedFiltering2(obj, cname = NULL, tag = NULL)
 \item{tag}{A character string that is the prefix for the contaminants to find in the data}
 }
 \value{
-An list of 2 items :
+An list of 4 items :
 obj : an object of class \code{MSnSet} in which the lines have been deleted
 deleted : an object of class \code{MSnSet} which contains the deleted lines
 }
