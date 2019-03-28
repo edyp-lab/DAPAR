@@ -154,7 +154,7 @@ display.CC <- function(The.CC,X, layout = layout_nicely,
     # display y (quantitative data) for peptides (proteins?)
     V(net)$color <- c(rep(col.prot,nb.prot), rep(col.spec,nb.pep))
   }
-  else{
+  else {
     edge.list[,1] <-edge.list[,1]+nb.prot
     net <- make_bipartite_graph( c(rep(0,nb.prot), rep(1,nb.pep)), as.vector(t(edge.list)))
     V(net)$label <- c(paste("PROT", The.CC$proteins),paste("pep", The.CC$peptides))
@@ -163,17 +163,40 @@ display.CC <- function(The.CC,X, layout = layout_nicely,
     V(net)$color <- c(rep(col.prot,nb.prot), rep(col.shared,nb.pep))
     V(net)$color[(which(rowSums(subX)==1))+nb.prot] <- col.spec
   }
+  
   V(net)$size <- c(rep(3,nb.prot), rep(2,nb.pep))
   V(net)$type <- c(rep("Protein",nb.prot), rep("Peptide",nb.pep))
-  for (i in pept.tooltip) {
-    V(net)[i] <- c(rep(NA,nb.prot), fData(obj)[as.numeric(The.CC$peptides),i])
-    }
   
   hchart(net, layout = layout_nicely)
 }
 
 
-
+display.CC.visNet <- function(The.CC,X, layout = layout_nicely, 
+                       obj=NULL,
+                       prot.tooltip=NULL, 
+                       pept.tooltip=NULL){
+  require(visNetwork)
+  
+  col.prot <- "red"
+  col.spec <- "green"
+  col.shared <- "blue"
+  subX <- X[The.CC$peptides, The.CC$proteins]
+  nb.prot <- length(The.CC$proteins)
+  nb.pep <- length(The.CC$peptides)
+  nb.total = nb.prot + nb.pep
+  edge.list <- as.data.frame(which(subX==1, arr.ind=TRUE))
+  
+  nodes <- data.frame(id = 1:nb.total,
+                      label = c(rownames(subX), colnames(subX)),
+                      title =  paste0("<p>", 1:nb.total,"<br>Tooltip !</p>"),
+                      shape = c("dot"),
+                      size = c(rep(5, nb.pep),rep(20, nb.prot)),
+                      color = c(rep('blue',nb.pep),rep('red',nb.prot))
+                      )
+  edges <- data.frame(from=c(edge.list$row), to=c(edge.list$col+ nb.pep))
+  visNetwork(nodes, edges)
+  
+}
 
 plotJitter_rCharts <- function(df, clickFunction=NULL){
   
