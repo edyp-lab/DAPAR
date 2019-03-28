@@ -1,0 +1,217 @@
+##' Method to build the list of connex composant of the adjacency matrix
+##' 
+##' @title Build the list of connex composant of the adjacency matrix
+##' @param X An adjacency matrix
+##' @return A list of CC  
+##' @author Thomas Burger, Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept) 
+##' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein.group.IDs", FALSE)
+##' ll <- get.pep.prot.cc(X)
+get.pep.prot.cc <- function(X){
+  if (is.null(X)){return()}
+  require(Matrix)
+  require(igraph)
+  require(graph)
+  
+  
+  p <- dim(X)[2] # Nb proteins
+  q <- dim(X)[1] # Nb peptides
+  
+  
+  multprot.cc <- singprot.cc <- multprot.cc.pep <- singprot.cc.pep <- NULL
+  A <- B <- g <- NULL
+  ### Adjacency matrix construction
+  A <- as.matrix(t(X) %&% X) # boolean matrix product
+  diag(A) <- rep(0,p) # remove self-connecting edges
+  A <- matrix(as.numeric(A[,]), ncol=p) # goes back to classical matrix format
+  colnames(A) <- rownames(A) <- colnames(X) # reset pep and prot names
+  
+  # proteins with no shared peptides
+  SingleProt.CC.id <- which(rowSums(A)==0) 
+  if (length(SingleProt.CC.id) > 0){
+    ### Peptides from single prot CCs
+    singprot.cc <- as.list(names(SingleProt.CC.id))
+    singprot.cc.pep <- list()
+    for(i in 1:length(singprot.cc)){
+      peplist <- which(X[,singprot.cc[[i]]]!=0)
+      singprot.cc.pep[[i]] <- names(peplist)
+    }
+  }
+  
+  
+  if (length(SingleProt.CC.id) < nrow(A)){
+    B <- A[-SingleProt.CC.id,-SingleProt.CC.id] # matrix with no 1-prot CC
+  
+    ### Protein CCs
+    multprot.cc <- NULL
+    g <- graphAM(B, edgemode='undirected', values=NA)
+    multprot.cc <- connComp(as(g, 'graphNEL'))
+
+    ### Peptides from multiple prot CCs
+    multprot.cc.pep <- list()
+    for(i in 1:length(multprot.cc)){
+      protlist <- multprot.cc[[i]]
+      subX <- X[,protlist]
+      peplist <- which(rowSums(subX)!=0)
+      multprot.cc.pep[[i]] <- names(peplist)
+    }
+  }
+  
+
+  ### Merge results into a single list
+  prot.cc <- c(multprot.cc, singprot.cc)
+  pep.cc <- c(multprot.cc.pep, singprot.cc.pep)
+  global.cc <- list()
+  for(i in 1:length(prot.cc)){
+    prot <- prot.cc[[i]]
+    pep <- pep.cc[[i]]
+    tmp <- list(prot,pep)
+    names(tmp) <- c("proteins", "peptides")
+    global.cc[[i]] <- tmp
+  }
+  
+  ### Clean memory and return result
+  rm(A,B,g,multprot.cc,singprot.cc,multprot.cc.pep,singprot.cc.pep,prot.cc,pep.cc)
+  gc()
+  return(global.cc)
+}
+
+
+
+
+
+##' Jitter plot of CC
+##' 
+##' @title Jitter plot of CC
+##' @param list.of.cc List of cc such as returned by the function get.pep.prot.cc
+##' @return A plot  
+##' @author Thomas Burger
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept) 
+##' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein.group.IDs", TRUE)
+##' ll <- get.pep.prot.cc(X)
+##' plotJitter(ll)
+plotJitter <- function(list.of.cc){
+  if (is.null(list.of.cc)){return()}
+  cc.summary <- GetDataForPlotJitter(list.of.cc)
+  plot(jitter(cc.summary[,2]),jitter(cc.summary[,1]), type="p", xlab="#peptides in CC", ylab="#proteins in CC")
+  
+}
+
+
+GetDataForPlotJitter <- function(list.of.cc){
+  if (is.null(list.of.cc)){return()}
+  length(list.of.cc) # number of CCs
+  cc.summary <- sapply(list.of.cc, function(x){c(length(x[[1]]),length(x[[2]]))})
+  rownames(cc.summary) <- c("Nb_proteins","Nb_peptides")
+  colSums(cc.summary) # total amount of pep and prot in each CC
+  colnames(cc.summary) <- 1:length(list.of.cc)
+  cc.summary
+  rowSums(cc.summary) # c(number of prot, number of pep)
+  
+  return(as.data.frame(t(jitter(cc.summary))))
+}
+###############
+
+##' Display a CC
+##' @title Display a CC
+##' @param The.CC A cc (a list)
+##' @param X xxxxx
+##' @param layout xxxxx
+##' @return A plot  
+##' @author Thomas Burger, Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept) 
+##' X <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein.group.IDs", FALSE)
+##' ll <- get.pep.prot.cc(X)
+##' display.CC(ll[[1]], X)
+display.CC <- function(The.CC,X, layout = layout_nicely, 
+                       obj=NULL,
+                       prot.tooltip=NULL, 
+                       pept.tooltip=NULL){
+  col.prot <- "red"
+  col.spec <- "green"
+  col.shared <- "blue"
+  subX <- X[The.CC$peptides, The.CC$proteins]
+  nb.prot <- length(The.CC$proteins)
+  nb.pep <- length(The.CC$peptides)
+  edge.list <- which(subX==1, arr.ind=TRUE)
+  if(nb.prot==1){
+    if(nb.pep == 1){
+      #print("Single protein and single peptide graph - nothing to display")
+      net <- make_bipartite_graph( c(0,1), 1:2)
+    }
+    else{
+      edge.list <- cbind(rep(1,nb.pep), edge.list+1)
+      net <- make_bipartite_graph( c(rep(0,nb.prot), rep(1,nb.pep)), as.vector(t(edge.list)))
+    }
+    V(net)$label <- c(paste("PROT", The.CC$proteins),paste("pep", The.CC$peptides))
+    #V(net)$size <- c(rep(2,nb.prot), rep(1,nb.pep))
+    # display y (quantitative data) for peptides (proteins?)
+    V(net)$color <- c(rep(col.prot,nb.prot), rep(col.spec,nb.pep))
+  }
+  else{
+    edge.list[,1] <-edge.list[,1]+nb.prot
+    net <- make_bipartite_graph( c(rep(0,nb.prot), rep(1,nb.pep)), as.vector(t(edge.list)))
+    V(net)$label <- c(paste("PROT", The.CC$proteins),paste("pep", The.CC$peptides))
+    #V(net)$size <- c(rep(2,nb.prot), rep(1,nb.pep))
+    # display y (quantitative data) for peptides (proteins?)
+    V(net)$color <- c(rep(col.prot,nb.prot), rep(col.shared,nb.pep))
+    V(net)$color[(which(rowSums(subX)==1))+nb.prot] <- col.spec
+  }
+  V(net)$size <- c(rep(3,nb.prot), rep(2,nb.pep))
+  V(net)$type <- c(rep("Protein",nb.prot), rep("Peptide",nb.pep))
+  for (i in pept.tooltip) {
+    V(net)[i] <- c(rep(NA,nb.prot), fData(obj)[as.numeric(The.CC$peptides),i])
+    }
+  
+  hchart(net, layout = layout_nicely)
+}
+
+
+
+
+plotJitter_rCharts <- function(df, clickFunction=NULL){
+  
+  #df <- GetDataForPlotJitter(list.of.cc)
+  print("In DAPAR::diffAnaVolcanoplot_rCharts")
+  print(str(df))
+  xtitle <- "TO DO"
+  
+  if (is.null(clickFunction)){
+    clickFunction <- 
+      JS("function(event) {Shiny.onInputChange('eventPointClicked', [this.index]+'_'+ [this.series.name]);}")
+  }
+  
+  i_tooltip <- which(startsWith(colnames(df),"tooltip"))
+  txt_tooltip <- NULL
+  for (i in i_tooltip){
+    t <- txt_tooltip <- paste(txt_tooltip,"<b>",gsub("tooltip_", "", 
+                                                     colnames(df)[i], 
+                                                     fixed=TRUE), 
+                              " </b>: {point.", colnames(df)[i],"} <br> ", 
+                              sep="")
+  }
+  
+  h1 <-  highchart() %>%
+    hc_add_series(data = df, type = "scatter") %>%
+    my_hc_chart(zoomType = "xy",chartType="scatter") %>%
+    hc_legend(enabled = FALSE) %>%
+    hc_yAxis(title = list(text="Nb of proteins ic CC")) %>%
+    hc_xAxis(title = list(text = "Nb of peptides ic CC")) %>%
+    hc_tooltip(headerFormat= '',pointFormat = txt_tooltip) %>%
+    hc_plotOptions(series = list( animation=list(duration = 100),
+                                   cursor = "pointer", 
+                                   point = list( events = list( 
+                                     click = clickFunction ) ) ) ) %>%
+    my_hc_ExportMenu(filename = "plotCC")
+    
+    
+  return(h1)
+}
+
+
