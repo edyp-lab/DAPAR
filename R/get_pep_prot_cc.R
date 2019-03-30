@@ -172,6 +172,35 @@ GetDataForPlotJitter <- function(list.of.cc){
 
 
 
+
+
+buildGraph <- function(The.CC, X){
+  
+  subX <- X[The.CC$peptides, The.CC$proteins]
+  nb.prot <- length(The.CC$proteins)
+  nb.pep <- length(The.CC$peptides)
+  nb.pep.shared <- length(which(rowSums(subX)>1))
+  nb.pep.spec <- length(which(rowSums(subX)==1))
+  nb.total = nb.prot + nb.pep
+  edge.list <- as.data.frame(which(subX==1, arr.ind=TRUE))
+  
+  def.grp <- c(rep("shared.peptide", nb.pep), rep("protein", nb.prot))
+  def.grp[which(rowSums(subX)==1)] <- 'spec.peptide'
+  
+  
+  nodes <- data.frame(id = 1:nb.total,
+                      group = def.grp,
+                      label = c(rownames(subX), colnames(subX)),
+                      title =  paste0("<p>", 1:nb.total,"<br>Tooltip !</p>"),
+                      size = c(rep(10, nb.pep),rep(20, nb.prot)),
+                      stringsAsFactors = FALSE
+  )
+  edges <- data.frame(from=c(edge.list$row), 
+                      to=c(edge.list$col+ nb.pep),
+                      stringsAsFactors = FALSE)
+  
+  return(list(nodes=nodes, edges=edges))
+}
 ##' Display a CC
 ##' @title Display a CC
 ##' @param The.CC A cc (a list)
@@ -184,35 +213,24 @@ GetDataForPlotJitter <- function(list.of.cc){
 ##' data(Exp1_R25_pept) 
 ##' X <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein.group.IDs", FALSE)
 ##' ll <- get.pep.prot.cc(X)
-##' display.CC(ll[[1]], X)
-display.CC.visNet <- function(The.CC,X, layout = layout_nicely, 
+##' g <- buildGraph(ll[[1]], X)
+##' display.CC.visNet(g)
+display.CC.visNet <- function(g, layout = layout_nicely, 
                        obj=NULL,
                        prot.tooltip=NULL, 
                        pept.tooltip=NULL){
   require(visNetwork)
   
-  col.prot <- "red"
-  col.spec <- "green"
-  col.shared <- "blue"
-  subX <- X[The.CC$peptides, The.CC$proteins]
-  nb.prot <- length(The.CC$proteins)
-  nb.pep <- length(The.CC$peptides)
-  nb.total = nb.prot + nb.pep
-  edge.list <- as.data.frame(which(subX==1, arr.ind=TRUE))
+  col.prot <- "#ECB57C"
+  col.spec <- "#5CA3F7"
+  col.shared <- "#0EA513"
   
-  nodes <- data.frame(id = 1:nb.total,
-                      group = c(rep("peptide", nb.pep), rep("protein", nb.prot)),
-                      label = c(rownames(subX), colnames(subX)),
-                      title =  paste0("<p>", 1:nb.total,"<br>Tooltip !</p>"),
-                      size = c(rep(10, nb.pep),rep(20, nb.prot))
-                      )
-  edges <- data.frame(from=c(edge.list$row), 
-                      to=c(edge.list$col+ nb.pep))
   
-  visNetwork(nodes, edges, width = "100%", height = "100%") %>%
+  visNetwork(g$nodes, g$edges, width = "100%", height = "100%") %>%
     visNodes(shape = "dot") %>%                        # square for all nodes
-    visGroups(groupname = "peptide", color = "#5CA3F7") %>%    # darkblue for group "A"
-    visGroups(groupname = "protein", color = "#ECB57C") %>%
+    visGroups(groupname = "spec.peptide", color = col.spec) %>%    # darkblue for group "A"
+    visGroups(groupname = "shared.peptide", color = col.shared) %>%    # darkblue for group "A"
+    visGroups(groupname = "protein", color = col.prot,shape = "dot") %>%
     visOptions(highlightNearest = FALSE) %>%
     #visLegend()
     #visPhysics(stabilization = FALSE)%>%
