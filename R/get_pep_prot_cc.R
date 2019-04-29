@@ -116,63 +116,26 @@ GetDataForPlotJitter <- function(list.of.cc){
 }
 ###############
 
-##' Display a CC
-##' @title Display a CC
-##' @param The.CC A cc (a list)
-##' @param X xxxxx
-##' @param layout xxxxx
-##' @return A plot  
-##' @author Thomas Burger, Samuel Wieczorek
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept) 
-##' X <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein.group.IDs", FALSE)
-##' ll <- get.pep.prot.cc(X)
-##' display.CC(ll[[1]], X)
-# display.CC <- function(The.CC,X, layout = layout_nicely, 
-#                        obj=NULL,
-#                        prot.tooltip=NULL, 
-#                        pept.tooltip=NULL){
-#   col.prot <- "red"
-#   col.spec <- "green"
-#   col.shared <- "blue"
-#   subX <- X[The.CC$peptides, The.CC$proteins]
-#   nb.prot <- length(The.CC$proteins)
-#   nb.pep <- length(The.CC$peptides)
-#   edge.list <- which(subX==1, arr.ind=TRUE)
-#   if(nb.prot==1){
-#     if(nb.pep == 1){
-#       #print("Single protein and single peptide graph - nothing to display")
-#       net <- make_bipartite_graph( c(0,1), 1:2)
-#     }
-#     else{
-#       edge.list <- cbind(rep(1,nb.pep), edge.list+1)
-#       net <- make_bipartite_graph( c(rep(0,nb.prot), rep(1,nb.pep)), as.vector(t(edge.list)))
-#     }
-#     V(net)$label <- c(paste("PROT", The.CC$proteins),paste("pep", The.CC$peptides))
-#     #V(net)$size <- c(rep(2,nb.prot), rep(1,nb.pep))
-#     # display y (quantitative data) for peptides (proteins?)
-#     V(net)$color <- c(rep(col.prot,nb.prot), rep(col.spec,nb.pep))
-#   }
-#   else {
-#     edge.list[,1] <-edge.list[,1]+nb.prot
-#     net <- make_bipartite_graph( c(rep(0,nb.prot), rep(1,nb.pep)), as.vector(t(edge.list)))
-#     V(net)$label <- c(paste("PROT", The.CC$proteins),paste("pep", The.CC$peptides))
-#     #V(net)$size <- c(rep(2,nb.prot), rep(1,nb.pep))
-#     # display y (quantitative data) for peptides (proteins?)
-#     V(net)$color <- c(rep(col.prot,nb.prot), rep(col.shared,nb.pep))
-#     V(net)$color[(which(rowSums(subX)==1))+nb.prot] <- col.spec
-#   }
-#   
-#   V(net)$size <- c(rep(3,nb.prot), rep(2,nb.pep))
-#   V(net)$type <- c(rep("Protein",nb.prot), rep("Peptide",nb.pep))
-#   
-#   hchart(net, layout = layout_nicely)
-# }
 
 
 
-
+buildFullGraph <- function(list.CC, X){
+  
+  n <- 0
+  supernodes <- list()
+  superedges <- list()
+  for (i in length(list.CC)){
+    tmp <- buildGraph(list.CC[i], X)
+    
+  }
+  
+}
+  
+  
+  
+  
+  
+  
 
 buildGraph <- function(The.CC, X){
   
@@ -191,7 +154,7 @@ buildGraph <- function(The.CC, X){
   nodes <- data.frame(id = 1:nb.total,
                       group = def.grp,
                       label = c(rownames(subX), colnames(subX)),
-                      title =  paste0("<p>", 1:nb.total,"<br>Tooltip !</p>"),
+                      #title =  paste0("<p>", 1:nb.total,"<br>Tooltip !</p>"),
                       size = c(rep(10, nb.pep),rep(20, nb.prot)),
                       stringsAsFactors = FALSE
   )

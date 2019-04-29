@@ -27,13 +27,12 @@ wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
     if (n > nmax){
       n <- length(unique(Biobase::pData(obj)$Condition))
     }
-    
-    
     ncp <- min(n, nmax)
   }
   # parameters available to the user
   variance.scaling <- TRUE
-  
+  print(var.scaling)
+  print(ncp)
   res.pca <- FactoMineR::PCA(exprs(obj), scale.unit = var.scaling, ncp=ncp, graph=FALSE)
   # si warning pour les missing values, le reproduire dans l'interface graphique
   
