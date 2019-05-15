@@ -34,8 +34,7 @@ diffAnaVolcanoplot <- function(logFC=NULL,
                                 pVal=NULL, 
                                 threshold_pVal=1e-60, 
                                 threshold_logFC=0, 
-                                conditions=NULL, 
-                               colors=NULL){
+                                conditions=NULL, colors=NULL){
 
 xtitle <- paste("log2 ( mean(",conditions[2],") / mean(",conditions[1],") )",
                 sep="")
@@ -117,7 +116,6 @@ return(p)
 ##' show info from slots in df. The variable this.index refers to the slot 
 ##' named index and allows to retrieve the right row to show in the tooltip.
 ##' @param palette xxx
-##' @param swap A boolean that indicates if the data has been swaped (inversion on the x-axis)
 ##' @return An interactive volcanoplot
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -149,12 +147,12 @@ diffAnaVolcanoplot_rCharts <- function(df,
                                         threshold_logFC=0, 
                                         conditions=NULL, 
                                         clickFunction=NULL,
-                                       palette=NULL, 
-                                       swap = FALSE){
+                                       palette=NULL){
     
   
-   xAxisTitle <- ifelse(swap, "-log(FC)","log(FC)")
-   xtitle <- paste("log2 ( mean(",conditions[2],") / mean(",conditions[1],") )",sep="")
+  print("In DAPAR::diffAnaVolcanoplot_rCharts")
+  print(str(df))
+    xtitle <- paste("log2 ( mean(",conditions[2],") / mean(",conditions[1],") )",sep="")
     
     if (is.null(clickFunction)){
         clickFunction <- 
@@ -191,7 +189,7 @@ diffAnaVolcanoplot_rCharts <- function(df,
         my_hc_chart(zoomType = "xy",chartType="scatter") %>%
         hc_legend(enabled = FALSE) %>%
         hc_yAxis(title = list(text="-log10(pValue)")) %>%
-        hc_xAxis(title = list(text = xAxisTitle),
+        hc_xAxis(title = list(text = "logFC"),
                  plotLines=list(list(color= "grey" , width = 1, value = 0, zIndex = 5))) %>%
         hc_tooltip(headerFormat= '',pointFormat = txt_tooltip) %>%
         hc_plotOptions( line = list(marker=list(enabled=FALSE),

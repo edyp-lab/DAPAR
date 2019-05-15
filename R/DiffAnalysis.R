@@ -381,15 +381,7 @@ return(p)
 
 
 
-##' This function plots a distribution of the p-values.
-##'
-##' @title Distribution of p-values (histogram) 
-##' @param pval_ll A list that contains the data
-##' @param bins An integer that is the number of bins of the histogram.
-##' @param pi0 A float that is the threshold
-##' @return A plot
-##' @author Samuel Wieczorek
-##' @examples
+
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' obj <- Exp1_R25_pept
@@ -411,7 +403,7 @@ histPValue_HC <- function(pval_ll, bins=80, pi0=1){
     hc_add_series(data = serieInf, name="p-value density") %>%
     hc_title(text = "P-value histogram") %>% 
      hc_legend(enabled = FALSE) %>%
-    hc_colors(c("#C1FFC1", "red")) %>%
+    hc_colors(c("green", "red")) %>%
     hc_xAxis(title = list(text = "P-value"), categories=h$breaks)%>%
     hc_yAxis(title = list(text="Density"),
              plotLines=list(list(color= "blue" , width = 2, value = pi0, zIndex = 5))) %>%
