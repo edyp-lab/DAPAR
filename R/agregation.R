@@ -226,6 +226,8 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
 
 
 
+
+
 ##' This function computes the intensity of proteins based on the sum of the 
 ##' intensities of their peptides.
 ##' 
