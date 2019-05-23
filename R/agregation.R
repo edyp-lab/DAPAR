@@ -224,6 +224,24 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
     return(X)
 }
 
+# 
+# BuildAdjacencyMatrix2 <- function(obj.pep, protID, unique=TRUE){
+#   
+#   data <- Biobase::exprs(obj.pep)
+#   PG <- Biobase::fData(obj.pep)[,protID]
+#   PG.l <- strsplit(as.character(PG), split=";", fixed=TRUE)
+#   
+#   dat <- data.frame(A=rep(seq_along(PG.l), lengths(PG.l)), B=unlist(PG.l))
+#   X <- Matrix(table(dat), sparse=T)
+#   dimnames(X) <- list(rowna)
+#   
+#   if (unique == TRUE){
+#     X[which(rowSums(X)==1),] <- 0
+#   }
+#   
+#   return(X)
+#   
+# }
 
 
 
