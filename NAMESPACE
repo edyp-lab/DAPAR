@@ -150,6 +150,6 @@ export(
 ,"my_hc_ExportMenu"
 ,"get.pep.prot.cc"
 ,"plotJitter"
-,"display.CC"
+,"display.CC.visNet"
 
 )
