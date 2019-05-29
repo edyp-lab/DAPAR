@@ -696,8 +696,9 @@ wrapper.hc_mvTypePlot2 <- function(obj,...){
 ##' @title Distribution of Observed values with respect to intensity values
 ##' @param qData A dataframe that contains quantitative data.
 ##' @param conds A vector of the conditions (one condition per sample).
-##' @param palette xxx
+##' @param palette The different colors for conditions
 ##' @param typeofMV xxx
+##' @param title The title of the plot
 ##' @return Density plots
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -705,24 +706,18 @@ wrapper.hc_mvTypePlot2 <- function(obj,...){
 ##' data(Exp1_R25_pept)
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' hc_mvTypePlot2(qData, conds)
-hc_mvTypePlot2 <- function(qData, conds, palette = NULL, typeofMV=NULL){
+##' hc_mvTypePlot2(qData, conds, title="POV distribution")
+hc_mvTypePlot2 <- function(qData, conds, palette = NULL, typeofMV=NULL, title=NULL){
   if (is.null(conds)){return(NULL)}
+  
     if (is.null(palette)){
               palette <- brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
     }else{
-      if (length(palette) != ncol(qData)){
-        warning("The color palette has not the same dimension as the number of samples")
+      if (length(palette) != length(unique(conds))){
+        warning("The color palette has not the same dimension as the number of conditions")
         return(NULL)
       }
     }
-  
-  
-  if (is.null(title)){
-    title <- "Missing values distribution"
-  } else {
-    title <- paste0(typeofMV, " values distribution")
-  }
   
     conditions <- conds
     mTemp <- nbNA <- nbValues <- matrix(rep(0,nrow(qData)*length(unique(conditions))), nrow=nrow(qData),
@@ -764,7 +759,7 @@ hc_mvTypePlot2 <- function(qData, conds, palette = NULL, typeofMV=NULL){
     
 
     hc <-  highchart() %>%
-        hc_title(text = "POV distribution") %>%
+        hc_title(text = title) %>%
         my_hc_chart(chartType = "spline", zoomType="xy") %>%
 
         hc_legend(align = "left", verticalAlign = "top",
@@ -776,7 +771,7 @@ hc_mvTypePlot2 <- function(qData, conds, palette = NULL, typeofMV=NULL){
                 # max = ymax,
                  tickInterval= 0.5
                  ) %>%
-        hc_colors(palette) %>%
+       # hc_colors(palette) %>%
         hc_tooltip(headerFormat= '',
                    pointFormat = "<b> {series.name} </b>: {point.y} ",
                    valueDecimals = 2) %>%
@@ -795,13 +790,21 @@ hc_mvTypePlot2 <- function(qData, conds, palette = NULL, typeofMV=NULL){
         )
     
 for (i in 1:length(series)){
-        hc <- hc_add_series(hc,data = list_parse(data.frame(cbind(x = series[[i]]$x, y = series[[i]]$y))), 
-                            showInLegend=FALSE, name=conds[i])
+        hc <- hc_add_series(hc,
+                            data = list_parse(data.frame(cbind(x = series[[i]]$x, 
+                                                               y = series[[i]]$y))), 
+                            showInLegend=FALSE,
+                            color = myColors[i],
+                            name=conds[i])
 }
     
     # add three empty series for the legend entries. Change color and marker symbol
 for (c in 1:length(unique(conds))){
-      hc <-  hc_add_series(hc,data = data.frame(), name = unique(conds)[c], color = palette[c], marker = list(symbol = "circle"), type = "line")
+      hc <-  hc_add_series(hc,data = data.frame(),
+                           name = unique(conds)[c],
+                           color = palette[c],
+                           marker = list(symbol = "circle"),
+                           type = "line")
 }
         
 hc
