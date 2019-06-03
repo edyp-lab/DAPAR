@@ -218,7 +218,10 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
                      dimnames=list(rownames(data),as.character(unique(Un1))))
     
     if (unique == TRUE){
-        X[which(rowSums(as.matrix(X))>1),] <- 0
+      ll <- which(rowSums(X)>1)
+      if (length(ll) > 0) {
+        X[ll,] <- 0
+      }
          }
     
     return(X)

@@ -169,12 +169,12 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
     #intensities <- as.matrix(data[,indExpData])
     #intensities <- gsub(",", ".", intensities)
     ##building exprs Data of MSnSet file
-    Intensity <- matrix(as.numeric(gsub(",", ".",as.matrix(data[,indExpData] )))
+    Intensity <- matrix(as.numeric(as.factor(gsub(",", ".",as.matrix(data[,indExpData] ))))
                         , ncol=length(indExpData)
                         , byrow=FALSE)
     
     colnames(Intensity) <- gsub(".", "_", colnames(data)[indExpData], fixed=TRUE)
-    
+    rownames(Intensity) <- rownames(data)
     ##the name of lines are the same as the data of the first column
     # if (is.null(indiceID)) {
     #     rownames(Intensity) <- rep(paste(pep_prot_data, "_", 1:nrow(Intensity), sep=""))
