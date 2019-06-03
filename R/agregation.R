@@ -227,7 +227,11 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
   
   t <- table(data.frame(A=rep(seq_along(PG.l), lengths(PG.l)), B=unlist(PG.l)))
   if (unique == TRUE){
-    t[which(rowSums(t)>1),] <- 0
+    ll <- which(rowSums(X)>1)
+    if (length(ll) > 0) {
+      X[ll,] <- 0
+    }
+   
   }
   
   X <- Matrix(t, sparse=T,
