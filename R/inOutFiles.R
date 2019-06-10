@@ -169,7 +169,7 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
     #intensities <- as.matrix(data[,indExpData])
     #intensities <- gsub(",", ".", intensities)
     ##building exprs Data of MSnSet file
-    Intensity <- matrix(as.numeric(as.factor(gsub(",", ".",as.matrix(data[,indExpData] ))))
+    Intensity <- matrix(as.numeric(gsub(",", ".",as.matrix(data[,indExpData] )))
                         , ncol=length(indExpData)
                         , byrow=FALSE)
     
@@ -343,14 +343,20 @@ writeMSnsetToExcel <- function(obj, filename)
 ##' @return A data.frame
 ##' @author Samuel Wieczorek
 readExcel <- function(file, extension, sheet){
-    data <- NULL
-    if (extension=="xls") {
-        data <- readxl::read_xls(file, sheet)
-    }
-    else if (extension=="xlsx") {
-        data <- readxl::read_xlsx(file, sheet)
-    }
-    return(as.data.frame(data))
+  # data <- NULL
+  # if (extension=="xls") {
+  #     data <- readxl::read_xls(file, sheet)
+  # }
+  # else if (extension=="xlsx") {
+  #     data <- readxl::read_xlsx(file, sheet)
+  # }
+  # return(as.data.frame(data,asIs=T))
+  
+  #options(digits=10)
+  data <- NULL
+  data <- readxl::read_excel(file, sheet)
+  
+  return(as.data.frame(data,asIs=T, stringsAsFactors=F))
     
 }
 
