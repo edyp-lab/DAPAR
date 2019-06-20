@@ -227,9 +227,9 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
   
   t <- table(data.frame(A=rep(seq_along(PG.l), lengths(PG.l)), B=unlist(PG.l)))
   if (unique == TRUE){
-    ll <- which(rowSums(X)>1)
+    ll <- which(rowSums(t)>1)
     if (length(ll) > 0) {
-      X[ll,] <- 0
+      t[ll,] <- 0
     }
    
   }
