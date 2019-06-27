@@ -23,7 +23,7 @@ get.pep.prot.cc <- function(X){
   multprot.cc <- singprot.cc <- multprot.cc.pep <- singprot.cc.pep <- NULL
   A <- B <- g <- NULL
   ### Adjacency matrix construction
-  A <- as.matrix(t(X) %&% X) # boolean matrix product
+  A <- as.matrix(crossprod(X)) # boolean matrix product
   diag(A) <- rep(0,p) # remove self-connecting edges
   A <- matrix(as.numeric(A[,]), ncol=p) # goes back to classical matrix format
   colnames(A) <- rownames(A) <- colnames(X) # reset pep and prot names
@@ -172,11 +172,22 @@ GetDataForPlotJitter <- function(list.of.cc){
 
 
 
-
-
+##' Display a CC
+##' @title Display a CC
+##' @param The.CC A cc (a list)
+##' @param X xxxxx
+##' @param layout xxxxx
+##' @return A plot  
+##' @author Thomas Burger, Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept) 
+##' X <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein.group.IDs", FALSE)
+##' ll <- get.pep.prot.cc(X)
+##' g <- buildGraph(ll[[1]], X)
 buildGraph <- function(The.CC, X){
   
-  subX <- X[The.CC$peptides, The.CC$proteins]
+  subX <- as.matrix(X[The.CC$peptides, The.CC$proteins])
   nb.prot <- length(The.CC$proteins)
   nb.pep <- length(The.CC$peptides)
   nb.pep.shared <- length(which(rowSums(subX)>1))

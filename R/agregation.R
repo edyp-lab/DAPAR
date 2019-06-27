@@ -241,7 +241,7 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
     
   }
   
-  X <- Matrix(t, sparse=T,
+  X <- Matrix::Matrix(t, sparse=T,
               dimnames = list(rownames(obj.pep), colnames(t))
   )
   
@@ -470,6 +470,16 @@ aggregateMean <- function(obj.pep, X){
 splitAdjacencyMat <- function(X){
   hasShared <- length( which(rowSums(X) > 1)) > 0
   hasSpec <- length( which(rowSums(X) == 1)) > 0
+  
+  
+  
+ 
+    ll <- which(rowSums(t)>1)
+    if (length(ll) > 0) {
+      t[ll,] <- 0
+    }
+ 
+  
   
   
   if (hasShared && !hasSpec){
