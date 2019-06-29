@@ -16,7 +16,7 @@
 ##' MShared <- BuildAdjacencyMatrix(obj, protID, FALSE)
 ##' getProteinsStats(MShared)
 getProteinsStats <- function(matShared){
-    if (is.null(matUnique)){return(NULL)}
+    if (is.null(matShared)){return(NULL)}
     #if(!is.matrix(matUnique) || !is.matrix(matShared)){return(NULL)}
     
     
@@ -472,16 +472,6 @@ splitAdjacencyMat <- function(X){
   hasSpec <- length( which(rowSums(X) == 1)) > 0
   
   
-  
- 
-    ll <- which(rowSums(t)>1)
-    if (length(ll) > 0) {
-      t[ll,] <- 0
-    }
- 
-  
-  
-  
   if (hasShared && !hasSpec){
     tmpShared <- X
     tmpSpec <- X
@@ -523,6 +513,26 @@ GetDetailedNbPeptidesUsed <- function(X, pepData){
               nSpec=t(mat$Xspec) %*% pepData))
   
 }
+
+
+
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' obj.pep <- Exp1_R25_pept[1:1000]
+##' protID <- "Protein.group.IDs"
+##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+GetDetailedNbPeptides <- function(X){
+  
+  mat <- splitAdjacencyMat(as.matrix(X))
+  
+  
+  return(list(nShared=rowSums(t(mat$Xshared)), 
+              nSpec=rowSums(t(mat$Xspec)))
+  )
+  
+}
+
 
 
 ##' Method to xxxxx
@@ -635,25 +645,28 @@ aggregateTopn <- function(obj.pep,X,  method='Mean', n=10){
 finalizeAggregation <- function(obj.pep, pepData, protData,X, lib.loc=NULL){
  
   protData <- as.matrix(protData)
+  X <- as.matrix(X)
   protData[protData==0] <- NA
   protData[is.nan(protData)] <- NA
   protData[is.infinite(protData)] <-NA
   
   temp <- GetDetailedNbPeptidesUsed(X, pepData)
   
-  pepShared <- as.matrix(temp$nShared)
-  colnames(pepShared) <- paste("pepShared.used.", colnames(pepData), sep="")
-  rownames(pepShared) <- colnames(X)
+  pepSharedUsed <- as.matrix(temp$nShared)
+  colnames(pepSharedUsed) <- paste("pepShared.used.", colnames(pepData), sep="")
+  rownames(pepSharedUsed) <- colnames(X)
   
-  pepSpec <- as.matrix(temp$nSpec)
-  colnames(pepSpec) <- paste("pepSpec.used.", colnames(pepData), sep="")
-  rownames(pepSpec) <- colnames(X)
+  pepSpecUsed <- as.matrix(temp$nSpec)
+  colnames(pepSpecUsed) <- paste("pepSpec.used.", colnames(pepData), sep="")
+  rownames(pepSpecUsed) <- colnames(X)
   
-  pepTotal <- as.matrix(GetNbPeptidesUsed(X, pepData))
-  colnames(pepTotal) <- paste("pepTotal.used.", colnames(pepData), sep="")
-  rownames(pepTotal) <- colnames(X)
+  pepTotalUsed <- as.matrix(GetNbPeptidesUsed(X, pepData))
+  colnames(pepTotalUsed) <- paste("pepTotal.used.", colnames(pepData), sep="")
+  rownames(pepTotalUsed) <- colnames(X)
   
-   fd <- data.frame(colnames(X), pepSpec, pepShared, pepTotal)
+  n <- GetDetailedNbPeptides(X)
+  
+   fd <- data.frame(colnames(X), nPepShared = n$nShared, nPepSpec = n$nSpec, pepSpecUsed, pepSharedUsed, pepTotalUsed)
   
   obj.prot <- MSnSet(exprs = log2(protData), 
                 fData = fd, 

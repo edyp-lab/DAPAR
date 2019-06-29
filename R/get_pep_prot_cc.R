@@ -23,7 +23,7 @@ get.pep.prot.cc <- function(X){
   multprot.cc <- singprot.cc <- multprot.cc.pep <- singprot.cc.pep <- NULL
   A <- B <- g <- NULL
   ### Adjacency matrix construction
-  A <- as.matrix(crossprod(X)) # boolean matrix product
+  A <- as.matrix(t(X) %&% X) # boolean matrix product
   diag(A) <- rep(0,p) # remove self-connecting edges
   A <- matrix(as.numeric(A[,]), ncol=p) # goes back to classical matrix format
   colnames(A) <- rownames(A) <- colnames(X) # reset pep and prot names

@@ -664,7 +664,6 @@ legend("topleft"
 ##' @examples 
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' densityPlotD_HC(Exp1_R25_pept, conds)
 densityPlotD_HC <- function(obj, legend=NULL, palette = NULL){
   
