@@ -527,7 +527,8 @@ GetDetailedNbPeptides <- function(X){
   mat <- splitAdjacencyMat(as.matrix(X))
   
   
-  return(list(nShared=rowSums(t(mat$Xshared)), 
+  return(list(nTotal = rowSums(t(as.matrix(X))),
+              nShared=rowSums(t(mat$Xshared)), 
               nSpec=rowSums(t(mat$Xspec)))
   )
   
@@ -666,7 +667,13 @@ finalizeAggregation <- function(obj.pep, pepData, protData,X, lib.loc=NULL){
   
   n <- GetDetailedNbPeptides(X)
   
-   fd <- data.frame(colnames(X), nPepShared = n$nShared, nPepSpec = n$nSpec, pepSpecUsed, pepSharedUsed, pepTotalUsed)
+   fd <- data.frame(colnames(X), 
+                    nPepTotal = n$nTotal,
+                    nPepShared = n$nShared, 
+                    nPepSpec = n$nSpec, 
+                    pepSpecUsed, 
+                    pepSharedUsed, 
+                    pepTotalUsed)
   
   obj.prot <- MSnSet(exprs = log2(protData), 
                 fData = fd, 
