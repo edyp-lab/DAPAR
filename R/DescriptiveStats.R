@@ -239,9 +239,7 @@ boxPlotD_HC <- function(obj, legend=NULL, palette = NULL){
   df <- data.frame(values = as.vector(qData,mode='numeric'),samples = tmp, stringsAsFactors = FALSE)
   
   
-  hc <- hcboxplot(x=df$values, var = df$samples, colorByPoint = TRUE, 
-                  
-                  outliers = TRUE) %>%
+  hc <- hcboxplot(x=df$values, var = df$samples, colorByPoint = TRUE, outliers = TRUE) %>%
     hc_chart(type="column") %>%
     hc_yAxis(title = list(text = "Log (intensity)")) %>%
     hc_xAxis(title = list(text = "Samples"), categories=legend) %>%

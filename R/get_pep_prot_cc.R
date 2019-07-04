@@ -53,7 +53,7 @@ get.pep.prot.cc <- function(X){
     multprot.cc.pep <- list()
     for(i in 1:length(multprot.cc)){
       protlist <- multprot.cc[[i]]
-      subX <- X[,protlist]
+      subX <- as.matrix(X[,protlist])
       peplist <- which(rowSums(subX)!=0)
       multprot.cc.pep[[i]] <- names(peplist)
     }

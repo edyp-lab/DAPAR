@@ -55,6 +55,9 @@ wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0
     return (NULL)
   }
   
+  
+  
+  
   #.temp <- qData
   #if (!is.null(.temp)){
   #  data <- .temp
@@ -110,7 +113,8 @@ QuantileCentering = {
              cOverall <- q(medianOverSamples)
              Biobase::exprs(obj) <- sweep(Biobase::exprs(obj), 2, medianOverSamples)
              Biobase::exprs(obj) <- Biobase::exprs(obj) + cOverall
-           } else if (type == "within conditions"){
+           } 
+           else if (type == "within conditions"){
              Biobase::exprs(obj) <- sweep(Biobase::exprs(obj), 2, medianOverSamples)
              cCond <- NULL
              for (l in unique(conds))
