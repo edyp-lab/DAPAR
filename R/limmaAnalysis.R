@@ -282,7 +282,7 @@ make.design.2=function(sTab){
 ##' @return A design matrix
 ##' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
 ##' @examples
-##' \donttest{
+##' \dontrun{
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' make.design.3(Biobase::pData(Exp1_R25_pept))

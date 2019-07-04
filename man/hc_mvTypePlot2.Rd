@@ -4,16 +4,19 @@
 \alias{hc_mvTypePlot2}
 \title{Distribution of Observed values with respect to intensity values}
 \usage{
-hc_mvTypePlot2(qData, conds, palette = NULL, typeofMV = NULL)
+hc_mvTypePlot2(qData, conds, palette = NULL, typeofMV = NULL,
+  title = NULL)
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
 
 \item{conds}{A vector of the conditions (one condition per sample).}
 
-\item{palette}{xxx}
+\item{palette}{The different colors for conditions}
 
 \item{typeofMV}{xxx}
+
+\item{title}{The title of the plot}
 }
 \value{
 Density plots
@@ -33,7 +36,7 @@ require(DAPARdata)
 data(Exp1_R25_pept)
 qData <- Biobase::exprs(Exp1_R25_pept)
 conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-hc_mvTypePlot2(qData, conds)
+hc_mvTypePlot2(qData, conds, title="POV distribution")
 }
 \author{
 Samuel Wieczorek

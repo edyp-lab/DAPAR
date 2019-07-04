@@ -27,13 +27,11 @@ A heatmap
 Heatmap of the quantitative proteomic data of a \code{MSnSet} object
 }
 \examples{
-\dontrun{
 require(DAPARdata)
 data(Exp1_R25_pept)
 obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
 qData <- Biobase::exprs(obj)
 heatmapD(qData)
-}
 }
 \author{
 Florence Combes, Samuel Wieczorek

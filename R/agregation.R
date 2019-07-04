@@ -104,6 +104,7 @@ return(newCol)
 ##' @return A vector
 ##' @author Samuel Wieczorek
 ##' @examples
+##' \dontrun{
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' protID <- "Protein.group.IDs"
@@ -114,6 +115,7 @@ return(newCol)
 ##' name <- "Protein.group.IDs"
 ##' proteinNames <- rownames(Biobase::fData(protData))
 ##' BuildColumnToProteinDataset_par(data, M, name,proteinNames )
+##' }
 BuildColumnToProteinDataset_par <- function(peptideData, matAdj, columnName, proteinNames){
     doParallel::registerDoParallel()
     

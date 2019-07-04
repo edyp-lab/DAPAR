@@ -156,7 +156,7 @@ plotPCA_Eigen_hc <- function(res.pca){
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' boxPlotD(Exp1_R25_pept, legend = conds)
+##' boxPlotD(Exp1_R25_pept)
 boxPlotD <- function(obj,legend=NULL,palette=NULL){
   qData <- Biobase::exprs(obj)
   if (is.null(palette)){
