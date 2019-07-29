@@ -55,15 +55,7 @@ wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0
     return (NULL)
   }
   
-  
-  
-  
-  #.temp <- qData
-  #if (!is.null(.temp)){
-  #  data <- .temp
-    
-    
-    
+   
     
   #qData <- Biobase::exprs(obj)
   conds <- Biobase::pData(obj)[,"Condition"]
@@ -137,7 +129,7 @@ MeanCentering = {
            
            if (type == "overall"){
              cOverall <- mean(meanOverSamples)
-             Biobase::exprs(obj) <- sweep(.temp, 2, meanOverSamples)
+             Biobase::exprs(obj) <- sweep(qData, 2, meanOverSamples)
              if (scaling){
                Biobase::exprs(obj) <- scale(Biobase::exprs(obj),center=FALSE,scale=TRUE)
                attr(Biobase::exprs(obj),"scaled:scale")<-NULL
