@@ -56,7 +56,7 @@ wrapper.t_test_Complete <- function(obj,...){
 ##' obj <- wrapper.impute.detQuant(obj)
 ##' obj <- reIntroduceMEC(obj, lapala)
 ##' obj <- wrapper.impute.detQuant(obj)
-##' ttest <- compute.t.tests(Biobase::exprs(obj), Biobase::pData(obj)[,"Condition"],1)
+##' ttest <- compute.t.tests(Biobase::exprs(obj), Biobase::pData(obj)[,"Condition"])
 compute.t.tests <- function(qData,Conditions, Contrast="OnevsOne", type="Student"){
 
     
