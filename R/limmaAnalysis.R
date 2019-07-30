@@ -206,13 +206,13 @@ make.design <- function(sTab){
 make.design.1 <- function(sTab){
   
   Conditions <- factor(sTab$Condition, ordered = TRUE)
-  nb_cond=length(levels(Conditions))
+  nb_cond=length(unique(Conditions))
   nb_samples <- nrow(sTab)
   
   #CGet the number of replicates per condition
   nb_Rep=rep(0,nb_cond)
   for (i in 1:nb_cond){
-    nb_Rep[i]=sum((Conditions==levels(Conditions)[i]))
+    nb_Rep[i]=sum((Conditions==unique(Conditions)[i]))
   }
   
   design=matrix(0,nb_samples,nb_cond)
@@ -246,8 +246,8 @@ make.design.2=function(sTab){
   RepBio <- factor(sTab$Bio.Rep, ordered = TRUE)
   
   #Renome the levels of factor
-  levels(Condition)=c(1:length(levels(Condition)))
-  levels(RepBio)=c(1:length(levels(RepBio)))
+  levels(Condition)=c(1:length(unique(Condition)))
+  levels(RepBio)=c(1:length(unique(RepBio)))
   
   #Initial design matrix
   df <- rep(0,nrow(sTab))
