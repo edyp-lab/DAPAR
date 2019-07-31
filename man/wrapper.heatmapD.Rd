@@ -28,10 +28,12 @@ Builds a heatmap of the quantitative proteomic data of a
 \code{MSnSet} object.
 }
 \examples{
+\dontrun{
 require(DAPARdata)
 data(Exp1_R25_pept)
 obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
 wrapper.heatmapD(obj)
+}
 }
 \author{
 Alexia Dorffer

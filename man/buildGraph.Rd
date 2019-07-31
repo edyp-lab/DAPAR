@@ -10,8 +10,6 @@ buildGraph(The.CC, X)
 \item{The.CC}{A cc (a list)}
 
 \item{X}{xxxxx}
-
-\item{layout}{xxxxx}
 }
 \value{
 A plot

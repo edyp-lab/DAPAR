@@ -8,11 +8,15 @@ display.CC.visNet(g, layout = layout_nicely, obj = NULL,
   prot.tooltip = NULL, pept.tooltip = NULL)
 }
 \arguments{
+\item{g}{A cc (a list)}
+
 \item{layout}{xxxxx}
 
-\item{The.CC}{A cc (a list)}
+\item{obj}{xxx}
 
-\item{X}{xxxxx}
+\item{prot.tooltip}{xxx}
+
+\item{pept.tooltip}{xxx}
 }
 \value{
 A plot

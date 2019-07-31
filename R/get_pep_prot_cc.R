@@ -11,9 +11,9 @@
 ##' ll <- get.pep.prot.cc(X)
 get.pep.prot.cc <- function(X){
   if (is.null(X)){return()}
-  require(Matrix)
-  require(igraph)
-  require(graph)
+  #require(Matrix)
+  #require(igraph)
+  #require(graph)
   
   
   p <- dim(X)[2] # Nb proteins
@@ -23,8 +23,10 @@ get.pep.prot.cc <- function(X){
   multprot.cc <- singprot.cc <- multprot.cc.pep <- singprot.cc.pep <- NULL
   A <- B <- g <- NULL
   ### Adjacency matrix construction
-  A <- as.matrix(t(X) %&% X) # boolean matrix product
-  diag(A) <- rep(0,p) # remove self-connecting edges
+  # boolean matrix product
+  A <- as.matrix(t(X) %&% X) 
+  # remove self-connecting edges
+  diag(A) <- rep(0,p)
   A <- matrix(as.numeric(A[,]), ncol=p) # goes back to classical matrix format
   colnames(A) <- rownames(A) <- colnames(X) # reset pep and prot names
   
@@ -96,14 +98,7 @@ get.pep.prot.cc <- function(X){
 ##' plotJitter(ll)
 plotJitter <- function(list.of.cc){
   if (is.null(list.of.cc)){return()}
-  cc.summary <- GetDataForPlotJitter(list.of.cc)
-  plot(jitter(cc.summary[,2]),jitter(cc.summary[,1]), type="p", xlab="#peptides in CC", ylab="#proteins in CC")
   
-}
-
-
-GetDataForPlotJitter <- function(list.of.cc){
-  if (is.null(list.of.cc)){return()}
   length(list.of.cc) # number of CCs
   cc.summary <- sapply(list.of.cc, function(x){c(length(x[[1]]),length(x[[2]]))})
   rownames(cc.summary) <- c("Nb_proteins","Nb_peptides")
@@ -112,15 +107,31 @@ GetDataForPlotJitter <- function(list.of.cc){
   cc.summary
   rowSums(cc.summary) # c(number of prot, number of pep)
   
-  return(as.data.frame(t(jitter(cc.summary))))
+  
+  cc.summary <- as.data.frame(t(jitter(cc.summary)))
+  plot(jitter(cc.summary[,2]),jitter(cc.summary[,1]), type="p", xlab="#peptides in CC", ylab="#proteins in CC")
+  
 }
+
+# 
+# GetDataForPlotJitter <- function(list.of.cc){
+#   if (is.null(list.of.cc)){return()}
+#   length(list.of.cc) # number of CCs
+#   cc.summary <- sapply(list.of.cc, function(x){c(length(x[[1]]),length(x[[2]]))})
+#   rownames(cc.summary) <- c("Nb_proteins","Nb_peptides")
+#   colSums(cc.summary) # total amount of pep and prot in each CC
+#   colnames(cc.summary) <- 1:length(list.of.cc)
+#   cc.summary
+#   rowSums(cc.summary) # c(number of prot, number of pep)
+#   
+#   return(as.data.frame(t(jitter(cc.summary))))
+# }
 
 
 ##' Display a CC
 ##' @title Display a CC
 ##' @param The.CC A cc (a list)
 ##' @param X xxxxx
-##' @param layout xxxxx
 ##' @return A plot  
 ##' @author Thomas Burger, Samuel Wieczorek
 ##' @examples
@@ -160,9 +171,11 @@ buildGraph <- function(The.CC, X){
 
 ##' Display a CC
 ##' @title Display a CC
-##' @param The.CC A cc (a list)
-##' @param X xxxxx
+##' @param g A cc (a list)
 ##' @param layout xxxxx
+##' @param obj xxx
+##' @param prot.tooltip xxx
+##' @param pept.tooltip xxx
 ##' @return A plot  
 ##' @author Thomas Burger, Samuel Wieczorek
 ##' @examples
@@ -176,29 +189,39 @@ display.CC.visNet <- function(g, layout = layout_nicely,
                        obj=NULL,
                        prot.tooltip=NULL, 
                        pept.tooltip=NULL){
-  require(visNetwork)
+  #require(visNetwork)
   
   col.prot <- "#ECB57C"
   col.spec <- "#5CA3F7"
   col.shared <- "#0EA513"
   
   
-  visNetwork(g$nodes, g$edges, width = "100%", height = "100%") %>%
-    visNodes(shape = "dot") %>%                        # square for all nodes
-    visGroups(groupname = "spec.peptide", color = col.spec) %>%    # darkblue for group "A"
-    visGroups(groupname = "shared.peptide", color = col.shared) %>%    # darkblue for group "A"
-    visGroups(groupname = "protein", color = col.prot,shape = "dot") %>%
-    visOptions(highlightNearest = FALSE) %>%
+  visNetwork::visNetwork(g$nodes, g$edges, width = "100%", height = "100%") %>%
+    visNetwork::visNodes(shape = "dot") %>%                        # square for all nodes
+    visNetwork::visGroups(groupname = "spec.peptide", color = col.spec) %>%    # darkblue for group "A"
+    visNetwork::visGroups(groupname = "shared.peptide", color = col.shared) %>%    # darkblue for group "A"
+    visNetwork::visGroups(groupname = "protein", color = col.prot,shape = "dot") %>%
+    visNetwork::visOptions(highlightNearest = FALSE) %>%
     #visLegend()
     #visPhysics(stabilization = FALSE)%>%
-    visEdges(color = "#A9A9A9",
-             width = 2)
+    visEdges(color = "#A9A9A9",width = 2)
   #%>%
    # visIgraphLayout(layout = "layout_with_fr")
   
   
 }
 
+
+
+##' Display a jitter plot for CC
+##' @title Display a a jitter plot for CC
+##' @param df xxxx
+##' @param clickFunction xxxx
+##' @return A plot  
+##' @author Thomas Burger, Samuel Wieczorek
+##' @examples
+##' \dontrun{
+##' }
 plotJitter_rCharts <- function(df, clickFunction=NULL){
   
   #df <- GetDataForPlotJitter(list.of.cc)

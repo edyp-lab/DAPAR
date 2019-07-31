@@ -296,8 +296,7 @@ boxPlotD_HC <- function(obj, legend=NULL, palette = NULL){
 ##' legend <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' violinPlotD(Exp1_R25_pept, legend=legend)
 violinPlotD <- function(obj, legend=NULL, palette = NULL){
-  print(legend)
-    plot.new()
+  plot.new()
   qData <- Biobase::exprs(obj)
   
     if (!is.null(palette)) {
@@ -1142,10 +1141,12 @@ corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
 ##' @return A heatmap
 ##' @author Alexia Dorffer
 ##' @examples
+##' \dontrun{
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
 ##' wrapper.heatmapD(obj)
+##' }
 wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete", 
                             dendro = FALSE){
 qData <- Biobase::exprs(obj)
@@ -1174,11 +1175,13 @@ heatmapD(qData, distance, cluster, dendro)
 ##' @return A heatmap
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
+##' \dontrun{
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
 ##' qData <- Biobase::exprs(obj)
 ##' heatmapD(qData)
+##' }
 heatmapD <- function(qData, distance="euclidean", cluster="complete", dendro = FALSE){
 ##Check parameters
 # paramdist <- c("euclidean", "manhattan") 
@@ -1416,45 +1419,45 @@ heatmap.DAPAR <-
     }
 
 
-
-rep.row <-function(x,n){
-  matrix(rep(x,each=n),nrow=n)
-}
-
-rep.col<-function(x,n){
-  matrix(rep(x,each=n), ncol=n, byrow=TRUE)
-}
+# 
+# rep.row <-function(x,n){
+#   matrix(rep(x,each=n),nrow=n)
+# }
+# 
+# rep.col<-function(x,n){
+#   matrix(rep(x,each=n), ncol=n, byrow=TRUE)
+# }
 
 ###--------------------------------------------------------------------
-heatmap_HC <- function(qData, col=heat.colors(100),labCol)
-{
-  conds_v <- c(rep.row(colnames(qData), nrow(qData)))
-  lines_v <- c(rep.col(1:nrow(qData), ncol(qData)))
-  data <- tibble(id=lines_v, condition=conds_v, value=round(c(qData), digits=2 ))
-  
-#   fntltp <- JS("function(){
-#                return this.point.x + ' ' +  this.series.yAxis.categories[this.point.y] + ':<br>' +
-#                Highcharts.numberFormat(this.point.value, 2);
-# }")
-
-  # plotline <- list(
-  #   color = "#fde725", value = 3, width = 2, zIndex = 5,
-  #   label = list(
-  #     text = "", verticalAlign = "top",
-  #     style = list(color = "black"), textAlign = "left",
-  #     rotation = 0, y = -5)
-  # )
-  
- # highchart2() %>%
-    hchart(data, "heatmap", hcaes(x = condition, y = id, value = value)) %>% 
-    hc_colorAxis(stops = color_stops(100, col),type = "linear") %>% 
-    # hc_yAxis(reversed = FALSE, offset = -20, tickLength = 0,
-    #          gridLineWidth = 0, minorGridLineWidth = 0,
-    #          labels = list(style = list(fontSize = "8px"))) %>% 
-    hc_tooltip(enabled = FALSE) %>% 
-    #hc_xAxis(plotLines = list(plotline)) %>%
-    hc_title(text = "MEC repartition") %>% 
-    hc_legend(layout = "vertical", verticalAlign = "top",
-              align = "left", valueDecimals = 0)
-  
-}
+# heatmap_HC <- function(qData, col=heat.colors(100),labCol)
+# {
+#   conds_v <- c(rep.row(colnames(qData), nrow(qData)))
+#   lines_v <- c(rep.col(1:nrow(qData), ncol(qData)))
+#   data <- tibble(id=lines_v, condition=conds_v, value=round(c(qData), digits=2 ))
+#   
+# #   fntltp <- JS("function(){
+# #                return this.point.x + ' ' +  this.series.yAxis.categories[this.point.y] + ':<br>' +
+# #                Highcharts.numberFormat(this.point.value, 2);
+# # }")
+# 
+#   # plotline <- list(
+#   #   color = "#fde725", value = 3, width = 2, zIndex = 5,
+#   #   label = list(
+#   #     text = "", verticalAlign = "top",
+#   #     style = list(color = "black"), textAlign = "left",
+#   #     rotation = 0, y = -5)
+#   # )
+#   
+#  # highchart2() %>%
+#     hchart(data, "heatmap", hcaes(x = condition, y = id, value = value)) %>% 
+#     hc_colorAxis(stops = color_stops(100, col),type = "linear") %>% 
+#     # hc_yAxis(reversed = FALSE, offset = -20, tickLength = 0,
+#     #          gridLineWidth = 0, minorGridLineWidth = 0,
+#     #          labels = list(style = list(fontSize = "8px"))) %>% 
+#     hc_tooltip(enabled = FALSE) %>% 
+#     #hc_xAxis(plotLines = list(plotline)) %>%
+#     hc_title(text = "MEC repartition") %>% 
+#     hc_legend(layout = "vertical", verticalAlign = "top",
+#               align = "left", valueDecimals = 0)
+#   
+# }

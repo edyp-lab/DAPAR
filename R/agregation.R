@@ -3,7 +3,6 @@
 ##' 
 ##' @title Computes the number of proteins that are only defined by 
 ##' specific peptides, shared peptides or a mixture of two.
-##' @param matUnique The adjacency matrix with only specific peptides.
 ##' @param matShared The adjacency matrix with both specific and 
 ##' shared peptides.
 ##' @return A list
@@ -24,10 +23,10 @@ getProteinsStats <- function(matShared){
     ind.unique.Pep <- which(rowSums(as.matrix(matShared))==1)
     
     M.shared.Pep <- matShared[ind.shared.Pep,]
-    M.shared.Pep <- M.shared.Pep[,-which(colSums(M.shared.Pep)==0)]
+    M.shared.Pep <- M.shared.Pep[,-which(colSums(as.matrix(M.shared.Pep))==0)]
     
     M.unique.Pep <- matShared[ind.unique.Pep,]
-    M.unique.Pep <- M.unique.Pep[,-which(colSums(M.unique.Pep)==0)]
+    M.unique.Pep <- M.unique.Pep[,-which(colSums(as.matrix(M.unique.Pep))==0)]
     
     
     pep.names.shared <- colnames(M.shared.Pep)
@@ -504,8 +503,19 @@ splitAdjacencyMat <- function(X){
 ##' @title Computes the detailed number of peptides used for aggregating each protein 
 ##' @param X An adjacency matrix
 ##' @param pepData A data.frame of quantitative data
-##' @return A data.frame
+##' @return A list of two items
 ##' @author Samuel Wieczorek
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' obj.pep <- Exp1_R25_pept[1:1000]
+##' protID <- "Protein.group.IDs"
+##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' obj.pep <- Exp1_R25_pept[1:1000]
+##' protID <- "Protein.group.IDs"
+##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+##' GetDetailedNbPeptidesUsed(X, obj.pep)
 GetDetailedNbPeptidesUsed <- function(X, pepData){
   pepData[!is.na(pepData)] <- 1
   pepData[is.na(pepData)] <- 0
@@ -517,13 +527,19 @@ GetDetailedNbPeptidesUsed <- function(X, pepData){
 }
 
 
-
+##' Method to compute the detailed number of quantified peptides for each protein
+##' 
+##' @title Computes the detailed number of peptides for each protein 
+##' @param X An adjacency matrix
+##' @return A data.frame
+##' @author Samuel Wieczorek
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' obj.pep <- Exp1_R25_pept[1:1000]
 ##' protID <- "Protein.group.IDs"
 ##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+##' GetDetailedNbPeptides(X)
 GetDetailedNbPeptides <- function(X){
   
   mat <- splitAdjacencyMat(as.matrix(X))

@@ -381,7 +381,15 @@ return(p)
 
 
 
-
+##' This function plots a histogram ov p-values
+##'
+##' @title Plots a histogram ov p-values 
+##' @param pval_ll xxx
+##' @param bins xxx
+##' @param pi0 xxx
+##' @return A plot
+##' @author Samuel Wieczorek
+##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' obj <- Exp1_R25_pept
