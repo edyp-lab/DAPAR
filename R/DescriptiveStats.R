@@ -664,7 +664,7 @@ legend("topleft"
 ##' @examples 
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' densityPlotD_HC(Exp1_R25_pept, conds)
+##' densityPlotD_HC(Exp1_R25_pept)
 densityPlotD_HC <- function(obj, legend=NULL, palette = NULL){
   
   qData <- Biobase::exprs(obj)
