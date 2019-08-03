@@ -81,7 +81,9 @@ plotPCA_Var <- function(res.pca, chosen.axes=c(1,2)){
 ##' plotPCA_Ind(res.pca)
 plotPCA_Ind <- function(res.pca, chosen.axes=c(1,2)){
   #plot.PCA(res.pca, choix="ind", axes = chosen.axes, select = 0:-1, title="Protein factor map (PCA)")
-  if (is.null(res.pca)){return(NULL)}
+  if (is.null(res.pca)){
+    print("return(NULL)")
+  return(NULL)}
   #require(factoextra)
   factoextra::fviz_pca_ind(res.pca,  axes = chosen.axes, geom="point")
   
@@ -213,6 +215,8 @@ abline(h=0)
 ##' boxPlotD_HC(Exp1_R25_pept, legend)
 boxPlotD_HC <- function(obj, legend=NULL, palette = NULL){
 
+  
+  palette = rainbow(6)
   qData <- Biobase::exprs(obj)
   if( is.null(legend)){legend <- Biobase::pData(obj)[,"Sample.name"]}
   
@@ -239,9 +243,7 @@ boxPlotD_HC <- function(obj, legend=NULL, palette = NULL){
   df <- data.frame(values = as.vector(qData,mode='numeric'),samples = tmp, stringsAsFactors = FALSE)
   
   
-  hc <- hcboxplot(x=df$values, var = df$samples, colorByPoint = TRUE, 
-                  
-                  outliers = TRUE) %>%
+  hc <- hcboxplot(x=df$values, var = df$samples, colorByPoint = TRUE, outliers = TRUE) %>%
     hc_chart(type="column") %>%
     hc_yAxis(title = list(text = "Log (intensity)")) %>%
     hc_xAxis(title = list(text = "Samples"), categories=legend) %>%
