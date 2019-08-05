@@ -12,12 +12,15 @@
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' res.pca <- wrapper.pca(Exp1_R25_pept)
+##'  obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
+##' res.pca <- wrapper.pca(obj)
 wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
  # require(FactoMineR)
   
   if (is.null(var.scaling)) {var.scaling <- TRUE}
-  if (length(which(is.na(Biobase::exprs(obj)))) > 0){return(NULL)}
+  if (length(which(is.na(Biobase::exprs(obj)))) > 0){
+    warning("The dataset contains NA. This function can not be run")
+    return(NULL)}
   if (is.null(ncp)){
     nmax <- 12
     y <- Biobase::exprs(obj)
@@ -81,12 +84,10 @@ plotPCA_Var <- function(res.pca, chosen.axes=c(1,2)){
 ##' plotPCA_Ind(res.pca)
 plotPCA_Ind <- function(res.pca, chosen.axes=c(1,2)){
   #plot.PCA(res.pca, choix="ind", axes = chosen.axes, select = 0:-1, title="Protein factor map (PCA)")
-  if (is.null(res.pca)){
-    print("return(NULL)")
-  return(NULL)}
+  if (is.null(res.pca)){  return(NULL)}
   #require(factoextra)
-  factoextra::fviz_pca_ind(res.pca,  axes = chosen.axes, geom="point")
-  
+  plot <- factoextra::fviz_pca_ind(res.pca,  axes = chosen.axes, geom="point")
+  plot
   }
 
 
