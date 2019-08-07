@@ -247,7 +247,7 @@ boxPlotD_HC <- function(obj, legend=NULL, palette = NULL,subset.view=NULL){
     hc_yAxis(title = list(text = "Log (intensity)")) %>%
     hc_xAxis(title = list(text = "Samples"), categories=legend) %>%
     hc_colors(palette) %>%
-    hc_add_series(type= "scatter",df_outlier,name="Outliers",tooltip=list(enabled=F,headerFormat ="",pointFormat="{point.y: .2f} ")) %>%   hc_tooltip(enabled = FALSE) %>%
+    hc_add_series(type= "scatter",df_outlier,name="Outliers",tooltip=list(enabled=F,headerFormat ="",pointFormat="{point.y: .2f} ")) %>%  
     hc_plotOptions(
       
       boxplot= list(
