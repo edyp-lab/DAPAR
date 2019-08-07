@@ -368,7 +368,7 @@ violinPlotD <- function(obj, legend=NULL, palette = NULL,subset.view=NULL){
       points(y=qData[i,ncol(qData)],x=ncol(qData),pch=16,col=pal[n])
     }
     legend("topleft",legend=idVector[subset.view],lty=1,lwd=2,col=pal,pch=16,bg="transparent",bty="n")
-    
+    }
 
 }
 
@@ -615,7 +615,7 @@ compareNormalizationDSubset <- function(qDataBefore,
          , inset=c(0,0)
   )
 
-
+}
 ##' Plot to compare the quantitative proteomics data before and after 
 ##' normalization using the library \code{highcharter}
 ##' 
