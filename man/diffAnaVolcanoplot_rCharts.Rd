@@ -6,7 +6,7 @@
 \usage{
 diffAnaVolcanoplot_rCharts(df, threshold_pVal = 1e-60,
   threshold_logFC = 0, conditions = NULL, clickFunction = NULL,
-  palette = NULL, swap = FALSE)
+  palette = NULL)
 }
 \arguments{
 \item{df}{A dataframe which contains the following slots :
@@ -32,8 +32,6 @@ show info from slots in df. The variable this.index refers to the slot
 named index and allows to retrieve the right row to show in the tooltip.}
 
 \item{palette}{xxx}
-
-\item{swap}{A boolean that indicates if the data has been swaped (inversion on the x-axis)}
 }
 \value{
 An interactive volcanoplot
