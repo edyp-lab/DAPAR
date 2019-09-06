@@ -32,12 +32,13 @@
 ##' @param subset.norm A vector of index indicating rows to be used for normalization
 ##' @return An instance of class \code{MSnSet} where the quantitative
 ##' data in the \code{exprs()} tab has been normalized.
-##' @author Samuel Wieczorek, Thomas Burger, Helene Borges, AC
+##' @author Samuel Wieczorek, Thomas Burger, Helene Borges, Anais Courtier
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' wrapper.normalizeD(Exp1_R25_pept[1:1000], "QuantileCentering", "within conditions")
-wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0.15, span = 0.7,subset.norm=NULL){
+wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0.15, span = 0.7,
+                               subset.norm=NULL){
   
   parammethod<-c("GlobalQuantileAlignment",
                  "SumByColumns",
@@ -80,6 +81,7 @@ wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0
   
   switch(method,
          GlobalQuantileAlignment = {
+           require(preprocessCore)
            Biobase::exprs(obj) <- normalize.quantiles(qData)
            dimnames(Biobase::exprs(obj)) <- list(rownames(qData),colnames(qData))
            obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type)

@@ -205,13 +205,13 @@ abline(h=0)
 ##' @param palette xxx
 ##' @param subset.view A vector of index indicating rows to highlight
 ##' @return A boxplot
-##' @author Samuel Wieczorek,AC
+##' @author Samuel Wieczorek, Anais Courtier
 ##' @seealso \code{\link{densityPlotD_HC}}
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' legend <- Biobase::pData(Exp1_R25_pept)[,"Sample.name"]
-##' boxPlotD_HC(Exp1_R25_pept, legend)
+##' boxPlotD_HC(Exp1_R25_pept, legend, subset.view=1:10)
 boxPlotD_HC <- function(obj, legend=NULL, palette = NULL,subset.view=NULL){
 
   qData <- Biobase::exprs(obj)
@@ -301,14 +301,14 @@ boxPlotD_HC <- function(obj, legend=NULL, palette = NULL,subset.view=NULL){
 ##' @param palette xxx
 ##' @param subset.view A vector of index indicating rows to highlight
 ##' @return A violinplot
-##' @author Samuel Wieczorek, AC
+##' @author Samuel Wieczorek, Anais Courtier
 ##' @seealso \code{\link{densityPlotD}}
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' library(vioplot)
 ##' legend <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' violinPlotD(Exp1_R25_pept, legend=legend)
+##' violinPlotD(Exp1_R25_pept, legend=legend,subset.view=20:30)
 violinPlotD <- function(obj, legend=NULL, palette = NULL,subset.view=NULL){
   plot.new()
   qData <- Biobase::exprs(obj)
@@ -531,6 +531,49 @@ legend("topleft"
 
 }
 
+
+
+
+
+##' Wrapper to the function that plot to compare the quantitative proteomics 
+##' data before and after normalization
+##' 
+##' @title Builds a plot from a dataframe
+##' @param objBefore A dataframe that contains quantitative data before 
+##' normalization.
+##' @param objAfter A dataframe that contains quantitative data after 
+##' normalization.
+##' @param condsForLegend A vector of the conditions (one condition per sample).
+##' @param indData2Show A vector of the indices of the columns to show in the 
+##' plot. The indices are those of indices of 
+##' the columns int the data.frame qDataBefore.
+##' @param ... arguments for palette
+##' @return A plot
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+##' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering","within conditions")
+##' ids <- fData(Exp1_R25_pept)[,Exp1_R25_pept@experimentData@other$proteinId]
+##' wrapper.compareNormalizationDSubset(Exp1_R25_pept, objAfter, conds, idsForLegend=ids, subset.view=1:10)
+wrapper.compareNormalizationDSubset <- function(objBefore, objAfter, 
+                                          condsForLegend=NULL,
+                                          indData2Show=NULL,
+                                          ...){
+  
+  qDataBefore <- Biobase::exprs(objBefore)
+  qDataAfter <- Biobase::exprs(objAfter)
+  #if (is.null(condsForLegend)){
+    #condsForLegend <- Biobase::pData(objBefore)[,"Condition"]}
+  
+  compareNormalizationDSubset(qDataBefore, qDataAfter, indData2Show, ...)
+}
+
+
+
+
+
 ##' Plot to compare the quantitative proteomics data before and after 
 ##' normalization for a subset of protein
 ##' 
@@ -546,7 +589,7 @@ legend("topleft"
 ##' @param palette xxx
 ##' @param subset.view A vector of index indicating rows to highlight
 ##' @return A plot
-##' @author Samuel Wieczorek, AC
+##' @author Samuel Wieczorek, Anais Courtier
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
@@ -614,6 +657,15 @@ compareNormalizationDSubset <- function(qDataBefore,
   )
 
 }
+
+
+
+
+
+
+
+
+
 ##' Plot to compare the quantitative proteomics data before and after 
 ##' normalization using the library \code{highcharter}
 ##' 
