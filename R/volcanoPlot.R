@@ -147,7 +147,8 @@ diffAnaVolcanoplot_rCharts <- function(df,
                                         threshold_logFC=0, 
                                         conditions=NULL, 
                                         clickFunction=NULL,
-                                       palette=NULL){
+                                       palette=NULL,
+                                       isSwaped = FALSE){
     
   
   print("In DAPAR::diffAnaVolcanoplot_rCharts")
@@ -183,12 +184,19 @@ diffAnaVolcanoplot_rCharts <- function(df,
     rightBorder <- data.frame(x=c(max(df$x), threshold_logFC,threshold_logFC),
                              y = c(threshold_pVal,threshold_pVal,max(df$y)))
     
+    title <- NULL
+    if (isTRUE(isSwaped)){
+      title <- paste0(cond[2], '_vs_', cond[1])
+    } else {
+      title <- paste0(cond[1], '_vs_', cond[2])
+    }
+    
     h1 <-  highchart() %>%
         hc_add_series(data = df, type = "scatter", hcaes(x,y,group=g)) %>%
         hc_colors(c(palette$In, palette$Out)) %>%
         my_hc_chart(zoomType = "xy",chartType="scatter") %>%
         hc_legend(enabled = FALSE) %>%
-       hc_title(text = paste0(cond[1], '_vs_', cond[2]),
+       hc_title(text = title,
                margin = 20, align = "center",
                style = list(size = 20, color = "black", useHTML = TRUE)) %>%
         hc_yAxis(title = list(text="-log10(pValue)")) %>%
