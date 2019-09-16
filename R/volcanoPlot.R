@@ -188,6 +188,9 @@ diffAnaVolcanoplot_rCharts <- function(df,
         hc_colors(c(palette$In, palette$Out)) %>%
         my_hc_chart(zoomType = "xy",chartType="scatter") %>%
         hc_legend(enabled = FALSE) %>%
+       hc_title(text = paste0(cond[1], '_vs_', cond[2]),
+               margin = 20, align = "center",
+               style = list(size = 20, color = "black", useHTML = TRUE)) %>%
         hc_yAxis(title = list(text="-log10(pValue)")) %>%
         hc_xAxis(title = list(text = "logFC"),
                  plotLines=list(list(color= "grey" , width = 1, value = 0, zIndex = 5))) %>%

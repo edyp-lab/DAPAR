@@ -762,7 +762,7 @@ hc_mvTypePlot2 <- function(qData, conds, palette = NULL, typeofMV=NULL, title=NU
     hc_legend(align = "left", verticalAlign = "top",
               layout = "vertical") %>%
     hc_xAxis(title = list(text = "Mean of intensities")) %>%
-    hc_yAxis(title = list(text = "Number ov values"),
+    hc_yAxis(title = list(text = "Number of quantity values per condition"),
              #categories = c(-1:3)
              #min = 1, 
              # max = ymax,
