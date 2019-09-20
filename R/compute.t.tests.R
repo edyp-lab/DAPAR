@@ -122,9 +122,12 @@ Cond.Nb<-length(levels(Conditions.f))
             p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))
             m1.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[1])))
             m2.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[2])))
+            m1.name <- names(unlist(lapply(res.tmp,function(x)x$estimate[1])))[1]
+            m2.name <- names(unlist(lapply(res.tmp,function(x)x$estimate[2])))[1]
             logFC.tmp <- m1.tmp - m2.tmp
+            if (grep(levels(Conditions.f)[1], m2.name)){logFC.tmp <- -logFC.tmp}
             
-            txt <- paste(unique(Conditions[c1]),"_vs_(all-",unique(Conditions[c1]),")", sep="")
+            txt <- paste(levels(Conditions.f)[i],"_vs_",levels(Conditions.f)[j], sep="")
             
             logFC[[paste(txt, "logFC", sep="_")]] <- logFC.tmp
             P_Value[[paste(txt, "pval", sep="_")]] <- p.tmp
