@@ -4,7 +4,7 @@
 \alias{compute.t.tests}
 \title{xxxxxx}
 \usage{
-\method{compute}{t.tests}(qData, Conditions, Contrast = "OnevsOne",
+compute.t.tests(qData, Conditions, Contrast = "OnevsOne",
   type = "Student")
 }
 \arguments{
@@ -35,11 +35,9 @@ This function is xxxxxx
 require(DAPARdata)
 data(Exp1_R25_pept)
 obj <- Exp1_R25_pept[1:1000]
-lapala <- findMECBlock(obj)
-obj <- wrapper.impute.detQuant(obj)
-obj <- reIntroduceMEC(obj, lapala)
-obj <- wrapper.impute.detQuant(obj)
-ttest <- compute.t.tests(Biobase::exprs(obj), Biobase::pData(obj)[,"Condition"],1)
+keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+obj <- mvFilterFromIndices(obj, keepThat)
+ttest <- compute.t.tests(Biobase::exprs(obj), Biobase::pData(obj)[,"Condition"])
 }
 \author{
 Florence Combes, Samuel Wieczorek

@@ -117,7 +117,6 @@ return(p)
 ##' show info from slots in df. The variable this.index refers to the slot 
 ##' named index and allows to retrieve the right row to show in the tooltip.
 ##' @param palette xxx
-##' @param swap A boolean that indicates if the data has been swaped (inversion on the x-axis)
 ##' @return An interactive volcanoplot
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -149,8 +148,7 @@ diffAnaVolcanoplot_rCharts <- function(df,
                                         threshold_logFC=0, 
                                         conditions=NULL, 
                                         clickFunction=NULL,
-                                       palette=NULL, 
-                                       swap = FALSE){
+                                       palette=NULL){
     
   
    xAxisTitle <- ifelse(swap, "-log(FC)","log(FC)")
@@ -184,6 +182,12 @@ diffAnaVolcanoplot_rCharts <- function(df,
                              y = c(threshold_pVal,threshold_pVal,max(df$y)))
     rightBorder <- data.frame(x=c(max(df$x), threshold_logFC,threshold_logFC),
                              y = c(threshold_pVal,threshold_pVal,max(df$y)))
+    title <- NULL
+    if (isTRUE(swap)){
+      title <- paste0(conditions[2], '_vs_', conditions[1])
+    } else {
+      title <- paste0(conditions[1], '_vs_', conditions[2])
+    }
     
     h1 <-  highchart() %>%
         hc_add_series(data = df, type = "scatter", hcaes(x,y,group=g)) %>%
