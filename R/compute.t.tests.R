@@ -12,10 +12,8 @@
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' obj <- Exp1_R25_pept[1:1000]
-##' lapala <- findMECBlock(obj)
-##' obj <- wrapper.impute.detQuant(obj)
-##' obj <- reIntroduceMEC(obj, lapala)
-##' obj <- wrapper.impute.detQuant(obj)
+##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+##' obj <- mvFilterFromIndices(obj, keepThat)
 ##' ttest <- wrapper.t_test_Complete(obj, 1)
 wrapper.t_test_Complete <- function(obj,...){
     
@@ -52,11 +50,9 @@ wrapper.t_test_Complete <- function(obj,...){
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' obj <- Exp1_R25_pept[1:1000]
-##' lapala <- findMECBlock(obj)
-##' obj <- wrapper.impute.detQuant(obj)
-##' obj <- reIntroduceMEC(obj, lapala)
-##' obj <- wrapper.impute.detQuant(obj)
-##' ttest <- compute.t.tests(Biobase::exprs(obj), Biobase::pData(obj)[,"Condition"],1)
+##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+##' obj <- mvFilterFromIndices(obj, keepThat)
+##' ttest <- compute.t.tests(Biobase::exprs(obj), Biobase::pData(obj)[,"Condition"],"OnevsOne")
 compute.t.tests <- function(qData,Conditions, Contrast="OnevsOne", type="Student"){
 
     
@@ -72,7 +68,7 @@ P_Value <- list()
 
 nbComp <- NULL
 
-Conditions.f <- factor(Conditions)
+Conditions.f <- factor(Conditions, levels=unique(Conditions))
 #Cond<-levels(Conditions.f)
 Cond.Nb<-length(levels(Conditions.f))
 
@@ -88,14 +84,18 @@ Cond.Nb<-length(levels(Conditions.f))
     
                 res.tmp <- apply(qData[,c(c1Indice,c2Indice)], 1, 
                                  function(x) {
-                   t.test(x~Conditions[c(c1Indice,c2Indice)],  var.equal=.type)
+                   t.test(x~Conditions[c(c1Indice,c2Indice)], data=qData, var.equal=.type)
                 })
                 p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))
                 m1.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[1])))
                 m2.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[2])))
+                m1.name <- names(unlist(lapply(res.tmp,function(x)x$estimate[1])))[1]
+                m2.name <- names(unlist(lapply(res.tmp,function(x)x$estimate[2])))[1]
                 logFC.tmp <- m1.tmp - m2.tmp
                 
-                txt <- paste(unique(Conditions[c1Indice]),"_vs_",unique(Conditions[c2Indice]), sep="")
+                if (grep(levels(Conditions.f)[1], m2.name)){logFC.tmp <- -logFC.tmp}
+                
+                txt <- paste(levels(Conditions.f)[i],"_vs_",levels(Conditions.f)[j], sep="")
 
                 logFC[[paste(txt, "logFC", sep="_")]] <- logFC.tmp
                 P_Value[[paste(txt, "pval", sep="_")]] <- p.tmp

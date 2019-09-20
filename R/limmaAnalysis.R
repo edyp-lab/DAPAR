@@ -461,7 +461,7 @@ limmaCompleteTest <- function(qData, sTab, comp.type="OnevsOne"){
          OnevsOne = contrast <- 1,
          OnevsAll = contrast <- 2)
   
-  conds <- factor(sTab$Condition, ordered = TRUE)
+  conds <- factor(sTab$Condition, , levels=unique(sTab$Condition))
   res.l <- NULL
   design.matrix <- make.design(sTab)
   if(!is.null(design.matrix)) {

@@ -148,11 +148,10 @@ diffAnaVolcanoplot_rCharts <- function(df,
                                         conditions=NULL, 
                                         clickFunction=NULL,
                                        palette=NULL,
-                                       isSwaped = FALSE){
+                                       swap = FALSE){
     
+ 
   
-  print("In DAPAR::diffAnaVolcanoplot_rCharts")
-  print(str(df))
     xtitle <- paste("log2 ( mean(",conditions[2],") / mean(",conditions[1],") )",sep="")
     
     if (is.null(clickFunction)){
@@ -185,10 +184,11 @@ diffAnaVolcanoplot_rCharts <- function(df,
                              y = c(threshold_pVal,threshold_pVal,max(df$y)))
     
     title <- NULL
-    if (isTRUE(isSwaped)){
-      title <- paste0(cond[2], '_vs_', cond[1])
+    #title <- paste0(cond[1], '_vs_', cond[2])
+    if (isTRUE(swap)){
+      title <- paste0(conditions[2], '_vs_', conditions[1])
     } else {
-      title <- paste0(cond[1], '_vs_', cond[2])
+      title <- paste0(conditions[1], '_vs_', conditions[2])
     }
     
     h1 <-  highchart() %>%
