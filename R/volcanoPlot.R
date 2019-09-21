@@ -116,6 +116,7 @@ return(p)
 ##' show info from slots in df. The variable this.index refers to the slot 
 ##' named index and allows to retrieve the right row to show in the tooltip.
 ##' @param palette xxx
+##' @param swap A boolean that indicates if the conditions have been swaped
 ##' @return An interactive volcanoplot
 ##' @author Samuel Wieczorek
 ##' @examples
@@ -147,7 +148,8 @@ diffAnaVolcanoplot_rCharts <- function(df,
                                         threshold_logFC=0, 
                                         conditions=NULL, 
                                         clickFunction=NULL,
-                                       palette=NULL){
+                                       palette=NULL,
+                                       swap=FALSE){
     
   
   print("In DAPAR::diffAnaVolcanoplot_rCharts")
@@ -183,10 +185,21 @@ diffAnaVolcanoplot_rCharts <- function(df,
     rightBorder <- data.frame(x=c(max(df$x), threshold_logFC,threshold_logFC),
                              y = c(threshold_pVal,threshold_pVal,max(df$y)))
     
+    title <- NULL
+    #title <- paste0(cond[1], '_vs_', cond[2])
+    if (isTRUE(swap)){
+      title <- paste0(conditions[2], '_vs_', conditions[1])
+    } else {
+      title <- paste0(conditions[1], '_vs_', conditions[2])
+    }
+    
     h1 <-  highchart() %>%
         hc_add_series(data = df, type = "scatter", hcaes(x,y,group=g)) %>%
         hc_colors(c(palette$In, palette$Out)) %>%
         my_hc_chart(zoomType = "xy",chartType="scatter") %>%
+      hc_title(text = title,
+               margin = 20, align = "center",
+               style = list(size = 20, color = "black", useHTML = TRUE)) %>%
         hc_legend(enabled = FALSE) %>%
         hc_yAxis(title = list(text="-log10(pValue)")) %>%
         hc_xAxis(title = list(text = "logFC"),
