@@ -243,7 +243,7 @@ make.design.1 <- function(sTab){
 ##' }
 make.design.2=function(sTab){
   Condition <- factor(sTab$Condition,  levels=unique(sTab$Condition))
-  RepBio <- factor(sTab$Bio.Rep,  levels=unique(sTab$Condition))
+  RepBio <- factor(sTab$Bio.Rep,  levels=unique(sTab$Bio.Rep))
   
   #Renome the levels of factor
   levels(Condition)=c(1:length(levels(Condition)))
@@ -290,8 +290,8 @@ make.design.2=function(sTab){
 make.design.3=function(sTab){
   
   Condition <- factor(sTab$Condition,  levels=unique(sTab$Condition))
-  RepBio <- factor(sTab$Bio.Rep,  levels=unique(sTab$Condition))
-  RepTech <- factor(sTab$Tech.Rep,  levels=unique(sTab$Condition))
+  RepBio <- factor(sTab$Bio.Rep,  levels=unique(sTab$Bio.Rep))
+  RepTech <- factor(sTab$Tech.Rep,  levels=unique(sTab$Tech.Rep))
   
   
   #Rename the levels of factor
