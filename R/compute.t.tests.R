@@ -18,9 +18,9 @@
 wrapper.t_test_Complete <- function(obj,...){
     
     qData <- Biobase::exprs(obj)
-    conds <- pData(obj)[,"Condition"]
+    sTab <- pData(obj)
     
-    ttest <- compute.t.tests(qData,Conditions=conds,...)
+    ttest <- compute.t.tests(qData,sTab=pData(obj),...)
     
     return (ttest)
 }
@@ -32,13 +32,12 @@ wrapper.t_test_Complete <- function(obj,...){
 ##'
 ##' @title xxxxxx
 ##' @param qData A matrix of quantitative data, without any missing values.
-##' @param Conditions A vector of factor which indicates the name of the 
-##' biological condition for each replicate. 
-##' @param Contrast Indicates if the test consists of the comparison of each 
+##' @param sTab xxxx 
+##' @param contrast Indicates if the test consists of the comparison of each 
 ##' biological condition versus 
-##' each of the other ones (Contrast=1; 
+##' each of the other ones (contrast=1; 
 ##' for example H0:"C1=C2" vs H1:"C1!=C2", etc.) 
-##' or each condition versus all others (Contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
+##' or each condition versus all others (contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
 ##' H1:"C1!=(C2+C3)/2", etc. if there are three conditions).
 ##' @param type xxxxx
 ##' @return A list of two items : logFC and P_Value; both are dataframe. The first one contains
@@ -52,9 +51,10 @@ wrapper.t_test_Complete <- function(obj,...){
 ##' obj <- Exp1_R25_pept[1:1000]
 ##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 ##' obj <- mvFilterFromIndices(obj, keepThat)
-##' ttest <- compute.t.tests(Biobase::exprs(obj), Biobase::pData(obj)[,"Condition"])
-compute.t.tests <- function(qData,Conditions, Contrast="OnevsOne", type="Student"){
-
+##' sTab <- Biobase::pData(obj)
+##' qData <- Biobase::exprs(obj)
+##' ttest <- compute.t.tests(qData,sTab ,"OnevsOne")
+compute.t.tests <- function(qData,sTab, contrast="OnevsOne", type="Student"){
     switch(type,
            Student=.type <- TRUE,
            Welch=.type <- FALSE)
@@ -65,12 +65,16 @@ P_Value <- list()
 
 nbComp <- NULL
 
-Conditions.f <- factor(Conditions, levels=unique(Conditions))
-#Cond<-levels(Conditions.f)
+sTab.old <- sTab
+Conditions.f <- factor(sTab$Condition, levels=unique(sTab$Condition))
+sTab <- sTab[unlist(lapply(split(sTab, Conditions.f), function(x) {x['Sample.name']})),]
+qData <- qData[,unlist(lapply(split(sTab.old, Conditions.f), function(x) {x['Sample.name']}))]
+Conditions <- sTab$Condition
+
 Cond.Nb<-length(levels(Conditions.f))
 
 
-    if(Contrast=="OnevsOne"){
+    if(contrast=="OnevsOne"){
         nbComp <- Cond.Nb*(Cond.Nb-1)/2
 
         for(i in 1:(Cond.Nb-1)){
@@ -89,7 +93,7 @@ Cond.Nb<-length(levels(Conditions.f))
                 m1.name <- names(unlist(lapply(res.tmp,function(x)x$estimate[1])))[1]
                 m2.name <- names(unlist(lapply(res.tmp,function(x)x$estimate[2])))[1]
                 logFC.tmp <- m1.tmp - m2.tmp
-                if (grep(levels(Conditions.f)[1], m2.name)){logFC.tmp <- -logFC.tmp}
+                if (grepl(levels(Conditions.f)[1], m2.name)){logFC.tmp <- -logFC.tmp}
                 
                 txt <- paste(levels(Conditions.f)[i],"_vs_",levels(Conditions.f)[j], sep="")
                 
@@ -99,12 +103,12 @@ Cond.Nb<-length(levels(Conditions.f))
         }
     } ##end Contrast==1
 
-    if(Contrast=="OnevsAll"){
+    if(contrast=="OnevsAll"){
         nbComp <- Cond.Nb
         
         for(i in 1:nbComp){
             
-            c1<-which(Conditions==levels(Conditions.f)[i])
+            c1 <- which(Conditions==levels(Conditions.f)[i])
            
             Cond.t.all<-c(1:length(Conditions))
             Cond.t.all[c1]<-levels(Conditions.f)[i]
@@ -122,10 +126,9 @@ Cond.Nb<-length(levels(Conditions.f))
             m2.name <- names(unlist(lapply(res.tmp,function(x)x$estimate[2])))[1]
             logFC.tmp <- m1.tmp - m2.tmp
             
-            if (grep(levels(Conditions.f)[1], m2.name)){logFC.tmp <- -logFC.tmp}
+            if (grepl(levels(Conditions.f)[i], m2.name)){logFC.tmp <- -logFC.tmp}
             
-            txt <- paste(levels(Conditions.f)[i],"_vs_",levels(Conditions.f)[j], sep="")
-            
+            txt <- paste(levels(Conditions.f)[i],"_vs_(all-",levels(Conditions.f)[i],")", sep="")
             logFC[[paste(txt, "logFC", sep="_")]] <- logFC.tmp
             P_Value[[paste(txt, "pval", sep="_")]] <- p.tmp
         }

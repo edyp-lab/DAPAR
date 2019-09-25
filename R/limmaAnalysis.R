@@ -205,7 +205,7 @@ make.design <- function(sTab){
 ##' make.design.1(Biobase::pData(Exp1_R25_pept))
 make.design.1 <- function(sTab){
   
-  Conditions <- factor(sTab$Condition, ordered = TRUE)
+  Conditions <- factor(sTab$Condition,   levels=unique(sTab$Condition))
   nb_cond=length(unique(Conditions))
   nb_samples <- nrow(sTab)
   
@@ -242,8 +242,8 @@ make.design.1 <- function(sTab){
 ##' make.design.2(Biobase::pData(Exp1_R25_pept))
 ##' }
 make.design.2=function(sTab){
-  Condition <- factor(sTab$Condition, ordered = TRUE)
-  RepBio <- factor(sTab$Bio.Rep, ordered = TRUE)
+  Condition <- factor(sTab$Condition,   levels=unique(sTab$Condition))
+  RepBio <- factor(sTab$Bio.Rep,   levels=unique(sTab$Bio.Rep))
   
   #Renome the levels of factor
   levels(Condition)=c(1:length(unique(Condition)))
@@ -289,9 +289,9 @@ make.design.2=function(sTab){
 ##' }
 make.design.3=function(sTab){
   
-  Condition <- factor(sTab$Condition, ordered = TRUE)
-  RepBio <- factor(sTab$Bio.Rep, ordered = TRUE)
-  RepTech <- factor(sTab$Tech.Rep, ordered = TRUE)
+  Condition <- factor(sTab$Condition,   levels=unique(sTab$Condition))
+  RepBio <- factor(sTab$Bio.Rep,   levels=unique(sTab$Bio.Rep))
+  RepTech <- factor(sTab$Tech.Rep,   levels=unique(sTab$Tech.Rep))
   
   
   #Rename the levels of factor
@@ -461,7 +461,12 @@ limmaCompleteTest <- function(qData, sTab, comp.type="OnevsOne"){
          OnevsOne = contrast <- 1,
          OnevsAll = contrast <- 2)
   
+  sTab.old <- sTab
   conds <- factor(sTab$Condition, levels=unique(sTab$Condition))
+  sTab <- sTab[unlist(lapply(split(sTab, conds), function(x) {x['Sample.name']})),]
+  qData <- qData[,unlist(lapply(split(sTab.old, conds), function(x) {x['Sample.name']}))]
+  conds <- conds[order(conds)]
+  
   res.l <- NULL
   design.matrix <- make.design(sTab)
   if(!is.null(design.matrix)) {

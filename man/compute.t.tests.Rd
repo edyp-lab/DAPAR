@@ -4,20 +4,19 @@
 \alias{compute.t.tests}
 \title{xxxxxx}
 \usage{
-compute.t.tests(qData, Conditions, Contrast = "OnevsOne",
+\method{compute}{t.tests}(qData, sTab, contrast = "OnevsOne",
   type = "Student")
 }
 \arguments{
 \item{qData}{A matrix of quantitative data, without any missing values.}
 
-\item{Conditions}{A vector of factor which indicates the name of the 
-biological condition for each replicate.}
+\item{sTab}{xxxx}
 
-\item{Contrast}{Indicates if the test consists of the comparison of each 
+\item{contrast}{Indicates if the test consists of the comparison of each 
 biological condition versus 
-each of the other ones (Contrast=1; 
+each of the other ones (contrast=1; 
 for example H0:"C1=C2" vs H1:"C1!=C2", etc.) 
-or each condition versus all others (Contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
+or each condition versus all others (contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
 H1:"C1!=(C2+C3)/2", etc. if there are three conditions).}
 
 \item{type}{xxxxx}
@@ -37,7 +36,9 @@ data(Exp1_R25_pept)
 obj <- Exp1_R25_pept[1:1000]
 keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 obj <- mvFilterFromIndices(obj, keepThat)
-ttest <- compute.t.tests(Biobase::exprs(obj), Biobase::pData(obj)[,"Condition"])
+sTab <- Biobase::pData(obj)
+qData <- Biobase::exprs(obj)
+ttest <- compute.t.tests(qData,sTab ,"OnevsOne")
 }
 \author{
 Florence Combes, Samuel Wieczorek
