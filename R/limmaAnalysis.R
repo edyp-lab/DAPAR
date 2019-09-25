@@ -316,9 +316,9 @@ make.design.2=function(sTab){
 ##' }
 make.design.3=function(sTab){
   
-  Condition <- factor(sTab$Condition, ordered = TRUE)
-  RepBio <- factor(sTab$Bio.Rep, ordered = TRUE)
-  RepTech <- factor(sTab$Tech.Rep, ordered = TRUE)
+  Condition <- factor(sTab$Condition, levels=unique(sTab$Condition))
+  RepBio <- factor(sTab$Bio.Rep, levels=unique(sTab$Bio.Rep))
+  RepTech <- factor(sTab$Tech.Rep, levels=unique(sTab$Tech.Rep))
   
   
   #Rename the levels of factor
