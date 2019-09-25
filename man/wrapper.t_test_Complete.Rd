@@ -21,10 +21,8 @@ This function is a wrapper xxxxx
 require(DAPARdata)
 data(Exp1_R25_pept)
 obj <- Exp1_R25_pept[1:1000]
-lapala <- findMECBlock(obj)
-obj <- wrapper.impute.detQuant(obj)
-obj <- reIntroduceMEC(obj, lapala)
-obj <- wrapper.impute.detQuant(obj)
+keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+obj <- mvFilterFromIndices(obj, keepThat)
 ttest <- wrapper.t_test_Complete(obj, 1)
 }
 \author{
