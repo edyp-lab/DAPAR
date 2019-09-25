@@ -18,9 +18,11 @@ wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
  # require(FactoMineR)
   
   if (is.null(var.scaling)) {var.scaling <- TRUE}
+  res.pca <- NULL
   if (length(which(is.na(Biobase::exprs(obj)))) > 0){
     warning("The dataset contains NA. This function can not be run")
     return(NULL)}
+  
   if (is.null(ncp)){
     nmax <- 12
     y <- Biobase::exprs(obj)

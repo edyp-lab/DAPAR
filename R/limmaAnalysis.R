@@ -203,30 +203,57 @@ make.design <- function(sTab){
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' make.design.1(Biobase::pData(Exp1_R25_pept))
+# make.design.1 <- function(sTab){
+#   
+#   Conditions <- factor(sTab$Condition,  levels=unique(sTab$Condition))
+#   nb_cond=length(unique(Conditions))
+#   nb_samples <- nrow(sTab)
+#   
+#   #CGet the number of replicates per condition
+#   # nb_Rep_decal=rep(0,nb_cond_decal)
+#   # for (i in 1:nb_cond_decal){
+#   #   nb_Rep_decal[i]=sum((Conditions_decal==unique(Conditions_decal)[i]))
+#   # }
+#   
+#   design=matrix(0,nb_samples,nb_cond)
+#   #n0_decal=1
+#   coln=NULL
+#   for (j in 1:nb_cond){
+#     test <- rep
+#     coln=c(coln,paste("Condition",j,collapse=NULL,sep=""))
+#     design[,j]=as.integer(Conditions==unique(Conditions)[j])
+#   }
+#   colnames(design)=coln
+#   
+#   return(design)
+# }
+
+
 make.design.1 <- function(sTab){
-  
-  Conditions <- factor(sTab$Condition, ordered = TRUE)
-  nb_cond=length(unique(Conditions))
-  nb_samples <- nrow(sTab)
-  
-  #CGet the number of replicates per condition
-  nb_Rep=rep(0,nb_cond)
-  for (i in 1:nb_cond){
-    nb_Rep[i]=sum((Conditions==unique(Conditions)[i]))
-  }
-  
-  design=matrix(0,nb_samples,nb_cond)
-  n0=1
-  coln=NULL
-  for (j in 1:nb_cond){
-    coln=c(coln,paste("Condition",j,collapse=NULL,sep=""))
-    design[(n0:(n0+nb_Rep[j]-1)),j]=rep(1,length((n0:(n0+nb_Rep[j]-1))))
-    n0=n0+nb_Rep[j]
-  }
-  colnames(design)=coln
-  
-  return(design)
+Conditions <- factor(sTab$Condition, ordered = TRUE)
+nb_cond=length(unique(Conditions))
+nb_samples <- nrow(sTab)
+
+#CGet the number of replicates per condition
+nb_Rep=rep(0,nb_cond)
+for (i in 1:nb_cond){
+  nb_Rep[i]=sum((Conditions==unique(Conditions)[i]))
 }
+
+design=matrix(0,nb_samples,nb_cond)
+n0=1
+coln=NULL
+for (j in 1:nb_cond){
+  coln=c(coln,paste("Condition",j,collapse=NULL,sep=""))
+  design[(n0:(n0+nb_Rep[j]-1)),j]=rep(1,length((n0:(n0+nb_Rep[j]-1))))
+  n0=n0+nb_Rep[j]
+}
+colnames(design)=coln
+
+return(design)
+
+}
+
 
 
 ##' This function builds the design matrix for design of level 2
@@ -242,8 +269,8 @@ make.design.1 <- function(sTab){
 ##' make.design.2(Biobase::pData(Exp1_R25_pept))
 ##' }
 make.design.2=function(sTab){
-  Condition <- factor(sTab$Condition, ordered = TRUE)
-  RepBio <- factor(sTab$Bio.Rep, ordered = TRUE)
+  Condition <- factor(sTab$Condition, levels=unique(sTab$Condition))
+  RepBio <- factor(sTab$Bio.Rep, levels=unique(sTab$Bio.Rep))
   
   #Renome the levels of factor
   levels(Condition)=c(1:length(levels(Condition)))
@@ -457,11 +484,19 @@ make.contrast <- function(design,condition, contrast=1){
 ##' limma <- limmaCompleteTest(qData,sTab)
 limmaCompleteTest <- function(qData, sTab, comp.type="OnevsOne"){
    
+  ## save the current order of columns
+  
+  # reoder columns to group conditions
+  
   switch(comp.type,
          OnevsOne = contrast <- 1,
          OnevsAll = contrast <- 2)
+  sTab.old <- sTab
+  conds <- factor(sTab$Condition, levels=unique(sTab$Condition))
+  sTab <- sTab[unlist(lapply(split(sTab, conds), function(x) {x['Sample.name']})),]
+  qData <- qData[,unlist(lapply(split(sTab.old, conds), function(x) {x['Sample.name']}))]
+  conds <- conds[order(conds)]
   
-  conds <- factor(sTab$Condition, , levels=unique(sTab$Condition))
   res.l <- NULL
   design.matrix <- make.design(sTab)
   if(!is.null(design.matrix)) {
