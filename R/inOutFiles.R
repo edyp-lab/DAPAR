@@ -181,7 +181,7 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
     # }else{rownames(Intensity) <- data[,indiceID]}
     
     ##building fData of MSnSet file
-    fd <- data.frame( data[,indFData],stringsAsFactors = F)
+    fd <- data.frame( data[,indFData],stringsAsFactors = FALSE)
     
     if (is.null(indiceID)) {
         rownames(fd) <- rep(paste(pep_prot_data, "_", 1:nrow(fd), sep=""))
@@ -193,7 +193,7 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
     
     colnames(fd) <- gsub(".", "_", colnames(data)[indFData], fixed=TRUE)
     
-     pd <- as.data.frame(metadata,stringsAsFactors = F)
+     pd <- as.data.frame(metadata,stringsAsFactors = FALSE)
     rownames(pd) <- gsub(".", "_", pd$Sample.name, fixed=TRUE)
     
     ##Integrity tests

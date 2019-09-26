@@ -152,8 +152,6 @@ diffAnaVolcanoplot_rCharts <- function(df,
                                        swap=FALSE){
     
   
-  print("In DAPAR::diffAnaVolcanoplot_rCharts")
-  print(str(df))
     xtitle <- paste("log2 ( mean(",conditions[2],") / mean(",conditions[1],") )",sep="")
     
     if (is.null(clickFunction)){
@@ -186,7 +184,6 @@ diffAnaVolcanoplot_rCharts <- function(df,
                              y = c(threshold_pVal,threshold_pVal,max(df$y)))
     
     title <- NULL
-    #title <- paste0(cond[1], '_vs_', cond[2])
     if (isTRUE(swap)){
       title <- paste0(conditions[2], '_vs_', conditions[1])
     } else {
