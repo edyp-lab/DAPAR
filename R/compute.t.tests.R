@@ -100,7 +100,7 @@ Cond.Nb<-length(levels(Conditions.f))
                 m2.name <- names(unlist(lapply(res.tmp,function(x)x$estimate[2])))[1]
                 logFC.tmp <- m1.tmp - m2.tmp
                 
-                if (grepl(levels(Conditions.f)[1], m2.name)){logFC.tmp <- -logFC.tmp}
+                if (grepl(levels(Conditions.f)[i], m2.name)){logFC.tmp <- -logFC.tmp}
                 
                 txt <- paste(levels(Conditions.f)[i],"_vs_",levels(Conditions.f)[j], sep="")
 
