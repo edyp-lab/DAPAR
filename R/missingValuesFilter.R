@@ -522,7 +522,7 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
 ##' mvFilterGetIndices(Exp1_R25_pept, "wholeMatrix", 2)
-mvFilterGetIndices <- function(obj,type, th)
+mvFilterGetIndices <- function(obj,type, th=NULL)
 {
 #Check parameters
 paramtype<-c("None", "EmptyLines", "wholeMatrix", "allCond", "atLeastOneCond") 
