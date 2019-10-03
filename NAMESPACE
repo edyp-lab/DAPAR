@@ -138,7 +138,7 @@ export(
 ,"getProcessingInfo"
 
 ,"pepa.test"
-,"groupttest"
+,"compute.group.t.tests"
 
 
 ,"group_GO"
