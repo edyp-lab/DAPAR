@@ -207,26 +207,7 @@ GraphPepProt <- function(mat){
 ##' data(Exp1_R25_pept) 
 ##' BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
 BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
-    
-    # data <- Biobase::exprs(obj.pep)
-    # PG <- Biobase::fData(obj.pep)[,protID]
-    # PG.l <- strsplit(as.character(PG), split=";", fixed=TRUE)
-    # 
-    # Un1 <- unlist(PG.l)
-    # X<- Matrix::sparseMatrix(i = rep(seq_along(PG.l), lengths(PG.l)),
-    #                  j=as.integer(factor(Un1, levels = unique(Un1))),
-    #                  x=1, 
-    #                  dimnames=list(rownames(data),as.character(unique(Un1))))
-    # 
-    # if (unique == TRUE){
-    #   ll <- which(rowSums(X)>1)
-    #   if (length(ll) > 0) {
-    #     X[ll,] <- 0
-    #   }
-    #      }
-    # 
-    # return(X)
-  
+   
   
   data <- Biobase::exprs(obj.pep)
   PG <- Biobase::fData(obj.pep)[,protID]
@@ -239,12 +220,21 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
     if (length(ll) > 0) {
       t[ll,] <- 0
     }
-    
   }
   
+  
+  ## Delete empty columns
+  # ll <- which(colSums(t)==0)
+  # if (length(ll) > 0){
+  #   X <- X[,-t]
+  # }
+  # 
   X <- Matrix::Matrix(t, sparse=T,
               dimnames = list(rownames(obj.pep), colnames(t))
   )
+  
+  
+  
   
   return(X)
 }

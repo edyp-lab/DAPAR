@@ -3,28 +3,28 @@
 
 
 ## Build design matrix X
-X <- as.matrix(BuildAdjacencyMatrix(obj, 'Protein_group_IDs', unique = FALSE))
-X.spec <- as.matrix(BuildAdjacencyMatrix(obj, 'Protein_group_IDs', unique = TRUE))
-
-y <- exprs(obj)
-y <- y[rownames(X), ]
-n1 <- n2 <- 3
-n <- n1+n2 # number of samples in c1 and c2
-
-## Keep track of proteins that are lost in aggregation step
-unsup.prot <- !(colnames(X) %in% colnames(X.spec))
-q <- nrow(X) # Number of peptides
-p <- ncol(X) # Number of proteins
-
-
-# Two ways to compute it (function groupttest below)
-peptide.spec.based.tmp <- apply(X.spec, 2, FUN=function(mask) t.test(x=as.vector(y[mask == 1, 1:n1]), y=as.vector(y[mask == 1, -(1:n1)]), var.equal=TRUE)$p.value)
-peptide.spec.based.tmp <- groupttest(X.spec,y)
-
-# then:
-peptide.spec.based.pv <- rep(1, ncol(X))
-peptide.spec.based.pv[!unsup.prot] <- peptide.spec.based.tmp
-
+# X <- as.matrix(BuildAdjacencyMatrix(obj, 'Protein_group_IDs', unique = FALSE))
+# X.spec <- as.matrix(BuildAdjacencyMatrix(obj, 'Protein_group_IDs', unique = TRUE))
+# 
+# y <- exprs(obj)
+# y <- y[rownames(X), ]
+# n1 <- n2 <- 3
+# n <- n1+n2 # number of samples in c1 and c2
+# 
+# ## Keep track of proteins that are lost in aggregation step
+# unsup.prot <- !(colnames(X) %in% colnames(X.spec))
+# q <- nrow(X) # Number of peptides
+# p <- ncol(X) # Number of proteins
+# 
+# 
+# # Two ways to compute it (function groupttest below)
+# peptide.spec.based.tmp <- apply(X.spec, 2, FUN=function(mask) t.test(x=as.vector(y[mask == 1, 1:n1]), y=as.vector(y[mask == 1, -(1:n1)]), var.equal=TRUE)$p.value)
+# peptide.spec.based.tmp <- groupttest(X.spec,y)
+# 
+# # then:
+# peptide.spec.based.pv <- rep(1, ncol(X))
+# peptide.spec.based.pv[!unsup.prot] <- peptide.spec.based.tmp
+# 
 
 
 
@@ -48,22 +48,38 @@ peptide.spec.based.pv[!unsup.prot] <- peptide.spec.based.tmp
 ##' X.spec <- BuildAdjacencyMatrix(obj, protID,  unique = TRUE)
 ##' qData <- Biobase::exprs(obj)
 ##' gttest <- groupttest(X.spec, qData)
-groupttest <- function(MatAdj, expr){
-  nProt <- dim(MatAdj)[2]
-  res <- rep(0,nProt)
+# groupttest <- function(MatAdj, expr){
+#   nProt <- dim(MatAdj)[2]
+#   res <- rep(0,nProt)
+#   
+#   for(i in 1:nProt){
+#     #print(i)
+#     index <- names(which(MatAdj[,i]==1))
+#     if(length(index)== 0){
+#       res[i] <- 1
+#     } else{
+#       peptidestotest <- expr[index,]
+#       if(length(index)== 1){
+#         res[i] <- t.test(x=peptidestotest[1:3], y=peptidestotest[-(1:3)], var.equal=TRUE)$p.value
+#       } else{
+#         res[i] <- t.test(x=peptidestotest[,1:3], y=peptidestotest[,-(1:3)], var.equal=TRUE)$p.value
+#       }
+#     }
+#   }
+#   return(res)
+# }  
+
+
+groupttestsw <- function(MatAdj, cond1, cond2){
+  res <- list()
   
-  for(i in 1:nProt){
-    print(i)
+  for(i in 1:dim(MatAdj)[2]){
     index <- names(which(MatAdj[,i]==1))
-    if(length(index)== 0){
-      res[i] <- 1
-    } else{
-      peptidestotest <- expr[index,]
-      if(length(index)== 1){
-        res[i] <- t.test(x=peptidestotest[1:3], y=peptidestotest[-(1:3)], var.equal=TRUE)$p.value
-      } else{
-        res[i] <- t.test(x=peptidestotest[,1:3], y=peptidestotest[,-(1:3)], var.equal=TRUE)$p.value
-      }
+    if(length(index)> 0){
+      res[[i]] <- t.test(x=cond1[index,], y=cond2[index,], var.equal=TRUE)
+    } else {
+      print(i)
+      res[[i]] <- NA
     }
   }
   return(res)
@@ -77,6 +93,7 @@ groupttest <- function(MatAdj, expr){
 ##' @param qData A matrix of quantitative data, without any missing values.
 ##' @param sTab xxxx
 ##' @param X.spec A matrix of quantitative data, without any missing values.
+##' @param logFC A vector (or list of vectors) xxxx
 ##' @param contrast Indicates if the test consists of the comparison of each 
 ##' biological condition versus 
 ##' each of the other ones (contrast=1; 
@@ -95,21 +112,16 @@ groupttest <- function(MatAdj, expr){
 ##' obj <- mvFilterFromIndices(obj, keepThat)
 ##' X.spec <- BuildAdjacencyMatrix(obj, protID,  unique = TRUE)
 ##' qData <- Biobase::exprs(obj)
-##' compute.group.t.tests <- groupttest(qData, sTab, X.spec)
-compute.group.t.tests <- function(qData,sTab, X.spec, contrast="OnevsOne", type="Student"){
-  
+##' gttest <- compute.group.t.tests(qData, sTab, X.spec)
+compute.group.t.tests <- function(qData,sTab, X.spec, logFC = NULL,contrast="OnevsOne", type="Student"){
   
   switch(type,
          Student=.type <- TRUE,
          Welch=.type <- FALSE)
   
-  
-  
-  res<-list()
+  res.tmp <- list()
   logFC <- list()
   P_Value <- list()
-  
-  nbComp <- NULL
   
   sTab.old <- sTab
   Conditions.f <- factor(sTab$Condition, levels=unique(sTab$Condition))
@@ -117,53 +129,44 @@ compute.group.t.tests <- function(qData,sTab, X.spec, contrast="OnevsOne", type=
   qData <- qData[,unlist(lapply(split(sTab.old, Conditions.f), function(x) {x['Sample.name']}))]
   Conditions <- sTab$Condition
   
-  Cond.Nb<-length(levels(Conditions.f))
-  
-  
+   
   if(contrast=="OnevsOne"){
-    nbComp <- Cond.Nb*(Cond.Nb-1)/2
-    
-    for(i in 1:(Cond.Nb-1)){
-      for (j in (i+1):Cond.Nb){
+    comb <- combn(levels(Conditions.f), 2)
+    for(i in 1:ncol(comb)){
+      c1Indice <- which(Conditions==comb[1,i])
+      c2Indice <- which(Conditions==comb[2,i])
+      res.tmp <- groupttestsw(X.spec,qData[,c1Indice], qData[,c2Indice] )
         
-        c1Indice <- which(Conditions==levels(Conditions.f)[i])
-        c2Indice <- which(Conditions==levels(Conditions.f)[j])
+      #compute logFC from the result of t.test function
+      p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))
+      m1.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[1])))
+      m2.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[2])))
+      m1.name <- names(unlist(lapply(res.tmp,function(x)x$estimate[1])))[1]
+      m2.name <- names(unlist(lapply(res.tmp,function(x)x$estimate[2])))[1]
+      logFC.tmp <- m1.tmp - m2.tmp
+      if (grepl(comb[1,i], m2.name)){logFC.tmp <- -logFC.tmp}
+      
         
-        res.tmp <- apply(qData[,c(c1Indice,c2Indice)], 1, 
-                         function(x) {
-                           t.test(x~Conditions[c(c1Indice,c2Indice)],  var.equal=.type)
-                         })
-        p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))
-        m1.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[1])))
-        m2.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[2])))
-        m1.name <- names(unlist(lapply(res.tmp,function(x)x$estimate[1])))[1]
-        m2.name <- names(unlist(lapply(res.tmp,function(x)x$estimate[2])))[1]
-        logFC.tmp <- m1.tmp - m2.tmp
-        if (grepl(levels(Conditions.f)[1], m2.name)){logFC.tmp <- -logFC.tmp}
+      txt <- paste(comb[1,i],"_vs_",comb[2,i], sep="")
         
-        txt <- paste(levels(Conditions.f)[i],"_vs_",levels(Conditions.f)[j], sep="")
-        
-        logFC[[paste(txt, "logFC", sep="_")]] <- logFC.tmp
-        P_Value[[paste(txt, "pval", sep="_")]] <- p.tmp
+      logFC[[paste(txt, "logFC", sep="_")]] <- logFC.tmp
+      P_Value[[paste(txt, "pval", sep="_")]] <- p.tmp
       }
-    }
   } ##end Contrast==1
   
   if(contrast=="OnevsAll"){
-    nbComp <- Cond.Nb
+    nbComp <- length(levels(Conditions.f))
     
     for(i in 1:nbComp){
       
-      c1 <- which(Conditions==levels(Conditions.f)[i])
+      c1Indice <- which(Conditions==levels(Conditions.f)[i])
+     # Cond.t.all <- c(1:length(Conditions))
+     # Cond.t.all[c1Indice] <- levels(Conditions.f)[i]
+     # Cond.t.all[-c1Indice] <- "all"
       
-      Cond.t.all<-c(1:length(Conditions))
-      Cond.t.all[c1]<-levels(Conditions.f)[i]
-      Cond.t.all[-c1]<-"all"
+      c1Indice <- which(Conditions==levels(Conditions.f)[i])
+      res.tmp <- groupttestsw(X.spec,qData[,c1Indice], qData[,-c1Indice] )
       
-      res.tmp <- apply(qData, 1, 
-                       function(x) {
-                         t.test(x~Cond.t.all, var.equal=.type)
-                       })
       
       p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))
       m1.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[1])))
