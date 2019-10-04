@@ -68,8 +68,8 @@ is.MV <- function(data){
   #MV=is.OfType(data, "MV")
   POV=is.OfType(data, "POV")
   MEC=is.OfType(data, "MEC")
-  
-  df <- POV | MEC
+  isNA = is.na(data)
+  df <- POV | MEC | isNA
   return (df)
 }
 
