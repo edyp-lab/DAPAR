@@ -240,9 +240,12 @@ impute.detQuant <- function(qData, values){
 ##' dat <- mvFilter(Exp1_R25_pept[1:1000], type="allCond", th = 1)
 ##' dat <- wrapper.impute.slsa(dat)
 wrapper.impute.slsa <- function(obj){
+    
+    
     # sort conditions to be compliant with impute.slsa
     conds <- factor(Biobase::pData(obj)$Condition, levels=unique(Biobase::pData(obj)$Condition))
     sample.names.old <- Biobase::pData(obj)$Sample.name
+    sTab <- Biobase::pData(obj)
     new.order <- unlist(lapply(split(sTab, conds), function(x) {x['Sample.name']}))
     qData <- Biobase::exprs(obj)[,new.order]
     
