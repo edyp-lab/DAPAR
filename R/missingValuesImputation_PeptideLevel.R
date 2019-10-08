@@ -89,15 +89,14 @@ wrapper.dapar.impute.mi <- function (obj, nb.iter = 3,
     }
     res = estim.mix(tab = tab, tab.imp = dat.slsa, conditions = conditions, 
                     x.step.mod = x.step.mod, 
-                    x.step.pi = x.step.pi, nb.rei = nb.rei, method = method, 
-                    gridsize = gridsize)
+                    x.step.pi = x.step.pi, nb.rei = nb.rei)
     
     
     if (progress.bar == TRUE) {
         cat(paste("\n 3/ Estimation of the probabilities each missing value is MCAR... \n  "))
     }
     born = estim.bound(tab = tab, conditions = conditions, q = q)
-    proba = prob.mcar.tab(born$tab.lower, born$tab.upper, res)
+    proba = prob.mcar.tab(born$tab.upper, res)
     
     
     if (progress.bar == TRUE) {
