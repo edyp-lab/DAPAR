@@ -881,7 +881,10 @@ legend("topright"
 ##' CVDistD_HC(Biobase::exprs(Exp1_R25_pept), conds)
 CVDistD_HC <- function(qData, conds=NULL, palette = NULL){
     
-    if (is.null(conds)) {return(NULL)}
+    if (is.null(conds)) {
+      warning("The vector of conditions is empty. The plot cannot be drawn.")
+      return(NULL)}
+  
   conditions <- unique(conds)
   n <- length(conditions)
   
