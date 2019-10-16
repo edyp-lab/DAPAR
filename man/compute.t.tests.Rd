@@ -4,8 +4,7 @@
 \alias{compute.t.tests}
 \title{xxxxxx}
 \usage{
-\method{compute}{t.tests}(qData, sTab, contrast = "OnevsOne",
-  type = "Student")
+compute.t.tests(qData, sTab, contrast = "OnevsOne", type = "Student")
 }
 \arguments{
 \item{qData}{A matrix of quantitative data, without any missing values.}

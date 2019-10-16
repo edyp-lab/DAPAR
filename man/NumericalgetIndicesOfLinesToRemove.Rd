@@ -26,7 +26,7 @@ prefix string
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-NumericalgetIndicesOfLinesToRemove(Exp1_R25_pept, "A.Count", value="6", operator='==')
+NumericalgetIndicesOfLinesToRemove(Exp1_R25_pept, "A_Count", value="6", operator='==')
 }
 \author{
 Samuel Wieczorek

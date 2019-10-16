@@ -26,7 +26,7 @@ This function removes lines in the dataset based on numerical conditions.
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-NumericalFiltering(Exp1_R25_pept, 'A.Count', '6', '==')
+NumericalFiltering(Exp1_R25_pept, 'A_Count', '6', '==')
 }
 \author{
 Samuel Wieczorek

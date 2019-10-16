@@ -85,7 +85,7 @@ wrapper.impute.KNN <- function(obj, K){
     
     for (cond in 1:nbCond){
         ind <- which(Biobase::pData(obj)$Condition == conditions[cond])
-        resKNN <- impute.knn(Biobase::exprs(obj)[,ind] ,k = K, rowmax = 0.99, colmax = 0.99, maxp = 1500, rng.seed = sample(1:1000,1))
+        resKNN <- impute::impute.knn(Biobase::exprs(obj)[,ind] ,k = K, rowmax = 0.99, colmax = 0.99, maxp = 1500, rng.seed = sample(1:1000,1))
         Biobase::exprs(obj)[,ind] <- resKNN[[1]]
     }
     

@@ -23,7 +23,7 @@ This function removes lines in the dataset based on a prefix string.
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-removeLines(Exp1_R25_pept, "Potential.contaminant")
+removeLines(Exp1_R25_pept, "Potential_contaminant")
 removeLines(Exp1_R25_pept, "Reverse")
 }
 \author{
