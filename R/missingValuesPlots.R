@@ -589,6 +589,11 @@ conds <- Biobase::pData(obj)[,"Condition"]
 originValues <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
 indices <- which(apply(is.OfType(originValues, "MEC"),1,sum) >0)
 
+if (length(indices)==0){
+  warning("The dataset contains no Missing value on Entire Condition. So this plot is not available.")
+  return()
+}
+
 mvImage(qData[indices,], conds)
 }
 
