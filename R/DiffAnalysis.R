@@ -236,19 +236,43 @@ diffAnaComputeFDR <- function(logFC, pval,threshold_PVal=0, threshold_LogFC = 0,
 
 
 
-
+##' This method returns a list of the statistical tests performed with DAPAR and recorded
+##' in an object of class \code{MSnSet}.
+##' 
+##' @title Returns list that contains a list of the statistical tests performed with DAPAR and recorded
+##' in an object of class \code{MSnSet}. 
+##' @param obj An object of class \code{MSnSet}.
+##' @return A list of two slots: logFC and P_Value
+##' @author Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' obj <- Exp1_R25_pept
+##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+##' obj <- mvFilterFromIndices(obj, keepThat)
+##' qData <- Biobase::exprs(obj)
+##' sTab <- Biobase::pData(obj)
+##' allComp <- limmaCompleteTest(qData,sTab)
+##' data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
+##' obj <- diffAnaSave(obj, allComp, data)
+##' ll <- Get_AllComparisons(obj)
 Get_AllComparisons <- function(obj){
   
+  logFC_KEY <- "_logFC"
+  pvalue_KEY <-"_pval"
+    
   ####### SAVE ALL THEPAIRWISE COMPARISON RESULTS
   res_AllPairwiseComparisons <- NULL
   
   #If there are already pVal values, then do no compute them 
-  if (length(grep("_logFC", names(Biobase::fData(obj) ))) > 0){
-    res_AllPairwiseComparisons <- list(logFC = Biobase::fData(obj)[,grep("_logFC",names(Biobase::fData(obj) ))],
-                            P_Value = Biobase::fData(obj)[,grep("_pval",names(Biobase::fData(obj) ))])
+  if (length(grep(logFC_KEY, names(Biobase::fData(obj) ))) > 0){
+    res_AllPairwiseComparisons <- list(logFC = as.data.frame(Biobase::fData(obj)[,grep(logFC_KEY,names(Biobase::fData(obj) ))]),
+                            P_Value = as.data.frame(Biobase::fData(obj)[,grep(pvalue_KEY,names(Biobase::fData(obj) ))]))
 
   }
-   
+  colnames(res_AllPairwiseComparisons$logFC) <- names(Biobase::fData(obj))[grep(logFC_KEY,names(Biobase::fData(obj) ))]
+  colnames(res_AllPairwiseComparisons$P_Value) <- names(Biobase::fData(obj))[grep(pvalue_KEY,names(Biobase::fData(obj) ))]
+  
   return(res_AllPairwiseComparisons)
 }
 
