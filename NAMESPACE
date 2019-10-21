@@ -124,7 +124,7 @@ export(
 ,"check.design"
 ,"check.conditions"
 
-
+,"Get_AllComparisons"
 
 
 ,"wrapper.t_test_Complete"
