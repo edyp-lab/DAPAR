@@ -151,7 +151,6 @@ diffAnaVolcanoplot_rCharts <- function(df,
                                        palette=NULL,
                                        swap = FALSE){
     
- 
   
     xtitle <- paste("log2 ( mean(",conditions[2],") / mean(",conditions[1],") )",sep="")
     
@@ -186,7 +185,7 @@ diffAnaVolcanoplot_rCharts <- function(df,
     
     title <- NULL
     #title <- paste0(cond[1], '_vs_', cond[2])
-    if (isTRUE(swap)){
+    if (swap == TRUE){
       title <- paste0(conditions[2], '_vs_', conditions[1])
     } else {
       title <- paste0(conditions[1], '_vs_', conditions[2])

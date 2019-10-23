@@ -266,12 +266,10 @@ Get_AllComparisons <- function(obj){
   
   #If there are already pVal values, then do no compute them 
   if (length(grep(logFC_KEY, names(Biobase::fData(obj) ))) > 0){
-    res_AllPairwiseComparisons <- list(logFC = as.data.frame(Biobase::fData(obj)[,grep(logFC_KEY,names(Biobase::fData(obj) ))]),
-                            P_Value = as.data.frame(Biobase::fData(obj)[,grep(pvalue_KEY,names(Biobase::fData(obj) ))]))
+    res_AllPairwiseComparisons <- list(logFC = dplyr::select(Biobase::fData(obj),grep(logFC_KEY,names(Biobase::fData(obj) ))),
+                                      P_Value = dplyr::select(Biobase::fData(obj),grep(pvalue_KEY,names(Biobase::fData(obj) ))))
 
   }
-  colnames(res_AllPairwiseComparisons$logFC) <- names(Biobase::fData(obj))[grep(logFC_KEY,names(Biobase::fData(obj) ))]
-  colnames(res_AllPairwiseComparisons$P_Value) <- names(Biobase::fData(obj))[grep(pvalue_KEY,names(Biobase::fData(obj) ))]
   
   return(res_AllPairwiseComparisons)
 }

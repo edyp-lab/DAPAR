@@ -75,7 +75,7 @@ reIntroduceMEC <- function(obj, MECIndex){
 ##' data(Exp1_R25_pept)
 ##' wrapper.impute.KNN(Exp1_R25_pept[1:1000], 3)
 wrapper.impute.KNN <- function(obj, K){
-    
+    #require(impute)
     if (is.null(obj)){return(NULL)}
     data <- Biobase::exprs(obj)
     
