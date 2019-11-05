@@ -37,7 +37,7 @@ return(pourcentage)
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' getNumberOf(Exp1_R25_pept, "Potential_contaminant", "+")
+##' getNumberOf(Exp1_R25_pept, "Potential.contaminant", "+")
 getNumberOf <- function(obj, name=NULL, prefix=NULL){
 if (is.null(name) || is.null(prefix) || (name=="") || (prefix=="")){
     return(0)}
@@ -66,7 +66,7 @@ return(count)
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' NumericalFiltering(Exp1_R25_pept, 'A_Count', '6', '==')
+##' NumericalFiltering(Exp1_R25_pept, 'A_Count', '6', '>=')
 NumericalFiltering <- function(obj, name=NULL, value=NULL, operator=NULL){
   if ((is.null(name) || (name == ""))) {return(NULL)}
   
@@ -105,7 +105,7 @@ NumericalFiltering <- function(obj, name=NULL, value=NULL, operator=NULL){
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' NumericalgetIndicesOfLinesToRemove(Exp1_R25_pept, "A_Count", value="6", operator='==')
+##' NumericalgetIndicesOfLinesToRemove(Exp1_R25_pept, "A.Count", value="6", operator='==')
 NumericalgetIndicesOfLinesToRemove <- function(obj, name=NULL, value=NULL, operator=NULL)
 {
   if ((value == "") || is.null(value)|| (operator=="") || is.null(operator)) {
@@ -180,7 +180,7 @@ proportionConRev_HC <- function(nBoth = 0, nCont=0, nRev=0, lDataset=0){
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' removeLines(Exp1_R25_pept, "Potential_contaminant")
+##' removeLines(Exp1_R25_pept, "Potential.contaminant")
 ##' removeLines(Exp1_R25_pept, "Reverse")
 removeLines <- function(obj, idLine2Delete=NULL, prefix=NULL){
 if ((prefix == "") || is.null(prefix)) {
@@ -216,7 +216,7 @@ return(obj)
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' StringBasedFiltering(Exp1_R25_pept, 'Potential_contaminant', '+', 'Reverse', '+')
+##' StringBasedFiltering(Exp1_R25_pept, 'Potential.contaminant', '+', 'Reverse', '+')
 StringBasedFiltering <- function(obj, 
                                  idCont2Delete=NULL, prefix_Cont=NULL, 
                                  idRev2Delete=NULL, prefix_Rev=NULL){
@@ -311,7 +311,7 @@ StringBasedFiltering <- function(obj,
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' StringBasedFiltering2(Exp1_R25_pept, 'Potential_contaminant', '+')
+##' StringBasedFiltering2(Exp1_R25_pept, 'Potential.contaminant', '+')
 StringBasedFiltering2 <- function(obj, cname=NULL, tag=NULL){
   
   deleted <- NULL
@@ -359,7 +359,7 @@ StringBasedFiltering2 <- function(obj, cname=NULL, tag=NULL){
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
-##' getIndicesOfLinesToRemove(Exp1_R25_pept, "Potential_contaminant", prefix="+")
+##' getIndicesOfLinesToRemove(Exp1_R25_pept, "Potential.contaminant", prefix="+")
 getIndicesOfLinesToRemove <- function(obj, idLine2Delete=NULL, prefix=NULL)
 {
 if ((prefix == "") || is.null(prefix)) {
@@ -541,7 +541,7 @@ keepThat <- NULL
 if (is.null(obj@experimentData@other$OriginOfValues)){
     data <- Biobase::exprs(obj)
 } else {
-    data <- dplyr::select(fData(obj),obj@experimentData@other$OriginOfValues)
+  data <- dplyr::select(fData(obj),obj@experimentData@other$OriginOfValues)
 }
 
 if (type == "None"){

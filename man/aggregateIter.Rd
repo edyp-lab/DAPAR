@@ -27,7 +27,7 @@ Method to xxxxx
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-protID <- "Protein_group_IDs"
+protID <- "Protein.group.IDs"
 X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
 aggregateIter(Exp1_R25_pept[1:1000],X=X)
 }

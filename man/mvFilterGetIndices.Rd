@@ -4,7 +4,7 @@
 \alias{mvFilterGetIndices}
 \title{Filter lines in the matrix of intensities w.r.t. some criteria}
 \usage{
-mvFilterGetIndices(obj, type, th = NULL)
+mvFilterGetIndices(obj, type, th)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet} containing

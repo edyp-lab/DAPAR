@@ -23,7 +23,7 @@ intensities of their peptides.
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-protID <- "Protein_group_IDs"
+protID <- "Protein.group.IDs"
 obj.pep <- Exp1_R25_pept[1:1000]
 X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 DAPAR::aggregateSum(obj.pep, X)

@@ -17,10 +17,10 @@
 #     matShared[1,1] <-  matShared[2:3,2]<-  matShared[4,3] <-   matShared[5,4] <-  matShared[6,5] <-  matShared[7,6] <-  matShared[8,7] <-  matShared[9,8] <-  matShared[10,9] <-matShared[10,10] <-  1
 #     
 #     computedMatUnique  <- BuildAdjacencyMatrix(obj, 
-#                                                "Protein_group_IDs", 
+#                                                "Protein.group.IDs", 
 #                                                unique=TRUE)
 #     computedMatShared  <- BuildAdjacencyMatrix(obj, 
-#                                                "Protein_group_IDs", 
+#                                                "Protein.group.IDs", 
 #                                                unique=FALSE)
 #     colnames(computedMatShared) <- NULL
 #     
@@ -40,7 +40,7 @@
 #     data(Exp1_R2_pept)
 #     obj <- Exp1_R2_pept[1:10]
 #     
-#     protID <- "Protein_group_IDs"
+#     protID <- "Protein.group.IDs"
 #     
 #     computedMShared <- BuildAdjacencyMatrix(obj, protID, unique=FALSE)
 #     sumShared <- matrix(c( 25.278, 24.996, 24.487, 25.502, 25.025, 24.691,
@@ -84,7 +84,7 @@
 #     
 #     data(Exp1_R2_pept)
 #     obj <- Exp1_R2_pept[1:10]
-#     protID <- "Protein_group_IDs"
+#     protID <- "Protein.group.IDs"
 #     
 #     computedMUnique <- BuildAdjacencyMatrix(obj, protID, unique=TRUE)
 #     sumUnique <- matrix(c(25.278,24.996,24.487,25.502,25.025,24.691,
@@ -124,7 +124,7 @@
 #     
 #     data(Exp1_R2_pept)
 #     obj <- Exp1_R2_pept[1:10]
-#     protID <- "Protein_group_IDs"
+#     protID <- "Protein.group.IDs"
 #     
 #     computedMUnique <- BuildAdjacencyMatrix(obj, protID, unique=TRUE)
 #     meanUnique <- matrix(c(25.278,24.996,24.487,25.502,25.025,24.691,
@@ -164,7 +164,7 @@
 #     
 #     data(Exp1_R2_pept)
 #     obj <- Exp1_R2_pept[1:10]
-#     protID <- "Protein_group_IDs"
+#     protID <- "Protein.group.IDs"
 #     
 #     computedMShared <- BuildAdjacencyMatrix(obj, protID, unique=FALSE)
 #     meanShared <- 
@@ -210,7 +210,7 @@
 #     data(Exp1_R2_pept)
 #     obj <- Exp1_R2_pept[1:10]
 #     n <- 3
-#     protID <- "Protein_group_IDs"
+#     protID <- "Protein.group.IDs"
 #     
 #     computedMShared <- BuildAdjacencyMatrix(obj, protID, unique=FALSE)
 #     topnShared <- matrix(c( 25.278, 24.996, 24.487, 25.502, 25.025, 24.691,
@@ -259,7 +259,7 @@
 #     data(Exp1_R2_pept)
 #     obj <- Exp1_R2_pept[1:10]
 #     n <- 3
-#     protID <- "Protein_group_IDs"
+#     protID <- "Protein.group.IDs"
 #     
 #     computedMUnique <- BuildAdjacencyMatrix(obj, protID, unique=TRUE)
 #     topnUnique <- matrix(c( 25.278, 24.996, 24.487, 25.502, 25.025, 24.691,

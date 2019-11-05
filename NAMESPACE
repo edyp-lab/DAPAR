@@ -124,7 +124,7 @@ export(
 ,"check.design"
 ,"check.conditions"
 
-,"Get_AllComparisons"
+
 
 
 ,"wrapper.t_test_Complete"
@@ -138,7 +138,7 @@ export(
 ,"getProcessingInfo"
 
 ,"pepa.test"
-
+,"compute.group.t.tests"
 
 
 ,"group_GO"

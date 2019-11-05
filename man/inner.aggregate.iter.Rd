@@ -28,7 +28,7 @@ Method to xxxxx
 Samuel Wieczorek
 require(DAPARdata)
 data(Exp1_R25_pept)
-protID <- "Protein_group_IDs"
+protID <- "Protein.group.IDs"
 obj.pep <- Exp1_R25_pept[1:1000]
 X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 DAPAR::inner.aggregate.iter(exprs(obj.pep), X)

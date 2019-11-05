@@ -158,7 +158,7 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
                          versions=NULL){
     
     if (!is.data.frame(file)){ #the variable is a path to a text file
-        data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
+        data <- read.table(file, header=TRUE, sep="\t", stringsAsFactors = FALSE)
     } else {data <- file}
     
     ## replace all blanks by a dot

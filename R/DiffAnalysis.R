@@ -17,16 +17,11 @@
 ##' qData <- Biobase::exprs(obj)
 ##' sTab <- Biobase::pData(obj)
 ##' res <- limmaCompleteTest(qData,sTab)
-##' hc_logFC_DensityPlot(res$logFC, threshold_LogFC=1)
+##' hc_logFC_DensityPlot(res$logFC)
 hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0, palette=NULL){
-    print("IN function !!!!!")
-  print(str(df_logFC))
-  print(threshold_LogFC)
-    if (is.null(df_logFC) || threshold_LogFC < 0){
-      hc <- NULL
-      return(NULL)
-      }
- 
+    
+    if (is.null(df_logFC)){return()}
+    if (threshold_LogFC < 0){return()}
   
   
   if (is.null(palette)){
@@ -42,7 +37,7 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0, palette=NULL){
   nInf <- length(which(df_logFC <= -threshold_LogFC))
   nSup <- length(which(df_logFC >= threshold_LogFC))
   nInside <- length(which(abs(df_logFC) < threshold_LogFC))
-  hc <- NULL
+  
      hc <-  highchart() %>% 
          hc_title(text = "log(FC) repartition") %>% 
          my_hc_chart(chartType = "spline", zoomType="x") %>%
@@ -50,8 +45,7 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0, palette=NULL){
        hc_colors(palette) %>%
          hc_xAxis(title = list(text = "log(FC)"),
                   plotBands = list(list(from= -threshold_LogFC, to = threshold_LogFC, color = "lightgrey")),
-                  plotLines=list(list(color= "grey" , width = 2, value = 0, zIndex = 5))
-                  )%>%
+                  plotLines=list(list(color= "grey" , width = 2, value = 0, zIndex = 5)))%>%
         hc_yAxis(title = list(text="Density")) %>%
          hc_tooltip(headerFormat= '',
                     pointFormat = "<b> {series.name} </b>: {point.y} ",
@@ -88,8 +82,8 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0, palette=NULL){
                             name=colnames(df_logFC)[i])
     }
      
-     ## add annotations
-     if(threshold_LogFC > 0) {
+     
+     if(threshold_LogFC != 0) {
       hc <- hc %>% hc_add_annotation(
        labelOptions = list(
          shape='connector',
@@ -236,46 +230,6 @@ diffAnaComputeFDR <- function(logFC, pval,threshold_PVal=0, threshold_LogFC = 0,
 
 
 
-##' This method returns a list of the statistical tests performed with DAPAR and recorded
-##' in an object of class \code{MSnSet}.
-##' 
-##' @title Returns list that contains a list of the statistical tests performed with DAPAR and recorded
-##' in an object of class \code{MSnSet}. 
-##' @param obj An object of class \code{MSnSet}.
-##' @return A list of two slots: logFC and P_Value
-##' @author Samuel Wieczorek
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' obj <- Exp1_R25_pept
-##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
-##' obj <- mvFilterFromIndices(obj, keepThat)
-##' qData <- Biobase::exprs(obj)
-##' sTab <- Biobase::pData(obj)
-##' allComp <- limmaCompleteTest(qData,sTab)
-##' data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
-##' obj <- diffAnaSave(obj, allComp, data)
-##' ll <- Get_AllComparisons(obj)
-Get_AllComparisons <- function(obj){
-  
-  logFC_KEY <- "_logFC"
-  pvalue_KEY <-"_pval"
-    
-  ####### SAVE ALL THEPAIRWISE COMPARISON RESULTS
-  res_AllPairwiseComparisons <- NULL
-  
-  #If there are already pVal values, then do no compute them 
-  if (length(grep(logFC_KEY, names(Biobase::fData(obj) ))) > 0){
-    res_AllPairwiseComparisons <- list(logFC = dplyr::select(Biobase::fData(obj),grep(logFC_KEY,names(Biobase::fData(obj) ))),
-                                      P_Value = dplyr::select(Biobase::fData(obj),grep(pvalue_KEY,names(Biobase::fData(obj) ))))
-
-  }
-  
-  return(res_AllPairwiseComparisons)
-}
-
-
-
 
 ##' This method returns a class \code{MSnSet} object with the results
 ##' of differential analysis.
@@ -303,7 +257,7 @@ Get_AllComparisons <- function(obj){
 ##' diffAnaSave(obj, allComp, data)
 diffAnaSave <- function (obj, allComp, data=NULL,th_pval=0,th_logFC=0){
     if (is.null(allComp)){
-        warning("The analysis has not been completed. Maybe there 
+        warning("The differential analysis has not been completed. Maybe there 
             are some missing values in the dataset. If so, please impute before
             running differential analysis")
         return(NULL)}

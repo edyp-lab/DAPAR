@@ -75,7 +75,7 @@ reIntroduceMEC <- function(obj, MECIndex){
 ##' data(Exp1_R25_pept)
 ##' wrapper.impute.KNN(Exp1_R25_pept[1:1000], 3)
 wrapper.impute.KNN <- function(obj, K){
-    #require(impute)
+    
     if (is.null(obj)){return(NULL)}
     data <- Biobase::exprs(obj)
     
@@ -85,7 +85,7 @@ wrapper.impute.KNN <- function(obj, K){
     
     for (cond in 1:nbCond){
         ind <- which(Biobase::pData(obj)$Condition == conditions[cond])
-        resKNN <- impute::impute.knn(Biobase::exprs(obj)[,ind] ,k = K, rowmax = 0.99, colmax = 0.99, maxp = 1500, rng.seed = sample(1:1000,1))
+        resKNN <- impute.knn(Biobase::exprs(obj)[,ind] ,k = K, rowmax = 0.99, colmax = 0.99, maxp = 1500, rng.seed = sample(1:1000,1))
         Biobase::exprs(obj)[,ind] <- resKNN[[1]]
     }
     
@@ -240,8 +240,6 @@ impute.detQuant <- function(qData, values){
 ##' dat <- mvFilter(Exp1_R25_pept[1:1000], type="allCond", th = 1)
 ##' dat <- wrapper.impute.slsa(dat)
 wrapper.impute.slsa <- function(obj){
-    
-    
     # sort conditions to be compliant with impute.slsa
     conds <- factor(Biobase::pData(obj)$Condition, levels=unique(Biobase::pData(obj)$Condition))
     sample.names.old <- Biobase::pData(obj)$Sample.name
@@ -250,7 +248,6 @@ wrapper.impute.slsa <- function(obj){
     qData <- Biobase::exprs(obj)[,new.order]
     
     res <- impute.slsa(qData, conditions=conds, nknn=15, selec="all", weight=1,ind.comp=1)
-    
     #restore old order
     res <- res[,sample.names.old]
     
