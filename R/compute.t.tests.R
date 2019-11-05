@@ -57,11 +57,9 @@ wrapper.t_test_Complete <- function(obj,...){
 compute.t.tests <- function(qData,sTab, contrast="OnevsOne", type="Student"){
 
     
-    switch(type,
-           Student=.type <- TRUE,
-           Welch=.type <- FALSE)
-    
-    
+switch(type,
+       Student=.type <- TRUE,
+       Welch=.type <- FALSE)
     
 res<-list()
 logFC <- list()
