@@ -543,7 +543,7 @@ mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto",
     
     h1 <-  highchart() %>%
          my_hc_chart(chartType = "column") %>%
-         hc_title(text = "#[non-NA values] by replicate") %>%
+         hc_title(text = "#NA by replicate") %>%
         hc_add_series(df,type="column", colorByPoint = TRUE) %>%
       hc_colors(palette) %>%
         hc_plotOptions( column = list(stacking = "normal"),

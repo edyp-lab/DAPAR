@@ -195,6 +195,7 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
     
      pd <- as.data.frame(metadata,stringsAsFactors = FALSE)
     rownames(pd) <- gsub(".", "_", pd$Sample.name, fixed=TRUE)
+    pd$Sample.name <- gsub(".", "_", pd$Sample.name, fixed=TRUE)
     
     ##Integrity tests
     if(identical(rownames(Intensity), rownames(fd))==FALSE)
