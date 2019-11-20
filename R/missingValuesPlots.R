@@ -38,7 +38,12 @@ mvPerLinesHisto(qData, samplesData, indLegend, showValues)
 ##' data(Exp1_R25_pept)
 ##' wrapper.mvPerLinesHisto(Exp1_R25_pept)
 wrapper.mvPerLinesHisto_HC <- function(obj, indLegend="auto", showValues=FALSE){
-    qData <- Biobase::exprs(obj)
+    if (is.null(obj)){
+      warning("The dataset in NULL. Cannot continue.")
+      return(NULL)
+      }
+  
+  qData <- Biobase::exprs(obj)
     samplesData <- Biobase::pData(obj)
     hc <- mvPerLinesHisto_HC(qData, samplesData, indLegend, showValues)
     return(hc)
@@ -223,7 +228,11 @@ mvPerLinesHistoPerCondition(qData, samplesData, indLegend, showValues)
 ##' wrapper.mvPerLinesHistoPerCondition_HC(Exp1_R25_pept)
 wrapper.mvPerLinesHistoPerCondition_HC <- function(obj, indLegend="auto", 
                                                 showValues=FALSE, ...){
-    qData <- Biobase::exprs(obj)
+    if (is.null(obj)){
+      warning("The dataset in NULL. Cannot continue.")
+      return(NULL)
+      }
+  qData <- Biobase::exprs(obj)
     samplesData <- Biobase::pData(obj)
     mvPerLinesHistoPerCondition_HC(qData, samplesData, indLegend, showValues, ...)
 }
@@ -420,6 +429,12 @@ mvHisto(qData, samplesData, conds, indLegend, showValues)
 ##' data(Exp1_R25_pept)
 ##' wrapper.mvHisto_HC(Exp1_R25_pept, showValues=TRUE)
 wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
+    if (is.null(obj)){
+      warning("The dataset in NULL. Cannot continue.")
+      return(NULL)
+      warning("The dataset in NULL. Cannot continue.")
+    }
+  
     qData <- Biobase::exprs(obj)
     samplesData <- Biobase::pData(obj)
     conds <- samplesData[,"Condition"]
