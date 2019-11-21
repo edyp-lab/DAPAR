@@ -21,7 +21,7 @@ ViolinPlot for quantitative proteomics data
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 library(vioplot)
 legend <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 violinPlotD(Exp1_R25_pept, legend=legend)

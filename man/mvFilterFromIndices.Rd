@@ -37,7 +37,7 @@ at least \code{th} values, and for at least one condition, are kept.
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 mvFilterFromIndices(Exp1_R25_pept, c(1:10))
 }
 \author{

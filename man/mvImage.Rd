@@ -24,7 +24,7 @@ number of missing values. A white square is plotted for missing values.
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 qData <- Biobase::exprs(Exp1_R25_pept)
 conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 mvImage(qData, conds)

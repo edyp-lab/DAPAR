@@ -21,7 +21,7 @@ Boxplot for quantitative proteomics data using the library \code{highcharter}
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 legend <- Biobase::pData(Exp1_R25_pept)[,"Sample.name"]
 boxPlotD_HC(Exp1_R25_pept, legend)
 }

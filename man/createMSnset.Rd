@@ -4,10 +4,19 @@
 \alias{createMSnset}
 \title{Creates an object of class \code{MSnSet} from text file}
 \usage{
-createMSnset(file, metadata = NULL, indExpData, indFData,
-  indiceID = NULL, indexForOriginOfValue = NULL, logData = FALSE,
-  replaceZeros = FALSE, pep_prot_data = NULL, proteinId = NULL,
-  versions = NULL)
+createMSnset(
+  file,
+  metadata = NULL,
+  indExpData,
+  indFData,
+  indiceID = NULL,
+  indexForOriginOfValue = NULL,
+  logData = FALSE,
+  replaceZeros = FALSE,
+  pep_prot_data = NULL,
+  proteinId = NULL,
+  versions = NULL
+)
 }
 \arguments{
 \item{file}{The name of a tab-separated file that contains the data.}

@@ -4,8 +4,14 @@
 \alias{diffAnaVolcanoplot}
 \title{Volcanoplot of the differential analysis}
 \usage{
-diffAnaVolcanoplot(logFC = NULL, pVal = NULL, threshold_pVal = 1e-60,
-  threshold_logFC = 0, conditions = NULL, colors = NULL)
+diffAnaVolcanoplot(
+  logFC = NULL,
+  pVal = NULL,
+  threshold_pVal = 1e-60,
+  threshold_logFC = 0,
+  conditions = NULL,
+  colors = NULL
+)
 }
 \arguments{
 \item{logFC}{A vector of the log(fold change) values of the differential
@@ -38,7 +44,7 @@ non differential data.
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 obj <- Exp1_R25_pept[1:1000]
 keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 obj <- mvFilterFromIndices(obj, keepThat)

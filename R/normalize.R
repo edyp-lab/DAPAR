@@ -32,8 +32,7 @@
 ##' data in the \code{exprs()} tab has been normalized.
 ##' @author Samuel Wieczorek, Thomas Burger, Helene Borges
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.normalizeD(Exp1_R25_pept[1:1000], "QuantileCentering", "within conditions")
 wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0.15, span = 0.7){
   

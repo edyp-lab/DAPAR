@@ -19,7 +19,7 @@ Sets the OriginOfValues dataframe in the fData table
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 addOriginOfValue(Exp1_R25_pept)
 }
 \author{

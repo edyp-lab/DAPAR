@@ -17,7 +17,7 @@ Jitter plot of CC
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept) 
+utils::data(Exp1_R25_pept) 
 X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
 ll <- get.pep.prot.cc(X)
 plotJitter(ll)

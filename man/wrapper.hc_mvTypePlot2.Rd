@@ -21,7 +21,7 @@ of class \code{MSnSet}).
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 wrapper.hc_mvTypePlot2(Exp1_R25_pept)
 }
 \author{

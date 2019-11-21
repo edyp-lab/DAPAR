@@ -20,7 +20,7 @@ objects of class \code{MSnSet} and imputes missing values with a fixed value.
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 wrapper.impute.fixedValue(Exp1_R25_pept[1:1000], 0.001)
 }
 \author{

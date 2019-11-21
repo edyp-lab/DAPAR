@@ -6,8 +6,7 @@
 quantitative data in the \code{exprs()} table of an object of
 class \code{MSnSet}}
 \usage{
-heatmapD(qData, distance = "euclidean", cluster = "complete",
-  dendro = FALSE)
+heatmapD(qData, distance = "euclidean", cluster = "complete", dendro = FALSE)
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
@@ -29,7 +28,7 @@ Heatmap of the quantitative proteomic data of a \code{MSnSet} object
 \examples{
 \dontrun{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
 qData <- Biobase::exprs(obj)
 heatmapD(qData)

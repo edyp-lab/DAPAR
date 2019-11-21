@@ -19,7 +19,7 @@ Similar to the function \code{is.na} but focused on the equality with the paramt
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 obj <- Exp1_R25_pept
 data <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
 is.OfType(data, "MEC")

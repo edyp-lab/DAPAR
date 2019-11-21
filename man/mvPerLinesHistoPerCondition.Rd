@@ -4,8 +4,13 @@
 \alias{mvPerLinesHistoPerCondition}
 \title{Bar plot of missing values per lines and per condition}
 \usage{
-mvPerLinesHistoPerCondition(qData, samplesData, indLegend = "auto",
-  showValues = FALSE, palette = NULL)
+mvPerLinesHistoPerCondition(
+  qData,
+  samplesData,
+  indLegend = "auto",
+  showValues = FALSE,
+  palette = NULL
+)
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
@@ -29,7 +34,7 @@ number of missing values (NA) per lines (ie proteins) and per conditions.
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 qData <- Biobase::exprs(Exp1_R25_pept)
 samplesData <- Biobase::pData(Exp1_R25_pept)
 mvPerLinesHistoPerCondition(qData, samplesData)

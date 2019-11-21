@@ -4,8 +4,7 @@
 \alias{wrapper.impute.pa2}
 \title{Missing values imputation from a \code{MSnSet} object}
 \usage{
-wrapper.impute.pa2(obj, q.min = 0, q.norm = 3, eps = 0,
-  distribution = "unif")
+wrapper.impute.pa2(obj, q.min = 0, q.norm = 3, eps = 0, distribution = "unif")
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
@@ -35,7 +34,7 @@ This method is a wrapper to the function \code{impute.pa} from the package
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 wrapper.impute.pa2(Exp1_R25_pept[1:1000], distribution="beta")
 }
 \author{

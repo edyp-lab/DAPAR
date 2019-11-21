@@ -21,7 +21,7 @@ Compute the PCA
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
  obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
 res.pca <- wrapper.pca(obj)
 }

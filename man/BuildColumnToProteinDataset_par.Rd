@@ -5,8 +5,7 @@
 \title{creates a column for the protein dataset after agregation by
  using the previous peptide dataset.}
 \usage{
-BuildColumnToProteinDataset_par(peptideData, matAdj, columnName,
-  proteinNames)
+BuildColumnToProteinDataset_par(peptideData, matAdj, columnName, proteinNames)
 }
 \arguments{
 \item{peptideData}{A data.frame of meta data of peptides. It is the fData 
@@ -30,7 +29,7 @@ by using the previous peptide dataset. It is a parallel version of the function
 \examples{
 \dontrun{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 protID <- "Protein_group_IDs"
 obj.pep <- Exp1_R25_pept[1:1000]
 M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)

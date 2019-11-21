@@ -11,8 +11,7 @@
 ##' @return A histogram
 ##' @author Alexia Dorffer
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.mvPerLinesHisto(Exp1_R25_pept)
 wrapper.mvPerLinesHisto <- function(obj, indLegend="auto", showValues=FALSE){
 qData <- Biobase::exprs(obj)
@@ -34,8 +33,7 @@ mvPerLinesHisto(qData, samplesData, indLegend, showValues)
 ##' @return A histogram
 ##' @author Alexia Dorffer
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.mvPerLinesHisto(Exp1_R25_pept)
 wrapper.mvPerLinesHisto_HC <- function(obj, indLegend="auto", showValues=FALSE){
     if (is.null(obj)){
@@ -62,8 +60,7 @@ wrapper.mvPerLinesHisto_HC <- function(obj, indLegend="auto", showValues=FALSE){
 ##' @return A bar plot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' samplesData <- Biobase::pData(Exp1_R25_pept)
 ##' mvPerLinesHisto(qData, samplesData)
@@ -123,8 +120,7 @@ x <- barplot(nb.na2barplot[-1],
 ##' @return A bar plot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' samplesData <- Biobase::pData(Exp1_R25_pept)
 ##' mvPerLinesHisto_HC(qData, samplesData)
@@ -198,8 +194,7 @@ mvPerLinesHisto_HC <- function(qData, samplesData, indLegend="auto", showValues=
 ##' @return A bar plot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.mvPerLinesHistoPerCondition(Exp1_R25_pept)
 wrapper.mvPerLinesHistoPerCondition <- function(obj, indLegend="auto", 
                                             showValues=FALSE){
@@ -223,8 +218,7 @@ mvPerLinesHistoPerCondition(qData, samplesData, indLegend, showValues)
 ##' @return A bar plot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.mvPerLinesHistoPerCondition_HC(Exp1_R25_pept)
 wrapper.mvPerLinesHistoPerCondition_HC <- function(obj, indLegend="auto", 
                                                 showValues=FALSE, ...){
@@ -252,8 +246,7 @@ wrapper.mvPerLinesHistoPerCondition_HC <- function(obj, indLegend="auto",
 ##' @return A bar plot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' samplesData <- Biobase::pData(Exp1_R25_pept)
 ##' mvPerLinesHistoPerCondition(qData, samplesData)
@@ -262,7 +255,7 @@ mvPerLinesHistoPerCondition <- function(qData, samplesData, indLegend="auto",
 
   
   if (is.null(palette)){
-    palette <- brewer.pal(ncol(qData),"Dark2")[1:ncol(qData)]
+    palette <- RColorBrewer::brewer.pal(ncol(qData),"Dark2")[1:ncol(qData)]
   }else{
     if (length(palette) != ncol(qData)){
       warning("The color palette has not the same dimension as the number of samples")
@@ -325,8 +318,7 @@ x <- barplot(m,
 ##' @return A bar plot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' samplesData <- Biobase::pData(Exp1_R25_pept)
 ##' mvPerLinesHistoPerCondition_HC(qData, samplesData)
@@ -335,7 +327,7 @@ mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto",
     
     conds <- samplesData[,"Condition"]
     if (is.null(palette)){
-      palette <- brewer.pal(length(unique(conds)),"Dark2")
+      palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")
     }else{
       if (length(palette) != ncol(qData)){
         warning("The color palette has not the same dimension as the number of samples")
@@ -402,8 +394,7 @@ mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto",
 ##' @return A histogram
 ##' @author Alexia Dorffer
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.mvHisto(Exp1_R25_pept, showValues=TRUE)
 wrapper.mvHisto <- function(obj, indLegend="auto", showValues=FALSE){
 qData <- Biobase::exprs(obj)
@@ -425,8 +416,7 @@ mvHisto(qData, samplesData, conds, indLegend, showValues)
 ##' @return A histogram
 ##' @author Alexia Dorffer
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.mvHisto_HC(Exp1_R25_pept, showValues=TRUE)
 wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
     if (is.null(obj)){
@@ -457,8 +447,7 @@ wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
 ##' @return A histogram
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' samplesData <- Biobase::pData(Exp1_R25_pept)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
@@ -466,7 +455,7 @@ wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
 mvHisto <- function(qData, samplesData, conds, indLegend="auto", showValues=FALSE, palette=NULL){
 
   if (is.null(palette)){
-    palette <- brewer.pal(length(unique(conds)),"Dark2")
+    palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")
   }else{
     if (length(palette) != ncol(qData)){
       warning("The color palette has not the same dimension as the number of samples")
@@ -526,8 +515,7 @@ graphics::text(x, -3,
 ##' @return A histogram
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' samplesData <- Biobase::pData(Exp1_R25_pept)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
@@ -535,7 +523,7 @@ graphics::text(x, -3,
 mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto", 
                     showValues=FALSE, palette = NULL){
   if (is.null(palette)){
-    palette <- brewer.pal(length(unique(conds)),"Dark2")
+    palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")
   }else{
     if (length(palette) != ncol(qData)){
       warning("The color palette has not the same dimension as the number of samples")
@@ -592,8 +580,7 @@ mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto",
 ##' @return A heatmap
 ##' @author Alexia Dorffer
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' obj <- Exp1_R25_pept
 ##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', 1)
 ##' obj <- mvFilterFromIndices(obj, keepThat)
@@ -627,8 +614,7 @@ mvImage(qData[indices,], conds)
 ##' @return A heatmap
 ##' @author Samuel Wieczorek, Thomas Burger
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' mvImage(qData, conds)
@@ -689,8 +675,7 @@ heatmap.DAPAR(exprso,
 ##' @return A scatter plot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.hc_mvTypePlot2(Exp1_R25_pept)
 wrapper.hc_mvTypePlot2 <- function(obj,...){
     qData <- Biobase::exprs(obj)
@@ -719,8 +704,7 @@ wrapper.hc_mvTypePlot2 <- function(obj,...){
 ##' @return Density plots
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' hc_mvTypePlot2(qData, conds, title="POV distribution")
@@ -728,7 +712,7 @@ hc_mvTypePlot2 <- function(qData, conds, palette = NULL, typeofMV=NULL, title=NU
   if (is.null(conds)){return(NULL)}
   
   if (is.null(palette)){
-    palette <- brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
+    palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
   }else{
     if (length(palette) != length(unique(conds))){
       warning("The color palette has not the same dimension as the number of conditions")

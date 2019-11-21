@@ -17,7 +17,7 @@ This function check xxxxx
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 test.design(Biobase::pData(Exp1_R25_pept)[,1:3])
 }
 \author{

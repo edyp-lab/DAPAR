@@ -23,7 +23,7 @@ missing values.
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 wrapper.mvHisto(Exp1_R25_pept, showValues=TRUE)
 }
 \author{

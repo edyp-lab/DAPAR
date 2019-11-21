@@ -4,8 +4,14 @@
 \alias{wrapper.normalizeD}
 \title{Normalisation}
 \usage{
-wrapper.normalizeD(obj, method, type = NULL, scaling = FALSE,
-  quantile = 0.15, span = 0.7)
+wrapper.normalizeD(
+  obj,
+  method,
+  type = NULL,
+  scaling = FALSE,
+  quantile = 0.15,
+  span = 0.7
+)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
@@ -50,7 +56,7 @@ by condition.
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 wrapper.normalizeD(Exp1_R25_pept[1:1000], "QuantileCentering", "within conditions")
 }
 \author{

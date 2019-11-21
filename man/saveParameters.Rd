@@ -4,8 +4,7 @@
 \alias{saveParameters}
 \title{Saves the parameters of a tool in the pipeline of Prostar}
 \usage{
-saveParameters(obj, name.dataset = NULL, name = NULL,
-  l.params = NULL)
+saveParameters(obj, name.dataset = NULL, name = NULL, l.params = NULL)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}}
@@ -24,7 +23,7 @@ Saves the parameters of a tool in the pipeline of Prostar
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 l.params=list(method="Global quantile alignment", type="overall")
 saveParameters(Exp1_R25_pept, "Filtered.peptide", "Imputation",l.params)
 }

@@ -4,7 +4,7 @@
 \alias{check.design}
 \title{Check if the design is valid}
 \usage{
-\method{check}{design}(sTab)
+check.design(sTab)
 }
 \arguments{
 \item{sTab}{The data.frame which correspond to the pData function of MSnbase}
@@ -17,7 +17,7 @@ This function check the validity of the experimental design
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 check.design(Biobase::pData(Exp1_R25_pept)[,1:3])
 }
 \author{

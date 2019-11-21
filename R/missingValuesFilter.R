@@ -9,8 +9,7 @@
 ##' @return A floating number
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' getPourcentageOfMV(Exp1_R25_pept)
 getPourcentageOfMV <- function(obj){
 
@@ -35,8 +34,7 @@ return(pourcentage)
 ##' @return An integer
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' getNumberOf(Exp1_R25_pept, "Potential_contaminant", "+")
 getNumberOf <- function(obj, name=NULL, prefix=NULL){
 if (is.null(name) || is.null(prefix) || (name=="") || (prefix=="")){
@@ -64,8 +62,7 @@ return(count)
 ##' deleted : an object of class \code{MSnSet} which contains the deleted lines 
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' NumericalFiltering(Exp1_R25_pept, 'A_Count', '6', '==')
 NumericalFiltering <- function(obj, name=NULL, value=NULL, operator=NULL){
   if ((is.null(name) || (name == ""))) {return(NULL)}
@@ -103,8 +100,7 @@ NumericalFiltering <- function(obj, name=NULL, value=NULL, operator=NULL){
 ##' @return A vector of integers.
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' NumericalgetIndicesOfLinesToRemove(Exp1_R25_pept, "A_Count", value="6", operator='==')
 NumericalgetIndicesOfLinesToRemove <- function(obj, name=NULL, value=NULL, operator=NULL)
 {
@@ -178,8 +174,7 @@ proportionConRev_HC <- function(nBoth = 0, nCont=0, nRev=0, lDataset=0){
 ##' @return An object of class \code{MSnSet}.
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' removeLines(Exp1_R25_pept, "Potential_contaminant")
 ##' removeLines(Exp1_R25_pept, "Reverse")
 removeLines <- function(obj, idLine2Delete=NULL, prefix=NULL){
@@ -214,8 +209,7 @@ return(obj)
 ##' corresponding to reverse,
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' StringBasedFiltering(Exp1_R25_pept, 'Potential_contaminant', '+', 'Reverse', '+')
 StringBasedFiltering <- function(obj, 
                                  idCont2Delete=NULL, prefix_Cont=NULL, 
@@ -309,8 +303,7 @@ StringBasedFiltering <- function(obj,
 ##' deleted : an object of class \code{MSnSet} which contains the deleted lines 
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' StringBasedFiltering2(Exp1_R25_pept, 'Potential_contaminant', '+')
 StringBasedFiltering2 <- function(obj, cname=NULL, tag=NULL){
   
@@ -357,8 +350,7 @@ StringBasedFiltering2 <- function(obj, cname=NULL, tag=NULL){
 ##' @return A vector of integers.
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' getIndicesOfLinesToRemove(Exp1_R25_pept, "Potential_contaminant", prefix="+")
 getIndicesOfLinesToRemove <- function(obj, idLine2Delete=NULL, prefix=NULL)
 {
@@ -395,8 +387,7 @@ return(ind)
 ##' @return An instance of class \code{MSnSet} that have been filtered.
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' mvFilter(Exp1_R25_pept, "wholeMatrix", 2)
 mvFilter <- function(obj,type, th, processText=NULL )
 {
@@ -449,8 +440,7 @@ obj <- obj[keepThat]
 ##' @return An instance of class \code{MSnSet} that have been filtered.
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' mvFilterFromIndices(Exp1_R25_pept, c(1:10))
 mvFilterFromIndices <- function(obj,keepThat=NULL, processText="" )
 {
@@ -480,8 +470,7 @@ return(obj)
 ##' @return An instance of class \code{MSnSet} that have been filtered.
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' deleteLinesFromIndices(Exp1_R25_pept, c(1:10))
 deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
 {
@@ -519,8 +508,7 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
 ##' @return An vector of indices that correspond to the lines to keep.
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' mvFilterGetIndices(Exp1_R25_pept, "wholeMatrix", 2)
 mvFilterGetIndices <- function(obj,type, th=NULL)
 {

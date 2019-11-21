@@ -21,7 +21,7 @@ This function imputes the missing values condition by condition.
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 wrapper.impute.KNN(Exp1_R25_pept[1:1000], 3)
 }
 \author{

@@ -4,8 +4,7 @@
 \alias{mvPerLinesHisto}
 \title{Bar plot of missing values per lines}
 \usage{
-mvPerLinesHisto(qData, samplesData, indLegend = "auto",
-  showValues = FALSE)
+mvPerLinesHisto(qData, samplesData, indLegend = "auto", showValues = FALSE)
 }
 \arguments{
 \item{qData}{A dataframe that contains the data to plot.}
@@ -27,7 +26,7 @@ number of missing values (NA) per lines (ie proteins).
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 qData <- Biobase::exprs(Exp1_R25_pept)
 samplesData <- Biobase::pData(Exp1_R25_pept)
 mvPerLinesHisto(qData, samplesData)

@@ -18,7 +18,7 @@ This method is a wrapper to the function \code{impute.mle} of the package
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 dat <- mvFilter(Exp1_R25_pept[1:1000,], type="allCond", th = 1)
 dat <- wrapper.impute.mle(dat)
 }

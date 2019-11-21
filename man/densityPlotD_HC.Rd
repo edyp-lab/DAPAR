@@ -23,7 +23,7 @@ but uses the package \code{highcharter}
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 densityPlotD_HC(Exp1_R25_pept)
 }
 \seealso{

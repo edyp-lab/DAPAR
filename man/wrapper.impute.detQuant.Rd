@@ -23,7 +23,7 @@ of class \code{MSnSet}
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 wrapper.impute.detQuant(Exp1_R25_pept)
 }
 \author{

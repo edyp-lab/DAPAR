@@ -21,7 +21,7 @@ This method returns the q-th quantile of each colum of an expression set, up to 
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 qData <- Biobase::exprs(Exp1_R25_pept)
 getQuantile4Imp(qData) 
 }

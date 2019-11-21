@@ -17,7 +17,7 @@ This function builds the design matrix for design of level 1
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 make.design.1(Biobase::pData(Exp1_R25_pept))
 }
 \author{

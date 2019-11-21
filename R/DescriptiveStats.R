@@ -10,8 +10,7 @@
 ##' @return A xxxxxx
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##'  obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
 ##' res.pca <- wrapper.pca(obj)
 wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
@@ -55,8 +54,7 @@ wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
 ##' @return A plot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' res.pca <- wrapper.pca(Exp1_R25_pept)
 ##' plotPCA_Var(res.pca)
 plotPCA_Var <- function(res.pca, chosen.axes=c(1,2)){
@@ -80,8 +78,7 @@ plotPCA_Var <- function(res.pca, chosen.axes=c(1,2)){
 ##' @return A plot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' res.pca <- wrapper.pca(Exp1_R25_pept)
 ##' plotPCA_Ind(res.pca)
 plotPCA_Ind <- function(res.pca, chosen.axes=c(1,2)){
@@ -100,8 +97,7 @@ plotPCA_Ind <- function(res.pca, chosen.axes=c(1,2)){
 ##' @return A histogram
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' res.pca <- wrapper.pca(Exp1_R25_pept, ncp=6)
 ##' plotPCA_Eigen(res.pca)
 plotPCA_Eigen <- function(res.pca){
@@ -127,8 +123,7 @@ plotPCA_Eigen <- function(res.pca){
 ##' @return A histogram
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' res.pca <- wrapper.pca(Exp1_R25_pept, ncp=6)
 ##' plotPCA_Eigen_hc(res.pca)
 plotPCA_Eigen_hc <- function(res.pca){
@@ -152,20 +147,20 @@ plotPCA_Eigen_hc <- function(res.pca){
 ##' 
 ##' @title Builds a boxplot from a dataframe
 ##' @param obj xxx
+##' @param conds xxx
 ##' @param legend A vector of the conditions (one string per sample).
 ##' @param palette xxx
 ##' @return A boxplot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{densityPlotD}}
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' boxPlotD(Exp1_R25_pept)
-boxPlotD <- function(obj,legend=NULL,palette=NULL){
+##' boxPlotD(Exp1_R25_pept, conds)
+boxPlotD <- function(obj,conds, legend=NULL,palette=NULL){
   qData <- Biobase::exprs(obj)
   if (is.null(palette)){
-    pal <- brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
+    pal <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
     
     for (i in 1:ncol(qData)){
       palette[i] <- pal[ which(conds[i] == unique(conds))]
@@ -212,8 +207,7 @@ abline(h=0)
 ##' @author Samuel Wieczorek
 ##' @seealso \code{\link{densityPlotD_HC}}
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' legend <- Biobase::pData(Exp1_R25_pept)[,"Sample.name"]
 ##' boxPlotD_HC(Exp1_R25_pept, legend)
 boxPlotD_HC <- function(obj, legend=NULL, palette = NULL){
@@ -246,7 +240,7 @@ boxPlotD_HC <- function(obj, legend=NULL, palette = NULL){
   df <- data.frame(values = as.vector(qData,mode='numeric'),samples = tmp, stringsAsFactors = FALSE)
   
   
-  hc <- hcboxplot(x=df$values, var = df$samples, colorByPoint = TRUE, outliers = TRUE) %>%
+  hc <- highcharter::hcboxplot(x=df$values, var = df$samples, colorByPoint = TRUE, outliers = TRUE) %>%
     hc_chart(type="column") %>%
     hc_yAxis(title = list(text = "Log (intensity)")) %>%
     hc_xAxis(title = list(text = "Samples"), categories=legend) %>%
@@ -295,8 +289,7 @@ boxPlotD_HC <- function(obj, legend=NULL, palette = NULL){
 ##' @author Samuel Wieczorek
 ##' @seealso \code{\link{densityPlotD}}
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' library(vioplot)
 ##' legend <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' violinPlotD(Exp1_R25_pept, legend=legend)
@@ -362,8 +355,7 @@ violinPlotD <- function(obj, legend=NULL, palette = NULL){
 ##' @return A plot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering","within conditions")
 ##' wrapper.compareNormalizationD(Exp1_R25_pept, objAfter, conds)
@@ -398,8 +390,7 @@ compareNormalizationD(qDataBefore, qDataAfter, condsForLegend, indData2Show, ...
 ##' @return A plot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering", 
 ##' "within conditions")
@@ -432,8 +423,7 @@ wrapper.compareNormalizationD_HC <- function(objBefore, objAfter,
 ##' @return A plot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' qDataBefore <- Biobase::exprs(Exp1_R25_pept)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' objAfter <- wrapper.normalizeD(Exp1_R25_pept,"QuantileCentering","within conditions")
@@ -448,7 +438,7 @@ if (is.null(condsForLegend)) return(NULL)
 if (is.null(indData2Show)) {indData2Show <- c(1:ncol(qDataAfter)) }
 
   if (is.null(palette)){
-    tmp <- brewer.pal(length(unique(condsForLegend)),"Dark2")[1:length(unique(condsForLegend))]
+    tmp <- RColorBrewer::brewer.pal(length(unique(condsForLegend)),"Dark2")[1:length(unique(condsForLegend))]
     
     for (i in 1:ncol(qDataBefore)){
       palette[i] <- tmp[ which(condsForLegend[i] == unique(condsForLegend))]
@@ -525,8 +515,7 @@ legend("topleft"
 ##' @return A plot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' obj <- Exp1_R25_pept[1:1000]
 ##' qDataBefore <- Biobase::exprs(obj)
 ##' conds <- Biobase::pData(obj)[,"Condition"]
@@ -543,7 +532,7 @@ compareNormalizationD_HC <- function(qDataBefore,
     
   
   if (is.null(palette)){
-    tmp <- brewer.pal(length(unique(condsForLegend)),"Dark2")[1:length(unique(condsForLegend))]
+    tmp <- RColorBrewer::brewer.pal(length(unique(condsForLegend)),"Dark2")[1:length(unique(condsForLegend))]
     
     for (i in 1:ncol(qDataBefore)){
       palette[i] <- tmp[ which(condsForLegend[i] == unique(condsForLegend))]
@@ -586,24 +575,24 @@ compareNormalizationD_HC <- function(qDataBefore,
 ##' 
 ##' @title Builds a densityplot from a dataframe
 ##' @param obj xxx
+##' @param conds xxx
 ##' @param legend A vector of the conditions (one condition per sample).
 ##' @param palette xxx
 ##' @return A density plot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{boxPlotD}}, \code{\link{CVDistD}}
 ##' @examples 
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' densityPlotD(Exp1_R25_pept, conds)
-densityPlotD <- function(obj, legend=NULL,palette = NULL){
+densityPlotD <- function(obj, conds, legend=NULL,palette = NULL){
     
   qData <- Biobase::exprs(obj)
   
   if (is.null(legend) ) { legend <- Biobase::pData(obj)[,"Condition"]}
   
   if (is.null(palette)){
-    palette <- brewer.pal(length(unique(conds)),"Dark2")
+    palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")
   }else{
     if (length(palette) != ncol(qData)){
       warning("The color palette has not the same dimension as the number of samples")
@@ -666,8 +655,7 @@ legend("topleft"
 ##' @author Samuel Wieczorek
 ##' @seealso \code{\link{boxPlotD}}, \code{\link{CVDistD}}
 ##' @examples 
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' densityPlotD_HC(Exp1_R25_pept)
 densityPlotD_HC <- function(obj, legend=NULL, palette = NULL){
   
@@ -748,8 +736,7 @@ densityPlotD_HC <- function(obj, legend=NULL, palette = NULL){
 ##' @return A density plot
 ##' @author Alexia Dorffer
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.CVDistD(Exp1_R25_pept)
 wrapper.CVDistD <- function(obj, ...){
 qData <- Biobase::exprs(obj)
@@ -770,8 +757,7 @@ CVDistD(qData, conds, ...)
 ##' @return A density plot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.CVDistD_HC(Exp1_R25_pept)
 wrapper.CVDistD_HC <- function(obj, ...){
     qData <- Biobase::exprs(obj)
@@ -792,15 +778,14 @@ wrapper.CVDistD_HC <- function(obj, ...){
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{densityPlotD}}.
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' CVDistD(Biobase::exprs(Exp1_R25_pept), conds)
 CVDistD <- function(qData, conds=NULL, palette = NULL){
     
 if (is.null(conds)) {return(NULL)}
   if (is.null(palette)){
-    palette <- brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
+    palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
   }else{
     if (length(palette) != ncol(qData)){
       warning("The color palette has not the same dimension as the number of samples")
@@ -875,8 +860,7 @@ legend("topright"
 ##' @author Samuel Wieczorek
 ##' @seealso \code{\link{densityPlotD}}.
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' CVDistD_HC(Biobase::exprs(Exp1_R25_pept), conds)
 CVDistD_HC <- function(qData, conds=NULL, palette = NULL){
@@ -889,7 +873,7 @@ CVDistD_HC <- function(qData, conds=NULL, palette = NULL){
   n <- length(conditions)
   
   if (is.null(palette)){
-    palette <- brewer.pal(length(unique(conds)),"Dark2")[1:n]
+    palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")[1:n]
   }else{
     if (length(palette) != ncol(qData)){
       warning("The color palette has not the same dimension as the number of samples")
@@ -976,8 +960,7 @@ CVDistD_HC <- function(qData, conds=NULL, palette = NULL){
 ##' @return A colored correlation matrix
 ##' @author Alexia Dorffer
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.corrMatrixD(Exp1_R25_pept)
 wrapper.corrMatrixD <- function(obj, rate=5){
 qData <- Biobase::exprs(obj)
@@ -995,8 +978,7 @@ corrMatrixD(qData, samplesData, rate)
 ##' @return A colored correlation matrix
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.corrMatrixD_HC(Exp1_R25_pept)
 wrapper.corrMatrixD_HC <- function(obj, rate=0.5){
     qData <- Biobase::exprs(obj)
@@ -1019,8 +1001,7 @@ wrapper.corrMatrixD_HC <- function(obj, rate=0.5){
 ##' @return A colored correlation matrix
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' samplesData <- Biobase::pData(Exp1_R25_pept)
 ##' corrMatrixD(qData, samplesData)
@@ -1069,8 +1050,7 @@ plot(d)
 ##' @return A colored correlation matrix
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' samplesData <- Biobase::pData(Exp1_R25_pept)
 ##' res <- cor(qData,use = 'pairwise.complete.obs')
@@ -1095,13 +1075,13 @@ corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
         gather(y, dist, -x) %>% 
         mutate(x = as.character(x),
                y = as.character(y)) %>% 
-        left_join(data_frame(x = y,
+        left_join(tibble(x = y,
                              xid = seq(length(y)) - 1), by = "x") %>% 
-        left_join(data_frame(y = y,
+        left_join(tibble(y = y,
                              yid = seq(length(y)) - 1), by = "y")
     
     ds <- df %>% 
-        select_("xid", "yid", "dist") %>% 
+        dplyr::select("xid", "yid", "dist") %>% 
         list_parse2()
     
     fntltp <- JS("function(){
@@ -1150,8 +1130,7 @@ corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
 ##' @author Alexia Dorffer
 ##' @examples
 ##' \dontrun{
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
 ##' wrapper.heatmapD(obj)
 ##' }
@@ -1184,8 +1163,7 @@ heatmapD(qData, distance, cluster, dendro)
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
 ##' \dontrun{
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
 ##' qData <- Biobase::exprs(obj)
 ##' heatmapD(qData)
@@ -1274,8 +1252,7 @@ heatmapD <- function(qData, distance="euclidean", cluster="complete", dendro = F
 ##' @return A heatmap
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
 ##' qData <- Biobase::exprs(obj)
 ##' heatmap.DAPAR(qData)
@@ -1350,12 +1327,11 @@ heatmap.DAPAR <-
         
         
         if (!is.null(labCol)) 
-        {
+            {
             axis(1, 1:nc, label = labCol, las = 2, line = -0.5 + 
                      offsetCol, tick = 0, cex.axis = cexCol, hadj = NA, 
                  padj = 0)
-        }
-        else {
+            } else {
                 adjCol = c(1, NA)
                 xpd.orig <- par("xpd")
                 par(xpd = NA)
@@ -1365,7 +1341,7 @@ heatmap.DAPAR <-
                          strheight("M"), label = labCol, adj = adjCol, 
                      cex = cexCol, srt = srtCol, col = colCol)
                 par(xpd = xpd.orig)
-        }
+                }
         
         
         if (!is.null(labRow) ) {
@@ -1382,9 +1358,6 @@ heatmap.DAPAR <-
                      srt = srtRow, col = colRow)
                 par(xpd = xpd.orig)
         }
-        
-        
-        
         
         par(mar = c(margins[1], 0, 0, 0))
         plot.new()

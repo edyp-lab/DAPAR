@@ -23,7 +23,7 @@ Same as the function \code{\link{wrapper.CVDistD}} but uses the package \code{hi
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 wrapper.CVDistD_HC(Exp1_R25_pept)
 }
 \author{

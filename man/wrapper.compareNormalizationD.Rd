@@ -4,8 +4,13 @@
 \alias{wrapper.compareNormalizationD}
 \title{Builds a plot from a dataframe}
 \usage{
-wrapper.compareNormalizationD(objBefore, objAfter, condsForLegend = NULL,
-  indData2Show = NULL, ...)
+wrapper.compareNormalizationD(
+  objBefore,
+  objAfter,
+  condsForLegend = NULL,
+  indData2Show = NULL,
+  ...
+)
 }
 \arguments{
 \item{objBefore}{A dataframe that contains quantitative data before 
@@ -31,7 +36,7 @@ data before and after normalization
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept)
 conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering","within conditions")
 wrapper.compareNormalizationD(Exp1_R25_pept, objAfter, conds)

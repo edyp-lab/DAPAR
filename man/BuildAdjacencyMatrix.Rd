@@ -24,7 +24,7 @@ in lines on a \code{MSnSet} object (peptides)
 }
 \examples{
 require(DAPARdata)
-data(Exp1_R25_pept) 
+utils::data(Exp1_R25_pept) 
 BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
 }
 \author{
