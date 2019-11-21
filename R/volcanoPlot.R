@@ -21,8 +21,7 @@
 ##' @return A volcanoplot
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' obj <- Exp1_R25_pept[1:1000]
 ##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 ##' obj <- mvFilterFromIndices(obj, keepThat)
@@ -123,8 +122,7 @@ return(p)
 ##' \donttest{
 ##' library(highcharter) 
 ##' library(tidyverse)
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' obj <- Exp1_R25_pept[1:1000]
 ##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 ##' obj <- mvFilterFromIndices(obj, keepThat)

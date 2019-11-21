@@ -4,8 +4,7 @@
 \alias{compute.t.tests}
 \title{xxxxxx}
 \usage{
-\method{compute}{t.tests}(qData, sTab, contrast = "OnevsOne",
-  type = "Student")
+compute.t.tests(qData, sTab, contrast = "OnevsOne", type = "Student")
 }
 \arguments{
 \item{qData}{A matrix of quantitative data, without any missing values.}
@@ -31,8 +30,7 @@ are identical and correspond to the description of the comparison.
 This function is xxxxxx
 }
 \examples{
-require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept[1:1000]
 keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 obj <- mvFilterFromIndices(obj, keepThat)

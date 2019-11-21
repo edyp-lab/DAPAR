@@ -22,8 +22,7 @@ This function returns the indice of the lines to delete, based on a
 prefix string
 }
 \examples{
-require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept, package='DAPARdata')
 getIndicesOfLinesToRemove(Exp1_R25_pept, "Potential.contaminant", prefix="+")
 }
 \author{

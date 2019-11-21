@@ -8,8 +8,7 @@
 ##' @return A list
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' protID <- "Protein_group_IDs"
 ##' obj <- Exp1_R25_pept[1:1000]
 ##' MShared <- BuildAdjacencyMatrix(obj, protID, FALSE)
@@ -62,8 +61,7 @@ getProteinsStats <- function(matShared){
 ##' @return A vector
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' protID <- "Protein_group_IDs"
 ##' obj.pep <- Exp1_R25_pept[1:1000]
 ##' M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
@@ -104,8 +102,7 @@ return(newCol)
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' \dontrun{
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' protID <- "Protein_group_IDs"
 ##' obj.pep <- Exp1_R25_pept[1:1000]
 ##' M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
@@ -140,8 +137,7 @@ BuildColumnToProteinDataset_par <- function(peptideData, matAdj, columnName, pro
 ##' but with NA values if they exist in the intensity matrix.
 ##' @author Alexia Dorffer
 ##' @examples
-##' library(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' protID <- "Protein_group_IDs"
 ##' M <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
 ##' CountPep(M)
@@ -162,8 +158,7 @@ CountPep <- function (M) {
 ##' @return A histogram  
 ##' @author Alexia Dorffer, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' mat <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs")
 ##' GraphPepProt(mat)
 GraphPepProt <- function(mat){
@@ -203,8 +198,7 @@ GraphPepProt <- function(mat){
 ##' @return A binary matrix  
 ##' @author Florence Combes, Samuel Wieczorek, Alexia Dorffer
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept) 
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
 BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
    
@@ -250,8 +244,7 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
 ##' @return A list of two adjacency matrices
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept) 
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
 ##' X.ll <- splitAdjacencyMat(X)
 splitAdjacencyMat <- function(X){
@@ -295,8 +288,7 @@ splitAdjacencyMat <- function(X){
 ##' @return A matrix of intensities of proteins
 ##' @author Alexia Dorffer
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' protID <- "Protein_group_IDs"
 ##' obj.pep <- Exp1_R25_pept[1:1000]
 ##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
@@ -321,8 +313,7 @@ aggregateSum <- function(obj.pep, X){
 ##' @return xxxxx
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' protID <- "Protein_group_IDs"
 ##' obj.pep <- Exp1_R25_pept[1:1000]
 ##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
@@ -359,8 +350,7 @@ aggregateIterParallel <- function(obj.pep, X, init.method='Sum', method='Mean', 
 ##' @param n xxxx
 ##' @return xxxxx
 ##' @author Samuel Wieczorek
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' protID <- "Protein_group_IDs"
 ##' obj.pep <- Exp1_R25_pept[1:1000]
 ##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
@@ -427,8 +417,7 @@ inner.aggregate.iter <- function(pepData, X,init.method='Sum', method='Mean', n=
 ##' @return A protein object of class \code{MSnset}
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' protID <- "Protein_group_IDs"
 ##' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
 ##' aggregateIter(Exp1_R25_pept[1:1000],X=X)
@@ -481,8 +470,7 @@ GetNbPeptidesUsed <- function(X, pepData){
 ##' @return A matrix of intensities of proteins
 ##' @author Alexia Dorffer
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' obj.pep <- Exp1_R25_pept[1:1000]
 ##' protID <- "Protein_group_IDs"
 ##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
@@ -503,13 +491,11 @@ aggregateMean <- function(obj.pep, X){
 ##' @param pepData A data.frame of quantitative data
 ##' @return A list of two items
 ##' @author Samuel Wieczorek
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' obj.pep <- Exp1_R25_pept[1:1000]
 ##' protID <- "Protein_group_IDs"
 ##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' obj.pep <- Exp1_R25_pept[1:1000]
 ##' protID <- "Protein_group_IDs"
 ##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
@@ -532,8 +518,7 @@ GetDetailedNbPeptidesUsed <- function(X, pepData){
 ##' @return A data.frame
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' obj.pep <- Exp1_R25_pept[1:1000]
 ##' protID <- "Protein_group_IDs"
 ##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
@@ -629,8 +614,7 @@ inner.aggregate.topn <-function(pepData,X, method='Mean', n=10){
 ##' @return A matrix of intensities of proteins
 ##' @author Alexia Dorffer, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' obj.pep <- Exp1_R25_pept[1:1000]
 ##' protID <- "Protein_group_IDs"
 ##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)

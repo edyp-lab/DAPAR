@@ -5,8 +5,7 @@
 ##' @return A list of CC  
 ##' @author Thomas Burger, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept) 
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein.group.IDs", FALSE)
 ##' ll <- get.pep.prot.cc(X)
 get.pep.prot.cc <- function(X){
@@ -91,8 +90,7 @@ get.pep.prot.cc <- function(X){
 ##' @return A plot  
 ##' @author Thomas Burger
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept) 
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein.group.IDs", TRUE)
 ##' ll <- get.pep.prot.cc(X)
 ##' plotJitter(ll)
@@ -135,8 +133,7 @@ plotJitter <- function(list.of.cc){
 ##' @return A plot  
 ##' @author Thomas Burger, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept) 
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' X <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein.group.IDs", FALSE)
 ##' ll <- get.pep.prot.cc(X)
 ##' g <- buildGraph(ll[[1]], X)
@@ -179,8 +176,7 @@ buildGraph <- function(The.CC, X){
 ##' @return A plot  
 ##' @author Thomas Burger, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept) 
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' X <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein.group.IDs", FALSE)
 ##' ll <- get.pep.prot.cc(X)
 ##' g <- buildGraph(ll[[1]], X)

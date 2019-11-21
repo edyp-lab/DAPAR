@@ -8,8 +8,7 @@
 ##' @return An instance of class \code{MSnSet}.
 ##' @author Samuel Wieczorek
 ##' @examples 
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' l.params=list(method="Global quantile alignment", type="overall")
 ##' saveParameters(Exp1_R25_pept, "Filtered.peptide", "Imputation",l.params)
 saveParameters <- function(obj,name.dataset=NULL,name=NULL,l.params=NULL){
@@ -38,8 +37,7 @@ saveParameters <- function(obj,name.dataset=NULL,name=NULL,l.params=NULL){
 ##' @return An instance of class \code{MSnSet}.
 ##' @author Samuel Wieczorek
 ##' @examples 
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' setMEC(Exp1_R25_pept)
 setMEC <- function(obj){
   
@@ -72,8 +70,7 @@ setMEC <- function(obj){
 ##' @return An instance of class \code{MSnSet}.
 ##' @author Samuel Wieczorek
 ##' @examples 
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' addOriginOfValue(Exp1_R25_pept)
 addOriginOfValue <- function(obj,index=NULL){
 

@@ -17,8 +17,7 @@ This function builds the design matrix for design of level 3
 }
 \examples{
 \dontrun{
-require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept, package='DAPARdata')
 make.design.3(Biobase::pData(Exp1_R25_pept))
 }
 }
