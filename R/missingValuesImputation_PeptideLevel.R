@@ -56,7 +56,7 @@ wrapper.dapar.impute.mi <- function (obj, nb.iter = 3,
                                      nknn = 15, selec = 600, siz = 500, weight = 1, ind.comp = 1, 
                                      progress.bar = TRUE, x.step.mod = 300, 
                                      x.step.pi = 300, nb.rei = 100, method = 4, gridsize = 300, 
-                                     q = 0.95, q.min = 0, q.norm = 3, eps = 0, methodi = "slsa",
+                                     q = 0.95, q.min = 0, q.norm = 3, eps = 0, methodMCAR = "slsa",
                                      lapala = TRUE,
                                      distribution="unif") 
 {
@@ -103,7 +103,7 @@ wrapper.dapar.impute.mi <- function (obj, nb.iter = 3,
     data.mi = mi.mix(tab = tab, tab.imp = dat.slsa, prob.MCAR = proba, 
                      conditions = conditions, repbio = repbio, reptech = reptech, 
                      nb.iter = nb.iter, nknn = nknn, weight = weight, selec = selec, 
-                     siz = siz, ind.comp = ind.comp, methodi = methodi, q = q, 
+                     siz = siz, ind.comp = ind.comp, methodMCAR = methodMCAR, q = q, 
                      progress.bar = progress.bar)
     
     if (lapala == TRUE){

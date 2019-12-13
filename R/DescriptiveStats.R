@@ -213,10 +213,8 @@ abline(h=0)
 boxPlotD_HC <- function(obj, legend=NULL, palette = NULL){
 
   
-  palette = rainbow(6)
   qData <- Biobase::exprs(obj)
   if( is.null(legend)){legend <- Biobase::pData(obj)[,"Sample.name"]}
-  
   if (is.null(palette)){palette <- rep("#FFFFFF", ncol(qData))
   } else {
     if (length(palette) != ncol(qData)){
@@ -228,10 +226,6 @@ boxPlotD_HC <- function(obj, legend=NULL, palette = NULL){
   bx <-boxplot(qData, na.rm=TRUE)
   df_outlier <- data.frame(x=bx$group-1,y = bx$out)
   
-  #tmp <- NULL
-  #for (i in 1:ncol(qData)){
-  #  tmp <- c(tmp, rep(paste("S",i,legend[i], collapse="_"),nrow(qData)))
-  #}
   tmp <- NULL
   for (i in 1:ncol(qData)){
     tmp <- c(tmp, rep(paste(paste0(rep("A", i), collapse=""),legend[i], sep='_'),nrow(qData)))
