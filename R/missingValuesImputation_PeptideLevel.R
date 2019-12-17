@@ -52,13 +52,11 @@ wrapper.impute.mle <- function(obj){
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' dat <- mvFilter(Exp1_R25_pept[1:1000], type="allCond", th = 1)
 ##' dat <- wrapper.dapar.impute.mi(dat, nb.iter=1)
-wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, 
-                                     nknn = 15, selec = 600, siz = 500, weight = 1, ind.comp = 1, 
-                                     progress.bar = TRUE, x.step.mod = 300, 
+wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, nknn = 15, selec = 600, siz = 500, 
+                                     weight = 1, ind.comp = 1, progress.bar = FALSE, x.step.mod = 300,
                                      x.step.pi = 300, nb.rei = 100, method = 4, gridsize = 300, 
                                      q = 0.95, q.min = 0, q.norm = 3, eps = 0, methodMCAR = "slsa",
-                                     lapala = TRUE,
-                                     distribution="unif") 
+                                     lapala = TRUE,distribution="unif") 
 {
     
     ## order exp and pData table before using imp4p functions
