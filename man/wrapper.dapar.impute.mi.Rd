@@ -12,7 +12,7 @@ wrapper.dapar.impute.mi(
   siz = 500,
   weight = 1,
   ind.comp = 1,
-  progress.bar = TRUE,
+  progress.bar = FALSE,
   x.step.mod = 300,
   x.step.pi = 300,
   nb.rei = 100,
@@ -22,7 +22,7 @@ wrapper.dapar.impute.mi(
   q.min = 0,
   q.norm = 3,
   eps = 0,
-  methodi = "slsa",
+  methodMCAR = "slsa",
   lapala = TRUE,
   distribution = "unif"
 )
@@ -62,7 +62,7 @@ wrapper.dapar.impute.mi(
 
 \item{eps}{Same as the function \code{impute.pa} in the package \code{imp4p}}
 
-\item{methodi}{Same as the function \code{mi.mix} in the package \code{imp4p}}
+\item{methodMCAR}{Same as the function \code{mi.mix} in the package \code{imp4p}}
 
 \item{lapala}{xxxxxxxxxxx}
 
