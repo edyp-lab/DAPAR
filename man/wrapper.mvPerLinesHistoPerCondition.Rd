@@ -5,8 +5,11 @@
 \title{Bar plot of missing values per lines and per conditions from an 
 object \code{MSnSet}}
 \usage{
-wrapper.mvPerLinesHistoPerCondition(obj, indLegend = "auto",
-  showValues = FALSE)
+wrapper.mvPerLinesHistoPerCondition(
+  obj,
+  indLegend = "auto",
+  showValues = FALSE
+)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}

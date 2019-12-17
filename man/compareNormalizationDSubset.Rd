@@ -4,8 +4,14 @@
 \alias{compareNormalizationDSubset}
 \title{Builds a plot from a dataframe}
 \usage{
-compareNormalizationDSubset(qDataBefore, qDataAfter, indData2Show = NULL,
-  idsForLegend = NULL, palette = NULL, subset.view = NULL)
+compareNormalizationDSubset(
+  qDataBefore,
+  qDataAfter,
+  indData2Show = NULL,
+  idsForLegend = NULL,
+  palette = NULL,
+  subset.view = NULL
+)
 }
 \arguments{
 \item{qDataBefore}{A dataframe that contains quantitative data before 
@@ -34,9 +40,10 @@ normalization for a subset of protein
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
+obj <- Exp1_R25_pept
 qDataBefore <- Biobase::exprs(Exp1_R25_pept)
-ids <-Exp1_R25_pept@featureData@data[,obj@experimentData@other$proteinId]
-objAfter <- wrapper.normalizeD(Exp1_R25_pept,"QuantileCentering","within conditions")
+ids <-obj@featureData@data[,obj@experimentData@other$proteinId]
+objAfter <- wrapper.normalizeD(obj,"QuantileCentering","within conditions")
 compareNormalizationDSubset(qDataBefore, Biobase::exprs(objAfter), idsForLegend=ids,subset.view=1:10)
 }
 \author{

@@ -5,8 +5,13 @@
 \title{Builds a plot from a dataframe. Same as compareNormalizationD but 
 uses the library \code{highcharter}}
 \usage{
-compareNormalizationD_HC(qDataBefore, qDataAfter, condsForLegend = NULL,
-  indData2Show = NULL, palette = NULL)
+compareNormalizationD_HC(
+  qDataBefore,
+  qDataAfter,
+  condsForLegend = NULL,
+  indData2Show = NULL,
+  palette = NULL
+)
 }
 \arguments{
 \item{qDataBefore}{A dataframe that contains quantitative data before 

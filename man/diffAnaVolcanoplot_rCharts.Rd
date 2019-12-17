@@ -4,9 +4,15 @@
 \alias{diffAnaVolcanoplot_rCharts}
 \title{Volcanoplot of the differential analysis}
 \usage{
-diffAnaVolcanoplot_rCharts(df, threshold_pVal = 1e-60,
-  threshold_logFC = 0, conditions = NULL, clickFunction = NULL,
-  palette = NULL, swap = FALSE)
+diffAnaVolcanoplot_rCharts(
+  df,
+  threshold_pVal = 1e-60,
+  threshold_logFC = 0,
+  conditions = NULL,
+  clickFunction = NULL,
+  palette = NULL,
+  swap = FALSE
+)
 }
 \arguments{
 \item{df}{A dataframe which contains the following slots :

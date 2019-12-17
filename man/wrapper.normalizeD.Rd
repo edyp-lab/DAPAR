@@ -4,8 +4,15 @@
 \alias{wrapper.normalizeD}
 \title{Normalisation}
 \usage{
-wrapper.normalizeD(obj, method, type = NULL, scaling = FALSE,
-  quantile = 0.15, span = 0.7, subset.norm = NULL)
+wrapper.normalizeD(
+  obj,
+  method,
+  type = NULL,
+  scaling = FALSE,
+  quantile = 0.15,
+  span = 0.7,
+  subset.norm = NULL
+)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}

@@ -29,25 +29,7 @@
 
 
 
-#######################
-### attention, à rendre générique: pour l'instant ne marche qu'avec n1=3 (car codé en dur)
-##' This function is xxxxxx
-##'
-##' @title xxxxxx
-##' @param qData A matrix of quantitative data, without any missing values.
-##' @param X A matrix of quantitative data, without any missing values.
-##' @return xxxxx
-##' @author Thomas Burger, Samuel Wieczorek
-##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
-##' obj <- Exp1_R25_pept
-##' protID <- "Protein_group_IDs"
-##' keepThat <-  mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
-##' obj <- mvFilterFromIndices(obj, keepThat)
-##' X.spec <- BuildAdjacencyMatrix(obj, protID,  unique = TRUE)
-##' qData <- Biobase::exprs(obj)
-##' gttest <- groupttest(X.spec, qData)
+
 # groupttest <- function(MatAdj, expr){
 #   nProt <- dim(MatAdj)[2]
 #   res <- rep(0,nProt)
@@ -70,7 +52,27 @@
 # }  
 
 
-groupttestsw <- function(MatAdj, cond1, cond2){
+#######################
+### attention, à rendre générique: pour l'instant ne marche qu'avec n1=3 (car codé en dur)
+##' This function is xxxxxx
+##'
+##' @title xxxxxx
+##' @param MatAdj xxxxx.
+##' @param cond1 xxxx.
+##' @param cond2 xxxx.
+##' @return xxxxx
+##' @author Thomas Burger, Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' obj <- Exp1_R25_pept
+##' protID <- "Protein_group_IDs"
+##' keepThat <-  mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+##' obj <- mvFilterFromIndices(obj, keepThat)
+##' X.spec <- BuildAdjacencyMatrix(obj, protID,  unique = TRUE)
+##' qData <- Biobase::exprs(obj)
+##' gttest <- groupttest(X.spec, qData[,1:3], qData[,4:6])
+groupttest <- function(MatAdj, cond1=qData[,c1Indice], cond2 = qData[,c2Indice]){
   res <- list()
   
   for(i in 1:dim(MatAdj)[2]){
@@ -78,7 +80,6 @@ groupttestsw <- function(MatAdj, cond1, cond2){
     if(length(index)> 0){
       res[[i]] <- t.test(x=cond1[index,], y=cond2[index,], var.equal=TRUE)
     } else {
-      print(i)
       res[[i]] <- NA
     }
   }
@@ -111,6 +112,7 @@ groupttestsw <- function(MatAdj, cond1, cond2){
 ##' keepThat <-  mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 ##' obj <- mvFilterFromIndices(obj, keepThat)
 ##' X.spec <- BuildAdjacencyMatrix(obj, protID,  unique = TRUE)
+##' sTab <- Biobase::pData(obj)
 ##' qData <- Biobase::exprs(obj)
 ##' gttest <- compute.group.t.tests(qData, sTab, X.spec)
 compute.group.t.tests <- function(qData,sTab, X.spec, logFC = NULL,contrast="OnevsOne", type="Student"){
@@ -135,14 +137,14 @@ compute.group.t.tests <- function(qData,sTab, X.spec, logFC = NULL,contrast="One
     for(i in 1:ncol(comb)){
       c1Indice <- which(Conditions==comb[1,i])
       c2Indice <- which(Conditions==comb[2,i])
-      res.tmp <- groupttestsw(X.spec,qData[,c1Indice], qData[,c2Indice] )
+      res.tmp <- groupttest(X.spec,qData[,c1Indice], qData[,c2Indice] )
         
       #compute logFC from the result of t.test function
-      p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))
-      m1.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[1])))
-      m2.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[2])))
-      m1.name <- names(unlist(lapply(res.tmp,function(x)x$estimate[1])))[1]
-      m2.name <- names(unlist(lapply(res.tmp,function(x)x$estimate[2])))[1]
+      p.tmp <- unlist(lapply(res.tmp,function(x) x["p.value"]))
+      m1.tmp <- unlist(lapply(res.tmp, function(x) as.numeric(unlist(x)["estimate.mean of x"])))
+      m2.tmp <- unlist(lapply(res.tmp, function(x) as.numeric(unlist(x)["estimate.mean of y"])))
+      m1.name <- comb[1,i]
+      m2.name <- comb[2,i]
       logFC.tmp <- m1.tmp - m2.tmp
       if (grepl(comb[1,i], m2.name)){logFC.tmp <- -logFC.tmp}
       
@@ -165,7 +167,7 @@ compute.group.t.tests <- function(qData,sTab, X.spec, logFC = NULL,contrast="One
      # Cond.t.all[-c1Indice] <- "all"
       
       c1Indice <- which(Conditions==levels(Conditions.f)[i])
-      res.tmp <- groupttestsw(X.spec,qData[,c1Indice], qData[,-c1Indice] )
+      res.tmp <- groupttest(X.spec,qData[,c1Indice], qData[,-c1Indice] )
       
       
       p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))

@@ -6,8 +6,12 @@
 quantitative data in the \code{exprs()} table of an object of
 class \code{MSnSet}}
 \usage{
-wrapper.heatmapD(obj, distance = "euclidean", cluster = "complete",
-  dendro = FALSE)
+wrapper.heatmapD(
+  obj,
+  distance = "euclidean",
+  cluster = "complete",
+  dendro = FALSE
+)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}

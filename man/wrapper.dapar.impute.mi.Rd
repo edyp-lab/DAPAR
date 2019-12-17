@@ -4,11 +4,28 @@
 \alias{wrapper.dapar.impute.mi}
 \title{Missing values imputation using the LSimpute algorithm.}
 \usage{
-wrapper.dapar.impute.mi(obj, nb.iter = 3, nknn = 15, selec = 600,
-  siz = 500, weight = 1, ind.comp = 1, progress.bar = TRUE,
-  x.step.mod = 300, x.step.pi = 300, nb.rei = 100, method = 4,
-  gridsize = 300, q = 0.95, q.min = 0, q.norm = 3, eps = 0,
-  methodi = "slsa", lapala = TRUE, distribution = "unif")
+wrapper.dapar.impute.mi(
+  obj,
+  nb.iter = 3,
+  nknn = 15,
+  selec = 600,
+  siz = 500,
+  weight = 1,
+  ind.comp = 1,
+  progress.bar = TRUE,
+  x.step.mod = 300,
+  x.step.pi = 300,
+  nb.rei = 100,
+  method = 4,
+  gridsize = 300,
+  q = 0.95,
+  q.min = 0,
+  q.norm = 3,
+  eps = 0,
+  methodi = "slsa",
+  lapala = TRUE,
+  distribution = "unif"
+)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}

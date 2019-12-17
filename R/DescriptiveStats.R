@@ -555,7 +555,7 @@ legend("topleft"
 ##' data(Exp1_R25_pept)
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering","within conditions")
-##' ids <- fData(Exp1_R25_pept)[,Exp1_R25_pept@experimentData@other$proteinId]
+##' ids <- Biobase::fData(Exp1_R25_pept)[,Exp1_R25_pept@experimentData@other$proteinId]
 ##' wrapper.compareNormalizationDSubset(Exp1_R25_pept, objAfter, conds, idsForLegend=ids, subset.view=1:10)
 wrapper.compareNormalizationDSubset <- function(objBefore, objAfter, 
                                           condsForLegend=NULL,
@@ -593,9 +593,10 @@ wrapper.compareNormalizationDSubset <- function(objBefore, objAfter,
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
+##' obj <- Exp1_R25_pept
 ##' qDataBefore <- Biobase::exprs(Exp1_R25_pept)
-##' ids <-Exp1_R25_pept@featureData@data[,obj@experimentData@other$proteinId]
-##' objAfter <- wrapper.normalizeD(Exp1_R25_pept,"QuantileCentering","within conditions")
+##' ids <-obj@featureData@data[,obj@experimentData@other$proteinId]
+##' objAfter <- wrapper.normalizeD(obj,"QuantileCentering","within conditions")
 ##' compareNormalizationDSubset(qDataBefore, Biobase::exprs(objAfter), idsForLegend=ids,subset.view=1:10)
 compareNormalizationDSubset <- function(qDataBefore,
                                   qDataAfter,

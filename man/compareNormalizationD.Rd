@@ -4,8 +4,13 @@
 \alias{compareNormalizationD}
 \title{Builds a plot from a dataframe}
 \usage{
-compareNormalizationD(qDataBefore, qDataAfter, condsForLegend = NULL,
-  indData2Show = NULL, palette = NULL)
+compareNormalizationD(
+  qDataBefore,
+  qDataAfter,
+  condsForLegend = NULL,
+  indData2Show = NULL,
+  palette = NULL
+)
 }
 \arguments{
 \item{qDataBefore}{A dataframe that contains quantitative data before 

@@ -4,8 +4,14 @@
 \alias{impute.pa2}
 \title{Missing values imputation from a \code{MSnSet} object}
 \usage{
-impute.pa2(tab, conditions, q.min = 0, q.norm = 3, eps = 0,
-  distribution = "unif")
+impute.pa2(
+  tab,
+  conditions,
+  q.min = 0,
+  q.norm = 3,
+  eps = 0,
+  distribution = "unif"
+)
 }
 \arguments{
 \item{tab}{An object of class \code{MSnSet}.}

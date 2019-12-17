@@ -31,20 +31,21 @@ import(factoextra)
 import(tidyverse)
 import(imp4p)
 importFrom("graphics", "par", "boxplot", "axis", "mtext", "abline", "points", 
-            "legend", "lines",  "barplot", "text","hist",
+            "legend", "lines",  "barplot", "text","hist", "segments",
            "layout", "plot.new", "strheight", "strwidth", "title","plot.window")
  
 importFrom("stats", "lowess", "cor", "density","pexp", "mad", 
             "var", "t.test", "dist", "hclust", "setNames", 
             "median", "p.adjust", "model.matrix", "rnorm","na.omit",
-           "quantile", "rbeta", "runif", "sd", "pchisq", "residuals","formula", "lm", "logLik")
+           "quantile", "rbeta", "runif", "sd", "pchisq", "residuals","formula", "lm", "logLik",
+           "complete.cases")
 importFrom("preprocessCore", "normalize.quantiles")
 importFrom("gplots", "heatmap.2")
 importFrom("limma", "lmFit", "eBayes", "topTable", "makeContrasts", "contrasts.fit", "normalizeCyclicLoess")
 importFrom("pcaMethods", "completeObs", "pca")
 importFrom("scales", "alpha")
 importFrom("grDevices", "colorRampPalette", "palette", "heat.colors")
-importFrom("utils", "read.csv", "read.table", "de", "str","write.csv", "zip", "installed.packages")
+importFrom("utils", "combn", "read.csv", "read.table", "de", "str","write.csv", "zip", "installed.packages")
 #importFrom("lme4", "getME")
 importFrom("openxlsx", "getSheetNames", "createWorkbook", "addWorksheet", "writeData", "saveWorkbook")
 import("readxl")
@@ -57,6 +58,7 @@ importFrom("vsn","vsn2","predict")
 import('Matrix')
 #import('igraph')
 
+  
 export(
 "writeMSnsetToExcel",
 "writeMSnsetToCSV",

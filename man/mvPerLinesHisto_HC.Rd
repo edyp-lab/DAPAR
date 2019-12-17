@@ -4,8 +4,7 @@
 \alias{mvPerLinesHisto_HC}
 \title{Bar plot of missing values per lines using highcharter}
 \usage{
-mvPerLinesHisto_HC(qData, samplesData, indLegend = "auto",
-  showValues = FALSE)
+mvPerLinesHisto_HC(qData, samplesData, indLegend = "auto", showValues = FALSE)
 }
 \arguments{
 \item{qData}{A dataframe that contains the data to plot.}

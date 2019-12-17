@@ -153,7 +153,32 @@ Cond.Nb<-length(levels(Conditions.f))
 
 
 
-##########################################################################################################
+##' This function is xxxxxx
+##'
+##' @title xxxxxx
+##' @param qData A matrix of quantitative data, without any missing values.
+##' @param sTab xxxx  
+##' @param contrast Indicates if the test consists of the comparison of each 
+##' biological condition versus 
+##' each of the other ones (contrast=1; 
+##' for example H0:"C1=C2" vs H1:"C1!=C2", etc.) 
+##' or each condition versus all others (contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
+##' H1:"C1!=(C2+C3)/2", etc. if there are three conditions).
+##' @param type xxxxx
+##' @return A list of two items : logFC and P_Value; both are dataframe. The first one contains
+##' the logFC values of all the comparisons (one column for one comparison), the second one contains
+##' the pvalue of all the comparisons (one column for one comparison). The names of the columns for those two dataframes
+##' are identical and correspond to the description of the comparison. 
+##' @author Florence Combes, Samuel Wieczorek
+##' @examples
+##' require(DAPARdata)
+##' data(Exp1_R25_pept)
+##' obj <- Exp1_R25_pept[1:1000]
+##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+##' obj <- mvFilterFromIndices(obj, keepThat)
+##' sTab <- Biobase::pData(obj)
+##' qData <- Biobase::exprs(obj)
+##' ttest <- compute.t.tests2(qData,sTab ,"OnevsOne")
 compute.t.tests2 <- function(qData,sTab, contrast="OnevsOne", type="Student"){
     
     

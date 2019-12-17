@@ -4,8 +4,7 @@
 \alias{saveParameters}
 \title{Saves the parameters of a tool in the pipeline of Prostar}
 \usage{
-saveParameters(obj, name.dataset = NULL, name = NULL,
-  l.params = NULL)
+saveParameters(obj, name.dataset = NULL, name = NULL, l.params = NULL)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}}

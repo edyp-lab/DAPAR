@@ -7,9 +7,17 @@ that displays quantitative data in the \code{exprs()} table of an object of
 class \code{MSnSet}. For more information, please refer to the help 
 of the heatmap.2 function.}
 \usage{
-heatmap.DAPAR(x, col = heat.colors(100), srtCol = NULL,
-  labCol = NULL, labRow = NULL, key = TRUE, key.title = NULL,
-  main = NULL, ylab = NULL)
+heatmap.DAPAR(
+  x,
+  col = heat.colors(100),
+  srtCol = NULL,
+  labCol = NULL,
+  labRow = NULL,
+  key = TRUE,
+  key.title = NULL,
+  main = NULL,
+  ylab = NULL
+)
 }
 \arguments{
 \item{x}{A dataframe that contains quantitative data.}

@@ -4,8 +4,14 @@
 \alias{mvHisto_HC}
 \title{Histogram of missing values}
 \usage{
-mvHisto_HC(qData, samplesData, conds, indLegend = "auto",
-  showValues = FALSE, palette = NULL)
+mvHisto_HC(
+  qData,
+  samplesData,
+  conds,
+  indLegend = "auto",
+  showValues = FALSE,
+  palette = NULL
+)
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}

@@ -28,12 +28,12 @@ by using the previous peptide dataset.
 \examples{
 require(DAPARdata)
 data(Exp1_R25_pept)
-protID <- "Protein.group.IDs"
+protID <- "Protein_group_IDs"
 obj.pep <- Exp1_R25_pept[1:1000]
 M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 data <- Biobase::fData(obj.pep)
 protData <- DAPAR::aggregateMean(obj.pep, M)
-name <- "Protein.group.IDs"
+name <- "Protein_group_IDs"
 proteinNames <- rownames(Biobase::fData(protData))
 BuildColumnToProteinDataset(data, M, name,proteinNames )
 }

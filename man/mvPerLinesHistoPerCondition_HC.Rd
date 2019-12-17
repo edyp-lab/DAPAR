@@ -4,8 +4,13 @@
 \alias{mvPerLinesHistoPerCondition_HC}
 \title{Bar plot of missing values per lines and per condition}
 \usage{
-mvPerLinesHistoPerCondition_HC(qData, samplesData, indLegend = "auto",
-  showValues = FALSE, palette = NULL)
+mvPerLinesHistoPerCondition_HC(
+  qData,
+  samplesData,
+  indLegend = "auto",
+  showValues = FALSE,
+  palette = NULL
+)
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}

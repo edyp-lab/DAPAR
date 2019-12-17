@@ -5,8 +5,13 @@
 \title{Computes the FDR corresponding to the p-values of the 
 differential analysis using}
 \usage{
-diffAnaComputeFDR(logFC, pval, threshold_PVal = 0, threshold_LogFC = 0,
-  pi0Method = 1)
+diffAnaComputeFDR(
+  logFC,
+  pval,
+  threshold_PVal = 0,
+  threshold_LogFC = 0,
+  pi0Method = 1
+)
 }
 \arguments{
 \item{logFC}{The result (logFC values) of the differential analysis processed 
