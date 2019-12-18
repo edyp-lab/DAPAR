@@ -407,8 +407,8 @@ writeMSnsetToCSV <- function(obj, fname){
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' df1 <- Exp1_R2_pept[1:100]
-##' df2 <- Exp1_R2_pept[200:250]
+##' df1 <- Exp1_R25_pept[1:100]
+##' df2 <- Exp1_R25_pept[200:250]
 ##' rbindMSnset(df1, df2)
 rbindMSnset <- function(df1=NULL, df2){
   
