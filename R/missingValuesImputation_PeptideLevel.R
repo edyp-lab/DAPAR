@@ -44,7 +44,7 @@ wrapper.impute.mle <- function(obj){
 ##' @param q.min Same as the function \code{impute.pa} in the package \code{imp4p}
 ##' @param q.norm Same as the function \code{impute.pa} in the package \code{imp4p}
 ##' @param eps Same as the function \code{impute.pa} in the package \code{imp4p}
-##' @param methodMCAR Same as the function \code{mi.mix} in the package \code{imp4p}
+##' @param methodi Same as the function \code{mi.mix} in the package \code{imp4p}
 ##' @param lapala xxxxxxxxxxx
 ##' @param distribution The type of distribution used. Values are \code{unif} (default) or \code{beta}.
 ##' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
@@ -57,7 +57,7 @@ wrapper.impute.mle <- function(obj){
 wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, nknn = 15, selec = 600, siz = 500, 
                                      weight = 1, ind.comp = 1, progress.bar = FALSE, x.step.mod = 300,
                                      x.step.pi = 300, nb.rei = 100, method = 4, gridsize = 300, 
-                                     q = 0.95, q.min = 0, q.norm = 3, eps = 0, methodMCAR = "slsa",
+                                     q = 0.95, q.min = 0, q.norm = 3, eps = 0, methodi = "slsa",
                                      lapala = TRUE,distribution="unif") 
 {
     
@@ -102,7 +102,7 @@ wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, nknn = 15, selec = 600, s
     data.mi = mi.mix(tab = tab, tab.imp = dat.slsa, prob.MCAR = proba, 
                      conditions = conditions, repbio = repbio, reptech = reptech, 
                      nb.iter = nb.iter, nknn = nknn, weight = weight, selec = selec, 
-                     siz = siz, ind.comp = ind.comp, methodMCAR = methodMCAR, q = q, 
+                     siz = siz, ind.comp = ind.comp, methodi = methodi, q = q, 
                      progress.bar = progress.bar)
     
     if (lapala == TRUE){

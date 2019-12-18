@@ -22,7 +22,7 @@ wrapper.dapar.impute.mi(
   q.min = 0,
   q.norm = 3,
   eps = 0,
-  methodMCAR = "slsa",
+  methodi = "slsa",
   lapala = TRUE,
   distribution = "unif"
 )
@@ -62,7 +62,7 @@ wrapper.dapar.impute.mi(
 
 \item{eps}{Same as the function \code{impute.pa} in the package \code{imp4p}}
 
-\item{methodMCAR}{Same as the function \code{mi.mix} in the package \code{imp4p}}
+\item{methodi}{Same as the function \code{mi.mix} in the package \code{imp4p}}
 
 \item{lapala}{xxxxxxxxxxx}
 
