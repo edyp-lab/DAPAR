@@ -18,8 +18,7 @@ An instance of class \code{MSnSet}.
 Similar to the function \code{rbind} but applies on two subsets of the same \code{MSnSet} object.
 }
 \examples{
-require(DAPARdata)
-utils::data(Exp1_R2_pept)
+utils::data(Exp1_R25_pept, package='DAPARdata')
 df1 <- Exp1_R2_pept[1:100]
 df2 <- Exp1_R2_pept[200:250]
 rbindMSnset(df1, df2)

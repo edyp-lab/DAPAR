@@ -31,8 +31,7 @@ bar plot which represents the distribution of the
 number of missing values (NA) per lines (ie proteins) and per conditions.
 }
 \examples{
-require(DAPARdata)
-utils::data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept, package='DAPARdata')
 wrapper.mvPerLinesHistoPerCondition_HC(Exp1_R25_pept)
 }
 \author{

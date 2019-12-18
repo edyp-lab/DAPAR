@@ -57,8 +57,7 @@ a point of the scatter plot.
 \examples{
 \donttest{
 library(highcharter) 
-require(DAPARdata)
-utils::data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept[1:1000]
 keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 obj <- mvFilterFromIndices(obj, keepThat)

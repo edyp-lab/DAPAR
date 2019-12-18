@@ -19,8 +19,7 @@ This function exports a MSnset dataset into three csv files compressed in a zip 
 }
 \examples{
 \donttest{
-require(DAPARdata)
-utils::data(Exp1_R2_pept)
+utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R2_pept[1:1000]
 writeMSnsetToCSV(obj, "foo")
 }

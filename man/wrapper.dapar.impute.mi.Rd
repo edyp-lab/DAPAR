@@ -12,7 +12,7 @@ wrapper.dapar.impute.mi(
   siz = 500,
   weight = 1,
   ind.comp = 1,
-  progress.bar = TRUE,
+  progress.bar = FALSE,
   x.step.mod = 300,
   x.step.pi = 300,
   nb.rei = 100,
@@ -76,8 +76,7 @@ This method is a wrapper to the function \code{impute.mi} of the package \code{i
 an object of class \code{MSnSet}.
 }
 \examples{
-require(DAPARdata)
-utils::data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept, package='DAPARdata')
 dat <- mvFilter(Exp1_R25_pept[1:1000], type="allCond", th = 1)
 dat <- wrapper.dapar.impute.mi(dat, nb.iter=1)
 }

@@ -26,8 +26,7 @@ This function creates a column for the protein dataset after aggregation
 by using the previous peptide dataset.
 }
 \examples{
-require(DAPARdata)
-utils::data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept, package='DAPARdata')
 protID <- "Protein_group_IDs"
 obj.pep <- Exp1_R25_pept[1:1000]
 M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)

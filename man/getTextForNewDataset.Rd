@@ -16,7 +16,7 @@ A string
 Build the text information for a new dataset
 }
 \examples{
-getTextForNewDataset(list(filename="foo.MSnset"))
+getTextForNewDataset(list(filename="foo.msnset"))
 }
 \author{
 Samuel Wieczorek

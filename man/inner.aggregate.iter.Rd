@@ -31,8 +31,7 @@ Method to xxxxx
 }
 \author{
 Samuel Wieczorek
-require(DAPARdata)
-utils::data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept, package='DAPARdata')
 protID <- "Protein_group_IDs"
 obj.pep <- Exp1_R25_pept[1:1000]
 X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)

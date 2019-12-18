@@ -46,8 +46,7 @@ A heatmap
 Heatmap inspired by the heatmap.2 function.
 }
 \examples{
-require(DAPARdata)
-utils::data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
 qData <- Biobase::exprs(obj)
 heatmap.DAPAR(qData)

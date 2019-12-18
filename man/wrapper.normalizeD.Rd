@@ -55,8 +55,7 @@ For the five other families, two type categories are available :
 by condition.
 }
 \examples{
-require(DAPARdata)
-utils::data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept, package='DAPARdata')
 wrapper.normalizeD(Exp1_R25_pept[1:1000], "QuantileCentering", "within conditions")
 }
 \author{

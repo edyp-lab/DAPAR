@@ -39,8 +39,7 @@ corresponding to reverse,
 This function removes lines in the dataset based on prefix strings (contaminants, reverse or both).
 }
 \examples{
-require(DAPARdata)
-utils::data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept, package='DAPARdata')
 StringBasedFiltering(Exp1_R25_pept, 'Potential_contaminant', '+', 'Reverse', '+')
 }
 \author{

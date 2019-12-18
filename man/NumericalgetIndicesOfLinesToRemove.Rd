@@ -28,8 +28,7 @@ This function returns the indice of the lines to delete, based on a
 prefix string
 }
 \examples{
-require(DAPARdata)
-utils::data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept, package='DAPARdata')
 NumericalgetIndicesOfLinesToRemove(Exp1_R25_pept, "A_Count", value="6", operator='==')
 }
 \author{

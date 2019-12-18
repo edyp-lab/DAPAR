@@ -28,8 +28,7 @@ by using the previous peptide dataset. It is a parallel version of the function
 }
 \examples{
 \dontrun{
-require(DAPARdata)
-utils::data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept, package='DAPARdata')
 protID <- "Protein_group_IDs"
 obj.pep <- Exp1_R25_pept[1:1000]
 M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
