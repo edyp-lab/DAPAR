@@ -37,8 +37,7 @@ data before and after normalization. Same as the function \link{wrapper.compareN
 but uses the package \code{highcharter}
 }
 \examples{
-require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept, package='DAPARdata')
 conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering", 
 "within conditions")

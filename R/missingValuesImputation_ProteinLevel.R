@@ -8,8 +8,7 @@
 ##' @return A data.frame that contains the indexes of LAPALA
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' obj <- Exp1_R25_pept[1:1000]
 ##' lapala <- findMECBlock(obj)
 findMECBlock <- function(obj){
@@ -42,8 +41,7 @@ findMECBlock <- function(obj){
 ##' @return The object \code{obj} where LAPALA have been reintroduced
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' obj <- Exp1_R25_pept[1:1000]
 ##' lapala <- findMECBlock(obj)
 ##' obj <- wrapper.impute.detQuant(obj)
@@ -71,8 +69,7 @@ reIntroduceMEC <- function(obj, MECIndex){
 ##' @return The object \code{obj} which has been imputed
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.impute.KNN(Exp1_R25_pept[1:1000], 3)
 wrapper.impute.KNN <- function(obj, K){
     
@@ -104,8 +101,7 @@ wrapper.impute.KNN <- function(obj, K){
 ##' @return The object \code{obj} which has been imputed
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.impute.fixedValue(Exp1_R25_pept[1:1000], 0.001)
 wrapper.impute.fixedValue <- function(obj, fixVal){
     
@@ -137,8 +133,7 @@ wrapper.impute.fixedValue <- function(obj, fixVal){
 ##' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' dat <- mvFilter(Exp1_R25_pept[1:1000], type="allCond", th = 1)
 ##' dat <- wrapper.impute.pa(dat)
 wrapper.impute.pa <- function(obj, q.min = 0.025){
@@ -162,8 +157,7 @@ wrapper.impute.pa <- function(obj, q.min = 0.025){
 ##' @return An imputed instance of class \code{MSnSet}
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.impute.detQuant(Exp1_R25_pept)
 wrapper.impute.detQuant <- function(obj, qval=0.025, factor=1){
     if (is.null(obj)){return(NULL)}
@@ -191,8 +185,7 @@ wrapper.impute.detQuant <- function(obj, qval=0.025, factor=1){
 ##' @return A list of two vectors, respectively containing the imputation values and the rescaled imputation values
 ##' @author Thomas Burger
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' getQuantile4Imp(qData) 
 getQuantile4Imp <- function(qData, qval=0.025, factor=1){
@@ -212,8 +205,7 @@ getQuantile4Imp <- function(qData, qval=0.025, factor=1){
 ##' @return An imputed dataset
 ##' @author Thomas Burger
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' qData <- Biobase::exprs(Exp1_R25_pept)
 ##' values <- getQuantile4Imp(qData)$shiftedImpVal
 ##' impute.detQuant(qData, values) 
@@ -235,8 +227,7 @@ impute.detQuant <- function(qData, values){
 ##' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' dat <- mvFilter(Exp1_R25_pept[1:1000], type="allCond", th = 1)
 ##' dat <- wrapper.impute.slsa(dat)
 wrapper.impute.slsa <- function(obj){

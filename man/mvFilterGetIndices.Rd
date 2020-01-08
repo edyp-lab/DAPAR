@@ -35,8 +35,7 @@ at least \code{th} values for each of the conditions are kept.
 at least \code{th} values, and for at least one condition, are kept.
 }
 \examples{
-require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept, package='DAPARdata')
 mvFilterGetIndices(Exp1_R25_pept, "wholeMatrix", 2)
 }
 \author{

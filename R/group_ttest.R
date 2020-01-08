@@ -63,8 +63,7 @@
 ##' @return xxxxx
 ##' @author Thomas Burger, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' obj <- Exp1_R25_pept
 ##' protID <- "Protein_group_IDs"
 ##' keepThat <-  mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
@@ -105,8 +104,7 @@ groupttest <- function(MatAdj, cond1=qData[,c1Indice], cond2 = qData[,c2Indice])
 ##' @return xxxxx
 ##' @author Thomas Burger, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' obj <- Exp1_R25_pept
 ##' protID <- "Protein_group_IDs"
 ##' keepThat <-  mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))

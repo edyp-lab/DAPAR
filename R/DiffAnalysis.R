@@ -9,8 +9,7 @@
 ##' @return A highcharts density plot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' obj <- Exp1_R25_pept[1:1000]
 ##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 ##' obj <- mvFilterFromIndices(obj, keepThat)
@@ -20,12 +19,14 @@
 ##' hc_logFC_DensityPlot(res$logFC)
 hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0, palette=NULL){
     
-    if (is.null(df_logFC)){return()}
-    if (threshold_LogFC < 0){return()}
+    if (is.null(df_logFC) || threshold_LogFC < 0){
+      hc <- NULL
+      return(NULL)
+    }
   
   
   if (is.null(palette)){
-    palette <- brewer.pal(ncol(df_logFC),"Paired")[1:ncol(df_logFC)]
+    palette <- RColorBrewer::brewer.pal(ncol(df_logFC),"Paired")[1:ncol(df_logFC)]
   }else{
     if (length(palette) != ncol(df_logFC)){
       warning("The color palette has not the same dimension as the number of samples")
@@ -38,7 +39,7 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0, palette=NULL){
   nSup <- length(which(df_logFC >= threshold_LogFC))
   nInside <- length(which(abs(df_logFC) < threshold_LogFC))
   
-     hc <-  highchart() %>% 
+     hc <-  highcharter::highchart() %>% 
          hc_title(text = "log(FC) repartition") %>% 
          my_hc_chart(chartType = "spline", zoomType="x") %>%
          hc_legend(enabled = TRUE) %>%
@@ -201,8 +202,7 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0, palette=NULL){
 ##' @return The computed FDR value (floating number)
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' obj <- Exp1_R25_pept[1:1000]
 ##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 ##' obj <- mvFilterFromIndices(obj, keepThat)
@@ -245,8 +245,7 @@ diffAnaComputeFDR <- function(logFC, pval,threshold_PVal=0, threshold_LogFC = 0,
 ##' @return A MSnSet
 ##' @author Alexia Dorffer, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' obj <- Exp1_R25_pept
 ##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 ##' obj <- mvFilterFromIndices(obj, keepThat)
@@ -324,8 +323,7 @@ diffAnaSave <- function (obj, allComp, data=NULL,th_pval=0,th_logFC=0){
 ##' @return A MSnSet
 ##' @author Alexia Dorffer
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' obj <- Exp1_R25_pept
 ##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 ##' obj <- mvFilterFromIndices(obj, keepThat)
@@ -361,8 +359,7 @@ diffAnaGetSignificant <- function (obj){
 ##' @return A plot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' obj <- Exp1_R25_pept[1:1000]
 ##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 ##' obj <- mvFilterFromIndices(obj, keepThat)
@@ -390,8 +387,7 @@ return(p)
 ##' @return A plot
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' obj <- Exp1_R25_pept
 ##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 ##' obj <- mvFilterFromIndices(obj, keepThat)

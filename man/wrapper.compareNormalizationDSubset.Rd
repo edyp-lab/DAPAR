@@ -35,8 +35,7 @@ Wrapper to the function that plot to compare the quantitative proteomics
 data before and after normalization
 }
 \examples{
-require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept, package='DAPARdata')
 conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering","within conditions")
 ids <- Biobase::fData(Exp1_R25_pept)[,Exp1_R25_pept@experimentData@other$proteinId]

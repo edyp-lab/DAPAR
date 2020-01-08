@@ -5,12 +5,13 @@
 ##' @return A list of CC  
 ##' @author Thomas Burger, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept) 
+##' utils::data(Exp1_R25_pept, package='DAPARdata') 
 ##' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
 ##' ll <- get.pep.prot.cc(X)
 get.pep.prot.cc <- function(X){
-  if (is.null(X)){return()}
+  if (is.null(X)){
+    warning("The adjacency matrix is empty")
+    return()}
   #require(Matrix)
   #require(igraph)
   #require(graph)
@@ -48,8 +49,8 @@ get.pep.prot.cc <- function(X){
   
     ### Protein CCs
     multprot.cc <- NULL
-    g <- graphAM(B, edgemode='undirected', values=NA)
-    multprot.cc <- connComp(as(g, 'graphNEL'))
+    g <- graph::graphAM(B, edgemode='undirected', values=NA)
+    multprot.cc <- graph::connComp(as(g, 'graphNEL'))
 
     ### Peptides from multiple prot CCs
     multprot.cc.pep <- list()
@@ -91,8 +92,7 @@ get.pep.prot.cc <- function(X){
 ##' @return A plot  
 ##' @author Thomas Burger
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept) 
+##' utils::data(Exp1_R25_pept, package='DAPARdata') 
 ##' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
 ##' ll <- get.pep.prot.cc(X)
 ##' plotJitter(ll)
@@ -135,8 +135,7 @@ plotJitter <- function(list.of.cc){
 ##' @return A plot  
 ##' @author Thomas Burger, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept) 
+##' utils::data(Exp1_R25_pept, package='DAPARdata') 
 ##' X <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein_group_IDs", FALSE)
 ##' ll <- get.pep.prot.cc(X)
 ##' g <- buildGraph(ll[[1]], X)
@@ -179,8 +178,7 @@ buildGraph <- function(The.CC, X){
 ##' @return A plot  
 ##' @author Thomas Burger, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept) 
+##' utils::data(Exp1_R25_pept, package='DAPARdata') 
 ##' X <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein_group_IDs", FALSE)
 ##' ll <- get.pep.prot.cc(X)
 ##' g <- buildGraph(ll[[1]], X)
@@ -204,7 +202,7 @@ display.CC.visNet <- function(g, layout = layout_nicely,
     visNetwork::visOptions(highlightNearest = FALSE) %>%
     #visLegend()
     #visPhysics(stabilization = FALSE)%>%
-    visEdges(color = "#A9A9A9",width = 2)
+    visNetwork::visEdges(color = "#A9A9A9",width = 2)
   #%>%
    # visIgraphLayout(layout = "layout_with_fr")
   

@@ -59,8 +59,7 @@ by condition.
 Normalization can be based only on a subset of protein. Proteins with NA in this subset are ignored
 }
 \examples{
-require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept, package='DAPARdata')
 wrapper.normalizeD(Exp1_R25_pept[1:1000], "QuantileCentering", "within conditions",subset.norm=1:10)
 }
 \author{

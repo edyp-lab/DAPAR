@@ -61,7 +61,6 @@ tabulated-like quantitative proteomic data into a \code{MSnSet} object,
 including metadata.
 }
 \examples{
-require(DAPARdata)
 require(Matrix)
 exprsFile <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
 metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")

@@ -8,8 +8,7 @@
 ##' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' dat <- mvFilter(Exp1_R25_pept[1:1000,], type="allCond", th = 1)
 ##' dat <- wrapper.impute.mle(dat)
 wrapper.impute.mle <- function(obj){
@@ -50,8 +49,7 @@ wrapper.impute.mle <- function(obj){
 ##' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
 ##' @author Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' dat <- mvFilter(Exp1_R25_pept[1:1000], type="allCond", th = 1)
 ##' dat <- wrapper.dapar.impute.mi(dat, nb.iter=1)
 wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, nknn = 15, selec = 600, siz = 500, 
@@ -79,7 +77,7 @@ wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, nknn = 15, selec = 600, s
     if (progress.bar == TRUE) {
         cat(paste("\n 1/ Initial imputation under the MCAR assumption with impute.rand ... \n  "))
     }
-    dat.slsa = impute.rand(tab = tab, conditions = conditions)
+    dat.slsa = imp4p::impute.rand(tab = tab, conditions = conditions)
     
     if (progress.bar == TRUE) {
         cat(paste("\n 2/ Estimation of the mixture model in each sample... \n  "))
@@ -174,8 +172,7 @@ translatedRandomBeta <- function(n, min, max, param1=3, param2=1){
 ##' @return The object \code{obj} which has been imputed
 ##' @author Thomas Burger, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.impute.pa2(Exp1_R25_pept[1:1000], distribution="beta")
 wrapper.impute.pa2 <- function (obj, q.min = 0, q.norm = 3, eps = 0, distribution = "unif"){
   ## order exp and pData table before using imp4p functions
@@ -226,8 +223,7 @@ wrapper.impute.pa2 <- function (obj, q.min = 0, q.norm = 3, eps = 0, distributio
 ##' @return The object \code{obj} which has been imputed
 ##' @author Thomas Burger, Samuel Wieczorek
 ##' @examples
-##' require(DAPARdata)
-##' data(Exp1_R25_pept)
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.impute.pa2(Exp1_R25_pept[1:1000], distribution="beta")
 impute.pa2 <- function (tab, conditions, q.min = 0, q.norm = 3, eps = 0, distribution = "unif"){
     tab_imp = tab

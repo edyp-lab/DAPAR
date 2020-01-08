@@ -31,8 +31,7 @@ whereas the y-axis count the number of observed values for this entity
 and the considered condition.
 }
 \examples{
-require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept, package='DAPARdata')
 qData <- Biobase::exprs(Exp1_R25_pept)
 conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 hc_mvTypePlot2(qData, conds, title="POV distribution")

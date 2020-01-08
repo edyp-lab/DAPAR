@@ -38,8 +38,7 @@ xxxxx
 xxxxxx
 }
 \examples{
-require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept
 protID <- "Protein_group_IDs"
 keepThat <-  mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))

@@ -38,8 +38,7 @@ Plot to compare the quantitative proteomics data before and after
 normalization for a subset of protein
 }
 \examples{
-require(DAPARdata)
-data(Exp1_R25_pept)
+utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept
 qDataBefore <- Biobase::exprs(Exp1_R25_pept)
 ids <-obj@featureData@data[,obj@experimentData@other$proteinId]
