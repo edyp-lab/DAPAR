@@ -40,7 +40,7 @@ importFrom("stats", "lowess", "cor", "density","pexp", "mad",
             "median", "p.adjust", "model.matrix", "rnorm","na.omit",
            "quantile", "rbeta", "runif", "sd", "pchisq", "residuals","formula", "lm", "logLik",
            "complete.cases")
-importFrom("preprocessCore")
+import("preprocessCore")
 importFrom("gplots", "heatmap.2")
 importFrom("limma", "lmFit", "eBayes", "topTable", "makeContrasts", "contrasts.fit", "normalizeCyclicLoess")
 importFrom("pcaMethods", "completeObs", "pca")
