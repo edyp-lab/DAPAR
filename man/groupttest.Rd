@@ -4,7 +4,7 @@
 \alias{groupttest}
 \title{xxxxxx}
 \usage{
-groupttest(MatAdj, cond1 = qData[, c1Indice], cond2 = qData[, c2Indice])
+groupttest(MatAdj, cond1 = NULL, cond2 = NULL)
 }
 \arguments{
 \item{MatAdj}{xxxxx.}

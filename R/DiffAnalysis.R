@@ -68,7 +68,7 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0, palette=NULL){
      
      
     for (i in 1:ncol(df_logFC)){
-        tmp <- density(df_logFC[,i])
+        tmp <- density(df_logFC[,i],na.rm = TRUE)
         ind <- tmp$y[which(tmp$x <= -threshold_LogFC)]
         maxY.inf <- max(maxY.inf, ifelse(length(ind)==0,0,ind))
         maxY.inside <- max(maxY.inf, tmp$y[intersect(which(tmp$x > -threshold_LogFC),which(tmp$x < threshold_LogFC))])

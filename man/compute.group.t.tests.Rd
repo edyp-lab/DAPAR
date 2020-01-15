@@ -7,6 +7,7 @@
 compute.group.t.tests(
   qData,
   sTab,
+  X,
   X.spec,
   logFC = NULL,
   contrast = "OnevsOne",
@@ -17,6 +18,8 @@ compute.group.t.tests(
 \item{qData}{A matrix of quantitative data, without any missing values.}
 
 \item{sTab}{xxxx}
+
+\item{X}{xxx}
 
 \item{X.spec}{A matrix of quantitative data, without any missing values.}
 
@@ -43,10 +46,11 @@ obj <- Exp1_R25_pept
 protID <- "Protein_group_IDs"
 keepThat <-  mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 obj <- mvFilterFromIndices(obj, keepThat)
+X <- BuildAdjacencyMatrix(obj, protID,  unique = FALSE)
 X.spec <- BuildAdjacencyMatrix(obj, protID,  unique = TRUE)
 sTab <- Biobase::pData(obj)
 qData <- Biobase::exprs(obj)
-gttest <- compute.group.t.tests(qData, sTab, X.spec)
+gttest <- compute.group.t.tests(qData, sTab, X, X.spec)
 }
 \author{
 Thomas Burger, Samuel Wieczorek
