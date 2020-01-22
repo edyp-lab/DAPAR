@@ -71,8 +71,12 @@
 ##' X.spec <- BuildAdjacencyMatrix(obj, protID,  unique = TRUE)
 ##' qData <- Biobase::exprs(obj)
 ##' gttest <- groupttest(X.spec, qData[,1:3], qData[,4:6])
-groupttest <- function(MatAdj, cond1=qData[,c1Indice], cond2 = qData[,c2Indice]){
+groupttest <- function(MatAdj, cond1=NULL, cond2 = NULL){
   res <- list()
+  if (is.null(cond1) || is.null(cond2)){
+    warning("At least, one condition is empty.")
+    return(NULL)
+  }
   
   for(i in 1:dim(MatAdj)[2]){
     index <- names(which(MatAdj[,i]==1))
@@ -92,6 +96,7 @@ groupttest <- function(MatAdj, cond1=qData[,c1Indice], cond2 = qData[,c2Indice])
 ##' @title xxxxxx
 ##' @param qData A matrix of quantitative data, without any missing values.
 ##' @param sTab xxxx
+##' @param X xxx
 ##' @param X.spec A matrix of quantitative data, without any missing values.
 ##' @param logFC A vector (or list of vectors) xxxx
 ##' @param contrast Indicates if the test consists of the comparison of each 
@@ -109,11 +114,12 @@ groupttest <- function(MatAdj, cond1=qData[,c1Indice], cond2 = qData[,c2Indice])
 ##' protID <- "Protein_group_IDs"
 ##' keepThat <-  mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 ##' obj <- mvFilterFromIndices(obj, keepThat)
+##' X <- BuildAdjacencyMatrix(obj, protID,  unique = FALSE)
 ##' X.spec <- BuildAdjacencyMatrix(obj, protID,  unique = TRUE)
 ##' sTab <- Biobase::pData(obj)
 ##' qData <- Biobase::exprs(obj)
-##' gttest <- compute.group.t.tests(qData, sTab, X.spec)
-compute.group.t.tests <- function(qData,sTab, X.spec, logFC = NULL,contrast="OnevsOne", type="Student"){
+##' gttest <- compute.group.t.tests(qData, sTab, X, X.spec)
+compute.group.t.tests <- function(qData, sTab,X,  X.spec, logFC = NULL,contrast="OnevsOne", type="Student"){
   
   switch(type,
          Student=.type <- TRUE,
@@ -128,6 +134,11 @@ compute.group.t.tests <- function(qData,sTab, X.spec, logFC = NULL,contrast="One
   sTab <- sTab[unlist(lapply(split(sTab, Conditions.f), function(x) {x['Sample.name']})),]
   qData <- qData[,unlist(lapply(split(sTab.old, Conditions.f), function(x) {x['Sample.name']}))]
   Conditions <- sTab$Condition
+  
+  y <- qData
+  y <- y[rownames(X), ]
+  ## Keep track of proteins that are lost in aggregation step
+  unsup.prot <- !(colnames(X) %in% colnames(X.spec))
   
    
   if(contrast=="OnevsOne"){
@@ -146,11 +157,16 @@ compute.group.t.tests <- function(qData,sTab, X.spec, logFC = NULL,contrast="One
       logFC.tmp <- m1.tmp - m2.tmp
       if (grepl(comb[1,i], m2.name)){logFC.tmp <- -logFC.tmp}
       
+      peptide.spec.based.pv <- rep(1, ncol(X))
+      peptide.spec.based.pv[!unsup.prot] <- p.tmp
+      peptide.spec.based.FC <- rep(1, ncol(X))
+      peptide.spec.based.FC[!unsup.prot] <- logFC.tmp
+      
         
       txt <- paste(comb[1,i],"_vs_",comb[2,i], sep="")
         
-      logFC[[paste(txt, "logFC", sep="_")]] <- logFC.tmp
-      P_Value[[paste(txt, "pval", sep="_")]] <- p.tmp
+      logFC[[paste(txt, "logFC", sep="_")]] <- peptide.spec.based.FC
+      P_Value[[paste(txt, "pval", sep="_")]] <- peptide.spec.based.pv
       }
   } ##end Contrast==1
   
@@ -163,22 +179,28 @@ compute.group.t.tests <- function(qData,sTab, X.spec, logFC = NULL,contrast="One
      # Cond.t.all <- c(1:length(Conditions))
      # Cond.t.all[c1Indice] <- levels(Conditions.f)[i]
      # Cond.t.all[-c1Indice] <- "all"
-      
-      c1Indice <- which(Conditions==levels(Conditions.f)[i])
+      #c1Indice <- which(Conditions==levels(Conditions.f)[i])
       res.tmp <- groupttest(X.spec,qData[,c1Indice], qData[,-c1Indice] )
       
       
-      p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))
-      m1.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[1])))
-      m2.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[2])))
-      m1.name <- names(unlist(lapply(res.tmp,function(x)x$estimate[1])))[1]
-      m2.name <- names(unlist(lapply(res.tmp,function(x)x$estimate[2])))[1]
+      p.tmp <- unlist(lapply(res.tmp,function(x) x["p.value"]))
+      m1.tmp <- unlist(lapply(res.tmp, function(x) as.numeric(unlist(x)["estimate.mean of x"])))
+      m2.tmp <- unlist(lapply(res.tmp, function(x) as.numeric(unlist(x)["estimate.mean of y"])))
+      m1.name <- levels(Conditions.f)[i]
+      m2.name <-  paste("all-(",levels(Conditions.f)[i],")", sep="")
       logFC.tmp <- m1.tmp - m2.tmp
       if (grepl(levels(Conditions.f)[i], m2.name)){logFC.tmp <- -logFC.tmp}
       
+      peptide.spec.based.pv <- rep(1, ncol(X))
+      peptide.spec.based.pv[!unsup.prot] <- p.tmp
+      peptide.spec.based.FC <- rep(1, ncol(X))
+      peptide.spec.based.FC[!unsup.prot] <- logFC.tmp
+      
+      
+      
       txt <- paste(levels(Conditions.f)[i],"_vs_(all-",levels(Conditions.f)[i],")", sep="")
-      logFC[[paste(txt, "logFC", sep="_")]] <- logFC.tmp
-      P_Value[[paste(txt, "pval", sep="_")]] <- p.tmp
+      logFC[[paste(txt, "logFC", sep="_")]] <- peptide.spec.based.FC
+      P_Value[[paste(txt, "pval", sep="_")]] <- peptide.spec.based.pv
     }
   } # End Contrast=2
   
