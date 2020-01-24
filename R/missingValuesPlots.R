@@ -593,11 +593,11 @@ indices <- which(apply(is.OfType(originValues, "MEC"),1,sum) >0)
 
 if (length(indices)==0){
   warning("The dataset contains no Missing value on Entire Condition. So this plot is not available.")
-  return()
+  return(NULL)
 }else if (length(indices)==1){
   warning("The dataset contains only one Missing value on Entire Condition. Currently, Prostar does not handle such dataset to build the plot. 
           As it has no side-effects on the results, you can continue your imputation.")
-  return()
+  return(NULL)
 }
 
 mvImage(qData[indices,], conds)
