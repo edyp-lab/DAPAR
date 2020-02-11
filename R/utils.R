@@ -1,3 +1,24 @@
+
+
+
+ReplaceDotsByUnderscore <- function(obj){
+  #colnames(out) <- gsub(".", "_", colnames(obj), fixed=TRUE)
+  #proteinId =  gsub(".", "_", input$convert_proteinId, fixed=TRUE)
+  colnames(fData(obj)) <- gsub(".", "_", colnames(fData(obj)), fixed=TRUE)
+  names(obj@experimentData@other) <- gsub(".", "_", names(obj@experimentData@other), fixed=TRUE)
+  pData(obj)$Sample.name <- gsub(".", "_", pData(obj)$Sample.name, fixed=TRUE)
+  
+  obj
+  
+}
+
+
+
+
+
+
+
+
 ##' Returns the contents of the slot processing of an object of class \code{MSnSet}
 ##' 
 ##' @title Returns the contains of the slot processing  of an object of 
