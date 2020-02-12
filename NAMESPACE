@@ -1,7 +1,8 @@
 
 exportPattern("^[[:alpha:]]+")
 
-import(MSnbase)
+importFrom(MSnbase, readMSnSet, MSnSet)
+import(MultiAssayExperiment)
 import(DAPARdata)
 import(RColorBrewer)
 import(Cairo)
@@ -163,5 +164,3 @@ exportClasses(
   PipelineProtein
 )
 
-
-)

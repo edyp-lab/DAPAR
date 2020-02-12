@@ -45,7 +45,7 @@
 ## elle n'est instanciée qu'une seule fois dans une session prostar
 
 #########################################################
-#' @export
+#' @export PipelineTemplate
 #' @import methods
 #' @importClassesFrom MultiAssayExperiment MultiAssayExperiment
 .PipelineTemplate <- setClass("PipelineTemplate",
@@ -90,12 +90,6 @@ PipelineTemplate <- function(
   validObject(obj)
   
   
-  ## Sourcing the code for corresponding modules. le nom de l'item dans la liste
-  ## doit correspondre au nom du fichier source prefixé par 'module' 
-  for(p in processes(obj)[-1]){
-     path <- file.path(".", paste0('modules/process/', pipelineType(obj), "/",p, ".R"))
-    source(path, local = TRUE)$value
-     }
   
   obj
   }
@@ -308,7 +302,7 @@ setMethod("show", "PipelineTemplate", function(object) {
 
 
 #' @export
-setGeneric("pipelineType<-", function(x, ..., value) standardGeneric("pipelineType<-"))
+setGeneric("pipelineType<-", function(x, value) standardGeneric("pipelineType<-"))
 
 
 #' @export
@@ -435,13 +429,13 @@ setMethod("addDataset", "PipelineTemplate", function(x, name, dataset) {
 
 
 #' @export
-setGeneric("updateDataset", function(x, name, newdataset) standardGeneric("updateDataset"))
+setGeneric("updateDataset<-", function(x, name, value) standardGeneric("updateDataset<-"))
 #' @export
-setMethod("updateDataset", "PipelineTemplate", function(x, name, newdataset) {
+setReplaceMethod("updateDataset", "PipelineTemplate", function(x, name, value) {
   #mae <- callNextMethod()
   .checkIfAnalysisExists(x, name)
   
-  experiments(x)[[name]] <- newdataset
+  experiments(x)[[name]] <- value
   validObject(x)
   x
 })
@@ -474,22 +468,11 @@ setMethod("dataset", "PipelineTemplate", function(x, name) {
   }
 }
 
-.checkProcessSourceCode <- function(object) {
-  errors <- character()
-  for(p in processes(object)[-1]){
-    path <- file.path(".", paste0('modules/process/', pipelineType(object), "/",p, ".R"))
-    if (!file.exists(path)) {
-      msg <- paste0( path, ' was not found.')
-      errors <- c(errors, msg)
-    }
-  }
-  return(errors)
-}
 
 
 .validPipelineTemplate <- function(object) {
   #if (length(experiments(object)) != 0L) {
-  c(.checkProcessSourceCode(object) )
+  
   # }
 }
 
