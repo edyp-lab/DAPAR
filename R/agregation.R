@@ -1,18 +1,19 @@
-##' This function computes the number of proteins that are only defined by 
-##' specific peptides, shared peptides or a mixture of two. 
-##' 
-##' @title Computes the number of proteins that are only defined by 
-##' specific peptides, shared peptides or a mixture of two.
-##' @param matShared The adjacency matrix with both specific and 
-##' shared peptides.
-##' @return A list
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' protID <- "Protein_group_IDs"
-##' obj <- Exp1_R25_pept[1:1000]
-##' MShared <- BuildAdjacencyMatrix(obj, protID, FALSE)
-##' getProteinsStats(MShared)
+#' This function computes the number of proteins that are only defined by 
+#' specific peptides, shared peptides or a mixture of two. 
+#' 
+#' @title Computes the number of proteins that are only defined by 
+#' specific peptides, shared peptides or a mixture of two.
+#' @param matShared The adjacency matrix with both specific and 
+#' shared peptides.
+#' @return A list
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' protID <- "Protein_group_IDs"
+#' obj <- Exp1_R25_pept[1:1000]
+#' MShared <- BuildAdjacencyMatrix(obj, protID, FALSE)
+#' getProteinsStats(MShared)
+#' @export
 getProteinsStats <- function(matShared){
     if (is.null(matShared)){return(NULL)}
     #if(!is.matrix(matUnique) || !is.matrix(matShared)){return(NULL)}
@@ -47,29 +48,30 @@ getProteinsStats <- function(matShared){
 
 
 
-##' This function creates a column for the protein dataset after aggregation 
-##' by using the previous peptide dataset.
-##' 
-##' @title creates a column for the protein dataset after agregation by
-##'  using the previous peptide dataset.
-##' @param peptideData A data.frame of meta data of peptides. It is the fData 
-##' of the MSnset object.
-##' @param matAdj The adjacency matrix used to agregate the peptides data.
-##' @param columnName The name of the column in fData(peptides_MSnset) that 
-##' the user wants to keep in the new protein data.frame.
-##' @param proteinNames The names of the protein in the new dataset (i.e. rownames)
-##' @return A vector
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' protID <- "Protein_group_IDs"
-##' obj.pep <- Exp1_R25_pept[1:1000]
-##' M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-##' data <- Biobase::fData(obj.pep)
-##' protData <- DAPAR::aggregateMean(obj.pep, M)
-##' name <- "Protein_group_IDs"
-##' proteinNames <- rownames(Biobase::fData(protData))
-##' BuildColumnToProteinDataset(data, M, name,proteinNames )
+#' This function creates a column for the protein dataset after aggregation 
+#' by using the previous peptide dataset.
+#' 
+#' @title creates a column for the protein dataset after agregation by
+#'  using the previous peptide dataset.
+#' @param peptideData A data.frame of meta data of peptides. It is the fData 
+#' of the MSnset object.
+#' @param matAdj The adjacency matrix used to agregate the peptides data.
+#' @param columnName The name of the column in fData(peptides_MSnset) that 
+#' the user wants to keep in the new protein data.frame.
+#' @param proteinNames The names of the protein in the new dataset (i.e. rownames)
+#' @return A vector
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' protID <- "Protein_group_IDs"
+#' obj.pep <- Exp1_R25_pept[1:1000]
+#' M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+#' data <- Biobase::fData(obj.pep)
+#' protData <- DAPAR::aggregateMean(obj.pep, M)
+#' name <- "Protein_group_IDs"
+#' proteinNames <- rownames(Biobase::fData(protData))
+#' BuildColumnToProteinDataset(data, M, name,proteinNames )
+#' @export
 BuildColumnToProteinDataset <- function(peptideData, matAdj, columnName, proteinNames){
 nbProt <- ncol(matAdj)
 newCol <- rep("", nbProt)
@@ -86,32 +88,33 @@ return(newCol)
 }
 
 
-##' This function creates a column for the protein dataset after agregation 
-##' by using the previous peptide dataset. It is a parallel version of the function
-##' \code{BuildColumnToProteinDataset}
-##' 
-##' @title creates a column for the protein dataset after agregation by
-##'  using the previous peptide dataset.
-##' @param peptideData A data.frame of meta data of peptides. It is the fData 
-##' of the MSnset object.
-##' @param matAdj The adjacency matrix used to agregate the peptides data.
-##' @param columnName The name of the column in fData(peptides_MSnset) that 
-##' the user wants to keep in the new protein data.frame.
-##' @param proteinNames The names of the protein in the new dataset (i.e. rownames)
-##' @return A vector
-##' @author Samuel Wieczorek
-##' @examples
-##' \dontrun{
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' protID <- "Protein_group_IDs"
-##' obj.pep <- Exp1_R25_pept[1:1000]
-##' M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-##' data <- Biobase::fData(obj.pep)
-##' protData <- DAPAR::aggregateSum(obj.pep, M)
-##' name <- "Protein_group_IDs"
-##' proteinNames <- rownames(Biobase::fData(protData))
-##' BuildColumnToProteinDataset_par(data, M, name,proteinNames )
-##' }
+#' This function creates a column for the protein dataset after agregation 
+#' by using the previous peptide dataset. It is a parallel version of the function
+#' \code{BuildColumnToProteinDataset}
+#' 
+#' @title creates a column for the protein dataset after agregation by
+#'  using the previous peptide dataset.
+#' @param peptideData A data.frame of meta data of peptides. It is the fData 
+#' of the MSnset object.
+#' @param matAdj The adjacency matrix used to agregate the peptides data.
+#' @param columnName The name of the column in fData(peptides_MSnset) that 
+#' the user wants to keep in the new protein data.frame.
+#' @param proteinNames The names of the protein in the new dataset (i.e. rownames)
+#' @return A vector
+#' @author Samuel Wieczorek
+#' @examples
+#' \dontrun{
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' protID <- "Protein_group_IDs"
+#' obj.pep <- Exp1_R25_pept[1:1000]
+#' M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+#' data <- Biobase::fData(obj.pep)
+#' protData <- DAPAR::aggregateSum(obj.pep, M)
+#' name <- "Protein_group_IDs"
+#' proteinNames <- rownames(Biobase::fData(protData))
+#' BuildColumnToProteinDataset_par(data, M, name,proteinNames )
+#' }
+#' @export
 BuildColumnToProteinDataset_par <- function(peptideData, matAdj, columnName, proteinNames){
     doParallel::registerDoParallel()
     
@@ -128,20 +131,21 @@ BuildColumnToProteinDataset_par <- function(peptideData, matAdj, columnName, pro
 
 
 
-##' This function computes the number of peptides used to aggregate proteins.
-##' 
-##' @title Compute the number of peptides used to aggregate proteins
-##' @param M A "valued" adjacency matrix in which lines and columns correspond 
-##' respectively to peptides and proteins.
-##' @return A vector of boolean which is the adjacency matrix 
-##' but with NA values if they exist in the intensity matrix.
-##' @author Alexia Dorffer
-##' @examples
-##' library(DAPARdata)
-##' utils::data(Exp1_R25_pept)
-##' protID <- "Protein_group_IDs"
-##' M <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
-##' CountPep(M)
+#' This function computes the number of peptides used to aggregate proteins.
+#' 
+#' @title Compute the number of peptides used to aggregate proteins
+#' @param M A "valued" adjacency matrix in which lines and columns correspond 
+#' respectively to peptides and proteins.
+#' @return A vector of boolean which is the adjacency matrix 
+#' but with NA values if they exist in the intensity matrix.
+#' @author Alexia Dorffer
+#' @examples
+#' library(DAPARdata)
+#' utils::data(Exp1_R25_pept)
+#' protID <- "Protein_group_IDs"
+#' M <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
+#' CountPep(M)
+#' @export
 CountPep <- function (M) {
     z <- M
     z[z!=0] <- 1
@@ -150,18 +154,19 @@ CountPep <- function (M) {
 
 
 
-##' Method to create a plot with proteins and peptides on
-##' a MSnSet object (peptides)
-##' 
-##' @title Function to create a histogram that shows the repartition of
-##' peptides w.r.t. the proteins
-##' @param mat An adjacency matrix.
-##' @return A histogram  
-##' @author Alexia Dorffer, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' mat <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs")
-##' GraphPepProt(mat)
+#' Method to create a plot with proteins and peptides on
+#' a MSnSet object (peptides)
+#' 
+#' @title Function to create a histogram that shows the repartition of
+#' peptides w.r.t. the proteins
+#' @param mat An adjacency matrix.
+#' @return A histogram  
+#' @author Alexia Dorffer, Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' mat <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs")
+#' GraphPepProt(mat)
+#' @export
 GraphPepProt <- function(mat){
     if (is.null(mat)){return (NULL)} 
 
@@ -185,23 +190,62 @@ GraphPepProt <- function(mat){
 }
 
 
+#' @export
+BuildListAdjacencyMatrices <- function(obj.pep, protID){
+  
+  
+  data <- Biobase::exprs(obj.pep)
+  PG <- Biobase::fData(obj.pep)[,protID]
+  PG.l <- strsplit(as.character(PG), split=";", fixed=TRUE)
+  
+  t <- table(data.frame(A=rep(seq_along(PG.l), lengths(PG.l)), B=unlist(PG.l)))
+  
+  
+  tmpShared <- t
+  tmpSpec <- t
+  
+  ll <- which(rowSums(tmpSpec)>1)
+  if (length(ll) > 0) {
+      tmpSpec[ll,] <- 0
+    }
+ 
+  ll <- which(rowSums(tmpShared)==1)
+  if (length(ll) > 0) {
+    tmpShared[ll,] <- 0
+  }
+  
+  
+  ## Delete empty columns
+  # ll <- which(colSums(t)==0)
+  # if (length(ll) > 0){
+  #   X <- X[,-t]
+  # }
+  # 
+  Xshared <- Matrix::Matrix(tmpShared, sparse=T,dimnames = list(rownames(obj.pep), colnames(t)))
+  Xspec <- Matrix::Matrix(tmpSpec, sparse=T,dimnames = list(rownames(obj.pep), colnames(t)))
+  t <- Matrix::Matrix(t, sparse=T,dimnames = list(rownames(obj.pep), colnames(t)))
+  
+  return (list(all = t, onlyShared = Xshared, onlySpec = Xspec))
+}
 
 
-##' Method to create a binary matrix with proteins in columns and peptides 
-##' in lines on a \code{MSnSet} object (peptides)
-##' 
-##' @title Function matrix of appartenance group
-##' @param obj.pep An object (peptides) of class \code{MSnSet}.
-##' @param protID The name of proteins ID column 
-##' @param unique A boolean to indicate whether only the unique peptides must 
-##' be considered (TRUE) or if the shared peptides have to 
-##' be integrated (FALSE).
-##' @return A binary matrix  
-##' @author Florence Combes, Samuel Wieczorek, Alexia Dorffer
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata') 
-##' BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
-BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
+
+#' Method to create a binary matrix with proteins in columns and peptides 
+#' in lines on a \code{MSnSet} object (peptides)
+#' 
+#' @title Function matrix of appartenance group
+#' @param obj.pep An object (peptides) of class \code{MSnSet}.
+#' @param protID The name of proteins ID column 
+#' @param unique A boolean to indicate whether only the unique peptides must 
+#' be considered (TRUE) or if the shared peptides have to 
+#' be integrated (FALSE).
+#' @return A binary matrix  
+#' @author Florence Combes, Samuel Wieczorek, Alexia Dorffer
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata') 
+#' BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
+#' @export
+BuildAdjacencyMatrix <- function(obj.pep, protID, unique=FALSE){
    
   
   data <- Biobase::exprs(obj.pep)
@@ -224,8 +268,7 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
   #   X <- X[,-t]
   # }
   # 
-  X <- Matrix::Matrix(t, sparse=T,
-              dimnames = list(rownames(obj.pep), colnames(t))
+  X <- Matrix::Matrix(t, dimnames = list(rownames(obj.pep), colnames(t))
   )
   
   
@@ -238,39 +281,33 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
 
 
 
-##' Method to split an adjacency matrix into specific and shared
-##' 
-##' @title splits an adjacency matrix into specific and shared 
-##' @param X An adjacency matrix
-##' @return A list of two adjacency matrices
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata') 
-##' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
-##' X.ll <- splitAdjacencyMat(X)
+#' Method to split an adjacency matrix into specific and shared
+#' 
+#' @title splits an adjacency matrix into specific and shared 
+#' @param X An adjacency matrix
+#' @return A list of two adjacency matrices
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata') 
+#' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
+#' X.ll <- splitAdjacencyMat(X)
+#' @export
 splitAdjacencyMat <- function(X){
   hasShared <- length( which(rowSums(X) > 1)) > 0
   hasSpec <- length( which(rowSums(X) == 1)) > 0
   
+  tmpShared <- X
+  tmpSpec <- X
   
   if (hasShared && !hasSpec){
-    tmpShared <- X
-    tmpSpec <- X
     tmpSpec[which(rowSums(tmpSpec) > 1),] <- 0
   }
   else if (!hasShared && hasSpec){
-    tmpSpec <- X
-    tmpShared <- X
     tmpShared[which(rowSums(tmpShared) == 1),] <- 0
   }
   else if (hasShared && hasSpec){
-    tmpSpec <- X
-    tmpShared <- X
     tmpShared[which(rowSums(tmpShared) == 1),] <- 0
     tmpSpec[which(rowSums(tmpSpec) > 1),] <- 0
-  } else {
-    tmpSpec <- X
-    tmpShared <- X
   }
   
   
@@ -278,22 +315,23 @@ splitAdjacencyMat <- function(X){
   
 }
 
-##' This function computes the intensity of proteins based on the sum of the 
-##' intensities of their peptides.
-##' 
-##' @title Compute the intensity of proteins with the sum of the intensities
-##' of their peptides.
-##' @param obj.pep A matrix of intensities of peptides
-##' @param X An adjacency matrix in which lines and columns correspond 
-##' respectively to peptides and proteins.
-##' @return A matrix of intensities of proteins
-##' @author Alexia Dorffer
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' protID <- "Protein_group_IDs"
-##' obj.pep <- Exp1_R25_pept[1:1000]
-##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-##' DAPAR::aggregateSum(obj.pep, X)
+#' This function computes the intensity of proteins based on the sum of the 
+#' intensities of their peptides.
+#' 
+#' @title Compute the intensity of proteins with the sum of the intensities
+#' of their peptides.
+#' @param obj.pep A matrix of intensities of peptides
+#' @param X An adjacency matrix in which lines and columns correspond 
+#' respectively to peptides and proteins.
+#' @return A matrix of intensities of proteins
+#' @author Alexia Dorffer
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' protID <- "Protein_group_IDs"
+#' obj.pep <- Exp1_R25_pept[1:1000]
+#' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+#' DAPAR::aggregateSum(obj.pep, X)
+#' @export
 aggregateSum <- function(obj.pep, X){
   pepData <- 2^(Biobase::exprs(obj.pep))
   protData <- inner.sum(pepData, X)
@@ -303,22 +341,23 @@ aggregateSum <- function(obj.pep, X){
 
 
 
-##' Method to xxxxx
-##' 
-##' @title xxxx 
-##' @param obj.pep xxxxx
-##' @param X xxxx
-##' @param init.method xxxxx
-##' @param method xxxxx
-##' @param n xxxx
-##' @return xxxxx
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' protID <- "Protein_group_IDs"
-##' obj.pep <- Exp1_R25_pept[1:1000]
-##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-##' aggregateIterParallel(obj.pep, X)
+#' Method to xxxxx
+#' 
+#' @title xxxx 
+#' @param obj.pep xxxxx
+#' @param X xxxx
+#' @param init.method xxxxx
+#' @param method xxxxx
+#' @param n xxxx
+#' @return xxxxx
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' protID <- "Protein_group_IDs"
+#' obj.pep <- Exp1_R25_pept[1:1000]
+#' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+#' aggregateIterParallel(obj.pep, X)
+#' @export
 aggregateIterParallel <- function(obj.pep, X, init.method='Sum', method='Mean', n=NULL){
   
   doParallel::registerDoParallel()
@@ -341,21 +380,22 @@ aggregateIterParallel <- function(obj.pep, X, init.method='Sum', method='Mean', 
 }
 
 
-##' Method to xxxxx
-##' 
-##' @title xxxx 
-##' @param pepData xxxxx
-##' @param X xxxx
-##' @param init.method xxx
-##' @param method xxx
-##' @param n xxxx
-##' @return xxxxx
-##' @author Samuel Wieczorek
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' protID <- "Protein_group_IDs"
-##' obj.pep <- Exp1_R25_pept[1:1000]
-##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-##' DAPAR::inner.aggregate.iter(exprs(obj.pep), X)
+#' Method to xxxxx
+#' 
+#' @title xxxx 
+#' @param pepData xxxxx
+#' @param X xxxx
+#' @param init.method xxx
+#' @param method xxx
+#' @param n xxxx
+#' @return xxxxx
+#' @author Samuel Wieczorek
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' protID <- "Protein_group_IDs"
+#' obj.pep <- Exp1_R25_pept[1:1000]
+#' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+#' DAPAR::inner.aggregate.iter(exprs(obj.pep), X)
+#' @export
 inner.aggregate.iter <- function(pepData, X,init.method='Sum', method='Mean', n=NULL){
   
   
@@ -407,21 +447,22 @@ inner.aggregate.iter <- function(pepData, X,init.method='Sum', method='Mean', n=
 
 
 
-##' Method to xxxxx
-##' 
-##' @title xxxx 
-##' @param obj.pep xxxxx
-##' @param X xxxx
-##' @param init.method xxxxx
-##' @param method xxxxx
-##' @param n xxxx
-##' @return A protein object of class \code{MSnset}
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' protID <- "Protein_group_IDs"
-##' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
-##' aggregateIter(Exp1_R25_pept[1:1000],X=X)
+#' Method to xxxxx
+#' 
+#' @title xxxx 
+#' @param obj.pep xxxxx
+#' @param X xxxx
+#' @param init.method xxxxx
+#' @param method xxxxx
+#' @param n xxxx
+#' @return A protein object of class \code{MSnset}
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' protID <- "Protein_group_IDs"
+#' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
+#' aggregateIter(Exp1_R25_pept[1:1000],X=X)
+#' @export
 aggregateIter <- function(obj.pep, X, init.method='Sum', method='Mean', n=NULL){
   
   ### a reproduire iterativement pour chaque condition
@@ -445,13 +486,14 @@ aggregateIter <- function(obj.pep, X, init.method='Sum', method='Mean', n=NULL){
 
 
 
-##' Method to compute the number of quantified peptides used for aggregating each protein
-##' 
-##' @title Computes the number of peptides used for aggregating each protein 
-##' @param X An adjacency matrix
-##' @param pepData A data.frame of quantitative data
-##' @return A data.frame
-##' @author Samuel Wieczorek
+#' Method to compute the number of quantified peptides used for aggregating each protein
+#' 
+#' @title Computes the number of peptides used for aggregating each protein 
+#' @param X An adjacency matrix
+#' @param pepData A data.frame of quantitative data
+#' @return A data.frame
+#' @author Samuel Wieczorek
+#' @export
 GetNbPeptidesUsed <- function(X, pepData){
    pepData[!is.na(pepData)] <- 1
   pepData[is.na(pepData)] <- 0
@@ -460,22 +502,23 @@ GetNbPeptidesUsed <- function(X, pepData){
   return(pep)
 }
 
-##' This function computes the intensity of proteins as the mean of the 
-##' intensities of their peptides.
-##' 
-##' @title Compute the intensity of proteins as the mean of the intensities
-##' of their peptides.
-##' @param obj.pep A peptide object of class \code{MSnset}
-##' @param X An adjacency matrix in which lines and columns correspond 
-##' respectively to peptides and proteins.
-##' @return A matrix of intensities of proteins
-##' @author Alexia Dorffer
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj.pep <- Exp1_R25_pept[1:1000]
-##' protID <- "Protein_group_IDs"
-##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-##' aggregateMean(obj.pep, X)
+#' This function computes the intensity of proteins as the mean of the 
+#' intensities of their peptides.
+#' 
+#' @title Compute the intensity of proteins as the mean of the intensities
+#' of their peptides.
+#' @param obj.pep A peptide object of class \code{MSnset}
+#' @param X An adjacency matrix in which lines and columns correspond 
+#' respectively to peptides and proteins.
+#' @return A matrix of intensities of proteins
+#' @author Alexia Dorffer
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj.pep <- Exp1_R25_pept[1:1000]
+#' protID <- "Protein_group_IDs"
+#' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+#' aggregateMean(obj.pep, X)
+#' @export
 aggregateMean <- function(obj.pep, X){
   pepData <- 2^(Biobase::exprs(obj.pep))
   protData <- inner.mean(pepData, X)
@@ -485,18 +528,19 @@ aggregateMean <- function(obj.pep, X){
 
 
 
-##' Method to compute the detailed number of quantified peptides used for aggregating each protein
-##' 
-##' @title Computes the detailed number of peptides used for aggregating each protein 
-##' @param X An adjacency matrix
-##' @param pepData A data.frame of quantitative data
-##' @return A list of two items
-##' @author Samuel Wieczorek
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj.pep <- Exp1_R25_pept[1:1000]
-##' protID <- "Protein_group_IDs"
-##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-##' GetDetailedNbPeptidesUsed(X, obj.pep)
+#' Method to compute the detailed number of quantified peptides used for aggregating each protein
+#' 
+#' @title Computes the detailed number of peptides used for aggregating each protein 
+#' @param X An adjacency matrix
+#' @param pepData A data.frame of quantitative data
+#' @return A list of two items
+#' @author Samuel Wieczorek
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj.pep <- Exp1_R25_pept[1:1000]
+#' protID <- "Protein_group_IDs"
+#' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+#' GetDetailedNbPeptidesUsed(X, obj.pep)
+#' @export
 GetDetailedNbPeptidesUsed <- function(X, pepData){
   pepData[!is.na(pepData)] <- 1
   pepData[is.na(pepData)] <- 0
@@ -508,18 +552,19 @@ GetDetailedNbPeptidesUsed <- function(X, pepData){
 }
 
 
-##' Method to compute the detailed number of quantified peptides for each protein
-##' 
-##' @title Computes the detailed number of peptides for each protein 
-##' @param X An adjacency matrix
-##' @return A data.frame
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj.pep <- Exp1_R25_pept[1:1000]
-##' protID <- "Protein_group_IDs"
-##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-##' GetDetailedNbPeptides(X)
+#' Method to compute the detailed number of quantified peptides for each protein
+#' 
+#' @title Computes the detailed number of peptides for each protein 
+#' @param X An adjacency matrix
+#' @return A data.frame
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj.pep <- Exp1_R25_pept[1:1000]
+#' protID <- "Protein_group_IDs"
+#' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+#' GetDetailedNbPeptides(X)
+#' @export
 GetDetailedNbPeptides <- function(X){
   
   mat <- splitAdjacencyMat(as.matrix(X))
@@ -534,13 +579,14 @@ GetDetailedNbPeptides <- function(X){
 
 
 
-##' Method to xxxxx
-##' 
-##' @title xxxx 
-##' @param pepData A data.frame of quantitative data
-##' @param X An adjacency matrix
-##' @return A matrix
-##' @author Samuel Wieczorek
+#' Method to xxxxx
+#' 
+#' @title xxxx 
+#' @param pepData A data.frame of quantitative data
+#' @param X An adjacency matrix
+#' @return A matrix
+#' @author Samuel Wieczorek
+#' @export
 inner.sum <- function(pepData, X){
   pepData[is.na(pepData)] <- 0
   Mp <- t(X) %*% pepData
@@ -548,13 +594,14 @@ inner.sum <- function(pepData, X){
 }
 
 
-##' Method to xxxxx
-##' 
-##' @title xxxx 
-##' @param pepData A data.frame of quantitative data
-##' @param X An adjacency matrix
-##' @return xxxxx
-##' @author Samuel Wieczorek
+#' Method to xxxxx
+#' 
+#' @title xxxx 
+#' @param pepData A data.frame of quantitative data
+#' @param X An adjacency matrix
+#' @return xxxxx
+#' @author Samuel Wieczorek
+#' @export
 inner.mean <- function(pepData, X){
   Mp <- inner.sum(pepData, X)
   Mp <- Mp / GetNbPeptidesUsed(X, pepData)
@@ -566,15 +613,16 @@ inner.mean <- function(pepData, X){
 
 
 
-##' Method to xxxxx
-##' 
-##' @title xxxx 
-##' @param pepData A data.frame of quantitative data
-##' @param X An adjacency matrix
-##' @param method xxxxx
-##' @param n xxxxx
-##' @return xxxxx
-##' @author Samuel Wieczorek
+#' Method to xxxxx
+#' 
+#' @title xxxx 
+#' @param pepData A data.frame of quantitative data
+#' @param X An adjacency matrix
+#' @param method xxxxx
+#' @param n xxxxx
+#' @return xxxxx
+#' @author Samuel Wieczorek
+#' @export
 inner.aggregate.topn <-function(pepData,X, method='Mean', n=10){
   
   med <- apply(pepData, 1, median)
@@ -598,24 +646,25 @@ inner.aggregate.topn <-function(pepData,X, method='Mean', n=10){
   return(Mp)
 }
 
-##' This function computes the intensity of proteins as the sum of the 
-##' intensities of their n best peptides.
-##' 
-##' @title Compute the intensity of proteins as the sum of the 
-##' intensities of their n best peptides.
-##' @param obj.pep A matrix of intensities of peptides
-##' @param X An adjacency matrix in which lines and columns correspond 
-##' respectively to peptides and proteins.
-##' @param method xxx
-##' @param n The maximum number of peptides used to aggregate a protein.
-##' @return A matrix of intensities of proteins
-##' @author Alexia Dorffer, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj.pep <- Exp1_R25_pept[1:1000]
-##' protID <- "Protein_group_IDs"
-##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-##' DAPAR::aggregateTopn(obj.pep, X, n=3)
+#' This function computes the intensity of proteins as the sum of the 
+#' intensities of their n best peptides.
+#' 
+#' @title Compute the intensity of proteins as the sum of the 
+#' intensities of their n best peptides.
+#' @param obj.pep A matrix of intensities of peptides
+#' @param X An adjacency matrix in which lines and columns correspond 
+#' respectively to peptides and proteins.
+#' @param method xxx
+#' @param n The maximum number of peptides used to aggregate a protein.
+#' @return A matrix of intensities of proteins
+#' @author Alexia Dorffer, Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj.pep <- Exp1_R25_pept[1:1000]
+#' protID <- "Protein_group_IDs"
+#' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+#' DAPAR::aggregateTopn(obj.pep, X, n=3)
+#' @export
 aggregateTopn <- function(obj.pep,X,  method='Mean', n=10){
   pepData <- 2^(Biobase::exprs(obj.pep))
   
@@ -628,18 +677,19 @@ aggregateTopn <- function(obj.pep,X,  method='Mean', n=10){
 
 
 
-##' Method to finalize the aggregation process
-##' 
-##' @title Finalizes the aggregation process 
-##' @param obj.pep A peptide object of class \code{MSnset}
-##' @param pepData xxxx
-##' @param X An adjacency matrix in which lines and columns correspond 
-##' respectively to peptides and proteins.
-##' @param protData xxxxx
-##' @param lib.loc A list of two items (lib.loc$Prostar.loc and lib.loc$DAPAR.loc) to provide the 
-##' location of the installed packages
-##' @return A protein object of class \code{MSnset}
-##' @author Samuel Wieczorek
+#' Method to finalize the aggregation process
+#' 
+#' @title Finalizes the aggregation process 
+#' @param obj.pep A peptide object of class \code{MSnset}
+#' @param pepData xxxx
+#' @param X An adjacency matrix in which lines and columns correspond 
+#' respectively to peptides and proteins.
+#' @param protData xxxxx
+#' @param lib.loc A list of two items (lib.loc$Prostar.loc and lib.loc$DAPAR.loc) to provide the 
+#' location of the installed packages
+#' @return A protein object of class \code{MSnset}
+#' @author Samuel Wieczorek
+#' @export
 finalizeAggregation <- function(obj.pep, pepData, protData,X, lib.loc=NULL){
  
   protData <- as.matrix(protData)

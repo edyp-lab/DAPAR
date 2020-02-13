@@ -1,18 +1,19 @@
-##' This method is a wrapper to plots from a \code{MSnSet} object a 
-##' histogram which represents the distribution of the 
-##' number of missing values (NA) per lines (ie proteins).
-##' 
-##' @title Histogram of missing values per lines from an object 
-##' \code{MSnSet}
-##' @param obj An object of class \code{MSnSet}.
-##' @param indLegend The indice of the column name's in \code{pData()} tab .
-##' @param showValues A logical that indicates wether numeric values should be
-##' drawn above the bars.
-##' @return A histogram
-##' @author Alexia Dorffer
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' wrapper.mvPerLinesHisto(Exp1_R25_pept)
+#' This method is a wrapper to plots from a \code{MSnSet} object a 
+#' histogram which represents the distribution of the 
+#' number of missing values (NA) per lines (ie proteins).
+#' 
+#' @title Histogram of missing values per lines from an object 
+#' \code{MSnSet}
+#' @param obj An object of class \code{MSnSet}.
+#' @param indLegend The indice of the column name's in \code{pData()} tab .
+#' @param showValues A logical that indicates wether numeric values should be
+#' drawn above the bars.
+#' @return A histogram
+#' @author Alexia Dorffer
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' wrapper.mvPerLinesHisto(Exp1_R25_pept)
+#' @export
 wrapper.mvPerLinesHisto <- function(obj, indLegend="auto", showValues=FALSE){
 qData <- Biobase::exprs(obj)
 samplesData <- Biobase::pData(obj)
@@ -20,21 +21,22 @@ mvPerLinesHisto(qData, samplesData, indLegend, showValues)
 }
 
 
-##' This method is a wrapper to plots from a \code{MSnSet} object a 
-##' histogram which represents the distribution of the 
-##' number of missing values (NA) per lines (ie proteins).
-##' 
-##' @title Histogram of missing values per lines from an object using highcharter
-##' \code{MSnSet}
-##' @param obj An object of class \code{MSnSet}.
-##' @param indLegend The indice of the column name's in \code{pData()} tab .
-##' @param showValues A logical that indicates wether numeric values should be
-##' drawn above the bars.
-##' @return A histogram
-##' @author Alexia Dorffer
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' wrapper.mvPerLinesHisto(Exp1_R25_pept)
+#' This method is a wrapper to plots from a \code{MSnSet} object a 
+#' histogram which represents the distribution of the 
+#' number of missing values (NA) per lines (ie proteins).
+#' 
+#' @title Histogram of missing values per lines from an object using highcharter
+#' \code{MSnSet}
+#' @param obj An object of class \code{MSnSet}.
+#' @param indLegend The indice of the column name's in \code{pData()} tab .
+#' @param showValues A logical that indicates wether numeric values should be
+#' drawn above the bars.
+#' @return A histogram
+#' @author Alexia Dorffer
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' wrapper.mvPerLinesHisto(Exp1_R25_pept)
+#' @export
 wrapper.mvPerLinesHisto_HC <- function(obj, indLegend="auto", showValues=FALSE){
   if (is.null(obj)){
     warning("The dataset in NULL. Cannot continue.")
@@ -47,23 +49,24 @@ wrapper.mvPerLinesHisto_HC <- function(obj, indLegend="auto", showValues=FALSE){
   return(hc)
 }
 
-##' This method plots a bar plot which represents the distribution of the 
-##' number of missing values (NA) per lines (ie proteins).
-##' 
-##' @title Bar plot of missing values per lines
-##' @param qData A dataframe that contains the data to plot.
-##' @param samplesData A dataframe which contains informations about 
-##' the replicates.
-##' @param indLegend The indice of the column name's in \code{pData()} tab 
-##' @param showValues A logical that indicates wether numeric values should be
-##' drawn above the bars.
-##' @return A bar plot
-##' @author Florence Combes, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' samplesData <- Biobase::pData(Exp1_R25_pept)
-##' mvPerLinesHisto(qData, samplesData)
+#' This method plots a bar plot which represents the distribution of the 
+#' number of missing values (NA) per lines (ie proteins).
+#' 
+#' @title Bar plot of missing values per lines
+#' @param qData A dataframe that contains the data to plot.
+#' @param samplesData A dataframe which contains informations about 
+#' the replicates.
+#' @param indLegend The indice of the column name's in \code{pData()} tab 
+#' @param showValues A logical that indicates wether numeric values should be
+#' drawn above the bars.
+#' @return A bar plot
+#' @author Florence Combes, Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' qData <- Biobase::exprs(Exp1_R25_pept)
+#' samplesData <- Biobase::pData(Exp1_R25_pept)
+#' mvPerLinesHisto(qData, samplesData)
+#' @export
 mvPerLinesHisto <- function(qData, samplesData, indLegend="auto", showValues=FALSE){
 
 if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
@@ -107,23 +110,24 @@ x <- barplot(nb.na2barplot[-1],
 }
 
 
-##' This method plots a bar plot which represents the distribution of the 
-##' number of missing values (NA) per lines (ie proteins).
-##' 
-##' @title Bar plot of missing values per lines using highcharter
-##' @param qData A dataframe that contains the data to plot.
-##' @param samplesData A dataframe which contains informations about 
-##' the replicates.
-##' @param indLegend The indice of the column name's in \code{pData()} tab 
-##' @param showValues A logical that indicates wether numeric values should be
-##' drawn above the bars.
-##' @return A bar plot
-##' @author Florence Combes, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' samplesData <- Biobase::pData(Exp1_R25_pept)
-##' mvPerLinesHisto_HC(qData, samplesData)
+#' This method plots a bar plot which represents the distribution of the 
+#' number of missing values (NA) per lines (ie proteins).
+#' 
+#' @title Bar plot of missing values per lines using highcharter
+#' @param qData A dataframe that contains the data to plot.
+#' @param samplesData A dataframe which contains informations about 
+#' the replicates.
+#' @param indLegend The indice of the column name's in \code{pData()} tab 
+#' @param showValues A logical that indicates wether numeric values should be
+#' drawn above the bars.
+#' @return A bar plot
+#' @author Florence Combes, Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' qData <- Biobase::exprs(Exp1_R25_pept)
+#' samplesData <- Biobase::pData(Exp1_R25_pept)
+#' mvPerLinesHisto_HC(qData, samplesData)
+#' @export
 mvPerLinesHisto_HC <- function(qData, samplesData, indLegend="auto", showValues=FALSE){
     
     if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
@@ -181,21 +185,22 @@ mvPerLinesHisto_HC <- function(qData, samplesData, indLegend="auto", showValues=
 
 
 
-##' This method is a wrapper to plots from a \code{MSnSet} object a 
-##' bar plot which represents the distribution of the 
-##' number of missing values (NA) per lines (ie proteins) and per conditions.
-##' 
-##' @title Bar plot of missing values per lines and per conditions from an 
-##' object \code{MSnSet}
-##' @param obj An object of class \code{MSnSet}.
-##' @param indLegend The indice of the column name's in \code{pData()} tab .
-##' @param showValues A logical that indicates wether numeric values should be
-##' drawn above the bars.
-##' @return A bar plot
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' wrapper.mvPerLinesHistoPerCondition(Exp1_R25_pept)
+#' This method is a wrapper to plots from a \code{MSnSet} object a 
+#' bar plot which represents the distribution of the 
+#' number of missing values (NA) per lines (ie proteins) and per conditions.
+#' 
+#' @title Bar plot of missing values per lines and per conditions from an 
+#' object \code{MSnSet}
+#' @param obj An object of class \code{MSnSet}.
+#' @param indLegend The indice of the column name's in \code{pData()} tab .
+#' @param showValues A logical that indicates wether numeric values should be
+#' drawn above the bars.
+#' @return A bar plot
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' wrapper.mvPerLinesHistoPerCondition(Exp1_R25_pept)
+#' @export
 wrapper.mvPerLinesHistoPerCondition <- function(obj, indLegend="auto", 
                                             showValues=FALSE){
 qData <- Biobase::exprs(obj)
@@ -204,22 +209,23 @@ mvPerLinesHistoPerCondition(qData, samplesData, indLegend, showValues)
 }
 
 
-##' This method is a wrapper to plots (using highcharts) from a \code{MSnSet} object a 
-##' bar plot which represents the distribution of the 
-##' number of missing values (NA) per lines (ie proteins) and per conditions.
-##' 
-##' @title Bar plot of missing values per lines and per conditions from an 
-##' object \code{MSnSet}
-##' @param obj An object of class \code{MSnSet}.
-##' @param indLegend The indice of the column name's in \code{pData()} tab .
-##' @param showValues A logical that indicates wether numeric values should be
-##' drawn above the bars.
-##' @param ... xxx
-##' @return A bar plot
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' wrapper.mvPerLinesHistoPerCondition_HC(Exp1_R25_pept)
+#' This method is a wrapper to plots (using highcharts) from a \code{MSnSet} object a 
+#' bar plot which represents the distribution of the 
+#' number of missing values (NA) per lines (ie proteins) and per conditions.
+#' 
+#' @title Bar plot of missing values per lines and per conditions from an 
+#' object \code{MSnSet}
+#' @param obj An object of class \code{MSnSet}.
+#' @param indLegend The indice of the column name's in \code{pData()} tab .
+#' @param showValues A logical that indicates wether numeric values should be
+#' drawn above the bars.
+#' @param ... xxx
+#' @return A bar plot
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' wrapper.mvPerLinesHistoPerCondition_HC(Exp1_R25_pept)
+#' @export
 wrapper.mvPerLinesHistoPerCondition_HC <- function(obj, indLegend="auto", 
                                                 showValues=FALSE, ...){
     if (is.null(obj)){
@@ -232,24 +238,25 @@ wrapper.mvPerLinesHistoPerCondition_HC <- function(obj, indLegend="auto",
 }
 
 
-##' This method plots a bar plot which represents the distribution of the 
-##' number of missing values (NA) per lines (ie proteins) and per conditions.
-##' 
-##' @title Bar plot of missing values per lines and per condition
-##' @param qData A dataframe that contains quantitative data.
-##' @param samplesData A dataframe where lines correspond to samples and 
-##' columns to the meta-data for those samples.
-##' @param indLegend The indice of the column name's in \code{pData()} tab 
-##' @param showValues A logical that indicates wether numeric values should be
-##' drawn above the bars.
-##' @param palette xxx
-##' @return A bar plot
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' samplesData <- Biobase::pData(Exp1_R25_pept)
-##' mvPerLinesHistoPerCondition(qData, samplesData)
+#' This method plots a bar plot which represents the distribution of the 
+#' number of missing values (NA) per lines (ie proteins) and per conditions.
+#' 
+#' @title Bar plot of missing values per lines and per condition
+#' @param qData A dataframe that contains quantitative data.
+#' @param samplesData A dataframe where lines correspond to samples and 
+#' columns to the meta-data for those samples.
+#' @param indLegend The indice of the column name's in \code{pData()} tab 
+#' @param showValues A logical that indicates wether numeric values should be
+#' drawn above the bars.
+#' @param palette xxx
+#' @return A bar plot
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' qData <- Biobase::exprs(Exp1_R25_pept)
+#' samplesData <- Biobase::pData(Exp1_R25_pept)
+#' mvPerLinesHistoPerCondition(qData, samplesData)
+#' @export
 mvPerLinesHistoPerCondition <- function(qData, samplesData, indLegend="auto", 
                                         showValues=FALSE, palette=NULL){
 
@@ -302,26 +309,27 @@ x <- barplot(m,
 
 
 
-##' This method plots a bar plot which represents the distribution of the 
-##' number of missing values (NA) per lines (ie proteins) and per conditions.
-##' Same as the function \link{mvPerLinesHistoPerCondition} but uses the package
-##' \code{highcharter}.
-##' 
-##' @title Bar plot of missing values per lines and per condition
-##' @param qData A dataframe that contains quantitative data.
-##' @param samplesData A dataframe where lines correspond to samples and 
-##' columns to the meta-data for those samples.
-##' @param indLegend The indice of the column name's in \code{pData()} tab 
-##' @param showValues A logical that indicates wether numeric values should be
-##' drawn above the bars.
-##' @param palette xxx
-##' @return A bar plot
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' samplesData <- Biobase::pData(Exp1_R25_pept)
-##' mvPerLinesHistoPerCondition_HC(qData, samplesData)
+#' This method plots a bar plot which represents the distribution of the 
+#' number of missing values (NA) per lines (ie proteins) and per conditions.
+#' Same as the function \link{mvPerLinesHistoPerCondition} but uses the package
+#' \code{highcharter}.
+#' 
+#' @title Bar plot of missing values per lines and per condition
+#' @param qData A dataframe that contains quantitative data.
+#' @param samplesData A dataframe where lines correspond to samples and 
+#' columns to the meta-data for those samples.
+#' @param indLegend The indice of the column name's in \code{pData()} tab 
+#' @param showValues A logical that indicates wether numeric values should be
+#' drawn above the bars.
+#' @param palette xxx
+#' @return A bar plot
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' qData <- Biobase::exprs(Exp1_R25_pept)
+#' samplesData <- Biobase::pData(Exp1_R25_pept)
+#' mvPerLinesHistoPerCondition_HC(qData, samplesData)
+#' @export
 mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto", 
                                         showValues=FALSE, palette=NULL){
     
@@ -383,19 +391,20 @@ mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto",
 }
 
 
-##' This method plots from a \code{MSnSet} object a histogram of 
-##' missing values.
-##' 
-##' @title Histogram of missing values from a \code{MSnSet} object
-##' @param obj An object of class \code{MSnSet}.
-##' @param indLegend The indices of the column name's in \code{pData()} tab.
-##' @param showValues A logical that indicates wether numeric values should be
-##' drawn above the bars.
-##' @return A histogram
-##' @author Alexia Dorffer
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' wrapper.mvHisto(Exp1_R25_pept, showValues=TRUE)
+#' This method plots from a \code{MSnSet} object a histogram of 
+#' missing values.
+#' 
+#' @title Histogram of missing values from a \code{MSnSet} object
+#' @param obj An object of class \code{MSnSet}.
+#' @param indLegend The indices of the column name's in \code{pData()} tab.
+#' @param showValues A logical that indicates wether numeric values should be
+#' drawn above the bars.
+#' @return A histogram
+#' @author Alexia Dorffer
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' wrapper.mvHisto(Exp1_R25_pept, showValues=TRUE)
+#' @export
 wrapper.mvHisto <- function(obj, indLegend="auto", showValues=FALSE){
 qData <- Biobase::exprs(obj)
 samplesData <- Biobase::pData(obj)
@@ -404,20 +413,21 @@ mvHisto(qData, samplesData, conds, indLegend, showValues)
 }
 
 
-##' This method plots from a \code{MSnSet} object a histogram of 
-##' missing values.
-##' 
-##' @title Histogram of missing values from a \code{MSnSet} object
-##' @param obj An object of class \code{MSnSet}.
-##' @param indLegend The indices of the column name's in \code{pData()} tab.
-##' @param showValues A logical that indicates wether numeric values should be
-##' drawn above the bars.
-##' @param ... xxx
-##' @return A histogram
-##' @author Alexia Dorffer
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' wrapper.mvHisto_HC(Exp1_R25_pept, showValues=TRUE)
+#' This method plots from a \code{MSnSet} object a histogram of 
+#' missing values.
+#' 
+#' @title Histogram of missing values from a \code{MSnSet} object
+#' @param obj An object of class \code{MSnSet}.
+#' @param indLegend The indices of the column name's in \code{pData()} tab.
+#' @param showValues A logical that indicates wether numeric values should be
+#' drawn above the bars.
+#' @param ... xxx
+#' @return A histogram
+#' @author Alexia Dorffer
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' wrapper.mvHisto_HC(Exp1_R25_pept, showValues=TRUE)
+#' @export
 wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
   if (is.null(obj)){
     warning("The dataset in NULL. Cannot continue.")
@@ -433,25 +443,26 @@ wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
 
 
 
-##' This method plots a histogram of missing values.
-##' 
-##' @title Histogram of missing values
-##' @param qData A dataframe that contains quantitative data.
-##' @param samplesData A dataframe where lines correspond to samples and 
-##' columns to the meta-data for those samples.
-##' @param conds A vector of the conditions (one condition per sample).
-##' @param indLegend The indices of the column name's in \code{pData()} tab
-##' @param showValues A logical that indicates wether numeric values should be
-##' drawn above the bars.
-##' @param palette xxx
-##' @return A histogram
-##' @author Florence Combes, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' samplesData <- Biobase::pData(Exp1_R25_pept)
-##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' mvHisto(qData, samplesData, conds, indLegend="auto", showValues=TRUE)
+#' This method plots a histogram of missing values.
+#' 
+#' @title Histogram of missing values
+#' @param qData A dataframe that contains quantitative data.
+#' @param samplesData A dataframe where lines correspond to samples and 
+#' columns to the meta-data for those samples.
+#' @param conds A vector of the conditions (one condition per sample).
+#' @param indLegend The indices of the column name's in \code{pData()} tab
+#' @param showValues A logical that indicates wether numeric values should be
+#' drawn above the bars.
+#' @param palette xxx
+#' @return A histogram
+#' @author Florence Combes, Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' qData <- Biobase::exprs(Exp1_R25_pept)
+#' samplesData <- Biobase::pData(Exp1_R25_pept)
+#' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+#' mvHisto(qData, samplesData, conds, indLegend="auto", showValues=TRUE)
+#' @export
 mvHisto <- function(qData, samplesData, conds, indLegend="auto", showValues=FALSE, palette=NULL){
 
   if (is.null(palette)){
@@ -500,26 +511,27 @@ graphics::text(x, -3,
 
 
 
-##' This method plots a histogram of missing values. Same as the function \code{mvHisto}
-##' but uses the package \code{highcharter}
-##' 
-##' @title Histogram of missing values
-##' @param qData A dataframe that contains quantitative data.
-##' @param samplesData A dataframe where lines correspond to samples and 
-##' columns to the meta-data for those samples.
-##' @param conds A vector of the conditions (one condition per sample).
-##' @param indLegend The indices of the column name's in \code{pData()} tab
-##' @param showValues A logical that indicates wether numeric values should be
-##' drawn above the bars.
-##' @param palette xxx
-##' @return A histogram
-##' @author Florence Combes, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' samplesData <- Biobase::pData(Exp1_R25_pept)
-##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' mvHisto_HC(qData, samplesData, conds, indLegend="auto", showValues=TRUE)
+#' This method plots a histogram of missing values. Same as the function \code{mvHisto}
+#' but uses the package \code{highcharter}
+#' 
+#' @title Histogram of missing values
+#' @param qData A dataframe that contains quantitative data.
+#' @param samplesData A dataframe where lines correspond to samples and 
+#' columns to the meta-data for those samples.
+#' @param conds A vector of the conditions (one condition per sample).
+#' @param indLegend The indices of the column name's in \code{pData()} tab
+#' @param showValues A logical that indicates wether numeric values should be
+#' drawn above the bars.
+#' @param palette xxx
+#' @return A histogram
+#' @author Florence Combes, Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' qData <- Biobase::exprs(Exp1_R25_pept)
+#' samplesData <- Biobase::pData(Exp1_R25_pept)
+#' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+#' mvHisto_HC(qData, samplesData, conds, indLegend="auto", showValues=TRUE)
+#' @export
 mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto", 
                     showValues=FALSE, palette = NULL){
   if (is.null(palette)){
@@ -568,23 +580,24 @@ mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto",
 
 
 
-##' Plots a heatmap of the quantitative data. Each column represent one of
-##' the conditions in the object of class \code{MSnSet} and 
-##' the color is proportional to the mean of intensity for each line of
-##' the dataset.
-##' The lines have been sorted in order to vizualize easily the different
-##' number of missing values. A white square is plotted for missing values.
-##' 
-##' @title Heatmap of missing values from a \code{MSnSet} object
-##' @param obj An object of class \code{MSnSet}.
-##' @return A heatmap
-##' @author Alexia Dorffer
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj <- Exp1_R25_pept
-##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', 1)
-##' obj <- mvFilterFromIndices(obj, keepThat)
-##' wrapper.mvImage(obj)
+#' Plots a heatmap of the quantitative data. Each column represent one of
+#' the conditions in the object of class \code{MSnSet} and 
+#' the color is proportional to the mean of intensity for each line of
+#' the dataset.
+#' The lines have been sorted in order to vizualize easily the different
+#' number of missing values. A white square is plotted for missing values.
+#' 
+#' @title Heatmap of missing values from a \code{MSnSet} object
+#' @param obj An object of class \code{MSnSet}.
+#' @return A heatmap
+#' @author Alexia Dorffer
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R25_pept
+#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', 1)
+#' obj <- mvFilterFromIndices(obj, keepThat)
+#' wrapper.mvImage(obj)
+#' @export
 wrapper.mvImage <- function(obj){
 qData <- Biobase::exprs(obj)
 conds <- Biobase::pData(obj)[,"Condition"]
@@ -596,23 +609,24 @@ mvImage(qData[indices,], conds)
 
 
 
-##' Plots a heatmap of the quantitative data. Each column represent one of
-##' the conditions in the object of class \code{MSnSet} and 
-##' the color is proportional to the mean of intensity for each line of
-##' the dataset.
-##' The lines have been sorted in order to vizualize easily the different
-##' number of missing values. A white square is plotted for missing values.
-##' 
-##' @title Heatmap of missing values
-##' @param qData A dataframe that contains quantitative data.
-##' @param conds A vector of the conditions (one condition per sample).
-##' @return A heatmap
-##' @author Samuel Wieczorek, Thomas Burger
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' mvImage(qData, conds)
+#' Plots a heatmap of the quantitative data. Each column represent one of
+#' the conditions in the object of class \code{MSnSet} and 
+#' the color is proportional to the mean of intensity for each line of
+#' the dataset.
+#' The lines have been sorted in order to vizualize easily the different
+#' number of missing values. A white square is plotted for missing values.
+#' 
+#' @title Heatmap of missing values
+#' @param qData A dataframe that contains quantitative data.
+#' @param conds A vector of the conditions (one condition per sample).
+#' @return A heatmap
+#' @author Samuel Wieczorek, Thomas Burger
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' qData <- Biobase::exprs(Exp1_R25_pept)
+#' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+#' mvImage(qData, conds)
+#' @export
 mvImage <- function(qData, conds){
   
 ### build indices of conditions
@@ -660,18 +674,19 @@ heatmap.DAPAR(exprso,
 
 
 
-##' This method is a wrapper for the function \code{\link{hc_mvTypePlot2}} adapted to objects
-##' of class \code{MSnSet}).
+#' This method is a wrapper for the function \code{\link{hc_mvTypePlot2}} adapted to objects
+#' of class \code{MSnSet}).
 
-##' @title Distribution of observed values with respect to intensity values 
-##' from a \code{MSnSet} object
-##' @param obj An object of class \code{MSnSet}.
-##' @param ... See \code{\link{hc_mvTypePlot2}} 
-##' @return A scatter plot
-##' @author Florence Combes, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' wrapper.hc_mvTypePlot2(Exp1_R25_pept)
+#' @title Distribution of observed values with respect to intensity values 
+#' from a \code{MSnSet} object
+#' @param obj An object of class \code{MSnSet}.
+#' @param ... See \code{\link{hc_mvTypePlot2}} 
+#' @return A scatter plot
+#' @author Florence Combes, Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' wrapper.hc_mvTypePlot2(Exp1_R25_pept)
+#' @export
 wrapper.hc_mvTypePlot2 <- function(obj,...){
     qData <- Biobase::exprs(obj)
     conds <- Biobase::pData(obj)[,"Condition"]
@@ -681,28 +696,29 @@ wrapper.hc_mvTypePlot2 <- function(obj,...){
 
 
 
-##' This method shows density plots which represents the repartition of
-##' Partial Observed Values for each replicate in the dataset.
-##' The colors correspond to the different conditions (slot Condition in in the
-##' dataset of class \code{MSnSet}).
-##' The x-axis represent the mean of intensity for one condition and one
-##' entity in the dataset (i. e. a protein) 
-##' whereas the y-axis count the number of observed values for this entity
-##' and the considered condition.
-##' 
-##' @title Distribution of Observed values with respect to intensity values
-##' @param qData A dataframe that contains quantitative data.
-##' @param conds A vector of the conditions (one condition per sample).
-##' @param palette The different colors for conditions
-##' @param typeofMV xxx
-##' @param title The title of the plot
-##' @return Density plots
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' hc_mvTypePlot2(qData, conds, title="POV distribution")
+#' This method shows density plots which represents the repartition of
+#' Partial Observed Values for each replicate in the dataset.
+#' The colors correspond to the different conditions (slot Condition in in the
+#' dataset of class \code{MSnSet}).
+#' The x-axis represent the mean of intensity for one condition and one
+#' entity in the dataset (i. e. a protein) 
+#' whereas the y-axis count the number of observed values for this entity
+#' and the considered condition.
+#' 
+#' @title Distribution of Observed values with respect to intensity values
+#' @param qData A dataframe that contains quantitative data.
+#' @param conds A vector of the conditions (one condition per sample).
+#' @param palette The different colors for conditions
+#' @param typeofMV xxx
+#' @param title The title of the plot
+#' @return Density plots
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' qData <- Biobase::exprs(Exp1_R25_pept)
+#' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+#' hc_mvTypePlot2(qData, conds, title="POV distribution")
+#' @export
 hc_mvTypePlot2 <- function(qData, conds, palette = NULL, typeofMV=NULL, title=NULL){
   if (is.null(conds)){return(NULL)}
   

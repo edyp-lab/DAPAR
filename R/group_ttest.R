@@ -54,23 +54,24 @@
 
 #######################
 ### attention, à rendre générique: pour l'instant ne marche qu'avec n1=3 (car codé en dur)
-##' This function is xxxxxx
-##'
-##' @title xxxxxx
-##' @param MatAdj xxxxx.
-##' @param cond1 xxxx.
-##' @param cond2 xxxx.
-##' @return xxxxx
-##' @author Thomas Burger, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj <- Exp1_R25_pept
-##' protID <- "Protein_group_IDs"
-##' keepThat <-  mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
-##' obj <- mvFilterFromIndices(obj, keepThat)
-##' X.spec <- BuildAdjacencyMatrix(obj, protID,  unique = TRUE)
-##' qData <- Biobase::exprs(obj)
-##' gttest <- groupttest(X.spec, qData[,1:3], qData[,4:6])
+#' This function is xxxxxx
+#'
+#' @title xxxxxx
+#' @param MatAdj xxxxx.
+#' @param cond1 xxxx.
+#' @param cond2 xxxx.
+#' @return xxxxx
+#' @author Thomas Burger, Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R25_pept
+#' protID <- "Protein_group_IDs"
+#' keepThat <-  mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' obj <- mvFilterFromIndices(obj, keepThat)
+#' X.spec <- BuildAdjacencyMatrix(obj, protID,  unique = TRUE)
+#' qData <- Biobase::exprs(obj)
+#' gttest <- groupttest(X.spec, qData[,1:3], qData[,4:6])
+#' @export
 groupttest <- function(MatAdj, cond1=NULL, cond2 = NULL){
   res <- list()
   if (is.null(cond1) || is.null(cond2)){
@@ -92,33 +93,34 @@ groupttest <- function(MatAdj, cond1=NULL, cond2 = NULL){
 
 
 
-##'
-##' @title xxxxxx
-##' @param qData A matrix of quantitative data, without any missing values.
-##' @param sTab xxxx
-##' @param X xxx
-##' @param X.spec A matrix of quantitative data, without any missing values.
-##' @param logFC A vector (or list of vectors) xxxx
-##' @param contrast Indicates if the test consists of the comparison of each 
-##' biological condition versus 
-##' each of the other ones (contrast=1; 
-##' for example H0:"C1=C2" vs H1:"C1!=C2", etc.) 
-##' or each condition versus all others (contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
-##' H1:"C1!=(C2+C3)/2", etc. if there are three conditions).
-##' @param type xxxxx
-##' @return xxxxx
-##' @author Thomas Burger, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj <- Exp1_R25_pept
-##' protID <- "Protein_group_IDs"
-##' keepThat <-  mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
-##' obj <- mvFilterFromIndices(obj, keepThat)
-##' X <- BuildAdjacencyMatrix(obj, protID,  unique = FALSE)
-##' X.spec <- BuildAdjacencyMatrix(obj, protID,  unique = TRUE)
-##' sTab <- Biobase::pData(obj)
-##' qData <- Biobase::exprs(obj)
-##' gttest <- compute.group.t.tests(qData, sTab, X, X.spec)
+#'
+#' @title xxxxxx
+#' @param qData A matrix of quantitative data, without any missing values.
+#' @param sTab xxxx
+#' @param X xxx
+#' @param X.spec A matrix of quantitative data, without any missing values.
+#' @param logFC A vector (or list of vectors) xxxx
+#' @param contrast Indicates if the test consists of the comparison of each 
+#' biological condition versus 
+#' each of the other ones (contrast=1; 
+#' for example H0:"C1=C2" vs H1:"C1!=C2", etc.) 
+#' or each condition versus all others (contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
+#' H1:"C1!=(C2+C3)/2", etc. if there are three conditions).
+#' @param type xxxxx
+#' @return xxxxx
+#' @author Thomas Burger, Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R25_pept
+#' protID <- "Protein_group_IDs"
+#' keepThat <-  mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' obj <- mvFilterFromIndices(obj, keepThat)
+#' X <- BuildAdjacencyMatrix(obj, protID,  unique = FALSE)
+#' X.spec <- BuildAdjacencyMatrix(obj, protID,  unique = TRUE)
+#' sTab <- Biobase::pData(obj)
+#' qData <- Biobase::exprs(obj)
+#' gttest <- compute.group.t.tests(qData, sTab, X, X.spec)
+#' @export
 compute.group.t.tests <- function(qData, sTab,X,  X.spec, logFC = NULL,contrast="OnevsOne", type="Student"){
   
   switch(type,

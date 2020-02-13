@@ -9,8 +9,7 @@
 ### PipelineTemplate class
 ### ----------------------------------------------
 
-#' An integrative multi-assay class for experiment data
-#'
+#' @title PipelineTemplate class
 #' @description
 #' The \code{PipelineTemplate} class inherits from the \code{PipelineTemplate} and serves as a template for
 #' instanciate pipeline classes such as proteinPipeline, proteinPipeline, etc. It can be used to manage results of
@@ -41,24 +40,16 @@
 #' colData=samples)
 
 #'
-#' @exportClass PipelineTemplate
-#' 
-#' 
-#' 
-#' 
-#' 
-#source(file.path(".", "Classes/pipeline-template-class.R"), local = TRUE)$value
-
+#' @exportClass PipelineProtein
 .PipelineProtein <- setClass("PipelineProtein",
           contains = "PipelineTemplate", 
           representation = representation(),
-          prototype = prototype(),
+          prototype = prototype()
          )
 
 
 
-#' @export
-#' @importFrom MultiAssayExperiment MultiAssayExperiment
+#' @export PipelineProtein
 PipelineProtein <- function(...)
 {
   template <- PipelineTemplate(...)

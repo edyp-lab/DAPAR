@@ -4,7 +4,7 @@
 \alias{BuildAdjacencyMatrix}
 \title{Function matrix of appartenance group}
 \usage{
-BuildAdjacencyMatrix(obj.pep, protID, unique = TRUE)
+BuildAdjacencyMatrix(obj.pep, protID, unique = FALSE)
 }
 \arguments{
 \item{obj.pep}{An object (peptides) of class \code{MSnSet}.}

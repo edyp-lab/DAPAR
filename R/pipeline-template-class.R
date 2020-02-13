@@ -5,8 +5,7 @@
 ### PipelineTemplate class
 ### ----------------------------------------------
 
-#' An integrative multi-assay class for experiment data
-#'
+#' @title PipelineTemplate class
 #' @description
 #' The \code{PipelineTemplate} class inherits from the \code{MultiAssayExperiment} and serves as a template for
 #' instanciate pipeline classes such as proteinPipeline, proteinPipeline, etc. It can be used to manage results of
@@ -33,7 +32,7 @@
 #' obj <- Exp1_R25_prot
 #' mae <- 
 
-#'
+#' @import MultiAssayExperiment
 #' @exportClass PipelineTemplate
 #' 
 #' 
@@ -45,9 +44,6 @@
 ## elle n'est instanciée qu'une seule fois dans une session prostar
 
 #########################################################
-#' @export PipelineTemplate
-#' @import methods
-#' @importClassesFrom MultiAssayExperiment MultiAssayExperiment
 .PipelineTemplate <- setClass("PipelineTemplate",
                           slots= list(
                             indexNA = "numeric",
@@ -63,8 +59,7 @@
 
 
 
-#' @export
-#' @importFrom MultiAssayExperiment
+#' @export PipelineTemplate
 PipelineTemplate <- function(
   indexNA = numeric(),
   PairwiseComparisons = list(),
@@ -201,20 +196,6 @@ setMethod("PairwiseComps", "PipelineTemplate", function(x, withDimnames=TRUE) {
 # of which can be modified as required.
 
 
-#' #' @export
-#' #' @importMethodsFrom MultiAssayExperiment rowData
-#' setMethod("rowData", "PipelineTemplate", function(x, ...) {
-#'   out <- callNextMethod()
-#'   
-#'   # Do something extra here.
-#'   out$extra <- runif(nrow(out))
-#'   
-#'   # Returning the rowData object.
-#'   out
-#' })
-
-
-
 # We use setValidity2 to define a validity function for PipelineTemplate. We use the previously 
 # defined getter functions to retrieve the slot values rather than using @. This is generally 
 # a good idea to keep the interface separate from the implementation
@@ -226,60 +207,12 @@ setMethod("PairwiseComps", "PipelineTemplate", function(x, withDimnames=TRUE) {
 
 
 
-#' #' @importFrom BiocGenerics NCOL NROW
-#' setValidity("PipelineTemplate", function(object) {
-  # NR <- NROW(object)
-  # NC <- NCOL(object)
-  # msg <- NULL
-  # 
-  # # 1D
-  # if (length(rowVec(object, withDimnames=FALSE)) != NR) {
-  #   msg <- c(msg, "'rowVec' should have length equal to the number of rows")
-  # }
-  # if (length(colVec(object, withDimnames=FALSE)) != NC) {
-  #   msg <- c(
-  #     msg, "'colVec' should have length equal to the number of columns"
-  #   )
-  # }
-  # 
-  # # 2D
-  # if (NROW(rowToRowMat(object, withDimnames=FALSE)) != NR) {
-  #   msg <- c(
-  #     msg, "'nrow(rowToRowMat)' should be equal to the number of rows"
-  #   )
-  # }
-  # if (NCOL(colToColMat(object, withDimnames=FALSE)) != NC) {
-  #   msg <- c(
-  #     msg, "'ncol(colToColMat)' should be equal to the number of columns"
-  #   )
-  # }
-  # if (NROW(rowToColMat(object, withDimnames=FALSE)) != NC) {
-  #   msg <- c(
-  #     msg, "'nrow(rowToColMat)' should be equal to the number of columns"
-  #   )
-  # }
-  # if (NCOL(colToRowMat(object, withDimnames=FALSE)) != NR) {
-  #   msg <- c(
-  #     msg, "'ncol(colToRowMat)' should be equal to the number of rows"
-  #   )
-  # }
-  # 
-  # if (length(msg)) {
-  #   msg
-  # } else TRUE
-#   TRUE
-# })
-
-
-
-
 # Creating a show method
 # The default show method will only display information about the MultiAssayExperiment slots. 
 # We can augment it to display some relevant aspects of the custom slots. This is done by 
 # calling the base show method before printing additional fields as necessary.
 
 #' @export
-#' @importMethodsFrom MultiAssayExperiment show
 setMethod("show", "PipelineTemplate", function(object) {
   cat(
     "The name of the pipeline is ", pipelineType(object), " \n",
@@ -365,29 +298,6 @@ setReplaceMethod("PairwiseComps", "PipelineTemplate", function(x, value) {
   validObject(x)
   x
 })
-
-
-
-
-# 3.6.3 For MultiAssayExperiment slots
-# Again, we can use the setter methods defined in MultiAssayExperiment 
-# to modify slots in the base class. These should generally not require 
-# any re-defining. However, if it is necessary, the methods should use 
-# callNextMethod internally:
-#   
-  
-#' #' @export
-#' #' @importMethodsFrom MultiAssayExperiment "rowData<-"
-#' setReplaceMethod("rowData", "ExampleClass", function(x, ..., value) {
-#'   y <- callNextMethod() # returns a modified ExampleClass
-#'   
-#'   # Do something extra here.
-#'   message("hi!\n")
-#'   
-#'   y
-#' })
-
-
 
 
 
