@@ -27,6 +27,7 @@ import(cp4p)
 import(FactoMineR)
 import(factoextra)
 importFrom("grDevices","rainbow")
+import(MultiAssayExperiment)
 
 
 import(tidyverse)

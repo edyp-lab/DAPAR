@@ -1,3 +1,16 @@
+ReplaceDotsByUndescrore <- function(dat){
+#tmp <- setIndexNA(tmp,which(is.na(data)))
+  out <- dat
+colnames(Biobase::fData(out)) <- gsub(".", "_", colnames(Biobase::fData(out)), fixed=TRUE)
+names(out@experimentData@other) <- gsub(".", "_", names(out@experimentData@other), fixed=TRUE)
+Biobase::pData(out)$Sample.name <- gsub(".", "_", Biobase::pData(out)$Sample.name, fixed=TRUE)
+
+
+return(out)
+}
+                                        
+                                        
+                                        
 ##' Returns the contents of the slot processing of an object of class \code{MSnSet}
 ##' 
 ##' @title Returns the contains of the slot processing  of an object of 
