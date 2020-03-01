@@ -1,17 +1,18 @@
 
 
 
-##' Compute the PCA
-##' 
-##' @title Compute the PCA
-##' @param obj xxx
-##' @param var.scaling The dimensions to plot
-##' @param ncp xxxx
-##' @return A xxxxxx
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' res.pca <- wrapper.pca(Exp1_R25_pept)
+#' Compute the PCA
+#' 
+#' @title Compute the PCA
+#' @param obj xxx
+#' @param var.scaling The dimensions to plot
+#' @param ncp xxxx
+#' @return A xxxxxx
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' res.pca <- wrapper.pca(Exp1_R25_pept)
+#' @export
 wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
  # require(FactoMineR)
   
@@ -41,17 +42,18 @@ wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
 
 
 
-##' Plots the variables of PCA
-##' 
-##' @title Plots variables of PCA
-##' @param res.pca xxx
-##' @param chosen.axes The dimensions to plot
-##' @return A plot
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' res.pca <- wrapper.pca(Exp1_R25_pept)
-##' plotPCA_Var(res.pca)
+#' Plots the variables of PCA
+#' 
+#' @title Plots variables of PCA
+#' @param res.pca xxx
+#' @param chosen.axes The dimensions to plot
+#' @return A plot
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' res.pca <- wrapper.pca(Exp1_R25_pept)
+#' plotPCA_Var(res.pca)
+#' @export
 plotPCA_Var <- function(res.pca, chosen.axes=c(1,2)){
   #plot.PCA(res.pca, choix="var", axes = chosen.axes, title="Sample factor map (PCA)")
   #require(factoextra)
@@ -65,17 +67,18 @@ plotPCA_Var <- function(res.pca, chosen.axes=c(1,2)){
 }
 
 
-##' Plots the individuals of PCA
-##' 
-##' @title Plots individuals of PCA
-##' @param res.pca xxx
-##' @param chosen.axes The dimensions to plot
-##' @return A plot
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' res.pca <- wrapper.pca(Exp1_R25_pept)
-##' plotPCA_Ind(res.pca)
+#' Plots the individuals of PCA
+#' 
+#' @title Plots individuals of PCA
+#' @param res.pca xxx
+#' @param chosen.axes The dimensions to plot
+#' @return A plot
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' res.pca <- wrapper.pca(Exp1_R25_pept)
+#' plotPCA_Ind(res.pca)
+#' @export
 plotPCA_Ind <- function(res.pca, chosen.axes=c(1,2)){
   #plot.PCA(res.pca, choix="ind", axes = chosen.axes, select = 0:-1, title="Protein factor map (PCA)")
   if (is.null(res.pca)){return(NULL)}
@@ -85,16 +88,17 @@ plotPCA_Ind <- function(res.pca, chosen.axes=c(1,2)){
   }
 
 
-##' Plots the eigen values of PCA
-##' 
-##' @title Plots the eigen values of PCA
-##' @param res.pca xxx
-##' @return A histogram
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' res.pca <- wrapper.pca(Exp1_R25_pept, ncp=6)
-##' plotPCA_Eigen(res.pca)
+#' Plots the eigen values of PCA
+#' 
+#' @title Plots the eigen values of PCA
+#' @param res.pca xxx
+#' @return A histogram
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' res.pca <- wrapper.pca(Exp1_R25_pept, ncp=6)
+#' plotPCA_Eigen(res.pca)
+#' @export
 plotPCA_Eigen <- function(res.pca){
   if (is.null(res.pca)){return(NULL)}
   eig.val <- res.pca$eig
@@ -111,16 +115,17 @@ plotPCA_Eigen <- function(res.pca){
 }
 
 
-##' Plots the eigen values of PCA with the highcharts library
-##' 
-##' @title Plots the eigen values of PCA with the highcharts library
-##' @param res.pca xxx
-##' @return A histogram
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' res.pca <- wrapper.pca(Exp1_R25_pept, ncp=6)
-##' plotPCA_Eigen_hc(res.pca)
+#' Plots the eigen values of PCA with the highcharts library
+#' 
+#' @title Plots the eigen values of PCA with the highcharts library
+#' @param res.pca xxx
+#' @return A histogram
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' res.pca <- wrapper.pca(Exp1_R25_pept, ncp=6)
+#' plotPCA_Eigen_hc(res.pca)
+#' @export
 plotPCA_Eigen_hc <- function(res.pca){
   if (is.null(res.pca)){return(NULL)}
   hc <- highchart() %>%
@@ -138,20 +143,21 @@ plotPCA_Eigen_hc <- function(res.pca){
   
 }
 
-##' Boxplot for quantitative proteomics data
-##' 
-##' @title Builds a boxplot from a dataframe
-##' @param obj xxx
-##' @param conds xxx
-##' @param legend A vector of the conditions (one string per sample).
-##' @param palette xxx
-##' @return A boxplot
-##' @author Florence Combes, Samuel Wieczorek
-##' @seealso \code{\link{densityPlotD}}
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' boxPlotD(Exp1_R25_pept, conds)
+#' Boxplot for quantitative proteomics data
+#' 
+#' @title Builds a boxplot from a dataframe
+#' @param obj xxx
+#' @param conds xxx
+#' @param legend A vector of the conditions (one string per sample).
+#' @param palette xxx
+#' @return A boxplot
+#' @author Florence Combes, Samuel Wieczorek
+#' @seealso \code{\link{densityPlotD}}
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+#' boxPlotD(Exp1_R25_pept, conds)
+#' @export
 boxPlotD <- function(obj,conds, legend=NULL,palette=NULL){
   qData <- Biobase::exprs(obj)
   if (is.null(palette)){
@@ -192,20 +198,21 @@ abline(h=0)
 
 
 
-##' Boxplot for quantitative proteomics data using the library \code{highcharter}
-##' 
-##' @title Builds a boxplot from a dataframe using the library \code{highcharter}
-##' @param obj xxx
-##' @param legend A vector of the conditions (one condition per sample).
-##' @param palette xxx
-##' @param subset.view A vector of index indicating rows to highlight
-##' @return A boxplot
-##' @author Samuel Wieczorek, Anais Courtier
-##' @seealso \code{\link{densityPlotD_HC}}
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' legend <- Biobase::pData(Exp1_R25_pept)[,"Sample.name"]
-##' boxPlotD_HC(Exp1_R25_pept, legend, subset.view=1:10)
+#' Boxplot for quantitative proteomics data using the library \code{highcharter}
+#' 
+#' @title Builds a boxplot from a dataframe using the library \code{highcharter}
+#' @param obj xxx
+#' @param legend A vector of the conditions (one condition per sample).
+#' @param palette xxx
+#' @param subset.view A vector of index indicating rows to highlight
+#' @return A boxplot
+#' @author Samuel Wieczorek, Anais Courtier
+#' @seealso \code{\link{densityPlotD_HC}}
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' legend <- Biobase::pData(Exp1_R25_pept)[,"Sample.name"]
+#' boxPlotD_HC(Exp1_R25_pept, legend, subset.view=1:10)
+#' @export
 boxPlotD_HC <- function(obj, legend=NULL, palette = NULL,subset.view=NULL){
 
   qData <- Biobase::exprs(obj)
@@ -287,21 +294,22 @@ boxPlotD_HC <- function(obj, legend=NULL, palette = NULL,subset.view=NULL){
 
 
 
-##' ViolinPlot for quantitative proteomics data
-##' 
-##' @title Builds a violinplot from a dataframe
-##' @param obj xxx
-##' @param legend A vector of the conditions (one condition per sample).
-##' @param palette xxx
-##' @param subset.view A vector of index indicating rows to highlight
-##' @return A violinplot
-##' @author Samuel Wieczorek, Anais Courtier
-##' @seealso \code{\link{densityPlotD}}
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' library(vioplot)
-##' legend <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' violinPlotD(Exp1_R25_pept, legend=legend,subset.view=20:30)
+#' ViolinPlot for quantitative proteomics data
+#' 
+#' @title Builds a violinplot from a dataframe
+#' @param obj xxx
+#' @param legend A vector of the conditions (one condition per sample).
+#' @param palette xxx
+#' @param subset.view A vector of index indicating rows to highlight
+#' @return A violinplot
+#' @author Samuel Wieczorek, Anais Courtier
+#' @seealso \code{\link{densityPlotD}}
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' library(vioplot)
+#' legend <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+#' violinPlotD(Exp1_R25_pept, legend=legend,subset.view=20:30)
+#' @export
 violinPlotD <- function(obj, legend=NULL, palette = NULL,subset.view=NULL){
   plot.new()
   qData <- Biobase::exprs(obj)
@@ -365,26 +373,27 @@ violinPlotD <- function(obj, legend=NULL, palette = NULL,subset.view=NULL){
 
 
 
-##' Wrapper to the function that plot to compare the quantitative proteomics 
-##' data before and after normalization
-##' 
-##' @title Builds a plot from a dataframe
-##' @param objBefore A dataframe that contains quantitative data before 
-##' normalization.
-##' @param objAfter A dataframe that contains quantitative data after 
-##' normalization.
-##' @param condsForLegend A vector of the conditions (one condition per sample).
-##' @param indData2Show A vector of the indices of the columns to show in the 
-##' plot. The indices are those of indices of 
-##' the columns int the data.frame qDataBefore.
-##' @param ... arguments for palette
-##' @return A plot
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering","within conditions")
-##' wrapper.compareNormalizationD(Exp1_R25_pept, objAfter, conds)
+#' Wrapper to the function that plot to compare the quantitative proteomics 
+#' data before and after normalization
+#' 
+#' @title Builds a plot from a dataframe
+#' @param objBefore A dataframe that contains quantitative data before 
+#' normalization.
+#' @param objAfter A dataframe that contains quantitative data after 
+#' normalization.
+#' @param condsForLegend A vector of the conditions (one condition per sample).
+#' @param indData2Show A vector of the indices of the columns to show in the 
+#' plot. The indices are those of indices of 
+#' the columns int the data.frame qDataBefore.
+#' @param ... arguments for palette
+#' @return A plot
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+#' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering","within conditions")
+#' wrapper.compareNormalizationD(Exp1_R25_pept, objAfter, conds)
+#' @export
 wrapper.compareNormalizationD <- function(objBefore, objAfter, 
                                         condsForLegend=NULL,
                                         indData2Show=NULL,
@@ -398,29 +407,30 @@ if (is.null(condsForLegend)){
 compareNormalizationD(qDataBefore, qDataAfter, condsForLegend, indData2Show, ...)
 }
 
-##' Wrapper to the function that plot to compare the quantitative proteomics 
-##' data before and after normalization. Same as the function \link{wrapper.compareNormalizationD}
-##' but uses the package \code{highcharter}
-##' 
-##' @title Builds a plot from a dataframe
-##' @param objBefore A dataframe that contains quantitative data before 
-##' normalization.
-##' @param objAfter A dataframe that contains quantitative data after 
-##' normalization.
-##' @param condsForLegend A vector of the conditions (one condition 
-##' per sample).
-##' @param indData2Show A vector of the indices of the columns to show in the 
-##' plot. The indices are those of indices of 
-##' the columns int the data.frame qDataBefore.
-##' @param ... arguments for palette
-##' @return A plot
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering", 
-##' "within conditions")
-##' wrapper.compareNormalizationD_HC(Exp1_R25_pept, objAfter, conds)
+#' Wrapper to the function that plot to compare the quantitative proteomics 
+#' data before and after normalization. Same as the function \link{wrapper.compareNormalizationD}
+#' but uses the package \code{highcharter}
+#' 
+#' @title Builds a plot from a dataframe
+#' @param objBefore A dataframe that contains quantitative data before 
+#' normalization.
+#' @param objAfter A dataframe that contains quantitative data after 
+#' normalization.
+#' @param condsForLegend A vector of the conditions (one condition 
+#' per sample).
+#' @param indData2Show A vector of the indices of the columns to show in the 
+#' plot. The indices are those of indices of 
+#' the columns int the data.frame qDataBefore.
+#' @param ... arguments for palette
+#' @return A plot
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+#' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering", 
+#' "within conditions")
+#' wrapper.compareNormalizationD_HC(Exp1_R25_pept, objAfter, conds)
+#' @export
 wrapper.compareNormalizationD_HC <- function(objBefore, objAfter, 
                                           condsForLegend=NULL,
                                           indData2Show=NULL,
@@ -432,28 +442,29 @@ wrapper.compareNormalizationD_HC <- function(objBefore, objAfter,
     compareNormalizationD_HC(qDataBefore, qDataAfter, condsForLegend, indData2Show,...)
 }
 
-##' Plot to compare the quantitative proteomics data before and after 
-##' normalization
-##' 
-##' @title Builds a plot from a dataframe
-##' @param qDataBefore A dataframe that contains quantitative data before 
-##' normalization.
-##' @param qDataAfter A dataframe that contains quantitative data after 
-##' normalization.
-##' @param condsForLegend A vector of the conditions (one condition 
-##' per sample).
-##' @param indData2Show A vector of the indices of the columns to show in 
-##' the plot. The indices are those of indices of 
-##' the columns int the data.frame qDataBefore.
-##' @param palette xxx
-##' @return A plot
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' qDataBefore <- Biobase::exprs(Exp1_R25_pept)
-##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' objAfter <- wrapper.normalizeD(Exp1_R25_pept,"QuantileCentering","within conditions")
-##' compareNormalizationD(qDataBefore, Biobase::exprs(objAfter), conds)
+#' Plot to compare the quantitative proteomics data before and after 
+#' normalization
+#' 
+#' @title Builds a plot from a dataframe
+#' @param qDataBefore A dataframe that contains quantitative data before 
+#' normalization.
+#' @param qDataAfter A dataframe that contains quantitative data after 
+#' normalization.
+#' @param condsForLegend A vector of the conditions (one condition 
+#' per sample).
+#' @param indData2Show A vector of the indices of the columns to show in 
+#' the plot. The indices are those of indices of 
+#' the columns int the data.frame qDataBefore.
+#' @param palette xxx
+#' @return A plot
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' qDataBefore <- Biobase::exprs(Exp1_R25_pept)
+#' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+#' objAfter <- wrapper.normalizeD(Exp1_R25_pept,"QuantileCentering","within conditions")
+#' compareNormalizationD(qDataBefore, Biobase::exprs(objAfter), conds)
+#' @export
 compareNormalizationD <- function(qDataBefore,
                                 qDataAfter,
                                 condsForLegend=NULL,
@@ -525,27 +536,28 @@ legend("topleft"
 
 
 
-##' Wrapper to the function that plot to compare the quantitative proteomics 
-##' data before and after normalization
-##' 
-##' @title Builds a plot from a dataframe
-##' @param objBefore A dataframe that contains quantitative data before 
-##' normalization.
-##' @param objAfter A dataframe that contains quantitative data after 
-##' normalization.
-##' @param condsForLegend A vector of the conditions (one condition per sample).
-##' @param indData2Show A vector of the indices of the columns to show in the 
-##' plot. The indices are those of indices of 
-##' the columns int the data.frame qDataBefore.
-##' @param ... arguments for palette
-##' @return A plot
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering","within conditions")
-##' ids <- Biobase::fData(Exp1_R25_pept)[,Exp1_R25_pept@experimentData@other$proteinId]
-##' wrapper.compareNormalizationDSubset(Exp1_R25_pept, objAfter, conds, idsForLegend=ids, subset.view=1:10)
+#' Wrapper to the function that plot to compare the quantitative proteomics 
+#' data before and after normalization
+#' 
+#' @title Builds a plot from a dataframe
+#' @param objBefore A dataframe that contains quantitative data before 
+#' normalization.
+#' @param objAfter A dataframe that contains quantitative data after 
+#' normalization.
+#' @param condsForLegend A vector of the conditions (one condition per sample).
+#' @param indData2Show A vector of the indices of the columns to show in the 
+#' plot. The indices are those of indices of 
+#' the columns int the data.frame qDataBefore.
+#' @param ... arguments for palette
+#' @return A plot
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+#' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering","within conditions")
+#' ids <- Biobase::fData(Exp1_R25_pept)[,Exp1_R25_pept@experimentData@other$proteinId]
+#' wrapper.compareNormalizationDSubset(Exp1_R25_pept, objAfter, conds, idsForLegend=ids, subset.view=1:10)
+#' @export
 wrapper.compareNormalizationDSubset <- function(objBefore, objAfter, 
                                           condsForLegend=NULL,
                                           indData2Show=NULL,
@@ -563,29 +575,30 @@ wrapper.compareNormalizationDSubset <- function(objBefore, objAfter,
 
 
 
-##' Plot to compare the quantitative proteomics data before and after 
-##' normalization for a subset of protein
-##' 
-##' @title Builds a plot from a dataframe
-##' @param qDataBefore A dataframe that contains quantitative data before 
-##' normalization.
-##' @param qDataAfter A dataframe that contains quantitative data after 
-##' normalization.
-##' @param indData2Show A vector of the indices of the columns to show in 
-##' the plot. The indices are those of indices of 
-##' the columns int the data.frame qDataBefore.
-##' @param idsForLegend A vector of the ids of the row in the data.frame qDataBefore.
-##' @param palette xxx
-##' @param subset.view A vector of index indicating rows to highlight
-##' @return A plot
-##' @author Samuel Wieczorek, Anais Courtier
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj <- Exp1_R25_pept
-##' qDataBefore <- Biobase::exprs(Exp1_R25_pept)
-##' ids <-obj@featureData@data[,obj@experimentData@other$proteinId]
-##' objAfter <- wrapper.normalizeD(obj,"QuantileCentering","within conditions")
-##' compareNormalizationDSubset(qDataBefore, Biobase::exprs(objAfter), idsForLegend=ids,subset.view=1:10)
+#' Plot to compare the quantitative proteomics data before and after 
+#' normalization for a subset of protein
+#' 
+#' @title Builds a plot from a dataframe
+#' @param qDataBefore A dataframe that contains quantitative data before 
+#' normalization.
+#' @param qDataAfter A dataframe that contains quantitative data after 
+#' normalization.
+#' @param indData2Show A vector of the indices of the columns to show in 
+#' the plot. The indices are those of indices of 
+#' the columns int the data.frame qDataBefore.
+#' @param idsForLegend A vector of the ids of the row in the data.frame qDataBefore.
+#' @param palette xxx
+#' @param subset.view A vector of index indicating rows to highlight
+#' @return A plot
+#' @author Samuel Wieczorek, Anais Courtier
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R25_pept
+#' qDataBefore <- Biobase::exprs(Exp1_R25_pept)
+#' ids <-obj@featureData@data[,obj@experimentData@other$proteinId]
+#' objAfter <- wrapper.normalizeD(obj,"QuantileCentering","within conditions")
+#' compareNormalizationDSubset(qDataBefore, Biobase::exprs(objAfter), idsForLegend=ids,subset.view=1:10)
+#' @export
 compareNormalizationDSubset <- function(qDataBefore,
                                   qDataAfter,
                                   indData2Show=NULL, idsForLegend=NULL,
@@ -655,30 +668,31 @@ compareNormalizationDSubset <- function(qDataBefore,
 
 
 
-##' Plot to compare the quantitative proteomics data before and after 
-##' normalization using the library \code{highcharter}
-##' 
-##' @title Builds a plot from a dataframe. Same as compareNormalizationD but 
-##' uses the library \code{highcharter}
-##' @param qDataBefore A dataframe that contains quantitative data before 
-##' normalization.
-##' @param qDataAfter A dataframe that contains quantitative data after 
-##' normalization.
-##' @param condsForLegend A vector of the conditions (one condition 
-##' per sample).
-##' @param indData2Show A vector of the indices of the columns to show in 
-##' the plot. The indices are those of indices of 
-##' the columns int the data.frame qDataBefore.
-##' @param palette xxx
-##' @return A plot
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj <- Exp1_R25_pept[1:1000]
-##' qDataBefore <- Biobase::exprs(obj)
-##' conds <- Biobase::pData(obj)[,"Condition"]
-##' objAfter <- wrapper.normalizeD(obj,"QuantileCentering","within conditions")
-##' compareNormalizationD_HC(qDataBefore, Biobase::exprs(objAfter), conds)
+#' Plot to compare the quantitative proteomics data before and after 
+#' normalization using the library \code{highcharter}
+#' 
+#' @title Builds a plot from a dataframe. Same as compareNormalizationD but 
+#' uses the library \code{highcharter}
+#' @param qDataBefore A dataframe that contains quantitative data before 
+#' normalization.
+#' @param qDataAfter A dataframe that contains quantitative data after 
+#' normalization.
+#' @param condsForLegend A vector of the conditions (one condition 
+#' per sample).
+#' @param indData2Show A vector of the indices of the columns to show in 
+#' the plot. The indices are those of indices of 
+#' the columns int the data.frame qDataBefore.
+#' @param palette xxx
+#' @return A plot
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R25_pept[1:1000]
+#' qDataBefore <- Biobase::exprs(obj)
+#' conds <- Biobase::pData(obj)[,"Condition"]
+#' objAfter <- wrapper.normalizeD(obj,"QuantileCentering","within conditions")
+#' compareNormalizationD_HC(qDataBefore, Biobase::exprs(objAfter), conds)
+#' @export
 compareNormalizationD_HC <- function(qDataBefore,
                                   qDataAfter,
                                   condsForLegend=NULL,
@@ -729,20 +743,21 @@ compareNormalizationD_HC <- function(qDataBefore,
 }
 
 
-##' Densityplot of quantitative proteomics data over samples.
-##' 
-##' @title Builds a densityplot from a dataframe
-##' @param obj xxx
-##' @param conds xxx
-##' @param legend A vector of the conditions (one condition per sample).
-##' @param palette xxx
-##' @return A density plot
-##' @author Florence Combes, Samuel Wieczorek
-##' @seealso \code{\link{boxPlotD}}, \code{\link{CVDistD}}
-##' @examples 
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' densityPlotD(Exp1_R25_pept, conds)
+#' Densityplot of quantitative proteomics data over samples.
+#' 
+#' @title Builds a densityplot from a dataframe
+#' @param obj xxx
+#' @param conds xxx
+#' @param legend A vector of the conditions (one condition per sample).
+#' @param palette xxx
+#' @return A density plot
+#' @author Florence Combes, Samuel Wieczorek
+#' @seealso \code{\link{boxPlotD}}, \code{\link{CVDistD}}
+#' @examples 
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+#' densityPlotD(Exp1_R25_pept, conds)
+#' @export
 densityPlotD <- function(obj, conds, legend=NULL,palette = NULL){
     
   qData <- Biobase::exprs(obj)
@@ -801,20 +816,21 @@ legend("topleft"
 
 
 
-##' Densityplot of quantitative proteomics data over samples. Same as the function \code{\link{densityPlotD}}
-##' but uses the package \code{highcharter}
-##' 
-##' @title Builds a densityplot from a dataframe
-##' @param obj xxx
-##' @param legend A vector of the conditions (one condition 
-##' per sample).
-##' @param palette xxx
-##' @return A density plot
-##' @author Samuel Wieczorek
-##' @seealso \code{\link{boxPlotD}}, \code{\link{CVDistD}}
-##' @examples 
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' densityPlotD_HC(Exp1_R25_pept)
+#' Densityplot of quantitative proteomics data over samples. Same as the function \code{\link{densityPlotD}}
+#' but uses the package \code{highcharter}
+#' 
+#' @title Builds a densityplot from a dataframe
+#' @param obj xxx
+#' @param legend A vector of the conditions (one condition 
+#' per sample).
+#' @param palette xxx
+#' @return A density plot
+#' @author Samuel Wieczorek
+#' @seealso \code{\link{boxPlotD}}, \code{\link{CVDistD}}
+#' @examples 
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' densityPlotD_HC(Exp1_R25_pept)
+#' @export
 densityPlotD_HC <- function(obj, legend=NULL, palette = NULL){
   
   qData <- Biobase::exprs(obj)
@@ -883,19 +899,20 @@ densityPlotD_HC <- function(obj, legend=NULL, palette = NULL){
 
 
 
-##' Builds a densityplot of the CV of entities in the exprs() table
-##' of an object \code{MSnSet}. The variance is calculated for each 
-##' condition present
-##' in the dataset (see the slot \code{'Condition'} in the \code{pData()} table).
-##' 
-##' @title Distribution of CV of entities
-##' @param obj An object of class \code{MSnSet}.
-##' @param ... arguments for palette
-##' @return A density plot
-##' @author Alexia Dorffer
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' wrapper.CVDistD(Exp1_R25_pept)
+#' Builds a densityplot of the CV of entities in the exprs() table
+#' of an object \code{MSnSet}. The variance is calculated for each 
+#' condition present
+#' in the dataset (see the slot \code{'Condition'} in the \code{pData()} table).
+#' 
+#' @title Distribution of CV of entities
+#' @param obj An object of class \code{MSnSet}.
+#' @param ... arguments for palette
+#' @return A density plot
+#' @author Alexia Dorffer
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' wrapper.CVDistD(Exp1_R25_pept)
+#' @export
 wrapper.CVDistD <- function(obj, ...){
 qData <- Biobase::exprs(obj)
 conds <- Biobase::pData(obj)[,"Condition"]
@@ -903,20 +920,21 @@ CVDistD(qData, conds, ...)
 }
 
 
-##' Builds a densityplot of the CV of entities in the exprs() table. 
-##' of an object \code{MSnSet}. The variance is calculated for each 
-##' condition present
-##' in the dataset (see the slot \code{'Condition'} in the \code{pData()} table).
-##' Same as the function \code{\link{wrapper.CVDistD}} but uses the package \code{highcharter}
-##' 
-##' @title Distribution of CV of entities
-##' @param obj An object of class \code{MSnSet}
-##' @param ... arguments for palette.
-##' @return A density plot
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' wrapper.CVDistD_HC(Exp1_R25_pept)
+#' Builds a densityplot of the CV of entities in the exprs() table. 
+#' of an object \code{MSnSet}. The variance is calculated for each 
+#' condition present
+#' in the dataset (see the slot \code{'Condition'} in the \code{pData()} table).
+#' Same as the function \code{\link{wrapper.CVDistD}} but uses the package \code{highcharter}
+#' 
+#' @title Distribution of CV of entities
+#' @param obj An object of class \code{MSnSet}
+#' @param ... arguments for palette.
+#' @return A density plot
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' wrapper.CVDistD_HC(Exp1_R25_pept)
+#' @export
 wrapper.CVDistD_HC <- function(obj, ...){
     qData <- Biobase::exprs(obj)
     conds <- Biobase::pData(obj)[,"Condition"]
@@ -924,21 +942,22 @@ wrapper.CVDistD_HC <- function(obj, ...){
 }
 
 
-##' Builds a densityplot of the CV of entities in the exprs() table
-##' of a object. The CV is calculated for each condition present
-##' in the dataset (see the slot \code{'Condition'} in the \code{pData()} table)
-##' 
-##' @title Distribution of CV of entities
-##' @param qData A dataframe that contains quantitative data.
-##' @param conds A vector of the conditions (one condition per sample).
-##' @param palette xxx
-##' @return A density plot
-##' @author Florence Combes, Samuel Wieczorek
-##' @seealso \code{\link{densityPlotD}}.
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' CVDistD(Biobase::exprs(Exp1_R25_pept), conds)
+#' Builds a densityplot of the CV of entities in the exprs() table
+#' of a object. The CV is calculated for each condition present
+#' in the dataset (see the slot \code{'Condition'} in the \code{pData()} table)
+#' 
+#' @title Distribution of CV of entities
+#' @param qData A dataframe that contains quantitative data.
+#' @param conds A vector of the conditions (one condition per sample).
+#' @param palette xxx
+#' @return A density plot
+#' @author Florence Combes, Samuel Wieczorek
+#' @seealso \code{\link{densityPlotD}}.
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+#' CVDistD(Biobase::exprs(Exp1_R25_pept), conds)
+#' @export
 CVDistD <- function(qData, conds=NULL, palette = NULL){
     
 if (is.null(conds)) {return(NULL)}
@@ -1006,21 +1025,22 @@ legend("topright"
 
 
 
-##' Builds a densityplot of the CV of entities in the exprs() table
-##' of a object. The CV is calculated for each condition present
-##' in the dataset (see the slot \code{'Condition'} in the \code{pData()} table)
-##' Same as the function \code{CVDistD} but uses the package \code{highcharter}
-##' @title Distribution of CV of entities
-##' @param qData A dataframe that contains quantitative data.
-##' @param conds A vector of the conditions (one condition per sample).
-##' @param palette xxx
-##' @return A density plot
-##' @author Samuel Wieczorek
-##' @seealso \code{\link{densityPlotD}}.
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-##' CVDistD_HC(Biobase::exprs(Exp1_R25_pept), conds)
+#' Builds a densityplot of the CV of entities in the exprs() table
+#' of a object. The CV is calculated for each condition present
+#' in the dataset (see the slot \code{'Condition'} in the \code{pData()} table)
+#' Same as the function \code{CVDistD} but uses the package \code{highcharter}
+#' @title Distribution of CV of entities
+#' @param qData A dataframe that contains quantitative data.
+#' @param conds A vector of the conditions (one condition per sample).
+#' @param palette xxx
+#' @return A density plot
+#' @author Samuel Wieczorek
+#' @seealso \code{\link{densityPlotD}}.
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+#' CVDistD_HC(Biobase::exprs(Exp1_R25_pept), conds)
+#' @export
 CVDistD_HC <- function(qData, conds=NULL, palette = NULL){
     
     if (is.null(conds)) {return(NULL)}
@@ -1106,35 +1126,37 @@ CVDistD_HC <- function(qData, conds=NULL, palette = NULL){
 
 
 
-##' Builds a correlation matrix based on a \code{MSnSet} object.
-##' 
-##' @title Displays a correlation matrix of the quantitative data of the
-##' \code{exprs()} table
-##' @param obj An object of class \code{MSnSet}.
-##' @param rate A float that defines the gradient of colors.
-##' @return A colored correlation matrix
-##' @author Alexia Dorffer
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' wrapper.corrMatrixD(Exp1_R25_pept)
+#' Builds a correlation matrix based on a \code{MSnSet} object.
+#' 
+#' @title Displays a correlation matrix of the quantitative data of the
+#' \code{exprs()} table
+#' @param obj An object of class \code{MSnSet}.
+#' @param rate A float that defines the gradient of colors.
+#' @return A colored correlation matrix
+#' @author Alexia Dorffer
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' wrapper.corrMatrixD(Exp1_R25_pept)
+#' @export
 wrapper.corrMatrixD <- function(obj, rate=5){
 qData <- Biobase::exprs(obj)
 samplesData <- Biobase::pData(obj)
 corrMatrixD(qData, samplesData, rate)
 }
 
-##' Builds a correlation matrix based on a \code{MSnSet} object. 
-##' Same as the function \code{\link{wrapper.corrMatrixD}} but uses the package \code{highcharter}
-##' 
-##' @title Displays a correlation matrix of the quantitative data of the
-##' \code{exprs()} table
-##' @param obj An object of class \code{MSnSet}.
-##' @param rate A float that defines the gradient of colors.
-##' @return A colored correlation matrix
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' wrapper.corrMatrixD_HC(Exp1_R25_pept)
+#' Builds a correlation matrix based on a \code{MSnSet} object. 
+#' Same as the function \code{\link{wrapper.corrMatrixD}} but uses the package \code{highcharter}
+#' 
+#' @title Displays a correlation matrix of the quantitative data of the
+#' \code{exprs()} table
+#' @param obj An object of class \code{MSnSet}.
+#' @param rate A float that defines the gradient of colors.
+#' @return A colored correlation matrix
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' wrapper.corrMatrixD_HC(Exp1_R25_pept)
+#' @export
 wrapper.corrMatrixD_HC <- function(obj, rate=0.5){
     qData <- Biobase::exprs(obj)
     samplesData <- Biobase::pData(obj)
@@ -1144,22 +1166,23 @@ wrapper.corrMatrixD_HC <- function(obj, rate=0.5){
 
 
 
-##' Correlation matrix based on a \code{MSnSet} object
-##' 
-##' @title Displays a correlation matrix of the quantitative data of the
-##' \code{exprs()} table.
-##' @param qData A dataframe of quantitative data.
-##' @param samplesData A dataframe where lines correspond to samples and 
-##' columns to the meta-data for those samples.
-##' @param gradientRate The rate parameter to control the exponential law for 
-##' the gradient of colors
-##' @return A colored correlation matrix
-##' @author Florence Combes, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' samplesData <- Biobase::pData(Exp1_R25_pept)
-##' corrMatrixD(qData, samplesData)
+#' Correlation matrix based on a \code{MSnSet} object
+#' 
+#' @title Displays a correlation matrix of the quantitative data of the
+#' \code{exprs()} table.
+#' @param qData A dataframe of quantitative data.
+#' @param samplesData A dataframe where lines correspond to samples and 
+#' columns to the meta-data for those samples.
+#' @param gradientRate The rate parameter to control the exponential law for 
+#' the gradient of colors
+#' @return A colored correlation matrix
+#' @author Florence Combes, Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' qData <- Biobase::exprs(Exp1_R25_pept)
+#' samplesData <- Biobase::pData(Exp1_R25_pept)
+#' corrMatrixD(qData, samplesData)
+#' @export
 corrMatrixD <- function(qData, samplesData, gradientRate = 5){
 Var1 <- Var2 <- value <- NULL
 
@@ -1192,24 +1215,25 @@ plot(d)
 
 
 
-##' Correlation matrix based on a \code{MSnSet} object. Same as the 
-##' function \link{corrMatrixD} but uses the package \code{highcharter}
-##' 
-##' @title Displays a correlation matrix of the quantitative data of the
-##' \code{exprs()} table.
-##' @param object The result of the \code{cor} function.
-##' @param samplesData A dataframe in which lines correspond to samples and 
-##' columns to the meta-data for those samples.
-##' @param rate The rate parameter to control the exponential law for 
-##' the gradient of colors
-##' @return A colored correlation matrix
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' samplesData <- Biobase::pData(Exp1_R25_pept)
-##' res <- cor(qData,use = 'pairwise.complete.obs')
-##' corrMatrixD_HC(res, samplesData)
+#' Correlation matrix based on a \code{MSnSet} object. Same as the 
+#' function \link{corrMatrixD} but uses the package \code{highcharter}
+#' 
+#' @title Displays a correlation matrix of the quantitative data of the
+#' \code{exprs()} table.
+#' @param object The result of the \code{cor} function.
+#' @param samplesData A dataframe in which lines correspond to samples and 
+#' columns to the meta-data for those samples.
+#' @param rate The rate parameter to control the exponential law for 
+#' the gradient of colors
+#' @return A colored correlation matrix
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' qData <- Biobase::exprs(Exp1_R25_pept)
+#' samplesData <- Biobase::pData(Exp1_R25_pept)
+#' res <- cor(qData,use = 'pairwise.complete.obs')
+#' corrMatrixD_HC(res, samplesData)
+#' @export
 corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
     
     df <- as.data.frame(object)
@@ -1269,26 +1293,27 @@ corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
 
 
 
-##' Builds a heatmap of the quantitative proteomic data of a 
-##' \code{MSnSet} object.
-##' 
-##' @title This function is a wrapper to \code{\link{heatmap.2}} that displays 
-##' quantitative data in the \code{exprs()} table of an object of
-##' class \code{MSnSet}
-##' @param obj An object of class \code{MSnSet}.
-##' @param distance The distance used by the clustering algorithm to compute 
-##' the dendrogram. See \code{help(heatmap.2)}.
-##' @param cluster the clustering algorithm used to build the dendrogram.
-##' See \code{help(heatmap.2)}
-##' @param dendro A boolean to indicate fi the dendrogram has to be displayed
-##' @return A heatmap
-##' @author Alexia Dorffer
-##' @examples
-##' \dontrun{
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
-##' wrapper.heatmapD(obj)
-##' }
+#' Builds a heatmap of the quantitative proteomic data of a 
+#' \code{MSnSet} object.
+#' 
+#' @title This function is a wrapper to \code{\link{heatmap.2}} that displays 
+#' quantitative data in the \code{exprs()} table of an object of
+#' class \code{MSnSet}
+#' @param obj An object of class \code{MSnSet}.
+#' @param distance The distance used by the clustering algorithm to compute 
+#' the dendrogram. See \code{help(heatmap.2)}.
+#' @param cluster the clustering algorithm used to build the dendrogram.
+#' See \code{help(heatmap.2)}
+#' @param dendro A boolean to indicate fi the dendrogram has to be displayed
+#' @return A heatmap
+#' @author Alexia Dorffer
+#' @examples
+#' \dontrun{
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
+#' wrapper.heatmapD(obj)
+#' }
+#' @export
 wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete", 
                             dendro = FALSE){
 qData <- Biobase::exprs(obj)
@@ -1303,26 +1328,27 @@ heatmapD(qData, distance, cluster, dendro)
 
 
 
-##' Heatmap of the quantitative proteomic data of a \code{MSnSet} object
-##' 
-##' @title This function is a wrapper to \code{\link{heatmap.2}} that displays 
-##' quantitative data in the \code{exprs()} table of an object of
-##' class \code{MSnSet}
-##' @param qData A dataframe that contains quantitative data.
-##' @param distance The distance used by the clustering algorithm to compute 
-##' the dendrogram. See \code{help(heatmap.2)}
-##' @param cluster the clustering algorithm used to build the dendrogram.
-##' See \code{help(heatmap.2)}
-##' @param dendro A boolean to indicate fi the dendrogram has to be displayed
-##' @return A heatmap
-##' @author Florence Combes, Samuel Wieczorek
-##' @examples
-##' \dontrun{
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
-##' qData <- Biobase::exprs(obj)
-##' heatmapD(qData)
-##' }
+#' Heatmap of the quantitative proteomic data of a \code{MSnSet} object
+#' 
+#' @title This function is a wrapper to \code{\link{heatmap.2}} that displays 
+#' quantitative data in the \code{exprs()} table of an object of
+#' class \code{MSnSet}
+#' @param qData A dataframe that contains quantitative data.
+#' @param distance The distance used by the clustering algorithm to compute 
+#' the dendrogram. See \code{help(heatmap.2)}
+#' @param cluster the clustering algorithm used to build the dendrogram.
+#' See \code{help(heatmap.2)}
+#' @param dendro A boolean to indicate fi the dendrogram has to be displayed
+#' @return A heatmap
+#' @author Florence Combes, Samuel Wieczorek
+#' @examples
+#' \dontrun{
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
+#' qData <- Biobase::exprs(obj)
+#' heatmapD(qData)
+#' }
+#' @export
 heatmapD <- function(qData, distance="euclidean", cluster="complete", dendro = FALSE){
 ##Check parameters
 # paramdist <- c("euclidean", "manhattan") 
@@ -1388,29 +1414,30 @@ heatmapD <- function(qData, distance="euclidean", cluster="complete", dendro = F
 }
 
 
-##' Heatmap inspired by the heatmap.2 function.
-##' 
-##' @title This function is inspired from the function \code{\link{heatmap.2}} 
-##' that displays quantitative data in the \code{exprs()} table of an object of
-##' class \code{MSnSet}. For more information, please refer to the help 
-##' of the heatmap.2 function.
-##' @param x A dataframe that contains quantitative data.
-##' @param col colors used for the image. Defaults to heat colors (heat.colors).
-##' @param srtCol angle of column conds, in degrees from horizontal 
-##' @param labCol character vectors with column conds to use.
-##' @param labRow character vectors with row conds to use.
-##' @param key logical indicating whether a color-key should be shown.
-##' @param key.title main title of the color key. If set to NA no title will 
-##' be plotted.
-##' @param main main title; default to none.
-##' @param ylab y-axis title; default to none.
-##' @return A heatmap
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
-##' qData <- Biobase::exprs(obj)
-##' heatmap.DAPAR(qData)
+#' Heatmap inspired by the heatmap.2 function.
+#' 
+#' @title This function is inspired from the function \code{\link{heatmap.2}} 
+#' that displays quantitative data in the \code{exprs()} table of an object of
+#' class \code{MSnSet}. For more information, please refer to the help 
+#' of the heatmap.2 function.
+#' @param x A dataframe that contains quantitative data.
+#' @param col colors used for the image. Defaults to heat colors (heat.colors).
+#' @param srtCol angle of column conds, in degrees from horizontal 
+#' @param labCol character vectors with column conds to use.
+#' @param labRow character vectors with row conds to use.
+#' @param key logical indicating whether a color-key should be shown.
+#' @param key.title main title of the color key. If set to NA no title will 
+#' be plotted.
+#' @param main main title; default to none.
+#' @param ylab y-axis title; default to none.
+#' @return A heatmap
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
+#' qData <- Biobase::exprs(obj)
+#' heatmap.DAPAR(qData)
+#' @export
 heatmap.DAPAR <- 
     function (x, 
               col = heat.colors(100),

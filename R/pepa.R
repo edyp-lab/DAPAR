@@ -1,51 +1,52 @@
-##' fudge2LRT: heuristic to choose the value of the hyperparameter
-##' (fudge factor) used to regularize the variance estimator in the
-##' likelihood ratio statistic (as implemented in samLRT). We follow
-##' the heuristic described in [1] and adapt the code of the fudge2
-##' function in the siggene R package.
+#' fudge2LRT: heuristic to choose the value of the hyperparameter
+#' (fudge factor) used to regularize the variance estimator in the
+#' likelihood ratio statistic (as implemented in samLRT). We follow
+#' the heuristic described in [1] and adapt the code of the fudge2
+#' function in the siggene R package.
 
-##' [1] Tusher, Tibshirani and Chu, Significance analysis of
-##' microarrays applied to the ionizing radiation response, PNAS 2001
-##' 98: 5116-5121, (Apr 24).
-##' 
-##' @title Heuristic to choose the value of the hyperparameter
-##' (fudge factor) used to regularize the variance estimator in the
-##' likelihood ratio statistic
-##' @param lmm.res.h0 a vector of object containing the estimates (used to
-##' compute the statistic) under H0 for each connected component. If
-##' the fast version of the estimator was used (as implemented in this
-##' package), lmm.res.h0 is a vector containing averages of squared
-##' residuals. If a fixed effect model was used, it is a vector of lm
-##' objects and if a mixed effect model was used it is a vector or lmer
-##' object.
-##' @param lmm.res.h1 similar to lmm.res.h0, a vector of object containing
-##' the estimates (used to compute the statistic) under H1 for each
-##' protein.
-##' @param cc a list containing the indices of peptides and proteins
-##' belonging to each connected component.
-##' @param n the number of samples used in the test
-##' @param p the number of proteins in the experiment
-##' @param s a vector containing the maximum likelihood estimate of the
-##' variance for the chosen model. When using the fast version of the
-##' estimator implemented in this package, this is the same thing as
-##' the input lmm.res.h1. For other models (e.g. mixed models) it can
-##' be obtained from samLRT.
-##' @param alpha A vector of proportions used to build candidate values for
-##' the regularizer. We use quantiles of s with these
-##' proportions. Default to seq(0, 1, 0.05)
-##' @param include.zero logical value indicating if 0 should be included in
-##' the list of candidates. Default to TRUE.
-##' @return (same as the fudge2 function of siggene):
-##' s.zero: the value of the fudge factor s0.
-##' alpha.hat: the optimal quantile of the 's' values. If s0=0, 'alpha.hat'
-##' will not be returned.
-##' vec.cv: the vector of the coefficients of variations.  Following
-##'           Tusher et al. (2001), the optimal 'alpha' quantile is given
-##'           by the quantile that leads to the smallest CV of the modified
-##'           test statistics.
-##' msg: a character string summarizing the most important information
-##'           about the fudge factor.
-##' @author Thomas Burger, Laurent Jacob
+#' [1] Tusher, Tibshirani and Chu, Significance analysis of
+#' microarrays applied to the ionizing radiation response, PNAS 2001
+#' 98: 5116-5121, (Apr 24).
+#' 
+#' @title Heuristic to choose the value of the hyperparameter
+#' (fudge factor) used to regularize the variance estimator in the
+#' likelihood ratio statistic
+#' @param lmm.res.h0 a vector of object containing the estimates (used to
+#' compute the statistic) under H0 for each connected component. If
+#' the fast version of the estimator was used (as implemented in this
+#' package), lmm.res.h0 is a vector containing averages of squared
+#' residuals. If a fixed effect model was used, it is a vector of lm
+#' objects and if a mixed effect model was used it is a vector or lmer
+#' object.
+#' @param lmm.res.h1 similar to lmm.res.h0, a vector of object containing
+#' the estimates (used to compute the statistic) under H1 for each
+#' protein.
+#' @param cc a list containing the indices of peptides and proteins
+#' belonging to each connected component.
+#' @param n the number of samples used in the test
+#' @param p the number of proteins in the experiment
+#' @param s a vector containing the maximum likelihood estimate of the
+#' variance for the chosen model. When using the fast version of the
+#' estimator implemented in this package, this is the same thing as
+#' the input lmm.res.h1. For other models (e.g. mixed models) it can
+#' be obtained from samLRT.
+#' @param alpha A vector of proportions used to build candidate values for
+#' the regularizer. We use quantiles of s with these
+#' proportions. Default to seq(0, 1, 0.05)
+#' @param include.zero logical value indicating if 0 should be included in
+#' the list of candidates. Default to TRUE.
+#' @return (same as the fudge2 function of siggene):
+#' s.zero: the value of the fudge factor s0.
+#' alpha.hat: the optimal quantile of the 's' values. If s0=0, 'alpha.hat'
+#' will not be returned.
+#' vec.cv: the vector of the coefficients of variations.  Following
+#'           Tusher et al. (2001), the optimal 'alpha' quantile is given
+#'           by the quantile that leads to the smallest CV of the modified
+#'           test statistics.
+#' msg: a character string summarizing the most important information
+#'           about the fudge factor.
+#' @author Thomas Burger, Laurent Jacob
+#' @export
 fudge2LRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s, alpha = seq(0, 1, 0.05), include.zero = TRUE)
 {
     
@@ -137,16 +138,17 @@ fudge2LRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s, alpha = seq(0, 1, 0.0
 
 
 
-##' This function is xxxxxxx
-##' 
-##' @title xxxxxx
-##' @param X an n.pep*n.prot indicator matrix.
-##' @param y1 n.pep*n.samples matrice giving the observed counts for
+#' This function is xxxxxxx
+#' 
+#' @title xxxxxx
+#' @param X an n.pep*n.prot indicator matrix.
+#' @param y1 n.pep*n.samples matrice giving the observed counts for
 ## each peptide in each sample from the condition 1
-##' @param y2  n.pep*n.samples matrice giving the observed counts for
+#' @param y2  n.pep*n.samples matrice giving the observed counts for
 ## each peptide in each sample from the condition 2 
-##' @return xxxxxxxxxx..
-##' @author Thomas Burger, Laurent Jacob
+#' @return xxxxxxxxxx..
+#' @author Thomas Burger, Laurent Jacob
+#' @export
 LH0 <- function(X, y1, y2){
     
     n <- ncol(y1)+ncol(y2)
@@ -162,18 +164,19 @@ LH0 <- function(X, y1, y2){
 
 
 
-##' This function is xxxxxxx
-##' 
-##' @title xxxxxx
-##' @param X an n.pep*n.prot indicator matrix.
-##' @param y1 n.pep*n.samples matrice giving the observed counts for
+#' This function is xxxxxxx
+#' 
+#' @title xxxxxx
+#' @param X an n.pep*n.prot indicator matrix.
+#' @param y1 n.pep*n.samples matrice giving the observed counts for
 ## each peptide in each sample from the condition 1
-##' @param y2  n.pep*n.samples matrice giving the observed counts for
+#' @param y2  n.pep*n.samples matrice giving the observed counts for
 ## each peptide in each sample from the condition 2 
-##' @param j the index of the protein being tested, ie which has different
+#' @param j the index of the protein being tested, ie which has different
 ## expression in the two conditions under H1
-##' @return xxxxxxxxxx..
-##' @author Thomas Burger, Laurent Jacob
+#' @return xxxxxxxxxx..
+#' @author Thomas Burger, Laurent Jacob
+#' @export
 LH1 <- function(X, y1, y2, j){
     n1 <- ncol(y1)
     n2 <- ncol(y2)
@@ -192,16 +195,17 @@ LH1 <- function(X, y1, y2, j){
 
 
 
-##' This function is xxxxxxx
-##' 
-##' @title xxxxxx
-##' @param X an n.pep*n.prot indicator matrix.
-##' @param y1 n.pep*n.samples matrice giving the observed counts for
-##' each peptide in each sample from the condition 1
-##' @param y2  n.pep*n.samples matrice giving the observed counts for
-##' each peptide in each sample from the condition 2 
-##' @return xxxxxxxxxx..
-##' @author Thomas Burger, Laurent Jacob
+#' This function is xxxxxxx
+#' 
+#' @title xxxxxx
+#' @param X an n.pep*n.prot indicator matrix.
+#' @param y1 n.pep*n.samples matrice giving the observed counts for
+#' each peptide in each sample from the condition 1
+#' @param y2  n.pep*n.samples matrice giving the observed counts for
+#' each peptide in each sample from the condition 2 
+#' @return xxxxxxxxxx..
+#' @author Thomas Burger, Laurent Jacob
+#' @export
 LH0.lm <- function(X, y1, y2){
     Ytilde <- matrix(c(as.vector(y1), as.vector(y2)), ncol=1)
     p <- ncol(X)
@@ -239,18 +243,19 @@ LH0.lm <- function(X, y1, y2){
 
 
 
-##' This function is xxxxxxx
-##' 
-##' @title xxxxxx
-##' @param X an n.pep*n.prot indicator matrix.
-##' @param y1 n.pep*n.samples matrix giving the observed counts for
+#' This function is xxxxxxx
+#' 
+#' @title xxxxxx
+#' @param X an n.pep*n.prot indicator matrix.
+#' @param y1 n.pep*n.samples matrix giving the observed counts for
 ## each peptide in each sample from the condition 1
-##' @param y2  n.pep*n.samples matrix giving the observed counts for
+#' @param y2  n.pep*n.samples matrix giving the observed counts for
 ## each peptide in each sample from the condition 2 
-##' @param j the index of the protein being tested, ie which has different
+#' @param j the index of the protein being tested, ie which has different
 ## expression in the two conditions under H1.
-##' @return xxxxxxxxxx..
-##' @author Thomas Burger, Laurent Jacob
+#' @return xxxxxxxxxx..
+#' @author Thomas Burger, Laurent Jacob
+#' @export
 LH1.lm <- function(X, y1, y2, j){
     n1 <- ncol(y1)
     n2 <- ncol(y2)
@@ -296,44 +301,45 @@ LH1.lm <- function(X, y1, y2, j){
 
 
 
-##' This function computes a regularized version of the likelihood ratio
-##' statistic. The regularization adds a user-input fudge factor s1 to
-##' the variance estimator. This is straightforward when using a fixed
-##' effect model (cases 'numeric' and 'lm') but requires some more care
-##' when using a mixed model.
+#' This function computes a regularized version of the likelihood ratio
+#' statistic. The regularization adds a user-input fudge factor s1 to
+#' the variance estimator. This is straightforward when using a fixed
+#' effect model (cases 'numeric' and 'lm') but requires some more care
+#' when using a mixed model.
 
-##' 
-##' @title xxxxxx
-##' @param lmm.res.h0 a vector of object containing the estimates (used to
-##' compute the statistic) under H0 for each connected component. If
-##' the fast version of the estimator was used (as implemented in this
-##' package), lmm.res.h0 is a vector containing averages of squared
-##' residuals. If a fixed effect model was used, it is a vector of lm
-##' objects and if a mixed effect model was used it is a vector or lmer
-##' object.
-##' @param lmm.res.h1 similar to lmm.res.h0, a vector of object containing
-##' the estimates (used to compute the statistic) under H1 for each
-##' protein.
-##' @param cc a list containing the indices of peptides and proteins
-##' belonging to each connected component. 
-##' @param n the number of samples used in the test
-##' @param p  the number of proteins in the experiment 
-##' @param s1 the fudge factor to be added to the variance estimate
-##' @return llr.sam: a vector of numeric containing the regularized log
-##' likelihood ratio statistic for each protein.
-##' s: a vector containing the maximum likelihood estimate of the
-##' variance for the chosen model. When using the fast version of the
-##' estimator implemented in this package, this is the same thing as
-##' the input lmm.res.h1.
-##' lh1.sam: a vector of numeric containing the regularized log
-##' likelihood under H1 for each protein.
-##' lh0.sam: a vector of numeric containing the regularized log
-##' likelihood under H0 for each connected component.
-##' sample.sizes: a vector of numeric containing the sample size
-##' (number of biological samples times number of peptides) for each
-##' protein. This number is the same for all proteins within each
-##' connected component.
-##' @author Thomas Burger, Laurent Jacob
+#' 
+#' @title xxxxxx
+#' @param lmm.res.h0 a vector of object containing the estimates (used to
+#' compute the statistic) under H0 for each connected component. If
+#' the fast version of the estimator was used (as implemented in this
+#' package), lmm.res.h0 is a vector containing averages of squared
+#' residuals. If a fixed effect model was used, it is a vector of lm
+#' objects and if a mixed effect model was used it is a vector or lmer
+#' object.
+#' @param lmm.res.h1 similar to lmm.res.h0, a vector of object containing
+#' the estimates (used to compute the statistic) under H1 for each
+#' protein.
+#' @param cc a list containing the indices of peptides and proteins
+#' belonging to each connected component. 
+#' @param n the number of samples used in the test
+#' @param p  the number of proteins in the experiment 
+#' @param s1 the fudge factor to be added to the variance estimate
+#' @return llr.sam: a vector of numeric containing the regularized log
+#' likelihood ratio statistic for each protein.
+#' s: a vector containing the maximum likelihood estimate of the
+#' variance for the chosen model. When using the fast version of the
+#' estimator implemented in this package, this is the same thing as
+#' the input lmm.res.h1.
+#' lh1.sam: a vector of numeric containing the regularized log
+#' likelihood under H1 for each protein.
+#' lh0.sam: a vector of numeric containing the regularized log
+#' likelihood under H0 for each connected component.
+#' sample.sizes: a vector of numeric containing the sample size
+#' (number of biological samples times number of peptides) for each
+#' protein. This number is the same for all proteins within each
+#' connected component.
+#' @author Thomas Burger, Laurent Jacob
+#' @export
 samLRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s1){
     s <- lh1.sam <- llr.sam <- rep(NA, p)
     lh0.sam <- rep(NA, length(cc))
@@ -384,36 +390,37 @@ samLRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s1){
 
 
 
-##' This function is PEptide based Protein differential Abundance test
-##' 
-##' @title PEptide based Protein differential Abundance test
-##' @param X Binary q x p design matrix for q peptides and p
-##' proteins. X_(ij)=1 if peptide i belongs to protein j, 0 otherwise.
-##' @param y q x n matrix representing the log intensities of q peptides
-##' among n MS samples.
-##' @param n1 number of samples under condition 1. It is assumed that the first n1 columns of y
-##' correspond to observations under condition 1.
-##' @param n2 number of samples under condition 2.
-##' @param global if TRUE, the test statistic for each protein uses all
-##' residues, including the ones for peptides in different connected
-##' components. Can be much faster as it does not require to compute
-##' connected components. However the p-values are not well calibrated
-##' in this case, as it amounts to adding a ridge to the test
-##' statistic. Calibrating the p-value would require knowing the
-##' amplitude of the ridge, which in turns would require computing the
-##' connected components.
-##' @param use.lm if TRUE (and if global=FALSE), use lm() rather than the result
-##' in Proposition 1 to compute the test statistic
-##' @return A list of the following elements:
-##' llr: log likelihood ratio statistic (maximum likelihood version).
-##' llr.map: log likelihood ratio statistic (maximum a posteriori version).
-##' llr.pv: p-value for llr.
-##' llr.map.pv: p-value for llr.map.
-##' mse.h0: Mean squared error under H0
-##' mse.h1: Mean squared error under H1
-##' s: selected regularization hyperparameter for llr.map.
-##' wchi2: weight used to make llr.map chi2-distributed under H0.
-##' @author Thomas Burger, Laurent Jacob
+#' This function is PEptide based Protein differential Abundance test
+#' 
+#' @title PEptide based Protein differential Abundance test
+#' @param X Binary q x p design matrix for q peptides and p
+#' proteins. X_(ij)=1 if peptide i belongs to protein j, 0 otherwise.
+#' @param y q x n matrix representing the log intensities of q peptides
+#' among n MS samples.
+#' @param n1 number of samples under condition 1. It is assumed that the first n1 columns of y
+#' correspond to observations under condition 1.
+#' @param n2 number of samples under condition 2.
+#' @param global if TRUE, the test statistic for each protein uses all
+#' residues, including the ones for peptides in different connected
+#' components. Can be much faster as it does not require to compute
+#' connected components. However the p-values are not well calibrated
+#' in this case, as it amounts to adding a ridge to the test
+#' statistic. Calibrating the p-value would require knowing the
+#' amplitude of the ridge, which in turns would require computing the
+#' connected components.
+#' @param use.lm if TRUE (and if global=FALSE), use lm() rather than the result
+#' in Proposition 1 to compute the test statistic
+#' @return A list of the following elements:
+#' llr: log likelihood ratio statistic (maximum likelihood version).
+#' llr.map: log likelihood ratio statistic (maximum a posteriori version).
+#' llr.pv: p-value for llr.
+#' llr.map.pv: p-value for llr.map.
+#' mse.h0: Mean squared error under H0
+#' mse.h1: Mean squared error under H1
+#' s: selected regularization hyperparameter for llr.map.
+#' wchi2: weight used to make llr.map chi2-distributed under H0.
+#' @author Thomas Burger, Laurent Jacob
+#' @export
 pepa.test <- function(X, y, n1, n2, global=FALSE, use.lm=FALSE){
     
     n <- n1+n2
