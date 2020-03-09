@@ -262,6 +262,7 @@ mvPerLinesHistoPerCondition <- function(qData, samplesData, indLegend="auto",
       return(NULL)
     }
   }
+  
 if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
 
 nbConditions <- length(unique(samplesData[,"Condition"]))
@@ -523,11 +524,19 @@ graphics::text(x, -3,
 mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto", 
                     showValues=FALSE, palette = NULL){
   if (is.null(palette)){
-    palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")
+    nConds <- max(3,length(unique(conds)))
+    palette.part <- RColorBrewer::brewer.pal(nConds,"Dark2")
+    palette <- rep(NA,length(conds))
+    for (i in 1:length(unique(conds))){
+      palette[which(conds==unique(conds)[i])] <- palette.part[i]
+    }
+    
   }else{
     if (length(palette) != ncol(qData)){
       warning("The color palette has not the same dimension as the number of samples")
       return(NULL)
+    } else {
+      palette <- palette
     }
   }
   
