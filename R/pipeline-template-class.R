@@ -27,7 +27,7 @@
 #' data('Exp1_R25_prot')
 #' obj <- Exp1_R25_prot
 #' samples <- Biobase::pData(Exp1_R25_prot)
-#' mae <- PipelineTemplate(analysis= 'test',pipelineType = 'protein', 
+#' mae <- PipelineTemplate(analysis= 'test',pipelineType = 'protein', dataType = 'protein', 
 #' processes='original',experiments=list(original=Exp1_R25_prot), 
 #' colData=samples)
 
@@ -99,6 +99,7 @@ PipelineTemplate <- function(
 ## Create getter methods for 1D data structures
 #' @export
 setGeneric("indexNA", function(x, ...) standardGeneric("indexNA"))
+
 
 #' @export
 setGeneric("analysis", function(x, ...) standardGeneric("analysis"))
@@ -176,6 +177,19 @@ setMethod("PairwiseComps", "PipelineTemplate", function(x, withDimnames=TRUE) {
 
 
 
+#' @export
+setGeneric("designMap", function(x, ...) standardGeneric("designMap"))
+
+
+#' @export
+setMethod("designMap", "PipelineTemplate", function(x, withDimnames=TRUE) {
+  out <- Biobase::pData(MultiAssayExperiment::experiments(x)[['original']])
+  out
+})
+
+
+
+
 
 
 
@@ -216,8 +230,6 @@ setMethod("show", "PipelineTemplate", function(object) {
   callNextMethod()
   
 })
-
-
 
 # Creating setter methods
 # 3.6.1 For 1D data structures
