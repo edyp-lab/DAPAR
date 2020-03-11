@@ -28,6 +28,7 @@ ComputeConnexComposants <- function(X=NULL){
 #' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
 #' ll <- get.pep.prot.cc(X)
 #' @export
+#' @import Matrix
 get.pep.prot.cc <- function(X){
   if (is.null(X)){
     warning("The adjacency matrix is empty")

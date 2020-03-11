@@ -98,8 +98,6 @@ rownames(OriginOfValues) <- rownames(Biobase::fData(obj))
 colnames(OriginOfValues) <- paste0("OriginOfValue",colnames(Biobase::exprs(obj)))
 colnames(OriginOfValues) <- gsub(".", "_", colnames(OriginOfValues), fixed=TRUE)
 
-#indMin <- length(colnames(fData(obj)))
-#indMax <- length(colnames(fData(obj))) + length(OriginOfValues)
 Biobase::fData(obj) <- cbind(Biobase::fData(obj), OriginOfValues, deparse.level = 0)
 
 obj@experimentData@other$OriginOfValues <- colnames(OriginOfValues)
@@ -279,7 +277,7 @@ writeMSnsetToExcel <- function(obj, filename)
     if (is.null(obj@experimentData@other$OriginOfValues)){
       listPOV <-  which(is.na(exprs(obj)), arr.ind=TRUE)
     } else {
-        mat <- fData(obj)[,obj@experimentData@other$OriginOfValues]
+        mat <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
         listPOV <- which(mat=="POV", arr.ind=TRUE)
         listMEC <- which(mat=="MEC", arr.ind=TRUE)
     }

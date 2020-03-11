@@ -34,11 +34,7 @@
 
 #' @import MultiAssayExperiment
 #' @exportClass PipelineTemplate
-#' 
-#' 
-#' 
-#' 
-#' 
+
 
 ## Cette classe définit un pipeline générique avec les structures de données adéquates
 ## elle n'est instanciée qu'une seule fois dans une session prostar
@@ -49,6 +45,7 @@
                             indexNA = "numeric",
                             PairwiseComparisons = "list",
                             analysis = "character",
+                            dataType = "character",
                             pipelineType = "character",
                             processes = "character",
                             version = "character"
@@ -64,6 +61,7 @@ PipelineTemplate <- function(
   indexNA = numeric(),
   PairwiseComparisons = list(),
   analysis = character(),
+  dataType = character(),
   pipelineType = character(),
   processes = character(),
   version = character(),
@@ -78,6 +76,7 @@ PipelineTemplate <- function(
                     indexNA = indexNA,
                     PairwiseComparisons = PairwiseComparisons,
                     analysis=analysis, 
+                    dataType =dataType,
                     pipelineType=pipelineType,
                     version = .version,
                     processes=c('original',processes)

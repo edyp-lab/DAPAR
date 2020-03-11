@@ -4,9 +4,9 @@
 ReplaceDotsByUnderscore <- function(obj){
   #colnames(out) <- gsub(".", "_", colnames(obj), fixed=TRUE)
   #proteinId =  gsub(".", "_", input$convert_proteinId, fixed=TRUE)
-  colnames(fData(obj)) <- gsub(".", "_", colnames(fData(obj)), fixed=TRUE)
+  colnames(Biobase::fData(obj)) <- gsub(".", "_", colnames(Biobase::fData(obj)), fixed=TRUE)
   names(obj@experimentData@other) <- gsub(".", "_", names(obj@experimentData@other), fixed=TRUE)
-  pData(obj)$Sample.name <- gsub(".", "_", pData(obj)$Sample.name, fixed=TRUE)
+  Biobase::pData(obj)$Sample.name <- gsub(".", "_", Biobase::pData(obj)$Sample.name, fixed=TRUE)
   
   if (is.null(obj@experimentData@other$RawPValues ))
     obj@experimentData@other$RawPValues <- FALSE

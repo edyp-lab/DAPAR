@@ -542,7 +542,7 @@ keepThat <- NULL
 if (is.null(obj@experimentData@other$OriginOfValues)){
     data <- Biobase::exprs(obj)
 } else {
-  data <- dplyr::select(fData(obj),obj@experimentData@other$OriginOfValues)
+  data <- dplyr::select(Biobase::fData(obj),obj@experimentData@other$OriginOfValues)
 }
 
 if (type == "None"){
