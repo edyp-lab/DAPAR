@@ -1,6 +1,20 @@
 
+                                        
+                                        
+                                        
+#' Returns the contents of the slot processing of an object of class \code{MSnSet}
+#' 
+#' @title Returns the contains of the slot processing  of an object of 
+#' class \code{MSnSet}
+#' @param  obj An object (peptides) of class \code{MSnSet}.
+#' @return The slot processing of obj@processingData
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' getProcessingInfo(Exp1_R25_pept)
 #' @title xxxx
 #' @export
+ 
 ReplaceDotsByUnderscore <- function(obj){
   #colnames(out) <- gsub(".", "_", colnames(obj), fixed=TRUE)
   #proteinId =  gsub(".", "_", input$convert_proteinId, fixed=TRUE)
@@ -33,6 +47,7 @@ ReplaceDotsByUnderscore <- function(obj){
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' getProcessingInfo(Exp1_R25_pept)
 #' @export
+
 getProcessingInfo <- function(obj){
 return(obj@processingData@processing)
 }

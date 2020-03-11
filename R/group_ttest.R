@@ -52,15 +52,18 @@
 # }  
 
 
-#######################
-### attention, à rendre générique: pour l'instant ne marche qu'avec n1=3 (car codé en dur)
+
+
+
 #' This function is xxxxxx
 #'
 #' @title xxxxxx
 #' @param MatAdj xxxxx.
 #' @param cond1 xxxx.
 #' @param cond2 xxxx.
+#' 
 #' @return xxxxx
+#' 
 #' @author Thomas Burger, Samuel Wieczorek
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
@@ -89,6 +92,8 @@ groupttest <- function(MatAdj, cond1=NULL, cond2 = NULL){
   }
   return(res)
 }  
+
+
 
 
 
@@ -142,14 +147,14 @@ compute.group.t.tests <- function(qData, sTab,X,  X.spec, logFC = NULL,contrast=
   ## Keep track of proteins that are lost in aggregation step
   unsup.prot <- !(colnames(X) %in% colnames(X.spec))
   
-   
+  
   if(contrast=="OnevsOne"){
     comb <- combn(levels(Conditions.f), 2)
     for(i in 1:ncol(comb)){
       c1Indice <- which(Conditions==comb[1,i])
       c2Indice <- which(Conditions==comb[2,i])
       res.tmp <- groupttest(X.spec,qData[,c1Indice], qData[,c2Indice] )
-        
+      
       #compute logFC from the result of t.test function
       p.tmp <- unlist(lapply(res.tmp,function(x) x["p.value"]))
       m1.tmp <- unlist(lapply(res.tmp, function(x) as.numeric(unlist(x)["estimate.mean of x"])))
@@ -164,12 +169,12 @@ compute.group.t.tests <- function(qData, sTab,X,  X.spec, logFC = NULL,contrast=
       peptide.spec.based.FC <- rep(1, ncol(X))
       peptide.spec.based.FC[!unsup.prot] <- logFC.tmp
       
-        
+      
       txt <- paste(comb[1,i],"_vs_",comb[2,i], sep="")
-        
+      
       logFC[[paste(txt, "logFC", sep="_")]] <- peptide.spec.based.FC
       P_Value[[paste(txt, "pval", sep="_")]] <- peptide.spec.based.pv
-      }
+    }
   } ##end Contrast==1
   
   if(contrast=="OnevsAll"){
@@ -178,9 +183,9 @@ compute.group.t.tests <- function(qData, sTab,X,  X.spec, logFC = NULL,contrast=
     for(i in 1:nbComp){
       
       c1Indice <- which(Conditions==levels(Conditions.f)[i])
-     # Cond.t.all <- c(1:length(Conditions))
-     # Cond.t.all[c1Indice] <- levels(Conditions.f)[i]
-     # Cond.t.all[-c1Indice] <- "all"
+      # Cond.t.all <- c(1:length(Conditions))
+      # Cond.t.all[c1Indice] <- levels(Conditions.f)[i]
+      # Cond.t.all[-c1Indice] <- "all"
       #c1Indice <- which(Conditions==levels(Conditions.f)[i])
       res.tmp <- groupttest(X.spec,qData[,c1Indice], qData[,-c1Indice] )
       
