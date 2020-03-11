@@ -42,5 +42,4 @@ samples <- Biobase::pData(Exp1_R25_prot)
 mae <- PipelineProtein(analysis= 'test',pipelineType = 'protein', 
 processes='original',experiments=list(original=data), 
 colData=samples)
-
 }

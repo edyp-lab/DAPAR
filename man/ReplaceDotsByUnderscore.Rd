@@ -2,10 +2,24 @@
 % Please edit documentation in R/utils.R
 \name{ReplaceDotsByUnderscore}
 \alias{ReplaceDotsByUnderscore}
-\title{xxxx}
+\title{Returns the contains of the slot processing  of an object of 
+class \code{MSnSet}}
 \usage{
 ReplaceDotsByUnderscore(obj)
 }
+\arguments{
+\item{obj}{An object (peptides) of class \code{MSnSet}.}
+}
+\value{
+The slot processing of obj@processingData
+}
 \description{
-xxxx
+Returns the contents of the slot processing of an object of class \code{MSnSet}
+}
+\examples{
+utils::data(Exp1_R25_pept, package='DAPARdata')
+getProcessingInfo(Exp1_R25_pept)
+}
+\author{
+Samuel Wieczorek
 }

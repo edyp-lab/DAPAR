@@ -1,13 +1,5 @@
+#' @import BiocGenerics MultiAssayExperiment S4Vectors methods
 
-## Cette classe définit un pipeline générique avec les structures de données adéquates
-## elle n'est instanciée qu'une seule fois dans une session prostar
-
-#' @import BiocGenerics SummarizedExperiment S4Vectors methods
-
-
-### ==============================================
-### PipelineTemplate class
-### ----------------------------------------------
 
 #' @title PipelineTemplate class
 #' @description
@@ -25,7 +17,7 @@
 #' @slot pipelineType A character vector that indicates the type of data that are managed in this instance
 #' @slot processes xxx
 #'
-#'@param ... Additional arguments for supporting functions. See details.
+#' @param ... Additional arguments for supporting functions. See details.
 #'
 #' @return A \code{PipelineTemplate} object
 #'
@@ -39,7 +31,7 @@
 #' processes='original',experiments=list(original=data), 
 #' colData=samples)
 
-#'
+
 #' @exportClass PipelineProtein
 .PipelineProtein <- setClass("PipelineProtein",
           contains = "PipelineTemplate", 

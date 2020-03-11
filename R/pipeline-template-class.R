@@ -1,9 +1,5 @@
-#' @import BiocGenerics SummarizedExperiment S4Vectors methods
+#' @import BiocGenerics MultiAssayExperiment S4Vectors methods
 
-
-### ==============================================
-### PipelineTemplate class
-### ----------------------------------------------
 
 #' @title PipelineTemplate class
 #' @description
@@ -21,7 +17,7 @@
 #' @slot pipelineType A character vector that indicates the type of data that are managed in this instance
 #' @slot processes xxx
 #'
-#'@param ... Additional arguments for supporting functions. See details.
+#' @param ... Additional arguments for supporting functions. See details.
 #'
 #' @return A \code{PipelineTemplate} object
 #'
@@ -34,16 +30,7 @@
 
 #' @import MultiAssayExperiment
 #' @exportClass PipelineTemplate
-#' 
-#' 
-#' 
-#' 
-#' 
 
-## Cette classe définit un pipeline générique avec les structures de données adéquates
-## elle n'est instanciée qu'une seule fois dans une session prostar
-
-#########################################################
 .PipelineTemplate <- setClass("PipelineTemplate",
                           slots= list(
                             indexNA = "numeric",
@@ -83,9 +70,6 @@ PipelineTemplate <- function(
                     processes=c('original',processes)
   )
   validObject(obj)
-  
-  
-  
   obj
   }
 
@@ -159,7 +143,7 @@ setMethod("processes", "PipelineTemplate", function(x, withDimnames=TRUE) {
 })
 
 
-
+#' @export
 setMethod("GetExperimentList", "PipelineTemplate", function(x) {
   out <- x@ExperimentList
   out
@@ -326,6 +310,7 @@ setMethod("rmDatasetByName", "PipelineTemplate", function(x, name) {
 
 #' @export
 setGeneric("addDataset", function(x, name, dataset) standardGeneric("addDataset"))
+
 #' @export
 setMethod("addDataset", "PipelineTemplate", function(x, name, dataset) {
   #mae <- callNextMethod()
