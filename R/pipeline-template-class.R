@@ -108,7 +108,6 @@ setGeneric("pipelineType", function(x, ...) standardGeneric("pipelineType"))
 #' @export
 setGeneric("processes", function(x, ...) standardGeneric("processes"))
 
-setGeneric("GetExperimentList", function(x, ...) standardGeneric("GetExperimentList"))
 
 #' @export
 setGeneric("version", function(x) standardGeneric("version"))
@@ -142,13 +141,6 @@ setMethod("pipelineType", "PipelineTemplate", function(x, withDimnames=TRUE) {
 #' @export
 setMethod("processes", "PipelineTemplate", function(x, withDimnames=TRUE) {
   out <- x@processes
-  out
-})
-
-
-#' @export
-setMethod("GetExperimentList", "PipelineTemplate", function(x) {
-  out <- x@ExperimentList
   out
 })
 

@@ -1233,6 +1233,7 @@ plot(d)
 #' samplesData <- Biobase::pData(Exp1_R25_pept)
 #' res <- cor(qData,use = 'pairwise.complete.obs')
 #' corrMatrixD_HC(res, samplesData)
+#' @importFrom dplyr tbl_df
 #' @export
 corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
     
@@ -1250,7 +1251,7 @@ corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
     
     x <- y <- names(df)
     
-    df <- tbl_df(cbind(x = y, df)) %>% 
+    df <- dplyr::tbl_df(cbind(x = y, df)) %>% 
         gather(y, dist, -x) %>% 
         mutate(x = as.character(x),
                y = as.character(y)) %>% 
