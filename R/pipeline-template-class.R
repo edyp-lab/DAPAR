@@ -26,7 +26,10 @@
 #' library(DAPARdata)
 #' data('Exp1_R25_prot')
 #' obj <- Exp1_R25_prot
-#' mae <- 
+#' samples <- Biobase::pData(Exp1_R25_prot)
+#' mae <- PipelineTemplate(analysis= 'test',pipelineType = 'protein', 
+#' processes='original',experiments=list(original=Exp1_R25_prot), 
+#' colData=samples)
 
 #' @import MultiAssayExperiment
 #' @exportClass PipelineTemplate
@@ -104,6 +107,9 @@ setGeneric("analysis", function(x, ...) standardGeneric("analysis"))
 #' @export
 setGeneric("pipelineType", function(x, ...) standardGeneric("pipelineType"))
 
+#' @export
+setGeneric("dataType", function(x, ...) standardGeneric("dataType"))
+
 
 #' @export
 setGeneric("processes", function(x, ...) standardGeneric("processes"))
@@ -123,6 +129,12 @@ setMethod("version", "PipelineTemplate", function(x) {
 #' @export
 setMethod("indexNA", "PipelineTemplate", function(x, withDimnames=TRUE) {
   out <- x@indexNA
+  out
+})
+
+#' @export
+setMethod("dataType", "PipelineTemplate", function(x, withDimnames=TRUE) {
+  out <- x@dataType
   out
 })
 

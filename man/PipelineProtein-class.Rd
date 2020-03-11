@@ -37,9 +37,8 @@ assays that are organized instances of
 example("PipelineTemp")
 library(DAPARdata)
 data('Exp1_R25_prot')
-data <- Biobase::exprs(Exp1_R25_prot)
 samples <- Biobase::pData(Exp1_R25_prot)
 mae <- PipelineProtein(analysis= 'test',pipelineType = 'protein', 
-processes='original',experiments=list(original=data), 
+processes='original',experiments=list(original=Exp1_R25_prot), 
 colData=samples)
 }
