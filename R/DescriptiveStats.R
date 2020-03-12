@@ -446,7 +446,6 @@ wrapper.compareNormalizationD <- function(objBefore, objAfter,
 #' "within conditions")
 #' wrapper.compareNormalizationD_HC(Exp1_R25_pept, objAfter, conds)
 #' @importFrom Biobase exprs
-#' @importFrom DAPAR compareNormalizationD_HC
 #' @export
 wrapper.compareNormalizationD_HC <- function(objBefore, objAfter, 
                                              condsForLegend=NULL,
@@ -940,7 +939,6 @@ densityPlotD_HC <- function(obj, legend=NULL, palette = NULL){
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' wrapper.CVDistD(Exp1_R25_pept)
 #' @importFrom Biobase exprs pData
-#' @importFrom DAPAR CVDistD
 #' @export
 wrapper.CVDistD <- function(obj, ...){
   qData <- Biobase::exprs(obj)
@@ -964,7 +962,6 @@ wrapper.CVDistD <- function(obj, ...){
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' wrapper.CVDistD_HC(Exp1_R25_pept)
 #' @importFrom Biobase exprs pData
-#' @importFrom DAPAR CVDistD_HC
 #' @export
 wrapper.CVDistD_HC <- function(obj, ...){
   qData <- Biobase::exprs(obj)
@@ -988,7 +985,7 @@ wrapper.CVDistD_HC <- function(obj, ...){
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 #' CVDistD(Biobase::exprs(Exp1_R25_pept), conds)
-#' @importFrom RColorBrewer::brewer.pal
+#' @importFrom RColorBrewer brewer.pal
 #' @export
 CVDistD <- function(qData, conds=NULL, palette = NULL){
   
@@ -1173,7 +1170,6 @@ CVDistD_HC <- function(qData, conds=NULL, palette = NULL){
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' wrapper.corrMatrixD(Exp1_R25_pept)
 #' @importFrom Biobase exprs pData
-#' @importFrom DAPAR corrMatrixD
 #' @export
 wrapper.corrMatrixD <- function(obj, rate=5){
   qData <- Biobase::exprs(obj)
@@ -1194,7 +1190,6 @@ wrapper.corrMatrixD <- function(obj, rate=5){
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' wrapper.corrMatrixD_HC(Exp1_R25_pept)
 #' @importFrom Biobase exprs pData
-#' @importFrom DAPAR corrMatrixD_HC
 #' @export
 wrapper.corrMatrixD_HC <- function(obj, rate=0.5){
   qData <- Biobase::exprs(obj)
@@ -1359,7 +1354,6 @@ corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
 #' wrapper.heatmapD(obj)
 #' }
 #' @importFrom Biobase exprs
-#' @importFrom DAPAR heatmapD
 #' @export
 wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete", 
                               dendro = FALSE){
