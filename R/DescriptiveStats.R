@@ -1106,7 +1106,7 @@ CVDistD_HC <- function(qData, conds=NULL, palette = NULL){
   #     }
   # }
   
-  h1 <-  highchart::highchart() %>% 
+  h1 <-  highcharter::highchart() %>% 
     my_hc_chart(chartType = "spline", zoomType="x") %>%
     hc_colors(unique(palette)) %>%
     hc_legend(enabled = TRUE) %>%
@@ -1369,7 +1369,7 @@ wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete",
                                 collapse =" ")
   }
   
-  heatmapD(qData, distance, cluster, dendro)
+  DAPAR::heatmapD(qData, distance, cluster, dendro)
 }
 
 
@@ -1396,6 +1396,7 @@ wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete",
 #' heatmapD(qData)
 #' }
 #' @importFrom grDevices colorRampPalette
+#' @importFrom gplots heatmap.2
 #' @export
 heatmapD <- function(qData, distance="euclidean", cluster="complete", dendro = FALSE){
   ##Check parameters
@@ -1431,7 +1432,7 @@ heatmapD <- function(qData, distance="euclidean", cluster="complete", dendro = F
   
   
   if (dendro){ .dendro = "row"} else {.dendro = "none"}
-  p <- heatmap.2(
+  p <- gplots::heatmap.2(
     x=t(.data),
     distfun = function(x) {
       x[is.na(x)] <- -1e5
