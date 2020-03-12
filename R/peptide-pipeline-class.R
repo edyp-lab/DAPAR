@@ -1,9 +1,39 @@
+#' @import BiocGenerics MultiAssayExperiment S4Vectors methods
+
+
+#' @title PipelineTemplate class
+#' @description
+#' The \code{PipelineTemplate} class inherits from the \code{PipelineTemplate} and serves as a template for
+#' instanciate pipeline classes such as proteinPipeline, proteinPipeline, etc. It can be used to manage results of
+#' diverse assays on a collection of specimen. Currently,  the class can handle
+#' assays that are organized instances of
+#' \code{\linkS4class{MSnSet}},
+#' \code{matrix}.
+#'
+#'
+#' @slot analysis A character vector that is the name of the MS study
+#' @slot pipelineType A character vector that indicates the type of data that are managed in this instance
+#' @slot processes xxx
+#'
+#' @param ... Additional arguments for supporting functions. See details.
+#'
+#' @return A \code{PipelineTemplate} object
+#'
+#' @examples
+#' example("PipelineTemp")
+#' library(DAPARdata)
+#' data('Exp1_R25_pept')
+#' obj <- Exp1_R25_pept
+#' samples <- Biobase::pData(obj)
+#' mae <- PipelinePeptide(analysis= 'test',pipelineType = 'peptide', dataType = 'peptide',
+#' processes='original',experiments=list(original=obj), 
+#' colData=samples)
+
 
 #' @exportClass PipelinePeptide
 .PipelinePeptide <- setClass("PipelinePeptide",
                              contains = "PipelineTemplate",
                              representation = representation(
-                               proteinID = "character",
                                matAdj = "list",
                                CC = "list"
                              ),
@@ -13,18 +43,22 @@
 
 
 #' @export PipelinePeptide
-PipelinePeptide <- function(proteinID = character(),
-                            ...)
+PipelinePeptide <- function(...)
 {
-  if (is.null(proteinID) || length(proteinID)==0){
-    warning("The proteinID is not set.")
-    return(NULL)
-  }
+  
   
   template <- PipelineTemplate(...)
-  matAdj <- BuildListAdjacencyMatrices(template[['original']], proteinID)
-  cc <- ComputeConnexComposants(matAdj)
-  obj <- new("PipelinePeptide", template, proteinID = proteinID, matAdj = matAdj, CC = cc)
+  
+  parentProtId <- parentProtId(template[['original']])
+  if (!is.null(parentProtId)) {
+    matAdj <- BuildListAdjacencyMatrices(template[['original']], parentProtId)
+    cc <- ComputeConnexComposants(matAdj)
+  } else { matAdj <- cc <- NULL}
+  
+  obj <- new("PipelinePeptide", 
+             template, 
+             matAdj = matAdj, 
+             CC = cc)
   
   obj
 }
@@ -39,7 +73,7 @@ PipelinePeptide <- function(proteinID = character(),
 #' @export
 setMethod("show", "PipelinePeptide", function(object) {
   cat(
-    "The proteinID is: ", proteinID(object), " \n",
+    "The proteinID is: ", parentProtId(object), " \n",
     sep=""
   )
   cat('-----------------------------------------\n')
@@ -47,18 +81,6 @@ setMethod("show", "PipelinePeptide", function(object) {
   
 })
 
-
-
-
-
-#' @export
-setGeneric("proteinID", function(x) standardGeneric("proteinID"))
-
-#' @export
-setMethod("proteinID", "PipelinePeptide", function(x) {
-  out <- x@proteinID
-  out
-})
 
 
 
