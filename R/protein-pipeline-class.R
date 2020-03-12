@@ -26,7 +26,7 @@
 #' library(DAPARdata)
 #' data('Exp1_R25_prot')
 #' samples <- Biobase::pData(Exp1_R25_prot)
-#' mae <- PipelineProtein(analysis= 'test',pipelineType = 'protein', 
+#' mae <- PipelineProtein(analysis= 'test',pipelineType = 'protein', dataType = 'protein',
 #' processes='original',experiments=list(original=Exp1_R25_prot), 
 #' colData=samples)
 

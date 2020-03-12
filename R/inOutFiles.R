@@ -147,7 +147,9 @@ return(obj)
 #' indFData <- c(1:55,62:71)
 #' indiceID <- 64
 #' createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, indexForOriginOfValue = NULL, pep_prot_data = "peptide")
+#' @importFrom MSnbase MSnSet
 #' @export
+
 createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
                          indexForOriginOfValue = NULL,
                          logData=FALSE, replaceZeros=FALSE,
@@ -204,7 +206,7 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
         stop("Problem consistency between column names 
              in expression data and row names in phenoData")
     
-    obj <- MSnSet(exprs = Intensity, fData = fd, pData = pd)
+    obj <- MSnbase::MSnSet(exprs = Intensity, fData = fd, pData = pd)
     
     if (logData) {
         Biobase::exprs(obj) <- log2(Biobase::exprs(obj))
