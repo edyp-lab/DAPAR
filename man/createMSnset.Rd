@@ -9,12 +9,12 @@ createMSnset(
   metadata = NULL,
   indExpData,
   indFData,
-  indiceID = NULL,
+  keyId = NULL,
   indexForOriginOfValue = NULL,
   logData = FALSE,
   replaceZeros = FALSE,
-  pep_prot_data = NULL,
-  proteinId = NULL,
+  typeOfData = NULL,
+  parentProtId = NULL,
   versions = NULL
 )
 }
@@ -31,9 +31,6 @@ of the \code{MSnSet} object.}
 \item{indFData}{The name of column in \code{file} that will be the name of
 rows for the \code{exprs()} and \code{fData()} tables}
 
-\item{indiceID}{The indice of the column containing the ID of entities 
-(peptides or proteins)}
-
 \item{indexForOriginOfValue}{xxxxxxxxxxx}
 
 \item{logData}{A boolean value to indicate if the data have to be
@@ -42,12 +39,15 @@ log-transformed (Default is FALSE)}
 \item{replaceZeros}{A boolean value to indicate if the 0 and NaN values of
 intensity have to be replaced by NA (Default is FALSE)}
 
-\item{pep_prot_data}{A string that indicates whether the dataset is about}
+\item{typeOfData}{A string that indicates whether the dataset is about}
 
-\item{proteinId}{xxxx}
+\item{parentProtId}{xxxx}
 
 \item{versions}{A list of the following items: Prostar_Version, DAPAR_Version
 peptides or proteins.}
+
+\item{keyid}{The indice of the column containing the ID of entities 
+(peptides or proteins)}
 }
 \value{
 An instance of class \code{MSnSet}.
@@ -67,8 +67,8 @@ metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdat
 metadata = read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
 indExpData <- c(56:61)
 indFData <- c(1:55,62:71)
-indiceID <- 64
-createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, indexForOriginOfValue = NULL, pep_prot_data = "peptide")
+keyid <- 64
+createMSnset(exprsFile, metadata,indExpData,  indFData, keyid, indexForOriginOfValue = NULL, typeOfData = "peptide")
 }
 \author{
 Florence Combes, Samuel Wieczorek

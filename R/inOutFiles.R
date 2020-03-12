@@ -125,15 +125,15 @@ return(obj)
 #' of the \code{MSnSet} object.
 #' @param indFData The name of column in \code{file} that will be the name of
 #' rows for the \code{exprs()} and \code{fData()} tables
-#' @param indiceID The indice of the column containing the ID of entities 
+#' @param keyid The indice of the column containing the ID of entities 
 #' (peptides or proteins)
 #' @param indexForOriginOfValue xxxxxxxxxxx
 #' @param logData A boolean value to indicate if the data have to be
 #' log-transformed (Default is FALSE)
 #' @param replaceZeros A boolean value to indicate if the 0 and NaN values of
 #' intensity have to be replaced by NA (Default is FALSE)
-#' @param pep_prot_data A string that indicates whether the dataset is about
-#' @param proteinId xxxx
+#' @param typeOfData A string that indicates whether the dataset is about
+#' @param parentProtId xxxx
 #' @param versions A list of the following items: Prostar_Version, DAPAR_Version
 #' peptides or proteins.
 #' @return An instance of class \code{MSnSet}.
@@ -145,16 +145,18 @@ return(obj)
 #' metadata = read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
 #' indExpData <- c(56:61)
 #' indFData <- c(1:55,62:71)
-#' indiceID <- 64
-#' createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, indexForOriginOfValue = NULL, pep_prot_data = "peptide")
+#' keyid <- 64
+#' createMSnset(exprsFile, metadata,indExpData,  indFData, keyid, indexForOriginOfValue = NULL, typeOfData = "peptide")
 #' @importFrom MSnbase MSnSet
 #' @export
 
-createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
+createMSnset <- function(file,metadata=NULL,indExpData,indFData,
+                         keyId=NULL,
                          indexForOriginOfValue = NULL,
-                         logData=FALSE, replaceZeros=FALSE,
-                         pep_prot_data=NULL,
-                         proteinId = NULL,
+                         logData=FALSE, 
+                         replaceZeros=FALSE,
+                         typeOfData=NULL,
+                         parentProtId = NULL,
                          versions=NULL){
     
     if (!is.data.frame(file)){ #the variable is a path to a text file
@@ -176,24 +178,24 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
     colnames(Intensity) <- gsub(".", "_", colnames(data)[indExpData], fixed=TRUE)
     rownames(Intensity) <- rownames(data)
     ##the name of lines are the same as the data of the first column
-    # if (is.null(indiceID)) {
-    #     rownames(Intensity) <- rep(paste(pep_prot_data, "_", 1:nrow(Intensity), sep=""))
-    # }else{rownames(Intensity) <- data[,indiceID]}
+    # if (is.null(keyid)) {
+    #     rownames(Intensity) <- rep(paste(typeOfData, "_", 1:nrow(Intensity), sep=""))
+    # }else{rownames(Intensity) <- data[,keyid]}
     
     ##building fData of MSnSet file
     fd <- data.frame( data[,indFData],stringsAsFactors = FALSE)
     
-    if (is.null(indiceID)) {
-        rownames(fd) <- rep(paste(pep_prot_data, "_", 1:nrow(fd), sep=""))
-        rownames(Intensity) <- rep(paste(pep_prot_data, "_", 1:nrow(Intensity), sep=""))
+    if (is.null(keyId)) {
+        rownames(fd) <- rep(paste(typeOfData, "_", 1:nrow(fd), sep=""))
+        rownames(Intensity) <- rep(paste(typeOfData, "_", 1:nrow(Intensity), sep=""))
     }else{
         rownames(fd) <- data[,indiceID]
-        rownames(Intensity) <- data[,indiceID]
+        rownames(Intensity) <- data[,keyid]
     }
     
     colnames(fd) <- gsub(".", "_", colnames(data)[indFData], fixed=TRUE)
     
-     pd <- as.data.frame(metadata,stringsAsFactors = FALSE)
+    pd <- as.data.frame(metadata,stringsAsFactors = FALSE)
     rownames(pd) <- gsub(".", "_", pd$Sample.name, fixed=TRUE)
     pd$Sample.name <- gsub(".", "_", pd$Sample.name, fixed=TRUE)
     
@@ -222,16 +224,18 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
     }
     
     
-    if (!is.null(pep_prot_data)) {
-        obj@experimentData@other$typeOfData <- pep_prot_data
-    }
-    
-    obj@experimentData@other$Prostar_Version <- versions$Prostar_Version
-    obj@experimentData@other$DAPAR_Version <- versions$DAPAR_Version
-    obj@experimentData@other$proteinId <- proteinId
     
     
-    obj@experimentData@other$RawPValues <- FALSE
+    
+    # initialisation fo slots
+    ProstarVersion(obj) <- versions$Prostar_Version
+    DAPARVersion(obj) <- versions$DAPAR_Version
+    parentProtId(obj) <- parentProtId
+    Params(obj) <- list()
+    typeOfData(obj) <- typeOfData
+    OriginOfValues(obj) <- NULL
+    RawPValues(obj) <- FALSE
+    
     
     obj <- addOriginOfValue(obj,indexForOriginOfValue)
     
@@ -438,3 +442,4 @@ rbindMSnset <- function(df1=NULL, df2){
   return(obj)
   
 }
+

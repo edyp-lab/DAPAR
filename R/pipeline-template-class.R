@@ -36,7 +36,6 @@
 
 .PipelineTemplate <- setClass("PipelineTemplate",
                           slots= list(
-                            indexNA = "numeric",
                             PairwiseComparisons = "list",
                             analysis = "character",
                             dataType = "character",
@@ -52,7 +51,6 @@
 
 #' @export PipelineTemplate
 PipelineTemplate <- function(
-  indexNA = numeric(),
   PairwiseComparisons = list(),
   analysis = character(),
   dataType = character(),
@@ -67,8 +65,7 @@ PipelineTemplate <- function(
   experiments(mae)[[1]] <-.ConfigureDataset(experiments(mae)[[1]])
   .version = if (is.na(installed.packages()["Prostar"])) 'NA' else installed.packages()["Prostar",'Version']
   obj <- new("PipelineTemplate",mae,
-                    indexNA = indexNA,
-                    PairwiseComparisons = PairwiseComparisons,
+                     PairwiseComparisons = PairwiseComparisons,
                     analysis=analysis, 
                     dataType =dataType,
                     pipelineType=pipelineType,
@@ -97,9 +94,6 @@ PipelineTemplate <- function(
 
 
 ## Create getter methods for 1D data structures
-#' @export
-setGeneric("indexNA", function(x, ...) standardGeneric("indexNA"))
-
 
 #' @export
 setGeneric("analysis", function(x, ...) standardGeneric("analysis"))
@@ -127,11 +121,7 @@ setMethod("version", "PipelineTemplate", function(x) {
 })
 
 
-#' @export
-setMethod("indexNA", "PipelineTemplate", function(x, withDimnames=TRUE) {
-  out <- x@indexNA
-  out
-})
+
 
 #' @export
 setMethod("dataType", "PipelineTemplate", function(x, withDimnames=TRUE) {
@@ -248,9 +238,6 @@ setGeneric("analysis<-", function(x, ..., value) standardGeneric("analysis<-"))
 #' @export
 setGeneric("processes<-", function(x, ..., value) standardGeneric("processes<-"))
 
-#' @export
-setGeneric("indexNA<-", function(x, ...) standardGeneric("indexNA<-"))
-
 
 # We define the class-specific methods for these generics. Note that use of validObject 
 # to ensure that the assigned input is still valid.
@@ -279,12 +266,6 @@ setReplaceMethod("analysis", "PipelineTemplate", function(x, value) {
   x
 })
 
-#' @export
-setReplaceMethod("indexNA", "PipelineTemplate", function(x, value) {
-  x@indexNA <- value
-  validObject(x)
-  x
-})
 
 
 # For 2D data structures
