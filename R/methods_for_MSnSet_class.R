@@ -116,7 +116,6 @@ setReplaceMethod("typeOfData", "MSnSet", function(obj, value) {
 })
 
 
-
 setGeneric("RawPValues", function(obj,...) standardGeneric("RawPValues"))
 
 #' @export
@@ -142,3 +141,4 @@ setMethod("properties", "MSnSet", function(obj, withDimnames=TRUE) {
   out <- obj@experimentData@other
   out
 })
+

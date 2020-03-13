@@ -189,8 +189,8 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,
         rownames(fd) <- rep(paste(typeOfData, "_", 1:nrow(fd), sep=""))
         rownames(Intensity) <- rep(paste(typeOfData, "_", 1:nrow(Intensity), sep=""))
     }else{
-        rownames(fd) <- data[,indiceID]
-        rownames(Intensity) <- data[,keyid]
+        rownames(fd) <- data[,keyId]
+        rownames(Intensity) <- data[,keyId]
     }
     
     colnames(fd) <- gsub(".", "_", colnames(data)[indFData], fixed=TRUE)

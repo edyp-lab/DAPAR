@@ -14,6 +14,7 @@
 #' getProcessingInfo(Exp1_R25_pept)
 #' @title xxxx
 #' @export
+#' @importFrom Biobase fData pData
  
 ReplaceDotsByUnderscore <- function(obj){
   #colnames(out) <- gsub(".", "_", colnames(obj), fixed=TRUE)
