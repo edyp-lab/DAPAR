@@ -115,3 +115,22 @@ setReplaceMethod("typeOfData", "MSnSet", function(obj, value) {
   obj
 })
 
+
+
+
+setGeneric("RawPValues", function(obj,...) standardGeneric("RawPValues"))
+
+#' @export
+setMethod("RawPValues", "MSnSet", function(obj, withDimnames=TRUE) {
+  out <- obj@experimentData@other$RawPValues
+  out
+})
+
+setGeneric("RawPValues<-", function(obj, value) standardGeneric("RawPValues<-"))
+
+#' @export
+setReplaceMethod("RawPValues", "MSnSet", function(obj, value) {
+  obj@experimentData@other$RawPValues <- value
+  obj
+})
+
