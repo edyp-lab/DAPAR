@@ -182,6 +182,7 @@ wrapper.impute.detQuant <- function(obj, qval=0.025, factor=1){
 #' qData <- Biobase::exprs(Exp1_R25_pept)
 #' getQuantile4Imp(qData) 
 #' @export
+#' @importFrom stats quantile
 getQuantile4Imp <- function(qData, qval=0.025, factor=1){
     r1 <- apply(qData, 2, quantile, qval, na.rm=TRUE)
     r2 <- r1*factor

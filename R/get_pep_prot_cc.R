@@ -245,11 +245,9 @@ display.CC.visNet <- function(g, layout = layout_nicely,
 #' \dontrun{
 #' }
 #' @export
+#' @import highcharter
 plotJitter_rCharts <- function(df, clickFunction=NULL){
   
-  #df <- GetDataForPlotJitter(list.of.cc)
-  print("In DAPAR::diffAnaVolcanoplot_rCharts")
-  print(str(df))
   xtitle <- "TO DO"
   
   if (is.null(clickFunction)){
@@ -269,7 +267,7 @@ plotJitter_rCharts <- function(df, clickFunction=NULL){
   
   h1 <-  highchart() %>%
     hc_add_series(data = df, type = "scatter") %>%
-    my_hc_chart(zoomType = "xy",chartType="scatter") %>%
+    dapar_hc_chart(zoomType = "xy",chartType="scatter") %>%
     hc_legend(enabled = FALSE) %>%
     hc_yAxis(title = list(text="Nb of proteins ic CC")) %>%
     hc_xAxis(title = list(text = "Nb of peptides ic CC")) %>%
@@ -278,7 +276,7 @@ plotJitter_rCharts <- function(df, clickFunction=NULL){
                                    cursor = "pointer", 
                                    point = list( events = list( 
                                      click = clickFunction ) ) ) ) %>%
-    my_hc_ExportMenu(filename = "plotCC")
+    dapar_hc_ExportMenu(filename = "plotCC")
     
     
   return(h1)

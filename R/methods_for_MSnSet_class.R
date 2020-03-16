@@ -22,15 +22,33 @@ setReplaceMethod("parentProtId", "MSnSet", function(obj, value) {
 
 setGeneric("DAPARVersion", function(obj,...) standardGeneric("DAPARVersion"))
 
+#' Function to get the version of DAPAR used to create the current object
+#' @title Get the version of DAPAR used.
+#' @description qkljsdh qsodhqs qsidsq.
+#' @param obj xxxx
+#' @return xxxx.
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
 #' @export
-setMethod("DAPARVersion", "MSnSet", function(obj, withDimnames=TRUE) {
+setMethod("DAPARVersion", "MSnSet", function(obj) {
   out <- obj@experimentData@other$DAPAR_Version
   out
 })
 
 setGeneric("DAPARVersion<-", function(obj, value) standardGeneric("DAPARVersion<-"))
 
+#' Function to set the version of DAPAR used to create the current object
+#' @title Set the version of DAPAR used.
+#' @description qsdh qiosdhqs qisdq.
+#' @param obj xxxx
+#' @param value xxx
+#' @return xxxx.
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
 #' @export
+
 setReplaceMethod("DAPARVersion", "MSnSet", function(obj, value) {
   obj@experimentData@other$DAPAR_Version <- value
   obj
@@ -40,14 +58,35 @@ setReplaceMethod("DAPARVersion", "MSnSet", function(obj, value) {
 
 setGeneric("ProstarVersion", function(obj,...) standardGeneric("ProstarVersion"))
 
+#' Function to get the version of Prostar used to create the current object
+#' @title Get the version of Prostar used.
+#' @description sfgsdff sjkfhksqdsq .
+#' @param obj xxxx
+#' @param value xxx
+#' @return xxxx.
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
 #' @export
 setMethod("ProstarVersion", "MSnSet", function(obj, withDimnames=TRUE) {
   out <- obj@experimentData@other$Prostar_Version
   out
 })
+
+
 setGeneric("ProstarVersion<-", function(obj, value) standardGeneric("ProstarVersion<-"))
 
+#' Function to set the version of Prostar used to create the current object
+#' @title Set the version of Prostar used.
+#' @description sfklsjhf qsjdhsqd.
+#' @param obj xxxx
+#' @param value xxx
+#' @return xxxx.
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
 #' @export
+
 setReplaceMethod("ProstarVersion", "MSnSet", function(obj, value) {
   obj@experimentData@other$Prostar_Version <- value
   obj

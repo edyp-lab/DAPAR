@@ -31,6 +31,9 @@ of the \code{MSnSet} object.}
 \item{indFData}{The name of column in \code{file} that will be the name of
 rows for the \code{exprs()} and \code{fData()} tables}
 
+\item{keyId}{The indice of the column containing the ID of entities 
+(peptides or proteins)}
+
 \item{indexForOriginOfValue}{xxxxxxxxxxx}
 
 \item{logData}{A boolean value to indicate if the data have to be
@@ -45,9 +48,6 @@ intensity have to be replaced by NA (Default is FALSE)}
 
 \item{versions}{A list of the following items: Prostar_Version, DAPAR_Version
 peptides or proteins.}
-
-\item{keyid}{The indice of the column containing the ID of entities 
-(peptides or proteins)}
 }
 \value{
 An instance of class \code{MSnSet}.
@@ -64,7 +64,7 @@ including metadata.
 require(Matrix)
 exprsFile <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
 metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
-metadata = read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
+metadata = utils::read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
 indExpData <- c(56:61)
 indFData <- c(1:55,62:71)
 keyid <- 64

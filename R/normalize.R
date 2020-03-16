@@ -37,6 +37,8 @@
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' wrapper.normalizeD(Exp1_R25_pept[1:1000], "QuantileCentering", "within conditions",subset.norm=1:10)
 #' @export
+#' @importFrom stats median
+#' @importFrom stats quantile
 wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0.15, span = 0.7,
                                subset.norm=NULL){
   parammethod<-c("GlobalQuantileAlignment",
@@ -64,13 +66,6 @@ wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0
   if(is.null(subset.norm) | length(subset.norm)<1){
     subset.norm=1:nrow(Biobase::exprs(obj))
   }
-  
-  
-  #.temp <- qData
-  #if (!is.null(.temp)){
-  #  data <- .temp
-  
-  
   
   
   conds <- Biobase::pData(obj)[,"Condition"]
@@ -124,7 +119,7 @@ wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0
          },
          
          QuantileCentering = {
-           q <- function(x) { quantile(x, probs=quantile, na.rm=TRUE) }
+           q <- function(x) { stats::quantile(x, probs=quantile, na.rm=TRUE) }
            #if normalization on only one protein,q function can't be applied
            if(length(subset.norm)==1){
              quantileOverSamples=Biobase::exprs(obj)[subset.norm,]

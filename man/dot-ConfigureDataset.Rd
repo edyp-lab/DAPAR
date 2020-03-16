@@ -2,10 +2,22 @@
 % Please edit documentation in R/pipeline-template-class.R
 \name{.ConfigureDataset}
 \alias{.ConfigureDataset}
-\title{Function to do some modifications of a MSnSet class dataset to be compatible with Prostar}
+\title{xxxxx.}
 \usage{
 .ConfigureDataset(x)
 }
+\arguments{
+\item{x}{An object of class \code{PipelineTemplate}}
+}
+\value{
+An instance of class \code{PipelineTemplate}.
+}
 \description{
 Function to do some modifications of a MSnSet class dataset to be compatible with Prostar
+}
+\examples{
+utils::data(Exp1_R25_prot)
+}
+\author{
+Samuel Wieczorek
 }

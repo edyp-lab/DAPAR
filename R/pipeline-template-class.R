@@ -13,9 +13,11 @@
 #'
 #' @slot PairwiseComparisons A \code{list} to store the result of hypothesis tests.
 #' @slot indexNA A xxxxxs
+#' @slot dataType xxxx.
 #' @slot analysis A character vector that is the name of the MS study
 #' @slot pipelineType A character vector that indicates the type of data that are managed in this instance
 #' @slot processes xxx
+#' @slot version xxx
 #'
 #' @param ... Additional arguments for supporting functions. See details.
 #'
@@ -32,6 +34,7 @@
 #' colData=samples)
 
 #' @import MultiAssayExperiment
+#' @importFrom utils installed.packages
 #' @exportClass PipelineTemplate
 
 .PipelineTemplate <- setClass("PipelineTemplate",
@@ -48,8 +51,19 @@
 )
 
 
-
-#' @export PipelineTemplate
+#' Function to create a new instance of the class \code{PipelineTemplate}
+#' @title xxxxx.
+#' @param PairwiseComparisons xxxx
+#' @param analysis A string that is the name of the object (ie the name of the MS study)
+#' @param dataType A string that is the type of data
+#' @param pipelineType the type of the pipeline used in Prostar
+#' @param processes a character vector that indicates the list of the processes which composed the pipeline
+#' @param version The version of Prostar used to create this object
+#' @return An instance of class \code{PipelineTemplate}.
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
+#' @export
 PipelineTemplate <- function(
   PairwiseComparisons = list(),
   analysis = character(),
@@ -63,7 +77,7 @@ PipelineTemplate <- function(
   
   ## on configure le dataset avant de le stocker dans mae
   experiments(mae)[[1]] <-.ConfigureDataset(experiments(mae)[[1]])
-  .version = if (is.na(installed.packages()["Prostar"])) 'NA' else installed.packages()["Prostar",'Version']
+  .version = if (is.na(utils::installed.packages()["Prostar"])) 'NA' else utils::installed.packages()["Prostar",'Version']
   obj <- new("PipelineTemplate",mae,
                      PairwiseComparisons = PairwiseComparisons,
                     analysis=analysis, 
@@ -78,6 +92,12 @@ PipelineTemplate <- function(
 
 
 #' Function to do some modifications of a MSnSet class dataset to be compatible with Prostar
+#' @title xxxxx.
+#' @param x An object of class \code{PipelineTemplate}
+#' @return An instance of class \code{PipelineTemplate}.
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
 .ConfigureDataset <- function(x) {
   if(class(x) != "MSnSet"){
     warning("The class of object is not MSnSet")

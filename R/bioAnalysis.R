@@ -188,6 +188,7 @@ GOAnalysisSave <- function (obj, ggo_res=NULL, ego_res=NULL, organism, ontology,
 #' @return A barplot 
 #' @author Samuel Wieczorek
 #' @export
+#' @import highcharter
 barplotGroupGO_HC <- function(ggo, maxRes=5, title=""){
     
     dat <- ggo@result
@@ -200,14 +201,14 @@ barplotGroupGO_HC <- function(ggo, maxRes=5, title=""){
     
     
     h1 <-  highchart() %>%
-        my_hc_chart(chartType = "bar") %>%
+      dapar_hc_chart(chartType = "bar") %>%
         hc_title(text =title) %>%
         hc_add_series(dat[,"Count"]) %>%
         hc_legend(enabled = FALSE) %>%
         #hc_colors(myColors) %>%
         hc_tooltip(enabled = FALSE) %>%
         hc_xAxis(categories = dat[,"Description"], title = list(text = "")) %>%
-        my_hc_ExportMenu(filename = "GOGroup_barplot")
+      dapar_hc_ExportMenu(filename = "GOGroup_barplot")
       
     
     return(h1)
@@ -226,6 +227,7 @@ barplotGroupGO_HC <- function(ggo, maxRes=5, title=""){
 #' @return A barplot 
 #' @author Samuel Wieczorek
 #' @export
+#' @import highcharter
 barplotEnrichGO_HC <- function(ego, maxRes = 5, title=NULL){
     if (is.null(ego)){return(NULL)}
     dat <- ego@result
@@ -268,7 +270,7 @@ barplotEnrichGO_HC <- function(ego, maxRes = 5, title=NULL){
         hc_colors(myColors) %>%
         hc_tooltip(headerFormat= '', 
                    pointFormat = txt_tooltip) %>%
-        my_hc_ExportMenu(filename = "GOEnrich_barplot") %>%
+      dapar_hc_ExportMenu(filename = "GOEnrich_barplot") %>%
         hc_legend(enabled = FALSE) %>%
         hc_plotOptions(bar = list(
             pointWidth=60,
@@ -288,6 +290,7 @@ barplotEnrichGO_HC <- function(ego, maxRes = 5, title=NULL){
 #' @return A dotplot 
 #' @author Samuel Wieczorek
 #' @export
+#' @import highcharter
 scatterplotEnrichGO_HC <- function(ego, maxRes = 10, title=NULL){
     
     dat <- ego@result
@@ -333,14 +336,14 @@ scatterplotEnrichGO_HC <- function(ego, maxRes = 10, title=NULL){
     
     h1 <-  highchart() %>%
         hc_title(title = title) %>%
-        my_hc_chart(chartType = "bubble") %>%
+      dapar_hc_chart(chartType = "bubble") %>%
         hc_add_series(df) %>%
         hc_legend(enabled = FALSE) %>%
         hc_xAxis(type = "category", categories = df$name)  %>%
         hc_yAxis(title = list(text = "Gene Ratio"))  %>%
         hc_tooltip(headerFormat= '',
                    pointFormat = txt_tooltip) %>%
-        my_hc_ExportMenu(filename = "GOEnrich_dotplot")
+      dapar_hc_ExportMenu(filename = "GOEnrich_dotplot")
     
     
     

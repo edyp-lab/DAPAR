@@ -54,6 +54,7 @@ wrapper.t_test_Complete <- function(obj,...){
 #' qData <- Biobase::exprs(obj)
 #' ttest <- compute.t.tests(qData,sTab ,"OnevsOne")
 #' @export
+#' @importFrom stats t.test
 compute.t.tests <- function(qData,sTab, contrast="OnevsOne", type="Student"){
 
     
@@ -87,7 +88,7 @@ Cond.Nb<-length(levels(Conditions.f))
     
                 res.tmp <- apply(qData[,c(c1Indice,c2Indice)], 1, 
                                  function(x) {
-                   t.test(x~Conditions[c(c1Indice,c2Indice)],  var.equal=.type)
+                   stats::t.test(x~Conditions[c(c1Indice,c2Indice)],  var.equal=.type)
                 })
                 p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))
                 m1.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[1])))
@@ -118,7 +119,7 @@ Cond.Nb<-length(levels(Conditions.f))
             
             res.tmp <- apply(qData, 1, 
                              function(x) {
-                                 t.test(x~Cond.t.all, var.equal=.type)
+                                 stats::t.test(x~Cond.t.all, var.equal=.type)
                              })
             
             p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))
@@ -179,6 +180,8 @@ Cond.Nb<-length(levels(Conditions.f))
 #' qData <- Biobase::exprs(obj)
 #' ttest <- compute.t.tests2(qData,sTab ,"OnevsOne")
 #' @export
+#' @importFrom utils combn
+#' @importFrom stats t.test
 compute.t.tests2 <- function(qData,sTab, contrast="OnevsOne", type="Student"){
     
     
@@ -204,7 +207,7 @@ compute.t.tests2 <- function(qData,sTab, contrast="OnevsOne", type="Student"){
     
     
     if(contrast=="OnevsOne"){
-        comb <- combn(levels(Conditions.f), 2)
+        comb <- utils::combn(levels(Conditions.f), 2)
         #nbComp <- Cond.Nb*(Cond.Nb-1)/2
         
         for(i in 1:ncol(comb)){
@@ -214,7 +217,7 @@ compute.t.tests2 <- function(qData,sTab, contrast="OnevsOne", type="Student"){
                 
                 res.tmp <- apply(qData[,c(c1Indice,c2Indice)], 1, 
                                  function(x) {
-                                     t.test(x~Conditions[c(c1Indice,c2Indice)],  var.equal=.type)
+                                     stats::t.test(x~Conditions[c(c1Indice,c2Indice)],  var.equal=.type)
                                  })
                 p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))
                 m1.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[1])))
@@ -244,7 +247,7 @@ compute.t.tests2 <- function(qData,sTab, contrast="OnevsOne", type="Student"){
             
             res.tmp <- apply(qData, 1, 
                              function(x) {
-                                 t.test(x~Cond.t.all, var.equal=.type)
+                                 stats::t.test(x~Cond.t.all, var.equal=.type)
                              })
             
             p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))

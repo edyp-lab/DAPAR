@@ -47,6 +47,7 @@
 #'           about the fudge factor.
 #' @author Thomas Burger, Laurent Jacob
 #' @export
+#' @importFrom stats quantile
 fudge2LRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s, alpha = seq(0, 1, 0.05), include.zero = TRUE)
 {
     
@@ -60,7 +61,7 @@ fudge2LRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s, alpha = seq(0, 1, 0.0
     }
     
     if (length(alpha) == 1) {
-        s.zero <- quantile(s, alpha)
+        s.zero <- stats::quantile(s, alpha)
         msg <- paste("s0 =", round(s.zero, 4), " (The", 100 *
                          alpha, "% quantile of the s values.) \n \n")
         
@@ -69,7 +70,7 @@ fudge2LRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s, alpha = seq(0, 1, 0.0
         
     }
     
-    fudge.quan <- quantile(s, alpha)
+    fudge.quan <- stats::quantile(s, alpha)
     fudge.quan <- sort(c(fudge.quan, 2*fudge.quan), decreasing=FALSE)
     if (include.zero)
         fudge.quan <- c(0, fudge.quan)
@@ -98,7 +99,7 @@ fudge2LRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s, alpha = seq(0, 1, 0.0
              "there should be at least 25 genes with differing standard deviations.")
 
     n.int <- ifelse(n.uni.s > 500, 101, floor(n.uni.s/5))
-    quan <- quantile(s, seq(0, 1, le = n.int))
+    quan <- stats::quantile(s, seq(0, 1, le = n.int))
     quan <- unique(round(quan, 8))
     n.int <- length(quan)
     int.s <- as.numeric(cut(s, quan, include.lowest = TRUE, right = FALSE))
@@ -256,6 +257,7 @@ LH0.lm <- function(X, y1, y2){
 #' @return xxxxxxxxxx..
 #' @author Thomas Burger, Laurent Jacob
 #' @export
+#' @importFrom stats formula logLik lm
 LH1.lm <- function(X, y1, y2, j){
     n1 <- ncol(y1)
     n2 <- ncol(y2)
@@ -286,13 +288,13 @@ LH1.lm <- function(X, y1, y2, j){
     }
     if(q > 1){ # Only include a peptide effect if there is more than one peptide
         lmm.form <- paste(lmm.form, ' Xpep', sep='+', collapse='') # Xpep effect
-        lmm.form <- formula(lmm.form)
-        lmm.res <- lm(lmm.form, data=dataIn)
+        lmm.form <- stats::formula(lmm.form)
+        lmm.res <- stats::lm(lmm.form, data=dataIn)
     }else{
-        lmm.form <- formula(lmm.form)
-        lmm.res <- lm(lmm.form, data=dataIn)
+        lmm.form <- stats::formula(lmm.form)
+        lmm.res <- stats::lm(lmm.form, data=dataIn)
     }
-    ll <- logLik(lmm.res)
+    ll <- stats::logLik(lmm.res)
     
     return(list(ll=ll, lmm.res=lmm.res))
 }
@@ -421,6 +423,7 @@ samLRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s1){
 #' wchi2: weight used to make llr.map chi2-distributed under H0.
 #' @author Thomas Burger, Laurent Jacob
 #' @export
+#' @importFrom stats pchisq quantile
 pepa.test <- function(X, y, n1, n2, global=FALSE, use.lm=FALSE){
     
     n <- n1+n2
@@ -503,7 +506,7 @@ pepa.test <- function(X, y, n1, n2, global=FALSE, use.lm=FALSE){
         }
         s <- mse.h1   
         if(p < 500){# Following SAM paper recommendations, we don't attempt to estimate s0 if p<500
-            s1 <- quantile(s, 0.05)
+            s1 <- stats::quantile(s, 0.05)
         }else{
             s1 <- fudge2LRT(mse.h0, mse.h1, cc, n, p, s)$s.zero
         }
@@ -512,11 +515,11 @@ pepa.test <- function(X, y, n1, n2, global=FALSE, use.lm=FALSE){
         ## Reweight LLR-sam for calibration of its p-value
         s2.est <- mean(s)
         wchi2 <- rep((s2.est + s1)/s2.est, length(de))
-        llr.map.pv <- 1 - pchisq(wchi2*llr.map, 1)
+        llr.map.pv <- 1 - stats::pchisq(wchi2*llr.map, 1)
     }
     
     ## Compute p-value for llr
-    llr.pv <- 1 - pchisq(llr, 1)
+    llr.pv <- 1 - stats::pchisq(llr, 1)
     
     return(list(llr=llr, llr.map=llr.map,
                 llr.pv=llr.pv, llr.map.pv=llr.map.pv,

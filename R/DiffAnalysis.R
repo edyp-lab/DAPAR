@@ -18,6 +18,7 @@
 #' res <- limmaCompleteTest(qData,sTab)
 #' hc_logFC_DensityPlot(res$logFC)
 #' @export
+#' @import highcharter
 hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0, palette=NULL){
   
   if (is.null(df_logFC) || threshold_LogFC < 0){
@@ -26,15 +27,8 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0, palette=NULL){
   }
   
   
-  if (is.null(palette)){
-    palette <- RColorBrewer::brewer.pal(ncol(df_logFC),"Paired")[1:ncol(df_logFC)]
-  }else{
-    if (length(palette) != ncol(df_logFC)){
-      warning("The color palette has not the same dimension as the number of samples")
-      return(NULL)
-    }
-  }
-  
+  #palette <- BuildPalette(conds, palette)
+  #
   nValues <- nrow(df_logFC)*ncol(df_logFC)
   nInf <- length(which(df_logFC <= -threshold_LogFC))
   nSup <- length(which(df_logFC >= threshold_LogFC))
@@ -42,7 +36,7 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0, palette=NULL){
   
   hc <-  highcharter::highchart() %>% 
     hc_title(text = "log(FC) repartition") %>% 
-    my_hc_chart(chartType = "spline", zoomType="x") %>%
+    dapar_hc_chart(chartType = "spline", zoomType="x") %>%
     hc_legend(enabled = TRUE) %>%
     hc_colors(palette) %>%
     hc_xAxis(title = list(text = "log(FC)"),
@@ -52,7 +46,7 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0, palette=NULL){
     hc_tooltip(headerFormat= '',
                pointFormat = "<b> {series.name} </b>: {point.y} ",
                valueDecimals = 2) %>%
-    my_hc_ExportMenu(filename = "densityplot") %>%
+    dapar_hc_ExportMenu(filename = "densityplot") %>%
     hc_plotOptions(
       series=list(
         animation=list(duration = 100),
@@ -440,6 +434,7 @@ wrapperCalibrationPlot <- function(vPVal, pi0Method="pounds"){
 #' allComp <- limmaCompleteTest(qData,sTab)
 #' histPValue_HC(allComp$P_Value[1])
 #' @export
+#' @import highcharter
 histPValue_HC <- function(pval_ll, bins=80, pi0=1){
   h <- hist(sort(unlist(pval_ll)), freq=F,breaks=bins)
   
@@ -459,7 +454,7 @@ histPValue_HC <- function(pval_ll, bins=80, pi0=1){
     hc_tooltip(headerFormat= '',
                pointFormat = "<b> {series.name} </b>: {point.y} ",
                valueDecimals = 2) %>%
-    my_hc_ExportMenu(filename = "histPVal") %>%
+    dapar_hc_ExportMenu(filename = "histPVal") %>%
     hc_plotOptions(
       column=list(
         groupPadding= 0,

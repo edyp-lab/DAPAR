@@ -146,9 +146,10 @@ wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, nknn = 15, selec = 600, s
 #' @examples
 #' translatedRandomBeta(1000, 5, 10, 1, 1)
 #' @export
+#' @importFrom stats rbeta
 translatedRandomBeta <- function(n, min, max, param1=3, param2=1){
     scale <- max-min
-    simu <- rbeta(n,param1,param2)
+    simu <- stats::rbeta(n,param1,param2)
     res <- (simu*scale) + min
     return(res)
 }
@@ -230,6 +231,7 @@ wrapper.impute.pa2 <- function (obj, q.min = 0, q.norm = 3, eps = 0, distributio
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' wrapper.impute.pa2(Exp1_R25_pept[1:1000], distribution="beta")
 #' @export
+#' @importFrom stats median quantile runif
 impute.pa2 <- function (tab, conditions, q.min = 0, q.norm = 3, eps = 0, distribution = "unif"){
     tab_imp = tab
     qu = apply(tab_imp, 2, quantile, na.rm = TRUE, q.min)
@@ -244,7 +246,7 @@ impute.pa2 <- function (tab, conditions, q.min = 0, q.norm = 3, eps = 0, distrib
         while (j < (k + nb_rep[i])) {
             if(distribution == "unif")
             {
-                tab_imp[which(is.na(tab_imp[, j])), j] = runif(n = sum(is.na(tab_imp[,j])), 
+                tab_imp[which(is.na(tab_imp[, j])), j] = stats::runif(n = sum(is.na(tab_imp[,j])), 
                                                                min = qu[j] - eps - q.norm * median(sde, na.rm = TRUE), 
                                                                max = qu[j] - eps)
             } else if (distribution == "beta"){

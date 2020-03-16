@@ -126,6 +126,7 @@ groupttest <- function(MatAdj, cond1=NULL, cond2 = NULL){
 #' qData <- Biobase::exprs(obj)
 #' gttest <- compute.group.t.tests(qData, sTab, X, X.spec)
 #' @export
+#' @importFrom utils combn
 compute.group.t.tests <- function(qData, sTab,X,  X.spec, logFC = NULL,contrast="OnevsOne", type="Student"){
   
   switch(type,
@@ -149,7 +150,7 @@ compute.group.t.tests <- function(qData, sTab,X,  X.spec, logFC = NULL,contrast=
   
   
   if(contrast=="OnevsOne"){
-    comb <- combn(levels(Conditions.f), 2)
+    comb <- utils::combn(levels(Conditions.f), 2)
     for(i in 1:ncol(comb)){
       c1Indice <- which(Conditions==comb[1,i])
       c2Indice <- which(Conditions==comb[2,i])

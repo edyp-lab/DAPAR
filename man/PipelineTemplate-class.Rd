@@ -26,11 +26,15 @@ assays that are organized instances of
 
 \item{\code{indexNA}}{A xxxxxs}
 
+\item{\code{dataType}}{xxxx.}
+
 \item{\code{analysis}}{A character vector that is the name of the MS study}
 
 \item{\code{pipelineType}}{A character vector that indicates the type of data that are managed in this instance}
 
 \item{\code{processes}}{xxx}
+
+\item{\code{version}}{xxx}
 }}
 
 \examples{

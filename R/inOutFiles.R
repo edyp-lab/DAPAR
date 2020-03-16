@@ -125,7 +125,7 @@ return(obj)
 #' of the \code{MSnSet} object.
 #' @param indFData The name of column in \code{file} that will be the name of
 #' rows for the \code{exprs()} and \code{fData()} tables
-#' @param keyid The indice of the column containing the ID of entities 
+#' @param keyId The indice of the column containing the ID of entities 
 #' (peptides or proteins)
 #' @param indexForOriginOfValue xxxxxxxxxxx
 #' @param logData A boolean value to indicate if the data have to be
@@ -142,12 +142,13 @@ return(obj)
 #' require(Matrix)
 #' exprsFile <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
 #' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
-#' metadata = read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
+#' metadata = utils::read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
 #' indExpData <- c(56:61)
 #' indFData <- c(1:55,62:71)
 #' keyid <- 64
 #' createMSnset(exprsFile, metadata,indExpData,  indFData, keyid, indexForOriginOfValue = NULL, typeOfData = "peptide")
 #' @importFrom MSnbase MSnSet
+#' @importFrom utils read.table
 #' @export
 
 createMSnset <- function(file,metadata=NULL,indExpData,indFData,
@@ -160,7 +161,7 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,
                          versions=NULL){
     
     if (!is.data.frame(file)){ #the variable is a path to a text file
-        data <- read.table(file, header=TRUE, sep="\t", stringsAsFactors = FALSE)
+        data <- utils::read.table(file, header=TRUE, sep="\t", stringsAsFactors = FALSE)
     } else {data <- file}
     
     ## replace all blanks by a dot
@@ -395,16 +396,17 @@ listSheets <- function(file){
 #' writeMSnsetToCSV(obj, "foo")
 #' }
 #' @export
+#' @importFrom utils write.csv zip
 writeMSnsetToCSV <- function(obj, fname){
     
     #fname <- paste(tempdir(),fname,  sep="/")
-    write.csv(Biobase::exprs(obj), paste(tempdir(), "exprs.csv", sep='/'))
-    write.csv(Biobase::fData(obj), paste(tempdir(), "fData.csv", sep='/'))
-    write.csv(Biobase::pData(obj), paste(tempdir(), "pData.csv", sep='/'))
+    utils::write.csv(Biobase::exprs(obj), paste(tempdir(), "exprs.csv", sep='/'))
+    utils::write.csv(Biobase::fData(obj), paste(tempdir(), "fData.csv", sep='/'))
+    utils::write.csv(Biobase::pData(obj), paste(tempdir(), "pData.csv", sep='/'))
     files <- c(paste(tempdir(), "exprs.csv", sep='/'),
                paste(tempdir(), "fData.csv", sep='/'),
                paste(tempdir(), "pData.csv", sep='/'))
-    zip(fname, files, zip = Sys.getenv("R_ZIPCMD", "zip"))
+    utils::zip(fname, files, zip = Sys.getenv("R_ZIPCMD", "zip"))
     
     return(fname)
 }

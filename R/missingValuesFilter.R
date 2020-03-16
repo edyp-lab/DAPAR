@@ -132,6 +132,7 @@ NumericalgetIndicesOfLinesToRemove <- function(obj, name=NULL, value=NULL, opera
 #' @examples
 #' proportionConRev_HC(10, 20, 100)
 #' @export
+#' @import highcharter
 proportionConRev_HC <- function(nBoth = 0, nCont=0, nRev=0, lDataset=0){
     if (is.null(nCont) && is.null(nBoth) && is.null(nRev) && is.null(lDataset)){return(NULL)}
     
@@ -150,7 +151,7 @@ proportionConRev_HC <- function(nBoth = 0, nCont=0, nRev=0, lDataset=0){
     mydata <- data.frame(test=c(pctGood, pctContaminants, pctReverse ,pctBoth))
     
     highchart() %>% 
-        my_hc_chart(chartType = "bar") %>% 
+      dapar_hc_chart(chartType = "bar") %>% 
         hc_yAxis(title = list(text = "Pourcentage")) %>% 
         hc_xAxis(categories=lbls) %>% 
         hc_legend(enabled = FALSE) %>%
@@ -162,7 +163,7 @@ proportionConRev_HC <- function(nBoth = 0, nCont=0, nRev=0, lDataset=0){
         hc_add_series(data  = mydata$test,
                       dataLabels = list(enabled = TRUE, format='{point.y}%'),
                   colorByPoint = TRUE) %>%
-      my_hc_ExportMenu(filename = "contaminants")
+      dapar_hc_ExportMenu(filename = "contaminants")
 
 
 }

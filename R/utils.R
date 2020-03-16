@@ -1,5 +1,33 @@
 
-                                        
+#' sfdsfdsfdsfd
+#' 
+#' @title djlqshdhsq dq idqs dqsd.
+#' @param  conds xxxxx.
+#' @param base_palette xxxxx;
+#' @return xxxxxx
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' getProcessingInfo(Exp1_R25_pept)
+
+#' @export
+#' @importFrom RColorBrewer brewer.pal
+
+BuildPalette <- function(conds, base_palette){
+  
+  palette <- NULL
+  if (is.null(base_palette)){
+    palette.init <- RColorBrewer::brewer.pal(8,"Dark2")[1:max(3,length(unique(conds)))]
+  } else {
+    palette.init <- base_palette
+  }
+  
+  for (i in 1:length(conds)){
+    palette[i] <- palette.init[which(conds[i] == unique(conds))]
+  }
+  return(palette)
+  
+}                                        
                                         
                                         
 #' Returns the contents of the slot processing of an object of class \code{MSnSet}
@@ -205,9 +233,10 @@ return(list(iCond1 = indCondition1, iCond2 = indCondition2))
 #' hc <- highchart() 
 #' hc_chart(hc,type = "line") 
 #' hc_add_series(hc,data = c(29, 71, 40))
-#' my_hc_ExportMenu(hc,filename='foo')
+#' dapar_hc_ExportMenu(hc,filename='foo')
 #' @export
-my_hc_ExportMenu <- function(hc, filename){
+#' @importFrom highcharter hc_exporting
+dapar_hc_ExportMenu <- function(hc, filename){
   hc_exporting(hc, enabled=TRUE,
                filename = filename,
                buttons= list(
@@ -233,9 +262,10 @@ my_hc_ExportMenu <- function(hc, filename){
 #' hc <- highchart() 
 #' hc_chart(hc,type = "line") 
 #' hc_add_series(hc,data = c(29, 71, 40))
-#' my_hc_ExportMenu(hc,filename='foo')
+#' dapar_hc_ExportMenu(hc,filename='foo')
 #' @export
-my_hc_chart <- function(hc,  chartType,zoomType="None"){
+#' @importFrom highcharter hc_chart
+dapar_hc_chart <- function(hc,  chartType,zoomType="None"){
   hc %>% 
     hc_chart(type = chartType, 
            zoomType=zoomType,

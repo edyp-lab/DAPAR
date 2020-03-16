@@ -30,6 +30,7 @@
 #' limma <- limmaCompleteTest(qData,sTab)
 #' diffAnaVolcanoplot(limma$logFC[,1], limma$P_Value[,1])
 #' @export
+#' @import graphics
 diffAnaVolcanoplot <- function(logFC=NULL, 
                                 pVal=NULL, 
                                 threshold_pVal=1e-60, 
@@ -142,6 +143,7 @@ return(p)
 #' diffAnaVolcanoplot_rCharts(df, 2.5, 1, cond,hc_clickFunction) 
 #' }
 #' @export
+#' @import highcharter
 diffAnaVolcanoplot_rCharts <- function(df, 
                                         threshold_pVal=1e-60, 
                                         threshold_logFC=0, 
@@ -192,7 +194,7 @@ diffAnaVolcanoplot_rCharts <- function(df,
     h1 <-  highchart() %>%
         hc_add_series(data = df, type = "scatter", hcaes(x,y,group=g)) %>%
         hc_colors(c(palette$In, palette$Out)) %>%
-        my_hc_chart(zoomType = "xy",chartType="scatter") %>%
+      dapar_hc_chart(zoomType = "xy",chartType="scatter") %>%
       hc_title(text = title,
                margin = 20, align = "center",
                style = list(size = 20, color = "black", useHTML = TRUE)) %>%
@@ -207,7 +209,7 @@ diffAnaVolcanoplot_rCharts <- function(df,
                                        cursor = "pointer", 
                                        point = list( events = list( 
                                            click = clickFunction ) ) ) ) %>%
-        my_hc_ExportMenu(filename = "volcanoplot") %>%
+      dapar_hc_ExportMenu(filename = "volcanoplot") %>%
       hc_add_series(data = leftBorder, type = "line", color='grey') %>%
       hc_add_series(data = rightBorder, type = "line", color='grey')
     

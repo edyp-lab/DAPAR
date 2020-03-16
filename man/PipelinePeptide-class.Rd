@@ -33,7 +33,7 @@ assays that are organized instances of
 example("PipelineTemp")
 library(DAPARdata)
 data('Exp1_R25_pept')
-obj <- Exp1_R25_pep
+obj <- Exp1_R25_pept
 samples <- Biobase::pData(obj)
 mae <- PipelinePeptide(analysis= 'test',pipelineType = 'peptide', dataType = 'peptide',
 processes='original',experiments=list(original=obj), 

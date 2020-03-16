@@ -115,6 +115,8 @@ return(newCol)
 #' BuildColumnToProteinDataset_par(data, M, name,proteinNames )
 #' }
 #' @export
+#' @import foreach
+#' @importFrom doParallel registerDoParallel 
 BuildColumnToProteinDataset_par <- function(peptideData, matAdj, columnName, proteinNames){
     doParallel::registerDoParallel()
     
@@ -168,7 +170,10 @@ CountPep <- function (M) {
 #' GraphPepProt(mat)
 #' @export
 GraphPepProt <- function(mat){
-    if (is.null(mat)){return (NULL)} 
+    if (is.null(mat)){
+      warning('The parameter mat is empty.')
+      return (NULL)
+        } 
 
     #mat <- as.matrix(mat)
     t <- t(mat)
@@ -358,6 +363,8 @@ aggregateSum <- function(obj.pep, X){
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 #' aggregateIterParallel(obj.pep, X)
 #' @export
+#' @importFrom doParallel registerDoParallel
+#' @import foreach
 aggregateIterParallel <- function(obj.pep, X, init.method='Sum', method='Mean', n=NULL){
   
   doParallel::registerDoParallel()
@@ -623,6 +630,7 @@ inner.mean <- function(pepData, X){
 #' @return xxxxx
 #' @author Samuel Wieczorek
 #' @export
+#' @importFrom stats median
 inner.aggregate.topn <-function(pepData,X, method='Mean', n=10){
   
   med <- apply(pepData, 1, median)
@@ -690,6 +698,7 @@ aggregateTopn <- function(obj.pep,X,  method='Mean', n=10){
 #' @return A protein object of class \code{MSnset}
 #' @author Samuel Wieczorek
 #' @export
+#' @importFrom utils installed.packages
 finalizeAggregation <- function(obj.pep, pepData, protData,X, lib.loc=NULL){
  
   protData <- as.matrix(protData)
@@ -729,8 +738,8 @@ finalizeAggregation <- function(obj.pep, pepData, protData,X, lib.loc=NULL){
   obj.prot@experimentData@other$typeOfData <-"protein"
   #obj.prot <- addOriginOfValue(obj.prot)
   obj.prot@experimentData@other$OriginOfValues <- NULL
-  obj.prot@experimentData@other$Prostar_Version <- installed.packages(lib.loc = lib.loc$Prostar.loc)["Prostar","Version"]
-  obj.prot@experimentData@other$DAPAR_Version <- installed.packages(lib.loc = lib.loc$DAPAR.loc)["DAPAR","Version"]
+  obj.prot@experimentData@other$Prostar_Version <- utils::installed.packages(lib.loc = lib.loc$Prostar.loc)["Prostar","Version"]
+  obj.prot@experimentData@other$DAPAR_Version <- utils::installed.packages(lib.loc = lib.loc$DAPAR.loc)["DAPAR","Version"]
   return (obj.prot)
 }
 

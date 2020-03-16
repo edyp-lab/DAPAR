@@ -241,6 +241,7 @@ make.design.1 <- function(sTab){
 #' make.design.2(Biobase::pData(Exp1_R25_pept))
 #' }
 #' @export
+#' @importFrom stats rnorm
 make.design.2=function(sTab){
   Condition <- factor(sTab$Condition,  levels=unique(sTab$Condition))
   RepBio <- factor(sTab$Bio.Rep,  levels=unique(sTab$Bio.Rep))
@@ -252,7 +253,7 @@ make.design.2=function(sTab){
   #Initial design matrix
   df <- rep(0,nrow(sTab))
   names(df) <- rownames(sTab)
-  design=model.matrix(df~0+Condition:RepBio)
+  design=stats::model.matrix(df~0+Condition:RepBio)
   
   #Remove empty columns in the design matrix
   design=design[,(apply(design,2,sum)>0)]
@@ -263,7 +264,7 @@ make.design.2=function(sTab){
     for (j in 1:length(d2[1,])){
       d2[,j]=d2[,j]-design[,i];
     }
-    e=as.matrix(rnorm(length(design[,1]),10,1));
+    e=as.matrix(stats::rnorm(length(design[,1]),10,1));
     sd2=t(e)%*%d2
     liste=which(sd2==0)
     coldel=c(coldel,liste+i)
@@ -286,6 +287,7 @@ make.design.2=function(sTab){
 #' sTab <-cbind(Biobase::pData(Exp1_R25_pept), Tech.Rep=1:6)
 #' make.design.3(sTab)
 #' @export
+#' @importFrom stats model.matrix rnorm
 make.design.3=function(sTab){
   
   Condition <- factor(sTab$Condition,  levels=unique(sTab$Condition))
@@ -302,7 +304,7 @@ make.design.3=function(sTab){
   #Initial design matrix
   df <- rep(0,nrow(sTab))
   names(df) <- rownames(sTab)
-  design=model.matrix(df~0+Condition:RepBio:RepTech)
+  design=stats::model.matrix(df~0+Condition:RepBio:RepTech)
   
   #Remove empty columns in the design matrix
   design=design[,(apply(design,2,sum)>0)]
@@ -314,7 +316,7 @@ make.design.3=function(sTab){
     for (j in 1:length(d2[1,])){
       d2[,j]=d2[,j]-design[,i];
     }
-    e=as.matrix(rnorm(length(design[,1]),10,1));
+    e=as.matrix(stats::rnorm(length(design[,1]),10,1));
     sd2=t(e)%*%d2
     liste=which(sd2==0)
     coldel=c(coldel,liste+i)
