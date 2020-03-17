@@ -39,7 +39,6 @@ Builds a densityplot of the CV of entities in the exprs() table.
 of an object \code{MSnSet}. The variance is calculated for each 
 condition present
 in the dataset (see the slot \code{'Condition'} in the \code{pData()} table).
-Same as the function \code{\link{wrapper.CVDistD}} but uses the package \code{highcharter}
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')

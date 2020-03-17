@@ -26,6 +26,8 @@ PipelineTemplate(
 \item{processes}{a character vector that indicates the list of the processes which composed the pipeline}
 
 \item{version}{The version of Prostar used to create this object}
+
+\item{...}{sdfkjdshfhdsfk}
 }
 \value{
 An instance of class \code{PipelineTemplate}.

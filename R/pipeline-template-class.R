@@ -59,6 +59,7 @@
 #' @param pipelineType the type of the pipeline used in Prostar
 #' @param processes a character vector that indicates the list of the processes which composed the pipeline
 #' @param version The version of Prostar used to create this object
+#' @param ... sdfkjdshfhdsfk
 #' @return An instance of class \code{PipelineTemplate}.
 #' @author Samuel Wieczorek
 #' @examples 
@@ -116,27 +117,89 @@ PipelineTemplate <- function(
 ## Create getter methods for 1D data structures
 
 #' @export
-setGeneric("analysis", function(x, ...) standardGeneric("analysis"))
+setGeneric("analysis", function(obj) standardGeneric("analysis"))
 
 
 #' @export
-setGeneric("pipelineType", function(x, ...) standardGeneric("pipelineType"))
+setGeneric("pipelineType", function(obj) standardGeneric("pipelineType"))
 
 #' @export
-setGeneric("dataType", function(x, ...) standardGeneric("dataType"))
-
-
-#' @export
-setGeneric("processes", function(x, ...) standardGeneric("processes"))
+setGeneric("dataType", function(obj) standardGeneric("dataType"))
 
 
 #' @export
-setGeneric("version", function(x) standardGeneric("version"))
+setGeneric("processes", function(obj) standardGeneric("processes"))
 
 
 #' @export
-setMethod("version", "PipelineTemplate", function(x) {
-  out <- x@version
+setGeneric("version", function(obj) standardGeneric("version"))
+
+
+#' @title Get the version slot value for the object
+#' @description sfklsjhf qsjdhsqd.
+#' @param obj xxxx
+#' @return The value of the slot version which is a column of the dataset which contains xxxx.
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
+#' @export
+setMethod("version", "PipelineTemplate", function(obj) {
+  out <- obj@version
+  out
+})
+
+
+
+
+#' @title Get the dataType slot value for the object
+#' @description sfklsjhf qsjdhsqd.
+#' @param obj xxxx
+#' @return The value of the dataType version which is a column of the dataset which contains xxxx.
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
+#' @export
+setMethod("dataType", "PipelineTemplate", function(obj) {
+  out <- obj@dataType
+  out
+})
+
+#' @title Get the analysis slot value for the object
+#' @description sfklsjhf qsjdhsqd.
+#' @param obj xxxx
+#' @return The value of the slot called analysis 
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
+#' @export
+setMethod("analysis", "PipelineTemplate", function(obj) {
+  out <- obj@analysis
+  out
+})
+
+#' @title Get the pipelineType slot value for the object
+#' @description sfklsjhf qsjdhsqd.
+#' @param obj xxxx
+#' @return The value of the slot called pipelineType 
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
+#' @export
+setMethod("pipelineType", "PipelineTemplate", function(obj) {
+  out <- obj@pipelineType
+  out
+})
+
+#' @title Get the processes slot value for the object
+#' @description sfklsjhf qsjdhsqd.
+#' @param obj xxxx
+#' @return The value of the slot called processes 
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
+#' @export
+setMethod("processes", "PipelineTemplate", function(obj) {
+  out <- obj@processes
   out
 })
 
@@ -144,42 +207,22 @@ setMethod("version", "PipelineTemplate", function(x) {
 
 
 #' @export
-setMethod("dataType", "PipelineTemplate", function(x, withDimnames=TRUE) {
-  out <- x@dataType
-  out
-})
-
-#' @export
-setMethod("analysis", "PipelineTemplate", function(x, withDimnames=TRUE) {
-  out <- x@analysis
-  out
-})
-
-#' @export
-setMethod("pipelineType", "PipelineTemplate", function(x, withDimnames=TRUE) {
-  out <- x@pipelineType
-  out
-})
-
-#' @export
-setMethod("processes", "PipelineTemplate", function(x, withDimnames=TRUE) {
-  out <- x@processes
-  out
-})
-
-
+setGeneric("PairwiseComps", function(obj) standardGeneric("PairwiseComps"))
 
 
 ##
 ## Create getter methods for 2D data structures
 ##
+#' @title Get the PairwiseComps slot value for the object
+#' @description sfklsjhf qsjdhsqd.
+#' @param obj xxxx
+#' @return The value of the slot called PairwiseComps 
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
 #' @export
-setGeneric("PairwiseComps", function(x, ...) standardGeneric("PairwiseComps"))
-
-
-#' @export
-setMethod("PairwiseComps", "PipelineTemplate", function(x, withDimnames=TRUE) {
-  out <- x@PairwiseComparisons
+setMethod("PairwiseComps", "PipelineTemplate", function(obj) {
+  out <- obj@PairwiseComparisons
   out
 })
 
@@ -188,12 +231,22 @@ setMethod("PairwiseComps", "PipelineTemplate", function(x, withDimnames=TRUE) {
 
 
 #' @export
-setGeneric("designMap", function(x, ...) standardGeneric("designMap"))
+setGeneric("designMap", function(obj) standardGeneric("designMap"))
 
 
+##
+## Create getter methods for 2D data structures
+##
+#' @title Get the designMap slot value for the object
+#' @description sfklsjhf qsjdhsqd.
+#' @param obj xxxx
+#' @return The value of the slot called designMap 
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
 #' @export
-setMethod("designMap", "PipelineTemplate", function(x, withDimnames=TRUE) {
-  out <- Biobase::pData(MultiAssayExperiment::experiments(x)[['original']])
+setMethod("designMap", "PipelineTemplate", function(obj) {
+  out <- Biobase::pData(MultiAssayExperiment::experiments(obj)[['original']])
   out
 })
 
@@ -227,6 +280,14 @@ setMethod("designMap", "PipelineTemplate", function(x, withDimnames=TRUE) {
 # We can augment it to display some relevant aspects of the custom slots. This is done by 
 # calling the base show method before printing additional fields as necessary.
 
+
+#' @title show function override
+#' @description sfklsjhf qsjdhsqd.
+#' @param object xxxx
+#' @return The value of the slot called designMap 
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
 #' @export
 setMethod("show", "PipelineTemplate", function(object) {
   cat(
@@ -248,15 +309,15 @@ setMethod("show", "PipelineTemplate", function(object) {
 
 
 #' @export
-setGeneric("pipelineType<-", function(x, value) standardGeneric("pipelineType<-"))
+setGeneric("pipelineType<-", function(obj, value) standardGeneric("pipelineType<-"))
 
 
 #' @export
-setGeneric("analysis<-", function(x, ..., value) standardGeneric("analysis<-"))
+setGeneric("analysis<-", function(obj, value) standardGeneric("analysis<-"))
 
 
 #' @export
-setGeneric("processes<-", function(x, ..., value) standardGeneric("processes<-"))
+setGeneric("processes<-", function(obj, value) standardGeneric("processes<-"))
 
 
 # We define the class-specific methods for these generics. Note that use of validObject 
@@ -265,25 +326,50 @@ setGeneric("processes<-", function(x, ..., value) standardGeneric("processes<-")
 
 
 
+
+#' @title Set the pipelineType slot value for the object
+#' @description sfklsjhf qsjdhsqd.
+#' @param obj xxxx
+#' @param value xxx
+#' @return xxxx
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
 #' @export
-setReplaceMethod("pipelineType", "PipelineTemplate", function(x, value) {
+setReplaceMethod("pipelineType", "PipelineTemplate", function(obj, value) {
   x@pipelineType <- value
   validObject(x)
   x
 })
 
+#' @title Set the processes slot value for the object
+#' @description sfklsjhf qsjdhsqd.
+#' @param obj xxxx
+#' @param value xxx
+#' @return xxxx
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
 #' @export
-setReplaceMethod("processes", "PipelineTemplate", function(x, value) {
-  x@processes <- value
-  validObject(x)
-  x
+setReplaceMethod("processes", "PipelineTemplate", function(obj, value) {
+  obj@processes <- value
+  validObject(obj)
+  obj
 })
 
+#' @title Set the analysis slot value for the object
+#' @description sfklsjhf qsjdhsqd.
+#' @param obj xxxx
+#' @param value xxx
+#' @return xxxx
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
 #' @export
-setReplaceMethod("analysis", "PipelineTemplate", function(x, value) {
-  x@analysis <- value
-  validObject(x)
-  x
+setReplaceMethod("analysis", "PipelineTemplate", function(obj, value) {
+  obj@analysis <- value
+  validObject(obj)
+  obj
 })
 
 
@@ -293,83 +379,143 @@ setReplaceMethod("analysis", "PipelineTemplate", function(x, value) {
 
 
 #' @export
-setGeneric("PairwiseComps<-", function(x, ..., value) standardGeneric("PairwiseComps<-"))
+setGeneric("PairwiseComps<-", function(obj, ..., value) standardGeneric("PairwiseComps<-"))
 
-# Again, we define class-specific methods for these generics.
+#' @title Set the PairwiseComps slot value for the object
+#' @description sfklsjhf qsjdhsqd.
+#' @param obj xxxx
+#' @param value xxx
+#' @return xxxx
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
 #' @export
-setReplaceMethod("PairwiseComps", "PipelineTemplate", function(x, value) {
-  x@PairwiseComparisons <- value
-  validObject(x)
-  x
+setReplaceMethod("PairwiseComps", "PipelineTemplate", function(obj, value) {
+  obj@PairwiseComparisons <- value
+  validObject(obj)
+  obj
 })
 
 
 
 #' @export
-setGeneric("rmDatasetByIndice", function(x, ind) standardGeneric("rmDatasetByIndice"))
+setGeneric("rmDatasetByIndice", function(obj, ind) standardGeneric("rmDatasetByIndice"))
 
+#' @title Set the rmDatasetByIndice slot value for the object
+#' @description sfklsjhf qsjdhsqd.
+#' @param obj xxxx
+#' @param ind xxx
+#' @return xxxx
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
 #' @export
-setMethod("rmDatasetByIndice", "PipelineTemplate", function(x, ind) {
+setMethod("rmDatasetByIndice", "PipelineTemplate", function(obj, ind) {
   #mae <- callNextMethod()
-  experiments(x) <- experiments(x)[-ind] 
-  validObject(x)
-  x
+  experiments(obj) <- experiments(obj)[-ind] 
+  validObject(obj)
+  obj
 })
 
 
 #' @export
-setGeneric("rmDatasetByName", function(x, name) standardGeneric("rmDatasetByName"))
+setGeneric("rmDatasetByName", function(obj, name) standardGeneric("rmDatasetByName"))
 
+#' @title Set the rmDatasetByName slot value for the object
+#' @description sfklsjhf qsjdhsqd.
+#' @param obj xxxx
+#' @param name xxx
+#' @return xxxx
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
 #' @export
-setMethod("rmDatasetByName", "PipelineTemplate", function(x, name) {
+setMethod("rmDatasetByName", "PipelineTemplate", function(obj, name) {
   #mae <- callNextMethod()
-  experiments(x) <- within(experiments(x), rm(name)) 
-  validObject(x)
-  x
+  experiments(obj) <- within(experiments(obj), rm(name)) 
+  validObject(obj)
+  obj
 })
 
 #' @export
-setGeneric("addDataset", function(x, name, dataset) standardGeneric("addDataset"))
+setGeneric("addDataset", function(obj, name, dataset) standardGeneric("addDataset"))
 
+#' @title Set the addDataset slot value for the object
+#' @description sfklsjhf qsjdhsqd.
+#' @param obj xxxx
+#' @param name xxx
+#' @param dataset xxx
+#' @return xxxx
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
 #' @export
-setMethod("addDataset", "PipelineTemplate", function(x, name, dataset) {
+setMethod("addDataset", "PipelineTemplate", function(obj, name, dataset) {
   #mae <- callNextMethod()
   ds <- list()
   ds[[name]]<- dataset
-  x <- c(x, ds)
-  validObject(x)
-  x
+  obj <- c(obj, ds)
+  validObject(obj)
+  obj
 })
 
 
 
 #' @export
-setGeneric("updateDataset<-", function(x, name, value) standardGeneric("updateDataset<-"))
+setGeneric("updateDataset<-", function(obj, name, value) standardGeneric("updateDataset<-"))
+
+
+#' @title Set the updateDataset slot value for the object
+#' @description sfklsjhf qsjdhsqd.
+#' @param obj xxxx
+#' @param name xxx
+#' @param value xxx
+#' @return xxxx
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
 #' @export
-setReplaceMethod("updateDataset", "PipelineTemplate", function(x, name, value) {
+setReplaceMethod("updateDataset", "PipelineTemplate", function(obj, name, value) {
   #mae <- callNextMethod()
-  .checkIfAnalysisExists(x, name)
+  .checkIfAnalysisExists(obj, name)
   
-  experiments(x)[[name]] <- value
-  validObject(x)
-  x
+  experiments(obj)[[name]] <- value
+  validObject(obj)
+  obj
 })
 
 
 #' @export
-setGeneric("dataset", function(x, name) standardGeneric("dataset"))
+setGeneric("dataset", function(obj, name) standardGeneric("dataset"))
+
+#' @title Get a dataset slot value for the object
+#' @description sfklsjhf qsjdhsqd.
+#' @param obj xxxx
+#' @param name xxx
+#' @return xxxx
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
 #' @export
-setMethod("dataset", "PipelineTemplate", function(x, name) {
+setMethod("dataset", "PipelineTemplate", function(obj, name) {
   #mae <- callNextMethod()
-  .checkIfAnalysisExists(x, name)
-  out <- experiments(x)[[name]]
+  .checkIfAnalysisExists(obj, name)
+  out <- experiments(obj)[[name]]
   out
 })
 
 
 
 
-
+#' @title Check if xxx
+#' @description sfklsjhf qsjdhsqd.
+#' @param object xxxx
+#' @param name xxx
+#' @return xxxx
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
+#' @export
 .checkIfAnalysisExists <- function(object, name)
 {
   if (!(name %in% names(assays(object)))){
@@ -384,12 +530,21 @@ setMethod("dataset", "PipelineTemplate", function(x, name) {
 }
 
 
-
+#' @title Check if xxx
+#' @description sfklsjhf qsjdhsqd.
+#' @param object xxxx
+#' @return xxxx
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
+#' @export
 .validPipelineTemplate <- function(object) {
   #if (length(experiments(object)) != 0L) {
   
   # }
 }
+
+
 
 S4Vectors::setValidity2("PipelineTemplate", .validPipelineTemplate)
 

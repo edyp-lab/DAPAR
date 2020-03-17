@@ -4,12 +4,10 @@
 \alias{ProstarVersion,MSnSet-method}
 \title{Get the version of Prostar used.}
 \usage{
-\S4method{ProstarVersion}{MSnSet}(obj, withDimnames = TRUE)
+\S4method{ProstarVersion}{MSnSet}(obj)
 }
 \arguments{
 \item{obj}{xxxx}
-
-\item{value}{xxx}
 }
 \value{
 xxxx.

@@ -26,6 +26,28 @@ drawn above the bars.}
 A bar plot
 }
 \description{
+#' This method is a wrapper to plots from a \code{MSnSet} object a 
+#' bar plot which represents the distribution of the 
+#' number of missing values (NA) per lines (ie proteins) and per conditions.
+#' 
+#' @title Bar plot of missing values per lines and per conditions from an 
+#' object \code{MSnSet}
+#' @param obj An object of class \code{MSnSet}.
+#' @param indLegend The indice of the column name's in \code{pData()} tab .
+#' @param showValues A logical that indicates wether numeric values should be
+#' drawn above the bars.
+#' @return A bar plot
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' wrapper.mvPerLinesHistoPerCondition(Exp1_R25_pept)
+#' @export
+wrapper.mvPerLinesHistoPerCondition <- function(obj, indLegend="auto", 
+                                                showValues=FALSE){
+  qData <- Biobase::exprs(obj)
+  samplesData <- Biobase::pData(obj)
+  mvPerLinesHistoPerCondition(qData, samplesData, indLegend, showValues)
+}
 This method is a wrapper to plots (using highcharts) from a \code{MSnSet} object a 
 bar plot which represents the distribution of the 
 number of missing values (NA) per lines (ie proteins) and per conditions.

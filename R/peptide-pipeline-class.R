@@ -15,8 +15,6 @@
 #' @slot pipelineType A character vector that indicates the type of data that are managed in this instance
 #' @slot processes xxx
 #'
-#' @param ... Additional arguments for supporting functions. See details.
-#'
 #' @return A \code{PipelineTemplate} object
 #'
 #' @examples
@@ -30,6 +28,14 @@
 #' colData=samples)
 
 
+#' @title sdfdsfs
+#' @description sfklsjhf qsjdhsqd.
+#' @param obj xxxx
+#' @return xxxx
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
+#' @export
 #' @exportClass PipelinePeptide
 .PipelinePeptide <- setClass("PipelinePeptide",
                              contains = "PipelineTemplate",
@@ -42,11 +48,16 @@
 
 
 
-#' @export PipelinePeptide
+#' @title sdfdsfs
+#' @description sfklsjhf qsjdhsqd.
+#' @param ... xxxx
+#' @return xxxx
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
+#' @export
 PipelinePeptide <- function(...)
 {
-  
-  
   template <- PipelineTemplate(...)
   
   parentProtId <- parentProtId(template[['original']])
@@ -59,17 +70,18 @@ PipelinePeptide <- function(...)
              template, 
              matAdj = matAdj, 
              CC = cc)
-  
   obj
 }
 
 
 
-###########################
-# Getter functions
-
-
-
+#' @title sdfdsfs
+#' @description sfklsjhf qsjdhsqd.
+#' @param object xxxx
+#' @return xxxx
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
 #' @export
 setMethod("show", "PipelinePeptide", function(object) {
   cat(
@@ -85,22 +97,36 @@ setMethod("show", "PipelinePeptide", function(object) {
 
 
 #' @export
-setGeneric("CC", function(x) standardGeneric("CC"))
+setGeneric("CC", function(obj) standardGeneric("CC"))
 
+#' @title sdfdsfs
+#' @description sfklsjhf qsjdhsqd.
+#' @param obj xxxx
+#' @return xxxx
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
 #' @export
-setMethod("CC", "PipelinePeptide", function(x) {
-  out <- x@CC
+setMethod("CC", "PipelinePeptide", function(obj) {
+  out <- xobjCC
   out
 })
 
 
 
 #' @export
-setGeneric("matAdj", function(x) standardGeneric("matAdj"))
+setGeneric("matAdj", function(obj) standardGeneric("matAdj"))
 
+#' @title Get 
+#' @description sfklsjhf qsjdhsqd.
+#' @param obj xxxx
+#' @return xxxx
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
 #' @export
-setMethod("matAdj", "PipelinePeptide", function(x) {
-  out <- x@matAdj
+setMethod("matAdj", "PipelinePeptide", function(obj) {
+  out <- obj@matAdj
   out
 })
 

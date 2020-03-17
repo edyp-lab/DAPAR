@@ -6,10 +6,12 @@
 \alias{.PipelinePeptide}
 \title{PipelineTemplate class}
 \arguments{
-\item{...}{Additional arguments for supporting functions. See details.}
+\item{obj}{xxxx}
 }
 \value{
 A \code{PipelineTemplate} object
+
+xxxx
 }
 \description{
 The \code{PipelineTemplate} class inherits from the \code{PipelineTemplate} and serves as a template for
@@ -18,6 +20,8 @@ diverse assays on a collection of specimen. Currently,  the class can handle
 assays that are organized instances of
 \code{\linkS4class{MSnSet}},
 \code{matrix}.
+
+sfklsjhf qsjdhsqd.
 }
 \section{Slots}{
 
@@ -38,4 +42,8 @@ samples <- Biobase::pData(obj)
 mae <- PipelinePeptide(analysis= 'test',pipelineType = 'peptide', dataType = 'peptide',
 processes='original',experiments=list(original=obj), 
 colData=samples)
+utils::data(Exp1_R25_prot)
+}
+\author{
+Samuel Wieczorek
 }

@@ -101,7 +101,6 @@ CVDistD <- function(qData, conds=NULL, palette = NULL){
 Builds a densityplot of the CV of entities in the exprs() table
 of a object. The CV is calculated for each condition present
 in the dataset (see the slot \code{'Condition'} in the \code{pData()} table)
-Same as the function \code{CVDistD} but uses the package \code{highcharter}
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')

@@ -1,128 +1,128 @@
-# 
-# 
-# #' Builds a heatmap of the quantitative proteomic data of a 
-# #' \code{MSnSet} object.
-# #' 
-# #' @title This function is a wrapper to \code{\link{heatmap.2}} that displays 
-# #' quantitative data in the \code{exprs()} table of an object of
-# #' class \code{MSnSet}
-# #' @param obj An object of class \code{MSnSet}.
-# #' @param distance The distance used by the clustering algorithm to compute 
-# #' the dendrogram. See \code{help(heatmap.2)}.
-# #' @param cluster the clustering algorithm used to build the dendrogram.
-# #' See \code{help(heatmap.2)}
-# #' @param dendro A boolean to indicate fi the dendrogram has to be displayed
-# #' @return A heatmap
-# #' @author Alexia Dorffer
-# #' @examples
-# #' \dontrun{
-# #' utils::data(Exp1_R25_pept, package='DAPARdata')
-# #' obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
-# #' wrapper.heatmapD(obj)
-# #' }
-# #' @importFrom Biobase exprs
-# #' @export
-# wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete",
-#                               dendro = FALSE){
-#   qData <- Biobase::exprs(obj)
-#   for (j in 1:length(colnames(qData))){
-#     colnames(qData)[j] <- paste(as.character(Biobase::pData(obj)[j,2:ncol(Biobase::pData(obj))]),
-#                                 collapse =" ")
-#   }
-# 
-#   DAPAR::heatmapD(qData, distance, cluster, dendro)
-# }
+
+
+#' Builds a heatmap of the quantitative proteomic data of a
+#' \code{MSnSet} object.
+#'
+#' @title This function is a wrapper to \code{\link{heatmap.2}} that displays
+#' quantitative data in the \code{exprs()} table of an object of
+#' class \code{MSnSet}
+#' @param obj An object of class \code{MSnSet}.
+#' @param distance The distance used by the clustering algorithm to compute
+#' the dendrogram. See \code{help(heatmap.2)}.
+#' @param cluster the clustering algorithm used to build the dendrogram.
+#' See \code{help(heatmap.2)}
+#' @param dendro A boolean to indicate fi the dendrogram has to be displayed
+#' @return A heatmap
+#' @author Alexia Dorffer
+#' @examples
+#' \dontrun{
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
+#' wrapper.heatmapD(obj)
+#' }
+#' @importFrom Biobase exprs
+#' @export
+wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete",
+                              dendro = FALSE){
+  qData <- Biobase::exprs(obj)
+  for (j in 1:length(colnames(qData))){
+    colnames(qData)[j] <- paste(as.character(Biobase::pData(obj)[j,2:ncol(Biobase::pData(obj))]),
+                                collapse =" ")
+  }
+
+  DAPAR::heatmapD(qData, distance, cluster, dendro)
+}
 
 
 
-# 
-# #' Heatmap of the quantitative proteomic data of a \code{MSnSet} object
-# #' 
-# #' @title This function is a wrapper to \code{\link{heatmap.2}} that displays 
-# #' quantitative data in the \code{exprs()} table of an object of
-# #' class \code{MSnSet}
-# #' @param qData A dataframe that contains quantitative data.
-# #' @param distance The distance used by the clustering algorithm to compute 
-# #' the dendrogram. See \code{help(heatmap.2)}
-# #' @param cluster the clustering algorithm used to build the dendrogram.
-# #' See \code{help(heatmap.2)}
-# #' @param dendro A boolean to indicate fi the dendrogram has to be displayed
-# #' @return A heatmap
-# #' @author Florence Combes, Samuel Wieczorek
-# #' @examples
-# #' \dontrun{
-# #' utils::data(Exp1_R25_pept, package='DAPARdata')
-# #' obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
-# #' qData <- Biobase::exprs(obj)
-# #' heatmapD(qData)
-# #' }
-# #' @importFrom grDevices colorRampPalette
-# #' @importFrom gplots heatmap.2
-# #' @import graphics
-# #' @export
-# heatmapD <- function(qData, distance="euclidean", cluster="complete", dendro = FALSE){
-#   ##Check parameters
-#   # paramdist <- c("euclidean", "manhattan") 
-#   # if (!(distance %in% paramdist)){
-#   #     stop("Param distance is not correct.")
-#   #     return (NULL)
-#   # }
-#   # 
-#   # paramcluster <- c("ward.D", "average")
-#   # if (!(cluster %in%  paramcluster)){
-#   #     stop("Param clustering is not correct.")
-#   #     return (NULL)
-#   # }
-#   
-#   
-#   # if (isTRUE(dendro) && getNumberOfEmptyLines(qData) != 0)  {
-#   #     stop("Your dataset contains empty lines: the dendrogram cannot 
-#   # be computed.
-#   #         Please filter or impute missing values before.")
-#   #     return (NULL)
-#   # }
-#   # else {
-#   .data <- matrix(qData, 
-#                   ncol = ncol(qData), 
-#                   byrow = FALSE,
-#                   dimnames = list(rownames(qData), colnames(qData))
-#   )
-#   colors = c(seq(-3, -2, length=100),
-#              seq(-2, 0.5, length=100),
-#              seq(0.5, 6, length=100))
-#   heatmap.color <- grDevices::colorRampPalette(c("green", "red"))(n = 1000)
-#   
-#   
-#   if (dendro){ .dendro = "row"} else {.dendro = "none"}
-#   p <- gplots::heatmap.2(
-#     x=t(.data),
-#     distfun = function(x) {
-#       x[is.na(x)] <- -1e5
-#       dist(x, method=distance)
-#     },
-#     hclustfun = function(x) {
-#       x[is.na(x)] <- -1e5
-#       hclust(x, method=cluster)
-#     },
-#     dendrogram =.dendro,
-#     Rowv=TRUE,
-#     col=heatmap.color ,
-#     density.info='none',
-#     key=TRUE,
-#     trace="none",
-#     scale="none",
-#     #srtCol=45,
-#     labCol="",
-#     margins=c(4,12),
-#     cexRow=1.5,
-#     keysize = 1.5,
-#     lhei = c(1.5, 9),
-#     lwid = c(1.5, 4),
-#     lmat = rbind(4:3, 2:1)
-#     
-#   )
-#   #    }
-# }
+
+#' Heatmap of the quantitative proteomic data of a \code{MSnSet} object
+#'
+#' @title This function is a wrapper to \code{\link{heatmap.2}} that displays
+#' quantitative data in the \code{exprs()} table of an object of
+#' class \code{MSnSet}
+#' @param qData A dataframe that contains quantitative data.
+#' @param distance The distance used by the clustering algorithm to compute
+#' the dendrogram. See \code{help(heatmap.2)}
+#' @param cluster the clustering algorithm used to build the dendrogram.
+#' See \code{help(heatmap.2)}
+#' @param dendro A boolean to indicate fi the dendrogram has to be displayed
+#' @return A heatmap
+#' @author Florence Combes, Samuel Wieczorek
+#' @examples
+#' \dontrun{
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
+#' qData <- Biobase::exprs(obj)
+#' heatmapD(qData)
+#' }
+#' @importFrom grDevices colorRampPalette
+#' @importFrom gplots heatmap.2
+#' @import graphics
+#' @export
+heatmapD <- function(qData, distance="euclidean", cluster="complete", dendro = FALSE){
+  ##Check parameters
+  # paramdist <- c("euclidean", "manhattan")
+  # if (!(distance %in% paramdist)){
+  #     stop("Param distance is not correct.")
+  #     return (NULL)
+  # }
+  #
+  # paramcluster <- c("ward.D", "average")
+  # if (!(cluster %in%  paramcluster)){
+  #     stop("Param clustering is not correct.")
+  #     return (NULL)
+  # }
+
+
+  # if (isTRUE(dendro) && getNumberOfEmptyLines(qData) != 0)  {
+  #     stop("Your dataset contains empty lines: the dendrogram cannot
+  # be computed.
+  #         Please filter or impute missing values before.")
+  #     return (NULL)
+  # }
+  # else {
+  .data <- matrix(qData,
+                  ncol = ncol(qData),
+                  byrow = FALSE,
+                  dimnames = list(rownames(qData), colnames(qData))
+  )
+  colors = c(seq(-3, -2, length=100),
+             seq(-2, 0.5, length=100),
+             seq(0.5, 6, length=100))
+  heatmap.color <- grDevices::colorRampPalette(c("green", "red"))(n = 1000)
+
+
+  if (dendro){ .dendro = "row"} else {.dendro = "none"}
+  p <- gplots::heatmap.2(
+    x=t(.data),
+    distfun = function(x) {
+      x[is.na(x)] <- -1e5
+      dist(x, method=distance)
+    },
+    hclustfun = function(x) {
+      x[is.na(x)] <- -1e5
+      hclust(x, method=cluster)
+    },
+    dendrogram =.dendro,
+    Rowv=TRUE,
+    col=heatmap.color ,
+    density.info='none',
+    key=TRUE,
+    trace="none",
+    scale="none",
+    #srtCol=45,
+    labCol="",
+    margins=c(4,12),
+    cexRow=1.5,
+    keysize = 1.5,
+    lhei = c(1.5, 9),
+    lwid = c(1.5, 4),
+    lmat = rbind(4:3, 2:1)
+
+  )
+  #    }
+}
 
 
 #' Heatmap inspired by the heatmap.2 function.

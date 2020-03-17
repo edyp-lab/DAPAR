@@ -25,9 +25,6 @@ but uses the package \code{highcharter}
 utils::data(Exp1_R25_pept, package='DAPARdata')
 densityPlotD_HC(Exp1_R25_pept)
 }
-\seealso{
-\code{\link{boxPlotD}}, \code{\link{CVDistD}}
-}
 \author{
-Samuel Wieczorek
+
 }

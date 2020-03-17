@@ -26,7 +26,6 @@
 #' of an object \code{MSnSet}. The variance is calculated for each 
 #' condition present
 #' in the dataset (see the slot \code{'Condition'} in the \code{pData()} table).
-#' Same as the function \code{\link{wrapper.CVDistD}} but uses the package \code{highcharter}
 #' 
 #' @title Distribution of CV of entities
 #' @param obj An object of class \code{MSnSet}
@@ -132,7 +131,6 @@ wrapper.CVDistD_HC <- function(obj, ...){
 #' Builds a densityplot of the CV of entities in the exprs() table
 #' of a object. The CV is calculated for each condition present
 #' in the dataset (see the slot \code{'Condition'} in the \code{pData()} table)
-#' Same as the function \code{CVDistD} but uses the package \code{highcharter}
 #' @title Distribution of CV of entities
 #' @param qData A dataframe that contains quantitative data.
 #' @param conds A vector of the conditions (one condition per sample).
