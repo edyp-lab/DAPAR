@@ -145,13 +145,16 @@ return(obj)
 #' metadata = utils::read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
 #' indExpData <- c(56:61)
 #' indFData <- c(1:55,62:71)
-#' keyid <- 64
+#' keyid <- 'Sequence'
 #' createMSnset(exprsFile, metadata,indExpData,  indFData, keyid, indexForOriginOfValue = NULL, typeOfData = "peptide")
 #' @importFrom MSnbase MSnSet
 #' @importFrom utils read.table
 #' @export
 
-createMSnset <- function(file,metadata=NULL,indExpData,indFData,
+createMSnset <- function(file,
+                         metadata=NULL,
+                         indExpData,
+                         indFData,
                          keyId=NULL,
                          indexForOriginOfValue = NULL,
                          logData=FALSE, 
@@ -232,6 +235,7 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,
     ProstarVersion(obj) <- versions$Prostar_Version
     DAPARVersion(obj) <- versions$DAPAR_Version
     parentProtId(obj) <- parentProtId
+    keyId(obj) <- keyId
     Params(obj) <- list()
     typeOfData(obj) <- typeOfData
     OriginOfValues(obj) <- NULL

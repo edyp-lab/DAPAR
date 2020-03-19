@@ -67,7 +67,7 @@ metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdat
 metadata = utils::read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
 indExpData <- c(56:61)
 indFData <- c(1:55,62:71)
-keyid <- 64
+keyid <- 'Sequence'
 createMSnset(exprsFile, metadata,indExpData,  indFData, keyid, indexForOriginOfValue = NULL, typeOfData = "peptide")
 }
 \author{

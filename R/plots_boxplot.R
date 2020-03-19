@@ -77,13 +77,19 @@ boxPlotD <- function(obj,conds, legend=NULL,palette=NULL){
 #' @export
 boxPlotD_HC <- function(obj, legend=NULL, palette = NULL,subset.view=NULL){
   
+  if (is.null(obj)){
+    warning('The dataset in NULL and cannot be shown')
+    return(NULL)
+  }
+  
   qData <- Biobase::exprs(obj)
   if( is.null(legend)){legend <- Biobase::pData(obj)[,"Sample.name"]}
   
-  palette <- BuildPalette(Biobase::pData(obj)$Conditions, palette)
+  palette <- BuildPalette(Biobase::pData(obj)$Condition, palette)
   
   bx <-boxplot(qData, na.rm=TRUE)
-  df_outlier <- data.frame(x=bx$group-1,y = bx$out)
+  df_outlier <- data.frame(x=bx$group-1,
+                           y = bx$out)
   
   #tmp <- NULL
   #for (i in 1:ncol(qData)){
@@ -129,8 +135,7 @@ boxPlotD_HC <- function(obj, legend=NULL, palette = NULL,subset.view=NULL){
   
   # Display of rows to highlight (index of row in subset.view) 
   if(!is.null(subset.view)){
-    idColName<-obj@experimentData@other$proteinId
-    idVector=obj@featureData@data[,idColName]
+    idVector <- Biobase::fData(obj)[,keyId(obj)]
     pal=grDevices::colorRampPalette(RColorBrewer::brewer.pal(8, "Set1"))(length(subset.view))    
     n=0
     for(i in subset.view){

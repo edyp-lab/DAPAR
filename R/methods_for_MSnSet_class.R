@@ -6,6 +6,62 @@
 #' @examples 
 #' utils::data(Exp1_R25_prot)
 #' @export
+setGeneric("keyId", function(obj) standardGeneric("keyId"))
+
+
+#' @title Get the keyId value for the object (peptide)
+#' @description sfklsjhf qsjdhsqd.
+#' @param obj xxxx
+#' @return Th value of parentProtId which is a column of the dataset which contains xxxx.
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
+#' @export
+setMethod("keyId", "MSnSet", function(obj) {
+  out <- obj@experimentData@other$keyId
+  out
+})
+
+
+
+#' @title qfsqfds
+#' @description sfklsjhf qsjdhsqd.
+#' @param obj xxxx
+#' @param value xxx
+#' @return xxxx.
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
+#' @export
+setGeneric("keyId<-", function(obj, value) standardGeneric("keyId<-"))
+
+#' @title Set the keyId value for the object (peptide)
+#' @description sfklsjhf qsjdhsqd.
+#' @param obj xxxx
+#' @param value xxx
+#' @return xxx
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
+#' @export
+setReplaceMethod("keyId", "MSnSet", function(obj, value) {
+  obj@experimentData@other$keyId <- value
+  obj
+})
+
+
+
+
+
+
+#' @title qfsqfds
+#' @description sfklsjhf qsjdhsqd.
+#' @param obj xxxx
+#' @return xxxx.
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_prot)
+#' @export
 setGeneric("parentProtId", function(obj) standardGeneric("parentProtId"))
 
 

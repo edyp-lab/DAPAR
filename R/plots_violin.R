@@ -21,27 +21,27 @@
 #' @importFrom vioplot vioplot
 #' @importFrom grDevices colorRampPalette
 #' @importFrom graphics plot.window
+#' @importFrom RColorBrewer brewer.pal
 #' @export
 violinPlotD <- function(obj, legend=NULL, palette = NULL,subset.view=NULL){
   plot.new()
-  qData <- Biobase::exprs(obj)
   
-  if (!is.null(palette)) {
-    if (length(palette) != ncol(qData)){
-      warning("The color palette has not the same dimension as the number of samples")
-      return(NULL)
-    }
-  } else {
-    palette <- rep('#FFFFFF',ncol(qData))
+  if (is.null(obj)){
+    warning('The dataset in NULL and cannot be shown')
+    return(NULL)
   }
   
-  
+  qData <- Biobase::exprs(obj)
+  conds <- Biobase::pData(obj)$Condition
+  palette <- BuildPalette(conds, palette)
+
   graphics::plot.window(xlim=c(0,ncol(qData)+1),
               ylim=c(min(na.omit(qData)),max(na.omit(qData))))
   title( ylab="Log (intensity)")
   
   for (i in 1:ncol(qData)) {
-    vioplot::vioplot(na.omit(qData[,i]), col = palette[i], add=TRUE, at=i)}
+    vioplot::vioplot(na.omit(qData[,i]), col = palette[i], add=TRUE, at=i)
+    }
   
   
   axis(2, yaxp = c(floor(min(na.omit(qData))), 
@@ -63,11 +63,12 @@ violinPlotD <- function(obj, legend=NULL, palette = NULL,subset.view=NULL){
     
     mtext("Samples",side=1,line=6+length(colnames(legend)), cex.lab=1, las=1)
   }
+  
+  
   # Display of rows to highlight (index of row in subset.view) 
   if(!is.null(subset.view)){
-    idColName<-obj@experimentData@other$proteinId
-    idVector=obj@featureData@data[,idColName]
-    pal=grDevices::colorRampPalette(brewer.pal(8, "Set1"))(length(subset.view))
+    idVector <- Biobase::fData(obj)[,DAPAR::keyId(obj)]
+    pal <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(8, "Set1"))(length(subset.view))
     
     n=0
     for (i in subset.view) {
