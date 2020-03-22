@@ -4,33 +4,19 @@
 \name{PipelinePeptide-class}
 \alias{PipelinePeptide-class}
 \alias{.PipelinePeptide}
-\title{PipelineTemplate class}
-\arguments{
-\item{obj}{xxxx}
-}
+\title{PipelinePeptide class}
 \value{
-A \code{PipelineTemplate} object
-
-xxxx
+A \code{PipelinePeptide} object
 }
 \description{
-The \code{PipelineTemplate} class inherits from the \code{PipelineTemplate} and serves as a template for
-instanciate pipeline classes such as proteinPipeline, proteinPipeline, etc. It can be used to manage results of
-diverse assays on a collection of specimen. Currently,  the class can handle
-assays that are organized instances of
-\code{\linkS4class{MSnSet}},
-\code{matrix}.
-
-sfklsjhf qsjdhsqd.
+xxxxx
 }
 \section{Slots}{
 
 \describe{
-\item{\code{analysis}}{A character vector that is the name of the MS study}
+\item{\code{matAdj}}{A character vector that is the name of the MS study}
 
-\item{\code{pipelineType}}{A character vector that indicates the type of data that are managed in this instance}
-
-\item{\code{processes}}{xxx}
+\item{\code{CC}}{A character vector that indicates the type of data that are managed in this instance}
 }}
 
 \examples{
@@ -42,8 +28,4 @@ samples <- Biobase::pData(obj)
 mae <- PipelinePeptide(analysis= 'test',pipelineType = 'peptide', dataType = 'peptide',
 processes='original',experiments=list(original=obj), 
 colData=samples)
-utils::data(Exp1_R25_prot)
-}
-\author{
-Samuel Wieczorek
 }

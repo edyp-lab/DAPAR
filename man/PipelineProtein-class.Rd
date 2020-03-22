@@ -4,35 +4,16 @@
 \name{PipelineProtein-class}
 \alias{PipelineProtein-class}
 \alias{.PipelineProtein}
-\title{PipelineTemplate class}
+\title{PipelineProtein class}
 \arguments{
 \item{...}{Additional arguments for supporting functions. See details.}
 }
 \value{
-A \code{PipelineTemplate} object
+A \code{PipelineProtein} object
 }
 \description{
-The \code{PipelineTemplate} class inherits from the \code{PipelineTemplate} and serves as a template for
-instanciate pipeline classes such as proteinPipeline, proteinPipeline, etc. It can be used to manage results of
-diverse assays on a collection of specimen. Currently,  the class can handle
-assays that are organized instances of
-\code{\linkS4class{MSnSet}},
-\code{matrix}.
+xx x
 }
-\section{Slots}{
-
-\describe{
-\item{\code{PairwiseComparisons}}{A \code{list} to store the result of hypothesis tests.}
-
-\item{\code{indexNA}}{A xxxxxs}
-
-\item{\code{analysis}}{A character vector that is the name of the MS study}
-
-\item{\code{pipelineType}}{A character vector that indicates the type of data that are managed in this instance}
-
-\item{\code{processes}}{xxx}
-}}
-
 \examples{
 example("PipelineTemp")
 library(DAPARdata)
