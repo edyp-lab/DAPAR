@@ -96,16 +96,7 @@ densityPlotD_HC <- function(obj, legend=NULL, palette = NULL){
   
   if (is.null(legend) ) { legend<- Biobase::pData(obj)[,"Condition"]}
   
-  # if (is.null(palette)){
-  #   nbConds <- length(unique(condsForLegend))
-  #   palette <- brewer.pal(nbConds, "Dark2")[1:nbConds]
-  #    temp <- NULL
-  #   for (i in 1:ncol(qData)){
-  #     temp[i] <- palette[ which(condsForLegend[i] == unique(condsForLegend))]
-  #   }
-  #   palette <- temp
-  #   
-  # }else{
+  palette <- BuildPalette(Biobase::pData(obj)[,"Condition"], palette)
   
   
   h1 <-  highcharter::highchart() %>% 

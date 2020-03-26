@@ -265,11 +265,13 @@ dapar_hc_ExportMenu <- function(hc, filename){
 #' dapar_hc_ExportMenu(hc,filename='foo')
 #' @export
 #' @importFrom highcharter hc_chart
-dapar_hc_chart <- function(hc,  chartType,zoomType="None"){
+dapar_hc_chart <- function(hc,  chartType,zoomType="None", width=0, height=0){
   hc %>% 
     hc_chart(type = chartType, 
            zoomType=zoomType,
            showAxes = TRUE,
+           width = width,
+           height = height,
            resetZoomButton= list(
              position = list(
                align= 'left',
