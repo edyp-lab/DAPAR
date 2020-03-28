@@ -28,7 +28,7 @@ which have been imputed.
 \donttest{
 Sys.setenv("R_ZIPCMD"= Sys.which("zip"))
 utils::data(Exp1_R25_pept, package='DAPARdata')
-obj <- Exp1_R25_pept[1:1000]
+obj <- Exp1_R2_pept[1:1000]
 writeMSnsetToExcel(obj, "foo")
 }
 }

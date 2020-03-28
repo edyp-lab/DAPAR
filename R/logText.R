@@ -6,7 +6,7 @@
 ##' @return A string
 ##' @author Samuel Wieczorek
 ##' @examples
-##' getTextForNewDataset(list(filename="foo.MSnset"))
+##' getTextForNewDataset(list(filename="foo.msnset"))
 getTextForNewDataset <- function(l.params){
   if (is.null(l.params) || length(l.params)==0) return(NULL)
   

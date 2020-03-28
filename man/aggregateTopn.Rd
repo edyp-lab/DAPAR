@@ -25,7 +25,7 @@ This function computes the intensity of proteins as the sum of the
 intensities of their n best peptides.
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
+utils::data(Exp1_R25_pept, package='DAPARdata') 
 obj.pep <- Exp1_R25_pept[1:1000]
 protID <- "Protein_group_IDs"
 X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)

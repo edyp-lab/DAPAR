@@ -199,10 +199,29 @@ GraphPepProt <- function(mat){
 ##' @return A binary matrix  
 ##' @author Florence Combes, Samuel Wieczorek, Alexia Dorffer
 ##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata') 
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
 BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
-   
+    
+    # data <- Biobase::exprs(obj.pep)
+    # PG <- Biobase::fData(obj.pep)[,protID]
+    # PG.l <- strsplit(as.character(PG), split=";", fixed=TRUE)
+    # 
+    # Un1 <- unlist(PG.l)
+    # X<- Matrix::sparseMatrix(i = rep(seq_along(PG.l), lengths(PG.l)),
+    #                  j=as.integer(factor(Un1, levels = unique(Un1))),
+    #                  x=1, 
+    #                  dimnames=list(rownames(data),as.character(unique(Un1))))
+    # 
+    # if (unique == TRUE){
+    #   ll <- which(rowSums(X)>1)
+    #   if (length(ll) > 0) {
+    #     X[ll,] <- 0
+    #   }
+    #      }
+    # 
+    # return(X)
+  
   
   data <- Biobase::exprs(obj.pep)
   PG <- Biobase::fData(obj.pep)[,protID]
@@ -215,68 +234,17 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
     if (length(ll) > 0) {
       t[ll,] <- 0
     }
+    
   }
   
-  
-  ## Delete empty columns
-  # ll <- which(colSums(t)==0)
-  # if (length(ll) > 0){
-  #   X <- X[,-t]
-  # }
-  # 
   X <- Matrix::Matrix(t, sparse=T,
               dimnames = list(rownames(obj.pep), colnames(t))
   )
-  
-  
-  
   
   return(X)
 }
 
 
-
-
-
-##' Method to split an adjacency matrix into specific and shared
-##' 
-##' @title splits an adjacency matrix into specific and shared 
-##' @param X An adjacency matrix
-##' @return A list of two adjacency matrices
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata') 
-##' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
-##' X.ll <- splitAdjacencyMat(X)
-splitAdjacencyMat <- function(X){
-  hasShared <- length( which(rowSums(X) > 1)) > 0
-  hasSpec <- length( which(rowSums(X) == 1)) > 0
-  
-  
-  if (hasShared && !hasSpec){
-    tmpShared <- X
-    tmpSpec <- X
-    tmpSpec[which(rowSums(tmpSpec) > 1),] <- 0
-  }
-  else if (!hasShared && hasSpec){
-    tmpSpec <- X
-    tmpShared <- X
-    tmpShared[which(rowSums(tmpShared) == 1),] <- 0
-  }
-  else if (hasShared && hasSpec){
-    tmpSpec <- X
-    tmpShared <- X
-    tmpShared[which(rowSums(tmpShared) == 1),] <- 0
-    tmpSpec[which(rowSums(tmpSpec) > 1),] <- 0
-  } else {
-    tmpSpec <- X
-    tmpShared <- X
-  }
-  
-  
-  return (list(Xshared = tmpShared, Xspec = tmpSpec))
-  
-}
 
 ##' This function computes the intensity of proteins based on the sum of the 
 ##' intensities of their peptides.
@@ -484,6 +452,41 @@ aggregateMean <- function(obj.pep, X){
 }
 
 
+##' Method to split an adjacency matrix into specific and shared
+##' 
+##' @title splits an adjacency matrix into specific and shared 
+##' @param X An adjacency matrix
+##' @return A list of two adjacency matrices
+##' @author Samuel Wieczorek
+splitAdjacencyMat <- function(X){
+  hasShared <- length( which(rowSums(X) > 1)) > 0
+  hasSpec <- length( which(rowSums(X) == 1)) > 0
+  
+  
+  if (hasShared && !hasSpec){
+    tmpShared <- X
+    tmpSpec <- X
+    tmpSpec[which(rowSums(tmpSpec) > 1),] <- 0
+  }
+  else if (!hasShared && hasSpec){
+    tmpSpec <- X
+    tmpShared <- X
+    tmpShared[which(rowSums(tmpShared) == 1),] <- 0
+  }
+  else if (hasShared && hasSpec){
+    tmpSpec <- X
+    tmpShared <- X
+    tmpShared[which(rowSums(tmpShared) == 1),] <- 0
+    tmpSpec[which(rowSums(tmpSpec) > 1),] <- 0
+  } else {
+    tmpSpec <- X
+    tmpShared <- X
+  }
+  
+  
+  return (list(Xshared = tmpShared, Xspec = tmpSpec))
+  
+}
 
 ##' Method to compute the detailed number of quantified peptides used for aggregating each protein
 ##' 
@@ -611,7 +614,7 @@ inner.aggregate.topn <-function(pepData,X, method='Mean', n=10){
 ##' @return A matrix of intensities of proteins
 ##' @author Alexia Dorffer, Samuel Wieczorek
 ##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
+##' utils::data(Exp1_R25_pept, package='DAPARdata') 
 ##' obj.pep <- Exp1_R25_pept[1:1000]
 ##' protID <- "Protein_group_IDs"
 ##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)

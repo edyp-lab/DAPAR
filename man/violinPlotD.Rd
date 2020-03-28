@@ -4,7 +4,7 @@
 \alias{violinPlotD}
 \title{Builds a violinplot from a dataframe}
 \usage{
-violinPlotD(obj, legend = NULL, palette = NULL, subset.view = NULL)
+violinPlotD(obj, legend = NULL, palette = NULL)
 }
 \arguments{
 \item{obj}{xxx}
@@ -12,8 +12,6 @@ violinPlotD(obj, legend = NULL, palette = NULL, subset.view = NULL)
 \item{legend}{A vector of the conditions (one condition per sample).}
 
 \item{palette}{xxx}
-
-\item{subset.view}{A vector of index indicating rows to highlight}
 }
 \value{
 A violinplot
@@ -25,11 +23,11 @@ ViolinPlot for quantitative proteomics data
 utils::data(Exp1_R25_pept, package='DAPARdata')
 library(vioplot)
 legend <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-violinPlotD(Exp1_R25_pept, legend=legend,subset.view=20:30)
+violinPlotD(Exp1_R25_pept, legend=legend)
 }
 \seealso{
 \code{\link{densityPlotD}}
 }
 \author{
-Samuel Wieczorek, Anais Courtier
+Samuel Wieczorek
 }

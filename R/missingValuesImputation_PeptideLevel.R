@@ -59,7 +59,7 @@ wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, nknn = 15, selec = 600, s
                                      lapala = TRUE,distribution="unif") 
 {
     
-  ## order exp and pData table before using imp4p functions
+    ## order exp and pData table before using imp4p functions
   conds <- factor(Biobase::pData(obj)$Condition, levels=unique(Biobase::pData(obj)$Condition))
   sample.names.old <- Biobase::pData(obj)$Sample.name
   sTab <- Biobase::pData(obj)
@@ -67,11 +67,12 @@ wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, nknn = 15, selec = 600, s
   qData <- Biobase::exprs(obj)[,new.order]
   sTab <- Biobase::pData(obj)[new.order,]
   
-  conditions <- as.factor(sTab$Condition)
-  repbio <- as.factor(sTab$Bio.Rep)
-  reptech <-as.factor(sTab$Tech.Rep)
   
   
+    conditions <- as.factor(sTab$Condition)
+    repbio <- as.factor(sTab$Bio.Rep)
+    reptech <-as.factor(sTab$Tech.Rep)
+    
     tab <- qData
     
     if (progress.bar == TRUE) {
@@ -113,12 +114,12 @@ wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, nknn = 15, selec = 600, s
         data.final <- data.mi
     }
     
+    
     # restore previous order
     colnames(data.final) <- new.order
     data.final <- data.final[,sample.names.old]
     
-    Biobase::exprs(obj) <- data.final
-    
+     Biobase::exprs(obj) <- data.final
     
     msg <- paste("Missing values imputation using imp4p")
     obj@processingData@processing <- c(obj@processingData@processing,msg)
@@ -175,6 +176,7 @@ translatedRandomBeta <- function(n, min, max, param1=3, param2=1){
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.impute.pa2(Exp1_R25_pept[1:1000], distribution="beta")
 wrapper.impute.pa2 <- function (obj, q.min = 0, q.norm = 3, eps = 0, distribution = "unif"){
+  
   ## order exp and pData table before using imp4p functions
   conds <- factor(Biobase::pData(obj)$Condition, levels=unique(Biobase::pData(obj)$Condition))
   sample.names.old <- Biobase::pData(obj)$Sample.name
@@ -183,11 +185,16 @@ wrapper.impute.pa2 <- function (obj, q.min = 0, q.norm = 3, eps = 0, distributio
   qData <- Biobase::exprs(obj)[,new.order]
   sTab <- Biobase::pData(obj)[new.order,]
   
+  
+  
+  
+  
   tab <- qData
   conditions <-  as.factor(sTab$Condition)
-  
+    
     tab_imp <- impute.pa2(tab, conditions, q.min, q.norm, eps, distribution)
     
+    # restore previous order
     colnames(tab_imp) <- new.order
     tab_imp <- tab_imp[,sample.names.old]
     
