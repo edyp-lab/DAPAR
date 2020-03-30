@@ -76,6 +76,12 @@ PipelineTemplate <- function(
   {
   mae <- MultiAssayExperiment(...)
   
+  if (length(experiments(mae)) != length(c('original',processes))){
+    warning('The number of experiment dataset must be equal to the number of processes in the pipeline.')
+    return(NULL)
+  }
+  
+  
   ## on configure le dataset avant de le stocker dans mae
   experiments(mae)[[1]] <-.ConfigureDataset(experiments(mae)[[1]])
   .version = if (is.na(utils::installed.packages()["Prostar"])) 'NA' else utils::installed.packages()["Prostar",'Version']
@@ -503,6 +509,7 @@ setMethod("dataset", "PipelineTemplate", function(obj, name) {
   out <- experiments(obj)[[name]]
   out
 })
+
 
 
 

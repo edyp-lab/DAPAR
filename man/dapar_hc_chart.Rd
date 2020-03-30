@@ -4,7 +4,7 @@
 \alias{dapar_hc_chart}
 \title{Customised resetZoomButton of highcharts plots}
 \usage{
-dapar_hc_chart(hc, chartType, zoomType = "None")
+dapar_hc_chart(hc, chartType, zoomType = "None", width = 0, height = 0)
 }
 \arguments{
 \item{hc}{A highcharter object}

@@ -42,7 +42,7 @@
 #' @export
 PipelinePeptide <- function(...)
 {
-  template <- PipelineTemplate(...)
+  template <- DAPAR::PipelineTemplate(...)
   
   parentProtId <- parentProtId(template[['original']])
   if (!is.null(parentProtId)) {
@@ -57,25 +57,6 @@ PipelinePeptide <- function(...)
   obj
 }
 
-
-
-#' @title sdfdsfs
-#' @description sfklsjhf qsjdhsqd.
-#' @param object xxxx
-#' @return xxxx
-#' @author Samuel Wieczorek
-#' @examples 
-#' utils::data(Exp1_R25_prot)
-#' @export
-setMethod("show", "PipelinePeptide", function(object) {
-  cat(
-    "The proteinID is: ", parentProtId(object), " \n",
-    sep=""
-  )
-  cat('-----------------------------------------\n')
-  callNextMethod()
-  
-})
 
 
 
@@ -114,6 +95,16 @@ setMethod("matAdj", "PipelinePeptide", function(obj) {
   out
 })
 
+
+
+#' @export
+setGeneric("pipelineType", function(obj) standardGeneric("pipelineType"))
+
+
+#' @export
+setMethod("pipelineType", "PipelinePeptide", function(obj) {
+  callNextMethod()
+})
 
 
 
