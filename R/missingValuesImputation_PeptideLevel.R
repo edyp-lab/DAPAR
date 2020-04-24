@@ -14,7 +14,7 @@
 wrapper.impute.mle <- function(obj){
   cond <- as.factor(Biobase::pData(obj)$Condition)
   
-  res <- impute.mle(Biobase::exprs(obj), conditions=cond)
+  res <- imp4p::impute.mle(Biobase::exprs(obj), conditions=cond)
   
   Biobase::exprs(obj) <-res
   return (obj)
@@ -101,7 +101,7 @@ wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, nknn = 15, selec = 600, s
     data.mi = mi.mix(tab = tab, tab.imp = dat.slsa, prob.MCAR = proba, 
                      conditions = conditions, repbio = repbio, reptech = reptech, 
                      nb.iter = nb.iter, nknn = nknn, weight = weight, selec = selec, 
-                     siz = siz, ind.comp = ind.comp, methodi = methodi, q = q, 
+                     siz = siz, ind.comp = ind.comp,  q = q, 
                      progress.bar = progress.bar)
     
     if (lapala == TRUE){
