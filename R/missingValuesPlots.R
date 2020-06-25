@@ -14,9 +14,9 @@
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.mvPerLinesHisto(Exp1_R25_pept)
 wrapper.mvPerLinesHisto <- function(obj, indLegend="auto", showValues=FALSE){
-qData <- Biobase::exprs(obj)
-samplesData <- Biobase::pData(obj)
-mvPerLinesHisto(qData, samplesData, indLegend, showValues)
+  qData <- Biobase::exprs(obj)
+  samplesData <- Biobase::pData(obj)
+  mvPerLinesHisto(qData, samplesData, indLegend, showValues)
 }
 
 
@@ -65,45 +65,45 @@ wrapper.mvPerLinesHisto_HC <- function(obj, indLegend="auto", showValues=FALSE){
 ##' samplesData <- Biobase::pData(Exp1_R25_pept)
 ##' mvPerLinesHisto(qData, samplesData)
 mvPerLinesHisto <- function(qData, samplesData, indLegend="auto", showValues=FALSE){
-
-if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
-    
-for (j in 1:length(colnames(qData))){
+  
+  if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
+  
+  for (j in 1:length(colnames(qData))){
     noms <- NULL
     for (i in 1:length(indLegend)){
-    noms <- paste(noms, samplesData[j,indLegend[i]], sep=" ")
+      noms <- paste(noms, samplesData[j,indLegend[i]], sep=" ")
     }
     colnames(qData)[j] <- noms
-}
-
-coeffMax <- .1
-
-NbNAPerCol <- colSums(is.na(qData))
-NbNAPerRow <- rowSums(is.na(qData))
-#par(mar = c(10,3, 3, 3))
-
-nb.col <- dim(qData)[2] 
-nb.na <- NbNAPerRow
-temp <- table(NbNAPerRow)
-nb.na2barplot <- c(temp, rep(0,1+ncol(qData)-length(temp)))
-
-if (sum(NbNAPerRow) == 0){
+  }
+  
+  coeffMax <- .1
+  
+  NbNAPerCol <- colSums(is.na(qData))
+  NbNAPerRow <- rowSums(is.na(qData))
+  #par(mar = c(10,3, 3, 3))
+  
+  nb.col <- dim(qData)[2] 
+  nb.na <- NbNAPerRow
+  temp <- table(NbNAPerRow)
+  nb.na2barplot <- c(temp, rep(0,1+ncol(qData)-length(temp)))
+  
+  if (sum(NbNAPerRow) == 0){
     nb.na2barplot <- rep(0,1+ncol(qData))
-}
-
-print(nb.na2barplot[-1])
-
-x <- barplot(nb.na2barplot[-1], 
-                main = "# lines by # of NA",
-                xlab = "# NA per lines",
-                names.arg = as.character(c(1:(ncol(qData)))), 
-                col = c(rep("lightgrey",nb.col-1), "red"),
-                ylim = c(0, 1.2*max(1,nb.na2barplot[-1])), 
-                las=1,
-                cex.names=1.5,
-                cex.axis=1.5
-)
-
+  }
+  
+  print(nb.na2barplot[-1])
+  
+  x <- barplot(nb.na2barplot[-1], 
+               main = "# lines by # of NA",
+               xlab = "# NA per lines",
+               names.arg = as.character(c(1:(ncol(qData)))), 
+               col = c(rep("lightgrey",nb.col-1), "red"),
+               ylim = c(0, 1.2*max(1,nb.na2barplot[-1])), 
+               las=1,
+               cex.names=1.5,
+               cex.axis=1.5
+  )
+  
 }
 
 
@@ -125,58 +125,58 @@ x <- barplot(nb.na2barplot[-1],
 ##' samplesData <- Biobase::pData(Exp1_R25_pept)
 ##' mvPerLinesHisto_HC(qData, samplesData)
 mvPerLinesHisto_HC <- function(qData, samplesData, indLegend="auto", showValues=FALSE){
-    
-    if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
-    
-    for (j in 1:length(colnames(qData))){
-        noms <- NULL
-        for (i in 1:length(indLegend)){
-            noms <- paste(noms, samplesData[j,indLegend[i]], sep=" ")
-        }
-        colnames(qData)[j] <- noms
+  
+  if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
+  
+  for (j in 1:length(colnames(qData))){
+    noms <- NULL
+    for (i in 1:length(indLegend)){
+      noms <- paste(noms, samplesData[j,indLegend[i]], sep=" ")
     }
-    
-    coeffMax <- .1
-    
-    NbNAPerCol <- colSums(is.na(qData))
-    NbNAPerRow <- rowSums(is.na(qData))
-    #par(mar = c(10,3, 3, 3))
-    
-    nb.col <- dim(qData)[2] 
-    nb.na <- NbNAPerRow
-    temp <- table(NbNAPerRow)
-    nb.na2barplot <- c(temp, rep(0,1+ncol(qData)-length(temp)))
-    
-    if (sum(NbNAPerRow) == 0){
-        nb.na2barplot <- rep(0,1+ncol(qData))
-    }
-    
-    df <- data.frame(y=nb.na2barplot[-1])
-    myColors = rep("lightgrey",nrow(df))
-    myColors[nrow(df)] <- "red"
-    
-    #df1 <- df2 <- df
-    #df2[1:(nrow(df)-1),] <- 0
-    #df1 [nrow(df),] <- 0
-    
-    
-    #, series = list( pointWidth = 50)
-    
-    h1 <-  highchart() %>% 
-        hc_title(text = "#[lines] with X NA values") %>% 
-        hc_add_series(data = df, type="column", colorByPoint = TRUE) %>%
-        hc_colors(myColors) %>%
-        hc_plotOptions( column = list(stacking = "normal"),
-                        animation=list(duration = 100)) %>%
-        hc_legend(enabled = FALSE) %>%
-        hc_xAxis(categories = row.names(df), title = list(text = "#[NA values] per line")) %>%
-      my_hc_ExportMenu(filename = "missingValuesPlot1") %>%
-        hc_tooltip(enabled = TRUE,
-                   headerFormat= '',
-                   pointFormat = "{point.y} ")
-    
-    return(h1)
- 
+    colnames(qData)[j] <- noms
+  }
+  
+  coeffMax <- .1
+  
+  NbNAPerCol <- colSums(is.na(qData))
+  NbNAPerRow <- rowSums(is.na(qData))
+  #par(mar = c(10,3, 3, 3))
+  
+  nb.col <- dim(qData)[2] 
+  nb.na <- NbNAPerRow
+  temp <- table(NbNAPerRow)
+  nb.na2barplot <- c(temp, rep(0,1+ncol(qData)-length(temp)))
+  
+  if (sum(NbNAPerRow) == 0){
+    nb.na2barplot <- rep(0,1+ncol(qData))
+  }
+  
+  df <- data.frame(y=nb.na2barplot[-1])
+  myColors = rep("lightgrey",nrow(df))
+  myColors[nrow(df)] <- "red"
+  
+  #df1 <- df2 <- df
+  #df2[1:(nrow(df)-1),] <- 0
+  #df1 [nrow(df),] <- 0
+  
+  
+  #, series = list( pointWidth = 50)
+  
+  h1 <-  highchart() %>% 
+    hc_title(text = "#[lines] with X NA values") %>% 
+    hc_add_series(data = df, type="column", colorByPoint = TRUE) %>%
+    hc_colors(myColors) %>%
+    hc_plotOptions( column = list(stacking = "normal"),
+                    animation=list(duration = 100)) %>%
+    hc_legend(enabled = FALSE) %>%
+    hc_xAxis(categories = row.names(df), title = list(text = "#[NA values] per line")) %>%
+    my_hc_ExportMenu(filename = "missingValuesPlot1") %>%
+    hc_tooltip(enabled = TRUE,
+               headerFormat= '',
+               pointFormat = "{point.y} ")
+  
+  return(h1)
+  
 }
 
 
@@ -197,10 +197,10 @@ mvPerLinesHisto_HC <- function(qData, samplesData, indLegend="auto", showValues=
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.mvPerLinesHistoPerCondition(Exp1_R25_pept)
 wrapper.mvPerLinesHistoPerCondition <- function(obj, indLegend="auto", 
-                                            showValues=FALSE){
-qData <- Biobase::exprs(obj)
-samplesData <- Biobase::pData(obj)
-mvPerLinesHistoPerCondition(qData, samplesData, indLegend, showValues)
+                                                showValues=FALSE){
+  qData <- Biobase::exprs(obj)
+  samplesData <- Biobase::pData(obj)
+  mvPerLinesHistoPerCondition(qData, samplesData, indLegend, showValues)
 }
 
 
@@ -221,11 +221,11 @@ mvPerLinesHistoPerCondition(qData, samplesData, indLegend, showValues)
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.mvPerLinesHistoPerCondition_HC(Exp1_R25_pept)
 wrapper.mvPerLinesHistoPerCondition_HC <- function(obj, indLegend="auto", 
-                                                showValues=FALSE, ...){
-    if (is.null(obj)){
-      warning("The dataset in NULL. Cannot continue.")
-      return(NULL)
-      }
+                                                   showValues=FALSE, ...){
+  if (is.null(obj)){
+    warning("The dataset in NULL. Cannot continue.")
+    return(NULL)
+  }
   qData <- Biobase::exprs(obj)
   samplesData <- Biobase::pData(obj)
   mvPerLinesHistoPerCondition_HC(qData, samplesData, indLegend, showValues, ...)
@@ -252,7 +252,7 @@ wrapper.mvPerLinesHistoPerCondition_HC <- function(obj, indLegend="auto",
 ##' mvPerLinesHistoPerCondition(qData, samplesData)
 mvPerLinesHistoPerCondition <- function(qData, samplesData, indLegend="auto", 
                                         showValues=FALSE, palette=NULL){
-
+  
   
   if (is.null(palette)){
     palette <-RColorBrewer::brewer.pal(ncol(qData),"Dark2")[1:ncol(qData)]
@@ -262,41 +262,41 @@ mvPerLinesHistoPerCondition <- function(qData, samplesData, indLegend="auto",
       return(NULL)
     }
   }
-if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
-
-nbConditions <- length(unique(samplesData[,"Condition"]))
-
-ncolMatrix <- max(unlist(lapply(unique(samplesData[,"Condition"]), function(x){length(which(samplesData[,"Condition"]==x))})))
-m <- matrix(rep(0, nbConditions*(1+ncolMatrix)), 
-            ncol = nbConditions, 
-            dimnames=list(seq(0:(ncolMatrix)),unique(samplesData[,"Condition"])))
-
-for (i in unique(samplesData[,"Condition"]))
-{
+  if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
+  
+  nbConditions <- length(unique(samplesData[,"Condition"]))
+  
+  ncolMatrix <- max(unlist(lapply(unique(samplesData[,"Condition"]), function(x){length(which(samplesData[,"Condition"]==x))})))
+  m <- matrix(rep(0, nbConditions*(1+ncolMatrix)), 
+              ncol = nbConditions, 
+              dimnames=list(seq(0:(ncolMatrix)),unique(samplesData[,"Condition"])))
+  
+  for (i in unique(samplesData[,"Condition"]))
+  {
     nSample <- length(which(samplesData[,"Condition"] == i))
     t <- NULL
     if (nSample == 1) {
-        t <- table(as.integer(is.na(qData[,which(samplesData[,"Condition"] == i)])))
+      t <- table(as.integer(is.na(qData[,which(samplesData[,"Condition"] == i)])))
     } else {t <- table(rowSums(is.na(qData[,which(samplesData[,"Condition"] == i)])))}
     
     m[as.integer(names(t))+1,i] <- t
-}
-
-m <- t(m)
-
-x <- barplot(m, 
-                main = "# lines by # of NA",
-                xlab = "# NA per lines",
-                names.arg = as.character(0:ncolMatrix), 
-                col = palette,
-                ylim = c(0, 1.2*max(m)), 
-                xpd = FALSE,
-                las=1,
-                cex.names=1.5,
-                cex.axis=1.5,
-                beside=TRUE
-)
-
+  }
+  
+  m <- t(m)
+  
+  x <- barplot(m, 
+               main = "# lines by # of NA",
+               xlab = "# NA per lines",
+               names.arg = as.character(0:ncolMatrix), 
+               col = palette,
+               ylim = c(0, 1.2*max(m)), 
+               xpd = FALSE,
+               las=1,
+               cex.names=1.5,
+               cex.axis=1.5,
+               beside=TRUE
+  )
+  
 }
 
 
@@ -323,63 +323,63 @@ x <- barplot(m,
 ##' samplesData <- Biobase::pData(Exp1_R25_pept)
 ##' mvPerLinesHistoPerCondition_HC(qData, samplesData)
 mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto", 
-                                        showValues=FALSE, palette=NULL){
-    
-    conds <- samplesData[,"Condition"]
-    if (is.null(palette)){
-      palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")
-    }else{
-      if (length(palette) != ncol(qData)){
-        warning("The color palette has not the same dimension as the number of samples")
-        return(NULL)
-      }
+                                           showValues=FALSE, palette=NULL){
+  
+  conds <- samplesData[,"Condition"]
+  if (is.null(palette)){
+    palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")
+  }else{
+    if (length(palette) != ncol(qData)){
+      warning("The color palette has not the same dimension as the number of samples")
+      return(NULL)
     }
+  }
+  
+  
+  if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
+  
+  nbConditions <- length(unique(samplesData[,"Condition"]))
+  
+  ncolMatrix <- max(unlist(lapply(unique(samplesData[,"Condition"]), function(x){length(which(samplesData[,"Condition"]==x))})))
+  m <- matrix(rep(0, nbConditions*(1+ncolMatrix)), 
+              ncol = nbConditions, 
+              dimnames=list(seq(0:(ncolMatrix)),unique(samplesData[,"Condition"])))
+  
+  for (i in unique(samplesData[,"Condition"]))
+  {
+    nSample <- length(which(samplesData[,"Condition"] == i))
+    t <- NULL
+    if (nSample == 1) {
+      t <- table(as.integer(is.na(qData[,which(samplesData[,"Condition"] == i)])))
+    } else {t <- table(rowSums(is.na(qData[,which(samplesData[,"Condition"] == i)])))}
     
-    
-    if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
-    
-    nbConditions <- length(unique(samplesData[,"Condition"]))
-    
-    ncolMatrix <- max(unlist(lapply(unique(samplesData[,"Condition"]), function(x){length(which(samplesData[,"Condition"]==x))})))
-    m <- matrix(rep(0, nbConditions*(1+ncolMatrix)), 
-                ncol = nbConditions, 
-                dimnames=list(seq(0:(ncolMatrix)),unique(samplesData[,"Condition"])))
-    
-    for (i in unique(samplesData[,"Condition"]))
-    {
-        nSample <- length(which(samplesData[,"Condition"] == i))
-        t <- NULL
-        if (nSample == 1) {
-            t <- table(as.integer(is.na(qData[,which(samplesData[,"Condition"] == i)])))
-        } else {t <- table(rowSums(is.na(qData[,which(samplesData[,"Condition"] == i)])))}
-        
-        m[as.integer(names(t))+1,i] <- t
-    }
-    m <- as.data.frame(m)
-    
-     rownames(m) <- 0:(nrow(m)-1)
-    
-    h1 <-  highchart() %>% 
-        hc_title(text = "#[lines] with X NA values (condition-wise)") %>% 
-        my_hc_chart(chartType = "column") %>%
-        hc_plotOptions( column = list(stacking = ""),
-                        dataLabels = list(enabled = FALSE),
-                        animation=list(duration = 100)) %>%
-        hc_colors(unique(palette)) %>%
-        hc_legend(enabled = FALSE) %>%
-        hc_xAxis(categories = row.names(m), title = list(text = "#[NA values] per line (condition-wise)")) %>%
-      my_hc_ExportMenu(filename = "missingValuesPlot_2") %>%
-        hc_tooltip(headerFormat= '',
-                   pointFormat = "{point.y} ")
-    
-    for (i in 1:nbConditions){
+    m[as.integer(names(t))+1,i] <- t
+  }
+  m <- as.data.frame(m)
+  
+  rownames(m) <- 0:(nrow(m)-1)
+  
+  h1 <-  highchart() %>% 
+    hc_title(text = "#[lines] with X NA values (condition-wise)") %>% 
+    my_hc_chart(chartType = "column") %>%
+    hc_plotOptions( column = list(stacking = ""),
+                    dataLabels = list(enabled = FALSE),
+                    animation=list(duration = 100)) %>%
+    hc_colors(unique(palette)) %>%
+    hc_legend(enabled = FALSE) %>%
+    hc_xAxis(categories = row.names(m), title = list(text = "#[NA values] per line (condition-wise)")) %>%
+    my_hc_ExportMenu(filename = "missingValuesPlot_2") %>%
+    hc_tooltip(headerFormat= '',
+               pointFormat = "{point.y} ")
+  
+  for (i in 1:nbConditions){
     h1 <- h1 %>% hc_add_series(data=m[,unique(samplesData[,"Condition"])[i]]) }
-      
-    
-    return(h1)
-    
-
-    
+  
+  
+  return(h1)
+  
+  
+  
 }
 
 
@@ -397,10 +397,10 @@ mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto",
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.mvHisto(Exp1_R25_pept, showValues=TRUE)
 wrapper.mvHisto <- function(obj, indLegend="auto", showValues=FALSE){
-qData <- Biobase::exprs(obj)
-samplesData <- Biobase::pData(obj)
-conds <- samplesData[,"Condition"]
-mvHisto(qData, samplesData, conds, indLegend, showValues)
+  qData <- Biobase::exprs(obj)
+  samplesData <- Biobase::pData(obj)
+  conds <- samplesData[,"Condition"]
+  mvHisto(qData, samplesData, conds, indLegend, showValues)
 }
 
 
@@ -453,7 +453,7 @@ wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' mvHisto(qData, samplesData, conds, indLegend="auto", showValues=TRUE)
 mvHisto <- function(qData, samplesData, conds, indLegend="auto", showValues=FALSE, palette=NULL){
-
+  
   if (is.null(palette)){
     palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")
   }else{
@@ -463,39 +463,39 @@ mvHisto <- function(qData, samplesData, conds, indLegend="auto", showValues=FALS
     }
   }
   
-if (identical(indLegend,"auto")) { 
+  if (identical(indLegend,"auto")) { 
     indLegend <- c(2:length(colnames(samplesData)))
-}
-
-
-colnames(qData) <- samplesData[,"Condition"]
-
-coeffMax <- .1
-
-NbNAPerCol <- colSums(is.na(qData))
-NbNAPerRow <- rowSums(is.na(qData))
-
-if (sum(NbNAPerCol) == 0) {if (sum(NbNAPerCol) == 0){
+  }
+  
+  
+  colnames(qData) <- samplesData[,"Condition"]
+  
+  coeffMax <- .1
+  
+  NbNAPerCol <- colSums(is.na(qData))
+  NbNAPerRow <- rowSums(is.na(qData))
+  
+  if (sum(NbNAPerCol) == 0) {if (sum(NbNAPerCol) == 0){
     NbNAPerCol <- rep(0,1+ncol(qData))
-}} 
-x <- barplot(NbNAPerCol, 
-                main = "# NA per columns",
-                col=palette,
-                las=1,
-                ylim = c(0, 1.2*max(1,NbNAPerCol)),
-                names.arg = c(1:18), 
-                cex.names=1.5,
-                cex.axis=1.5,
-                axisnames = FALSE
-)
-
-par(xpd = TRUE)
-graphics::text(x, -3,
-        label = colnames(qData),
-        srt = 45,
-        adj=1,
-        cex=1.4)
-
+  }} 
+  x <- barplot(NbNAPerCol, 
+               main = "# NA per columns",
+               col=palette,
+               las=1,
+               ylim = c(0, 1.2*max(1,NbNAPerCol)),
+               names.arg = c(1:18), 
+               cex.names=1.5,
+               cex.axis=1.5,
+               axisnames = FALSE
+  )
+  
+  par(xpd = TRUE)
+  graphics::text(x, -3,
+                 label = colnames(qData),
+                 srt = 45,
+                 adj=1,
+                 cex=1.4)
+  
 }
 
 
@@ -521,7 +521,7 @@ graphics::text(x, -3,
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' mvHisto_HC(qData, samplesData, conds, indLegend="auto", showValues=TRUE)
 mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto", 
-                    showValues=FALSE, palette = NULL){
+                       showValues=FALSE, palette = NULL){
   if (is.null(palette)){
     palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")
   }else{
@@ -532,38 +532,38 @@ mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto",
   }
   
   
-    if (identical(indLegend,"auto")) { 
-        indLegend <- c(2:length(colnames(samplesData)))
-    }
-    
-   
-    NbNAPerCol <- colSums(is.na(qData))
-    NbNAPerRow <- rowSums(is.na(qData))
-    
-    df <- data.frame(NbNAPerCol)
-    names(df) <- 'y'
-    
-    
-    h1 <-  highchart() %>%
-         my_hc_chart(chartType = "column") %>%
-         hc_title(text = "#NA by replicate") %>%
-        hc_add_series(df,type="column", colorByPoint = TRUE) %>%
-      hc_colors(palette) %>%
-        hc_plotOptions( column = list(stacking = "normal"),
-                        animation=list(duration = 100)) %>%
-        hc_legend(enabled = FALSE) %>%
-        hc_xAxis(categories = conds, title = list(text = "Replicates")) %>%
-      my_hc_ExportMenu(filename = "missingValuesPlot_3") %>%
-        hc_tooltip(headerFormat= '',
-                   pointFormat = "{point.y}")
-    
-
-    return(h1)
-    
-    
-    
-
-    
+  if (identical(indLegend,"auto")) { 
+    indLegend <- c(2:length(colnames(samplesData)))
+  }
+  
+  
+  NbNAPerCol <- colSums(is.na(qData))
+  NbNAPerRow <- rowSums(is.na(qData))
+  
+  df <- data.frame(NbNAPerCol)
+  names(df) <- 'y'
+  
+  
+  h1 <-  highchart() %>%
+    my_hc_chart(chartType = "column") %>%
+    hc_title(text = "#NA by replicate") %>%
+    hc_add_series(df,type="column", colorByPoint = TRUE) %>%
+    hc_colors(palette) %>%
+    hc_plotOptions( column = list(stacking = "normal"),
+                    animation=list(duration = 100)) %>%
+    hc_legend(enabled = FALSE) %>%
+    hc_xAxis(categories = conds, title = list(text = "Replicates")) %>%
+    my_hc_ExportMenu(filename = "missingValuesPlot_3") %>%
+    hc_tooltip(headerFormat= '',
+               pointFormat = "{point.y}")
+  
+  
+  return(h1)
+  
+  
+  
+  
+  
 }
 
 
@@ -586,12 +586,12 @@ mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto",
 ##' obj <- mvFilterFromIndices(obj, keepThat)
 ##' wrapper.mvImage(obj)
 wrapper.mvImage <- function(obj){
-qData <- Biobase::exprs(obj)
-conds <- Biobase::pData(obj)[,"Condition"]
-originValues <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
-indices <- which(apply(is.OfType(originValues, "MEC"),1,sum) >0)
-
-mvImage(qData[indices,], conds)
+  qData <- Biobase::exprs(obj)
+  conds <- Biobase::pData(obj)[,"Condition"]
+  originValues <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
+  indices <- which(apply(is.OfType(originValues, "MEC"),1,sum) >0)
+  
+  mvImage(qData[indices,], conds)
 }
 
 
@@ -615,20 +615,20 @@ mvImage(qData[indices,], conds)
 ##' mvImage(qData, conds)
 mvImage <- function(qData, conds){
   
-### build indices of conditions
-indCond <- list()
-ConditionNames <- unique(conds)
-for (i in ConditionNames) {
+  ### build indices of conditions
+  indCond <- list()
+  ConditionNames <- unique(conds)
+  for (i in ConditionNames) {
     indCond <- append(indCond, list(which(i == conds)))
-}
-indCond <- setNames(indCond, as.list(c("cond1", "cond2")))
-
-nNA1 = apply(as.matrix(qData[,indCond$cond1]), 1, function(x) sum(is.na(x)))
-nNA2 = apply(as.matrix(qData[,indCond$cond2]), 1, function(x) sum(is.na(x)))
-o <- order(((nNA1 +1)^2) / (nNA2 +1))
-exprso <- qData[o,]
-
-for (i in 1:nrow(exprso)){
+  }
+  indCond <- setNames(indCond, as.list(c("cond1", "cond2")))
+  
+  nNA1 = apply(as.matrix(qData[,indCond$cond1]), 1, function(x) sum(is.na(x)))
+  nNA2 = apply(as.matrix(qData[,indCond$cond2]), 1, function(x) sum(is.na(x)))
+  o <- order(((nNA1 +1)^2) / (nNA2 +1))
+  exprso <- qData[o,]
+  
+  for (i in 1:nrow(exprso)){
     k <- order(exprso[i,indCond$cond1])
     exprso[i,rev(indCond$cond1)] <- exprso[i, k]
     .temp <- mean(exprso[i,rev(indCond$cond1)], na.rm = TRUE)
@@ -638,22 +638,22 @@ for (i in 1:nrow(exprso)){
     exprso[i,indCond$cond2] <- exprso[i, k+length(indCond$cond1)]
     .temp <- mean(exprso[i,indCond$cond2], na.rm = TRUE)
     exprso[i,length(indCond$cond1) + 
-            which(!is.na(exprso[i,indCond$cond2]))] <- .temp
-}
-
-
-heatmap.DAPAR(exprso,
+             which(!is.na(exprso[i,indCond$cond2]))] <- .temp
+  }
+  
+  
+  heatmap.DAPAR(exprso,
                 col = colorRampPalette(c("yellow", "red"))(100),
                 key=TRUE,
                 srtCol= 0,
                 labCol=conds,
                 ylab = "Peptides / proteins",
                 main = "MEC heatmap"
-)
-
-#heatmap_HC(exprso,col = colfunc(100),labCol=conds)
-           
-           
+  )
+  
+  #heatmap_HC(exprso,col = colfunc(100),labCol=conds)
+  
+  
 }
 
 
@@ -673,9 +673,9 @@ heatmap.DAPAR(exprso,
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.hc_mvTypePlot2(Exp1_R25_pept)
 wrapper.hc_mvTypePlot2 <- function(obj,...){
-    qData <- Biobase::exprs(obj)
-    conds <- Biobase::pData(obj)[,"Condition"]
-    hc_mvTypePlot2(qData, conds = conds,...)
+  qData <- Biobase::exprs(obj)
+  conds <- Biobase::pData(obj)[,"Condition"]
+  hc_mvTypePlot2(qData, conds = conds,...)
 }
 
 
