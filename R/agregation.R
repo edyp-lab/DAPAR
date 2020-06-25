@@ -61,6 +61,7 @@ getProteinsStats <- function(matShared){
 ##' @return A vector
 ##' @author Samuel Wieczorek
 ##' @examples
+##' \dontrun{
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' protID <- "Protein_group_IDs"
 ##' obj.pep <- Exp1_R25_pept[1:1000]
@@ -70,6 +71,7 @@ getProteinsStats <- function(matShared){
 ##' name <- "Protein_group_IDs"
 ##' proteinNames <- rownames(Biobase::fData(protData))
 ##' BuildColumnToProteinDataset(data, M, name,proteinNames )
+##' }
 BuildColumnToProteinDataset <- function(peptideData, matAdj, columnName, proteinNames){
 nbProt <- ncol(matAdj)
 newCol <- rep("", nbProt)
@@ -199,10 +201,29 @@ GraphPepProt <- function(mat){
 ##' @return A binary matrix  
 ##' @author Florence Combes, Samuel Wieczorek, Alexia Dorffer
 ##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata') 
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
 BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
-   
+    
+    # data <- Biobase::exprs(obj.pep)
+    # PG <- Biobase::fData(obj.pep)[,protID]
+    # PG.l <- strsplit(as.character(PG), split=";", fixed=TRUE)
+    # 
+    # Un1 <- unlist(PG.l)
+    # X<- Matrix::sparseMatrix(i = rep(seq_along(PG.l), lengths(PG.l)),
+    #                  j=as.integer(factor(Un1, levels = unique(Un1))),
+    #                  x=1, 
+    #                  dimnames=list(rownames(data),as.character(unique(Un1))))
+    # 
+    # if (unique == TRUE){
+    #   ll <- which(rowSums(X)>1)
+    #   if (length(ll) > 0) {
+    #     X[ll,] <- 0
+    #   }
+    #      }
+    # 
+    # return(X)
+  
   
   data <- Biobase::exprs(obj.pep)
   PG <- Biobase::fData(obj.pep)[,protID]
@@ -215,68 +236,17 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
     if (length(ll) > 0) {
       t[ll,] <- 0
     }
+    
   }
   
-  
-  ## Delete empty columns
-  # ll <- which(colSums(t)==0)
-  # if (length(ll) > 0){
-  #   X <- X[,-t]
-  # }
-  # 
   X <- Matrix::Matrix(t, sparse=T,
               dimnames = list(rownames(obj.pep), colnames(t))
   )
-  
-  
-  
   
   return(X)
 }
 
 
-
-
-
-##' Method to split an adjacency matrix into specific and shared
-##' 
-##' @title splits an adjacency matrix into specific and shared 
-##' @param X An adjacency matrix
-##' @return A list of two adjacency matrices
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata') 
-##' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
-##' X.ll <- splitAdjacencyMat(X)
-splitAdjacencyMat <- function(X){
-  hasShared <- length( which(rowSums(X) > 1)) > 0
-  hasSpec <- length( which(rowSums(X) == 1)) > 0
-  
-  
-  if (hasShared && !hasSpec){
-    tmpShared <- X
-    tmpSpec <- X
-    tmpSpec[which(rowSums(tmpSpec) > 1),] <- 0
-  }
-  else if (!hasShared && hasSpec){
-    tmpSpec <- X
-    tmpShared <- X
-    tmpShared[which(rowSums(tmpShared) == 1),] <- 0
-  }
-  else if (hasShared && hasSpec){
-    tmpSpec <- X
-    tmpShared <- X
-    tmpShared[which(rowSums(tmpShared) == 1),] <- 0
-    tmpSpec[which(rowSums(tmpSpec) > 1),] <- 0
-  } else {
-    tmpSpec <- X
-    tmpShared <- X
-  }
-  
-  
-  return (list(Xshared = tmpShared, Xspec = tmpSpec))
-  
-}
 
 ##' This function computes the intensity of proteins based on the sum of the 
 ##' intensities of their peptides.
@@ -289,11 +259,13 @@ splitAdjacencyMat <- function(X){
 ##' @return A matrix of intensities of proteins
 ##' @author Alexia Dorffer
 ##' @examples
+##' \dontrun{
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' protID <- "Protein_group_IDs"
 ##' obj.pep <- Exp1_R25_pept[1:1000]
 ##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 ##' DAPAR::aggregateSum(obj.pep, X)
+##' }
 aggregateSum <- function(obj.pep, X){
   pepData <- 2^(Biobase::exprs(obj.pep))
   protData <- inner.sum(pepData, X)
@@ -314,11 +286,13 @@ aggregateSum <- function(obj.pep, X){
 ##' @return xxxxx
 ##' @author Samuel Wieczorek
 ##' @examples
+##' \dontrun{
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' protID <- "Protein_group_IDs"
 ##' obj.pep <- Exp1_R25_pept[1:1000]
 ##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 ##' aggregateIterParallel(obj.pep, X)
+##' }
 aggregateIterParallel <- function(obj.pep, X, init.method='Sum', method='Mean', n=NULL){
   
   doParallel::registerDoParallel()
@@ -334,7 +308,7 @@ aggregateIterParallel <- function(obj.pep, X, init.method='Sum', method='Mean', 
    }
   
   protData <- protData[,colnames(Biobase::exprs(obj.pep))]
-  obj.prot <- finalizeAggregation(obj.pep, qData.pep, protData, X)
+  obj.prot <- DAPAR::finalizeAggregation(obj.pep, qData.pep, protData, X)
   
   return(obj.prot)
 
@@ -418,10 +392,12 @@ inner.aggregate.iter <- function(pepData, X,init.method='Sum', method='Mean', n=
 ##' @return A protein object of class \code{MSnset}
 ##' @author Samuel Wieczorek
 ##' @examples
+##' \dontrun{
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' protID <- "Protein_group_IDs"
 ##' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
 ##' aggregateIter(Exp1_R25_pept[1:1000],X=X)
+##' }
 aggregateIter <- function(obj.pep, X, init.method='Sum', method='Mean', n=NULL){
   
   ### a reproduire iterativement pour chaque condition
@@ -471,11 +447,13 @@ GetNbPeptidesUsed <- function(X, pepData){
 ##' @return A matrix of intensities of proteins
 ##' @author Alexia Dorffer
 ##' @examples
+##' \dontrun{
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' obj.pep <- Exp1_R25_pept[1:1000]
 ##' protID <- "Protein_group_IDs"
 ##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 ##' aggregateMean(obj.pep, X)
+##' }
 aggregateMean <- function(obj.pep, X){
   pepData <- 2^(Biobase::exprs(obj.pep))
   protData <- inner.mean(pepData, X)
@@ -484,6 +462,41 @@ aggregateMean <- function(obj.pep, X){
 }
 
 
+##' Method to split an adjacency matrix into specific and shared
+##' 
+##' @title splits an adjacency matrix into specific and shared 
+##' @param X An adjacency matrix
+##' @return A list of two adjacency matrices
+##' @author Samuel Wieczorek
+splitAdjacencyMat <- function(X){
+  hasShared <- length( which(rowSums(X) > 1)) > 0
+  hasSpec <- length( which(rowSums(X) == 1)) > 0
+  
+  
+  if (hasShared && !hasSpec){
+    tmpShared <- X
+    tmpSpec <- X
+    tmpSpec[which(rowSums(tmpSpec) > 1),] <- 0
+  }
+  else if (!hasShared && hasSpec){
+    tmpSpec <- X
+    tmpShared <- X
+    tmpShared[which(rowSums(tmpShared) == 1),] <- 0
+  }
+  else if (hasShared && hasSpec){
+    tmpSpec <- X
+    tmpShared <- X
+    tmpShared[which(rowSums(tmpShared) == 1),] <- 0
+    tmpSpec[which(rowSums(tmpSpec) > 1),] <- 0
+  } else {
+    tmpSpec <- X
+    tmpShared <- X
+  }
+  
+  
+  return (list(Xshared = tmpShared, Xspec = tmpSpec))
+  
+}
 
 ##' Method to compute the detailed number of quantified peptides used for aggregating each protein
 ##' 
@@ -611,11 +624,13 @@ inner.aggregate.topn <-function(pepData,X, method='Mean', n=10){
 ##' @return A matrix of intensities of proteins
 ##' @author Alexia Dorffer, Samuel Wieczorek
 ##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
+##' \dontrun{
+##' utils::data(Exp1_R25_pept, package='DAPARdata') 
 ##' obj.pep <- Exp1_R25_pept[1:1000]
 ##' protID <- "Protein_group_IDs"
 ##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 ##' DAPAR::aggregateTopn(obj.pep, X, n=3)
+##' }
 aggregateTopn <- function(obj.pep,X,  method='Mean', n=10){
   pepData <- 2^(Biobase::exprs(obj.pep))
   
@@ -679,8 +694,17 @@ finalizeAggregation <- function(obj.pep, pepData, protData,X, lib.loc=NULL){
   obj.prot@experimentData@other$typeOfData <-"protein"
   #obj.prot <- addOriginOfValue(obj.prot)
   obj.prot@experimentData@other$OriginOfValues <- NULL
-  obj.prot@experimentData@other$Prostar_Version <- installed.packages(lib.loc = lib.loc$Prostar.loc)["Prostar","Version"]
-  obj.prot@experimentData@other$DAPAR_Version <- installed.packages(lib.loc = lib.loc$DAPAR.loc)["DAPAR","Version"]
+  if (length(grep('Prostar', installed.packages(lib.loc=lib.loc$Prostar.loc))) >0){
+    obj.prot@experimentData@other$Prostar_Version <- installed.packages(lib.loc = lib.loc$Prostar.loc)["Prostar","Version"]
+  } else {
+    obj.prot@experimentData@other$Prostar_Version <- NA
+  }
+  
+  if (length(grep('DAPAR', installed.packages(lib.loc=lib.loc$DAPAR.loc))) >0){
+    obj.prot@experimentData@other$DAPAR_Version <- installed.packages(lib.loc = lib.loc$DAPAR.loc)["DAPAR","Version"]
+  } else {
+    obj.prot@experimentData@other$DAPAR_Version <- NA
+  }
   return (obj.prot)
 }
 

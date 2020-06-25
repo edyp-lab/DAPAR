@@ -92,7 +92,7 @@ get.pep.prot.cc <- function(X){
 ##' @return A plot  
 ##' @author Thomas Burger
 ##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata') 
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
 ##' ll <- get.pep.prot.cc(X)
 ##' plotJitter(ll)
@@ -135,7 +135,7 @@ plotJitter <- function(list.of.cc){
 ##' @return A plot  
 ##' @author Thomas Burger, Samuel Wieczorek
 ##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata') 
+##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' X <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein_group_IDs", FALSE)
 ##' ll <- get.pep.prot.cc(X)
 ##' g <- buildGraph(ll[[1]], X)

@@ -154,7 +154,7 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
                          versions=NULL){
     
     if (!is.data.frame(file)){ #the variable is a path to a text file
-        data <- read.table(file, header=TRUE, sep="\t", stringsAsFactors = FALSE)
+        data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
     } else {data <- file}
     
     ## replace all blanks by a dot
@@ -253,7 +253,7 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
 ##' \donttest{
 ##' Sys.setenv("R_ZIPCMD"= Sys.which("zip"))
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj <- Exp1_R25_pept[1:1000]
+##' obj <- Exp1_R2_pept[1:1000]
 ##' writeMSnsetToExcel(obj, "foo")
 ##' }
 writeMSnsetToExcel <- function(obj, filename)
@@ -380,7 +380,7 @@ listSheets <- function(file){
 ##' @examples
 ##' \donttest{
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj <- Exp1_R25_pept[1:1000]
+##' obj <- Exp1_R2_pept[1:1000]
 ##' writeMSnsetToCSV(obj, "foo")
 ##' }
 writeMSnsetToCSV <- function(obj, fname){

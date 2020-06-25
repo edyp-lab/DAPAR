@@ -36,15 +36,15 @@ wrapper.mvPerLinesHisto <- function(obj, indLegend="auto", showValues=FALSE){
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.mvPerLinesHisto(Exp1_R25_pept)
 wrapper.mvPerLinesHisto_HC <- function(obj, indLegend="auto", showValues=FALSE){
-  if (is.null(obj)){
-    warning("The dataset in NULL. Cannot continue.")
-    return(NULL)
-  }
+    if (is.null(obj)){
+      warning("The dataset in NULL. Cannot continue.")
+      return(NULL)
+      }
   
   qData <- Biobase::exprs(obj)
-  samplesData <- Biobase::pData(obj)
-  hc <- mvPerLinesHisto_HC(qData, samplesData, indLegend, showValues)
-  return(hc)
+    samplesData <- Biobase::pData(obj)
+    hc <- mvPerLinesHisto_HC(qData, samplesData, indLegend, showValues)
+    return(hc)
 }
 
 ##' This method plots a bar plot which represents the distribution of the 
@@ -227,8 +227,8 @@ wrapper.mvPerLinesHistoPerCondition_HC <- function(obj, indLegend="auto",
     return(NULL)
   }
   qData <- Biobase::exprs(obj)
-  samplesData <- Biobase::pData(obj)
-  mvPerLinesHistoPerCondition_HC(qData, samplesData, indLegend, showValues, ...)
+    samplesData <- Biobase::pData(obj)
+    mvPerLinesHistoPerCondition_HC(qData, samplesData, indLegend, showValues, ...)
 }
 
 
@@ -255,7 +255,7 @@ mvPerLinesHistoPerCondition <- function(qData, samplesData, indLegend="auto",
   
   
   if (is.null(palette)){
-    palette <-RColorBrewer::brewer.pal(ncol(qData),"Dark2")[1:ncol(qData)]
+    palette <- RColorBrewer::brewer.pal(ncol(qData),"Dark2")[1:ncol(qData)]
   }else{
     if (length(palette) != ncol(qData)){
       warning("The color palette has not the same dimension as the number of samples")
@@ -419,16 +419,16 @@ wrapper.mvHisto <- function(obj, indLegend="auto", showValues=FALSE){
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.mvHisto_HC(Exp1_R25_pept, showValues=TRUE)
 wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
-  if (is.null(obj)){
-    warning("The dataset in NULL. Cannot continue.")
-    return(NULL)
-    warning("The dataset in NULL. Cannot continue.")
-  }
+    if (is.null(obj)){
+      warning("The dataset in NULL. Cannot continue.")
+      return(NULL)
+      warning("The dataset in NULL. Cannot continue.")
+    }
   
-  qData <- Biobase::exprs(obj)
-  samplesData <- Biobase::pData(obj)
-  conds <- samplesData[,"Condition"]
-  mvHisto_HC(qData, samplesData, conds, indLegend, showValues, ...)
+    qData <- Biobase::exprs(obj)
+    samplesData <- Biobase::pData(obj)
+    conds <- samplesData[,"Condition"]
+    mvHisto_HC(qData, samplesData, conds, indLegend, showValues, ...)
 }
 
 
@@ -586,12 +586,30 @@ mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto",
 ##' obj <- mvFilterFromIndices(obj, keepThat)
 ##' wrapper.mvImage(obj)
 wrapper.mvImage <- function(obj){
+<<<<<<< HEAD
   qData <- Biobase::exprs(obj)
   conds <- Biobase::pData(obj)[,"Condition"]
   originValues <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
   indices <- which(apply(is.OfType(originValues, "MEC"),1,sum) >0)
   
   mvImage(qData[indices,], conds)
+=======
+qData <- Biobase::exprs(obj)
+conds <- Biobase::pData(obj)[,"Condition"]
+originValues <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
+indices <- which(apply(is.OfType(originValues, "MEC"),1,sum) >0)
+
+if (length(indices)==0){
+  warning("The dataset contains no Missing value on Entire Condition. So this plot is not available.")
+  return(NULL)
+}else if (length(indices)==1){
+  warning("The dataset contains only one Missing value on Entire Condition. Currently, Prostar does not handle such dataset to build the plot. 
+          As it has no side-effects on the results, you can continue your imputation.")
+  return(NULL)
+}
+
+mvImage(qData[indices,], conds)
+>>>>>>> 8c87dfed13aa0519e00cc27ed88f2e354999f36d
 }
 
 

@@ -4,7 +4,7 @@
 \alias{check.design}
 \title{Check if the design is valid}
 \usage{
-\method{check}{design}(sTab)
+check.design(sTab)
 }
 \arguments{
 \item{sTab}{The data.frame which correspond to the pData function of MSnbase}

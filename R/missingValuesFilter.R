@@ -63,7 +63,7 @@ return(count)
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' NumericalFiltering(Exp1_R25_pept, 'A_Count', '6', '>=')
+##' NumericalFiltering(Exp1_R25_pept, 'A_Count', '6', '==')
 NumericalFiltering <- function(obj, name=NULL, value=NULL, operator=NULL){
   if ((is.null(name) || (name == ""))) {return(NULL)}
   
@@ -529,7 +529,7 @@ keepThat <- NULL
 if (is.null(obj@experimentData@other$OriginOfValues)){
     data <- Biobase::exprs(obj)
 } else {
-  data <- dplyr::select(fData(obj),obj@experimentData@other$OriginOfValues)
+    data <- dplyr::select(fData(obj),obj@experimentData@other$OriginOfValues)
 }
 
 if (type == "None"){
