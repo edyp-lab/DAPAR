@@ -21,12 +21,10 @@ findMECBlock <- function(obj){
     for (cond in 1:nbCond){
         ind <- which(Biobase::pData(obj)$Condition == conditions[cond])
         lNA <- which(apply(is.na(Biobase::exprs(obj)[,ind]), 1, sum)==length(ind))
-        if (length(lNA) > 0)
-        {
+        if (length(lNA) > 0) {
             tmp <- data.frame(cond,which(apply(is.na(Biobase::exprs(obj)[,ind]), 1, sum)==length(ind)))
             names(tmp) <- c("Condition", "Line")
             s <- rbind(s,tmp)
-            
         }
     }
     return(s)
@@ -240,7 +238,7 @@ wrapper.impute.slsa <- function(obj){
     new.order <- unlist(lapply(split(sTab, conds), function(x) {x['Sample.name']}))
     qData <- Biobase::exprs(obj)[,new.order]
     
-    res <- impute.slsa(qData, conditions=conds, nknn=15, selec="all", weight=1,ind.comp=1)
+    res <- imp4p::impute.slsa(qData, conditions=conds, nknn=15, selec="all", weight=1,ind.comp=1)
     
     #restore old order
     res <- res[,sample.names.old]

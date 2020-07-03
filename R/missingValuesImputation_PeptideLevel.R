@@ -9,12 +9,12 @@
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' dat <- mvFilter(Exp1_R25_pept[1:1000,], type="allCond", th = 1)
+##' dat <- DAPAR::mvFilter(Exp1_R25_pept[1:1000,], type="allCond", th = 1)
 ##' dat <- wrapper.impute.mle(dat)
 wrapper.impute.mle <- function(obj){
   cond <- as.factor(Biobase::pData(obj)$Condition)
   
-  res <- impute.mle(Biobase::exprs(obj), conditions=cond)
+  res <- imp4p::impute.mle(Biobase::exprs(obj), conditions=cond)
   
   Biobase::exprs(obj) <-res
   return (obj)
@@ -49,7 +49,7 @@ wrapper.impute.mle <- function(obj){
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' dat <- mvFilter(Exp1_R25_pept[1:1000], type="allCond", th = 1)
+##' dat <- DAPAR::mvFilter(Exp1_R25_pept[1:1000], type="allCond", th = 1)
 ##' dat <- wrapper.dapar.impute.mi(dat, nb.iter=1)
 wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, nknn = 15, selec = 600, siz = 500, 
                                      weight = 1, ind.comp = 1, progress.bar = FALSE, x.step.mod = 300,
@@ -57,8 +57,8 @@ wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, nknn = 15, selec = 600, s
                                      q = 0.95, q.min = 0, q.norm = 3, eps = 0, 
                                      lapala = TRUE,distribution="unif") 
 {
-    
-    ## order exp and pData table before using imp4p functions
+  
+  ## order exp and pData table before using imp4p functions
   conds <- factor(Biobase::pData(obj)$Condition, levels=unique(Biobase::pData(obj)$Condition))
   sample.names.old <- Biobase::pData(obj)$Sample.name
   sTab <- Biobase::pData(obj)
@@ -68,65 +68,65 @@ wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, nknn = 15, selec = 600, s
   
   
   
-    conditions <- as.factor(sTab$Condition)
-    repbio <- as.factor(sTab$Bio.Rep)
-    reptech <-as.factor(sTab$Tech.Rep)
-    
-    tab <- qData
-    
+  conditions <- as.factor(sTab$Condition)
+  repbio <- as.factor(sTab$Bio.Rep)
+  reptech <-as.factor(sTab$Tech.Rep)
+  
+  tab <- qData
+  
+  if (progress.bar == TRUE) {
+    cat(paste("\n 1/ Initial imputation under the MCAR assumption with impute.rand ... \n  "))
+  }
+  dat.slsa = imp4p::impute.rand(tab = tab, conditions = conditions)
+  
+  if (progress.bar == TRUE) {
+    cat(paste("\n 2/ Estimation of the mixture model in each sample... \n  "))
+  }
+  res = imp4p::estim.mix(tab = tab, tab.imp = dat.slsa, conditions = conditions, 
+                         x.step.mod = x.step.mod, 
+                         x.step.pi = x.step.pi, nb.rei = nb.rei)
+  
+  
+  if (progress.bar == TRUE) {
+    cat(paste("\n 3/ Estimation of the probabilities each missing value is MCAR... \n  "))
+  }
+  born = imp4p::estim.bound(tab = tab, conditions = conditions, q = q)
+  proba = imp4p::prob.mcar.tab(born$tab.upper, res)
+  
+  
+  if (progress.bar == TRUE) {
+    cat(paste("\n 4/ Multiple imputation strategy with mi.mix ... \n  "))
+  }
+  data.mi = imp4p::mi.mix(tab = tab, tab.imp = dat.slsa, prob.MCAR = proba, 
+                          conditions = conditions, repbio = repbio, reptech = reptech, 
+                          nb.iter = nb.iter, nknn = nknn, weight = weight, selec = selec, 
+                          siz = siz, ind.comp = ind.comp, q = q, 
+                          progress.bar = progress.bar)
+  
+  if (lapala == TRUE){
     if (progress.bar == TRUE) {
-        cat(paste("\n 1/ Initial imputation under the MCAR assumption with impute.rand ... \n  "))
+      cat(paste("\n\n 5/ Imputation of rows with only missing values in a condition with impute.pa ... \n  "))
     }
-    dat.slsa = imp4p::impute.rand(tab = tab, conditions = conditions)
-    
-    if (progress.bar == TRUE) {
-        cat(paste("\n 2/ Estimation of the mixture model in each sample... \n  "))
-    }
-    res = estim.mix(tab = tab, tab.imp = dat.slsa, conditions = conditions, 
-                    x.step.mod = x.step.mod, 
-                    x.step.pi = x.step.pi, nb.rei = nb.rei)
-    
-    
-    if (progress.bar == TRUE) {
-        cat(paste("\n 3/ Estimation of the probabilities each missing value is MCAR... \n  "))
-    }
-    born = estim.bound(tab = tab, conditions = conditions, q = q)
-    proba = prob.mcar.tab(born$tab.upper, res)
-    
-    
-    if (progress.bar == TRUE) {
-        cat(paste("\n 4/ Multiple imputation strategy with mi.mix ... \n  "))
-    }
-    data.mi = mi.mix(tab = tab, tab.imp = dat.slsa, prob.MCAR = proba, 
-                     conditions = conditions, repbio = repbio, reptech = reptech, 
-                     nb.iter = nb.iter, nknn = nknn, weight = weight, selec = selec, 
-                     siz = siz, ind.comp = ind.comp, q = q, 
-                     progress.bar = progress.bar)
-    
-    if (lapala == TRUE){
-        if (progress.bar == TRUE) {
-            cat(paste("\n\n 5/ Imputation of rows with only missing values in a condition with impute.pa ... \n  "))
-        }
-        data.final = impute.pa2(tab = data.mi, conditions = conditions, 
-                                q.min = q.min, q.norm = q.norm, eps = eps, distribution = distribution)
-    } else {
-        data.final <- data.mi
-    }
-    
-    
-    # restore previous order
-    colnames(data.final) <- new.order
-    data.final <- data.final[,sample.names.old]
-    
-     Biobase::exprs(obj) <- data.final
-    
-    msg <- paste("Missing values imputation using imp4p")
-    obj@processingData@processing <- c(obj@processingData@processing,msg)
-    
-    obj@experimentData@other$imputation.method <- "imp4p"
-    
-    return(obj)
-    
+    data.final = impute.pa2(tab = data.mi, conditions = conditions, 
+                            q.min = q.min, q.norm = q.norm, eps = eps, distribution = distribution)
+  } else {
+    data.final <- data.mi
+  }
+  
+  
+  # restore previous order
+  colnames(data.final) <- new.order
+  data.final <- data.final[,sample.names.old]
+  
+  Biobase::exprs(obj) <- data.final
+  
+  msg <- paste("Missing values imputation using imp4p")
+  obj@processingData@processing <- c(obj@processingData@processing,msg)
+  
+  obj@experimentData@other$imputation.method <- "imp4p"
+  
+  return(obj)
+  
 }
 
 
@@ -144,10 +144,10 @@ wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, nknn = 15, selec = 600, s
 ##' @examples
 ##' translatedRandomBeta(1000, 5, 10, 1, 1)
 translatedRandomBeta <- function(n, min, max, param1=3, param2=1){
-    scale <- max-min
-    simu <- rbeta(n,param1,param2)
-    res <- (simu*scale) + min
-    return(res)
+  scale <- max-min
+  simu <- rbeta(n,param1,param2)
+  res <- (simu*scale) + min
+  return(res)
 }
 
 
@@ -190,17 +190,17 @@ wrapper.impute.pa2 <- function (obj, q.min = 0, q.norm = 3, eps = 0, distributio
   
   tab <- qData
   conditions <-  as.factor(sTab$Condition)
-    
-    tab_imp <- impute.pa2(tab, conditions, q.min, q.norm, eps, distribution)
-    
-    # restore previous order
-    colnames(tab_imp) <- new.order
-    tab_imp <- tab_imp[,sample.names.old]
-    
-    Biobase::exprs(obj) <- tab_imp
-    
-    
-    return(obj)
+  
+  tab_imp <- impute.pa2(tab, conditions, q.min, q.norm, eps, distribution)
+  
+  # restore previous order
+  colnames(tab_imp) <- new.order
+  tab_imp <- tab_imp[,sample.names.old]
+  
+  Biobase::exprs(obj) <- tab_imp
+  
+  
+  return(obj)
 }
 
 
@@ -232,35 +232,35 @@ wrapper.impute.pa2 <- function (obj, q.min = 0, q.norm = 3, eps = 0, distributio
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.impute.pa2(Exp1_R25_pept[1:1000], distribution="beta")
 impute.pa2 <- function (tab, conditions, q.min = 0, q.norm = 3, eps = 0, distribution = "unif"){
-    tab_imp = tab
-    qu = apply(tab_imp, 2, quantile, na.rm = TRUE, q.min)
-    nb_cond = length(levels(conditions))
-    nb_rep = rep(0, nb_cond)
-    k = 1
-    j = 1
-    for (i in 1:nb_cond) {
-        nb_rep[i] = sum((conditions == levels(conditions)[i]))
-        sde = apply(tab_imp[, (k:(k + nb_rep[i] - 1))], 1, sd, 
-                    na.rm = TRUE)
-        while (j < (k + nb_rep[i])) {
-            if(distribution == "unif")
-            {
-                tab_imp[which(is.na(tab_imp[, j])), j] = runif(n = sum(is.na(tab_imp[,j])), 
-                                                               min = qu[j] - eps - q.norm * median(sde, na.rm = TRUE), 
-                                                               max = qu[j] - eps)
-            } else if (distribution == "beta"){
-                tab_imp[which(is.na(tab_imp[, j])), j] = translatedRandomBeta(n = sum(is.na(tab_imp[,j])), 
-                                                                              min = qu[j] - eps - q.norm * median(sde, na.rm = TRUE), 
-                                                                              max = qu[j] - eps,
-                                                                              param1 = 3,
-                                                                              param2 = 1)
-            }
-            j = j + 1
-        }
-        k = k + nb_rep[i]
+  tab_imp = tab
+  qu = apply(tab_imp, 2, quantile, na.rm = TRUE, q.min)
+  nb_cond = length(levels(conditions))
+  nb_rep = rep(0, nb_cond)
+  k = 1
+  j = 1
+  for (i in 1:nb_cond) {
+    nb_rep[i] = sum((conditions == levels(conditions)[i]))
+    sde = apply(tab_imp[, (k:(k + nb_rep[i] - 1))], 1, sd, 
+                na.rm = TRUE)
+    while (j < (k + nb_rep[i])) {
+      if(distribution == "unif")
+      {
+        tab_imp[which(is.na(tab_imp[, j])), j] = runif(n = sum(is.na(tab_imp[,j])), 
+                                                       min = qu[j] - eps - q.norm * median(sde, na.rm = TRUE), 
+                                                       max = qu[j] - eps)
+      } else if (distribution == "beta"){
+        tab_imp[which(is.na(tab_imp[, j])), j] = translatedRandomBeta(n = sum(is.na(tab_imp[,j])), 
+                                                                      min = qu[j] - eps - q.norm * median(sde, na.rm = TRUE), 
+                                                                      max = qu[j] - eps,
+                                                                      param1 = 3,
+                                                                      param2 = 1)
+      }
+      j = j + 1
     }
-    
-    return(tab_imp)
+    k = k + nb_rep[i]
+  }
+  
+  return(tab_imp)
 }
 
 

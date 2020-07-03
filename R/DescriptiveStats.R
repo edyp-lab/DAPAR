@@ -208,15 +208,20 @@ abline(h=0)
 ##' @seealso \code{\link{densityPlotD_HC}}
 ##' @examples
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' legend <- Biobase::pData(Exp1_R25_pept)[,"Sample.name"]
-##' boxPlotD_HC(Exp1_R25_pept, legend)
+##' boxPlotD_HC(Exp1_R25_pept)
 boxPlotD_HC <- function(obj, legend=NULL, palette = NULL){
 
-  
   qData <- Biobase::exprs(obj)
+  conds <- Biobase::pData(obj)[,"Condition"]
+  
   if( is.null(legend)){legend <- Biobase::pData(obj)[,"Sample.name"]}
-  if (is.null(palette)){palette <- rep("#FFFFFF", ncol(qData))
-  } else {
+  if (is.null(palette)){
+    pal <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
+        for (i in 1:ncol(qData)){
+      palette[i] <- pal[ which(conds[i] == unique(conds))]
+    }
+  }
+  else {
     if (length(palette) != ncol(qData)){
       warning("The color palette has not the same dimension as the number of samples")
       return(NULL)

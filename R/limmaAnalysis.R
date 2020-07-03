@@ -18,12 +18,12 @@ test.design <- function(tab){
   level.b <- factor(tab[,2], ordered = TRUE)
   name.level.a <- colnames(tab)[1]
   name.level.b <-colnames(tab)[2]
-    
+  
   level.c <- NULL
   level.c <- if(ncol(tab)==3) factor(tab[,3], ordered = TRUE) else NULL
   name.level.c <- if(ncol(tab)==3) colnames(tab)[3] else NULL
-    
-
+  
+  
   # verification intersection sur B
   ##verification de la non redondance'intersection vide entre les groupes
   uniqueA <- unique(level.a)
@@ -42,10 +42,10 @@ test.design <- function(tab){
   
   #verification si niveau hierarchique inf
   if (length(levels(level.a)) == length(levels(level.b))){
-      ## c'est un design de niveau n-1 en fait
-      valid <- FALSE
-      txt <- c(txt,paste0("The column ",name.level.b, " is not informative. Thus, the design is not of level (n-1).\n"))
-    } 
+    ## c'est un design de niveau n-1 en fait
+    valid <- FALSE
+    txt <- c(txt,paste0("The column ",name.level.b, " is not informative. Thus, the design is not of level (n-1).\n"))
+  } 
   else if (!is.null(level.c)){
     if (length(levels(level.b)) == length(levels(level.c))){
       ## c'est un design de niveau n-1 en fait
@@ -72,8 +72,8 @@ check.conditions <- function(conds){
   res <- list(valid=TRUE,warn=NULL)
   
   if (("" %in% conds) || (NA %in% conds)){
-      res <- list(valid=FALSE,warn="The conditions are note full filled.")
-      return(res)
+    res <- list(valid=FALSE,warn="The conditions are note full filled.")
+    return(res)
   }
   
   # Check if there is at least two conditions
@@ -117,31 +117,31 @@ check.design <- function(sTab){
   # Check if all the column are fullfilled
   
   if (level.design == 1){
-      if (("" %in% sTab$Bio.Rep) || (NA %in% sTab$Bio.Rep)){
-          res <- list(valid=FALSE,warn="The Bio.Rep colmumn are not full filled.")
-          return(res)
-      }
-      }
+    if (("" %in% sTab$Bio.Rep) || (NA %in% sTab$Bio.Rep)){
+      res <- list(valid=FALSE,warn="The Bio.Rep colmumn are not full filled.")
+      return(res)
+    }
+  }
   else if (level.design == 2){
-      if (("" %in% sTab$Bio.Rep) || (NA %in% sTab$Bio.Rep)){
-          res <- list(valid=FALSE,warn="The Bio.Rep colmumn are not full filled.")
-          return(res)
-      }else if (("" %in% sTab$Tech.Rep) || (NA %in% sTab$Tech.Rep)){
-          res <- list(valid=FALSE,warn="The Tech.Rep colmumn are not full filled.")
-          return(res)
-      }
-      }
+    if (("" %in% sTab$Bio.Rep) || (NA %in% sTab$Bio.Rep)){
+      res <- list(valid=FALSE,warn="The Bio.Rep colmumn are not full filled.")
+      return(res)
+    }else if (("" %in% sTab$Tech.Rep) || (NA %in% sTab$Tech.Rep)){
+      res <- list(valid=FALSE,warn="The Tech.Rep colmumn are not full filled.")
+      return(res)
+    }
+  }
   else if (level.design == 3){
-      if (("" %in% sTab$Bio.Rep) || (NA %in% sTab$Bio.Rep)){
-          res <- list(valid=FALSE,warn="The Bio.Rep colmumn are not full filled.")
-          return(res)
-      } else if (("" %in% sTab$Tech.Rep) || (NA %in% sTab$Tech.Rep)){
-          res <- list(valid=FALSE,warn="The Tech.Rep colmumn are not full filled.")
-          return(res)
-      } else if (("" %in% sTab$Analyt.Rep) || (NA %in% sTab$Analyt.Rep)){
-          res <- list(valid=FALSE,warn="The Analyt.Rep colmumn are not full filled.")
-          return(res)
-      }
+    if (("" %in% sTab$Bio.Rep) || (NA %in% sTab$Bio.Rep)){
+      res <- list(valid=FALSE,warn="The Bio.Rep colmumn are not full filled.")
+      return(res)
+    } else if (("" %in% sTab$Tech.Rep) || (NA %in% sTab$Tech.Rep)){
+      res <- list(valid=FALSE,warn="The Tech.Rep colmumn are not full filled.")
+      return(res)
+    } else if (("" %in% sTab$Analyt.Rep) || (NA %in% sTab$Analyt.Rep)){
+      res <- list(valid=FALSE,warn="The Analyt.Rep colmumn are not full filled.")
+      return(res)
+    }
   }
   
   # Check if the hierarchy of the design is correct
@@ -154,7 +154,7 @@ check.design <- function(sTab){
       res <- test.design(sTab[,c("Bio.Rep","Tech.Rep", "Analyt.Rep")])
       
     }
-      }
+  }
   
   return(res)
 }
@@ -172,11 +172,11 @@ check.design <- function(sTab){
 ##' make.design(Biobase::pData(Exp1_R25_pept))
 make.design <- function(sTab){
   
-    if (!check.design(sTab)$valid){
-      warning("The design matrix is not correct.")
-      warning(check.design(sTab)$warn)
-      return(NULL)
-      }
+  if (!check.design(sTab)$valid){
+    warning("The design matrix is not correct.")
+    warning(check.design(sTab)$warn)
+    return(NULL)
+  }
   
   n <- ncol(sTab)
   if (n==1 || n==2){
@@ -184,7 +184,7 @@ make.design <- function(sTab){
   } 
   
   res <- do.call(paste0("make.design.", (n-2)),list(sTab))
- 
+  
   return(res)
 }
 
@@ -225,28 +225,28 @@ make.design <- function(sTab){
 
 
 make.design.1 <- function(sTab){
-Conditions <- factor(sTab$Condition, ordered = TRUE)
-nb_cond=length(unique(Conditions))
-nb_samples <- nrow(sTab)
-
-#CGet the number of replicates per condition
-nb_Rep=rep(0,nb_cond)
-for (i in 1:nb_cond){
-  nb_Rep[i]=sum((Conditions==unique(Conditions)[i]))
-}
-
-design=matrix(0,nb_samples,nb_cond)
-n0=1
-coln=NULL
-for (j in 1:nb_cond){
-  coln=c(coln,paste("Condition",j,collapse=NULL,sep=""))
-  design[(n0:(n0+nb_Rep[j]-1)),j]=rep(1,length((n0:(n0+nb_Rep[j]-1))))
-  n0=n0+nb_Rep[j]
-}
-colnames(design)=coln
-
-return(design)
-
+  Conditions <- factor(sTab$Condition, ordered = TRUE)
+  nb_cond=length(unique(Conditions))
+  nb_samples <- nrow(sTab)
+  
+  #CGet the number of replicates per condition
+  nb_Rep=rep(0,nb_cond)
+  for (i in 1:nb_cond){
+    nb_Rep[i]=sum((Conditions==unique(Conditions)[i]))
+  }
+  
+  design=matrix(0,nb_samples,nb_cond)
+  n0=1
+  coln=NULL
+  for (j in 1:nb_cond){
+    coln=c(coln,paste("Condition",j,collapse=NULL,sep=""))
+    design[(n0:(n0+nb_Rep[j]-1)),j]=rep(1,length((n0:(n0+nb_Rep[j]-1))))
+    n0=n0+nb_Rep[j]
+  }
+  colnames(design)=coln
+  
+  return(design)
+  
 }
 
 
@@ -400,7 +400,7 @@ make.contrast <- function(design,condition, contrast=1){
   k=1
   
   if (contrast == 1){
-  ## Contrast for One vs One
+    ## Contrast for One vs One
     contra=rep(0,sum(1:(nb.cond-1)))
     for (i in 1:(nb.cond-1)){
       for (j in (i+1):nb.cond){
@@ -411,7 +411,7 @@ make.contrast <- function(design,condition, contrast=1){
       }
     }
   } else if (contrast==2){
-   ## Contrast for One vs All
+    ## Contrast for One vs All
     contra=rep(0,nb.cond)
     for (i in 1:(nb.cond)){
       contra[k]=c(paste("(",label.agg[i],")/",nb.agg[i]))
@@ -422,7 +422,7 @@ make.contrast <- function(design,condition, contrast=1){
       k=k+1
     }
   }
- 
+  
   return(contra)
 }
 
@@ -473,7 +473,7 @@ make.contrast <- function(design,condition, contrast=1){
 ##' sTab <- Biobase::pData(obj)
 ##' limma <- limmaCompleteTest(qData,sTab)
 limmaCompleteTest <- function(qData, sTab, comp.type="OnevsOne"){
-   
+  
   ## save the current order of columns
   
   # reoder columns to group conditions

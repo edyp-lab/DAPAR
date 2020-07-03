@@ -57,24 +57,24 @@ wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0
   #.temp <- qData
   #if (!is.null(.temp)){
   #  data <- .temp
-    
-    
-    
-    
+  
+  
+  
+  
   conds <- Biobase::pData(obj)[,"Condition"]
   qData <- Biobase::exprs(obj)
   msg_method <- paste("Normalisation using method =", method,  sep="")
   msg_type <- paste("With type =", type,  sep="")
   
   switch(method,
-  GlobalQuantileAlignment = {
-           Biobase::exprs(obj) <- normalize.quantiles(qData)
+         GlobalQuantileAlignment = {
+           Biobase::exprs(obj) <- preprocessCore::normalize.quantiles(qData)
            dimnames(Biobase::exprs(obj)) <- list(rownames(qData),colnames(qData))
            obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type)
            obj@experimentData@other$normalizationMethod <- method
            
          },
-  SumByColumns = {
+         SumByColumns = {
            t <- 2^(Biobase::exprs(obj))
            
            if (type == "overall"){
@@ -98,9 +98,9 @@ wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0
            obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type)
            obj@experimentData@other$normalizationMethod <- method
            obj@experimentData@other$normalizationType <- type
-          },
+         },
          
-QuantileCentering = {
+         QuantileCentering = {
            q <- function(x) { quantile(x, probs=quantile, na.rm=TRUE) }
            medianOverSamples <- apply(Biobase::exprs(obj), 2, q)
            
@@ -126,7 +126,7 @@ QuantileCentering = {
            obj@experimentData@other$normalizationQuantile <- quantile
            
          },
-MeanCentering = {
+         MeanCentering = {
            meanOverSamples <- apply(Biobase::exprs(obj), 2, mean, na.rm = TRUE)
            
            if (type == "overall"){
@@ -198,7 +198,7 @@ MeanCentering = {
            
          }
   )
-
+  
   return(obj)
   
   
