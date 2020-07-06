@@ -14,7 +14,7 @@
 ##'  obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
 ##' res.pca <- wrapper.pca(obj)
 wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
- # require(FactoMineR)
+  # require(FactoMineR)
   
   if (is.null(var.scaling)) {var.scaling <- TRUE}
   res.pca <- NULL
@@ -60,11 +60,11 @@ wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
 plotPCA_Var <- function(res.pca, chosen.axes=c(1,2)){
   #plot.PCA(res.pca, choix="var", axes = chosen.axes, title="Sample factor map (PCA)")
   #require(factoextra)
-  # Colorer en fonction du cos2: qualit? de repr?sentation
+  # Colorer en fonction du cos2: qualite de representation
   if (is.null(res.pca)){return(NULL)}
   factoextra::fviz_pca_var(res.pca, axes = chosen.axes, col.var = "cos2",
-               gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
-               repel = TRUE # ?vite le chevauchement de texte
+                           gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+                           repel = TRUE # evite le chevauchement de texte
   )
   
 }
@@ -87,7 +87,7 @@ plotPCA_Ind <- function(res.pca, chosen.axes=c(1,2)){
   #require(factoextra)
   plot <- factoextra::fviz_pca_ind(res.pca,  axes = chosen.axes, geom="point")
   plot
-  }
+}
 
 
 ##' Plots the eigen values of PCA
@@ -138,7 +138,7 @@ plotPCA_Eigen_hc <- function(res.pca){
     #hc_add_series(data.frame(y=res.pca$eig[,1]),  type="line",  lineWidth = 4,name = "Eigen values", color = "orange", yAxis = 2) %>%
     #hc_tooltip(crosshairs = TRUE, headerFormat = "<b>{point.x}</b><br>") %>%
     hc_legend(enabled = TRUE)
-   # hc_plotOptions(column = list(colorByPoint = TRUE, colors = SiteOTD$Colors))
+  # hc_plotOptions(column = list(colorByPoint = TRUE, colors = SiteOTD$Colors))
   
   
 }
@@ -172,26 +172,26 @@ boxPlotD <- function(obj,conds, legend=NULL,palette=NULL){
       return(NULL)
     }
   }
-
-        
-boxplot(qData
-        ,las = 1
-        , col = palette
-        , cex = 2
-        , axes=TRUE
-        , xaxt = "n"
-        , ylab = "Log (intensity)"
-        , pt.cex = 4
-        , horizontal = FALSE
-)
-
-
-if( is.null(legend)){legend <- Biobase::pData(obj)$Condition}
-axis(side=1,at = 1:ncol(qData), label = legend)
-#mtext("Samples", side=1,  line=(6+ncol(legend)), cex.lab=1, las=1)
-
-abline(h=0) 
-
+  
+  
+  boxplot(qData
+          ,las = 1
+          , col = palette
+          , cex = 2
+          , axes=TRUE
+          , xaxt = "n"
+          , ylab = "Log (intensity)"
+          , pt.cex = 4
+          , horizontal = FALSE
+  )
+  
+  
+  if( is.null(legend)){legend <- Biobase::pData(obj)$Condition}
+  axis(side=1,at = 1:ncol(qData), label = legend)
+  #mtext("Samples", side=1,  line=(6+ncol(legend)), cex.lab=1, las=1)
+  
+  abline(h=0) 
+  
 }
 
 
@@ -210,16 +210,16 @@ abline(h=0)
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' boxPlotD_HC(Exp1_R25_pept)
 boxPlotD_HC <- function(obj, legend=NULL, palette = NULL){
-
-  qData <- Biobase::exprs(obj)
-  conds <- Biobase::pData(obj)[,"Condition"]
   
+  
+  qData <- Biobase::exprs(obj)
+  #conds <- Biobase::pData(obj)[,"Condition"]
   if( is.null(legend)){legend <- Biobase::pData(obj)[,"Sample.name"]}
-  if (is.null(palette)){
-    pal <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
-        for (i in 1:ncol(qData)){
-      palette[i] <- pal[ which(conds[i] == unique(conds))]
-    }
+  if (is.null(palette)){ palette <- rep("#FFFFFF", ncol(qData))
+    # pal <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
+    # for (i in 1:ncol(qData)){
+    #   palette[i] <- pal[ which(conds[i] == unique(conds))]
+    # }
   }
   else {
     if (length(palette) != ncol(qData)){
@@ -296,44 +296,44 @@ violinPlotD <- function(obj, legend=NULL, palette = NULL){
   plot.new()
   qData <- Biobase::exprs(obj)
   
-    if (!is.null(palette)) {
-      if (length(palette) != ncol(qData)){
-        warning("The color palette has not the same dimension as the number of samples")
+  if (!is.null(palette)) {
+    if (length(palette) != ncol(qData)){
+      warning("The color palette has not the same dimension as the number of samples")
       return(NULL)
-      }
-    } else {
-      palette <- rep('#FFFFFF',ncol(qData))
     }
- 
+  } else {
+    palette <- rep('#FFFFFF',ncol(qData))
+  }
   
-    plot.window(xlim=c(0,ncol(qData)+1),
-                ylim=c(min(na.omit(qData)),max(na.omit(qData))))
-    title( ylab="Log (intensity)")
+  
+  plot.window(xlim=c(0,ncol(qData)+1),
+              ylim=c(min(na.omit(qData)),max(na.omit(qData))))
+  title( ylab="Log (intensity)")
+  
+  for (i in 1:ncol(qData)) {
+    vioplot(na.omit(qData[,i]), col = palette[i], add=TRUE, at=i)}
+  
+  
+  axis(2, yaxp = c(floor(min(na.omit(qData))), 
+                   floor(max(na.omit(qData))), 5), las=1)
+  
+  if( !is.null(legend))
+  {
+    if (is.vector(legend) ){
+      N <- 1} else{ N <- ncol(legend)}
     
-    for (i in 1:ncol(qData)) {
-        vioplot(na.omit(qData[,i]), col = palette[i], add=TRUE, at=i)}
-    
-    
-    axis(2, yaxp = c(floor(min(na.omit(qData))), 
-                     floor(max(na.omit(qData))), 5), las=1)
-    
-     if( !is.null(legend))
-     {
-        if (is.vector(legend) ){
-            N <- 1} else{ N <- ncol(legend)}
-         
-        for (i in 1:N){
-            axis(side=1,
-                 at = 1:ncol(qData),
-                 label = if (is.vector(legend) ) 
-                     {legend} else {legend[,i]},
-                 line= 2*i-1
-            )
-        }
-
-        mtext("Samples",side=1,line=6+length(colnames(legend)), cex.lab=1, las=1)
+    for (i in 1:N){
+      axis(side=1,
+           at = 1:ncol(qData),
+           label = if (is.vector(legend) ) 
+           {legend} else {legend[,i]},
+           line= 2*i-1
+      )
     }
-
+    
+    mtext("Samples",side=1,line=6+length(colnames(legend)), cex.lab=1, las=1)
+  }
+  
 }
 
 
@@ -359,16 +359,16 @@ violinPlotD <- function(obj, legend=NULL, palette = NULL){
 ##' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering","within conditions")
 ##' wrapper.compareNormalizationD(Exp1_R25_pept, objAfter, conds)
 wrapper.compareNormalizationD <- function(objBefore, objAfter, 
-                                        condsForLegend=NULL,
-                                        indData2Show=NULL,
-                                        ...){
-
-qDataBefore <- Biobase::exprs(objBefore)
-qDataAfter <- Biobase::exprs(objAfter)
-if (is.null(condsForLegend)){
-  condsForLegend <- Biobase::pData(objBefore)[,"Condition"]}
-
-compareNormalizationD(qDataBefore, qDataAfter, condsForLegend, indData2Show, ...)
+                                          condsForLegend=NULL,
+                                          indData2Show=NULL,
+                                          ...){
+  
+  qDataBefore <- Biobase::exprs(objBefore)
+  qDataAfter <- Biobase::exprs(objAfter)
+  if (is.null(condsForLegend)){
+    condsForLegend <- Biobase::pData(objBefore)[,"Condition"]}
+  
+  compareNormalizationD(qDataBefore, qDataAfter, condsForLegend, indData2Show, ...)
 }
 
 ##' Wrapper to the function that plot to compare the quantitative proteomics 
@@ -395,14 +395,14 @@ compareNormalizationD(qDataBefore, qDataAfter, condsForLegend, indData2Show, ...
 ##' "within conditions")
 ##' wrapper.compareNormalizationD_HC(Exp1_R25_pept, objAfter, conds)
 wrapper.compareNormalizationD_HC <- function(objBefore, objAfter, 
-                                          condsForLegend=NULL,
-                                          indData2Show=NULL,
-                                           ...){
-    
-    qDataBefore <- Biobase::exprs(objBefore)
-    qDataAfter <- Biobase::exprs(objAfter)
-    
-    compareNormalizationD_HC(qDataBefore, qDataAfter, condsForLegend, indData2Show,...)
+                                             condsForLegend=NULL,
+                                             indData2Show=NULL,
+                                             ...){
+  
+  qDataBefore <- Biobase::exprs(objBefore)
+  qDataAfter <- Biobase::exprs(objAfter)
+  
+  compareNormalizationD_HC(qDataBefore, qDataAfter, condsForLegend, indData2Show,...)
 }
 
 ##' Plot to compare the quantitative proteomics data before and after 
@@ -428,14 +428,14 @@ wrapper.compareNormalizationD_HC <- function(objBefore, objAfter,
 ##' objAfter <- wrapper.normalizeD(Exp1_R25_pept,"QuantileCentering","within conditions")
 ##' compareNormalizationD(qDataBefore, Biobase::exprs(objAfter), conds)
 compareNormalizationD <- function(qDataBefore,
-                                qDataAfter,
-                                condsForLegend=NULL,
-                                indData2Show=NULL,
-                                palette = NULL){
-
-if (is.null(condsForLegend)) return(NULL)
-if (is.null(indData2Show)) {indData2Show <- c(1:ncol(qDataAfter)) }
-
+                                  qDataAfter,
+                                  condsForLegend=NULL,
+                                  indData2Show=NULL,
+                                  palette = NULL){
+  
+  if (is.null(condsForLegend)) return(NULL)
+  if (is.null(indData2Show)) {indData2Show <- c(1:ncol(qDataAfter)) }
+  
   if (is.null(palette)){
     tmp <- RColorBrewer::brewer.pal(length(unique(condsForLegend)),"Dark2")[1:length(unique(condsForLegend))]
     
@@ -450,48 +450,48 @@ if (is.null(indData2Show)) {indData2Show <- c(1:ncol(qDataAfter)) }
     }
   }
   
-x <- qDataBefore
-y <- qDataAfter/qDataBefore
-
-lim.x <- range(min(x, na.rm=TRUE), max(x, na.rm=TRUE))
-lim.y <- range(min(y, na.rm=TRUE), max(y, na.rm=TRUE))
-
-
-##Colors definition
-    legendColor <- unique(palette)
-    txtLegend <- unique(condsForLegend)
-
-
-
-plot(x=NULL
-    ,xlim = lim.x
-    ,ylim = lim.y
-    , cex = 1
-    , axes=TRUE
-    , xlab = "Intensities before normalization"
-    , ylab = "Intensities after normalization / Intensities before 
+  x <- qDataBefore
+  y <- qDataAfter/qDataBefore
+  
+  lim.x <- range(min(x, na.rm=TRUE), max(x, na.rm=TRUE))
+  lim.y <- range(min(y, na.rm=TRUE), max(y, na.rm=TRUE))
+  
+  
+  ##Colors definition
+  legendColor <- unique(palette)
+  txtLegend <- unique(condsForLegend)
+  
+  
+  
+  plot(x=NULL
+       ,xlim = lim.x
+       ,ylim = lim.y
+       , cex = 1
+       , axes=TRUE
+       , xlab = "Intensities before normalization"
+       , ylab = "Intensities after normalization / Intensities before 
     normalization"
-    ,cex.lab = 1
-    ,cex.axis = 1
-    ,cex.main = 3)
-
-
-for (i in indData2Show){
+       ,cex.lab = 1
+       ,cex.axis = 1
+       ,cex.main = 3)
+  
+  
+  for (i in indData2Show){
     points(x[,i], y[,i], col = palette[i], cex = 1,pch=16)
-}
-
-legend("topleft"
-        , legend = txtLegend
-        , col = legendColor
-        , pch = 15 
-        , bty = "n"
-        , pt.cex = 2
-        , cex = 1
-        , horiz = FALSE
-        , inset=c(0,0)
-)
-
-
+  }
+  
+  legend("topleft"
+         , legend = txtLegend
+         , col = legendColor
+         , pch = 15 
+         , bty = "n"
+         , pt.cex = 2
+         , cex = 1
+         , horiz = FALSE
+         , inset=c(0,0)
+  )
+  
+  
 }
 
 
@@ -521,14 +521,14 @@ legend("topleft"
 ##' objAfter <- wrapper.normalizeD(obj,"QuantileCentering","within conditions")
 ##' compareNormalizationD_HC(qDataBefore, Biobase::exprs(objAfter), conds)
 compareNormalizationD_HC <- function(qDataBefore,
-                                  qDataAfter,
-                                  condsForLegend=NULL,
-                                  indData2Show=NULL,
-                                  palette = NULL){
-    
-    if (is.null(condsForLegend)) return(NULL)
-    if (is.null(indData2Show)) {indData2Show <- c(1:ncol(qDataAfter)) }
-    
+                                     qDataAfter,
+                                     condsForLegend=NULL,
+                                     indData2Show=NULL,
+                                     palette = NULL){
+  
+  if (is.null(condsForLegend)) return(NULL)
+  if (is.null(indData2Show)) {indData2Show <- c(1:ncol(qDataAfter)) }
+  
   
   if (is.null(palette)){
     tmp <- RColorBrewer::brewer.pal(length(unique(condsForLegend)),"Dark2")[1:length(unique(condsForLegend))]
@@ -544,29 +544,29 @@ compareNormalizationD_HC <- function(qDataBefore,
     }
   }
   
-    x <- qDataBefore
-    y <- qDataAfter/qDataBefore
-   
-    ##Colors definition
-        legendColor <- unique(palette)
-        txtLegend <- unique(condsForLegend)
-    
-    
-    series <- list()
-    for (i in 1:length(indData2Show)){
-        tmp <- list(name=condsForLegend[i], data =list_parse(data.frame(x=x[,indData2Show[i]],
-                                                                        y=y[,indData2Show[i]])))
-        series[[i]] <- tmp
-    }
-   
-    h1 <-  highchart2() %>% 
-        my_hc_chart( chartType = "scatter") %>%
-        hc_add_series_list(series) %>%
-        hc_tooltip(enabled= "false" ) %>%
-        my_hc_ExportMenu(filename = "compareNormalization")
-    h1
-    return(h1)
-
+  x <- qDataBefore
+  y <- qDataAfter/qDataBefore
+  
+  ##Colors definition
+  legendColor <- unique(palette)
+  txtLegend <- unique(condsForLegend)
+  
+  
+  series <- list()
+  for (i in 1:length(indData2Show)){
+    tmp <- list(name=condsForLegend[i], data =list_parse(data.frame(x=x[,indData2Show[i]],
+                                                                    y=y[,indData2Show[i]])))
+    series[[i]] <- tmp
+  }
+  
+  h1 <-  highchart2() %>% 
+    my_hc_chart( chartType = "scatter") %>%
+    hc_add_series_list(series) %>%
+    hc_tooltip(enabled= "false" ) %>%
+    my_hc_ExportMenu(filename = "compareNormalization")
+  h1
+  return(h1)
+  
 }
 
 
@@ -585,7 +585,7 @@ compareNormalizationD_HC <- function(qDataBefore,
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' densityPlotD(Exp1_R25_pept, conds)
 densityPlotD <- function(obj, conds, legend=NULL,palette = NULL){
-    
+  
   qData <- Biobase::exprs(obj)
   
   if (is.null(legend) ) { legend <- Biobase::pData(obj)[,"Condition"]}
@@ -599,44 +599,44 @@ densityPlotD <- function(obj, conds, legend=NULL,palette = NULL){
     }
   }
   
-
-### Range of axis definition
-axis.limits <- matrix(data = 0, nrow = 4, ncol = ncol(qData))
-for (i in 1:ncol(qData)){
+  
+  ### Range of axis definition
+  axis.limits <- matrix(data = 0, nrow = 4, ncol = ncol(qData))
+  for (i in 1:ncol(qData)){
     dens <- density(qData[,i], na.rm = TRUE)
     axis.limits[,i] <- c(min(dens$x), max(dens$x), min(dens$y), max(dens$y))
-    }
-lim.x <- range(min(axis.limits[1,]), max(axis.limits[2,]))
-lim.y <- range(min(axis.limits[3,]), max(axis.limits[4,]))
-
-
-
-plot(x =NULL
-    , ylab ="Density"
-    , xlab = "log(intensity)"
-    , col = palette
-    ,xlim = lim.x
-    ,ylim = lim.y
-    ,las = 1
-    ,cex.lab = 1
-    ,cex.axis = 1
-    ,cex.main = 3)
-
-for (i in ncol(qData)){
+  }
+  lim.x <- range(min(axis.limits[1,]), max(axis.limits[2,]))
+  lim.y <- range(min(axis.limits[3,]), max(axis.limits[4,]))
+  
+  
+  
+  plot(x =NULL
+       , ylab ="Density"
+       , xlab = "log(intensity)"
+       , col = palette
+       ,xlim = lim.x
+       ,ylim = lim.y
+       ,las = 1
+       ,cex.lab = 1
+       ,cex.axis = 1
+       ,cex.main = 3)
+  
+  for (i in ncol(qData)){
     lines(density(qData[,i], na.rm=TRUE), col = palette[i])
-}
-
-
-legend("topleft"         
-        , legend = unique(legend)
-        , col = unique(palette)
-        , pch = 15 
-        , bty = "n"
-        , pt.cex = 2
-        , cex = 1
-        , horiz = FALSE
-        , inset=c(0,0)
-)
+  }
+  
+  
+  legend("topleft"         
+         , legend = unique(legend)
+         , col = unique(palette)
+         , pch = 15 
+         , bty = "n"
+         , pt.cex = 2
+         , cex = 1
+         , horiz = FALSE
+         , inset=c(0,0)
+  )
 }
 
 
@@ -660,7 +660,7 @@ densityPlotD_HC <- function(obj, legend=NULL, palette = NULL){
   
   qData <- Biobase::exprs(obj)
   
-  if (is.null(legend) ) { legend<- Biobase::pData(obj)[,"Condition"]}
+  if (is.null(legend) ) { legend<- Biobase::pData(obj)[,"Condition"] }
   
   # if (is.null(palette)){
   #   nbConds <- length(unique(condsForLegend))
@@ -672,53 +672,54 @@ densityPlotD_HC <- function(obj, legend=NULL, palette = NULL){
   #   palette <- temp
   #   
   # }else{
-   
-    
-    h1 <-  highchart() %>% 
-        hc_title(text = "Density plot") %>% 
-        my_hc_chart(chartType = "spline", zoomType="x") %>%
-         hc_legend(enabled = TRUE) %>%
-        hc_xAxis(title = list(text = "log(Intensity)")) %>%
-        hc_yAxis(title = list(text = "Density")) %>%
-       hc_tooltip(headerFormat= '',
-                   pointFormat = "<b> {series.name} </b>: {point.y} ",
-                   valueDecimals = 2) %>%
-      my_hc_ExportMenu(filename = "densityplot") %>%
-        hc_plotOptions(
-            series=list(
-                animation=list(
-                    duration = 100
-                ),
-                connectNulls= TRUE,
-                marker=list(
-                  enabled = FALSE)
-            )
-        )
-    
-    if (!is.null(palette)) {
-      if (length(palette) != ncol(qData)){
-        warning("The color palette has not the same dimension as the number of samples")
-        return(NULL)
-      }
-      h1 <- h1 %>% hc_colors(palette)
+  
+  h1 <-  highchart() %>% 
+    hc_title(text = "Density plot") %>% 
+    my_hc_chart(chartType = "spline", zoomType="x") %>%
+    hc_legend(enabled = TRUE) %>%
+    hc_xAxis(title = list(text = "log(Intensity)")) %>%
+    hc_yAxis(title = list(text = "Density")) %>%
+    hc_tooltip(headerFormat= '',
+               pointFormat = "<b> {series.name} </b>: {point.y} ",
+               valueDecimals = 2) %>%
+    my_hc_ExportMenu(filename = "densityplot") %>%
+    hc_plotOptions(
+      series=list(
+        animation=list(
+          duration = 100
+        ),
+        connectNulls= TRUE,
+        marker=list(
+          enabled = FALSE)
+      )
+    )
+  
+  
+  if (!is.null(palette)) {
+    if (length(palette) != ncol(qData)){
+      warning("The color palette has not the same dimension as the number of samples")
+      return(NULL)
     }
+    h1 <- h1 %>% hc_colors(palette)
+  }
+  
+  if (is.null(legend)) {
+    legend <- paste0("series", 1:ncol(qData))
+  }
+  
+  
+  for (i in 1:ncol(qData)){
     
-    if (is.null(legend)) {
-      legend <- paste0("series", 1:ncol(qData))
-    }
+    tmp <- data.frame(x = density(qData[,i], na.rm = TRUE)$x, 
+                      y = density(qData[,i], na.rm = TRUE)$y)
     
-   for (i in 1:ncol(qData)){
-      
-      tmp <- data.frame(x = density(qData[,i], na.rm = TRUE)$x, 
-                        y = density(qData[,i], na.rm = TRUE)$y)
-      
-      h1 <- h1 %>% hc_add_series(data=list_parse(tmp), name=legend[i]) 
+    h1 <- h1 %>% hc_add_series(data=list_parse(tmp), name=legend[i]) 
     
-    }
-    
-    
-    return(h1)
-
+  }
+  
+  
+  return(h1)
+  
 }
 
 
@@ -738,9 +739,9 @@ densityPlotD_HC <- function(obj, legend=NULL, palette = NULL){
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.CVDistD(Exp1_R25_pept)
 wrapper.CVDistD <- function(obj, ...){
-qData <- Biobase::exprs(obj)
-conds <- Biobase::pData(obj)[,"Condition"]
-CVDistD(qData, conds, ...)
+  qData <- Biobase::exprs(obj)
+  conds <- Biobase::pData(obj)[,"Condition"]
+  CVDistD(qData, conds, ...)
 }
 
 
@@ -759,9 +760,9 @@ CVDistD(qData, conds, ...)
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.CVDistD_HC(Exp1_R25_pept)
 wrapper.CVDistD_HC <- function(obj, ...){
-    qData <- Biobase::exprs(obj)
-    conds <- Biobase::pData(obj)[,"Condition"]
-    CVDistD_HC(qData, conds, ...)
+  qData <- Biobase::exprs(obj)
+  conds <- Biobase::pData(obj)[,"Condition"]
+  CVDistD_HC(qData, conds, ...)
 }
 
 
@@ -781,8 +782,8 @@ wrapper.CVDistD_HC <- function(obj, ...){
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' CVDistD(Biobase::exprs(Exp1_R25_pept), conds)
 CVDistD <- function(qData, conds=NULL, palette = NULL){
-    
-if (is.null(conds)) {return(NULL)}
+  
+  if (is.null(conds)) {return(NULL)}
   if (is.null(palette)){
     palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
   }else{
@@ -792,57 +793,57 @@ if (is.null(conds)) {return(NULL)}
     }
   }
   
-conditions <- unique(conds)
-n <- length(conditions)
-axis.limits <- matrix(data = 0, nrow = 4, ncol = n)
-for (i in conditions){
+  conditions <- unique(conds)
+  n <- length(conditions)
+  axis.limits <- matrix(data = 0, nrow = 4, ncol = n)
+  for (i in conditions){
     if (length(which(conds == i)) > 1){
-    t <- density(apply(qData[,which(conds == i)], 1, 
-                    function(x) 100*var(x, na.rm=TRUE)/mean(x, na.rm=TRUE)), 
-                 na.rm=TRUE)
-
-    axis.limits[,which(conditions == i)]<- c(min(t$x), max(t$x), min(t$y),max(t$y))
+      t <- density(apply(qData[,which(conds == i)], 1, 
+                         function(x) 100*var(x, na.rm=TRUE)/mean(x, na.rm=TRUE)), 
+                   na.rm=TRUE)
+      
+      axis.limits[,which(conditions == i)]<- c(min(t$x), max(t$x), min(t$y),max(t$y))
     }
-}
-
-lim.x <- range(min(axis.limits[1,]), max(axis.limits[2,]))
-lim.y <- range(min(axis.limits[3,]), max(axis.limits[4,]))
-
-#par(mar = c(5, 5, 6, 3))
-plot(x = NULL
-        , ylab ="Density"
-        , xlab = "CV( log (intensity) )"
-        , xlim = lim.x
-        , ylim = lim.y
-        , las=1
-)
-
-# density by condition
-conditions <- unique(conds)
-col.density = c(1:length(conditions))
-for (i in conditions){
+  }
+  
+  lim.x <- range(min(axis.limits[1,]), max(axis.limits[2,]))
+  lim.y <- range(min(axis.limits[3,]), max(axis.limits[4,]))
+  
+  #par(mar = c(5, 5, 6, 3))
+  plot(x = NULL
+       , ylab ="Density"
+       , xlab = "CV( log (intensity) )"
+       , xlim = lim.x
+       , ylim = lim.y
+       , las=1
+  )
+  
+  # density by condition
+  conditions <- unique(conds)
+  col.density = c(1:length(conditions))
+  for (i in conditions){
     if (length(which(conds == i)) > 1){
-        t <- apply(qData[,which(conds == i)], 1, 
-                function(x) 100*var(x, na.rm=TRUE)/mean(x, na.rm=TRUE))
-    lines(density(t, na.rm = TRUE)
-        , xlab=""
-        , ylab=""
-        , col=col.density[which(conditions == i)]
-    )
+      t <- apply(qData[,which(conds == i)], 1, 
+                 function(x) 100*var(x, na.rm=TRUE)/mean(x, na.rm=TRUE))
+      lines(density(t, na.rm = TRUE)
+            , xlab=""
+            , ylab=""
+            , col=col.density[which(conditions == i)]
+      )
     }
-}
-
-legend("topright"         
-        , legend = conditions
-        , col = col.density
-        , pch = 15
-        , bty = "n"
-        , pt.cex = 2
-        , cex = 1
-        , horiz = FALSE
-        , inset = c(0,0)
-)
-
+  }
+  
+  legend("topright"         
+         , legend = conditions
+         , col = col.density
+         , pch = 15
+         , bty = "n"
+         , pt.cex = 2
+         , cex = 1
+         , horiz = FALSE
+         , inset = c(0,0)
+  )
+  
 }
 
 
@@ -862,11 +863,11 @@ legend("topright"
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' CVDistD_HC(Biobase::exprs(Exp1_R25_pept), conds)
-CVDistD_HC <- function(qData, conds=NULL, palette = NULL){
-    
-    if (is.null(conds)) {
-      warning("The vector of conditions is empty. The plot cannot be drawn.")
-      return(NULL)}
+CVDistD_HC <- function(qData, conds, palette = NULL){
+  
+  if (is.null(conds)) {
+    warning("The vector of conditions is empty. The plot cannot be drawn.")
+    return(NULL)}
   
   conditions <- unique(conds)
   n <- length(conditions)
@@ -881,68 +882,68 @@ CVDistD_HC <- function(qData, conds=NULL, palette = NULL){
   }
   
   
-    
-    # nbSeries = n
-    # series <- list()
-    # for (i in 1:length(conditions)){
-    #     if (length(which(conds == conditions[i])) > 1){
-    #         t <- apply(qData[,which(conds == conditions[i])], 1, 
-    #                    function(x) 100*var(x, na.rm=TRUE)/mean(x, na.rm=TRUE))
-    #         tmp <- data.frame(x = density(t, na.rm = TRUE)$x,
-    #                           y = density(t, na.rm = TRUE)$y)
-    #         series[[i]] <- list(name = conditions[i],
-    #                             data = list_parse(tmp))
-    #     }
-    # }
-
-    h1 <-  highchart() %>% 
-        my_hc_chart(chartType = "spline", zoomType="x") %>%
-        hc_colors(unique(palette)) %>%
-        hc_legend(enabled = TRUE) %>%
-        hc_xAxis(title = list(text = "CV(log(Intensity))")) %>%
-        hc_yAxis(title = list(text = "Density")) %>%
-        hc_tooltip(headerFormat= '',
-                   pointFormat = "<b>{series.name}</b>: {point.y} ",
-                   valueDecimals = 2) %>%
-      my_hc_ExportMenu(filename = "logIntensity") %>%
-        hc_plotOptions(
-            series=list(
-                connectNulls= TRUE,
-                marker=list(
-                    enabled = FALSE)
-            )
-        )
-    
-    minX <- maxX <- 0
-    maxY <- 0
-    for (i in 1:n){
-      if (length(which(conds == conditions[i])) > 1){
-        t <- apply(qData[,which(conds == conditions[i])], 1, 
-                   function(x) 100*var(x, na.rm=TRUE)/mean(x, na.rm=TRUE))
-        tmp <- data.frame(x = density(t, na.rm = TRUE)$x,
-                          y = density(t, na.rm = TRUE)$y)
-        
-        ymaxY <- max(maxY,tmp$y)
-        xmaxY <- tmp$x[which(tmp$y==max(tmp$y))]
-        minX <- min(minX, tmp$x)
-        maxX <- max(maxX, 10*(xmaxY-minX))
-        
-        
+  
+  # nbSeries = n
+  # series <- list()
+  # for (i in 1:length(conditions)){
+  #     if (length(which(conds == conditions[i])) > 1){
+  #         t <- apply(qData[,which(conds == conditions[i])], 1, 
+  #                    function(x) 100*var(x, na.rm=TRUE)/mean(x, na.rm=TRUE))
+  #         tmp <- data.frame(x = density(t, na.rm = TRUE)$x,
+  #                           y = density(t, na.rm = TRUE)$y)
+  #         series[[i]] <- list(name = conditions[i],
+  #                             data = list_parse(tmp))
+  #     }
+  # }
+  
+  h1 <-  highchart() %>% 
+    my_hc_chart(chartType = "spline", zoomType="x") %>%
+    hc_colors(unique(palette)) %>%
+    hc_legend(enabled = TRUE) %>%
+    hc_xAxis(title = list(text = "CV(log(Intensity))")) %>%
+    hc_yAxis(title = list(text = "Density")) %>%
+    hc_tooltip(headerFormat= '',
+               pointFormat = "<b>{series.name}</b>: {point.y} ",
+               valueDecimals = 2) %>%
+    my_hc_ExportMenu(filename = "logIntensity") %>%
+    hc_plotOptions(
+      series=list(
+        connectNulls= TRUE,
+        marker=list(
+          enabled = FALSE)
+      )
+    )
+  
+  minX <- maxX <- 0
+  maxY <- 0
+  for (i in 1:n){
+    if (length(which(conds == conditions[i])) > 1){
+      t <- apply(qData[,which(conds == conditions[i])], 1, 
+                 function(x) 100*var(x, na.rm=TRUE)/mean(x, na.rm=TRUE))
+      tmp <- data.frame(x = density(t, na.rm = TRUE)$x,
+                        y = density(t, na.rm = TRUE)$y)
+      
+      ymaxY <- max(maxY,tmp$y)
+      xmaxY <- tmp$x[which(tmp$y==max(tmp$y))]
+      minX <- min(minX, tmp$x)
+      maxX <- max(maxX, 10*(xmaxY-minX))
+      
+      
       h1 <- h1 %>% hc_add_series(data=tmp, name=conditions[i]) }
-    }
-    
-    h1 <- h1 %>%
-      hc_chart(
+  }
+  
+  h1 <- h1 %>%
+    hc_chart(
       events = list(
         load = JS(paste0("function(){
                          var chart = this;
                          this.xAxis[0].setExtremes(",minX,",",maxX, ");
                          this.showResetZoom();}"))
-        )
-        )
-
-    return(h1)
-
+      )
+    )
+  
+  return(h1)
+  
 }
 
 
@@ -962,9 +963,9 @@ CVDistD_HC <- function(qData, conds=NULL, palette = NULL){
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.corrMatrixD(Exp1_R25_pept)
 wrapper.corrMatrixD <- function(obj, rate=5){
-qData <- Biobase::exprs(obj)
-samplesData <- Biobase::pData(obj)
-corrMatrixD(qData, samplesData, rate)
+  qData <- Biobase::exprs(obj)
+  samplesData <- Biobase::pData(obj)
+  corrMatrixD(qData, samplesData, rate)
 }
 
 ##' Builds a correlation matrix based on a \code{MSnSet} object. 
@@ -980,10 +981,10 @@ corrMatrixD(qData, samplesData, rate)
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.corrMatrixD_HC(Exp1_R25_pept)
 wrapper.corrMatrixD_HC <- function(obj, rate=0.5){
-    qData <- Biobase::exprs(obj)
-    samplesData <- Biobase::pData(obj)
-    data <- cor(qData,use = 'pairwise.complete.obs')
-    corrMatrixD_HC(data,samplesData, rate)
+  qData <- Biobase::exprs(obj)
+  samplesData <- Biobase::pData(obj)
+  data <- cor(qData,use = 'pairwise.complete.obs')
+  corrMatrixD_HC(data,samplesData, rate)
 }
 
 
@@ -1005,32 +1006,32 @@ wrapper.corrMatrixD_HC <- function(obj, rate=0.5){
 ##' samplesData <- Biobase::pData(Exp1_R25_pept)
 ##' corrMatrixD(qData, samplesData)
 corrMatrixD <- function(qData, samplesData, gradientRate = 5){
-Var1 <- Var2 <- value <- NULL
-
-for (j in 1:length(colnames(qData))){
+  Var1 <- Var2 <- value <- NULL
+  
+  for (j in 1:length(colnames(qData))){
     colnames(qData)[j] <- paste(as.character(samplesData[j,2:ncol(samplesData)]), 
                                 collapse =" ")
-}
-
-z <- cor(qData,use = 'pairwise.complete.obs')
-text <- element_text(colour="black", size = 16, face = "bold")
-d <- qplot(x = Var1, 
-            y = Var2, 
-            data = melt(z), 
-            fill = value, 
-            geom = "tile") +
+  }
+  
+  z <- cor(qData,use = 'pairwise.complete.obs')
+  text <- element_text(colour="black", size = 16, face = "bold")
+  d <- qplot(x = Var1, 
+             y = Var2, 
+             data = melt(z), 
+             fill = value, 
+             geom = "tile") +
     theme(axis.text = element_text(size=16),
-        axis.title = element_text(size=20, face="bold"),
-        axis.text.x = element_text(angle=30, vjust=1, hjust=1),
-        legend.text = text,
-        legend.title = text) +
+          axis.title = element_text(size=20, face="bold"),
+          axis.text.x = element_text(angle=30, vjust=1, hjust=1),
+          legend.text = text,
+          legend.title = text) +
     labs(x = "", y = "") +
-
+    
     scale_fill_gradientn (
-    colours=colorRampPalette (c ("white", "lightblue","darkblue")) (101),
-    values = c(pexp(seq(0,1,0.01), rate=gradientRate),1), limits=c(0,1))
-
-plot(d)
+      colours=colorRampPalette (c ("white", "lightblue","darkblue")) (101),
+      values = c(pexp(seq(0,1,0.01), rate=gradientRate),1), limits=c(0,1))
+  
+  plot(d)
 }
 
 
@@ -1055,59 +1056,59 @@ plot(d)
 ##' res <- cor(qData,use = 'pairwise.complete.obs')
 ##' corrMatrixD_HC(res, samplesData)
 corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
-    
-    df <- as.data.frame(object)
-    
-    if (!is.null(samplesData)){
-        for (j in 1:ncol(df)){
-            names(df)[j] <- paste(as.character(samplesData[j,2:ncol(samplesData)]), 
-                                        collapse =" ")
-        }
-        }
-    is.num <- sapply(df, is.numeric)
-    df[is.num] <- lapply(df[is.num], round, 2)
-    dist <- NULL
-    
-    x <- y <- names(df)
-    
-    df <- tbl_df(cbind(x = y, df)) %>% 
-        gather(y, dist, -x) %>% 
-        mutate(x = as.character(x),
-               y = as.character(y)) %>% 
-        left_join(tibble(x = y,
-                             xid = seq(length(y)) - 1), by = "x") %>% 
-        left_join(tibble(y = y,
-                             yid = seq(length(y)) - 1), by = "y")
-    
-    ds <- df %>% 
-        dplyr::select("xid", "yid", "dist") %>% 
-        list_parse2()
-    
-    fntltp <- JS("function(){
+  
+  df <- as.data.frame(object)
+  
+  if (!is.null(samplesData)){
+    for (j in 1:ncol(df)){
+      names(df)[j] <- paste(as.character(samplesData[j,2:ncol(samplesData)]), 
+                            collapse =" ")
+    }
+  }
+  is.num <- sapply(df, is.numeric)
+  df[is.num] <- lapply(df[is.num], round, 2)
+  dist <- NULL
+  
+  x <- y <- names(df)
+  
+  df <- tbl_df(cbind(x = y, df)) %>% 
+    gather(y, dist, -x) %>% 
+    mutate(x = as.character(x),
+           y = as.character(y)) %>% 
+    left_join(tibble(x = y,
+                     xid = seq(length(y)) - 1), by = "x") %>% 
+    left_join(tibble(y = y,
+                     yid = seq(length(y)) - 1), by = "y")
+  
+  ds <- df %>% 
+    dplyr::select("xid", "yid", "dist") %>% 
+    list_parse2()
+  
+  fntltp <- JS("function(){
                   return this.series.xAxis.categories[this.point.x] + ' ~ ' +
                          this.series.yAxis.categories[this.point.y] + ': <b>' +
                          Highcharts.numberFormat(this.point.value, 2)+'</b>';
                ; }")
-    cor_colr <- list( list(0, '#FF5733'),
-                      list(0.5, '#F8F5F5'),
-                      list(1, '#2E86C1')
-    )
-    highchart() %>% 
-        my_hc_chart(chartType = "heatmap") %>% 
-        hc_xAxis(categories = y, title = NULL) %>% 
-        hc_yAxis(categories = y, title = NULL) %>% 
-        hc_add_series(data = ds) %>% 
-        hc_plotOptions(
-            series = list(
-                boderWidth = 0,
-                dataConditions = list(enabled = TRUE),
-                dataLabels = list(enabled = TRUE)
-            )) %>% 
-        hc_tooltip(formatter = fntltp) %>% 
-        hc_legend(align = "right", layout = "vertical",
-                  verticalAlign="middle") %>% 
-        hc_colorAxis(  stops= cor_colr,min=rate,max=1) %>%
-      my_hc_ExportMenu(filename = "corrMatrix")
+  cor_colr <- list( list(0, '#FF5733'),
+                    list(0.5, '#F8F5F5'),
+                    list(1, '#2E86C1')
+  )
+  highchart() %>% 
+    my_hc_chart(chartType = "heatmap") %>% 
+    hc_xAxis(categories = y, title = NULL) %>% 
+    hc_yAxis(categories = y, title = NULL) %>% 
+    hc_add_series(data = ds) %>% 
+    hc_plotOptions(
+      series = list(
+        boderWidth = 0,
+        dataConditions = list(enabled = TRUE),
+        dataLabels = list(enabled = TRUE)
+      )) %>% 
+    hc_tooltip(formatter = fntltp) %>% 
+    hc_legend(align = "right", layout = "vertical",
+              verticalAlign="middle") %>% 
+    hc_colorAxis(  stops= cor_colr,min=rate,max=1) %>%
+    my_hc_ExportMenu(filename = "corrMatrix")
 }
 
 
@@ -1134,14 +1135,14 @@ corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
 ##' wrapper.heatmapD(obj)
 ##' }
 wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete", 
-                            dendro = FALSE){
-qData <- Biobase::exprs(obj)
-for (j in 1:length(colnames(qData))){
+                              dendro = FALSE){
+  qData <- Biobase::exprs(obj)
+  for (j in 1:length(colnames(qData))){
     colnames(qData)[j] <- paste(as.character(Biobase::pData(obj)[j,2:ncol(Biobase::pData(obj))]), 
                                 collapse =" ")
-}
-
-heatmapD(qData, distance, cluster, dendro)
+  }
+  
+  heatmapD(qData, distance, cluster, dendro)
 }
 
 
@@ -1168,67 +1169,67 @@ heatmapD(qData, distance, cluster, dendro)
 ##' heatmapD(qData)
 ##' }
 heatmapD <- function(qData, distance="euclidean", cluster="complete", dendro = FALSE){
-##Check parameters
-# paramdist <- c("euclidean", "manhattan") 
-# if (!(distance %in% paramdist)){
-#     stop("Param distance is not correct.")
-#     return (NULL)
-# }
-# 
-# paramcluster <- c("ward.D", "average")
-# if (!(cluster %in%  paramcluster)){
-#     stop("Param clustering is not correct.")
-#     return (NULL)
-# }
-
-
-# if (isTRUE(dendro) && getNumberOfEmptyLines(qData) != 0)  {
-#     stop("Your dataset contains empty lines: the dendrogram cannot 
-# be computed.
-#         Please filter or impute missing values before.")
-#     return (NULL)
-# }
-# else {
-    .data <- matrix(qData, 
-                    ncol = ncol(qData), 
-                    byrow = FALSE,
-                    dimnames = list(rownames(qData), colnames(qData))
-    )
-    colors = c(seq(-3, -2, length=100),
-                seq(-2, 0.5, length=100),
-                seq(0.5, 6, length=100))
-    heatmap.color <- colorRampPalette(c("green", "red"))(n = 1000)
+  ##Check parameters
+  # paramdist <- c("euclidean", "manhattan") 
+  # if (!(distance %in% paramdist)){
+  #     stop("Param distance is not correct.")
+  #     return (NULL)
+  # }
+  # 
+  # paramcluster <- c("ward.D", "average")
+  # if (!(cluster %in%  paramcluster)){
+  #     stop("Param clustering is not correct.")
+  #     return (NULL)
+  # }
+  
+  
+  # if (isTRUE(dendro) && getNumberOfEmptyLines(qData) != 0)  {
+  #     stop("Your dataset contains empty lines: the dendrogram cannot 
+  # be computed.
+  #         Please filter or impute missing values before.")
+  #     return (NULL)
+  # }
+  # else {
+  .data <- matrix(qData, 
+                  ncol = ncol(qData), 
+                  byrow = FALSE,
+                  dimnames = list(rownames(qData), colnames(qData))
+  )
+  colors = c(seq(-3, -2, length=100),
+             seq(-2, 0.5, length=100),
+             seq(0.5, 6, length=100))
+  heatmap.color <- colorRampPalette(c("green", "red"))(n = 1000)
+  
+  
+  if (dendro){ .dendro = "row"} else {.dendro = "none"}
+  p <- heatmap.2(
+    x=t(.data),
+    distfun = function(x) {
+      x[is.na(x)] <- -1e5
+      dist(x, method=distance)
+    },
+    hclustfun = function(x) {
+      x[is.na(x)] <- -1e5
+      hclust(x, method=cluster)
+    },
+    dendrogram =.dendro,
+    Rowv=TRUE,
+    col=heatmap.color ,
+    density.info='none',
+    key=TRUE,
+    trace="none",
+    scale="none",
+    #srtCol=45,
+    labCol="",
+    margins=c(4,12),
+    cexRow=1.5,
+    keysize = 1.5,
+    lhei = c(1.5, 9),
+    lwid = c(1.5, 4),
+    lmat = rbind(4:3, 2:1)
     
-    
-    if (dendro){ .dendro = "row"} else {.dendro = "none"}
-    p <- heatmap.2(
-        x=t(.data),
-        distfun = function(x) {
-            x[is.na(x)] <- -1e5
-            dist(x, method=distance)
-            },
-        hclustfun = function(x) {
-            x[is.na(x)] <- -1e5
-            hclust(x, method=cluster)
-            },
-        dendrogram =.dendro,
-        Rowv=TRUE,
-        col=heatmap.color ,
-        density.info='none',
-        key=TRUE,
-        trace="none",
-        scale="none",
-        #srtCol=45,
-        labCol="",
-        margins=c(4,12),
-        cexRow=1.5,
-        keysize = 1.5,
-        lhei = c(1.5, 9),
-        lwid = c(1.5, 4),
-        lmat = rbind(4:3, 2:1)
-        
-    )
-#    }
+  )
+  #    }
 }
 
 
