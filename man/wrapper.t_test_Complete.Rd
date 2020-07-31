@@ -20,9 +20,9 @@ This function is a wrapper xxxxx
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept[1:1000]
-keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
-obj <- mvFilterFromIndices(obj, keepThat)
-ttest <- wrapper.t_test_Complete(obj, 1)
+keepThat <- DAPAR::mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+obj <- DAPAR::mvFilterFromIndices(obj, keepThat)
+ttest <- wrapper.t_test_Complete(obj)
 }
 \author{
 Samuel Wieczorek

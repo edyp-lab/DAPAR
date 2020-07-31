@@ -55,7 +55,7 @@ importFrom("stringr", "str_match_all")
 importFrom("clusterProfiler", "bitr", "enrichGO", "groupGO")
 importFrom("vsn","vsn2","predict")
 import('Matrix')
-#import('igraph')
+import('igraph')
 
 export(
 "writeMSnsetToExcel",

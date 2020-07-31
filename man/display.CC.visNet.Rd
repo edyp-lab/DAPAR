@@ -35,6 +35,7 @@ X <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein_group_IDs", FALSE)
 ll <- get.pep.prot.cc(X)
 g <- buildGraph(ll[[1]], X)
 display.CC.visNet(g)
+
 }
 \author{
 Thomas Burger, Samuel Wieczorek

@@ -414,6 +414,9 @@ samLRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s1){
 ##' s: selected regularization hyperparameter for llr.map.
 ##' wchi2: weight used to make llr.map chi2-distributed under H0.
 ##' @author Thomas Burger, Laurent Jacob
+##' 
+##' @importFrom graph graphAM connComp
+##' 
 pepa.test <- function(X, y, n1, n2, global=FALSE, use.lm=FALSE){
     
     n <- n1+n2

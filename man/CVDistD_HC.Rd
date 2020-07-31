@@ -4,7 +4,7 @@
 \alias{CVDistD_HC}
 \title{Distribution of CV of entities}
 \usage{
-CVDistD_HC(qData, conds = NULL, palette = NULL)
+CVDistD_HC(qData, conds, palette = NULL)
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}

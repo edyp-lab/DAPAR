@@ -287,6 +287,9 @@ aggregateSum <- function(obj.pep, X){
 ##' obj.pep <- Exp1_R25_pept[1:1000]
 ##' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 ##' aggregateIterParallel(obj.pep, X)
+##' 
+##' @importFrom foreach foreach
+##' 
 aggregateIterParallel <- function(obj.pep, X, init.method='Sum', method='Mean', n=NULL){
   
   doParallel::registerDoParallel()

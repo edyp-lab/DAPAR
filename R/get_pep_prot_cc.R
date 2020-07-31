@@ -8,6 +8,9 @@
 ##' utils::data(Exp1_R25_pept, package='DAPARdata') 
 ##' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
 ##' ll <- get.pep.prot.cc(X)
+##' 
+##' @importFrom graph graphAM connComp
+##' 
 get.pep.prot.cc <- function(X){
   if (is.null(X)){
     warning("The adjacency matrix is empty")
@@ -183,6 +186,9 @@ buildGraph <- function(The.CC, X){
 ##' ll <- get.pep.prot.cc(X)
 ##' g <- buildGraph(ll[[1]], X)
 ##' display.CC.visNet(g)
+##' 
+##' @importFrom igraph layout_nicely
+##' 
 display.CC.visNet <- function(g, layout = layout_nicely, 
                        obj=NULL,
                        prot.tooltip=NULL, 

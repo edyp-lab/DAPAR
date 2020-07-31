@@ -208,20 +208,15 @@ boxPlotD <- function(obj,conds, legend=NULL,palette=NULL){
 ##' @seealso \code{\link{densityPlotD_HC}}
 ##' @examples
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' boxPlotD_HC(Exp1_R25_pept)
+##' legend <- Biobase::pData(Exp1_R25_pept)[,"Sample.name"]
+##' boxPlotD_HC(Exp1_R25_pept, legend)
 boxPlotD_HC <- function(obj, legend=NULL, palette = NULL){
   
   
   qData <- Biobase::exprs(obj)
-  #conds <- Biobase::pData(obj)[,"Condition"]
   if( is.null(legend)){legend <- Biobase::pData(obj)[,"Sample.name"]}
   if (is.null(palette)){ palette <- rep("#FFFFFF", ncol(qData))
-    # pal <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
-    # for (i in 1:ncol(qData)){
-    #   palette[i] <- pal[ which(conds[i] == unique(conds))]
-    # }
-  }
-  else {
+  } else {
     if (length(palette) != ncol(qData)){
       warning("The color palette has not the same dimension as the number of samples")
       return(NULL)
@@ -660,7 +655,7 @@ densityPlotD_HC <- function(obj, legend=NULL, palette = NULL){
   
   qData <- Biobase::exprs(obj)
   
-  if (is.null(legend) ) { legend<- Biobase::pData(obj)[,"Condition"] }
+  if (is.null(legend) ) { legend <- Biobase::pData(obj)[,"Condition"]}
   
   # if (is.null(palette)){
   #   nbConds <- length(unique(condsForLegend))
@@ -673,6 +668,7 @@ densityPlotD_HC <- function(obj, legend=NULL, palette = NULL){
   #   
   # }else{
   
+
   h1 <-  highchart() %>% 
     hc_title(text = "Density plot") %>% 
     my_hc_chart(chartType = "spline", zoomType="x") %>%
@@ -694,29 +690,27 @@ densityPlotD_HC <- function(obj, legend=NULL, palette = NULL){
       )
     )
   
-  
   if (!is.null(palette)) {
     if (length(palette) != ncol(qData)){
       warning("The color palette has not the same dimension as the number of samples")
       return(NULL)
     }
-    h1 <- h1 %>% hc_colors(palette)
+    h1 <- h1 %>% hc_colors(unique(palette))
   }
   
-  if (is.null(legend)) {
-    legend <- paste0("series", 1:ncol(qData))
-  }
+  
+  
   
   
   for (i in 1:ncol(qData)){
     
-    tmp <- data.frame(x = density(qData[,i], na.rm = TRUE)$x, 
+    tmp <- data.frame(x = density(qData[,i], na.rm = TRUE)$x,
                       y = density(qData[,i], na.rm = TRUE)$y)
-    
-    h1 <- h1 %>% hc_add_series(data=list_parse(tmp), name=legend[i]) 
+
+    h1 <- h1 %>% hc_add_series(data=list_parse(tmp), name=unique(legend)[i])
     
   }
-  
+
   
   return(h1)
   
