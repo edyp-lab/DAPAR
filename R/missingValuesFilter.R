@@ -588,14 +588,14 @@ return(keepThat)
 ##' @param intensities_proportion float between 0 and 1 corresponding to the proportion
 ##' of intensities to keep in the lines.
 ##' @param mode character string. Three possibilities corresponding to the
-##' description above: "whole_matrix", "all_cond" and "at_least_1_cond".
+##' description above: "None", whole_matrix", "all_cond" and "at_least_1_cond".
 ##' @return the object given as input but with the lines not respecting the
 ##' proportion of NA requested in less.
 filterByProportion <- function(obj, intensities_proportion, mode = NULL){
   # check if mode is valid
-  if(!(mode %in% c("whole_matrix", "all_cond", "at_least_1_cond"))){
+  if(!(mode %in% c("None","whole_matrix", "all_cond", "at_least_1_cond"))){
     stop(stringr::str_glue("Wrong mode: {mode} is not a valid string.
-                     Please choose between 'whole_matrix', 'all_cond' or 'at_least_1_cond'.",
+                     Please choose between 'None', whole_matrix', 'all_cond' or 'at_least_1_cond'.",
                            call. =FALSE))
   }
   # check if intensities_proportion is valid
@@ -621,8 +621,9 @@ filterByProportion <- function(obj, intensities_proportion, mode = NULL){
   # the protein order, we cheat by transforming feature into a factor.
   longer_intensities$feature <- factor(longer_intensities$feature,
                                        levels = unique(longer_intensities$feature))
-
-  if(mode == "whole_matrix"){
+  if(mode == "None"){
+    to_keep <- obj
+  }else if(mode == "whole_matrix"){
     nb_samples <- ncol(intensities)
     threshold <- ceiling(nb_samples*x)
     print(stringr::str_glue("missing value threshold {threshold}"))
