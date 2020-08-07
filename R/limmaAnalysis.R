@@ -518,7 +518,7 @@ limmaCompleteTest <- function(qData, sTab, comp.type="OnevsOne"){
                         "P_Value" = fit_pvalue)
         }
     }
-  return(res.l)
+    return(res.l)
 }
 
 
