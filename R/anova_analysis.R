@@ -44,8 +44,8 @@ wrapperClassic1wayAnova <- function(obj, post_hoc = NULL){
     if(post_hoc == "None" || is.null(post_hoc)){
         anova_tests <- as.data.frame(t(apply(qData,1,function(x) unlist(summary(classic1wayAnova(x,conditions=as.factor(sTab$Condition)))))))
         results <- dplyr::select(anova_tests, `Pr(>F)1`)
-        to_return <- list("logFC" = data.frame("anova1way" = matrix(NA, nrow = nrow(results))),
-                          "P_Value" = data.frame("anova1way" = p.adjust(results$`Pr(>F)1`, method = "fdr")))
+        to_return <- list("logFC" = data.frame("anova1way" = matrix(NA, nrow = nrow(results)), row.names = rownames(results)),
+                          "P_Value" = data.frame("anova1way" = p.adjust(results$`Pr(>F)1`, method = "fdr"), row.names = rownames(results)))
     }else if(post_hoc == "TukeyHSD"){
         anova_tests <- t(apply(qData,1, classic1wayAnova, conditions=as.factor(sTab$Condition)))
         names(anova_tests) <- rownames(qData)
