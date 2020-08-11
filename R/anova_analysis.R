@@ -21,8 +21,15 @@ classic1wayAnova <- function(current_line, conditions){
 ##' @param post_hoc a character string corresponding to the post-hoc test to
 ##' perform. Possible values are "TukeyHSD" and "Dunnett". See details of
 ##' \code{postHocTest()} function to choose the appropriate one.
-##' @return A dataframe of two columns. The first contains the p-values and the
-##' second the adjusted p-values obtained withe Benjamini-Hochberg (FDR) method.
+##' @details This function allows to perform a 1-way Analysis of Variance. Also
+##' computes the post-hoc tests if the \code{post_hoc} parameter is specified.
+##' There are two possible post-hoc tests: the Tukey Honest Significant Differences
+##' (specified as "TukeyHSD") and the Dunnett test (specified as "Dunnett").
+##' @return A list of two dataframes. First one called "LogFC" contains
+##' all pairwise comparisons logFC values (one column for one comparison) for
+##' each analysed feature (Except in the case without post-hoc testing, for
+##' which NAs are returned.); The second one named "P_Value" contains the
+##' corresponding pvalues.
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
