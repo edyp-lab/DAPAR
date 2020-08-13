@@ -1,0 +1,218 @@
+##' Average protein/peptide abundances for each condition studied
+##'
+##' @description Calculate the average of the abundances for each protein in
+##' each condition for an ExpressionSet or MSnSet. Needs to have the array
+##' expression data ordered in the same way as the phenotype data (columns of
+##' the array data in the same order than the condition column in the phenotype
+##' data).
+##'
+##' @param ESet_obj ExpressionSet object containing all the data
+##' @return a tibble in wide format providing the mean of
+##' abondances for each protein in each condition.
+##' @author Hélène Borges
+##' @examples
+##' averageIntensities(my_expresion_set)
+averageIntensities <- function(ESet_obj){
+    intensities <- Biobase::exprs(ESet_obj)
+    sTab <- Biobase::pData(ESet_obj)
+    sTab$Condition <- as.factor(sTab$Condition)
+    intensities_t <- as.data.frame(t(intensities))
+    intensities_t <- dplyr::bind_cols(intensities_t, condition = sTab$Condition, sample = rownames(intensities_t))
+    tbl_intensities <- dplyr::as_tibble(intensities_t, rownames = NA)
+    longer_intensities <- tbl_intensities %>%
+        tidyr::pivot_longer(-c(condition,sample), names_to = "feature", values_to = "intensity")
+    mean_intensities <- longer_intensities %>%
+        dplyr::group_by(condition, feature) %>%
+        dplyr::summarise(mean = mean(intensity))
+    mean_intensities_wide <- mean_intensities %>%
+        tidyr::pivot_wider(names_from = condition, values_from = mean)
+    return(mean_intensities_wide)
+}
+
+
+
+##' Prepare the data for subsequent clustering
+##'
+##' @description The first step is to standardize the data (with the \code{Mfuzz}
+##' package). Then the function checks that these data are clusterizable or not
+##'  (use of [diptest::dip.test()] to determine whether the distribution is unimodal or
+##'  multimodal). Finally, it determines the "optimal" k by the Gap statistic
+##'  approach.
+##'
+##' @param averaged_data the tibble returned by the function average_intensities
+##' @return a list of 3 elements:
+##' * standardized: corresponds to the standardized means.
+##' * dip_test: the result of the clusterability of the data
+##' * gap_cluster: the gap statistic obtained with the function [cluster::clusGap()].
+##' @author Hélène Borges
+##' @examples
+##' checkClusterability(protein_means)
+checkClusterability <- function(averaged_data){
+    averaged_data <- as.data.frame(averaged_data)
+    rownames(averaged_data) <- averaged_data[,1]
+    # on standardise les données pour les rendre comparables
+    eset <- Biobase::ExpressionSet(assayData = as.matrix(averaged_data[,-1]))
+    eset_s <- Mfuzz::standardise(eset)
+    standards <- eset_s@assayData$exprs
+    # on vérifie la clusterabilité des données
+    dip_res <- diptest::dip.test(x = standards)
+    # d.power = 2 correspond au critère de Tibshirani. B = 500 permet d'avoir
+    # des résultats stables d'une simulation à l'autre.
+    gap_cluster <- cluster::clusGap(standards, FUNcluster = kmeans, nstart = 20, K.max = 10, d.power = 2, B = 500)
+
+    return(list(
+        "standardized" = dplyr::bind_cols(feature = dplyr::as_tibble(averaged_data[,1]), dplyr::as_tibble(standards)),
+        "dip_test" = dip_res,
+        "gap_cluster" = gap_cluster
+    ))
+}
+
+##' Visualize the clusters according to pvalue thresholds
+##'
+##' @param dat the standardize data returned by the function [checkClusterability()]
+##' @param clust_model the clustering model obtained with dat.
+##' @param adjusted_pValues vector of the adjusted pvalues obtained for each protein with
+##'  a 1-way ANOVA (for example obtained with the function [wrapperClassic1wayAnova()]).
+##' @param color_th the thresholds of pvalues for the coloring of the profiles.
+##' @param ttl title for the plot.
+##' @param subttl subtitle for the plot.
+##' @return a ggplot object
+##' @author Hélène Borges
+##' @examples
+##' test_anova <- wrapperClassic1wayAnova(fibrose)
+##' vizu <- visualizeClusters(dat = checked_means$standardized,
+##'                           clust_model = km_model,
+##'                           adjusted_pValues = test_anova$P_Value$anova1way,
+##'                           ttl = "Clustering of protein profiles")
+visualizeClusters <- function(dat, clust_model, adjusted_pValues, color_th, ttl = "", subttl = ""){
+    dat$FDR_threshold <- cut(adjusted_pValues, c(-Inf,0.001,0.005,0.01,0.05,Inf), c("<0.001", "<0.005", "<0.01", "<0.05", ">0.05"))
+    dat$FDR_threshold <- factor(dat$FDR_threshold,
+                                levels = c(">0.05", "<0.05", "<0.01","<0.005","<0.001"))
+    if(methods::is(clust_model, "kmeans")){
+        dat$cluster <- as.factor(km_model$cluster)
+
+    }else if(methods::is(clust_model, "APResult")){
+        dat$cluster <- NA
+        for(k in seq_len(length(clust_model@clusters))){
+            dat$cluster[clust_model@clusters[[k]]] <- k
+        }
+
+    }else{
+        message("Wrong model. Currently, only the Kmeans and the Affinity
+                Propagation models are supported.")
+        return(NULL)
+    }
+    melted <- reshape2::melt(dat,
+                             id.vars = c("value", "cluster", "FDR_threshold"),
+                             value.name = "intensity",
+                             variable.name = "Condition")
+    palette2use <- c("#DEDEDE","#FFC125", "#FF8C00", "#CD3700", "#8B0000")
+    names(palette2use) <- levels(dat$FDR_threshold)
+    colScale <- ggplot2::scale_colour_manual(name = "FDR threshold",
+                                             values = palette2use)
+
+    return(ggplot2::ggplot(data = melted,
+                           ggplot2::aes(x = Condition, y = intensity, group = value, colour = FDR_threshold)) +
+               ggplot2::geom_line() +
+               ggplot2::facet_wrap(~ cluster) +
+               colScale +
+               ggplot2::xlab("Condition") +
+               ggplot2::ylab("Standardized averaged intensity") +
+               ggplot2::labs(title = ttl, subtitle = subttl) +
+               ggplot2::theme(
+                   plot.title = ggplot2::element_text(size = 15, face = "bold"),
+                   plot.subtitle = ggplot2::element_text(size = 12),
+                   panel.spacing = ggplot2::unit(1.5, "lines"),
+                   panel.background = ggplot2::element_rect(fill = NA),
+                   panel.grid.major = ggplot2::element_line(linetype = 'solid',
+                                                            size = 0.25,
+                                                            colour = "#f6f6f6"),
+                   panel.grid.minor = ggplot2::element_blank()
+               )
+    )
+}
+
+
+
+##' Run a clustering of protein/peptide abundance profiles.
+##'
+##' @description This function does all of the steps necessary to obtain a
+##' clustering model and its graph from average abundances of proteins/peptides.
+##'  It is possible to carry out either a kmeans model or an affinity
+##'  propagation model. See details for exact steps.
+##' @param obj ExpressionSet or MSnSet object.
+##' @param clustering_method character string. Three possible values are "kmeans",
+##' "affinityProp" and "affinityPropReduced. See the details section for more
+##' explanation.
+##' @param k_clusters integer or NULL. Number of clusters to run the kmeans
+##' algorithm. If `clustering_method` is set to "kmeans" and this parameter is
+##' set to NULL, then a kmeans model will be realized with an optimal number of
+##' clusters `k` estimated by the Gap statistic method. Ignored for the Affinity
+##'  propagation model.
+##' @param conditions_order
+##' @param adjusted_pvals vector of adjusted pvalues returned by the [wrapperClassic1wayAnova()]
+##' @param coloration_thresholds
+##' @details The first step consists in averaging the abundances of
+##' proteins/peptides according to the different conditions defined in the
+##' phenotype data of the expressionSet / MSnSet. Then we standardize the data,
+##' check the clusterability of the data and estimate a number of clusters using
+##'  the gap statistic method. This optimal k is used only in the case where we
+##'  ask to realize a kmeans model without specifying the desired number of
+##'  clusters (`clustering_method =" kmeans "` and `k_clusters = NULL`). We
+##'  advise however to specify a k for the kmeans, because the gap stat gives
+##'  the smallest possible k, whereas in biology a small number of clusters can
+##'  turn out to be uninformative. If you want to run a kmeans but you don't
+##'  know what number of clusters to give, you can let the pipeline run the
+##'  first time without specifying `k_clusters`, in order to view the profiles
+##'  the first time and choose by the following is a more appropriate value of
+##'  k. If it is assumed that the data can be structured with a large number of
+##'  clusters, it is recommended to use the affinity propagation model instead.
+##'  This method simultaneously considers all the data as exemplary potentials,
+##'  unlike hard clustering (kmeans) which initializes with a number k of points
+##'   taken at random. The "affinityProp" model will use a q parameter set to NA,
+##'   meaning that exemplar preferences are set to the median of non-Inf values
+##'   in the similarity matrix (set q to 0.5 will be the same). The
+##'   "affinityPropReduced" model will use a q set to 0, meaning that exemplar
+##'   preferences are set to the sample quantile with threshold 0 of non-Inf
+##'   values. This should lead to a smaller number of final clusters.
+##' @author Hélène Borges
+##' @return a list of 2 elements: First is the model, the second is the ggplot
+##' of profiles clustering.
+##' @references
+##' Tibshirani, R., Walther, G. and Hastie, T. (2001). Estimating the number of data clusters via the Gap statistic. *Journal of the Royal Statistical Society* B, 63, 411–423.
+##'
+##' Frey, B. J. and Dueck, D. (2007) Clustering by passing messages between data points. *Science* 315, 972-976. DOI: \href{https://science.sciencemag.org/content/315/5814/972}{10.1126/science.1136800}
+##'
+##' @examples
+##' test_anova <- wrapperClassic1wayAnova(fibrose)
+##' test_clust_pipeline <- runClustering(obj = fibrose,
+##'                                      clustering_method = "affinityPropReduced", adjusted_pvals = test_anova$P_Value$anova1way)
+runClustering <- function(obj, clustering_method, k_clusters = NULL, adjusted_pvals, coloration_thresholds = NULL){
+    res <- list("model" = NULL, "ggplot" = NULL)
+    means <- averageIntensities(obj)
+    # TODO réordonner les conditions si demandé
+    checked_means <- checkClusterability(means)
+    if(clustering_method == "affinityProp"){
+        res$model <- apcluster::apcluster(apcluster::negDistMat(r=2), checked_means$standardized[,-1])
+
+    }else if(clustering_method == "affinityPropReduced"){
+        res$model <- apcluster::apcluster(apcluster::negDistMat(r=2), checked_means$standardized[,-1], q=0)
+    }else if(clustering_method == "kmeans"){
+        if(is.null(k_clusters)){
+            best_k <- checked_means$gap_cluster
+        }else{
+            best_k <- k_clusters
+        }
+        res$model <- kmeans(checked_means$standards, centers = best_k, nstart = 25)
+    }else{
+        return(NULL)
+    }
+    res$ggplot <- visualizeClusters(dat = checked_means$standardized,
+                                    clust_model = res$model,
+                                    adjusted_pValues = adjusted_pvals,
+                                    color_th = coloration_thresholds,
+                                    ttl = "",
+                                    subttl = ""
+    )
+    return(res)
+}
