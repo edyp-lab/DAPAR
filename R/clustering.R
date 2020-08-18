@@ -149,9 +149,21 @@ visualizeClusters <- function(dat, clust_model, adjusted_pValues, color_th, ttl 
 ##' set to NULL, then a kmeans model will be realized with an optimal number of
 ##' clusters `k` estimated by the Gap statistic method. Ignored for the Affinity
 ##'  propagation model.
-##' @param conditions_order
+##' @param conditions_order vector specifying the order of the Condition factor
+##' levels in the phenotype data. Default value is NULL, which means that it is the
+##' order of the condition present in the phenotype data of "obj" which is
+##' taken to create the profiles.
 ##' @param adjusted_pvals vector of adjusted pvalues returned by the [wrapperClassic1wayAnova()]
-##' @param coloration_thresholds
+##' @param ttl the title for the final plot
+##' @param subttl the subtitle for the final plot
+##' @param coloration_thresholds vector containing the different threshold
+##' values to be used to color the profiles according to their adjusted pvalue.
+##' The default value (NULL) generates 4 thresholds: [0.001, 0.005, 0.01, 0.05].
+##'  Thus, there will be 5 intervals therefore 5 colors: the pvalues <0.001,
+##'  those between 0.001 and 0.005, those between 0.005 and 0.01, those between
+##'  0.01 and 0.05, and those> 0.05. The highest given value will be considered
+##'  as the threshold of insignificance, the profiles having a pvalue> this
+##'  threshold value will then be colored in gray.
 ##' @details The first step consists in averaging the abundances of
 ##' proteins/peptides according to the different conditions defined in the
 ##' phenotype data of the expressionSet / MSnSet. Then we standardize the data,
@@ -176,7 +188,7 @@ visualizeClusters <- function(dat, clust_model, adjusted_pValues, color_th, ttl 
 ##'   preferences are set to the sample quantile with threshold 0 of non-Inf
 ##'   values. This should lead to a smaller number of final clusters.
 ##' @author Hélène Borges
-##' @return a list of 2 elements: First is the model, the second is the ggplot
+##' @return a list of 2 elements: "model" is the clustering model, "ggplot" is the ggplot
 ##' of profiles clustering.
 ##' @references
 ##' Tibshirani, R., Walther, G. and Hastie, T. (2001). Estimating the number of data clusters via the Gap statistic. *Journal of the Royal Statistical Society* B, 63, 411–423.
@@ -187,10 +199,28 @@ visualizeClusters <- function(dat, clust_model, adjusted_pValues, color_th, ttl 
 ##' test_anova <- wrapperClassic1wayAnova(fibrose)
 ##' test_clust_pipeline <- runClustering(obj = fibrose,
 ##'                                      clustering_method = "affinityPropReduced", adjusted_pvals = test_anova$P_Value$anova1way)
-runClustering <- function(obj, clustering_method, k_clusters = NULL, adjusted_pvals, coloration_thresholds = NULL){
+runClustering <- function(obj, clustering_method, conditions_order = NULL, k_clusters = NULL, adjusted_pvals, ttl = "", subttl = "", coloration_thresholds = NULL){
     res <- list("model" = NULL, "ggplot" = NULL)
+    # reorder conditions if requested
+    if(!is.null(conditions_order)){
+        # check that given levels are correct in number...
+        if(length(conditions_order) == length(levels(forcats::as_factor(obj@phenoData@data$Condition)))){
+            # ...and have same labels
+            if(all(conditions_order %in% levels(forcats::as_factor(obj@phenoData@data$Condition)))){
+                obj@phenoData@data$Condition <- forcats::fct_relevel(obj@phenoData@data$Condition, conditions_order)
+            }else{
+                valid_labels <- str_c(levels(forcats::as_factor(obj@phenoData@data$Condition)), collapse = ", ")
+                message(stringr::str_glue("Wrong labels given. The valid labels are {valid_labels}"))
+                return(NULL)
+            }
+        }else{
+            y <- length(conditions_order)
+            n <- length(levels(forcats::as_factor(obj@phenoData@data$Condition)))
+            message(stringr::str_glue("Wrong number of given levels. There are currently {n} levels for Condition. You provided {y} levels."))
+            return(NULL)
+        }
+    }
     means <- averageIntensities(obj)
-    # TODO réordonner les conditions si demandé
     checked_means <- checkClusterability(means)
     if(clustering_method == "affinityProp"){
         res$model <- apcluster::apcluster(apcluster::negDistMat(r=2), checked_means$standardized[,-1])
@@ -205,14 +235,15 @@ runClustering <- function(obj, clustering_method, k_clusters = NULL, adjusted_pv
         }
         res$model <- kmeans(checked_means$standards, centers = best_k, nstart = 25)
     }else{
+        message("Wrong method given. Valid names are affinityProp, affinityPropReduced and kmeans.")
         return(NULL)
     }
     res$ggplot <- visualizeClusters(dat = checked_means$standardized,
                                     clust_model = res$model,
                                     adjusted_pValues = adjusted_pvals,
                                     color_th = coloration_thresholds,
-                                    ttl = "",
-                                    subttl = ""
+                                    ttl = ttl,
+                                    subttl = subttl
     )
     return(res)
 }
