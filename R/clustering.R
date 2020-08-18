@@ -74,6 +74,7 @@ checkClusterability <- function(averaged_data){
 ##' @param adjusted_pValues vector of the adjusted pvalues obtained for each protein with
 ##'  a 1-way ANOVA (for example obtained with the function [wrapperClassic1wayAnova()]).
 ##' @param color_th the thresholds of pvalues for the coloring of the profiles.
+##' For the sake of readability, a maximum of 4 values can be specified.
 ##' @param ttl title for the plot.
 ##' @param subttl subtitle for the plot.
 ##' @return a ggplot object
@@ -83,11 +84,23 @@ checkClusterability <- function(averaged_data){
 ##' vizu <- visualizeClusters(dat = checked_means$standardized,
 ##'                           clust_model = km_model,
 ##'                           adjusted_pValues = test_anova$P_Value$anova1way,
+##'                           color_th = c(0.001,0.005,0.01,0.05),
 ##'                           ttl = "Clustering of protein profiles")
 visualizeClusters <- function(dat, clust_model, adjusted_pValues, color_th, ttl = "", subttl = ""){
-    dat$FDR_threshold <- cut(adjusted_pValues, c(-Inf,0.001,0.005,0.01,0.05,Inf), c("<0.001", "<0.005", "<0.01", "<0.05", ">0.05"))
+
+    if(length(color_th) > 4){
+        message("Too many thresholds provided. Please do not exceed 4 thresholds.")
+        return(NULL)
+    }
+
+    str_try <- stringr::str_glue("<{color_th}")
+    str_max <- stringr::str_glue(">{max(color_th)}")
+    dat$FDR_threshold <- cut(adjusted_pValues, c(-Inf,color_th,Inf), c(str_try, str_max))
+    desc_th <- color_th[order(color_th, decreasing = TRUE)]
+    str_desc <- stringr::str_glue("<{desc_th}")
     dat$FDR_threshold <- factor(dat$FDR_threshold,
-                                levels = c(">0.05", "<0.05", "<0.01","<0.005","<0.001"))
+                                levels = c(str_max, str_desc))
+
     if(methods::is(clust_model, "kmeans")){
         dat$cluster <- as.factor(km_model$cluster)
 
@@ -113,7 +126,7 @@ visualizeClusters <- function(dat, clust_model, adjusted_pValues, color_th, ttl 
 
     return(ggplot2::ggplot(data = melted,
                            ggplot2::aes(x = Condition, y = intensity, group = value, colour = FDR_threshold)) +
-               ggplot2::geom_line() +
+               ggplot2::geom_line(size = 1) +
                ggplot2::facet_wrap(~ cluster) +
                colScale +
                ggplot2::xlab("Condition") +
