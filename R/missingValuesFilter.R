@@ -581,21 +581,19 @@ return(keepThat)
 ##' * at least one condition: the lines for which at least one condition is
 ##' equal to or less than the fixed proportion of NA will be kept.
 ##'
-##' @author Hélène Borges
-##'
 ##' @param obj  An object of class \code{MSnSet} containing quantitative data
 ##' and phenotype data.
 ##' @param intensities_proportion float between 0 and 1 corresponding to the proportion
 ##' of intensities to keep in the lines.
-##' @param mode character string. Three possibilities corresponding to the
+##' @param mode character string. Four possibilities corresponding to the
 ##' description above: "None", whole_matrix", "all_cond" and "at_least_1_cond".
 ##' @return the object given as input but with the lines not respecting the
 ##' proportion of NA requested in less.
-##'
+##' @author Hélène Borges
 ##' @examples
 ##' utils::data(Exp1_R25_prot, package='DAPARdata')
-##' filterByProportion(obj = Exp1_R25_prot, intensities_proportion = 0.8, mode = "at_least_1_cond)
-filterByProportion <- function(obj, intensities_proportion, mode = NULL){
+##' filtered <- filterByProportion(obj = Exp1_R25_prot, intensities_proportion = 0.8, mode = "at_least_1_cond)
+filterByProportion <- function(obj, intensities_proportion, mode = "None"){
   # check if mode is valid
   if(!(mode %in% c("None","whole_matrix", "all_cond", "at_least_1_cond"))){
     stop(stringr::str_glue("Wrong mode: {mode} is not a valid string.
