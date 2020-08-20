@@ -74,6 +74,7 @@ checkClusterability <- function(averaged_data){
 ##' @param adjusted_pValues vector of the adjusted pvalues obtained for each protein with
 ##'  a 1-way ANOVA (for example obtained with the function [wrapperClassic1wayAnova()]).
 ##' @param color_th the thresholds of pvalues for the coloring of the profiles.
+##' The default (NULL) creates 4 thresholds: 0.001, 0.005, 0.01, 0.05
 ##' For the sake of readability, a maximum of 4 values can be specified.
 ##' @param ttl title for the plot.
 ##' @param subttl subtitle for the plot.
@@ -86,9 +87,10 @@ checkClusterability <- function(averaged_data){
 ##'                           adjusted_pValues = test_anova$P_Value$anova1way,
 ##'                           color_th = c(0.001,0.005,0.01,0.05),
 ##'                           ttl = "Clustering of protein profiles")
-visualizeClusters <- function(dat, clust_model, adjusted_pValues, color_th, ttl = "", subttl = ""){
-
-    if(length(color_th) > 4){
+visualizeClusters <- function(dat, clust_model, adjusted_pValues, color_th = NULL, ttl = "", subttl = ""){
+    if(is.null(color_th)){
+        color_th <- c(0.001,0.005,0.01,0.05)
+    }else if(length(color_th) > 4){
         message("Too many thresholds provided. Please do not exceed 4 thresholds.")
         return(NULL)
     }
