@@ -175,10 +175,10 @@ diffAnaVolcanoplot_rCharts <- function(df,
                               sep="")
   }
   
-  leftBorder <- data.frame(x=c(min(x), -threshold_logFC,-threshold_logFC),
-                           y = c(threshold_pVal,threshold_pVal,max(y)))
-  rightBorder <- data.frame(x=c(max(x), threshold_logFC,threshold_logFC),
-                            y = c(threshold_pVal,threshold_pVal,max(y)))
+  leftBorder <- data.frame(x=c(min(df$x), -threshold_logFC,-threshold_logFC),
+                           y = c(threshold_pVal,threshold_pVal,max(df$y)))
+  rightBorder <- data.frame(x=c(max(df$x), threshold_logFC,threshold_logFC),
+                            y = c(threshold_pVal,threshold_pVal,max(df$y)))
   
   title <- NULL
   #title <- paste0(cond[1], '_vs_', cond[2])
