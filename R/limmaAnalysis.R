@@ -514,7 +514,8 @@ limmaCompleteTest <- function(qData, sTab, comp.type="OnevsOne"){
             ebayes_fit <- limma::eBayes(limma::contrasts.fit(limma::lmFit(qData, design.matrix), contrasts_limma_format))
             fit_pvalue <- limma::topTable(ebayes_fit, sort.by = "none", number = nrow(qData)) %>%
               dplyr::select("anova_1way_pval" = P.Value)
-            res.l <- list("logFC" = data.frame("anova_1way_logFC" = matrix(NA, nrow = nrow(fit_pvalue))),
+            res.l <- list("logFC" = data.frame("anova_1way_logFC" = matrix(NA, nrow = nrow(fit_pvalue)),
+                                               row.names = rownames(fit_pvalue)),
                         "P_Value" = fit_pvalue)
         }
     }
