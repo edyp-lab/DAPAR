@@ -35,5 +35,5 @@ utils::data(Exp1_R25_pept, package='DAPARdata')
 protID <- "Protein_group_IDs"
 obj.pep <- Exp1_R25_pept[1:1000]
 X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-DAPAR::inner.aggregate.iter(exprs(obj.pep), X)
+inner.aggregate.iter(exprs(obj.pep), X)
 }

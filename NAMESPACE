@@ -1,61 +1,57 @@
 
 exportPattern("^[[:alpha:]]+")
 
-import(MSnbase)
-import(DAPARdata)
-import(RColorBrewer)
-import(Cairo)
-import(png)
-import(lattice)
-import(reshape2)
-import(tmvtnorm)
-import(ggplot2)
-import(norm)
-import(highcharter)
-import(vioplot)
-import(impute)
-import(knitr)
-importFrom("doParallel", "registerDoParallel")
-importFrom("dplyr", "left_join", "mutate","tbl_df", "select_","data_frame", "last", "tibble")
-importFrom("tidyr", "gather")
-import("foreach")
-importFrom("AnnotationDbi", "keys")
-import("parallel")
-import("doParallel")
-#import("Matrix")
-import(cp4p)
-import(FactoMineR)
-import(factoextra)
-importFrom("grDevices", "rainbow")
 
-#import(tidyverse)
-import(imp4p)
-importFrom("graphics", "par", "boxplot", "axis", "mtext", "abline", "points", 
-            "legend", "lines",  "barplot", "text","hist",
-           "layout", "plot.new", "strheight", "strwidth", "title","plot.window")
- 
-importFrom("stats", "lowess", "cor", "density","pexp", "mad", 
-            "var", "t.test", "dist", "hclust", "setNames", 
-            "median", "p.adjust", "model.matrix", "rnorm","na.omit",
-           "quantile", "rbeta", "runif", "sd", "pchisq", "residuals","formula", "lm", "logLik")
-importFrom("preprocessCore", "normalize.quantiles")
-importFrom("gplots", "heatmap.2")
-importFrom("limma", "lmFit", "eBayes", "topTable", "makeContrasts", "contrasts.fit", "normalizeCyclicLoess")
-importFrom("pcaMethods", "completeObs", "pca")
-importFrom("scales", "alpha")
-importFrom("grDevices", "colorRampPalette", "palette", "heat.colors")
-importFrom("utils", "read.csv", "read.table", "de", "str","write.csv", "zip", "installed.packages")
-#importFrom("lme4", "getME")
-importFrom("openxlsx", "getSheetNames", "createWorkbook", "addWorksheet", "writeData", "saveWorkbook")
-importFrom("readxl","read_excel")
-import("siggenes") # SAM
-import("graph")
-importFrom("visNetwork", "visNetwork", "visNodes", "visGroups", "visOptions", "visEdges")
-importFrom("stringr", "str_match_all")
+import('Cairo')
+import('DAPARdata')
+#import('MSnbase')
+importFrom("MSnbase", "MSnSet", "exprs", "fData", "pData")
+#import('clusterProfiler')
 importFrom("clusterProfiler", "bitr", "enrichGO", "groupGO")
-importFrom("vsn","vsn2","predict")
-import('Matrix')
-import('igraph')
+import('ggplot2')
+import('gplots')
+import('knitr')
+import('lattice') 
+import('norm') 
+import('pcaMethods') 
+import('png') 
+import('reshape2') 
+import('scales')
+import('siggenes') 
+#import('tidyr')
+importFrom("tidyr", "gather")
+import('tidyverse') 
+import('tmvtnorm') 
+import('vioplot')
+import('doParallel')
+import('igraph') 
+import('parallel')
+
+import("highcharter")
+importFrom("FactoMineR","PCA")
+importFrom(Matrix,"%&%")
+importFrom("RColorBrewer","brewer.pal")
+importFrom("cp4p","adjust.p","calibration.plot")
+importFrom(dplyr,left_join,mutate,tbl_df,tibble)
+importFrom("factoextra","fviz_pca_ind","fviz_pca_var")
+importFrom("foreach","foreach","%dopar%")
+importFrom("graph","connComp","graphAM")
+importFrom(imp4p,impute.pa)
+importFrom(stringr,str_match_all)
+
+importFrom("grDevices", "colorRampPalette", "heat.colors")
+importFrom("graphics", "abline", "axis", "barplot", "boxplot", "hist",
+           "image", "layout", "legend", "lines", "mtext", "par",
+           "plot.new", "plot.window", "points", "strheight",
+           "strwidth", "text", "title")
+importFrom("stats", "cor", "density", "dist", "formula", "hclust",
+           "lm", "logLik", "mad", "median", "model.matrix", "na.omit",
+           "pchisq", "pexp", "quantile", "rbeta", "residuals", "rnorm",
+           "runif", "sd", "setNames", "t.test", "var")
+importFrom("utils", "de", "installed.packages", "read.table", "str",
+           "write.csv", "zip")
+
+
 
 export(
 "writeMSnsetToExcel",
@@ -68,7 +64,7 @@ export(
 
 "boxPlotD",
 "densityPlotD"
-,"wrapper.CVDistD","CVDistD"
+,"wrapper.CVDistD","CVDistD","CVDistD_HC"
 ,"wrapper.corrMatrixD","corrMatrixD"
 ,"wrapper.heatmapD","heatmapD"
 ,"wrapper.mvPerLinesHisto", "mvPerLinesHisto"
@@ -151,5 +147,9 @@ export(
 
 ,"my_hc_ExportMenu"
 
-
+,"CountPep"
+,"GetDetailedNbPeptides"
+,"NumericalFiltering"
+,"NumericalgetIndicesOfLinesToRemove"
+,StringBasedFiltering2
 )

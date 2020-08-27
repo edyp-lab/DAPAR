@@ -1,16 +1,16 @@
 
-##' Saves the parameters of a tool in the pipeline of Prostar
-##' @title Saves the parameters of a tool in the pipeline of Prostar
-##' @param obj An object of class \code{MSnSet}
-##' @param name.dataset The name of the dataset
-##' @param name The name of the tool. Available values are: "Norm, Imputation, anaDiff, GOAnalysis,Aggregation"
-##' @param l.params A list that contains the parameters
-##' @return An instance of class \code{MSnSet}.
-##' @author Samuel Wieczorek
-##' @examples 
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' l.params=list(method="Global quantile alignment", type="overall")
-##' saveParameters(Exp1_R25_pept, "Filtered.peptide", "Imputation",l.params)
+#' Saves the parameters of a tool in the pipeline of Prostar
+#' @title Saves the parameters of a tool in the pipeline of Prostar
+#' @param obj An object of class \code{MSnSet}
+#' @param name.dataset The name of the dataset
+#' @param name The name of the tool. Available values are: "Norm, Imputation, anaDiff, GOAnalysis,Aggregation"
+#' @param l.params A list that contains the parameters
+#' @return An instance of class \code{MSnSet}.
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' l.params=list(method="Global quantile alignment", type="overall")
+#' saveParameters(Exp1_R25_pept, "Filtered.peptide", "Imputation",l.params)
 saveParameters <- function(obj,name.dataset=NULL,name=NULL,l.params=NULL){
   if ( is.null(name) || is.null(name.dataset)) {
     warning("No operation has been applied to the dataset.")
@@ -31,14 +31,14 @@ saveParameters <- function(obj,name.dataset=NULL,name=NULL,l.params=NULL){
 
 
 
-##' Sets the MEC tag in the OriginOfValues
-##' @title Sets the MEC tag in the OriginOfValues
-##' @param obj An object of class \code{MSnSet}
-##' @return An instance of class \code{MSnSet}.
-##' @author Samuel Wieczorek
-##' @examples 
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' setMEC(Exp1_R25_pept)
+#' Sets the MEC tag in the OriginOfValues
+#' @title Sets the MEC tag in the OriginOfValues
+#' @param obj An object of class \code{MSnSet}
+#' @return An instance of class \code{MSnSet}.
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' setMEC(Exp1_R25_pept)
 setMEC <- function(obj){
   
   if (is.null( obj@experimentData@other$OriginOfValues)){return()}
@@ -63,15 +63,15 @@ setMEC <- function(obj){
 
 
 
-##' Sets the OriginOfValues dataframe in the fData table
-##' @title Sets the OriginOfValues dataframe
-##' @param obj An object of class \code{MSnSet}
-##' @param index A list of integer xxxxxxx
-##' @return An instance of class \code{MSnSet}.
-##' @author Samuel Wieczorek
-##' @examples 
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' addOriginOfValue(Exp1_R25_pept)
+#' Sets the OriginOfValues dataframe in the fData table
+#' @title Sets the OriginOfValues dataframe
+#' @param obj An object of class \code{MSnSet}
+#' @param index A list of integer xxxxxxx
+#' @return An instance of class \code{MSnSet}.
+#' @author Samuel Wieczorek
+#' @examples 
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' addOriginOfValue(Exp1_R25_pept)
 addOriginOfValue <- function(obj,index=NULL){
 
 if (!is.null(obj@experimentData@other$OriginOfValues)){
@@ -108,44 +108,44 @@ return(obj)
 
 
 
-##' Builds an object of class \code{MSnSet} from a 
-##' single tabulated-like file for quantitative and meta-data and a dataframe 
-##' for the samples description. It differs from
-##' the original \code{MSnSet} builder which requires three separated files 
-##' tabulated-like quantitative proteomic data into a \code{MSnSet} object,
-##' including metadata.
-##' 
-##' @title Creates an object of class \code{MSnSet} from text file
-##' @param file The name of a tab-separated file that contains the data.
-##' @param metadata A dataframe describing the samples (in lines).
-##' @param indExpData A vector of string where each element is the name
-##' of a column in designTable that have to be integrated in
-##' the \code{fData()} table
-##' of the \code{MSnSet} object.
-##' @param indFData The name of column in \code{file} that will be the name of
-##' rows for the \code{exprs()} and \code{fData()} tables
-##' @param indiceID The indice of the column containing the ID of entities 
-##' (peptides or proteins)
-##' @param indexForOriginOfValue xxxxxxxxxxx
-##' @param logData A boolean value to indicate if the data have to be
-##' log-transformed (Default is FALSE)
-##' @param replaceZeros A boolean value to indicate if the 0 and NaN values of
-##' intensity have to be replaced by NA (Default is FALSE)
-##' @param pep_prot_data A string that indicates whether the dataset is about
-##' @param proteinId xxxx
-##' @param versions A list of the following items: Prostar_Version, DAPAR_Version
-##' peptides or proteins.
-##' @return An instance of class \code{MSnSet}.
-##' @author Florence Combes, Samuel Wieczorek
-##' @examples 
-##' require(Matrix)
-##' exprsFile <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
-##' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
-##' metadata = read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
-##' indExpData <- c(56:61)
-##' indFData <- c(1:55,62:71)
-##' indiceID <- 64
-##' createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, indexForOriginOfValue = NULL, pep_prot_data = "peptide")
+#' Builds an object of class \code{MSnSet} from a 
+#' single tabulated-like file for quantitative and meta-data and a dataframe 
+#' for the samples description. It differs from
+#' the original \code{MSnSet} builder which requires three separated files 
+#' tabulated-like quantitative proteomic data into a \code{MSnSet} object,
+#' including metadata.
+#' 
+#' @title Creates an object of class \code{MSnSet} from text file
+#' @param file The name of a tab-separated file that contains the data.
+#' @param metadata A dataframe describing the samples (in lines).
+#' @param indExpData A vector of string where each element is the name
+#' of a column in designTable that have to be integrated in
+#' the \code{fData()} table
+#' of the \code{MSnSet} object.
+#' @param indFData The name of column in \code{file} that will be the name of
+#' rows for the \code{exprs()} and \code{fData()} tables
+#' @param indiceID The indice of the column containing the ID of entities 
+#' (peptides or proteins)
+#' @param indexForOriginOfValue xxxxxxxxxxx
+#' @param logData A boolean value to indicate if the data have to be
+#' log-transformed (Default is FALSE)
+#' @param replaceZeros A boolean value to indicate if the 0 and NaN values of
+#' intensity have to be replaced by NA (Default is FALSE)
+#' @param pep_prot_data A string that indicates whether the dataset is about
+#' @param proteinId xxxx
+#' @param versions A list of the following items: Prostar_Version, DAPAR_Version
+#' peptides or proteins.
+#' @return An instance of class \code{MSnSet}.
+#' @author Florence Combes, Samuel Wieczorek
+#' @examples 
+#' require(Matrix)
+#' exprsFile <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
+#' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
+#' metadata = read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
+#' indExpData <- c(56:61)
+#' indFData <- c(1:55,62:71)
+#' indiceID <- 64
+#' createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, indexForOriginOfValue = NULL, pep_prot_data = "peptide")
 createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
                          indexForOriginOfValue = NULL,
                          logData=FALSE, replaceZeros=FALSE,
@@ -235,27 +235,27 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
 }
 
 
-##' This function exports a \code{MSnSet} data object to a Excel file.
-##' Each of the 
-##' three data.frames in the \code{MSnSet} object (ie experimental data,
-##' phenoData
-##' and metaData are respectively integrated into separate sheets in
-##' the Excel file).
-##' The colored cells in the experimental data correspond to the original missing values
-##' which have been imputed.
-##' 
-##' @title This function exports a \code{MSnSet} object to a Excel file.
-##' @param obj An object of class \code{MSnSet}.
-##' @param filename A character string for the name of the Excel file.
-##' @return A Excel file (.xlsx)
-##' @author Samuel Wieczorek
-##' @examples
-##' \donttest{
-##' Sys.setenv("R_ZIPCMD"= Sys.which("zip"))
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj <- Exp1_R2_pept[1:1000]
-##' writeMSnsetToExcel(obj, "foo")
-##' }
+#' This function exports a \code{MSnSet} data object to a Excel file.
+#' Each of the 
+#' three data.frames in the \code{MSnSet} object (ie experimental data,
+#' phenoData
+#' and metaData are respectively integrated into separate sheets in
+#' the Excel file).
+#' The colored cells in the experimental data correspond to the original missing values
+#' which have been imputed.
+#' 
+#' @title This function exports a \code{MSnSet} object to a Excel file.
+#' @param obj An object of class \code{MSnSet}.
+#' @param filename A character string for the name of the Excel file.
+#' @return A Excel file (.xlsx)
+#' @author Samuel Wieczorek
+#' @examples
+#' \donttest{
+#' Sys.setenv("R_ZIPCMD"= Sys.which("zip"))
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R2_pept[1:1000]
+#' writeMSnsetToExcel(obj, "foo")
+#' }
 writeMSnsetToExcel <- function(obj, filename)
 {
     #require(Matrix)
@@ -330,14 +330,14 @@ writeMSnsetToExcel <- function(obj, filename)
     
 }
 
-##' This function reads a sheet of an Excel file and put the data into a data.frame.
-##' 
-##' @title This function reads a sheet of an Excel file and put the data into a data.frame.
-##' @param file The name of the Excel file.
-##' @param extension The extension of the file
-##' @param sheet The name of the sheet
-##' @return A data.frame
-##' @author Samuel Wieczorek
+#' This function reads a sheet of an Excel file and put the data into a data.frame.
+#' 
+#' @title This function reads a sheet of an Excel file and put the data into a data.frame.
+#' @param file The name of the Excel file.
+#' @param extension The extension of the file
+#' @param sheet The name of the sheet
+#' @return A data.frame
+#' @author Samuel Wieczorek
 readExcel <- function(file, extension, sheet){
   # data <- NULL
   # if (extension=="xls") {
@@ -357,12 +357,12 @@ readExcel <- function(file, extension, sheet){
 }
 
 
-##' This function lists all the sheets of an Excel file.
-##' 
-##' @title This function returns the list of the sheets names in a Excel file.
-##' @param file The name of the Excel file.
-##' @return A vector
-##' @author Samuel Wieczorek
+#' This function lists all the sheets of an Excel file.
+#' 
+#' @title This function returns the list of the sheets names in a Excel file.
+#' @param file The name of the Excel file.
+#' @return A vector
+#' @author Samuel Wieczorek
 listSheets <- function(file){
     #require(openxlsx)
     return(openxlsx::getSheetNames(file))
@@ -370,19 +370,19 @@ listSheets <- function(file){
 }
 
 
-##' This function exports a MSnset dataset into three csv files compressed in a zip file
-##' 
-##' @title Exports a MSnset dataset into a zip archive containing three zipped CSV files.
-##' @param obj An object of class \code{MSnSet}.
-##' @param fname The name of the archive file.
-##' @return A compressed file
-##' @author Samuel Wieczorek
-##' @examples
-##' \donttest{
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj <- Exp1_R2_pept[1:1000]
-##' writeMSnsetToCSV(obj, "foo")
-##' }
+#' This function exports a MSnset dataset into three csv files compressed in a zip file
+#' 
+#' @title Exports a MSnset dataset into a zip archive containing three zipped CSV files.
+#' @param obj An object of class \code{MSnSet}.
+#' @param fname The name of the archive file.
+#' @return A compressed file
+#' @author Samuel Wieczorek
+#' @examples
+#' \donttest{
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R2_pept[1:1000]
+#' writeMSnsetToCSV(obj, "foo")
+#' }
 writeMSnsetToCSV <- function(obj, fname){
     
     #fname <- paste(tempdir(),fname,  sep="/")
@@ -398,18 +398,18 @@ writeMSnsetToCSV <- function(obj, fname){
 }
 
 
-##' Similar to the function \code{rbind} but applies on two subsets of the same \code{MSnSet} object.
-##' 
-##' @title Similar to the function \code{rbind} but applies on two subsets of the same \code{MSnSet} object.
-##' @param df1 An object (or subset of) of class \code{MSnSet}. May be NULL
-##' @param df2 A subset of the same object as df1
-##' @return An instance of class \code{MSnSet}.
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' df1 <- Exp1_R25_pept[1:100]
-##' df2 <- Exp1_R25_pept[200:250]
-##' rbindMSnset(df1, df2)
+#' Similar to the function \code{rbind} but applies on two subsets of the same \code{MSnSet} object.
+#' 
+#' @title Similar to the function \code{rbind} but applies on two subsets of the same \code{MSnSet} object.
+#' @param df1 An object (or subset of) of class \code{MSnSet}. May be NULL
+#' @param df2 A subset of the same object as df1
+#' @return An instance of class \code{MSnSet}.
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' df1 <- Exp1_R25_pept[1:100]
+#' df2 <- Exp1_R25_pept[200:250]
+#' rbindMSnset(df1, df2)
 rbindMSnset <- function(df1=NULL, df2){
   
   if (is.null(df1)){

@@ -19,6 +19,7 @@ Display a jitter plot for CC
 }
 \examples{
 \dontrun{
+xxx
 }
 }
 \author{

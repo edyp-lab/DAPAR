@@ -26,6 +26,7 @@ Same as the function \code{CVDistD} but uses the package \code{highcharter}
 utils::data(Exp1_R25_pept, package='DAPARdata')
 conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 CVDistD_HC(Biobase::exprs(Exp1_R25_pept), conds)
+
 }
 \seealso{
 \code{\link{densityPlotD}}.

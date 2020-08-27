@@ -33,11 +33,12 @@ protID <- "Protein_group_IDs"
 obj.pep <- Exp1_R25_pept[1:1000]
 M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 data <- Biobase::fData(obj.pep)
-protData <- DAPAR::aggregateSum(obj.pep, M)
+protData <- aggregateSum(obj.pep, as.matrix(M))
 name <- "Protein_group_IDs"
 proteinNames <- rownames(Biobase::fData(protData))
 BuildColumnToProteinDataset_par(data, M, name,proteinNames )
 }
+
 }
 \author{
 Samuel Wieczorek

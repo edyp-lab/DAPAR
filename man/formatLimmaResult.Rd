@@ -30,6 +30,7 @@ obj <- mvFilterFromIndices(obj, keepThat)
 qData <- Biobase::exprs(obj)
 sTab <- Biobase::pData(obj)
 limma <- limmaCompleteTest(qData,sTab)
+
 }
 \author{
 Samuel Wieczorek

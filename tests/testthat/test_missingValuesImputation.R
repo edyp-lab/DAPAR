@@ -1,6 +1,5 @@
 context("Missing values imputation")
-library(DAPARdata)
-data(Exp1_R25_prot)
+utils::data(Exp1_R25_prot, package='DAPARdata')
 test <- Exp1_R25_prot[1:100]
 
 # test_that("wrapper.mvImputation QRILC", {

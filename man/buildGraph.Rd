@@ -20,7 +20,7 @@ Display a CC
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 X <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein_group_IDs", FALSE)
-ll <- get.pep.prot.cc(X)
+ll <- get.pep.prot.cc(as.matrix(X))
 g <- buildGraph(ll[[1]], X)
 }
 \author{

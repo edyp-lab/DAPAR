@@ -1,7 +1,6 @@
 context("Utils")
 
-require(DAPARdata)
-data(Exp1_R2_pept)
+utils::data(Exp1_R2_pept, package='DAPARdata')
 obj <- Exp1_R2_pept
 test <- Exp1_R2_pept[130:140]
 test2 <- Exp1_R2_pept[20:28]

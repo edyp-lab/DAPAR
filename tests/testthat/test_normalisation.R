@@ -1,6 +1,5 @@
 context("Test of normalization methods")
-require(DAPARdata)
-data(Exp1_R25_prot)
+utils::data(Exp1_R25_prot, package='DAPARdata')
 test <- Exp1_R25_prot[1:10]
 
 # 

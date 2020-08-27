@@ -4,18 +4,10 @@
 \alias{display.CC.visNet}
 \title{Display a CC}
 \usage{
-display.CC.visNet(
-  g,
-  layout = layout_nicely,
-  obj = NULL,
-  prot.tooltip = NULL,
-  pept.tooltip = NULL
-)
+display.CC.visNet(g, obj = NULL, prot.tooltip = NULL, pept.tooltip = NULL)
 }
 \arguments{
 \item{g}{A cc (a list)}
-
-\item{layout}{xxxxx}
 
 \item{obj}{xxx}
 
@@ -32,7 +24,7 @@ Display a CC
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata') 
 X <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein_group_IDs", FALSE)
-ll <- get.pep.prot.cc(X)
+ll <- get.pep.prot.cc(as.matrix(X))
 g <- buildGraph(ll[[1]], X)
 display.CC.visNet(g)
 

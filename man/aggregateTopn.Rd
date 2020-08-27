@@ -29,7 +29,7 @@ utils::data(Exp1_R25_pept, package='DAPARdata')
 obj.pep <- Exp1_R25_pept[1:1000]
 protID <- "Protein_group_IDs"
 X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-DAPAR::aggregateTopn(obj.pep, X, n=3)
+aggregateTopn(obj.pep, as.matrix(X), n=3)
 }
 \author{
 Alexia Dorffer, Samuel Wieczorek

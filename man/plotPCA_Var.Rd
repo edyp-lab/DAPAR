@@ -21,6 +21,7 @@ Plots the variables of PCA
 utils::data(Exp1_R25_pept, package='DAPARdata')
 res.pca <- wrapper.pca(Exp1_R25_pept)
 plotPCA_Var(res.pca)
+
 }
 \author{
 Samuel Wieczorek
