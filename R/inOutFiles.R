@@ -50,9 +50,9 @@ setMEC <- function(obj){
     ind <- which(Biobase::pData(obj)$Condition == conditions[cond])
     if (length(ind) == 1) {
       lNA <- which(is.na(Biobase::exprs(obj)[,ind]))
-      } else {
-        lNA <- which(apply(is.na(Biobase::exprs(obj)[,ind]), 1, sum)==length(ind))
-      }
+    } else {
+      lNA <- which(apply(is.na(Biobase::exprs(obj)[,ind]), 1, sum)==length(ind))
+    }
     if (length(lNA) > 0)
     {
       Biobase::fData(obj)[lNA,obj@experimentData@other$OriginOfValues[ind]] <- "MEC"
@@ -73,37 +73,36 @@ setMEC <- function(obj){
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' addOriginOfValue(Exp1_R25_pept)
 addOriginOfValue <- function(obj,index=NULL){
-
-if (!is.null(obj@experimentData@other$OriginOfValues)){
- print("Dataframe already exists. No modification has been made to the MSnset object.")
-  return (obj)
+  
+  if (!is.null(obj@experimentData@other$OriginOfValues)) {
+    print("Dataframe already exists. No modification has been made to the MSnset object.")
+    return (obj)
   }
-
-
-if (!is.null(index))
-{
-  OriginOfValues <- Biobase::fData(obj)[,index]
-}else {   
-  OriginOfValues <- data.frame(matrix(rep("unknown", nrow(Biobase::exprs(obj))*ncol(Biobase::exprs(obj))), 
-                                      nrow=nrow(Biobase::exprs(obj)),
-                                      ncol=ncol(Biobase::exprs(obj))),
-                               stringsAsFactors = FALSE)
-}
-    
-OriginOfValues[is.na(obj)] <-  "POV"
-rownames(OriginOfValues) <- rownames(Biobase::fData(obj))
-colnames(OriginOfValues) <- paste0("OriginOfValue",colnames(Biobase::exprs(obj)))
-colnames(OriginOfValues) <- gsub(".", "_", colnames(OriginOfValues), fixed=TRUE)
-
-#indMin <- length(colnames(fData(obj)))
-#indMax <- length(colnames(fData(obj))) + length(OriginOfValues)
-Biobase::fData(obj) <- cbind(Biobase::fData(obj), OriginOfValues, deparse.level = 0)
-
-obj@experimentData@other$OriginOfValues <- colnames(OriginOfValues)
-
-obj <- setMEC(obj)
-
-return(obj)
+  
+  
+  if (!is.null(index)) {
+    OriginOfValues <- Biobase::fData(obj)[,index]
+  } else {   
+    OriginOfValues <- data.frame(matrix(rep("unknown", nrow(Biobase::exprs(obj))*ncol(Biobase::exprs(obj))), 
+                                        nrow=nrow(Biobase::exprs(obj)),
+                                        ncol=ncol(Biobase::exprs(obj))),
+                                 stringsAsFactors = FALSE)
+  }
+  
+  OriginOfValues[is.na(obj)] <-  "POV"
+  rownames(OriginOfValues) <- rownames(Biobase::fData(obj))
+  colnames(OriginOfValues) <- paste0("OriginOfValue",colnames(Biobase::exprs(obj)))
+  colnames(OriginOfValues) <- gsub(".", "_", colnames(OriginOfValues), fixed=TRUE)
+  
+  #indMin <- length(colnames(fData(obj)))
+  #indMax <- length(colnames(fData(obj))) + length(OriginOfValues)
+  Biobase::fData(obj) <- cbind(Biobase::fData(obj), OriginOfValues, deparse.level = 0)
+  
+  obj@experimentData@other$OriginOfValues <- colnames(OriginOfValues)
+  
+  obj <- setMEC(obj)
+  
+  return(obj)
 }
 
 
@@ -152,86 +151,86 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
                          pep_prot_data=NULL,
                          proteinId = NULL,
                          versions=NULL){
-    
-    if (!is.data.frame(file)){ #the variable is a path to a text file
-        data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
-    } else {data <- file}
-    
-    ## replace all blanks by a dot
-    ##   cols <- gsub(" ","\\.",  colnames(data)[indExpData])
-    ##   dotIndice <- regexpr(pattern = '.',cols, fixed=TRUE) [1]
-    ##   pattern <- substr(cols,1,dotIndice)
-    ##   cols <- sub(pattern[1], replacement="", cols)
-    #intensities <- as.matrix(data[,indExpData])
-    #intensities <- gsub(",", ".", intensities)
-    ##building exprs Data of MSnSet file
-    Intensity <- matrix(as.numeric(gsub(",", ".",as.matrix(data[,indExpData] )))
-                        , ncol=length(indExpData)
-                        , byrow=FALSE)
-    
-    colnames(Intensity) <- gsub(".", "_", colnames(data)[indExpData], fixed=TRUE)
-    rownames(Intensity) <- rownames(data)
-    ##the name of lines are the same as the data of the first column
-    # if (is.null(indiceID)) {
-    #     rownames(Intensity) <- rep(paste(pep_prot_data, "_", 1:nrow(Intensity), sep=""))
-    # }else{rownames(Intensity) <- data[,indiceID]}
-    
-    ##building fData of MSnSet file
-    fd <- data.frame( data[,indFData],stringsAsFactors = FALSE)
-    
-    if (is.null(indiceID)) {
-        rownames(fd) <- rep(paste(pep_prot_data, "_", 1:nrow(fd), sep=""))
-        rownames(Intensity) <- rep(paste(pep_prot_data, "_", 1:nrow(Intensity), sep=""))
-    }else{
-        rownames(fd) <- data[,indiceID]
-        rownames(Intensity) <- data[,indiceID]
-    }
-    
-    colnames(fd) <- gsub(".", "_", colnames(data)[indFData], fixed=TRUE)
-    
-     pd <- as.data.frame(metadata,stringsAsFactors = FALSE)
-    rownames(pd) <- gsub(".", "_", pd$Sample.name, fixed=TRUE)
-    pd$Sample.name <- gsub(".", "_", pd$Sample.name, fixed=TRUE)
-    
-    ##Integrity tests
-    if(identical(rownames(Intensity), rownames(fd))==FALSE)
-        stop("Problem consistency between
+  
+  if (!is.data.frame(file)){ #the variable is a path to a text file
+    data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
+  } else {data <- file}
+  
+  ## replace all blanks by a dot
+  ##   cols <- gsub(" ","\\.",  colnames(data)[indExpData])
+  ##   dotIndice <- regexpr(pattern = '.',cols, fixed=TRUE) [1]
+  ##   pattern <- substr(cols,1,dotIndice)
+  ##   cols <- sub(pattern[1], replacement="", cols)
+  #intensities <- as.matrix(data[,indExpData])
+  #intensities <- gsub(",", ".", intensities)
+  ##building exprs Data of MSnSet file
+  Intensity <- matrix(as.numeric(gsub(",", ".",as.matrix(data[,indExpData] )))
+                      , ncol=length(indExpData)
+                      , byrow=FALSE)
+  
+  colnames(Intensity) <- gsub(".", "_", colnames(data)[indExpData], fixed=TRUE)
+  rownames(Intensity) <- rownames(data)
+  ##the name of lines are the same as the data of the first column
+  # if (is.null(indiceID)) {
+  #     rownames(Intensity) <- rep(paste(pep_prot_data, "_", 1:nrow(Intensity), sep=""))
+  # }else{rownames(Intensity) <- data[,indiceID]}
+  
+  ##building fData of MSnSet file
+  fd <- data.frame( data[,indFData],stringsAsFactors = FALSE)
+  
+  if (is.null(indiceID)) {
+    rownames(fd) <- rep(paste(pep_prot_data, "_", 1:nrow(fd), sep=""))
+    rownames(Intensity) <- rep(paste(pep_prot_data, "_", 1:nrow(Intensity), sep=""))
+  }else{
+    rownames(fd) <- data[,indiceID]
+    rownames(Intensity) <- data[,indiceID]
+  }
+  
+  colnames(fd) <- gsub(".", "_", colnames(data)[indFData], fixed=TRUE)
+  
+  pd <- as.data.frame(metadata,stringsAsFactors = FALSE)
+  rownames(pd) <- gsub(".", "_", pd$Sample.name, fixed=TRUE)
+  pd$Sample.name <- gsub(".", "_", pd$Sample.name, fixed=TRUE)
+  
+  ##Integrity tests
+  if(identical(rownames(Intensity), rownames(fd))==FALSE)
+    stop("Problem consistency between
              row names expression data and featureData")
-    
-    if(identical(colnames(Intensity), rownames(pd))==FALSE) 
-        stop("Problem consistency between column names 
+  
+  if(identical(colnames(Intensity), rownames(pd))==FALSE) 
+    stop("Problem consistency between column names 
              in expression data and row names in phenoData")
-    
-    obj <- MSnSet(exprs = Intensity, fData = fd, pData = pd)
-    
-    if (logData) {
-        Biobase::exprs(obj) <- log2(Biobase::exprs(obj))
-        obj@processingData@processing <- 
-            c(obj@processingData@processing, "Data has been Log2 tranformed")
-    }
-    
-    if (replaceZeros) {
-        Biobase::exprs(obj)[Biobase::exprs(obj) == 0] <- NA
-        Biobase::exprs(obj)[is.nan(Biobase::exprs(obj))] <- NA
-        Biobase::exprs(obj)[is.infinite(Biobase::exprs(obj))] <-NA
-        obj@processingData@processing <- c(obj@processingData@processing, "All zeros were replaced by NA")
-    }
-    
-    
-    if (!is.null(pep_prot_data)) {
-        obj@experimentData@other$typeOfData <- pep_prot_data
-    }
-    
-    obj@experimentData@other$Prostar_Version <- versions$Prostar_Version
-    obj@experimentData@other$DAPAR_Version <- versions$DAPAR_Version
-    obj@experimentData@other$proteinId <- proteinId
-    
-    
-    obj@experimentData@other$RawPValues <- FALSE
-    
-    obj <- addOriginOfValue(obj,indexForOriginOfValue)
-    
-    return(obj)
+  
+  obj <- MSnSet(exprs = Intensity, fData = fd, pData = pd)
+  
+  if (logData) {
+    Biobase::exprs(obj) <- log2(Biobase::exprs(obj))
+    obj@processingData@processing <- 
+      c(obj@processingData@processing, "Data has been Log2 tranformed")
+  }
+  
+  if (replaceZeros) {
+    Biobase::exprs(obj)[Biobase::exprs(obj) == 0] <- NA
+    Biobase::exprs(obj)[is.nan(Biobase::exprs(obj))] <- NA
+    Biobase::exprs(obj)[is.infinite(Biobase::exprs(obj))] <-NA
+    obj@processingData@processing <- c(obj@processingData@processing, "All zeros were replaced by NA")
+  }
+  
+  
+  if (!is.null(pep_prot_data)) {
+    obj@experimentData@other$typeOfData <- pep_prot_data
+  }
+  
+  obj@experimentData@other$Prostar_Version <- versions$Prostar_Version
+  obj@experimentData@other$DAPAR_Version <- versions$DAPAR_Version
+  obj@experimentData@other$proteinId <- proteinId
+  
+  
+  obj@experimentData@other$RawPValues <- FALSE
+  
+  obj <- addOriginOfValue(obj,indexForOriginOfValue)
+  
+  return(obj)
 }
 
 
@@ -258,76 +257,76 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
 ##' }
 writeMSnsetToExcel <- function(obj, filename)
 {
-    #require(Matrix)
-    POV_Style <- openxlsx::createStyle(fgFill = "lightblue")
-    MEC_Style <- openxlsx::createStyle(fgFill = "orange")
+  #require(Matrix)
+  POV_Style <- openxlsx::createStyle(fgFill = "lightblue")
+  MEC_Style <- openxlsx::createStyle(fgFill = "orange")
+  
+  #require(openxlsx)
+  name <- paste(filename, ".xlsx", sep="")
+  wb <- openxlsx::createWorkbook(name)
+  n <- 1
+  openxlsx::addWorksheet(wb, "Quantitative Data")
+  openxlsx::writeData(wb, sheet=n, cbind(ID = rownames(Biobase::exprs(obj)),
+                                         Biobase::exprs(obj)), rowNames = FALSE)
+  
+  
+  if (is.null(obj@experimentData@other$OriginOfValues)){
+    listPOV <-  which(is.na(exprs(obj)), arr.ind=TRUE)
+  } else {
+    mat <- fData(obj)[,obj@experimentData@other$OriginOfValues]
+    listPOV <- which(mat=="POV", arr.ind=TRUE)
+    listMEC <- which(mat=="MEC", arr.ind=TRUE)
+  }
+  
+  openxlsx::addStyle(wb, sheet=n, cols = listPOV[,"col"]+1, rows = listPOV[,"row"]+1, style = POV_Style)
+  openxlsx::addStyle(wb, sheet=n, cols = listMEC[,"col"]+1, rows = listMEC[,"row"]+1, style = MEC_Style)
+  
+  #bodyStyleNumber <- createStyle(numFmt = "NUMBER")
+  #addStyle(wb, sheet=1, bodyStyleNumber, rows = 2:nrow(Biobase::exprs(obj)), 
+  #cols=2:ncol(Biobase::exprs(obj)),gridExpand = TRUE)
+  
+  openxlsx::addWorksheet(wb, "Samples Meta Data")
+  n <- n +1
+  openxlsx::writeData(wb, sheet=n, Biobase::pData(obj), rowNames = FALSE)
+  n <- n +1
+  if (dim(Biobase::fData(obj))[2] != 0){
+    openxlsx::addWorksheet(wb, "Feature Meta Data")
+    #numericCols <- which(sapply(Biobase::fData(obj), is.numeric))
+    #Biobase::fData(obj)[,numericCols] <- 
+    #format(Biobase::fData(obj)[,numericCols])
     
-    #require(openxlsx)
-    name <- paste(filename, ".xlsx", sep="")
-    wb <- openxlsx::createWorkbook(name)
-    n <- 1
-    openxlsx::addWorksheet(wb, "Quantitative Data")
-    openxlsx::writeData(wb, sheet=n, cbind(ID = rownames(Biobase::exprs(obj)),
-                                           Biobase::exprs(obj)), rowNames = FALSE)
-    
-   
-    if (is.null(obj@experimentData@other$OriginOfValues)){
-      listPOV <-  which(is.na(exprs(obj)), arr.ind=TRUE)
-    } else {
-        mat <- fData(obj)[,obj@experimentData@other$OriginOfValues]
-        listPOV <- which(mat=="POV", arr.ind=TRUE)
-        listMEC <- which(mat=="MEC", arr.ind=TRUE)
-    }
-    
-    openxlsx::addStyle(wb, sheet=n, cols = listPOV[,"col"]+1, rows = listPOV[,"row"]+1, style = POV_Style)
-    openxlsx::addStyle(wb, sheet=n, cols = listMEC[,"col"]+1, rows = listMEC[,"row"]+1, style = MEC_Style)
-    
+    openxlsx::writeData(wb, sheet=n, cbind(ID = rownames(Biobase::fData(obj)),
+                                           Biobase::fData(obj)), rowNames = FALSE)
     #bodyStyleNumber <- createStyle(numFmt = "NUMBER")
-    #addStyle(wb, sheet=1, bodyStyleNumber, rows = 2:nrow(Biobase::exprs(obj)), 
-    #cols=2:ncol(Biobase::exprs(obj)),gridExpand = TRUE)
+    #addStyle(wb, sheet=3, bodyStyleNumber, 
+    #rows = 2:nrow(Biobase::exprs(obj)), cols=numericCols, 
+    #gridExpand = TRUE, stack=TRUE)
     
-    openxlsx::addWorksheet(wb, "Samples Meta Data")
+  }
+  
+  if (!is.null(obj@experimentData@other$GGO_analysis))
+  {
+    l <- length(obj@experimentData@other$GGO_analysis$ggo_res)
+    for (i in 1:l){
+      n <- n +1
+      level <- as.numeric(obj@experimentData@other$GGO_analysis$levels[i])
+      openxlsx::addWorksheet(wb, paste("Group GO - level ", level, sep=""))
+      openxlsx::writeData(wb, sheet=n, obj@experimentData@other$GGO_analysis$ggo_res[[i]]$ggo_res@result)
+    }
+  }
+  
+  if (!is.null(obj@experimentData@other$EGO_analysis))
+  {
     n <- n +1
-    openxlsx::writeData(wb, sheet=n, Biobase::pData(obj), rowNames = FALSE)
-    n <- n +1
-    if (dim(Biobase::fData(obj))[2] != 0){
-        openxlsx::addWorksheet(wb, "Feature Meta Data")
-        #numericCols <- which(sapply(Biobase::fData(obj), is.numeric))
-        #Biobase::fData(obj)[,numericCols] <- 
-        #format(Biobase::fData(obj)[,numericCols])
-        
-        openxlsx::writeData(wb, sheet=n, cbind(ID = rownames(Biobase::fData(obj)),
-                                               Biobase::fData(obj)), rowNames = FALSE)
-        #bodyStyleNumber <- createStyle(numFmt = "NUMBER")
-        #addStyle(wb, sheet=3, bodyStyleNumber, 
-        #rows = 2:nrow(Biobase::exprs(obj)), cols=numericCols, 
-        #gridExpand = TRUE, stack=TRUE)
-        
-    }
+    openxlsx::addWorksheet(wb, "Enrichment GO")
+    openxlsx::writeData(wb, sheet=n, obj@experimentData@other$EGO_analysis$ego_res@result)
     
-    if (!is.null(obj@experimentData@other$GGO_analysis))
-    {
-        l <- length(obj@experimentData@other$GGO_analysis$ggo_res)
-        for (i in 1:l){
-            n <- n +1
-            level <- as.numeric(obj@experimentData@other$GGO_analysis$levels[i])
-            openxlsx::addWorksheet(wb, paste("Group GO - level ", level, sep=""))
-            openxlsx::writeData(wb, sheet=n, obj@experimentData@other$GGO_analysis$ggo_res[[i]]$ggo_res@result)
-        }
-    }
-    
-    if (!is.null(obj@experimentData@other$EGO_analysis))
-    {
-        n <- n +1
-        openxlsx::addWorksheet(wb, "Enrichment GO")
-        openxlsx::writeData(wb, sheet=n, obj@experimentData@other$EGO_analysis$ego_res@result)
-        
-    }
-    
-    openxlsx::saveWorkbook(wb, name, overwrite=TRUE)
-    return(name)
-    
-    
+  }
+  
+  openxlsx::saveWorkbook(wb, name, overwrite=TRUE)
+  return(name)
+  
+  
 }
 
 ##' This function reads a sheet of an Excel file and put the data into a data.frame.
@@ -353,7 +352,7 @@ readExcel <- function(file, extension, sheet){
   data <- readxl::read_excel(file, sheet)
   
   return(as.data.frame(data,asIs=T, stringsAsFactors=F))
-    
+  
 }
 
 
@@ -364,9 +363,9 @@ readExcel <- function(file, extension, sheet){
 ##' @return A vector
 ##' @author Samuel Wieczorek
 listSheets <- function(file){
-    #require(openxlsx)
-    return(openxlsx::getSheetNames(file))
-    
+  #require(openxlsx)
+  return(openxlsx::getSheetNames(file))
+  
 }
 
 
@@ -384,17 +383,17 @@ listSheets <- function(file){
 ##' writeMSnsetToCSV(obj, "foo")
 ##' }
 writeMSnsetToCSV <- function(obj, fname){
-    
-    #fname <- paste(tempdir(),fname,  sep="/")
-    write.csv(Biobase::exprs(obj), paste(tempdir(), "exprs.csv", sep='/'))
-    write.csv(Biobase::fData(obj), paste(tempdir(), "fData.csv", sep='/'))
-    write.csv(Biobase::pData(obj), paste(tempdir(), "pData.csv", sep='/'))
-    files <- c(paste(tempdir(), "exprs.csv", sep='/'),
-               paste(tempdir(), "fData.csv", sep='/'),
-               paste(tempdir(), "pData.csv", sep='/'))
-    zip(fname, files, zip = Sys.getenv("R_ZIPCMD", "zip"))
-    
-    return(fname)
+  
+  #fname <- paste(tempdir(),fname,  sep="/")
+  write.csv(Biobase::exprs(obj), paste(tempdir(), "exprs.csv", sep='/'))
+  write.csv(Biobase::fData(obj), paste(tempdir(), "fData.csv", sep='/'))
+  write.csv(Biobase::pData(obj), paste(tempdir(), "pData.csv", sep='/'))
+  files <- c(paste(tempdir(), "exprs.csv", sep='/'),
+             paste(tempdir(), "fData.csv", sep='/'),
+             paste(tempdir(), "pData.csv", sep='/'))
+  zip(fname, files, zip = Sys.getenv("R_ZIPCMD", "zip"))
+  
+  return(fname)
 }
 
 
@@ -417,7 +416,7 @@ rbindMSnset <- function(df1=NULL, df2){
     return(obj)
   }
   if (is.null(df1) && is.null(df2)){return(NULL)}
-    
+  
   tmp.exprs <- rbind(exprs(df1), exprs(df2))
   tmp.fData <- rbind(fData(df1), fData(df2))
   tmp.pData <- pData(df1)

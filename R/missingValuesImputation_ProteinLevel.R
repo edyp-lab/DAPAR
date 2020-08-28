@@ -228,7 +228,7 @@ impute.detQuant <- function(qData, values){
 ##' @author Samuel Wieczorek
 ##' @examples
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' dat <- mvFilter(Exp1_R25_pept[1:1000], type="allCond", th = 1)
+##' dat <- DAPAR::mvFilter(Exp1_R25_pept[1:1000], type="allCond", th = 1)
 ##' dat <- wrapper.impute.slsa(dat)
 wrapper.impute.slsa <- function(obj){
     
@@ -240,7 +240,7 @@ wrapper.impute.slsa <- function(obj){
     new.order <- unlist(lapply(split(sTab, conds), function(x) {x['Sample.name']}))
     qData <- Biobase::exprs(obj)[,new.order]
     
-    res <- impute.slsa(qData, conditions=conds, nknn=15, selec="all", weight=1,ind.comp=1)
+    res <- imp4p::impute.slsa(qData, conditions=conds, nknn=15, selec="all", weight=1,ind.comp=1)
     
     #restore old order
     res <- res[,sample.names.old]
@@ -248,7 +248,3 @@ wrapper.impute.slsa <- function(obj){
     Biobase::exprs(obj) <-res
     return (obj)
 }
-
-
-
-
