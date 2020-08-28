@@ -9,8 +9,7 @@ classic1wayAnova <- function(current_line, conditions){
     # vector containing the protein/peptide intensities
     intensities <- unname(unlist(current_line))
     # anova sur ces deux vecteurs
-    aov_test <- unlist(summary(aov(formula = intensities ~ conditions, data = NULL)))
-
+    aov_test <- aov(formula = intensities ~ conditions, data = NULL)
     return(aov_test)
 
 }
@@ -18,18 +17,20 @@ classic1wayAnova <- function(current_line, conditions){
 ##' @title Wrapper for One-way Anova statistical test
 ##' @author Hélène Borges
 ##' @param obj An object of class \code{MSnSet}.
-##' @param post_hoc a character string corresponding to the post-hoc test to
-##' perform. Possible values are "TukeyHSD" and "Dunnett". See details of
+##' @param with_post_hoc a character string with 2 possible values: "Yes" and
+##' "No" (default) saying if function must perform a Post-Hoc test or not.
+##' @param post_hoc_test character string, possible values are "No" (for no
+##' test; default value) or TukeyHSD" or "Dunnett". See details of
 ##' \code{postHocTest()} function to choose the appropriate one.
 ##' @details This function allows to perform a 1-way Analysis of Variance. Also
-##' computes the post-hoc tests if the \code{post_hoc} parameter is specified.
-##' There are two possible post-hoc tests: the Tukey Honest Significant Differences
+##' computes the post-hoc tests if the \code{with_post_hoc} parameter is set to
+##' yes. There are two possible post-hoc tests: the Tukey Honest Significant Differences
 ##' (specified as "TukeyHSD") and the Dunnett test (specified as "Dunnett").
-##' @return A list of two dataframes. First one called "LogFC" contains
+##' @return A list of two dataframes. First one called "logFC" contains
 ##' all pairwise comparisons logFC values (one column for one comparison) for
 ##' each analysed feature (Except in the case without post-hoc testing, for
 ##' which NAs are returned.); The second one named "P_Value" contains the
-##' corresponding pvalues.
+##' corresponding p-values.
 ##' @examples
 ##' require(DAPARdata)
 ##' data(Exp1_R25_pept)
@@ -38,31 +39,67 @@ classic1wayAnova <- function(current_line, conditions){
 ##' obj <- mvFilterFromIndices(obj, keepThat)
 ##' anovatest <- wrapperClassic1wayAnova(obj)
 ##' @seealso [postHocTest()]
-wrapperClassic1wayAnova <- function(obj, post_hoc = NULL){
+wrapperClassic1wayAnova <- function(obj, with_post_hoc = "No", post_hoc_test = "No"){
     qData <- Biobase::exprs(obj)
     sTab <- Biobase::pData(obj)
-    if(post_hoc == "None" || is.null(post_hoc)){
+    if(with_post_hoc == "No"){
         anova_tests <- as.data.frame(t(apply(qData,1,function(x) unlist(summary(classic1wayAnova(x,conditions=as.factor(sTab$Condition)))))))
         results <- dplyr::select(anova_tests, `Pr(>F)1`)
-        to_return <- list("logFC" = data.frame("anova1way" = matrix(NA, nrow = nrow(results)), row.names = rownames(results)),
-                          "P_Value" = data.frame("anova1way" = p.adjust(results$`Pr(>F)1`, method = "fdr"), row.names = rownames(results)))
-    }else if(post_hoc == "TukeyHSD"){
-        anova_tests <- t(apply(qData,1, classic1wayAnova, conditions=as.factor(sTab$Condition)))
-        names(anova_tests) <- rownames(qData)
-        to_return <- postHocTest(aov_fits = anova_tests, post_hoc_test = "TukeyHSD")
+        to_return <- list("logFC" = data.frame("anova_1way_logFC" = matrix(NA, nrow = nrow(results)), row.names = rownames(results)),
+                          "P_Value" = data.frame("anova_1way_pval" = results$`Pr(>F)1`, row.names = rownames(results)))
+    }else if(with_post_hoc == "Yes"){
+        if(post_hoc_test == "No"){
+            stop("You want to perform a post-hoc test but did not specify which test. Please choose between Dunnett or TukeyHSD")
+        }else if(post_hoc_test == "TukeyHSD"){
+            anova_tests <- t(apply(qData,1, classic1wayAnova, conditions=as.factor(sTab$Condition)))
+            names(anova_tests) <- rownames(qData)
+            to_return <- postHocTest(aov_fits = anova_tests, post_hoc_test = post_hoc_test)
 
-    }else if(post_hoc == "Dunnett"){
-        anova_tests <- t(apply(qData,1, classic1wayAnova, conditions=as.factor(sTab$Condition)))
-        names(anova_tests) <- rownames(qData)
-        to_return <- postHocTest(aov_fits = anova_tests, post_hoc_test = "Dunnett")
-
+        }else if(post_hoc == "Dunnett"){
+            anova_tests <- t(apply(qData,1, classic1wayAnova, conditions=as.factor(sTab$Condition)))
+            names(anova_tests) <- rownames(qData)
+            to_return <- postHocTest(aov_fits = anova_tests, post_hoc_test = post_hoc_test)
+        }
     }else{
-        stop("Wrong post_hoc parameter. Please choose between NULL, None,
-             TukeyHSD or Dunnett.")
+        stop("Wrong with_post_hoc parameter. Please choose between No or Yes.")
     }
 
     return(to_return)
 }
+
+
+
+##' Extract logFC and raw pvalues from multiple post-hoc models summaries
+##'
+##' @param post_hoc_models_summaries a list of summaries of post-hoc models.
+##'
+##' @return a list of 2 dataframes containing the logFC values and pvalues for
+##' each comparison.
+##' @author Hélène Borges
+formatPHResults <- function(post_hoc_models_summaries){
+    # récupérer les différences entre les moyennes
+    res_coeffs <- lapply(post_hoc_models_summaries, function(x) x$test$coefficients)
+    logFC <- data.frame(purrr::map_dfr(res_coeffs, cbind),
+                        row.names = names(post_hoc_models_summaries[[1]]$test$coefficients))
+    logFC <- as.data.frame(t(logFC))
+    # extract raw p-values (non-adjusted)
+    res_pvals <- lapply(post_hoc_models_summaries, function(x) x$test$pvalues)
+    pvals <- data.frame(purrr::map_dfr(res_pvals, cbind),
+                        row.names = names(post_hoc_models_summaries[[1]]$test$coefficients))
+    pvals <- as.data.frame(t(pvals))
+    res <- list("logFC" = logFC,
+                "P_Value" = pvals)
+    # formatting of column names for consistency with the limma and t-test code
+    colnames(res$logFC) <- stringr::str_replace(colnames(res$logFC), " - ", "_vs_")
+    colnames(res$P_Value) <- stringr::str_replace(colnames(res$P_Value), " - ", "_vs_")
+    colnames(res$logFC) <- stringr::str_c(colnames(res$logFC), "_logFC")
+    colnames(res$P_Value) <- stringr::str_c(colnames(res$P_Value), "_pval")
+
+    return(res)
+}
+
+
+
 
 
 ##' Post-hoc tests for classic 1-way ANOVA
@@ -95,39 +132,21 @@ wrapperClassic1wayAnova <- function(obj, post_hoc = NULL){
 ##' corresponding pvalues.
 ##' @author Hélène Borges
 postHocTest <- function(aov_fits, post_hoc_test = "TukeyHSD"){
-    res <- NULL
+
     if(post_hoc_test == "TukeyHSD"){
-        tukey_models <- lapply(aov_fits,TukeyHSD)
-        # récupérer les différences entre les moyennes
-        results_df_diffs <- lapply(tukey_models, function(x) data.frame(x$conditions,
-                                                                        check.rows = TRUE, check.names = TRUE)$diff)
-        logFC <- data.frame(purrr::map_dfr(results_df_diffs, cbind),
-                            row.names = rownames(tukey_models[[1]]$conditions))
-        logFC <- as.data.frame(t(logFC))
-        # récupérer les pavalues ajustées
-        results_df_pvals <- lapply(tukey_models, function(x) data.frame(x$conditions, check.rows = TRUE, check.names = TRUE)$p.adj)
-        pvals <- data.frame(purrr::map_dfr(results_df_pvals, cbind),
-                            row.names = rownames(tukey_models[[1]]$conditions))
-        pvals <- as.data.frame(t(pvals))
-        res <- list("logFC" = logFC,
-                    "P_Value" = pvals)
+        # use of adjusted("none") to obtain raw p-values (and not adjusted ones)
+        tukey_models_summaries <- lapply(aov_fits,
+                                         function(x) summary(multcomp::glht(x, linfct = multcomp::mcp(conditions = "Tukey")),
+                                                             test = multcomp::adjusted("none")))
+        res <- formatPHResults(tukey_models_summaries)
+
     }else if(post_hoc_test == "Dunnett"){
-        dunnett_models <- map(aov_fits,
-                              multcomp::glht,
-                              linfct = multcomp::mcp(conditions = "Dunnett"))
-        res_summaries <- purrr::map(dunnett_models, summary)
-        # on extrait les coefficients
-        res_coefs <- purrr::map(res_summaries, function(x) x$test$coefficients)
-        res_coefs <- data.frame(purrr::map_dfr(res_coefs, cbind),
-                                row.names = names(res_summaries[[1]]$test$coefficients))
-        res_coefs <- as.data.frame(t(res_coefs))
-        # On extrait les pvalues
-        res_pvalues <- purrr::map(res_summaries, function(x) x$test$pvalues)
-        res_pvalues <- data.frame(purrr::map_dfr(res_pvalues, cbind),
-                                  row.names = names(res_summaries[[1]]$test$coefficients))
-        res_pvalues <- as.data.frame(t(res_pvalues))
-        res <- list("logFC" = res_coefs,
-                    "P_Value" = res_pvalues)
+        dunnett_models_summaries <- lapply(aov_fits,
+                                           function(x) summary(multcomp::glht(x, linfct = multcomp::mcp(conditions = "Dunnett")),
+                                                               test = multcomp::adjusted("none"))
+                                           )
+        res <- formatPHResults(dunnett_models_summaries)
+
     }else{
         stop("Wrong post_hoc_test parameter. Please choose between TukeyHSD or
              Dunnett.")
