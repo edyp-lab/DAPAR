@@ -503,17 +503,17 @@ limmaCompleteTest <- function(qData, sTab, comp.type="OnevsOne"){
             res.l <- formatLimmaResult(fit, conds, contrast)
         }else if(comp.type == "anova1way"){
             # make the orthogonal contrasts
-            orthogonal_contrasts <- tidyr::crossing(A = colnames(design.matrix), B = colnames(design.matrix), .name_repair = "minimal") %>%
-              dplyr::filter(A!=B) %>%
-              dplyr::filter(!duplicated(paste0(pmax(A, B), pmin(A, B)))) %>%
-              dplyr::mutate(contrasts = stringr::str_glue("{A}-{B}"))
+            contrasts <- tidyr::crossing(A = colnames(design.matrix), B = colnames(design.matrix), .name_repair = "minimal")
+            contrasts <- dplyr::filter(contrasts, A!=B)
+            orthogonal_contrasts <- dplyr::filter(contrasts, !duplicated(paste0(pmax(A, B), pmin(A, B))))
+            orthogonal_contrasts <- dplyr::mutate(contrasts = stringr::str_glue("{A}-{B}"))
             # make the contrasts in a format adapted for limma functions
             contrasts_limma_format <- limma::makeContrasts(contrasts = orthogonal_contrasts$contrasts,
                                          levels = colnames(design.matrix))
 
             ebayes_fit <- limma::eBayes(limma::contrasts.fit(limma::lmFit(qData, design.matrix), contrasts_limma_format))
-            fit_pvalue <- limma::topTable(ebayes_fit, sort.by = "none", number = nrow(qData)) %>%
-              dplyr::select("anova_1way_pval" = P.Value)
+            fit_table <- limma::topTable(ebayes_fit, sort.by = "none", number = nrow(qData))
+            fit_pvalue <- dplyr::select(fit_table, "anova_1way_pval" = P.Value)
             res.l <- list("logFC" = data.frame("anova_1way_logFC" = matrix(NA, nrow = nrow(fit_pvalue)),
                                                row.names = rownames(fit_pvalue)),
                         "P_Value" = fit_pvalue)
