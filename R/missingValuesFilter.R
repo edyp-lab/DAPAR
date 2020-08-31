@@ -586,7 +586,7 @@ return(keepThat)
 ##' @param intensities_proportion float between 0 and 1 corresponding to the proportion
 ##' of intensities to keep in the lines.
 ##' @param mode character string. Four possibilities corresponding to the
-##' description above: "None", whole_matrix", "all_cond" and "at_least_1_cond".
+##' description above: "None", wholeMatrix", "allCond" and "atLeastOneCond".
 ##' @return the object given as input but with the lines not respecting the
 ##' proportion of NA requested in less.
 ##' @author Hélène Borges
@@ -595,9 +595,9 @@ return(keepThat)
 ##' filtered <- filterByProportion(obj = Exp1_R25_prot, intensities_proportion = 0.8, mode = "at_least_1_cond)
 filterByProportion <- function(obj, intensities_proportion, mode = "None"){
   # check if mode is valid
-  if(!(mode %in% c("None","whole_matrix", "all_cond", "at_least_1_cond"))){
+  if(!(mode %in% c("None","wholeMatrix", "allCond", "atLeastOneCond"))){
     stop(stringr::str_glue("Wrong mode: {mode} is not a valid string.
-                     Please choose between 'None', whole_matrix', 'all_cond' or 'at_least_1_cond'.",
+                     Please choose between 'None', wholeMatrix', 'allCond' or 'atLeastOneCond'.",
                            call. =FALSE))
   }
   # check if intensities_proportion is valid
@@ -625,7 +625,7 @@ filterByProportion <- function(obj, intensities_proportion, mode = "None"){
                                        levels = unique(longer_intensities$feature))
   if(mode == "None"){
     to_keep <- obj
-  }else if(mode == "whole_matrix"){
+  }else if(mode == "wholeMatrix"){
     nb_samples <- ncol(intensities)
     threshold <- ceiling(nb_samples*x)
     print(stringr::str_glue("missing value threshold {threshold}"))
@@ -635,7 +635,7 @@ filterByProportion <- function(obj, intensities_proportion, mode = "None"){
       dplyr::summarise(non_na = sum(!is.na(intensity)))
     to_keep <- obj[which(feat_grp$non_na >= threshold),]
 
-  }else if(mode == "all_cond" || mode == "at_least_1_cond"){
+  }else if(mode == "allCond" || mode == "atLeastOneCond"){
     workforces <- longer_intensities %>%
       dplyr::group_by(feature, condition) %>%
       dplyr::count(condition)
@@ -659,9 +659,9 @@ filterByProportion <- function(obj, intensities_proportion, mode = "None"){
         TRUE ~ 1
       )) %>%
       dplyr::ungroup()
-    # if it is all_cond then we must find the features for which all the conditions
+    # if it is allCond then we must find the features for which all the conditions
     # respect the threshold
-    if(mode == "all_cond"){
+    if(mode == "allCond"){
       all_cond_ok <- check_th %>%
         dplyr::group_by(feature) %>%
         dplyr::filter(all(non_na ==1)) %>%
@@ -669,8 +669,8 @@ filterByProportion <- function(obj, intensities_proportion, mode = "None"){
         as.data.frame()
       all_cond_ok$feature <- as.character(all_cond_ok$feature)
       to_keep <- obj[which(rownames(obj) %in% all_cond_ok$feature),]
-    }else if(mode == "at_least_1_cond"){
-      # if it is at_least_1_cond then we must find the features for which at
+    }else if(mode == "atLeastOneCond"){
+      # if it is atLeastOneCond then we must find the features for which at
       # least one condition that respects the threshold
       any_cond_ok <- check_th %>%
         dplyr::group_by(feature) %>%
