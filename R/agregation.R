@@ -14,34 +14,34 @@
 ##' MShared <- BuildAdjacencyMatrix(obj, protID, FALSE)
 ##' getProteinsStats(MShared)
 getProteinsStats <- function(matShared){
-    if (is.null(matShared)){return(NULL)}
-    #if(!is.matrix(matUnique) || !is.matrix(matShared)){return(NULL)}
-    
-    
-    ind.shared.Pep <- which(rowSums(as.matrix(matShared))>1)
-    ind.unique.Pep <- which(rowSums(as.matrix(matShared))==1)
-    
-    M.shared.Pep <- matShared[ind.shared.Pep,]
-    M.shared.Pep <- M.shared.Pep[,-which(colSums(as.matrix(M.shared.Pep))==0)]
-    
-    M.unique.Pep <- matShared[ind.unique.Pep,]
-    M.unique.Pep <- M.unique.Pep[,-which(colSums(as.matrix(M.unique.Pep))==0)]
-    
-    
-    pep.names.shared <- colnames(M.shared.Pep)
-    pep.names.unique <- colnames(M.unique.Pep)
-    protOnlyShared <- setdiff(pep.names.shared, intersect(pep.names.shared, pep.names.unique))
-    protOnlyUnique <- setdiff(pep.names.unique, intersect(pep.names.shared, pep.names.unique))
-    protMix <- intersect(pep.names.shared, pep.names.unique)
-    
-
-    return (list(nbPeptides = nrow(M.unique.Pep)+nrow(M.shared.Pep),
-                 nbSpecificPeptides = nrow(M.unique.Pep),
-                 nbSharedPeptides = nrow(M.shared.Pep),
-                 nbProt = length(protOnlyShared)+length(protOnlyUnique)+length(protMix),
-                 protOnlyUniquePep =protOnlyUnique,
-                  protOnlySharedPep =protOnlyShared,
-                  protMixPep = protMix))
+  if (is.null(matShared)){return(NULL)}
+  #if(!is.matrix(matUnique) || !is.matrix(matShared)){return(NULL)}
+  
+  
+  ind.shared.Pep <- which(rowSums(as.matrix(matShared))>1)
+  ind.unique.Pep <- which(rowSums(as.matrix(matShared))==1)
+  
+  M.shared.Pep <- matShared[ind.shared.Pep,]
+  M.shared.Pep <- M.shared.Pep[,-which(colSums(as.matrix(M.shared.Pep))==0)]
+  
+  M.unique.Pep <- matShared[ind.unique.Pep,]
+  M.unique.Pep <- M.unique.Pep[,-which(colSums(as.matrix(M.unique.Pep))==0)]
+  
+  
+  pep.names.shared <- colnames(M.shared.Pep)
+  pep.names.unique <- colnames(M.unique.Pep)
+  protOnlyShared <- setdiff(pep.names.shared, intersect(pep.names.shared, pep.names.unique))
+  protOnlyUnique <- setdiff(pep.names.unique, intersect(pep.names.shared, pep.names.unique))
+  protMix <- intersect(pep.names.shared, pep.names.unique)
+  
+  
+  return (list(nbPeptides = nrow(M.unique.Pep)+nrow(M.shared.Pep),
+               nbSpecificPeptides = nrow(M.unique.Pep),
+               nbSharedPeptides = nrow(M.shared.Pep),
+               nbProt = length(protOnlyShared)+length(protOnlyUnique)+length(protMix),
+               protOnlyUniquePep =protOnlyUnique,
+               protOnlySharedPep =protOnlyShared,
+               protMixPep = protMix))
 }
 
 
@@ -73,18 +73,18 @@ getProteinsStats <- function(matShared){
 ##' BuildColumnToProteinDataset(data, M, name,proteinNames )
 ##' }
 BuildColumnToProteinDataset <- function(peptideData, matAdj, columnName, proteinNames){
-nbProt <- ncol(matAdj)
-newCol <- rep("", nbProt)
-
-#print(head(rownames(peptideData)))
-i <- 1
-for (p in proteinNames){
+  nbProt <- ncol(matAdj)
+  newCol <- rep("", nbProt)
+  
+  #print(head(rownames(peptideData)))
+  i <- 1
+  for (p in proteinNames){
     listeIndicePeptides <- names(which(matAdj[,p] == 1))
     listeData <- unique(as.character(peptideData[listeIndicePeptides,columnName], ";"))
     newCol[i] <- paste0(listeData, collapse = ", ")
     i <- i +1
-}
-return(newCol)
+  }
+  return(newCol)
 }
 
 
@@ -115,17 +115,17 @@ return(newCol)
 ##' BuildColumnToProteinDataset_par(data, M, name,proteinNames )
 ##' }
 BuildColumnToProteinDataset_par <- function(peptideData, matAdj, columnName, proteinNames){
-    doParallel::registerDoParallel()
-    
-    nbProt <- ncol(matAdj)
-    newCol <- rep("", nbProt)
-    i <- 1
-    newCol <- foreach (i=1:length(proteinNames), .combine=rbind) %dopar% {
-        listeIndicePeptides <- names(which(matAdj[,proteinNames[i]] == 1))
-        listeData <- unique(as.character(peptideData[listeIndicePeptides,columnName], ";"))
-        paste0(listeData, collapse = ", ")
-    }
-    return(as.vector(newCol))
+  doParallel::registerDoParallel()
+  
+  nbProt <- ncol(matAdj)
+  newCol <- rep("", nbProt)
+  i <- 1
+  newCol <- foreach (i=1:length(proteinNames), .combine=rbind) %dopar% {
+    listeIndicePeptides <- names(which(matAdj[,proteinNames[i]] == 1))
+    listeData <- unique(as.character(peptideData[listeIndicePeptides,columnName], ";"))
+    paste0(listeData, collapse = ", ")
+  }
+  return(as.vector(newCol))
 }
 
 
@@ -145,9 +145,9 @@ BuildColumnToProteinDataset_par <- function(peptideData, matAdj, columnName, pro
 ##' M <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
 ##' CountPep(M)
 CountPep <- function (M) {
-    z <- M
-    z[z!=0] <- 1
-    return(z)
+  z <- M
+  z[z!=0] <- 1
+  return(z)
 }
 
 
@@ -165,25 +165,25 @@ CountPep <- function (M) {
 ##' mat <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs")
 ##' GraphPepProt(mat)
 GraphPepProt <- function(mat){
-    if (is.null(mat)){return (NULL)} 
-
-    #mat <- as.matrix(mat)
-    t <- t(mat)
-    t <- apply(mat, 2, sum, na.rm=TRUE)
-    tab <- table(t)
-    position <- seq(1, length(tab),by=3)
-    conds <- names(tab)
-
-    #par(mar=c(6,4,4,8) + 0.1)#, mgp=c(3,0.5,0)
-    barplot(tab, 
-            xlim=c(1, length(tab)),
-            xlab="Nb of peptides", 
-            ylab="Nb of proteins",
-            names.arg=conds, 
-            xaxp=c(1, length(tab), 3), 
-            las=1
-            , col = "orange")
-
+  if (is.null(mat)){return (NULL)} 
+  
+  #mat <- as.matrix(mat)
+  t <- t(mat)
+  t <- apply(mat, 2, sum, na.rm=TRUE)
+  tab <- table(t)
+  position <- seq(1, length(tab),by=3)
+  conds <- names(tab)
+  
+  #par(mar=c(6,4,4,8) + 0.1)#, mgp=c(3,0.5,0)
+  barplot(tab, 
+          xlim=c(1, length(tab)),
+          xlab="Nb of peptides", 
+          ylab="Nb of proteins",
+          names.arg=conds, 
+          xaxp=c(1, length(tab), 3), 
+          las=1
+          , col = "orange")
+  
 }
 
 
@@ -204,25 +204,25 @@ GraphPepProt <- function(mat){
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
 BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
-    
-    # data <- Biobase::exprs(obj.pep)
-    # PG <- Biobase::fData(obj.pep)[,protID]
-    # PG.l <- strsplit(as.character(PG), split=";", fixed=TRUE)
-    # 
-    # Un1 <- unlist(PG.l)
-    # X<- Matrix::sparseMatrix(i = rep(seq_along(PG.l), lengths(PG.l)),
-    #                  j=as.integer(factor(Un1, levels = unique(Un1))),
-    #                  x=1, 
-    #                  dimnames=list(rownames(data),as.character(unique(Un1))))
-    # 
-    # if (unique == TRUE){
-    #   ll <- which(rowSums(X)>1)
-    #   if (length(ll) > 0) {
-    #     X[ll,] <- 0
-    #   }
-    #      }
-    # 
-    # return(X)
+  
+  # data <- Biobase::exprs(obj.pep)
+  # PG <- Biobase::fData(obj.pep)[,protID]
+  # PG.l <- strsplit(as.character(PG), split=";", fixed=TRUE)
+  # 
+  # Un1 <- unlist(PG.l)
+  # X<- Matrix::sparseMatrix(i = rep(seq_along(PG.l), lengths(PG.l)),
+  #                  j=as.integer(factor(Un1, levels = unique(Un1))),
+  #                  x=1, 
+  #                  dimnames=list(rownames(data),as.character(unique(Un1))))
+  # 
+  # if (unique == TRUE){
+  #   ll <- which(rowSums(X)>1)
+  #   if (length(ll) > 0) {
+  #     X[ll,] <- 0
+  #   }
+  #      }
+  # 
+  # return(X)
   
   
   data <- Biobase::exprs(obj.pep)
@@ -240,7 +240,7 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
   }
   
   X <- Matrix::Matrix(t, sparse=T,
-              dimnames = list(rownames(obj.pep), colnames(t))
+                      dimnames = list(rownames(obj.pep), colnames(t))
   )
   
   return(X)
@@ -305,13 +305,13 @@ aggregateIterParallel <- function(obj.pep, X, init.method='Sum', method='Mean', 
     condsIndices <- which(Biobase::pData(obj.pep)$Condition == unique(Biobase::pData(obj.pep)$Condition)[cond])
     qData <- qData.pep[,condsIndices]
     DAPAR::inner.aggregate.iter(qData, X, init.method, method, n)
-   }
+  }
   
   protData <- protData[,colnames(Biobase::exprs(obj.pep))]
   obj.prot <- DAPAR::finalizeAggregation(obj.pep, qData.pep, protData, X)
   
   return(obj.prot)
-
+  
 }
 
 
@@ -339,8 +339,8 @@ inner.aggregate.iter <- function(pepData, X,init.method='Sum', method='Mean', n=
   }
   
   if (!(method %in% c("onlyN", "Mean"))){
-        warning("Wrong parameter method")
-        return(NULL)
+    warning("Wrong parameter method")
+    return(NULL)
   }
   
   
@@ -348,7 +348,7 @@ inner.aggregate.iter <- function(pepData, X,init.method='Sum', method='Mean', n=
     warning("Parameter n is null")
     return(NULL)
   }
-      
+  
   yprot <- NULL
   switch(init.method,
          Sum= yprot <- inner.sum(pepData, X),
@@ -401,21 +401,21 @@ inner.aggregate.iter <- function(pepData, X,init.method='Sum', method='Mean', n=
 aggregateIter <- function(obj.pep, X, init.method='Sum', method='Mean', n=NULL){
   
   ### a reproduire iterativement pour chaque condition
-    # Initialisation: presque aucune d?pendance ? l'initialisation prendre "sum overall" et  matAdj = X par simplicit?
-    #X <- as.matrix(X)
+  # Initialisation: presque aucune d?pendance ? l'initialisation prendre "sum overall" et  matAdj = X par simplicit?
+  #X <- as.matrix(X)
   qData.pep <- 2^(Biobase::exprs(obj.pep))
   
-    protData <- matrix(rep(0,ncol(X)*ncol(obj.pep)), nrow=ncol(X))
-    
-    for (cond in unique(pData(obj.pep)$Condition)){
-      condsIndices <- which(pData(obj.pep)$Condition == cond)
-      qData <- qData.pep[,condsIndices]
-      print(paste0("Condition ", cond))
-      protData[,condsIndices]  <- inner.aggregate.iter(qData, X, init.method, method, n)
-     }
-    obj.prot <- finalizeAggregation(obj.pep, qData.pep, protData, X)
-    return(obj.prot)
-    
+  protData <- matrix(rep(0,ncol(X)*ncol(obj.pep)), nrow=ncol(X))
+  
+  for (cond in unique(pData(obj.pep)$Condition)){
+    condsIndices <- which(pData(obj.pep)$Condition == cond)
+    qData <- qData.pep[,condsIndices]
+    print(paste0("Condition ", cond))
+    protData[,condsIndices]  <- inner.aggregate.iter(qData, X, init.method, method, n)
+  }
+  obj.prot <- finalizeAggregation(obj.pep, qData.pep, protData, X)
+  return(obj.prot)
+  
   #return(yprot)
 }
 
@@ -429,7 +429,7 @@ aggregateIter <- function(obj.pep, X, init.method='Sum', method='Mean', n=NULL){
 ##' @return A data.frame
 ##' @author Samuel Wieczorek
 GetNbPeptidesUsed <- function(X, pepData){
-   pepData[!is.na(pepData)] <- 1
+  pepData[!is.na(pepData)] <- 1
   pepData[is.na(pepData)] <- 0
   pep <- t(X) %*% pepData
   
@@ -656,7 +656,7 @@ aggregateTopn <- function(obj.pep,X,  method='Mean', n=10){
 ##' @return A protein object of class \code{MSnset}
 ##' @author Samuel Wieczorek
 finalizeAggregation <- function(obj.pep, pepData, protData,X, lib.loc=NULL){
- 
+  
   protData <- as.matrix(protData)
   X <- as.matrix(X)
   protData[protData==0] <- NA
@@ -679,17 +679,17 @@ finalizeAggregation <- function(obj.pep, pepData, protData,X, lib.loc=NULL){
   
   n <- GetDetailedNbPeptides(X)
   
-   fd <- data.frame(colnames(X), 
-                    nPepTotal = n$nTotal,
-                    nPepShared = n$nShared, 
-                    nPepSpec = n$nSpec, 
-                    pepSpecUsed, 
-                    pepSharedUsed, 
-                    pepTotalUsed)
+  fd <- data.frame(colnames(X), 
+                   nPepTotal = n$nTotal,
+                   nPepShared = n$nShared, 
+                   nPepSpec = n$nSpec, 
+                   pepSpecUsed, 
+                   pepSharedUsed, 
+                   pepTotalUsed)
   
   obj.prot <- MSnSet(exprs = log2(protData), 
-                fData = fd, 
-                pData = Biobase::pData(obj.pep))
+                     fData = fd, 
+                     pData = Biobase::pData(obj.pep))
   obj.prot@experimentData@other <- obj.pep@experimentData@other
   obj.prot@experimentData@other$typeOfData <-"protein"
   #obj.prot <- addOriginOfValue(obj.prot)
