@@ -13,6 +13,10 @@
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #'  obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
 #' res.pca <- wrapper.pca(obj)
+#' 
+#' @importFrom Biobase exprs pData
+#' @importFrom FactoMineR PCA
+#' 
 wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
   # require(FactoMineR)
   
@@ -57,6 +61,9 @@ wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' res.pca <- wrapper.pca(Exp1_R25_pept)
 #' plotPCA_Var(res.pca)
+#' 
+#' @importFrom factoextra fviz_pca_var
+#' 
 plotPCA_Var <- function(res.pca, chosen.axes=c(1,2)){
   #plot.PCA(res.pca, choix="var", axes = chosen.axes, title="Sample factor map (PCA)")
   #require(factoextra)
@@ -81,6 +88,9 @@ plotPCA_Var <- function(res.pca, chosen.axes=c(1,2)){
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' res.pca <- wrapper.pca(Exp1_R25_pept)
 #' plotPCA_Ind(res.pca)
+#' 
+#' @importFrom factoextra fviz_pca_ind
+#' 
 plotPCA_Ind <- function(res.pca, chosen.axes=c(1,2)){
   #plot.PCA(res.pca, choix="ind", axes = chosen.axes, select = 0:-1, title="Protein factor map (PCA)")
   if (is.null(res.pca)){  return(NULL)}
@@ -126,6 +136,9 @@ plotPCA_Eigen <- function(res.pca){
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' res.pca <- wrapper.pca(Exp1_R25_pept, ncp=6)
 #' plotPCA_Eigen_hc(res.pca)
+#' 
+#' @import highcharter
+#' 
 plotPCA_Eigen_hc <- function(res.pca){
   if (is.null(res.pca)){return(NULL)}
   hc <- highchart() %>%
@@ -157,6 +170,10 @@ plotPCA_Eigen_hc <- function(res.pca){
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 #' boxPlotD(Exp1_R25_pept, conds)
+#' 
+#' @importFrom Biobase exprs pData
+#' @importFrom RColorBrewer brewer.pal
+#' 
 boxPlotD <- function(obj,conds, legend=NULL,palette=NULL){
   qData <- Biobase::exprs(obj)
   if (is.null(palette)){
@@ -211,7 +228,8 @@ boxPlotD <- function(obj,conds, legend=NULL,palette=NULL){
 #' legend <- Biobase::pData(Exp1_R25_pept)[,"Sample.name"]
 #' boxPlotD_HC(Exp1_R25_pept, legend)
 #' 
-#' import highcharter
+#' @importFrom Biobase exprs
+#' @import highcharter
 #' 
 boxPlotD_HC <- function(obj, legend=NULL, palette = NULL){
   
@@ -234,9 +252,8 @@ boxPlotD_HC <- function(obj, legend=NULL, palette = NULL){
   }
   
   df <- data.frame(values = as.vector(qData,mode='numeric'),samples = tmp, stringsAsFactors = FALSE)
-  print(palette)
   
-  hc <- hcboxplot(x=df$values, var = df$samples, colorByPoint = TRUE, outliers = TRUE) %>%
+  hc <- highcharter::hcboxplot(x=df$values, var = df$samples, colorByPoint = TRUE, outliers = TRUE) %>%
     hc_chart(type="column") %>%
     hc_yAxis(title = list(text = "Log (intensity)")) %>%
     hc_xAxis(title = list(text = "Samples"), categories=legend) %>%
@@ -289,6 +306,9 @@ boxPlotD_HC <- function(obj, legend=NULL, palette = NULL){
 #' library(vioplot)
 #' legend <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 #' violinPlotD(Exp1_R25_pept, legend=legend)
+#' 
+#' @importFrom Biobase exprs
+#' 
 violinPlotD <- function(obj, legend=NULL, palette = NULL){
   plot.new()
   qData <- Biobase::exprs(obj)
@@ -314,8 +334,7 @@ violinPlotD <- function(obj, legend=NULL, palette = NULL){
   axis(2, yaxp = c(floor(min(na.omit(qData))), 
                    floor(max(na.omit(qData))), 5), las=1)
   
-  if( !is.null(legend))
-  {
+  if( !is.null(legend)) {
     if (is.vector(legend) ){
       N <- 1} else{ N <- ncol(legend)}
     
@@ -355,6 +374,9 @@ violinPlotD <- function(obj, legend=NULL, palette = NULL){
 #' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 #' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering","within conditions")
 #' wrapper.compareNormalizationD(Exp1_R25_pept, objAfter, conds)
+#' 
+#' @importFrom Biobase exprs pData
+#' 
 wrapper.compareNormalizationD <- function(objBefore, objAfter, 
                                           condsForLegend=NULL,
                                           indData2Show=NULL,
@@ -391,6 +413,9 @@ wrapper.compareNormalizationD <- function(objBefore, objAfter,
 #' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering", 
 #' "within conditions")
 #' wrapper.compareNormalizationD_HC(Exp1_R25_pept, objAfter, conds)
+#' 
+#' @importFrom Biobase exprs
+#' 
 wrapper.compareNormalizationD_HC <- function(objBefore, objAfter, 
                                              condsForLegend=NULL,
                                              indData2Show=NULL,
@@ -424,6 +449,9 @@ wrapper.compareNormalizationD_HC <- function(objBefore, objAfter,
 #' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 #' objAfter <- wrapper.normalizeD(Exp1_R25_pept,"QuantileCentering","within conditions")
 #' compareNormalizationD(qDataBefore, Biobase::exprs(objAfter), conds)
+#' 
+#' @importFrom RColorBrewer brewer.pal
+#' 
 compareNormalizationD <- function(qDataBefore,
                                   qDataAfter,
                                   condsForLegend=NULL,
@@ -518,6 +546,7 @@ compareNormalizationD <- function(qDataBefore,
 #' objAfter <- wrapper.normalizeD(obj,"QuantileCentering","within conditions")
 #' compareNormalizationD_HC(qDataBefore, Biobase::exprs(objAfter), conds)
 #' 
+#' @import highcharter
 #' @importFrom RColorBrewer brewer.pal
 #' 
 compareNormalizationD_HC <- function(qDataBefore,
@@ -531,7 +560,7 @@ compareNormalizationD_HC <- function(qDataBefore,
   
   
   if (is.null(palette)){
-    tmp <- brewer.pal(length(unique(condsForLegend)),"Dark2")[1:length(unique(condsForLegend))]
+    tmp <- RColorBrewer::brewer.pal(length(unique(condsForLegend)),"Dark2")[1:length(unique(condsForLegend))]
     
     for (i in 1:ncol(qDataBefore)){
       palette[i] <- tmp[ which(condsForLegend[i] == unique(condsForLegend))]
@@ -584,6 +613,10 @@ compareNormalizationD_HC <- function(qDataBefore,
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 #' densityPlotD(Exp1_R25_pept, conds)
+#' 
+#' @importFrom Biobase exprs pData
+#' @importFrom RColorBrewer brewer.pal
+#' 
 densityPlotD <- function(obj, conds, legend=NULL,palette = NULL){
   
   qData <- Biobase::exprs(obj)
@@ -656,6 +689,10 @@ densityPlotD <- function(obj, conds, legend=NULL,palette = NULL){
 #' @examples 
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' densityPlotD_HC(Exp1_R25_pept)
+#' 
+#' @import highcharter
+#' @importFrom Biobase exprs pData
+#' 
 densityPlotD_HC <- function(obj, legend=NULL, palette = NULL){
   
   qData <- Biobase::exprs(obj)
@@ -737,6 +774,9 @@ densityPlotD_HC <- function(obj, legend=NULL, palette = NULL){
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' wrapper.CVDistD(Exp1_R25_pept)
+#' 
+#' @importFrom Biobase exprs pData
+#' 
 wrapper.CVDistD <- function(obj, ...){
   qData <- Biobase::exprs(obj)
   conds <- Biobase::pData(obj)[,"Condition"]
@@ -758,6 +798,9 @@ wrapper.CVDistD <- function(obj, ...){
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' wrapper.CVDistD_HC(Exp1_R25_pept)
+#' 
+#' @importFrom Biobase exprs pData
+#' 
 wrapper.CVDistD_HC <- function(obj, ...){
   qData <- Biobase::exprs(obj)
   conds <- Biobase::pData(obj)[,"Condition"]
@@ -780,6 +823,9 @@ wrapper.CVDistD_HC <- function(obj, ...){
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 #' CVDistD(Biobase::exprs(Exp1_R25_pept), conds)
+#' 
+#' @importFrom RColorBrewer brewer.pal
+#' 
 CVDistD <- function(qData, conds=NULL, palette = NULL){
   
   if (is.null(conds)) {return(NULL)}
@@ -862,6 +908,10 @@ CVDistD <- function(qData, conds=NULL, palette = NULL){
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 #' CVDistD_HC(Biobase::exprs(Exp1_R25_pept), conds)
+#' 
+#' @import highcharter
+#' @importFrom RColorBrewer brewer.pal
+#' 
 CVDistD_HC <- function(qData, conds=NULL, palette = NULL){
   
   if (is.null(conds)) {
@@ -961,6 +1011,9 @@ CVDistD_HC <- function(qData, conds=NULL, palette = NULL){
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' wrapper.corrMatrixD(Exp1_R25_pept)
+#' 
+#' @importFrom Biobase exprs pData
+#' 
 wrapper.corrMatrixD <- function(obj, rate=5){
   qData <- Biobase::exprs(obj)
   samplesData <- Biobase::pData(obj)
@@ -979,6 +1032,9 @@ wrapper.corrMatrixD <- function(obj, rate=5){
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' wrapper.corrMatrixD_HC(Exp1_R25_pept)
+#'  
+#' @importFrom Biobase exprs pData
+#' 
 wrapper.corrMatrixD_HC <- function(obj, rate=0.5){
   qData <- Biobase::exprs(obj)
   samplesData <- Biobase::pData(obj)
@@ -1027,7 +1083,7 @@ corrMatrixD <- function(qData, samplesData, gradientRate = 5){
     labs(x = "", y = "") +
     
     scale_fill_gradientn (
-      colours=colorRampPalette (c ("white", "lightblue","darkblue")) (101),
+      colours = colorRampPalette (c ("white", "lightblue","darkblue")) (101),
       values = c(pexp(seq(0,1,0.01), rate=gradientRate),1), limits=c(0,1))
   
   plot(d)
@@ -1055,7 +1111,10 @@ corrMatrixD <- function(qData, samplesData, gradientRate = 5){
 #' res <- cor(qData,use = 'pairwise.complete.obs')
 #' corrMatrixD_HC(res, samplesData)
 #' 
-#' @importFrom dplyr select
+#' @import highcharter
+#' @importFrom dplyr tbl_df mutate left_join select
+#' @importFrom tidyr gather
+#' @importFrom tibble tibble
 #' 
 corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
   
@@ -1073,14 +1132,14 @@ corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
   
   x <- y <- names(df)
   
-  df <- tbl_df(cbind(x = y, df)) %>% 
-    gather(y, dist, -x) %>% 
-    mutate(x = as.character(x),
-           y = as.character(y)) %>% 
-    left_join(tibble(x = y,
-                     xid = seq(length(y)) - 1), by = "x") %>% 
-    left_join(tibble(y = y,
-                     yid = seq(length(y)) - 1), by = "y")
+  df <- dplyr::tbl_df(cbind(x = y, df)) %>% 
+    tidyr::gather(y, dist, -x) %>% 
+    dplyr::mutate(x = as.character(x),
+                  y = as.character(y)) %>% 
+    dplyr::left_join(tibble(x = y,
+                            xid = seq(length(y)) - 1), by = "x") %>% 
+    dplyr::left_join(tibble(y = y,
+                            yid = seq(length(y)) - 1), by = "y")
   
   ds <- df %>% 
     dplyr::select("xid", "yid", "dist") %>% 
@@ -1141,14 +1200,12 @@ corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
 #' 
 wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete", 
                               dendro = FALSE){
-  qData <- exprs(obj)
-  conds <- pData(obj)[['Condition']]
+  qData <- Biobase::exprs(obj)
+  conds <- Biobase::pData(obj)[['Condition']]
   for (j in 1:length(colnames(qData))){
     colnames(qData)[j] <- paste(as.character(Biobase::pData(obj)[j,2:ncol(Biobase::pData(obj))]), 
                                 collapse =" ")
   }
-  print("heatmap")
-  print(conds)
   heatmapD(qData, conds, distance, cluster, dendro)
 }
 
@@ -1161,6 +1218,7 @@ wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete",
 #' quantitative data in the \code{exprs()} table of an object of
 #' class \code{MSnSet}
 #' @param qData A dataframe that contains quantitative data.
+#' @param conds A vector containing the conditions
 #' @param distance The distance used by the clustering algorithm to compute 
 #' the dendrogram. See \code{help(heatmap.2)}
 #' @param cluster the clustering algorithm used to build the dendrogram.
@@ -1217,9 +1275,8 @@ heatmapD <- function(qData, conds, distance="euclidean", cluster="complete", den
   x[is.na(x)] <- -1e5
   dist= dist(x, method=distance)
   hcluster = hclust(dist, method=cluster)
-  
   palette<-NULL
-  palette.init <- brewer.pal(8,"Dark2")[1:length(unique(conds))]
+  palette.init <- RColorBrewer::brewer.pal(8,"Dark2")[1:length(unique(conds))]
   for (i in 1:length(conds)){
     palette[i] <- palette.init[which(conds[i] == unique(conds))]
   }
@@ -1229,7 +1286,7 @@ heatmapD <- function(qData, conds, distance="euclidean", cluster="complete", den
   col_labels <- dendextend::get_leaves_branches_col(dend1)
   
   if (dendro){ .dendro = "row"} else {.dendro = "none"}
-  p <- heatmap.2(
+  p <- gplots::heatmap.2(
     x=t(.data),
     distfun = function(x) {
       x[is.na(x)] <- -1e5

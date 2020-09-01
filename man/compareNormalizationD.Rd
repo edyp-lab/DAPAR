@@ -41,6 +41,7 @@ qDataBefore <- Biobase::exprs(Exp1_R25_pept)
 conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 objAfter <- wrapper.normalizeD(Exp1_R25_pept,"QuantileCentering","within conditions")
 compareNormalizationD(qDataBefore, Biobase::exprs(objAfter), conds)
+
 }
 \author{
 Samuel Wieczorek

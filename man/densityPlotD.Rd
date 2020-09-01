@@ -25,6 +25,7 @@ Densityplot of quantitative proteomics data over samples.
 utils::data(Exp1_R25_pept, package='DAPARdata')
 conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 densityPlotD(Exp1_R25_pept, conds)
+
 }
 \seealso{
 \code{\link{boxPlotD}}, \code{\link{CVDistD}}

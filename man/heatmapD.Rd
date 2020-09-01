@@ -6,10 +6,18 @@
 quantitative data in the \code{exprs()} table of an object of
 class \code{MSnSet}}
 \usage{
-heatmapD(qData, distance = "euclidean", cluster = "complete", dendro = FALSE)
+heatmapD(
+  qData,
+  conds,
+  distance = "euclidean",
+  cluster = "complete",
+  dendro = FALSE
+)
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
+
+\item{conds}{A vector containing the conditions}
 
 \item{distance}{The distance used by the clustering algorithm to compute 
 the dendrogram. See \code{help(heatmap.2)}}
@@ -30,8 +38,10 @@ Heatmap of the quantitative proteomic data of a \code{MSnSet} object
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
 qData <- Biobase::exprs(obj)
-heatmapD(qData)
+conds <- pData(obj)[['Condition']]
+heatmapD(qData, conds)
 }
+
 }
 \author{
 Florence Combes, Samuel Wieczorek

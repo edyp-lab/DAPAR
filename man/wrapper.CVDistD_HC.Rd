@@ -24,6 +24,7 @@ Same as the function \code{\link{wrapper.CVDistD}} but uses the package \code{hi
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 wrapper.CVDistD_HC(Exp1_R25_pept)
+
 }
 \author{
 Samuel Wieczorek

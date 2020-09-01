@@ -585,6 +585,9 @@ mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto",
 ##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', 1)
 ##' obj <- mvFilterFromIndices(obj, keepThat)
 ##' wrapper.mvImage(obj)
+##' 
+##' @importFrom Biobase exprs pData fData
+##' 
 wrapper.mvImage <- function(obj){
   
   qData <- Biobase::exprs(obj)

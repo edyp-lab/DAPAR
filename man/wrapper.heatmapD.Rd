@@ -37,6 +37,7 @@ utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
 wrapper.heatmapD(obj)
 }
+
 }
 \author{
 Alexia Dorffer

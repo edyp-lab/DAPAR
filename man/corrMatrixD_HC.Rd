@@ -29,6 +29,7 @@ qData <- Biobase::exprs(Exp1_R25_pept)
 samplesData <- Biobase::pData(Exp1_R25_pept)
 res <- cor(qData,use = 'pairwise.complete.obs')
 corrMatrixD_HC(res, samplesData)
+
 }
 \author{
 Samuel Wieczorek

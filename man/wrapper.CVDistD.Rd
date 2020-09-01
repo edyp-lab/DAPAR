@@ -23,6 +23,7 @@ in the dataset (see the slot \code{'Condition'} in the \code{pData()} table).
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 wrapper.CVDistD(Exp1_R25_pept)
+
 }
 \author{
 Alexia Dorffer

@@ -1,6 +1,19 @@
 
 exportPattern("^[[:alpha:]]+")
 
+import(highcharter)
+importFrom(FactoMineR,PCA)
+importFrom(RColorBrewer,brewer.pal)
+importFrom(dplyr,left_join)
+importFrom(dplyr,mutate)
+importFrom(dplyr,select)
+importFrom(dplyr,tbl_df)
+importFrom(factoextra,fviz_pca_ind)
+importFrom(factoextra,fviz_pca_var)
+importFrom(gplots,heatmap.2)
+importFrom(tidyr,gather)
+
+
 import(MSnbase)
 import(DAPARdata)
 import(RColorBrewer)

@@ -43,6 +43,7 @@ qDataBefore <- Biobase::exprs(obj)
 conds <- Biobase::pData(obj)[,"Condition"]
 objAfter <- wrapper.normalizeD(obj,"QuantileCentering","within conditions")
 compareNormalizationD_HC(qDataBefore, Biobase::exprs(objAfter), conds)
+
 }
 \author{
 Samuel Wieczorek

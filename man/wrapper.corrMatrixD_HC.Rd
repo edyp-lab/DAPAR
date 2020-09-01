@@ -22,6 +22,7 @@ Same as the function \code{\link{wrapper.corrMatrixD}} but uses the package \cod
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 wrapper.corrMatrixD_HC(Exp1_R25_pept)
+ 
 }
 \author{
 Samuel Wieczorek

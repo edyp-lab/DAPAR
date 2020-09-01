@@ -39,6 +39,7 @@ utils::data(Exp1_R25_pept, package='DAPARdata')
 conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering","within conditions")
 wrapper.compareNormalizationD(Exp1_R25_pept, objAfter, conds)
+
 }
 \author{
 Samuel Wieczorek

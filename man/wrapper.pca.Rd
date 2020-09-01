@@ -23,6 +23,7 @@ Compute the PCA
 utils::data(Exp1_R25_pept, package='DAPARdata')
  obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
 res.pca <- wrapper.pca(obj)
+
 }
 \author{
 Samuel Wieczorek

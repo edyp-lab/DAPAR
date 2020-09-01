@@ -19,6 +19,7 @@ Plots the eigen values of PCA with the highcharts library
 utils::data(Exp1_R25_pept, package='DAPARdata')
 res.pca <- wrapper.pca(Exp1_R25_pept, ncp=6)
 plotPCA_Eigen_hc(res.pca)
+
 }
 \author{
 Samuel Wieczorek

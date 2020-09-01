@@ -26,6 +26,7 @@ obj <- Exp1_R25_pept
 keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', 1)
 obj <- mvFilterFromIndices(obj, keepThat)
 wrapper.mvImage(obj)
+
 }
 \author{
 Alexia Dorffer

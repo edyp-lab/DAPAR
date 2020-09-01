@@ -24,6 +24,7 @@ utils::data(Exp1_R25_pept, package='DAPARdata')
 library(vioplot)
 legend <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 violinPlotD(Exp1_R25_pept, legend=legend)
+
 }
 \seealso{
 \code{\link{densityPlotD}}
