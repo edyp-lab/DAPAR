@@ -15,7 +15,7 @@ inner.mean(pepData, X)
 xxxxx
 }
 \description{
-Method to xxxxx
+xxxx
 }
 \author{
 Samuel Wieczorek

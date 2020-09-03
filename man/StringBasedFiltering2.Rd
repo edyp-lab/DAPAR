@@ -24,6 +24,7 @@ This function removes lines in the dataset based on prefix strings.
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 StringBasedFiltering2(Exp1_R25_pept, 'Potential_contaminant', '+')
+
 }
 \author{
 Samuel Wieczorek

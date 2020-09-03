@@ -15,7 +15,7 @@ inner.sum(pepData, X)
 A matrix
 }
 \description{
-Method to xxxxx
+xxxx
 }
 \author{
 Samuel Wieczorek

@@ -18,6 +18,7 @@ Builds the text information for the hypothesis test process
 \examples{
 params <- list(design='OnevsOne', method='limma')
 getTextForHypothesisTest(params)
+
 }
 \author{
 Samuel Wieczorek

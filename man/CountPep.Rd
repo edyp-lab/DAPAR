@@ -23,6 +23,7 @@ utils::data(Exp1_R25_pept)
 protID <- "Protein_group_IDs"
 M <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
 CountPep(M)
+
 }
 \author{
 Alexia Dorffer

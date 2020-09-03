@@ -19,6 +19,7 @@ Method to compute the detailed number of quantified peptides used for aggregatin
 }
 \author{
 Samuel Wieczorek
+
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj.pep <- Exp1_R25_pept[1:1000]
 protID <- "Protein_group_IDs"

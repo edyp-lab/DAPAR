@@ -37,6 +37,7 @@ obj <- mvFilterFromIndices(obj, keepThat)
 sTab <- Biobase::pData(obj)
 qData <- Biobase::exprs(obj)
 ttest <- compute.t.tests(qData,sTab ,"OnevsOne")
+
 }
 \author{
 Florence Combes, Samuel Wieczorek

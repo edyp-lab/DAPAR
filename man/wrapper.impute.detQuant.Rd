@@ -24,6 +24,7 @@ of class \code{MSnSet}
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 wrapper.impute.detQuant(Exp1_R25_pept)
+
 }
 \author{
 Samuel Wieczorek

@@ -24,6 +24,7 @@ Plots a barplot of proportion of contaminants and reverse. Same as the function
 }
 \examples{
 proportionConRev_HC(10, 20, 100)
+
 }
 \author{
 Samuel Wieczorek

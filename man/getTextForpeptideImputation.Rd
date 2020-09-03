@@ -18,6 +18,7 @@ Build the text information for the peptide Imputation process
 \examples{
 params <- list()
 getTextForpeptideImputation(params)
+
 }
 \author{
 Samuel Wieczorek

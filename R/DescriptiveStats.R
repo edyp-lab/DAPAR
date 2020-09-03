@@ -4,11 +4,17 @@
 #' Compute the PCA
 #' 
 #' @title Compute the PCA
+#' 
 #' @param obj xxx
+#' 
 #' @param var.scaling The dimensions to plot
+#' 
 #' @param ncp xxxx
+#' 
 #' @return A xxxxxx
+#' 
 #' @author Samuel Wieczorek
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #'  obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
@@ -16,6 +22,8 @@
 #' 
 #' @importFrom Biobase exprs pData
 #' @importFrom FactoMineR PCA
+#' 
+#' @export
 #' 
 wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
   # require(FactoMineR)
@@ -52,17 +60,25 @@ wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
 
 #' Plots the variables of PCA
 #' 
+#' 
 #' @title Plots variables of PCA
+#' 
 #' @param res.pca xxx
+#' 
 #' @param chosen.axes The dimensions to plot
+#' 
 #' @return A plot
+#' 
 #' @author Samuel Wieczorek
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' res.pca <- wrapper.pca(Exp1_R25_pept)
 #' plotPCA_Var(res.pca)
 #' 
 #' @importFrom factoextra fviz_pca_var
+#' 
+#' @export
 #' 
 plotPCA_Var <- function(res.pca, chosen.axes=c(1,2)){
   #plot.PCA(res.pca, choix="var", axes = chosen.axes, title="Sample factor map (PCA)")
@@ -77,19 +93,25 @@ plotPCA_Var <- function(res.pca, chosen.axes=c(1,2)){
 }
 
 
-#' Plots the individuals of PCA
-#' 
+
 #' @title Plots individuals of PCA
+#' 
 #' @param res.pca xxx
+#' 
 #' @param chosen.axes The dimensions to plot
+#' 
 #' @return A plot
+#' 
 #' @author Samuel Wieczorek
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' res.pca <- wrapper.pca(Exp1_R25_pept)
 #' plotPCA_Ind(res.pca)
 #' 
 #' @importFrom factoextra fviz_pca_ind
+#' 
+#' @export
 #' 
 plotPCA_Ind <- function(res.pca, chosen.axes=c(1,2)){
   #plot.PCA(res.pca, choix="ind", axes = chosen.axes, select = 0:-1, title="Protein factor map (PCA)")
@@ -100,16 +122,22 @@ plotPCA_Ind <- function(res.pca, chosen.axes=c(1,2)){
 }
 
 
-#' Plots the eigen values of PCA
-#' 
+
 #' @title Plots the eigen values of PCA
+#' 
 #' @param res.pca xxx
+#' 
 #' @return A histogram
+#' 
 #' @author Samuel Wieczorek
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' res.pca <- wrapper.pca(Exp1_R25_pept, ncp=6)
 #' plotPCA_Eigen(res.pca)
+#' 
+#' @export
+#' 
 plotPCA_Eigen <- function(res.pca){
   if (is.null(res.pca)){return(NULL)}
   eig.val <- res.pca$eig
@@ -126,18 +154,23 @@ plotPCA_Eigen <- function(res.pca){
 }
 
 
-#' Plots the eigen values of PCA with the highcharts library
-#' 
+
 #' @title Plots the eigen values of PCA with the highcharts library
+#' 
 #' @param res.pca xxx
+#' 
 #' @return A histogram
+#' 
 #' @author Samuel Wieczorek
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' res.pca <- wrapper.pca(Exp1_R25_pept, ncp=6)
 #' plotPCA_Eigen_hc(res.pca)
 #' 
 #' @import highcharter
+#' 
+#' @export
 #' 
 plotPCA_Eigen_hc <- function(res.pca){
   if (is.null(res.pca)){return(NULL)}
@@ -156,16 +189,23 @@ plotPCA_Eigen_hc <- function(res.pca){
   
 }
 
-#' Boxplot for quantitative proteomics data
-#' 
+
 #' @title Builds a boxplot from a dataframe
+#' 
 #' @param obj xxx
+#' 
 #' @param conds xxx
+#' 
 #' @param legend A vector of the conditions (one string per sample).
+#' 
 #' @param palette xxx
+#' 
 #' @return A boxplot
+#' 
 #' @author Florence Combes, Samuel Wieczorek
+#' 
 #' @seealso \code{\link{densityPlotD}}
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
@@ -173,6 +213,8 @@ plotPCA_Eigen_hc <- function(res.pca){
 #' 
 #' @importFrom Biobase exprs pData
 #' @importFrom RColorBrewer brewer.pal
+#' 
+#' @export
 #' 
 boxPlotD <- function(obj,conds, legend=NULL,palette=NULL){
   qData <- Biobase::exprs(obj)
@@ -214,15 +256,21 @@ boxPlotD <- function(obj,conds, legend=NULL,palette=NULL){
 
 
 
-#' Boxplot for quantitative proteomics data using the library \code{highcharter}
-#' 
+
 #' @title Builds a boxplot from a dataframe using the library \code{highcharter}
+#' 
 #' @param obj xxx
+#' 
 #' @param legend A vector of the conditions (one condition per sample).
+#' 
 #' @param palette xxx
+#' 
 #' @return A boxplot
+#' 
 #' @author Samuel Wieczorek
+#' 
 #' @seealso \code{\link{densityPlotD_HC}}
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' legend <- Biobase::pData(Exp1_R25_pept)[,"Sample.name"]
@@ -230,6 +278,8 @@ boxPlotD <- function(obj,conds, legend=NULL,palette=NULL){
 #' 
 #' @importFrom Biobase exprs
 #' @import highcharter
+#' 
+#' @export
 #' 
 boxPlotD_HC <- function(obj, legend=NULL, palette = NULL){
   
@@ -292,15 +342,21 @@ boxPlotD_HC <- function(obj, legend=NULL, palette = NULL){
 
 
 
-#' ViolinPlot for quantitative proteomics data
-#' 
+
 #' @title Builds a violinplot from a dataframe
+#' 
 #' @param obj xxx
+#' 
 #' @param legend A vector of the conditions (one condition per sample).
+#' 
 #' @param palette xxx
+#' 
 #' @return A violinplot
+#' 
 #' @author Samuel Wieczorek
+#' 
 #' @seealso \code{\link{densityPlotD}}
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' library(vioplot)
@@ -308,6 +364,8 @@ boxPlotD_HC <- function(obj, legend=NULL, palette = NULL){
 #' violinPlotD(Exp1_R25_pept, legend=legend)
 #' 
 #' @importFrom Biobase exprs
+#' 
+#' @export
 #' 
 violinPlotD <- function(obj, legend=NULL, palette = NULL){
   plot.new()
@@ -358,17 +416,25 @@ violinPlotD <- function(obj, legend=NULL, palette = NULL){
 #' data before and after normalization
 #' 
 #' @title Builds a plot from a dataframe
+#' 
 #' @param objBefore A dataframe that contains quantitative data before 
 #' normalization.
+#' 
 #' @param objAfter A dataframe that contains quantitative data after 
 #' normalization.
+#' 
 #' @param condsForLegend A vector of the conditions (one condition per sample).
+#' 
 #' @param indData2Show A vector of the indices of the columns to show in the 
 #' plot. The indices are those of indices of 
 #' the columns int the data.frame qDataBefore.
+#' 
 #' @param ... arguments for palette
+#' 
 #' @return A plot
+#' 
 #' @author Samuel Wieczorek
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
@@ -376,6 +442,8 @@ violinPlotD <- function(obj, legend=NULL, palette = NULL){
 #' wrapper.compareNormalizationD(Exp1_R25_pept, objAfter, conds)
 #' 
 #' @importFrom Biobase exprs pData
+#' 
+#' @export
 #' 
 wrapper.compareNormalizationD <- function(objBefore, objAfter, 
                                           condsForLegend=NULL,
@@ -395,18 +463,26 @@ wrapper.compareNormalizationD <- function(objBefore, objAfter,
 #' but uses the package \code{highcharter}
 #' 
 #' @title Builds a plot from a dataframe
+#' 
 #' @param objBefore A dataframe that contains quantitative data before 
 #' normalization.
+#' 
 #' @param objAfter A dataframe that contains quantitative data after 
 #' normalization.
+#' 
 #' @param condsForLegend A vector of the conditions (one condition 
 #' per sample).
+#' 
 #' @param indData2Show A vector of the indices of the columns to show in the 
 #' plot. The indices are those of indices of 
 #' the columns int the data.frame qDataBefore.
+#' 
 #' @param ... arguments for palette
+#' 
 #' @return A plot
+#' 
 #' @author Samuel Wieczorek
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
@@ -415,6 +491,8 @@ wrapper.compareNormalizationD <- function(objBefore, objAfter,
 #' wrapper.compareNormalizationD_HC(Exp1_R25_pept, objAfter, conds)
 #' 
 #' @importFrom Biobase exprs
+#' 
+#' @export
 #' 
 wrapper.compareNormalizationD_HC <- function(objBefore, objAfter, 
                                              condsForLegend=NULL,
@@ -431,18 +509,26 @@ wrapper.compareNormalizationD_HC <- function(objBefore, objAfter,
 #' normalization
 #' 
 #' @title Builds a plot from a dataframe
+#' 
 #' @param qDataBefore A dataframe that contains quantitative data before 
 #' normalization.
+#' 
 #' @param qDataAfter A dataframe that contains quantitative data after 
 #' normalization.
+#' 
 #' @param condsForLegend A vector of the conditions (one condition 
 #' per sample).
+#' 
 #' @param indData2Show A vector of the indices of the columns to show in 
 #' the plot. The indices are those of indices of 
 #' the columns int the data.frame qDataBefore.
+#' 
 #' @param palette xxx
+#' 
 #' @return A plot
+#' 
 #' @author Samuel Wieczorek
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' qDataBefore <- Biobase::exprs(Exp1_R25_pept)
@@ -451,6 +537,8 @@ wrapper.compareNormalizationD_HC <- function(objBefore, objAfter,
 #' compareNormalizationD(qDataBefore, Biobase::exprs(objAfter), conds)
 #' 
 #' @importFrom RColorBrewer brewer.pal
+#' 
+#' @export
 #' 
 compareNormalizationD <- function(qDataBefore,
                                   qDataAfter,
@@ -526,18 +614,26 @@ compareNormalizationD <- function(qDataBefore,
 #' 
 #' @title Builds a plot from a dataframe. Same as compareNormalizationD but 
 #' uses the library \code{highcharter}
+#' 
 #' @param qDataBefore A dataframe that contains quantitative data before 
 #' normalization.
+#' 
 #' @param qDataAfter A dataframe that contains quantitative data after 
 #' normalization.
+#' 
 #' @param condsForLegend A vector of the conditions (one condition 
 #' per sample).
+#' 
 #' @param indData2Show A vector of the indices of the columns to show in 
 #' the plot. The indices are those of indices of 
 #' the columns int the data.frame qDataBefore.
+#' 
 #' @param palette xxx
+#' 
 #' @return A plot
+#' 
 #' @author Samuel Wieczorek
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:1000]
@@ -548,6 +644,8 @@ compareNormalizationD <- function(qDataBefore,
 #' 
 #' @import highcharter
 #' @importFrom RColorBrewer brewer.pal
+#' 
+#' @export
 #' 
 compareNormalizationD_HC <- function(qDataBefore,
                                      qDataAfter,
@@ -602,13 +700,21 @@ compareNormalizationD_HC <- function(qDataBefore,
 #' Densityplot of quantitative proteomics data over samples.
 #' 
 #' @title Builds a densityplot from a dataframe
+#' 
 #' @param obj xxx
+#' 
 #' @param conds xxx
+#' 
 #' @param legend A vector of the conditions (one condition per sample).
+#' 
 #' @param palette xxx
+#' 
 #' @return A density plot
+#' 
 #' @author Florence Combes, Samuel Wieczorek
+#' 
 #' @seealso \code{\link{boxPlotD}}, \code{\link{CVDistD}}
+#' 
 #' @examples 
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
@@ -616,6 +722,8 @@ compareNormalizationD_HC <- function(qDataBefore,
 #' 
 #' @importFrom Biobase exprs pData
 #' @importFrom RColorBrewer brewer.pal
+#' 
+#' @export
 #' 
 densityPlotD <- function(obj, conds, legend=NULL,palette = NULL){
   
@@ -679,19 +787,28 @@ densityPlotD <- function(obj, conds, legend=NULL,palette = NULL){
 #' but uses the package \code{highcharter}
 #' 
 #' @title Builds a densityplot from a dataframe
+#' 
 #' @param obj xxx
+#' 
 #' @param legend A vector of the conditions (one condition 
 #' per sample).
+#' 
 #' @param palette xxx
+#' 
 #' @return A density plot
+#' 
 #' @author Samuel Wieczorek
+#' 
 #' @seealso \code{\link{boxPlotD}}, \code{\link{CVDistD}}
+#' 
 #' @examples 
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' densityPlotD_HC(Exp1_R25_pept)
 #' 
 #' @import highcharter
 #' @importFrom Biobase exprs pData
+#' 
+#' @export
 #' 
 densityPlotD_HC <- function(obj, legend=NULL, palette = NULL){
   
@@ -767,15 +884,22 @@ densityPlotD_HC <- function(obj, legend=NULL, palette = NULL){
 #' in the dataset (see the slot \code{'Condition'} in the \code{pData()} table).
 #' 
 #' @title Distribution of CV of entities
+#' 
 #' @param obj An object of class \code{MSnSet}.
+#' 
 #' @param ... arguments for palette
+#' 
 #' @return A density plot
+#' 
 #' @author Alexia Dorffer
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' wrapper.CVDistD(Exp1_R25_pept)
 #' 
 #' @importFrom Biobase exprs pData
+#' 
+#' @export
 #' 
 wrapper.CVDistD <- function(obj, ...){
   qData <- Biobase::exprs(obj)
@@ -791,15 +915,23 @@ wrapper.CVDistD <- function(obj, ...){
 #' Same as the function \code{\link{wrapper.CVDistD}} but uses the package \code{highcharter}
 #' 
 #' @title Distribution of CV of entities
+#' 
 #' @param obj An object of class \code{MSnSet}
+#' 
 #' @param ... arguments for palette.
+#' 
 #' @return A density plot
+#' 
 #' @author Samuel Wieczorek
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' wrapper.CVDistD_HC(Exp1_R25_pept)
 #' 
 #' @importFrom Biobase exprs pData
+#' 
+#' 
+#' @export
 #' 
 wrapper.CVDistD_HC <- function(obj, ...){
   qData <- Biobase::exprs(obj)
@@ -813,18 +945,27 @@ wrapper.CVDistD_HC <- function(obj, ...){
 #' in the dataset (see the slot \code{'Condition'} in the \code{pData()} table)
 #' 
 #' @title Distribution of CV of entities
+#' 
 #' @param qData A dataframe that contains quantitative data.
+#' 
 #' @param conds A vector of the conditions (one condition per sample).
+#' 
 #' @param palette xxx
+#' 
 #' @return A density plot
+#' 
 #' @author Florence Combes, Samuel Wieczorek
+#' 
 #' @seealso \code{\link{densityPlotD}}.
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 #' CVDistD(Biobase::exprs(Exp1_R25_pept), conds)
 #' 
 #' @importFrom RColorBrewer brewer.pal
+#' 
+#' @export
 #' 
 CVDistD <- function(qData, conds=NULL, palette = NULL){
   
@@ -897,13 +1038,21 @@ CVDistD <- function(qData, conds=NULL, palette = NULL){
 #' of a object. The CV is calculated for each condition present
 #' in the dataset (see the slot \code{'Condition'} in the \code{pData()} table)
 #' Same as the function \code{CVDistD} but uses the package \code{highcharter}
+#' 
 #' @title Distribution of CV of entities
+#' 
 #' @param qData A dataframe that contains quantitative data.
+#' 
 #' @param conds A vector of the conditions (one condition per sample).
+#' 
 #' @param palette xxx
+#' 
 #' @return A density plot
+#' 
 #' @author Samuel Wieczorek
+#' 
 #' @seealso \code{\link{densityPlotD}}.
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
@@ -911,6 +1060,8 @@ CVDistD <- function(qData, conds=NULL, palette = NULL){
 #' 
 #' @import highcharter
 #' @importFrom RColorBrewer brewer.pal
+#' 
+#' @export
 #' 
 CVDistD_HC <- function(qData, conds=NULL, palette = NULL){
   
@@ -1004,15 +1155,22 @@ CVDistD_HC <- function(qData, conds=NULL, palette = NULL){
 #' 
 #' @title Displays a correlation matrix of the quantitative data of the
 #' \code{exprs()} table
+#' 
 #' @param obj An object of class \code{MSnSet}.
+#' 
 #' @param rate A float that defines the gradient of colors.
+#' 
 #' @return A colored correlation matrix
+#' 
 #' @author Alexia Dorffer
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' wrapper.corrMatrixD(Exp1_R25_pept)
 #' 
 #' @importFrom Biobase exprs pData
+#' 
+#' @export
 #' 
 wrapper.corrMatrixD <- function(obj, rate=5){
   qData <- Biobase::exprs(obj)
@@ -1025,15 +1183,22 @@ wrapper.corrMatrixD <- function(obj, rate=5){
 #' 
 #' @title Displays a correlation matrix of the quantitative data of the
 #' \code{exprs()} table
+#' 
 #' @param obj An object of class \code{MSnSet}.
+#' 
 #' @param rate A float that defines the gradient of colors.
+#' 
 #' @return A colored correlation matrix
+#' 
 #' @author Samuel Wieczorek
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' wrapper.corrMatrixD_HC(Exp1_R25_pept)
 #'  
 #' @importFrom Biobase exprs pData
+#' 
+#' @export
 #' 
 wrapper.corrMatrixD_HC <- function(obj, rate=0.5){
   qData <- Biobase::exprs(obj)
@@ -1048,18 +1213,27 @@ wrapper.corrMatrixD_HC <- function(obj, rate=0.5){
 #' 
 #' @title Displays a correlation matrix of the quantitative data of the
 #' \code{exprs()} table.
+#' 
 #' @param qData A dataframe of quantitative data.
+#' 
 #' @param samplesData A dataframe where lines correspond to samples and 
 #' columns to the meta-data for those samples.
+#' 
 #' @param gradientRate The rate parameter to control the exponential law for 
 #' the gradient of colors
+#' 
 #' @return A colored correlation matrix
+#' 
 #' @author Florence Combes, Samuel Wieczorek
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' qData <- Biobase::exprs(Exp1_R25_pept)
 #' samplesData <- Biobase::pData(Exp1_R25_pept)
 #' corrMatrixD(qData, samplesData)
+#' 
+#' @export
+#' 
 corrMatrixD <- function(qData, samplesData, gradientRate = 5){
   Var1 <- Var2 <- value <- NULL
   
@@ -1097,13 +1271,19 @@ corrMatrixD <- function(qData, samplesData, gradientRate = 5){
 #' 
 #' @title Displays a correlation matrix of the quantitative data of the
 #' \code{exprs()} table.
+#' 
 #' @param object The result of the \code{cor} function.
+#' 
 #' @param samplesData A dataframe in which lines correspond to samples and 
 #' columns to the meta-data for those samples.
+#' 
 #' @param rate The rate parameter to control the exponential law for 
 #' the gradient of colors
+#' 
 #' @return A colored correlation matrix
+#' 
 #' @author Samuel Wieczorek
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' qData <- Biobase::exprs(Exp1_R25_pept)
@@ -1115,6 +1295,8 @@ corrMatrixD <- function(qData, samplesData, gradientRate = 5){
 #' @importFrom dplyr tbl_df mutate left_join select
 #' @importFrom tidyr gather
 #' @importFrom tibble tibble
+#' 
+#' @export
 #' 
 corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
   
@@ -1181,14 +1363,21 @@ corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
 #' @title This function is a wrapper to \code{\link{heatmap.2}} that displays 
 #' quantitative data in the \code{exprs()} table of an object of
 #' class \code{MSnSet}
+#' 
 #' @param obj An object of class \code{MSnSet}.
+#' 
 #' @param distance The distance used by the clustering algorithm to compute 
 #' the dendrogram. See \code{help(heatmap.2)}.
+#' 
 #' @param cluster the clustering algorithm used to build the dendrogram.
 #' See \code{help(heatmap.2)}
+#' 
 #' @param dendro A boolean to indicate fi the dendrogram has to be displayed
+#' 
 #' @return A heatmap
+#' 
 #' @author Alexia Dorffer
+#' 
 #' @examples
 #' \dontrun{
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
@@ -1197,6 +1386,8 @@ corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
 #' }
 #' 
 #' @importFrom Biobase exprs pData
+#' 
+#' @export
 #' 
 wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete", 
                               dendro = FALSE){
@@ -1217,15 +1408,23 @@ wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete",
 #' @title This function is a wrapper to \code{\link{heatmap.2}} that displays 
 #' quantitative data in the \code{exprs()} table of an object of
 #' class \code{MSnSet}
+#' 
 #' @param qData A dataframe that contains quantitative data.
+#' 
 #' @param conds A vector containing the conditions
+#' 
 #' @param distance The distance used by the clustering algorithm to compute 
 #' the dendrogram. See \code{help(heatmap.2)}
+#' 
 #' @param cluster the clustering algorithm used to build the dendrogram.
 #' See \code{help(heatmap.2)}
+#' 
 #' @param dendro A boolean to indicate fi the dendrogram has to be displayed
+#' 
 #' @return A heatmap
+#' 
 #' @author Florence Combes, Samuel Wieczorek
+#' 
 #' @examples
 #' \dontrun{
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
@@ -1237,6 +1436,8 @@ wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete",
 #' 
 #' @importFrom gplots heatmap.2
 #' @importFrom RColorBrewer brewer.pal
+#' 
+#' @export
 #' 
 heatmapD <- function(qData, conds, distance="euclidean", cluster="complete", dendro = FALSE){
   ##Check parameters
@@ -1324,23 +1525,38 @@ heatmapD <- function(qData, conds, distance="euclidean", cluster="complete", den
 #' that displays quantitative data in the \code{exprs()} table of an object of
 #' class \code{MSnSet}. For more information, please refer to the help 
 #' of the heatmap.2 function.
+#' 
 #' @param x A dataframe that contains quantitative data.
+#' 
 #' @param col colors used for the image. Defaults to heat colors (heat.colors).
+#' 
 #' @param srtCol angle of column conds, in degrees from horizontal 
+#' 
 #' @param labCol character vectors with column conds to use.
+#' 
 #' @param labRow character vectors with row conds to use.
+#' 
 #' @param key logical indicating whether a color-key should be shown.
+#' 
 #' @param key.title main title of the color key. If set to NA no title will 
 #' be plotted.
+#' 
 #' @param main main title; default to none.
+#' 
 #' @param ylab y-axis title; default to none.
+#' 
 #' @return A heatmap
+#' 
 #' @author Samuel Wieczorek
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
 #' qData <- Biobase::exprs(obj)
 #' heatmap.DAPAR(qData)
+#' 
+#' @export
+#' 
 heatmap.DAPAR <- 
   function (x, 
             col = heat.colors(100),

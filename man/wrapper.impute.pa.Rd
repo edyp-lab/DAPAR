@@ -22,6 +22,7 @@ This method is a wrapper to the function \code{impute.pa} of the package
 utils::data(Exp1_R25_pept, package='DAPARdata')
 dat <- mvFilter(Exp1_R25_pept[1:1000], type="allCond", th = 1)
 dat <- wrapper.impute.pa(dat)
+
 }
 \author{
 Samuel Wieczorek

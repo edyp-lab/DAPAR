@@ -26,6 +26,7 @@ missing values.
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 wrapper.mvHisto_HC(Exp1_R25_pept, showValues=TRUE)
+
 }
 \author{
 Alexia Dorffer

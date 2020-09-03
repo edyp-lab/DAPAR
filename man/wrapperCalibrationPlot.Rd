@@ -28,6 +28,7 @@ qData <- Biobase::exprs(obj)
 sTab <- Biobase::pData(obj)
 limma <- limmaCompleteTest(qData,sTab)
 wrapperCalibrationPlot(limma$P_Value[,1])
+
 }
 \author{
 Samuel Wieczorek

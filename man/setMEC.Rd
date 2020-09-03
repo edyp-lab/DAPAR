@@ -18,6 +18,7 @@ Sets the MEC tag in the OriginOfValues
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 setMEC(Exp1_R25_pept)
+
 }
 \author{
 Samuel Wieczorek

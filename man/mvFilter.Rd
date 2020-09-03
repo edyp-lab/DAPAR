@@ -40,6 +40,7 @@ at least \code{th} values, and for at least one condition, are kept.
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 mvFilter(Exp1_R25_pept, "wholeMatrix", 2)
+
 }
 \author{
 Florence Combes, Samuel Wieczorek

@@ -18,6 +18,7 @@ This function check the validity of the experimental design
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 check.design(Biobase::pData(Exp1_R25_pept)[,1:3])
+
 }
 \author{
 Thomas Burger, Samuel Wieczorek

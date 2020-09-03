@@ -22,6 +22,7 @@ utils::data(Exp1_R25_pept, package='DAPARdata')
 qData <- Biobase::exprs(Exp1_R25_pept)
 values <- getQuantile4Imp(qData)$shiftedImpVal
 impute.detQuant(qData, values) 
+
 }
 \author{
 Thomas Burger

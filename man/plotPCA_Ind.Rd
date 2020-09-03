@@ -15,7 +15,7 @@ plotPCA_Ind(res.pca, chosen.axes = c(1, 2))
 A plot
 }
 \description{
-Plots the individuals of PCA
+Plots individuals of PCA
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')

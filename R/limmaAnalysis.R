@@ -1,14 +1,21 @@
 
 
-##' This function check xxxxx
-##' 
-##' @title Check if xxxxxx
-##' @param tab A data.frame which correspond to xxxxxx
-##' @return A list of two items
-##' @author Thomas Burger, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' test.design(Biobase::pData(Exp1_R25_pept)[,1:3])
+#' This function check xxxxx
+#' 
+#' @title Check if xxxxxx
+#' 
+#' @param tab A data.frame which correspond to xxxxxx
+#' 
+#' @return A list of two items
+#' 
+#' @author Thomas Burger, Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' test.design(Biobase::pData(Exp1_R25_pept)[,1:3])
+#' 
+#' @export
+#' 
 test.design <- function(tab){
   valid <- TRUE
   txt <- NULL
@@ -59,15 +66,22 @@ test.design <- function(tab){
 }
 
 
-##' This function check the validity of the conditions
-##' 
-##' @title Check if the design is valid
-##' @param conds A vector
-##' @return A list
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' check.conditions(Biobase::pData(Exp1_R25_pept)$Condition)
+#' This function check the validity of the conditions
+#' 
+#' @title Check if the design is valid
+#' 
+#' @param conds A vector
+#' 
+#' @return A list
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' check.conditions(Biobase::pData(Exp1_R25_pept)$Condition)
+#' 
+#' @export
+#' 
 check.conditions <- function(conds){
   res <- list(valid=TRUE,warn=NULL)
   
@@ -94,15 +108,22 @@ check.conditions <- function(conds){
 }
 
 
-##' This function check the validity of the experimental design
-##' 
-##' @title Check if the design is valid
-##' @param sTab The data.frame which correspond to the pData function of MSnbase
-##' @return A boolean
-##' @author Thomas Burger, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' check.design(Biobase::pData(Exp1_R25_pept)[,1:3])
+#' This function check the validity of the experimental design
+#' 
+#' @title Check if the design is valid
+#' 
+#' @param sTab The data.frame which correspond to the pData function of MSnbase
+#' 
+#' @return A boolean
+#' 
+#' @author Thomas Burger, Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' check.design(Biobase::pData(Exp1_R25_pept)[,1:3])
+#' 
+#' @export
+#' 
 check.design <- function(sTab){
   res <- list(valid=FALSE,warn=NULL)
   
@@ -161,15 +182,21 @@ check.design <- function(sTab){
 
 
 
-##' This function builds the design matrix 
-##' 
-##' @title Builds the design matrix
-##' @param sTab The data.frame which correspond to the pData function of MSnbase
-##' @return A design matrix
-##' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' make.design(Biobase::pData(Exp1_R25_pept))
+#' This function builds the design matrix 
+#' 
+#' @title Builds the design matrix
+#' 
+#' @param sTab The data.frame which correspond to the pData function of MSnbase
+#' 
+#' @return A design matrix
+#' 
+#' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' make.design(Biobase::pData(Exp1_R25_pept))
+#' 
+#' @export
 make.design <- function(sTab){
   
     if (!check.design(sTab)$valid){
@@ -189,15 +216,22 @@ make.design <- function(sTab){
 }
 
 
-##' This function builds the design matrix for design of level 1
-##' 
-##' @title Builds the design matrix for designs of level 1
-##' @param sTab The data.frame which correspond to the pData function of MSnbase
-##' @return A design matrix
-##' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' make.design.1(Biobase::pData(Exp1_R25_pept))
+#' This function builds the design matrix for design of level 1
+#' 
+#' @title Builds the design matrix for designs of level 1
+#' 
+#' @param sTab The data.frame which correspond to the pData function of MSnbase
+#' 
+#' @return A design matrix
+#' 
+#' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' make.design.1(Biobase::pData(Exp1_R25_pept))
+#' 
+#' @export
+#' 
 # make.design.1 <- function(sTab){
 #   
 #   Conditions <- factor(sTab$Condition,  levels=unique(sTab$Condition))
@@ -251,17 +285,22 @@ return(design)
 
 
 
-##' This function builds the design matrix for design of level 2
-##' 
-##' @title Builds the design matrix for designs of level 2
-##' @param sTab The data.frame which correspond to the pData function of MSnbase
-##' @return A design matrix
-##' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
-##' @examples
-##' \donttest{
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' make.design.2(Biobase::pData(Exp1_R25_pept))
-##' }
+#' This function builds the design matrix for design of level 2
+#' 
+#' @title Builds the design matrix for designs of level 2
+#' 
+#' @param sTab The data.frame which correspond to the pData function of MSnbase
+#' 
+#' @return A design matrix
+#' 
+#' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
+#' 
+#' @examples
+#' \donttest{
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' make.design.2(Biobase::pData(Exp1_R25_pept))
+#' }
+#' 
 make.design.2=function(sTab){
   Condition <- factor(sTab$Condition, levels=unique(sTab$Condition))
   RepBio <- factor(sTab$Bio.Rep, levels=unique(sTab$Bio.Rep))
@@ -296,16 +335,21 @@ make.design.2=function(sTab){
 
 
 
-##' This function builds the design matrix for design of level 3
-##' 
-##' @title Builds the design matrix for designs of level 3
-##' @param sTab The data.frame which correspond to the pData function of MSnbase
-##' @return A design matrix
-##' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' sTab <-cbind(Biobase::pData(Exp1_R25_pept), Tech.Rep=1:6)
-##' make.design.3(sTab)
+#' This function builds the design matrix for design of level 3
+#' 
+#' @title Builds the design matrix for designs of level 3
+#' 
+#' @param sTab The data.frame which correspond to the pData function of MSnbase
+#' 
+#' @return A design matrix
+#' 
+#' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' sTab <-cbind(Biobase::pData(Exp1_R25_pept), Tech.Rep=1:6)
+#' make.design.3(sTab)
+#' 
 make.design.3=function(sTab){
   
   Condition <- factor(sTab$Condition, levels=unique(sTab$Condition))
@@ -346,23 +390,30 @@ make.design.3=function(sTab){
 
 
 
-##' This function builds the contrast matrix
-##' 
-##' @title Builds the contrast matrix
-##' @param design The data.frame which correspond to the pData function of MSnbase
-##' @param condition xxxxx
-##' @param contrast An integer that Indicates if the test consists of the comparison of each 
-##' biological condition versus each of the other ones (Contrast=1; 
-##' for example H0:"C1=C2" vs H1:"C1!=C2", etc.) 
-##' or each condition versus all others (Contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
-##'  H1:"C1!=(C2+C3)/2", etc. if there are three conditions).
-##' @return A constrat matrix
-##' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' design <- make.design(Biobase::pData(Exp1_R25_pept))
-##' conds <- Biobase::pData(Exp1_R25_pept)$Condition
-##' make.contrast(design, conds)
+#' This function builds the contrast matrix
+#' 
+#' @title Builds the contrast matrix
+#' 
+#' @param design The data.frame which correspond to the pData function of MSnbase
+#' 
+#' @param condition xxxxx
+#' 
+#' @param contrast An integer that Indicates if the test consists of the comparison of each 
+#' biological condition versus each of the other ones (Contrast=1; 
+#' for example H0:"C1=C2" vs H1:"C1!=C2", etc.) 
+#' or each condition versus all others (Contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
+#'  H1:"C1!=(C2+C3)/2", etc. if there are three conditions).
+#'  
+#' @return A constrat matrix
+#' 
+#' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' design <- make.design(Biobase::pData(Exp1_R25_pept))
+#' conds <- Biobase::pData(Exp1_R25_pept)$Condition
+#' make.contrast(design, conds)
+#' 
 make.contrast <- function(design,condition, contrast=1){
   
   #######################################################
@@ -452,26 +503,35 @@ make.contrast <- function(design,condition, contrast=1){
 
 
 
-##' This function is a limmaCompleteTest
-##' 
-##' @title Computes a hierarchical differential analysis
-##' @param qData A matrix of quantitative data, without any missing values.
-##' @param sTab A dataframe of experimental design (pData()). 
-##' @param comp.type A string that corresponds to the type of comparison. 
-##' Values are: 'OnevsOne' and 'OnevsAll'; default is 'OnevsOne'.
-##' @return A list of two dataframes : logFC and P_Value. The first one contains
-##' the logFC values of all the comparisons (one column for one comparison), the second one contains
-##' the pvalue of all the comparisons (one column for one comparison). The names of the columns for those two dataframes
-##' are identical and correspond to the description of the comparison. 
-##' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj <- Exp1_R25_pept
-##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
-##' obj <- mvFilterFromIndices(obj, keepThat)
-##' qData <- Biobase::exprs(obj)
-##' sTab <- Biobase::pData(obj)
-##' limma <- limmaCompleteTest(qData,sTab)
+#' This function is a limmaCompleteTest
+#' 
+#' @title Computes a hierarchical differential analysis
+#' 
+#' @param qData A matrix of quantitative data, without any missing values.
+#' 
+#' @param sTab A dataframe of experimental design (pData()). 
+#' 
+#' @param comp.type A string that corresponds to the type of comparison. 
+#' Values are: 'OnevsOne' and 'OnevsAll'; default is 'OnevsOne'.
+#' 
+#' @return A list of two dataframes : logFC and P_Value. The first one contains
+#' the logFC values of all the comparisons (one column for one comparison), the second one contains
+#' the pvalue of all the comparisons (one column for one comparison). The names of the columns for those two dataframes
+#' are identical and correspond to the description of the comparison. 
+#' 
+#' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R25_pept
+#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' obj <- mvFilterFromIndices(obj, keepThat)
+#' qData <- Biobase::exprs(obj)
+#' sTab <- Biobase::pData(obj)
+#' limma <- limmaCompleteTest(qData,sTab)
+#' 
+#' @export
+#' 
 limmaCompleteTest <- function(qData, sTab, comp.type="OnevsOne"){
    
   ## save the current order of columns
@@ -501,25 +561,32 @@ limmaCompleteTest <- function(qData, sTab, comp.type="OnevsOne"){
 
 
 
-##' This function is xxxx
-##' 
-##' @title xxxx
-##' @param fit xxxx
-##' @param conds xxxx
-##' @param contrast xxxx
-##' @return A list of two dataframes : logFC and P_Value. The first one contains
-##' the logFC values of all the comparisons (one column for one comparison), the second one contains
-##' the pvalue of all the comparisons (one column for one comparison). The names of the columns for those two dataframes
-##' are identical and correspond to the description of the comparison. 
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj <- Exp1_R25_pept
-##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
-##' obj <- mvFilterFromIndices(obj, keepThat)
-##' qData <- Biobase::exprs(obj)
-##' sTab <- Biobase::pData(obj)
-##' limma <- limmaCompleteTest(qData,sTab)
+#' This function is xxxx
+#' 
+#' @title xxxx
+#' 
+#' @param fit xxxx
+#' 
+#' @param conds xxxx
+#' 
+#' @param contrast xxxx
+#' 
+#' @return A list of two dataframes : logFC and P_Value. The first one contains
+#' the logFC values of all the comparisons (one column for one comparison), the second one contains
+#' the pvalue of all the comparisons (one column for one comparison). The names of the columns for those two dataframes
+#' are identical and correspond to the description of the comparison. 
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R25_pept
+#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' obj <- mvFilterFromIndices(obj, keepThat)
+#' qData <- Biobase::exprs(obj)
+#' sTab <- Biobase::pData(obj)
+#' limma <- limmaCompleteTest(qData,sTab)
+#' 
 
 
 

@@ -47,6 +47,7 @@ qData <- Biobase::exprs(obj)
 sTab <- Biobase::pData(obj)
 limma <- limmaCompleteTest(qData,sTab)
 diffAnaComputeFDR(limma$logFC[,1],limma$P_Value[,1])
+
 }
 \author{
 Samuel Wieczorek

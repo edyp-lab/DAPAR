@@ -28,6 +28,7 @@ obj.pep <- Exp1_R25_pept[1:1000]
 X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 DAPAR::aggregateSum(obj.pep, X)
 }
+
 }
 \author{
 Alexia Dorffer

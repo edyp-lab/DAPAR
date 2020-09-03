@@ -20,6 +20,7 @@ Display a jitter plot for CC
 \examples{
 \dontrun{
 }
+
 }
 \author{
 Thomas Burger, Samuel Wieczorek

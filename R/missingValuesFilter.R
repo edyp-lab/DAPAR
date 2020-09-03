@@ -1,16 +1,22 @@
 
 
 
-##' Returns the percentage of missing values in the quantitative
-##' data (\code{exprs()} table of the dataset).
-##' 
-##' @title Percentage of missing values
-##' @param obj An object of class \code{MSnSet}.
-##' @return A floating number
-##' @author Florence Combes, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' getPourcentageOfMV(Exp1_R25_pept)
+#' Returns the percentage of missing values in the quantitative
+#' data (\code{exprs()} table of the dataset).
+#' 
+#' @title Percentage of missing values
+#' 
+#' @param obj An object of class \code{MSnSet}.
+#' 
+#' @return A floating number
+#' 
+#' @author Florence Combes, Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' getPourcentageOfMV(Exp1_R25_pept)
+#' 
+#' @export
 getPourcentageOfMV <- function(obj){
 
   df <- data.frame(Biobase::exprs(obj))
@@ -24,18 +30,27 @@ pourcentage <- 100 * round(sum(NA.count) /(nrow(df)* ncol(df)), digits=4)
 return(pourcentage)
 }
 
-##' Returns the number of lines, in a given column, where content matches 
-##' the prefix.
-##' 
-##' @title Number of lines with prefix
-##' @param obj An object of class \code{MSnSet}.
-##' @param name The name of a column.
-##' @param prefix A string
-##' @return An integer
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' getNumberOf(Exp1_R25_pept, "Potential_contaminant", "+")
+#' Returns the number of lines, in a given column, where content matches 
+#' the prefix.
+#' 
+#' @title Number of lines with prefix
+#' 
+#' @param obj An object of class \code{MSnSet}.
+#' 
+#' @param name The name of a column.
+#' 
+#' @param prefix A string
+#' 
+#' @return An integer
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' getNumberOf(Exp1_R25_pept, "Potential_contaminant", "+")
+#' 
+#' @export
+#' 
 getNumberOf <- function(obj, name=NULL, prefix=NULL){
 if (is.null(name) || is.null(prefix) || (name=="") || (prefix=="")){
     return(0)}
@@ -50,20 +65,30 @@ return(count)
 }
 
 
-##' This function removes lines in the dataset based on numerical conditions.
-##' 
-##' @title Removes lines in the dataset based on numerical conditions.
-##' @param obj An object of class \code{MSnSet}.
-##' @param name The name of the column that correspond to the line to filter
-##' @param value A number 
-##' @param operator A string
-##' @return An list of 2 items :
-##' obj : an object of class \code{MSnSet} in which the lines have been deleted
-##' deleted : an object of class \code{MSnSet} which contains the deleted lines 
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' NumericalFiltering(Exp1_R25_pept, 'A_Count', '6', '==')
+#' This function removes lines in the dataset based on numerical conditions.
+#' 
+#' @title Removes lines in the dataset based on numerical conditions.
+#' 
+#' @param obj An object of class \code{MSnSet}.
+#' 
+#' @param name The name of the column that correspond to the line to filter
+#' 
+#' @param value A number 
+#' 
+#' @param operator A string
+#' 
+#' @return An list of 2 items :
+#' obj : an object of class \code{MSnSet} in which the lines have been deleted
+#' deleted : an object of class \code{MSnSet} which contains the deleted lines 
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' NumericalFiltering(Exp1_R25_pept, 'A_Count', '6', '==')
+#' 
+#' @export
+#' 
 NumericalFiltering <- function(obj, name=NULL, value=NULL, operator=NULL){
   if ((is.null(name) || (name == ""))) {return(NULL)}
   
@@ -89,19 +114,29 @@ NumericalFiltering <- function(obj, name=NULL, value=NULL, operator=NULL){
 
 
 
-##' This function returns the indice of the lines to delete, based on a 
-##' prefix string
-##' 
-##' @title Get the indices of the lines to delete, based on a prefix string
-##' @param obj An object of class \code{MSnSet}.
-##' @param name The name of the column that correspond to the data to filter
-##' @param value xxxx
-##' @param operator A xxxx
-##' @return A vector of integers.
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' NumericalgetIndicesOfLinesToRemove(Exp1_R25_pept, "A_Count", value="6", operator='==')
+#' This function returns the indice of the lines to delete, based on a 
+#' prefix string
+#' 
+#' @title Get the indices of the lines to delete, based on a prefix string
+#' 
+#' @param obj An object of class \code{MSnSet}.
+#' 
+#' @param name The name of the column that correspond to the data to filter
+#' 
+#' @param value xxxx
+#' 
+#' @param operator A xxxx
+#' 
+#' @return A vector of integers.
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' NumericalgetIndicesOfLinesToRemove(Exp1_R25_pept, "A_Count", value="6", operator='==')
+#' 
+#' @export
+#' 
 NumericalgetIndicesOfLinesToRemove <- function(obj, name=NULL, value=NULL, operator=NULL)
 {
   if ((value == "") || is.null(value)|| (operator=="") || is.null(operator)) {
@@ -115,18 +150,28 @@ NumericalgetIndicesOfLinesToRemove <- function(obj, name=NULL, value=NULL, opera
 }
 
 
-##' Plots a barplot of proportion of contaminants and reverse. Same as the function
-##' \code{proportionConRev} but uses the package \code{highcharter}
-##' 
-##' @title Barplot of proportion of contaminants and reverse
-##' @param nBoth The number of both contaminants and reverse identified in the dataset.
-##' @param nCont The number of contaminants identified in the dataset.
-##' @param nRev The number of reverse entities identified in the dataset.
-##' @param lDataset The total length (number of rows) of the dataset
-##' @return A barplot
-##' @author Samuel Wieczorek
-##' @examples
-##' proportionConRev_HC(10, 20, 100)
+#' Plots a barplot of proportion of contaminants and reverse. Same as the function
+#' \code{proportionConRev} but uses the package \code{highcharter}
+#' 
+#' @title Barplot of proportion of contaminants and reverse
+#' 
+#' @param nBoth The number of both contaminants and reverse identified in the dataset.
+#' 
+#' @param nCont The number of contaminants identified in the dataset.
+#' 
+#' @param nRev The number of reverse entities identified in the dataset.
+#' 
+#' @param lDataset The total length (number of rows) of the dataset
+#' 
+#' @return A barplot
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' proportionConRev_HC(10, 20, 100)
+#' 
+#' @export
+#' 
 proportionConRev_HC <- function(nBoth = 0, nCont=0, nRev=0, lDataset=0){
     if (is.null(nCont) && is.null(nBoth) && is.null(nRev) && is.null(lDataset)){return(NULL)}
     
@@ -164,19 +209,27 @@ proportionConRev_HC <- function(nBoth = 0, nCont=0, nRev=0, lDataset=0){
 
 
 
-##' This function removes lines in the dataset based on a prefix string.
-##' 
-##' @title Removes lines in the dataset based on a prefix string.
-##' @param obj An object of class \code{MSnSet}.
-##' @param idLine2Delete The name of the column that correspond to the 
-##' data to filter
-##' @param prefix A character string that is the prefix to find in the data
-##' @return An object of class \code{MSnSet}.
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' removeLines(Exp1_R25_pept, "Potential_contaminant")
-##' removeLines(Exp1_R25_pept, "Reverse")
+#' This function removes lines in the dataset based on a prefix string.
+#' 
+#' @title Removes lines in the dataset based on a prefix string.
+#' 
+#' @param obj An object of class \code{MSnSet}.
+#' 
+#' @param idLine2Delete The name of the column that correspond to the 
+#' data to filter
+#' 
+#' @param prefix A character string that is the prefix to find in the data
+#' @return An object of class \code{MSnSet}.
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' removeLines(Exp1_R25_pept, "Potential_contaminant")
+#' removeLines(Exp1_R25_pept, "Reverse")
+#' 
+#' @export
+#' 
 removeLines <- function(obj, idLine2Delete=NULL, prefix=NULL){
 if ((prefix == "") || is.null(prefix)) {
     #warning ("No change was made")
@@ -189,29 +242,40 @@ return(obj)
 }
 
 
-##' This function removes lines in the dataset based on prefix strings (contaminants, reverse or both).
-##' 
-##' @title Removes lines in the dataset based on a prefix strings (contaminants, reverse or both).
-##' @param obj An object of class \code{MSnSet}.
-##' @param idCont2Delete The name of the column that correspond to the 
-##' contaminants to filter
-##' @param prefix_Cont A character string that is the prefix for the contaminants to find in the data
-##' @param idRev2Delete The name of the column that correspond to the 
-##' reverse data to filter
-##' @param prefix_Rev A character string that is the prefix for the reverse to find in the data
-##' @return An list of 4 items :
-##' obj : an object of class \code{MSnSet} in which the lines have been deleted
-##' deleted.both : an object of class \code{MSnSet} which contains the deleted lines 
-##' corresponding to both contaminants and reverse, 
-##' deleted.contaminants : n object of class \code{MSnSet} which contains the deleted lines 
-##' corresponding to contaminants, 
-##' deleted.reverse : an object of class \code{MSnSet} which contains the deleted lines 
-##' corresponding to reverse,
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' StringBasedFiltering(Exp1_R25_pept, 'Potential_contaminant', '+', 'Reverse', '+')
-StringBasedFiltering <- function(obj, 
+#' This function removes lines in the dataset based on prefix strings (contaminants, reverse or both).
+#' 
+#' @title Removes lines in the dataset based on a prefix strings (contaminants, reverse or both).
+#' 
+#' @param obj An object of class \code{MSnSet}.
+#' 
+#' @param idCont2Delete The name of the column that correspond to the 
+#' contaminants to filter
+#' 
+#' @param prefix_Cont A character string that is the prefix for the contaminants to find in the data
+#' 
+#' @param idRev2Delete The name of the column that correspond to the 
+#' reverse data to filter
+#' 
+#' @param prefix_Rev A character string that is the prefix for the reverse to find in the data
+#' 
+#' @return An list of 4 items :
+#' obj : an object of class \code{MSnSet} in which the lines have been deleted
+#' deleted.both : an object of class \code{MSnSet} which contains the deleted lines 
+#' corresponding to both contaminants and reverse, 
+#' deleted.contaminants : n object of class \code{MSnSet} which contains the deleted lines 
+#' corresponding to contaminants, 
+#' deleted.reverse : an object of class \code{MSnSet} which contains the deleted lines 
+#' corresponding to reverse,
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' StringBasedFiltering(Exp1_R25_pept, 'Potential_contaminant', '+', 'Reverse', '+')
+#' 
+#' @export
+#' 
+stringBasedFiltering <- function(obj, 
                                  idCont2Delete=NULL, prefix_Cont=NULL, 
                                  idRev2Delete=NULL, prefix_Rev=NULL){
     
@@ -292,19 +356,28 @@ StringBasedFiltering <- function(obj,
 
 
 
-##' This function removes lines in the dataset based on prefix strings.
-##' 
-##' @title Removes lines in the dataset based on a prefix strings.
-##' @param obj An object of class \code{MSnSet}.
-##' @param cname The name of the column that correspond to the line to filter
-##' @param tag A character string that is the prefix for the contaminants to find in the data
-##' @return An list of 4 items :
-##' obj : an object of class \code{MSnSet} in which the lines have been deleted
-##' deleted : an object of class \code{MSnSet} which contains the deleted lines 
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' StringBasedFiltering2(Exp1_R25_pept, 'Potential_contaminant', '+')
+#' This function removes lines in the dataset based on prefix strings.
+#' 
+#' @title Removes lines in the dataset based on a prefix strings.
+#' 
+#' @param obj An object of class \code{MSnSet}.
+#' 
+#' @param cname The name of the column that correspond to the line to filter
+#' 
+#' @param tag A character string that is the prefix for the contaminants to find in the data
+#' 
+#' @return An list of 4 items :
+#' obj : an object of class \code{MSnSet} in which the lines have been deleted
+#' deleted : an object of class \code{MSnSet} which contains the deleted lines 
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' StringBasedFiltering2(Exp1_R25_pept, 'Potential_contaminant', '+')
+#' 
+#' @export
+#' 
 StringBasedFiltering2 <- function(obj, cname=NULL, tag=NULL){
   
   deleted <- NULL
@@ -339,19 +412,28 @@ StringBasedFiltering2 <- function(obj, cname=NULL, tag=NULL){
 
 
 
-##' This function returns the indice of the lines to delete, based on a 
-##' prefix string
-##' 
-##' @title Get the indices of the lines to delete, based on a prefix string
-##' @param obj An object of class \code{MSnSet}.
-##' @param idLine2Delete The name of the column that correspond to the data 
-##' to filter
-##' @param prefix A character string that is the prefix to find in the data
-##' @return A vector of integers.
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' getIndicesOfLinesToRemove(Exp1_R25_pept, "Potential_contaminant", prefix="+")
+#' This function returns the indice of the lines to delete, based on a 
+#' prefix string
+#' 
+#' @title Get the indices of the lines to delete, based on a prefix string
+#' 
+#' @param obj An object of class \code{MSnSet}.
+#' 
+#' @param idLine2Delete The name of the column that correspond to the data 
+#' to filter
+#' 
+#' @param prefix A character string that is the prefix to find in the data
+#' 
+#' @return A vector of integers.
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' getIndicesOfLinesToRemove(Exp1_R25_pept, "Potential_contaminant", prefix="+")
+#' 
+#' @export
+#' 
 getIndicesOfLinesToRemove <- function(obj, idLine2Delete=NULL, prefix=NULL)
 {
 if ((prefix == "") || is.null(prefix)) {
@@ -362,33 +444,43 @@ ind <- which( t== TRUE)
 return(ind)
 }
 
-##' Filters the lines of \code{exprs()} table with conditions on the number
-##' of missing values.
-##' The user chooses the minimum amount of intensities that is acceptable and
-##' the filter delete lines that do not respect this condition.
-##' The condition may be on the whole line or condition by condition.
-##' 
-##' The different methods are :
-##' "wholeMatrix": given a threshold \code{th}, only the lines that contain
-##' at least \code{th} values are kept.
-##' "allCond": given a threshold \code{th}, only the lines which contain
-##' at least \code{th} values for each of the conditions are kept.
-##' "atLeastOneCond": given a threshold \code{th}, only the lines that contain
-##' at least \code{th} values, and for at least one condition, are kept.
-##' 
-##' @title Filter lines in the matrix of intensities w.r.t. some criteria
-##' @param obj An object of class \code{MSnSet} containing
-##' quantitative data.
-##' @param type Method used to choose the lines to delete.
-##' Values are : "None", "wholeMatrix", "allCond", "atLeastOneCond"
-##' @param th An integer value of the threshold
-##' @param processText A string to be included in the \code{MSnSet}
-##' object for log. 
-##' @return An instance of class \code{MSnSet} that have been filtered.
-##' @author Florence Combes, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' mvFilter(Exp1_R25_pept, "wholeMatrix", 2)
+#' Filters the lines of \code{exprs()} table with conditions on the number
+#' of missing values.
+#' The user chooses the minimum amount of intensities that is acceptable and
+#' the filter delete lines that do not respect this condition.
+#' The condition may be on the whole line or condition by condition.
+#' 
+#' The different methods are :
+#' "wholeMatrix": given a threshold \code{th}, only the lines that contain
+#' at least \code{th} values are kept.
+#' "allCond": given a threshold \code{th}, only the lines which contain
+#' at least \code{th} values for each of the conditions are kept.
+#' "atLeastOneCond": given a threshold \code{th}, only the lines that contain
+#' at least \code{th} values, and for at least one condition, are kept.
+#' 
+#' @title Filter lines in the matrix of intensities w.r.t. some criteria
+#' 
+#' @param obj An object of class \code{MSnSet} containing
+#' quantitative data.
+#' 
+#' @param type Method used to choose the lines to delete.
+#' Values are : "None", "wholeMatrix", "allCond", "atLeastOneCond"
+#' 
+#' @param th An integer value of the threshold
+#' 
+#' @param processText A string to be included in the \code{MSnSet}
+#' object for log. 
+#' 
+#' @return An instance of class \code{MSnSet} that have been filtered.
+#' 
+#' @author Florence Combes, Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' mvFilter(Exp1_R25_pept, "wholeMatrix", 2)
+#' 
+#' @export
+#' 
 mvFilter <- function(obj,type, th, processText=NULL )
 {
     #Check parameters
@@ -416,32 +508,41 @@ obj <- obj[keepThat]
 }
 
 
-##' Filters the lines of \code{exprs()} table with conditions on the number
-##' of missing values.
-##' The user chooses the minimum amount of intensities that is acceptable and
-##' the filter delete lines that do not respect this condition.
-##' The condition may be on the whole line or condition by condition.
-##' 
-##' The different methods are :
-##' "wholeMatrix": given a threshold \code{th}, only the lines that contain
-##' at least \code{th} values are kept.
-##' "allCond": given a threshold \code{th}, only the lines which contain
-##' at least \code{th} values for each of the conditions are kept.
-##' "atLeastOneCond": given a threshold \code{th}, only the lines that contain
-##' at least \code{th} values, and for at least one condition, are kept.
-##' 
-##' @title Filter lines in the matrix of intensities w.r.t. some criteria
-##' @param obj An object of class \code{MSnSet} containing
-##' quantitative data.
-##' @param keepThat A vector of integers which are the indices of lines to 
-##' keep.
-##' @param processText A string to be included in the \code{MSnSet}
-##' object for log. 
-##' @return An instance of class \code{MSnSet} that have been filtered.
-##' @author Florence Combes, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' mvFilterFromIndices(Exp1_R25_pept, c(1:10))
+#' Filters the lines of \code{exprs()} table with conditions on the number
+#' of missing values.
+#' The user chooses the minimum amount of intensities that is acceptable and
+#' the filter delete lines that do not respect this condition.
+#' The condition may be on the whole line or condition by condition.
+#' 
+#' The different methods are :
+#' "wholeMatrix": given a threshold \code{th}, only the lines that contain
+#' at least \code{th} values are kept.
+#' "allCond": given a threshold \code{th}, only the lines which contain
+#' at least \code{th} values for each of the conditions are kept.
+#' "atLeastOneCond": given a threshold \code{th}, only the lines that contain
+#' at least \code{th} values, and for at least one condition, are kept.
+#' 
+#' @title Filter lines in the matrix of intensities w.r.t. some criteria
+#' 
+#' @param obj An object of class \code{MSnSet} containing
+#' quantitative data.
+#' 
+#' @param keepThat A vector of integers which are the indices of lines to 
+#' keep.
+#' 
+#' @param processText A string to be included in the \code{MSnSet}
+#' object for log. 
+#' 
+#' @return An instance of class \code{MSnSet} that have been filtered.
+#' 
+#' @author Florence Combes, Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' mvFilterFromIndices(Exp1_R25_pept, c(1:10))
+#' 
+#' @export
+#' 
 mvFilterFromIndices <- function(obj,keepThat=NULL, processText="" )
 {
 
@@ -457,21 +558,30 @@ obj@processingData@processing <-
 return(obj)
 }
 
-##' Delete the lines of \code{exprs()} table identified by their indice.
-##' 
-##' @title Delete the lines in the matrix of intensities and the metadata table
-##' given their indice.
-##' @param obj An object of class \code{MSnSet} containing
-##' quantitative data.
-##' @param deleteThat A vector of integers which are the indices of lines to 
-##' delete.
-##' @param processText A string to be included in the \code{MSnSet}
-##' object for log. 
-##' @return An instance of class \code{MSnSet} that have been filtered.
-##' @author Florence Combes, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' deleteLinesFromIndices(Exp1_R25_pept, c(1:10))
+#' Delete the lines of \code{exprs()} table identified by their indice.
+#' 
+#' @title Delete the lines in the matrix of intensities and the metadata table
+#' given their indice.
+#' 
+#' @param obj An object of class \code{MSnSet} containing
+#' quantitative data.
+#' 
+#' @param deleteThat A vector of integers which are the indices of lines to 
+#' delete.
+#' 
+#' @param processText A string to be included in the \code{MSnSet}
+#' object for log. 
+#' 
+#' @return An instance of class \code{MSnSet} that have been filtered.
+#' 
+#' @author Florence Combes, Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' deleteLinesFromIndices(Exp1_R25_pept, c(1:10))
+#' 
+#' @export
+#' 
 deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
 {
     
@@ -485,31 +595,40 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
 }
 
 
-##' Returns the indices of the lines of \code{exprs()} table to delete w.r.t. 
-##' the conditions on the number of missing values.
-##' The user chooses the minimum amount of intensities that is acceptable and
-##' the filter delete lines that do not respect this condition.
-##' The condition may be on the whole line or condition by condition.
-##' 
-##' The different methods are :
-##' "wholeMatrix": given a threshold \code{th}, only the lines that contain
-##' at least \code{th} values are kept.
-##' "allCond": given a threshold \code{th}, only the lines which contain
-##' at least \code{th} values for each of the conditions are kept.
-##' "atLeastOneCond": given a threshold \code{th}, only the lines that contain
-##' at least \code{th} values, and for at least one condition, are kept.
-##' 
-##' @title Filter lines in the matrix of intensities w.r.t. some criteria
-##' @param obj An object of class \code{MSnSet} containing
-##' quantitative data.
-##' @param type Method used to choose the lines to delete.
-##' Values are : "None", "EmptyLines", "wholeMatrix", "allCond", "atLeastOneCond"
-##' @param th An integer value of the threshold
-##' @return An vector of indices that correspond to the lines to keep.
-##' @author Florence Combes, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' mvFilterGetIndices(Exp1_R25_pept, "wholeMatrix", 2)
+#' Returns the indices of the lines of \code{exprs()} table to delete w.r.t. 
+#' the conditions on the number of missing values.
+#' The user chooses the minimum amount of intensities that is acceptable and
+#' the filter delete lines that do not respect this condition.
+#' The condition may be on the whole line or condition by condition.
+#' 
+#' The different methods are :
+#' "wholeMatrix": given a threshold \code{th}, only the lines that contain
+#' at least \code{th} values are kept.
+#' "allCond": given a threshold \code{th}, only the lines which contain
+#' at least \code{th} values for each of the conditions are kept.
+#' "atLeastOneCond": given a threshold \code{th}, only the lines that contain
+#' at least \code{th} values, and for at least one condition, are kept.
+#' 
+#' @title Filter lines in the matrix of intensities w.r.t. some criteria
+#' 
+#' @param obj An object of class \code{MSnSet} containing
+#' quantitative data.
+#' 
+#' @param type Method used to choose the lines to delete.
+#' Values are : "None", "EmptyLines", "wholeMatrix", "allCond", "atLeastOneCond"
+#' 
+#' @param th An integer value of the threshold
+#' 
+#' @return An vector of indices that correspond to the lines to keep.
+#' 
+#' @author Florence Combes, Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' mvFilterGetIndices(Exp1_R25_pept, "wholeMatrix", 2)
+#' 
+#' @export
+#' 
 mvFilterGetIndices <- function(obj,type, th=NULL)
 {
 #Check parameters

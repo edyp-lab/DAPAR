@@ -20,6 +20,7 @@ Returns the possible number of values in lines in a matrix.
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 getListNbValuesInLines(Exp1_R25_pept)
+
 }
 \author{
 Samuel Wieczorek

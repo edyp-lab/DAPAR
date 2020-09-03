@@ -36,6 +36,7 @@ sTab <- Biobase::pData(obj)
 allComp <- limmaCompleteTest(qData,sTab)
 data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
 diffAnaSave(obj, allComp, data)
+
 }
 \author{
 Alexia Dorffer, Samuel Wieczorek

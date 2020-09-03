@@ -1,39 +1,42 @@
-##' Provides several methods to normalize quantitative data from
-##' a \code{MSnSet} object.
-##' They are organized in six main families : GlobalQuantileAlignement, sumByColumns, QuantileCentering, MeanCentering, LOESS, vsn
-##' For the first family, there is no type.
-##' For the five other families, two type categories are available :
-##' "Overall" which means that the value for each protein
-##' (ie line in the expression data tab) is computed over all the samples ;
-##' "within conditions" which means that the value for each protein
-##' (ie line in the \code{exprs()} data tab) is computed condition
-##' by condition.
-##'
-##' @title Normalisation
-##' @param obj An object of class \code{MSnSet}.
-##' @param method One of the following : "GlobalQuantileAlignment" (for
-##' normalizations of important magnitude), "SumByColumns", "QuantileCentering",
-##' "Mean Centering", "LOESS" and "vsn".
-##' @param type For the method "Global Alignment", the parameters are:
-##' "sum by columns": operates on the original scale (not the log2 one) and propose
-##' to normalize each abundance by the total abundance of the sample (so as to focus
-##' on the analyte proportions among each sample).
-##' "Alignment on all quantiles": proposes to align the quantiles of all the
-##' replicates; practically it amounts to replace abundances by order statistics.
-##' For the two other methods, the parameters are "overall" (shift all the
-##' sample distributions at once) or "within conditions" (shift the sample
-##' distributions within each condition at a time).
-##' @param scaling A boolean that indicates if the variance of the data have to
-##' be forced to unit (variance reduction) or not.
-##' @param quantile A float that corresponds to the quantile used to align the
-##' data.
-##' @param span parameter for LOESS method
-##' @return An instance of class \code{MSnSet} where the quantitative
-##' data in the \code{exprs()} tab has been normalized.
-##' @author Samuel Wieczorek, Thomas Burger, Helene Borges
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' wrapper.normalizeD(Exp1_R25_pept[1:1000], "QuantileCentering", "within conditions")
+#' Provides several methods to normalize quantitative data from
+#' a \code{MSnSet} object.
+#' They are organized in six main families : GlobalQuantileAlignement, sumByColumns, QuantileCentering, MeanCentering, LOESS, vsn
+#' For the first family, there is no type.
+#' For the five other families, two type categories are available :
+#' "Overall" which means that the value for each protein
+#' (ie line in the expression data tab) is computed over all the samples ;
+#' "within conditions" which means that the value for each protein
+#' (ie line in the \code{exprs()} data tab) is computed condition
+#' by condition.
+#'
+#' @title Normalisation
+#' @param obj An object of class \code{MSnSet}.
+#' @param method One of the following : "GlobalQuantileAlignment" (for
+#' normalizations of important magnitude), "SumByColumns", "QuantileCentering",
+#' "Mean Centering", "LOESS" and "vsn".
+#' @param type For the method "Global Alignment", the parameters are:
+#' "sum by columns": operates on the original scale (not the log2 one) and propose
+#' to normalize each abundance by the total abundance of the sample (so as to focus
+#' on the analyte proportions among each sample).
+#' "Alignment on all quantiles": proposes to align the quantiles of all the
+#' replicates; practically it amounts to replace abundances by order statistics.
+#' For the two other methods, the parameters are "overall" (shift all the
+#' sample distributions at once) or "within conditions" (shift the sample
+#' distributions within each condition at a time).
+#' @param scaling A boolean that indicates if the variance of the data have to
+#' be forced to unit (variance reduction) or not.
+#' @param quantile A float that corresponds to the quantile used to align the
+#' data.
+#' @param span parameter for LOESS method
+#' @return An instance of class \code{MSnSet} where the quantitative
+#' data in the \code{exprs()} tab has been normalized.
+#' @author Samuel Wieczorek, Thomas Burger, Helene Borges
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' wrapper.normalizeD(Exp1_R25_pept[1:1000], "QuantileCentering", "within conditions")
+#'  
+#' @export
+#'
 wrapper.normalizeD <- function(obj, method, type=NULL, scaling=FALSE, quantile=0.15, span = 0.7){
   
   parammethod<-c("GlobalQuantileAlignment",

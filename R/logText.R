@@ -1,12 +1,19 @@
 
-##' Build the text information for a new dataset
-##' 
-##' @title  Build the text information for a new dataset
-##' @param l.params A list of parameters related to the process of the dataset
-##' @return A string
-##' @author Samuel Wieczorek
-##' @examples
-##' getTextForNewDataset(list(filename="foo.msnset"))
+#' Build the text information for a new dataset
+#' 
+#' @title  Build the text information for a new dataset
+#' 
+#' @param l.params A list of parameters related to the process of the dataset
+#' 
+#' @return A string
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' getTextForNewDataset(list(filename="foo.msnset"))
+#' 
+#' @export
+#' 
 getTextForNewDataset <- function(l.params){
   if (is.null(l.params) || length(l.params)==0) return(NULL)
   
@@ -15,14 +22,21 @@ getTextForNewDataset <- function(l.params){
 }
 
 
-##' Build the text information for the filtering process
-##' 
-##' @title  Build the text information for the filtering process
-##' @param l.params A list of parameters related to the process of the dataset
-##' @return A string
-##' @author Samuel Wieczorek
-##' @examples
-##' getTextForFiltering(list(mvFilterType="wholeMatrix",mvThNA=3))
+#' Build the text information for the filtering process
+#' 
+#' @title  Build the text information for the filtering process
+#' 
+#' @param l.params A list of parameters related to the process of the dataset
+#' 
+#' @return A string
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' getTextForFiltering(list(mvFilterType="wholeMatrix",mvThNA=3))
+#' 
+#' @export
+#' 
 getTextForFiltering <- function(l.params){ 
     # str(l.params) = list(mvFilterType ,
     #                 mvThNA,
@@ -56,14 +70,21 @@ getTextForFiltering <- function(l.params){
 
 
 
-##' Build the text information for the Normalization process
-##' 
-##' @title  Build the text information for the Normalization process
-##' @param l.params A list of parameters related to the process of the dataset
-##' @return A string
-##' @author Samuel Wieczorek
-##' @examples
-##' getTextForNormalization(list(method="SumByColumns"))
+#' Build the text information for the Normalization process
+#' 
+#' @title  Build the text information for the Normalization process
+#' 
+#' @param l.params A list of parameters related to the process of the dataset
+#' 
+#' @return A string
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' getTextForNormalization(list(method="SumByColumns"))
+#' 
+#' @export
+#' 
 getTextForNormalization <- function(l.params){ 
     
   # l.params <- list(method = input$normalization.method,
@@ -96,15 +117,22 @@ getTextForNormalization <- function(l.params){
 
 
 
-##' Build the text information for the peptide Imputation process
-##' 
-##' @title  Build the text information for the peptide Imputation process
-##' @param l.params A list of parameters related to the process of the dataset
-##' @return A string
-##' @author Samuel Wieczorek
-##' @examples
-##' params <- list()
-##' getTextForpeptideImputation(params)
+#' Build the text information for the peptide Imputation process
+#' 
+#' @title  Build the text information for the peptide Imputation process
+#' 
+#' @param l.params A list of parameters related to the process of the dataset
+#' 
+#' @return A string
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' params <- list()
+#' getTextForpeptideImputation(params)
+#' 
+#' @export
+#' 
 getTextForpeptideImputation <- function(l.params){
 # l.params <- list(pepLevel_algorithm = input$peptideLevel_missing.value.algorithm,
 #                  pepLevel_basicAlgorithm = input$peptideLevel_missing.value.basic.algorithm,
@@ -148,15 +176,22 @@ return (txt)
 
 }
 
-##' Build the text information for the Protein Imputation process
-##' 
-##' @title  Build the text information for the protein Imputation process
-##' @param l.params A list of parameters related to the process of the dataset
-##' @return A string
-##' @author Samuel Wieczorek
-##' @examples
-##' params <- list()
-##' getTextForproteinImputation(params)
+#' Build the text information for the Protein Imputation process
+#' 
+#' @title  Build the text information for the protein Imputation process
+#' 
+#' @param l.params A list of parameters related to the process of the dataset
+#' 
+#' @return A string
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' params <- list()
+#' getTextForproteinImputation(params)
+#' 
+#' @export
+#' 
 getTextForproteinImputation <- function(l.params){ 
     
   if (is.null(l.params) || length(l.params)==0) return(NULL)
@@ -200,15 +235,22 @@ getTextForproteinImputation <- function(l.params){
 }
 
 
-##' Builds the text information for the Aggregation process
-##' 
-##' @title  Build the text information for the Aggregation process
-##' @param l.params A list of parameters related to the process of the dataset
-##' @return A string
-##' @author Samuel Wieczorek
-##' @examples
-##' params <- list()
-##' getTextForAggregation(params)
+#' Builds the text information for the Aggregation process
+#' 
+#' @title  Build the text information for the Aggregation process
+#' 
+#' @param l.params A list of parameters related to the process of the dataset
+#' 
+#' @return A string
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' params <- list()
+#' getTextForAggregation(params)
+#' 
+#' @export
+#' 
 getTextForAggregation <- function(l.params){ 
     
   # l.params <- list(includeSharedPeptides = input$radioBtn_includeShared,
@@ -237,15 +279,22 @@ getTextForAggregation <- function(l.params){
 
 
 
-##' Builds the text information for the hypothesis test process
-##' 
-##' @title  Build the text information for the hypothesis test process
-##' @param l.params A list of parameters related to the process of the dataset
-##' @return A string
-##' @author Samuel Wieczorek
-##' @examples
-##' params <- list(design='OnevsOne', method='limma')
-##' getTextForHypothesisTest(params)
+#' Builds the text information for the hypothesis test process
+#' 
+#' @title  Build the text information for the hypothesis test process
+#' 
+#' @param l.params A list of parameters related to the process of the dataset
+#' 
+#' @return A string
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' params <- list(design='OnevsOne', method='limma')
+#' getTextForHypothesisTest(params)
+#' 
+#' @export
+#' 
 getTextForHypothesisTest <- function(l.params){ 
   
   # l.params <- list(design = input$anaDiff_Design,
@@ -276,14 +325,21 @@ getTextForHypothesisTest <- function(l.params){
 
 
 
-##' Build the text information for the differential Analysis process
-##' 
-##' @title  Build the text information for the Aggregation process
-##' @param l.params A list of parameters related to the process of the dataset
-##' @return A string
-##' @author Samuel Wieczorek
-##' @examples
-##' getTextForAnaDiff(list(design="OnevsOne",method="Limma"))
+#' Build the text information for the differential Analysis process
+#' 
+#' @title  Build the text information for the Aggregation process
+#' 
+#' @param l.params A list of parameters related to the process of the dataset
+#' 
+#' @return A string
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' getTextForAnaDiff(list(design="OnevsOne",method="Limma"))
+#' 
+#' @export
+#' 
 getTextForAnaDiff <- function(l.params){ 
   
   # param
@@ -337,14 +393,21 @@ if (!is.null(l.params$FDR)){
 }
 
 
-##' Build the text information for the Aggregation process
-##' 
-##' @title  Build the text information for the Aggregation process
-##' @param l.params A list of parameters related to the process of the dataset
-##' @return A string
-##' @author Samuel Wieczorek
-##' @examples
-##' getTextForGOAnalysis(list())
+#' Build the text information for the Aggregation process
+#' 
+#' @title  Build the text information for the Aggregation process
+#' 
+#' @param l.params A list of parameters related to the process of the dataset
+#' 
+#' @return A string
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' getTextForGOAnalysis(list())
+#' 
+#' @export
+#' 
 getTextForGOAnalysis <-  function(l.params){
   
   if (is.null(l.params) || length(l.params)==0) return(NULL)

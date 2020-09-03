@@ -25,8 +25,7 @@ createMSnset(
 
 \item{indExpData}{A vector of string where each element is the name
 of a column in designTable that have to be integrated in
-the \code{fData()} table
-of the \code{MSnSet} object.}
+the \code{fData()} table of the \code{MSnSet} object.}
 
 \item{indFData}{The name of column in \code{file} that will be the name of
 rows for the \code{exprs()} and \code{fData()} tables}
@@ -69,6 +68,7 @@ indExpData <- c(56:61)
 indFData <- c(1:55,62:71)
 indiceID <- 64
 createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, indexForOriginOfValue = NULL, pep_prot_data = "peptide")
+
 }
 \author{
 Florence Combes, Samuel Wieczorek

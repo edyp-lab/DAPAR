@@ -33,6 +33,7 @@ number of missing values (NA) per lines (ie proteins) and per conditions.
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 wrapper.mvPerLinesHistoPerCondition_HC(Exp1_R25_pept)
+
 }
 \author{
 Samuel Wieczorek

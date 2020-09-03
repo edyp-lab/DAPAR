@@ -3,8 +3,7 @@
 \name{univ_AnnotDbPkg}
 \alias{univ_AnnotDbPkg}
 \title{Returns the totality of ENTREZ ID (gene id) of an OrgDb annotation 
-package. 
-Careful : org.Pf.plasmo.db : no ENTREZID but ORF}
+package. Careful : org.Pf.plasmo.db : no ENTREZID but ORF}
 \usage{
 univ_AnnotDbPkg(orgdb)
 }

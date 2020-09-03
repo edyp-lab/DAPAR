@@ -24,6 +24,7 @@ protID <- "Protein_group_IDs"
 obj <- Exp1_R25_pept[1:1000]
 MShared <- BuildAdjacencyMatrix(obj, protID, FALSE)
 getProteinsStats(MShared)
+
 }
 \author{
 Samuel Wieczorek

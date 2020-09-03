@@ -1,22 +1,31 @@
-##' This function show the density plots of Fold Change (the same as calculated by limma) for a list 
-##' of the comparisons of conditions in a differnetial analysis.
-##' 
-##' @title Density plots of logFC values
-##' @param df_logFC A dataframe that contains the logFC values
-##' @param threshold_LogFC The threshold on log(Fold Change) to
-##' distinguish between differential and non-differential data 
-##' @param palette xxx
-##' @return A highcharts density plot
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj <- Exp1_R25_pept[1:1000]
-##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
-##' obj <- mvFilterFromIndices(obj, keepThat)
-##' qData <- Biobase::exprs(obj)
-##' sTab <- Biobase::pData(obj)
-##' res <- limmaCompleteTest(qData,sTab)
-##' hc_logFC_DensityPlot(res$logFC, threshold_LogFC=1)
+#' This function show the density plots of Fold Change (the same as calculated by limma) for a list 
+#' of the comparisons of conditions in a differnetial analysis.
+#' 
+#' @title Density plots of logFC values
+#' 
+#' @param df_logFC A dataframe that contains the logFC values
+#' 
+#' @param threshold_LogFC The threshold on log(Fold Change) to
+#' distinguish between differential and non-differential data 
+#' 
+#' @param palette xxx
+#' 
+#' @return A highcharts density plot
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R25_pept[1:1000]
+#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' obj <- mvFilterFromIndices(obj, keepThat)
+#' qData <- Biobase::exprs(obj)
+#' sTab <- Biobase::pData(obj)
+#' res <- limmaCompleteTest(qData,sTab)
+#' hc_logFC_DensityPlot(res$logFC, threshold_LogFC=1)
+#' 
+#' @export
+#' 
 hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0, palette=NULL){
      if (is.null(df_logFC) || threshold_LogFC < 0){
       hc <- NULL
@@ -183,34 +192,45 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0, palette=NULL){
 
 
 
-##' This function is a wrappper to the function adjust.p from the
-##' cp4p package. It returns the FDR corresponding to the p-values of the 
-##' differential analysis.
-##' The FDR is computed with the function \code{p.adjust}\{stats\}..
-##' 
-##' @title Computes the FDR corresponding to the p-values of the 
-##' differential analysis using 
-##' @param logFC The result (logFC values) of the differential analysis processed 
-##' by \code{\link{limmaCompleteTest}} 
-##' @param pval The result (p-values) of the differential analysis processed 
-##' by \code{\link{limmaCompleteTest}} 
-##' @param threshold_PVal The threshold on p-pvalue to
-##' distinguish between differential and non-differential data 
-##' @param threshold_LogFC The threshold on log(Fold Change) to
-##' distinguish between differential and non-differential data 
-##' @param pi0Method The parameter pi0.method of the method adjust.p 
-##' in the package \code{cp4p}
-##' @return The computed FDR value (floating number)
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj <- Exp1_R25_pept[1:1000]
-##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
-##' obj <- mvFilterFromIndices(obj, keepThat)
-##' qData <- Biobase::exprs(obj)
-##' sTab <- Biobase::pData(obj)
-##' limma <- limmaCompleteTest(qData,sTab)
-##' diffAnaComputeFDR(limma$logFC[,1],limma$P_Value[,1])
+#' This function is a wrappper to the function adjust.p from the
+#' cp4p package. It returns the FDR corresponding to the p-values of the 
+#' differential analysis.
+#' The FDR is computed with the function \code{p.adjust}\{stats\}..
+#' 
+#' @title Computes the FDR corresponding to the p-values of the 
+#' differential analysis using 
+#' 
+#' @param logFC The result (logFC values) of the differential analysis processed 
+#' by \code{\link{limmaCompleteTest}} 
+#' 
+#' @param pval The result (p-values) of the differential analysis processed 
+#' by \code{\link{limmaCompleteTest}} 
+#' 
+#' @param threshold_PVal The threshold on p-pvalue to
+#' distinguish between differential and non-differential data 
+#' 
+#' @param threshold_LogFC The threshold on log(Fold Change) to
+#' distinguish between differential and non-differential data 
+#' 
+#' @param pi0Method The parameter pi0.method of the method adjust.p 
+#' in the package \code{cp4p}
+#' 
+#' @return The computed FDR value (floating number)
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R25_pept[1:1000]
+#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' obj <- mvFilterFromIndices(obj, keepThat)
+#' qData <- Biobase::exprs(obj)
+#' sTab <- Biobase::pData(obj)
+#' limma <- limmaCompleteTest(qData,sTab)
+#' diffAnaComputeFDR(limma$logFC[,1],limma$P_Value[,1])
+#' 
+#' @export
+#' 
 diffAnaComputeFDR <- function(logFC, pval,threshold_PVal=0, threshold_LogFC = 0, 
                             pi0Method=1){
   #require(cp4p)
@@ -231,25 +251,32 @@ diffAnaComputeFDR <- function(logFC, pval,threshold_PVal=0, threshold_LogFC = 0,
 
 
 
-##' This method returns a list of the statistical tests performed with DAPAR and recorded
-##' in an object of class \code{MSnSet}.
-##' 
-##' @title Returns list that contains a list of the statistical tests performed with DAPAR and recorded
-##' in an object of class \code{MSnSet}. 
-##' @param obj An object of class \code{MSnSet}.
-##' @return A list of two slots: logFC and P_Value
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj <- Exp1_R25_pept
-##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
-##' obj <- mvFilterFromIndices(obj, keepThat)
-##' qData <- Biobase::exprs(obj)
-##' sTab <- Biobase::pData(obj)
-##' allComp <- limmaCompleteTest(qData,sTab)
-##' data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
-##' obj <- diffAnaSave(obj, allComp, data)
-##' ll <- Get_AllComparisons(obj)
+#' This method returns a list of the statistical tests performed with DAPAR and recorded
+#' in an object of class \code{MSnSet}.
+#' 
+#' @title Returns list that contains a list of the statistical tests performed with DAPAR and recorded
+#' in an object of class \code{MSnSet}. 
+#' 
+#' @param obj An object of class \code{MSnSet}.
+#' 
+#' @return A list of two slots: logFC and P_Value
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R25_pept
+#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' obj <- mvFilterFromIndices(obj, keepThat)
+#' qData <- Biobase::exprs(obj)
+#' sTab <- Biobase::pData(obj)
+#' allComp <- limmaCompleteTest(qData,sTab)
+#' data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
+#' obj <- diffAnaSave(obj, allComp, data)
+#' ll <- Get_AllComparisons(obj)
+#' 
+#' @export
+#' 
 Get_AllComparisons <- function(obj){
   
   logFC_KEY <- "_logFC"
@@ -271,29 +298,40 @@ Get_AllComparisons <- function(obj){
 
 
 
-##' This method returns a class \code{MSnSet} object with the results
-##' of differential analysis.
-##' 
-##' @title Returns a \code{MSnSet} object with the results of
-##' the differential analysis performed with \code{\link{limma}} package. 
-##' @param obj An object of class \code{MSnSet}.
-##' @param allComp A list of two items which is the result of the function wrapper.limmaCompleteTest or xxxx 
-##' @param data The result of the differential analysis processed 
-##' by \code{\link{limmaCompleteTest}} 
-##' @param th_pval xxx
-##' @param th_logFC xxx
-##' @return A MSnSet
-##' @author Alexia Dorffer, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj <- Exp1_R25_pept
-##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
-##' obj <- mvFilterFromIndices(obj, keepThat)
-##' qData <- Biobase::exprs(obj)
-##' sTab <- Biobase::pData(obj)
-##' allComp <- limmaCompleteTest(qData,sTab)
-##' data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
-##' diffAnaSave(obj, allComp, data)
+#' This method returns a class \code{MSnSet} object with the results
+#' of differential analysis.
+#' 
+#' @title Returns a \code{MSnSet} object with the results of
+#' the differential analysis performed with \code{\link{limma}} package. 
+#' 
+#' @param obj An object of class \code{MSnSet}.
+#' 
+#' @param allComp A list of two items which is the result of the function wrapper.limmaCompleteTest or xxxx 
+#' 
+#' @param data The result of the differential analysis processed 
+#' by \code{\link{limmaCompleteTest}} 
+#' 
+#' @param th_pval xxx
+#' 
+#' @param th_logFC xxx
+#' 
+#' @return A MSnSet
+#' 
+#' @author Alexia Dorffer, Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R25_pept
+#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' obj <- mvFilterFromIndices(obj, keepThat)
+#' qData <- Biobase::exprs(obj)
+#' sTab <- Biobase::pData(obj)
+#' allComp <- limmaCompleteTest(qData,sTab)
+#' data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
+#' diffAnaSave(obj, allComp, data)
+#' 
+#' @export
+#' 
 diffAnaSave <- function (obj, allComp, data=NULL,th_pval=0,th_logFC=0){
     if (is.null(allComp)){
         warning("The analysis has not been completed. Maybe there 
@@ -354,25 +392,32 @@ diffAnaSave <- function (obj, allComp, data=NULL,th_pval=0,th_logFC=0){
 }
 
 
-##' Returns a MSnSet object with only proteins significant after 
-##' differential analysis.
-##' 
-##' @title Returns a MSnSet object with only proteins significant after 
-##' differential analysis.
-##' @param obj An object of class \code{MSnSet}.
-##' @return A MSnSet
-##' @author Alexia Dorffer
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj <- Exp1_R25_pept
-##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
-##' obj <- mvFilterFromIndices(obj, keepThat)
-##' qData <- Biobase::exprs(obj)
-##' sTab <- Biobase::pData(obj)
-##' allComp <- limmaCompleteTest(qData,sTab)
-##' data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
-##' obj <- diffAnaSave(obj, allComp, data)
-##' signif <- diffAnaGetSignificant(obj)
+#' Returns a MSnSet object with only proteins significant after 
+#' differential analysis.
+#' 
+#' @title Returns a MSnSet object with only proteins significant after 
+#' differential analysis.
+#' 
+#' @param obj An object of class \code{MSnSet}.
+#' 
+#' @return A MSnSet
+#' 
+#' @author Alexia Dorffer
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R25_pept
+#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' obj <- mvFilterFromIndices(obj, keepThat)
+#' qData <- Biobase::exprs(obj)
+#' sTab <- Biobase::pData(obj)
+#' allComp <- limmaCompleteTest(qData,sTab)
+#' data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
+#' obj <- diffAnaSave(obj, allComp, data)
+#' signif <- diffAnaGetSignificant(obj)
+#' 
+#' @export
+#' 
 diffAnaGetSignificant <- function (obj){
     if (is.null(obj)){
         warning("The dataset contains no data")
@@ -389,24 +434,32 @@ diffAnaGetSignificant <- function (obj){
 
 
 
-##' This function is a wrapper to the calibration.plot method of the 
-##' \code{cp4p} package for use with \code{MSnSet} objects.
-##'
-##' @title Performs a calibration plot on an \code{MSnSet} object, 
-##' calling the \code{cp4p} package functions. 
-##' @param vPVal A dataframe that contains quantitative data.
-##' @param pi0Method A vector of the conditions (one condition per sample).
-##' @return A plot
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj <- Exp1_R25_pept[1:1000]
-##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
-##' obj <- mvFilterFromIndices(obj, keepThat)
-##' qData <- Biobase::exprs(obj)
-##' sTab <- Biobase::pData(obj)
-##' limma <- limmaCompleteTest(qData,sTab)
-##' wrapperCalibrationPlot(limma$P_Value[,1])
+#' This function is a wrapper to the calibration.plot method of the 
+#' \code{cp4p} package for use with \code{MSnSet} objects.
+#'
+#' @title Performs a calibration plot on an \code{MSnSet} object, 
+#' calling the \code{cp4p} package functions. 
+#' 
+#' @param vPVal A dataframe that contains quantitative data.
+#' 
+#' @param pi0Method A vector of the conditions (one condition per sample).
+#' 
+#' @return A plot
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R25_pept[1:1000]
+#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' obj <- mvFilterFromIndices(obj, keepThat)
+#' qData <- Biobase::exprs(obj)
+#' sTab <- Biobase::pData(obj)
+#' limma <- limmaCompleteTest(qData,sTab)
+#' wrapperCalibrationPlot(limma$P_Value[,1])
+#' 
+#' @export
+#' 
 wrapperCalibrationPlot <- function(vPVal, pi0Method="pounds"){
 #require(cp4p)
 if (is.null(vPVal)){return(NULL)}
@@ -418,23 +471,32 @@ return(p)
 
 
 
-##' This function plots a histogram ov p-values
-##'
-##' @title Plots a histogram ov p-values 
-##' @param pval_ll xxx
-##' @param bins xxx
-##' @param pi0 xxx
-##' @return A plot
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj <- Exp1_R25_pept
-##' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
-##' obj <- mvFilterFromIndices(obj, keepThat)
-##' qData <- Biobase::exprs(obj)
-##' sTab <- Biobase::pData(obj)
-##' allComp <- limmaCompleteTest(qData,sTab)
-##' histPValue_HC(allComp$P_Value[1])
+#' This function plots a histogram ov p-values
+#'
+#' @title Plots a histogram ov p-values 
+#' 
+#' @param pval_ll xxx
+#' 
+#' @param bins xxx
+#' 
+#' @param pi0 xxx
+#' 
+#' @return A plot
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R25_pept
+#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' obj <- mvFilterFromIndices(obj, keepThat)
+#' qData <- Biobase::exprs(obj)
+#' sTab <- Biobase::pData(obj)
+#' allComp <- limmaCompleteTest(qData,sTab)
+#' histPValue_HC(allComp$P_Value[1])
+#' 
+#' @export
+#' 
 histPValue_HC <- function(pval_ll, bins=80, pi0=1){
   h <- hist(sort(unlist(pval_ll)), freq=F,breaks=bins)
   

@@ -32,6 +32,7 @@ protID <- "Protein_group_IDs"
 X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 DAPAR::aggregateTopn(obj.pep, X, n=3)
 }
+
 }
 \author{
 Alexia Dorffer, Samuel Wieczorek

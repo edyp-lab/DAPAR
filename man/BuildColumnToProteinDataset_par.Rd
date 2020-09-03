@@ -38,6 +38,7 @@ name <- "Protein_group_IDs"
 proteinNames <- rownames(Biobase::fData(protData))
 BuildColumnToProteinDataset_par(data, M, name,proteinNames )
 }
+
 }
 \author{
 Samuel Wieczorek

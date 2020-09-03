@@ -1,16 +1,23 @@
 
 
 
-##' This method finds the LAPALA in a dataset.
-##'
-##' @title Finds the LAPALA into a \code{MSnSet} object
-##' @param obj An object of class \code{MSnSet}.
-##' @return A data.frame that contains the indexes of LAPALA
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj <- Exp1_R25_pept[1:1000]
-##' lapala <- findMECBlock(obj)
+#' This method finds the LAPALA in a dataset.
+#'
+#' @title Finds the LAPALA into a \code{MSnSet} object
+#' 
+#' @param obj An object of class \code{MSnSet}.
+#' 
+#' @return A data.frame that contains the indexes of LAPALA
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R25_pept[1:1000]
+#' lapala <- findMECBlock(obj)
+#' 
+#' @export
+#' 
 findMECBlock <- function(obj){
     
     conditions <- unique(Biobase::pData(obj)$Condition)
@@ -33,19 +40,27 @@ findMECBlock <- function(obj){
 }
 
 
-##' This method is used to put back the LAPALA that have been identified previously
-##'
-##' @title Put back LAPALA into  a \code{MSnSet} object
-##' @param obj An object of class \code{MSnSet}.
-##' @param MECIndex A data.frame that contains index of MEC (see findMECBlock) .
-##' @return The object \code{obj} where LAPALA have been reintroduced
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' obj <- Exp1_R25_pept[1:1000]
-##' lapala <- findMECBlock(obj)
-##' obj <- wrapper.impute.detQuant(obj)
-##' obj <- reIntroduceMEC(obj, lapala)
+#' This method is used to put back the LAPALA that have been identified previously
+#'
+#' @title Put back LAPALA into  a \code{MSnSet} object
+#' 
+#' @param obj An object of class \code{MSnSet}.
+#' 
+#' @param MECIndex A data.frame that contains index of MEC (see findMECBlock) .
+#' 
+#' @return The object \code{obj} where LAPALA have been reintroduced
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R25_pept[1:1000]
+#' lapala <- findMECBlock(obj)
+#' obj <- wrapper.impute.detQuant(obj)
+#' obj <- reIntroduceMEC(obj, lapala)
+#' 
+#' @export
+#' 
 reIntroduceMEC <- function(obj, MECIndex){
     
     for (i in 1:nrow(MECIndex))
@@ -59,18 +74,26 @@ reIntroduceMEC <- function(obj, MECIndex){
 
 
 
-##' This method is a wrapper for
-##' objects of class \code{MSnSet} and imputes missing values with a fixed value.
-##' This function imputes the missing values condition by condition.
-##'
-##' @title KNN missing values imputation from a \code{MSnSet} object
-##' @param obj An object of class \code{MSnSet}.
-##' @param K the number of neighbors.
-##' @return The object \code{obj} which has been imputed
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' wrapper.impute.KNN(Exp1_R25_pept[1:1000], 3)
+#' This method is a wrapper for
+#' objects of class \code{MSnSet} and imputes missing values with a fixed value.
+#' This function imputes the missing values condition by condition.
+#'
+#' @title KNN missing values imputation from a \code{MSnSet} object
+#' 
+#' @param obj An object of class \code{MSnSet}.
+#' 
+#' @param K the number of neighbors.
+#' 
+#' @return The object \code{obj} which has been imputed
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' wrapper.impute.KNN(Exp1_R25_pept[1:1000], 3)
+#' 
+#' @export
+#' 
 wrapper.impute.KNN <- function(obj, K){
     #require(impute)
     if (is.null(obj)){return(NULL)}
@@ -92,17 +115,25 @@ wrapper.impute.KNN <- function(obj, K){
 
 
 
-##' This method is a wrapper to
-##' objects of class \code{MSnSet} and imputes missing values with a fixed value.
-##'
-##' @title Missing values imputation from a \code{MSnSet} object
-##' @param obj An object of class \code{MSnSet}.
-##' @param fixVal A float .
-##' @return The object \code{obj} which has been imputed
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' wrapper.impute.fixedValue(Exp1_R25_pept[1:1000], 0.001)
+#' This method is a wrapper to
+#' objects of class \code{MSnSet} and imputes missing values with a fixed value.
+#'
+#' @title Missing values imputation from a \code{MSnSet} object
+#' 
+#' @param obj An object of class \code{MSnSet}.
+#' 
+#' @param fixVal A float .
+#' 
+#' @return The object \code{obj} which has been imputed
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' wrapper.impute.fixedValue(Exp1_R25_pept[1:1000], 0.001)
+#' 
+#' @export
+#' 
 wrapper.impute.fixedValue <- function(obj, fixVal){
     
     Biobase::exprs(obj)[is.na(exprs(obj))] <- fixVal
@@ -124,18 +155,26 @@ wrapper.impute.fixedValue <- function(obj, fixVal){
 
 
 
-##' This method is a wrapper to the function \code{impute.pa} of the package
-##' \code{imp4p} adapted to an object of class \code{MSnSet}.
-##'
-##' @title Imputation of peptides having no values in a biological condition.
-##' @param obj An object of class \code{MSnSet}.
-##' @param q.min Same as the function \code{impute.pa} in the package \code{imp4p}
-##' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' dat <- mvFilter(Exp1_R25_pept[1:1000], type="allCond", th = 1)
-##' dat <- wrapper.impute.pa(dat)
+#' This method is a wrapper to the function \code{impute.pa} of the package
+#' \code{imp4p} adapted to an object of class \code{MSnSet}.
+#'
+#' @title Imputation of peptides having no values in a biological condition.
+#' 
+#' @param obj An object of class \code{MSnSet}.
+#' 
+#' @param q.min Same as the function \code{impute.pa} in the package \code{imp4p}
+#' 
+#' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' dat <- mvFilter(Exp1_R25_pept[1:1000], type="allCond", th = 1)
+#' dat <- wrapper.impute.pa(dat)
+#' 
+#' @export
+#' 
 wrapper.impute.pa <- function(obj, q.min = 0.025){
     cond <- as.factor(Biobase::pData(obj)$Condition)
     res <- impute.pa(Biobase::exprs(obj), conditions=cond, q.min = q.min, q.norm=3,  eps=0)
@@ -146,19 +185,28 @@ wrapper.impute.pa <- function(obj, q.min = 0.025){
 
 
 
-##' This method is a wrapper of the function \code{\link{impute.detQuant}} for objects
-##' of class \code{MSnSet} 
-##' 
-##' @title Wrapper of the function \code{\link{impute.detQuant}} for objects
-##' of class \code{MSnSet}
-##' @param obj An instance of class \code{MSnSet}
-##' @param qval An expression set containing quantitative values of various replicates
-##' @param factor A scaling factor to multiply the imputation value with 
-##' @return An imputed instance of class \code{MSnSet}
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' wrapper.impute.detQuant(Exp1_R25_pept)
+#' This method is a wrapper of the function \code{\link{impute.detQuant}} for objects
+#' of class \code{MSnSet} 
+#' 
+#' @title Wrapper of the function \code{\link{impute.detQuant}} for objects
+#' of class \code{MSnSet}
+#' 
+#' @param obj An instance of class \code{MSnSet}
+#' 
+#' @param qval An expression set containing quantitative values of various replicates
+#' 
+#' @param factor A scaling factor to multiply the imputation value with 
+#' 
+#' @return An imputed instance of class \code{MSnSet}
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' wrapper.impute.detQuant(Exp1_R25_pept)
+#' 
+#' @export
+#' 
 wrapper.impute.detQuant <- function(obj, qval=0.025, factor=1){
     if (is.null(obj)){return(NULL)}
     
@@ -176,18 +224,27 @@ wrapper.impute.detQuant <- function(obj, qval=0.025, factor=1){
 
 
 
-##' This method returns the q-th quantile of each colum of an expression set, up to a scaling factor
-##'
-##' @title Quantile imputation value definition
-##' @param qData An expression set containing quantitative values of various replicates
-##' @param qval The quantile used to define the imputation value
-##' @param factor A scaling factor to multiply the imputation value with
-##' @return A list of two vectors, respectively containing the imputation values and the rescaled imputation values
-##' @author Thomas Burger
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' getQuantile4Imp(qData) 
+#' This method returns the q-th quantile of each column of an expression set, up to a scaling factor
+#'
+#' @title Quantile imputation value definition
+#' 
+#' @param qData An expression set containing quantitative values of various replicates
+#' 
+#' @param qval The quantile used to define the imputation value
+#' 
+#' @param factor A scaling factor to multiply the imputation value with
+#' 
+#' @return A list of two vectors, respectively containing the imputation values and the rescaled imputation values
+#' 
+#' @author Thomas Burger
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' qData <- Biobase::exprs(Exp1_R25_pept)
+#' getQuantile4Imp(qData) 
+#' 
+#' @export
+#' 
 getQuantile4Imp <- function(qData, qval=0.025, factor=1){
     r1 <- apply(qData, 2, quantile, qval, na.rm=TRUE)
     r2 <- r1*factor
@@ -197,18 +254,26 @@ getQuantile4Imp <- function(qData, qval=0.025, factor=1){
 
 
 
-##' This method replaces each missing value by a given value
-##'
-##' @title Deterministic imputation
-##' @param qData An expression set containing quantitative or missing values
-##' @param values A vector with as many elements as the number of colums of qData
-##' @return An imputed dataset
-##' @author Thomas Burger
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' qData <- Biobase::exprs(Exp1_R25_pept)
-##' values <- getQuantile4Imp(qData)$shiftedImpVal
-##' impute.detQuant(qData, values) 
+#' This method replaces each missing value by a given value
+#'
+#' @title Deterministic imputation
+#' 
+#' @param qData An expression set containing quantitative or missing values
+#' 
+#' @param values A vector with as many elements as the number of colums of qData
+#' 
+#' @return An imputed dataset
+#' 
+#' @author Thomas Burger
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' qData <- Biobase::exprs(Exp1_R25_pept)
+#' values <- getQuantile4Imp(qData)$shiftedImpVal
+#' impute.detQuant(qData, values) 
+#' 
+#' @export
+#' 
 impute.detQuant <- function(qData, values){
     for(i in 1:dim(qData)[2]){
         col <- qData[,i]
@@ -219,17 +284,24 @@ impute.detQuant <- function(qData, values){
 }
 
 
-##' This method is a wrapper to the function \code{impute.slsa} of the package
-##' \code{imp4p} adapted to an object of class \code{MSnSet}.
-##'
-##' @title Imputation of peptides having no values in a biological condition.
-##' @param obj An object of class \code{MSnSet}.
-##' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' dat <- DAPAR::mvFilter(Exp1_R25_pept[1:1000], type="allCond", th = 1)
-##' dat <- wrapper.impute.slsa(dat)
+#' This method is a wrapper to the function \code{impute.slsa} of the package
+#' \code{imp4p} adapted to an object of class \code{MSnSet}.
+#'
+#' @title Imputation of peptides having no values in a biological condition.
+#' 
+#' @param obj An object of class \code{MSnSet}.
+#' 
+#' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' dat <- DAPAR::mvFilter(Exp1_R25_pept[1:1000], type="allCond", th = 1)
+#' dat <- wrapper.impute.slsa(dat)
+#' 
+#' @export
+#' 
 wrapper.impute.slsa <- function(obj){
     
     

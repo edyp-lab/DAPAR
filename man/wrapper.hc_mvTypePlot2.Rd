@@ -22,6 +22,7 @@ of class \code{MSnSet}).
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 wrapper.hc_mvTypePlot2(Exp1_R25_pept)
+
 }
 \author{
 Florence Combes, Samuel Wieczorek

@@ -22,6 +22,7 @@ utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept
 data <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
 is.MV(data)
+
 }
 \author{
 Samuel Wieczorek

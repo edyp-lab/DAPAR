@@ -39,6 +39,7 @@ utils::data(Exp1_R25_pept, package='DAPARdata')
 qData <- Biobase::exprs(Exp1_R25_pept)
 samplesData <- Biobase::pData(Exp1_R25_pept)
 mvPerLinesHistoPerCondition_HC(qData, samplesData)
+
 }
 \author{
 Samuel Wieczorek

@@ -20,6 +20,7 @@ Sets the OriginOfValues dataframe in the fData table
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 addOriginOfValue(Exp1_R25_pept)
+
 }
 \author{
 Samuel Wieczorek

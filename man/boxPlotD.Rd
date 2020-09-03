@@ -19,7 +19,7 @@ boxPlotD(obj, conds, legend = NULL, palette = NULL)
 A boxplot
 }
 \description{
-Boxplot for quantitative proteomics data
+Builds a boxplot from a dataframe
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')

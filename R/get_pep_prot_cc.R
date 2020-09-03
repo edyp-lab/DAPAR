@@ -1,13 +1,22 @@
-##' Method to build the list of connex composant of the adjacency matrix
-##' 
-##' @title Build the list of connex composant of the adjacency matrix
-##' @param X An adjacency matrix
-##' @return A list of CC  
-##' @author Thomas Burger, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata') 
-##' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
-##' ll <- get.pep.prot.cc(X)
+#' Method to build the list of connex composant of the adjacency matrix
+#' 
+#' @title Build the list of connex composant of the adjacency matrix
+#' 
+#' @param X An adjacency matrix
+#' 
+#' @return A list of CC 
+#'  
+#' @author Thomas Burger, Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata') 
+#' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
+#' ll <- get.pep.prot.cc(X)
+#' 
+#' @importFrom Matrix %&%
+#' 
+#' @export
+#' 
 get.pep.prot.cc <- function(X){
   if (is.null(X)){
     warning("The adjacency matrix is empty")
@@ -85,17 +94,24 @@ get.pep.prot.cc <- function(X){
 
 
 
-##' Jitter plot of CC
-##' 
-##' @title Jitter plot of CC
-##' @param list.of.cc List of cc such as returned by the function get.pep.prot.cc
-##' @return A plot  
-##' @author Thomas Burger
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
-##' ll <- get.pep.prot.cc(X)
-##' plotJitter(ll)
+#' Jitter plot of CC
+#' 
+#' @title Jitter plot of CC
+#' 
+#' @param list.of.cc List of cc such as returned by the function get.pep.prot.cc
+#' 
+#' @return A plot  
+#' 
+#' @author Thomas Burger
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
+#' ll <- get.pep.prot.cc(X)
+#' plotJitter(ll)
+#' 
+#' @export
+#' 
 plotJitter <- function(list.of.cc){
   if (is.null(list.of.cc)){return()}
   
@@ -128,17 +144,26 @@ plotJitter <- function(list.of.cc){
 # }
 
 
-##' Display a CC
-##' @title Display a CC
-##' @param The.CC A cc (a list)
-##' @param X xxxxx
-##' @return A plot  
-##' @author Thomas Burger, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' X <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein_group_IDs", FALSE)
-##' ll <- get.pep.prot.cc(X)
-##' g <- buildGraph(ll[[1]], X)
+#' Display a CC
+#' 
+#' @title Display a CC
+#' 
+#' @param The.CC A cc (a list)
+#' 
+#' @param X xxxxx
+#' 
+#' @return A plot 
+#'  
+#' @author Thomas Burger, Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' X <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein_group_IDs", FALSE)
+#' ll <- get.pep.prot.cc(X)
+#' g <- buildGraph(ll[[1]], X)
+#' 
+#' @export
+#' 
 buildGraph <- function(The.CC, X){
   
   subX <- as.matrix(X[The.CC$peptides, The.CC$proteins])
@@ -168,21 +193,33 @@ buildGraph <- function(The.CC, X){
 }
 
 
-##' Display a CC
-##' @title Display a CC
-##' @param g A cc (a list)
-##' @param layout xxxxx
-##' @param obj xxx
-##' @param prot.tooltip xxx
-##' @param pept.tooltip xxx
-##' @return A plot  
-##' @author Thomas Burger, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata') 
-##' X <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein_group_IDs", FALSE)
-##' ll <- get.pep.prot.cc(X)
-##' g <- buildGraph(ll[[1]], X)
-##' display.CC.visNet(g)
+#' Display a CC
+#' 
+#' @title Display a CC
+#' 
+#' @param g A cc (a list)
+#' 
+#' @param layout xxxxx
+#' 
+#' @param obj xxx
+#' 
+#' @param prot.tooltip xxx
+#' 
+#' @param pept.tooltip xxx
+#' 
+#' @return A plot 
+#'  
+#' @author Thomas Burger, Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata') 
+#' X <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein_group_IDs", FALSE)
+#' ll <- get.pep.prot.cc(X)
+#' g <- buildGraph(ll[[1]], X)
+#' display.CC.visNet(g)
+#' 
+#' @export
+#' 
 display.CC.visNet <- function(g, layout = layout_nicely, 
                        obj=NULL,
                        prot.tooltip=NULL, 
@@ -211,15 +248,24 @@ display.CC.visNet <- function(g, layout = layout_nicely,
 
 
 
-##' Display a jitter plot for CC
-##' @title Display a a jitter plot for CC
-##' @param df xxxx
-##' @param clickFunction xxxx
-##' @return A plot  
-##' @author Thomas Burger, Samuel Wieczorek
-##' @examples
-##' \dontrun{
-##' }
+#' Display a jitter plot for CC
+#' 
+#' @title Display a a jitter plot for CC
+#' 
+#' @param df xxxx
+#' 
+#' @param clickFunction xxxx
+#' 
+#' @return A plot  
+#' 
+#' @author Thomas Burger, Samuel Wieczorek
+#' 
+#' @examples
+#' \dontrun{
+#' }
+#' 
+#' @export
+#' 
 plotJitter_rCharts <- function(df, clickFunction=NULL){
   
   #df <- GetDataForPlotJitter(list.of.cc)

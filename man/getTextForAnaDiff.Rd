@@ -17,6 +17,7 @@ Build the text information for the differential Analysis process
 }
 \examples{
 getTextForAnaDiff(list(design="OnevsOne",method="Limma"))
+
 }
 \author{
 Samuel Wieczorek

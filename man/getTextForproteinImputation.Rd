@@ -18,6 +18,7 @@ Build the text information for the Protein Imputation process
 \examples{
 params <- list()
 getTextForproteinImputation(params)
+
 }
 \author{
 Samuel Wieczorek

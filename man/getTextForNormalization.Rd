@@ -17,6 +17,7 @@ Build the text information for the Normalization process
 }
 \examples{
 getTextForNormalization(list(method="SumByColumns"))
+
 }
 \author{
 Samuel Wieczorek

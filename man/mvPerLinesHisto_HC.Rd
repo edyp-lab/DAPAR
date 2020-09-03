@@ -29,6 +29,7 @@ utils::data(Exp1_R25_pept, package='DAPARdata')
 qData <- Biobase::exprs(Exp1_R25_pept)
 samplesData <- Biobase::pData(Exp1_R25_pept)
 mvPerLinesHisto_HC(qData, samplesData)
+
 }
 \author{
 Florence Combes, Samuel Wieczorek

@@ -19,7 +19,7 @@ inner.aggregate.topn(pepData, X, method = "Mean", n = 10)
 xxxxx
 }
 \description{
-Method to xxxxx
+xxxx
 }
 \author{
 Samuel Wieczorek

@@ -16,10 +16,8 @@ A Excel file (.xlsx)
 }
 \description{
 This function exports a \code{MSnSet} data object to a Excel file.
-Each of the 
-three data.frames in the \code{MSnSet} object (ie experimental data,
-phenoData
-and metaData are respectively integrated into separate sheets in
+Each of the three data.frames in the \code{MSnSet} object (ie experimental data,
+phenoData and metaData are respectively integrated into separate sheets in
 the Excel file).
 The colored cells in the experimental data correspond to the original missing values
 which have been imputed.
@@ -31,6 +29,7 @@ utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R2_pept[1:1000]
 writeMSnsetToExcel(obj, "foo")
 }
+
 }
 \author{
 Samuel Wieczorek

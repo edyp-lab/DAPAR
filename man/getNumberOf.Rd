@@ -23,6 +23,7 @@ the prefix.
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 getNumberOf(Exp1_R25_pept, "Potential_contaminant", "+")
+
 }
 \author{
 Samuel Wieczorek

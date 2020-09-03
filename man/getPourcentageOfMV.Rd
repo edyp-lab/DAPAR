@@ -19,6 +19,7 @@ data (\code{exprs()} table of the dataset).
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 getPourcentageOfMV(Exp1_R25_pept)
+
 }
 \author{
 Florence Combes, Samuel Wieczorek

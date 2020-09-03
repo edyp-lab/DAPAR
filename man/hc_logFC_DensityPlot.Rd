@@ -30,6 +30,7 @@ qData <- Biobase::exprs(obj)
 sTab <- Biobase::pData(obj)
 res <- limmaCompleteTest(qData,sTab)
 hc_logFC_DensityPlot(res$logFC, threshold_LogFC=1)
+
 }
 \author{
 Samuel Wieczorek

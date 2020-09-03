@@ -40,6 +40,7 @@ qData <- Biobase::exprs(Exp1_R25_pept)
 samplesData <- Biobase::pData(Exp1_R25_pept)
 conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 mvHisto(qData, samplesData, conds, indLegend="auto", showValues=TRUE)
+
 }
 \author{
 Florence Combes, Samuel Wieczorek

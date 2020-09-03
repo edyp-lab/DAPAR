@@ -24,6 +24,7 @@ This function removes lines in the dataset based on a prefix string.
 utils::data(Exp1_R25_pept, package='DAPARdata')
 removeLines(Exp1_R25_pept, "Potential_contaminant")
 removeLines(Exp1_R25_pept, "Reverse")
+
 }
 \author{
 Samuel Wieczorek

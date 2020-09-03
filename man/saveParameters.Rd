@@ -25,6 +25,7 @@ Saves the parameters of a tool in the pipeline of Prostar
 utils::data(Exp1_R25_pept, package='DAPARdata')
 l.params=list(method="Global quantile alignment", type="overall")
 saveParameters(Exp1_R25_pept, "Filtered.peptide", "Imputation",l.params)
+
 }
 \author{
 Samuel Wieczorek

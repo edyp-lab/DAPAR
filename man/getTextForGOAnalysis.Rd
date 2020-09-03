@@ -17,6 +17,7 @@ Build the text information for the Aggregation process
 }
 \examples{
 getTextForGOAnalysis(list())
+
 }
 \author{
 Samuel Wieczorek

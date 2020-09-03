@@ -17,7 +17,7 @@ violinPlotD(obj, legend = NULL, palette = NULL)
 A violinplot
 }
 \description{
-ViolinPlot for quantitative proteomics data
+Builds a violinplot from a dataframe
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')

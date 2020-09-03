@@ -18,6 +18,7 @@ Builds the text information for the Aggregation process
 \examples{
 params <- list()
 getTextForAggregation(params)
+
 }
 \author{
 Samuel Wieczorek

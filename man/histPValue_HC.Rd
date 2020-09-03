@@ -28,6 +28,7 @@ qData <- Biobase::exprs(obj)
 sTab <- Biobase::pData(obj)
 allComp <- limmaCompleteTest(qData,sTab)
 histPValue_HC(allComp$P_Value[1])
+
 }
 \author{
 Samuel Wieczorek

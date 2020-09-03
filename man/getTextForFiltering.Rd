@@ -17,6 +17,7 @@ Build the text information for the filtering process
 }
 \examples{
 getTextForFiltering(list(mvFilterType="wholeMatrix",mvThNA=3))
+
 }
 \author{
 Samuel Wieczorek

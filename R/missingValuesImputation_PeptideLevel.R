@@ -1,16 +1,23 @@
 
 
-##' This method is a wrapper to the function \code{impute.mle} of the package
-##' \code{imp4p} adapted to an object of class \code{MSnSet}.
-##'
-##' @title Imputation of peptides having no values in a biological condition.
-##' @param obj An object of class \code{MSnSet}.
-##' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' dat <- mvFilter(Exp1_R25_pept[1:1000,], type="allCond", th = 1)
-##' dat <- wrapper.impute.mle(dat)
+#' This method is a wrapper to the function \code{impute.mle} of the package
+#' \code{imp4p} adapted to an object of class \code{MSnSet}.
+#'
+#' @title Imputation of peptides having no values in a biological condition.
+#' 
+#' @param obj An object of class \code{MSnSet}.
+#' 
+#' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' dat <- mvFilter(Exp1_R25_pept[1:1000,], type="allCond", th = 1)
+#' dat <- wrapper.impute.mle(dat)
+#' 
+#' @export
+#' 
 wrapper.impute.mle <- function(obj){
   cond <- as.factor(Biobase::pData(obj)$Condition)
   
@@ -22,36 +29,62 @@ wrapper.impute.mle <- function(obj){
 
 
 
-##' This method is a wrapper to the function \code{impute.mi} of the package \code{imp4p} adapted to
-##' an object of class \code{MSnSet}.
-##'
-##' @title Missing values imputation using the LSimpute algorithm.
-##' @param obj An object of class \code{MSnSet}.
-##' @param nb.iter Same as the function \code{mi.mix} in the package \code{imp4p}
-##' @param nknn Same as the function \code{mi.mix} in the package \code{imp4p}
-##' @param selec Same as the function \code{mi.mix} in the package \code{imp4p}
-##' @param siz Same as the function \code{mi.mix} in the package \code{imp4p}
-##' @param weight Same as the function \code{mi.mix} in the package \code{imp4p}
-##' @param ind.comp Same as the function \code{mi.mix} in the package \code{imp4p}
-##' @param progress.bar Same as the function \code{mi.mix} in the package \code{imp4p}
-##' @param x.step.mod Same as the function \code{estim.mix} in the package \code{imp4p}
-##' @param x.step.pi Same as the function \code{estim.mix} in the package \code{imp4p}
-##' @param nb.rei Same as the function \code{estim.mix} in the package \code{imp4p}
-##' @param method Same as the function \code{estim.mix} in the package \code{imp4p}
-##' @param gridsize Same as the function \code{estim.mix} in the package \code{imp4p}
-##' @param q Same as the function \code{mi.mix} in the package \code{imp4p}
-##' @param q.min Same as the function \code{impute.pa} in the package \code{imp4p}
-##' @param q.norm Same as the function \code{impute.pa} in the package \code{imp4p}
-##' @param eps Same as the function \code{impute.pa} in the package \code{imp4p}
-##' @param methodi Same as the function \code{mi.mix} in the package \code{imp4p}
-##' @param lapala xxxxxxxxxxx
-##' @param distribution The type of distribution used. Values are \code{unif} (default) or \code{beta}.
-##' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
-##' @author Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' dat <- mvFilter(Exp1_R25_pept[1:1000], type="allCond", th = 1)
-##' dat <- wrapper.dapar.impute.mi(dat, nb.iter=1)
+#' This method is a wrapper to the function \code{impute.mi} of the package \code{imp4p} adapted to
+#' an object of class \code{MSnSet}.
+#'
+#' @title Missing values imputation using the LSimpute algorithm.
+#' 
+#' @param obj An object of class \code{MSnSet}.
+#' 
+#' @param nb.iter Same as the function \code{mi.mix} in the package \code{imp4p}
+#' 
+#' @param nknn Same as the function \code{mi.mix} in the package \code{imp4p}
+#' 
+#' @param selec Same as the function \code{mi.mix} in the package \code{imp4p}
+#' 
+#' @param siz Same as the function \code{mi.mix} in the package \code{imp4p}
+#' 
+#' @param weight Same as the function \code{mi.mix} in the package \code{imp4p}
+#' 
+#' @param ind.comp Same as the function \code{mi.mix} in the package \code{imp4p}
+#' 
+#' @param progress.bar Same as the function \code{mi.mix} in the package \code{imp4p}
+#' 
+#' @param x.step.mod Same as the function \code{estim.mix} in the package \code{imp4p}
+#' 
+#' @param x.step.pi Same as the function \code{estim.mix} in the package \code{imp4p}
+#' 
+#' @param nb.rei Same as the function \code{estim.mix} in the package \code{imp4p}
+#' 
+#' @param method Same as the function \code{estim.mix} in the package \code{imp4p}
+#' 
+#' @param gridsize Same as the function \code{estim.mix} in the package \code{imp4p}
+#' 
+#' @param q Same as the function \code{mi.mix} in the package \code{imp4p}
+#' 
+#' @param q.min Same as the function \code{impute.pa} in the package \code{imp4p}
+#' 
+#' @param q.norm Same as the function \code{impute.pa} in the package \code{imp4p}
+#' 
+#' @param eps Same as the function \code{impute.pa} in the package \code{imp4p}
+#' 
+#' @param methodi Same as the function \code{mi.mix} in the package \code{imp4p}
+#' 
+#' @param lapala xxxxxxxxxxx
+#' 
+#' @param distribution The type of distribution used. Values are \code{unif} (default) or \code{beta}.
+#' 
+#' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' dat <- mvFilter(Exp1_R25_pept[1:1000], type="allCond", th = 1)
+#' dat <- wrapper.dapar.impute.mi(dat, nb.iter=1)
+#' 
+#' @export
+#' 
 wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, nknn = 15, selec = 600, siz = 500, 
                                      weight = 1, ind.comp = 1, progress.bar = FALSE, x.step.mod = 300,
                                      x.step.pi = 300, nb.rei = 100, method = 4, gridsize = 300, 
@@ -132,18 +165,29 @@ wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, nknn = 15, selec = 600, s
 
 
 ################################################
-##' Generator of simulated values
-##' 
-##' @title Generator of simulated values
-##' @param n An integer which is the number of simulation (same as in rbeta)
-##' @param min An integer that corresponds to the lower bound of the interval
-##' @param max An integer that corresponds to the upper bound of the interval
-##' @param param1 An integer that is the first parameter of rbeta function.
-##' @param param2 An integer that is second parameter of rbeta function.
-##' @return A vector of n simulated values
-##' @author Thomas Burger
-##' @examples
-##' translatedRandomBeta(1000, 5, 10, 1, 1)
+#' Generator of simulated values
+#' 
+#' @title Generator of simulated values
+#' 
+#' @param n An integer which is the number of simulation (same as in rbeta)
+#' 
+#' @param min An integer that corresponds to the lower bound of the interval
+#' 
+#' @param max An integer that corresponds to the upper bound of the interval
+#' 
+#' @param param1 An integer that is the first parameter of rbeta function.
+#' 
+#' @param param2 An integer that is second parameter of rbeta function.
+#' 
+#' @return A vector of n simulated values
+#' 
+#' @author Thomas Burger
+#' 
+#' @examples
+#' translatedRandomBeta(1000, 5, 10, 1, 1)
+#' 
+#' @export
+#' 
 translatedRandomBeta <- function(n, min, max, param1=3, param2=1){
     scale <- max-min
     simu <- rbeta(n,param1,param2)
@@ -153,28 +197,39 @@ translatedRandomBeta <- function(n, min, max, param1=3, param2=1){
 
 
 ################################################
-##' This method is a wrapper to the function \code{impute.pa} from the package 
-##' \code{imp4p} adapted to objects of class \code{MSnSet}.
-##' 
-##' @title Missing values imputation from a \code{MSnSet} object
-##' @param obj An object of class \code{MSnSet}.
-##' @param q.min A quantile value of the observed values allowing defining the 
-##' maximal value which can be generated. This maximal value is defined by the
-##' quantile q.min of the observed values distribution minus eps. 
-##' Default is 0 (the maximal value is the minimum of observed values minus eps).
-##' @param q.norm A quantile value of a normal distribution allowing defining 
-##' the minimal value which can be generated. Default is 3 (the minimal value 
-##' is the maximal value minus qn*median(sd(observed values)) where sd is the 
-##' standard deviation of a row in a condition).
-##' @param eps A value allowing defining the maximal value which can be 
-##' generated. This maximal value is defined by the quantile q.min of the 
-##' observed values distribution minus eps. Default is 0.
-##' @param distribution The type of distribution used. Values are \code{unif} (default) or \code{beta}.
-##' @return The object \code{obj} which has been imputed
-##' @author Thomas Burger, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' wrapper.impute.pa2(Exp1_R25_pept[1:1000], distribution="beta")
+#' This method is a wrapper to the function \code{impute.pa} from the package 
+#' \code{imp4p} adapted to objects of class \code{MSnSet}.
+#' 
+#' @title Missing values imputation from a \code{MSnSet} object
+#' 
+#' @param obj An object of class \code{MSnSet}.
+#' 
+#' @param q.min A quantile value of the observed values allowing defining the 
+#' maximal value which can be generated. This maximal value is defined by the
+#' quantile q.min of the observed values distribution minus eps. 
+#' Default is 0 (the maximal value is the minimum of observed values minus eps).
+#' 
+#' @param q.norm A quantile value of a normal distribution allowing defining 
+#' the minimal value which can be generated. Default is 3 (the minimal value 
+#' is the maximal value minus qn*median(sd(observed values)) where sd is the 
+#' standard deviation of a row in a condition).
+#' 
+#' @param eps A value allowing defining the maximal value which can be 
+#' generated. This maximal value is defined by the quantile q.min of the 
+#' observed values distribution minus eps. Default is 0.
+#' 
+#' @param distribution The type of distribution used. Values are \code{unif} (default) or \code{beta}.
+#' 
+#' @return The object \code{obj} which has been imputed
+#' 
+#' @author Thomas Burger, Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' wrapper.impute.pa2(Exp1_R25_pept[1:1000], distribution="beta")
+#' 
+#' @export
+#' 
 wrapper.impute.pa2 <- function (obj, q.min = 0, q.norm = 3, eps = 0, distribution = "unif"){
   
   ## order exp and pData table before using imp4p functions
@@ -209,29 +264,41 @@ wrapper.impute.pa2 <- function (obj, q.min = 0, q.norm = 3, eps = 0, distributio
 
 
 ################################################
-##' This method is a variation to the function \code{impute.pa} from the package 
-##' \code{imp4p}.
-##' 
-##' @title Missing values imputation from a \code{MSnSet} object
-##' @param tab An object of class \code{MSnSet}.
-##' @param conditions A vector of conditions in the dataset
-##' @param q.min A quantile value of the observed values allowing defining the 
-##' maximal value which can be generated. This maximal value is defined by the
-##' quantile q.min of the observed values distribution minus eps. 
-##' Default is 0 (the maximal value is the minimum of observed values minus eps).
-##' @param q.norm A quantile value of a normal distribution allowing defining 
-##' the minimal value which can be generated. Default is 3 (the minimal value 
-##' is the maximal value minus qn*median(sd(observed values)) where sd is the 
-##' standard deviation of a row in a condition).
-##' @param eps A value allowing defining the maximal value which can be 
-##' generated. This maximal value is defined by the quantile q.min of the 
-##' observed values distribution minus eps. Default is 0.
-##' @param distribution The type of distribution used. Values are unif or beta.
-##' @return The object \code{obj} which has been imputed
-##' @author Thomas Burger, Samuel Wieczorek
-##' @examples
-##' utils::data(Exp1_R25_pept, package='DAPARdata')
-##' wrapper.impute.pa2(Exp1_R25_pept[1:1000], distribution="beta")
+#' This method is a variation to the function \code{impute.pa} from the package 
+#' \code{imp4p}.
+#' 
+#' @title Missing values imputation from a \code{MSnSet} object
+#' 
+#' @param tab An object of class \code{MSnSet}.
+#' 
+#' @param conditions A vector of conditions in the dataset
+#' 
+#' @param q.min A quantile value of the observed values allowing defining the 
+#' maximal value which can be generated. This maximal value is defined by the
+#' quantile q.min of the observed values distribution minus eps. 
+#' Default is 0 (the maximal value is the minimum of observed values minus eps).
+#' 
+#' @param q.norm A quantile value of a normal distribution allowing defining 
+#' the minimal value which can be generated. Default is 3 (the minimal value 
+#' is the maximal value minus qn*median(sd(observed values)) where sd is the 
+#' standard deviation of a row in a condition).
+#' 
+#' @param eps A value allowing defining the maximal value which can be 
+#' generated. This maximal value is defined by the quantile q.min of the 
+#' observed values distribution minus eps. Default is 0.
+#' 
+#' @param distribution The type of distribution used. Values are unif or beta.
+#' 
+#' @return The object \code{obj} which has been imputed
+#' 
+#' @author Thomas Burger, Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' wrapper.impute.pa2(Exp1_R25_pept[1:1000], distribution="beta")
+#' 
+#' @export
+#' 
 impute.pa2 <- function (tab, conditions, q.min = 0, q.norm = 3, eps = 0, distribution = "unif"){
     tab_imp = tab
     qu = apply(tab_imp, 2, quantile, na.rm = TRUE, q.min)

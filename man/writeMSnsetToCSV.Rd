@@ -23,6 +23,7 @@ utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R2_pept[1:1000]
 writeMSnsetToCSV(obj, "foo")
 }
+
 }
 \author{
 Samuel Wieczorek

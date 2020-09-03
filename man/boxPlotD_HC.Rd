@@ -17,7 +17,7 @@ boxPlotD_HC(obj, legend = NULL, palette = NULL)
 A boxplot
 }
 \description{
-Boxplot for quantitative proteomics data using the library \code{highcharter}
+Builds a boxplot from a dataframe using the library \code{highcharter}
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')

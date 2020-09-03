@@ -19,6 +19,7 @@ Method to build the list of connex composant of the adjacency matrix
 utils::data(Exp1_R25_pept, package='DAPARdata') 
 X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
 ll <- get.pep.prot.cc(X)
+
 }
 \author{
 Thomas Burger, Samuel Wieczorek

@@ -27,6 +27,7 @@ utils::data(Exp1_R25_pept, package='DAPARdata')
 qData <- Biobase::exprs(Exp1_R25_pept)
 conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 mvImage(qData, conds)
+
 }
 \author{
 Samuel Wieczorek, Thomas Burger

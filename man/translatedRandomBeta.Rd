@@ -25,6 +25,7 @@ Generator of simulated values
 }
 \examples{
 translatedRandomBeta(1000, 5, 10, 1, 1)
+
 }
 \author{
 Thomas Burger

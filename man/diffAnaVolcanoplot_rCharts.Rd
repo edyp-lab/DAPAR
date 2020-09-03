@@ -76,6 +76,7 @@ hc_clickFunction <- JS("function(event) {Shiny.onInputChange('eventPointClicked'
 cond <- c("25fmol", "10fmol")
 diffAnaVolcanoplot_rCharts(df, 2.5, 1, cond,hc_clickFunction) 
 }
+
 }
 \author{
 Samuel Wieczorek

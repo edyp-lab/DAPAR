@@ -28,6 +28,7 @@ allComp <- limmaCompleteTest(qData,sTab)
 data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
 obj <- diffAnaSave(obj, allComp, data)
 signif <- diffAnaGetSignificant(obj)
+
 }
 \author{
 Alexia Dorffer

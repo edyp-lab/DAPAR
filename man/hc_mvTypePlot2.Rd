@@ -35,6 +35,7 @@ utils::data(Exp1_R25_pept, package='DAPARdata')
 qData <- Biobase::exprs(Exp1_R25_pept)
 conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 hc_mvTypePlot2(qData, conds, title="POV distribution")
+
 }
 \author{
 Samuel Wieczorek

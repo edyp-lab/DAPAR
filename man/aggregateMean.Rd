@@ -28,6 +28,7 @@ protID <- "Protein_group_IDs"
 X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 aggregateMean(obj.pep, X)
 }
+
 }
 \author{
 Alexia Dorffer
