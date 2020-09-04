@@ -14,6 +14,7 @@
 #' ll <- get.pep.prot.cc(X)
 #' 
 #' @importFrom Matrix %&%
+#' @importFrom graph graphAM connComp 
 #' 
 #' @export
 #' 
@@ -21,11 +22,8 @@ get.pep.prot.cc <- function(X){
   if (is.null(X)){
     warning("The adjacency matrix is empty")
     return()}
-  #require(Matrix)
-  #require(igraph)
-  #require(graph)
   
-  
+  X <- as.matrix(X)
   p <- dim(X)[2] # Nb proteins
   q <- dim(X)[1] # Nb peptides
   

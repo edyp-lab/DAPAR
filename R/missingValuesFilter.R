@@ -275,7 +275,7 @@ return(obj)
 #' 
 #' @export
 #' 
-stringBasedFiltering <- function(obj, 
+StringBasedFiltering <- function(obj, 
                                  idCont2Delete=NULL, prefix_Cont=NULL, 
                                  idRev2Delete=NULL, prefix_Rev=NULL){
     
