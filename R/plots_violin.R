@@ -17,7 +17,9 @@
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' library(vioplot)
 #' legend <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-#' violinPlotD(Exp1_R25_pept, legend=legend)
+#' conds <- Biobase::pData(Exp1_R25_pept)[["Condition"]]
+#' key <- "Protein_group_IDs"
+#' violinPlotD(exprs(Exp1_R25_pept), conds=legend, keyId=key, palette=c(rep('blue',3), rep('green',3)),subset.view=1:10)
 #' 
 #' @importFrom vioplot vioplot
 #' 

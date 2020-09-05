@@ -1,3 +1,14 @@
+#' @title List normalization methods with tracking option
+#' 
+#' @name normalizeMethodsWithTracking.dapar
+#' 
+#' @export
+#'
+normalizeMethodsWithTracking.dapar <- function()
+  c("SumByColumns", "QuantileCentering", "MeanCentering")
+
+
+
 #' Provides several methods to normalize quantitative data from
 #' a \code{MSnSet} object.
 #' They are organized in six main families : GlobalQuantileAlignement, sumByColumns, QuantileCentering, MeanCentering, LOESS, vsn

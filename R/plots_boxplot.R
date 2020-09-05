@@ -23,7 +23,7 @@
 #' qData <- Biobase::exprs((Exp1_R25_pept))
 #' conds <- Biobase::pData(Exp1_R25_pept)[["Condition"]]
 #' key <- "Protein_group_IDs"
-#' boxPlotD_HC(qData, conds, keyId = key, conds, subset.view=1:10)
+#' boxPlotD_HC(qData, conds, keyId = key, conds, palette=c(rep('blue',3), rep('green',3)),subset.view=1:10)
 #' 
 #' @import highcharter
 #' 
