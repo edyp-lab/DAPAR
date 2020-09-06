@@ -4,7 +4,10 @@
 \alias{normalizeMethodsWithTracking.dapar}
 \title{List normalization methods with tracking option}
 \usage{
-normalizeMethodsWithTracking.dapar()
+normalizeMethodsWithTracking.dapar(withTracking = FALSE)
+}
+\arguments{
+\item{withTracking}{xxx}
 }
 \description{
 List normalization methods with tracking option
