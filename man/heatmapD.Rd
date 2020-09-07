@@ -44,5 +44,5 @@ heatmapD(qData, conds)
 
 }
 \author{
-Florence Combes, Samuel Wieczorek
+Florence Combes, Samuel Wieczorek, Enor Fremy
 }

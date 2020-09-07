@@ -21,9 +21,9 @@
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' qData <- Biobase::exprs((Exp1_R25_pept))
-#' conds <- Biobase::pData(Exp1_R25_pept)[["Condition"]]
+#' conds <- legend <- Biobase::pData(Exp1_R25_pept)[["Condition"]]
 #' key <- "Protein_group_IDs"
-#' boxPlotD_HC(qData, conds, keyId = key, conds, palette=c(rep('blue',3), rep('green',3)),subset.view=1:10)
+#' boxPlotD_HC(qData, conds, key, legend, c(rep('blue',3), rep('green',3)), 1:10)
 #' 
 #' @import highcharter
 #' 
@@ -57,7 +57,7 @@ boxPlotD_HC <- function(qData, conds, keyId=NULL, legend=NULL, palette = NULL, s
   }
   
   
-  add_variable_to_series_list<- function(x, series_list, key_vector, value_vector){
+  add_variable_to_series_list <- function(x, series_list, key_vector, value_vector){
     base::stopifnot(length(key_vector) == length(value_vector))
     base::stopifnot(length(series_list) == length(key_vector))
     series_list[[x]][length(series_list[[x]])+1]<- value_vector[x]
@@ -67,7 +67,7 @@ boxPlotD_HC <- function(qData, conds, keyId=NULL, legend=NULL, palette = NULL, s
   
   
   # From highcharter github pages:
-  hc_add_series_bwpout = function(hc, value, by, ...) {
+  hc_add_series_bwpout <- function(hc, value, by, ...) {
     z = lapply(levels(by), function(x) {
       bpstats = boxplot.stats(value[by == x])$stats
       outliers = c()
@@ -82,12 +82,12 @@ boxPlotD_HC <- function(qData, conds, keyId=NULL, legend=NULL, palette = NULL, s
   }
   
   
-  gen_key_vector<-function(variable, num_times){
+  gen_key_vector <- function(variable, num_times){
     return(rep(variable, num_times))
   } 
   
   
-  gen_boxplot_series_from_df<- function(value, by,...){
+  gen_boxplot_series_from_df <- function(value, by,...){
     value<- base::as.numeric(value)
     by<- base::as.factor(by)
     box_names<- levels(by)
@@ -116,7 +116,7 @@ boxPlotD_HC <- function(qData, conds, keyId=NULL, legend=NULL, palette = NULL, s
   
   
   ## Boxplot function:
-  make_highchart_boxplot_with_colored_factors<- function(value, by, chart_title="Boxplots",
+  make_highchart_boxplot_with_colored_factors <- function(value, by, chart_title="Boxplots",
                                                          chart_x_axis_label="Values", show_outliers=FALSE,
                                                          boxcolors=NULL, box_line_colors=NULL){
     by <- as.factor(by)
@@ -204,53 +204,7 @@ boxPlotD_HC <- function(qData, conds, keyId=NULL, legend=NULL, palette = NULL, s
                                                     boxcolors = palette,
                                                     box_line_colors = "black")
   
-  
-  
-  
-  # bx <- graphics::boxplot(qData, na.rm=TRUE)
-  # df_outlier <- data.frame(x=bx$group-1,
-  #                          y = bx$out)
-  # 
-  # 
-  # tmp <- NULL
-  # for (i in 1:ncol(qData)){
-  #   tmp <- c(tmp, rep(paste(paste0(rep("A", i), collapse=""),legend[i], sep='_'),nrow(qData)))
-  # }
-  # 
-  # df <- data.frame(values = as.vector(qData,mode='numeric'),samples = tmp, stringsAsFactors = FALSE)
-  # 
-  # 
-  # hc <- highcharter::hcboxplot(x=df$values, var = df$samples, colorByPoint = TRUE, outliers = TRUE) %>%
-  #   highcharter::hc_chart(type="column") %>%
-  #   highcharter::hc_yAxis(title = list(text = "Log (intensity)")) %>%
-  #   highcharter::hc_xAxis(title = list(text = "Samples"), categories=legend) %>%
-  #   highcharter::hc_colors(palette) %>%
-  #   highcharter::hc_add_series(type= "scatter",df_outlier,name="Outliers",tooltip=list(enabled=F,headerFormat ="",pointFormat="{point.y: .2f} ")) %>%  
-  #   highcharter::hc_plotOptions(
-  #     
-  #     boxplot= list(
-  #       
-  #       fillColor= c('lightgrey'),
-  #       lineWidth= 3,
-  #       medianColor= 'grey',
-  #       medianWidth= 3,
-  #       stemColor= '#A63400',
-  #       stemDashStyle= 'dot',
-  #       stemWidth= 1,
-  #       whiskerColor= '#3D9200',
-  #       whiskerLength= '20%',
-  #       whiskerWidth= 3
-  #     ),
-  #     scatter = list(
-  #       marker=list(
-  #         fillColor = 'white',
-  #         lineWidth = 0.5,
-  #         lineColor = 'grey'
-  #       )
-  #     )
-  #   )
-  
-  # Display of rows to highlight (index of row in subset.view) 
+    # Display of rows to highlight (index of row in subset.view) 
   if(!is.null(subset.view)){
     idVector <- keyId
     pal=grDevices::colorRampPalette(RColorBrewer::brewer.pal(8, "Set1"))(length(subset.view))    

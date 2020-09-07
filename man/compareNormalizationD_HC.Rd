@@ -41,7 +41,7 @@ utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept[1:1000]
 qDataBefore <- Biobase::exprs(obj)
 conds <- Biobase::pData(obj)[,"Condition"]
-objAfter <- wrapper.normalizeD(obj,"QuantileCentering","within conditions")
+objAfter <- wrapper.normalizeD(obj, method = "QuantileCentering", conds =conds, type = "within conditions")
 compareNormalizationD_HC(qDataBefore, Biobase::exprs(objAfter), conds)
 
 }

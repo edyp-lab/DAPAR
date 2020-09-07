@@ -85,6 +85,7 @@ wrapper.CVDistD_HC <- function(obj, ...){
 #' CVDistD(Biobase::exprs(Exp1_R25_pept), conds)
 #' 
 #' @importFrom RColorBrewer brewer.pal
+#' @importFrom stats density var
 #' 
 #' @export
 #' 
@@ -181,6 +182,7 @@ CVDistD <- function(qData, conds=NULL, palette = NULL){
 #' 
 #' @import highcharter
 #' @importFrom RColorBrewer brewer.pal
+#' @importFrom stats density var
 #' 
 #' @export
 #' 

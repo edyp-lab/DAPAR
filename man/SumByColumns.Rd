@@ -11,8 +11,9 @@ SumByColumns(qData, conds = NULL, type = NULL, subset.norm = NULL)
 
 \item{conds}{xxx}
 
-\item{type}{"overall" (shift all the sample distributions at once) or
-"within conditions" (shift the sample distributions within each condition at a time).}
+\item{type}{Available values are "overall" (shift all the
+sample distributions at once) or "within conditions" (shift the sample
+distributions within each condition at a time).}
 
 \item{subset.norm}{A vector of index indicating rows to be used for normalization}
 }
@@ -23,11 +24,9 @@ A normalized numeric matrix
 Normalisation SumByColumns
 }
 \examples{
-library(QFeatures)
-utils::data(Exp1_R25_pept, package='DAPARdata2')
-library(QFeatures)
-qData <- assay(Exp1_R25_pept[['original_log']])
-conds <- colData(Exp1_R25_pept)[["Condition"]]
+utils::data(Exp1_R25_pept, package='DAPARdata')
+qData <- Biobase::exprs(Exp1_R25_pept)
+conds <- Biobase::pData(Exp1_R25_pept)$Condition
 normalized <- SumByColumns(qData, conds, type="within conditions", subset.norm=1:10)
 
 }

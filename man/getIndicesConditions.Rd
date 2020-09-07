@@ -29,6 +29,7 @@ indices for the samples.
 utils::data(Exp1_R25_pept, package='DAPARdata')
 conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 getIndicesConditions(conds, "25fmol", "10fmol")
+
 }
 \author{
 Florence Combes, Samuel Wieczorek

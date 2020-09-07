@@ -141,6 +141,9 @@ BuildColumnToProteinDataset <- function(peptideData, matAdj, columnName, protein
 #' 
 #' @export
 #' 
+#' @importFrom doParallel registerDoParallel 
+#' @importFrom foreach foreach
+#' 
 BuildColumnToProteinDataset_par <- function(peptideData, matAdj, columnName, proteinNames){
   doParallel::registerDoParallel()
   
@@ -208,7 +211,7 @@ CountPep <- function (M) {
 GraphPepProt <- function(mat){
   if (is.null(mat)){return (NULL)} 
   
-  #mat <- as.matrix(mat)
+  mat <- as.matrix(mat)
   t <- t(mat)
   t <- apply(mat, 2, sum, na.rm=TRUE)
   tab <- table(t)
@@ -252,6 +255,8 @@ GraphPepProt <- function(mat){
 #' BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
 #' 
 #' @export
+#' 
+#' @importFrom Biobase pData exprs fData
 #' 
 BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
   
@@ -324,6 +329,8 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
 #' 
 #' @export
 #' 
+#' @importFrom Biobase pData exprs fData
+#' 
 aggregateSum <- function(obj.pep, X){
   pepData <- 2^(Biobase::exprs(obj.pep))
   protData <- inner.sum(pepData, X)
@@ -362,9 +369,13 @@ aggregateSum <- function(obj.pep, X){
 #' 
 #' @export
 #' 
+#' @importFrom Biobase pData exprs fData
+#' @importFrom doParallel registerDoParallel 
+#' @importFrom foreach foreach
+#' 
 aggregateIterParallel <- function(obj.pep, X, init.method='Sum', method='Mean', n=NULL){
   
-  doParallel::registerDoParallel()
+  registerDoParallel()
   
   qData.pep <- 2^(Biobase::exprs(obj.pep))
   protData <- matrix(rep(0,ncol(X)*nrow(X)), nrow=ncol(X))
@@ -489,6 +500,8 @@ inner.aggregate.iter <- function(pepData, X,init.method='Sum', method='Mean', n=
 #' 
 #' @export
 #' 
+#' @importFrom Biobase pData exprs fData
+#' 
 aggregateIter <- function(obj.pep, X, init.method='Sum', method='Mean', n=NULL){
   
   ### a reproduire iterativement pour chaque condition
@@ -559,6 +572,8 @@ GetNbPeptidesUsed <- function(X, pepData){
 #' }
 #' 
 #' @export
+#' 
+#' @importFrom Biobase pData exprs fData
 #' 
 aggregateMean <- function(obj.pep, X){
   pepData <- 2^(Biobase::exprs(obj.pep))
@@ -781,6 +796,8 @@ inner.aggregate.topn <-function(pepData,X, method='Mean', n=10){
 #' 
 #' @export
 #' 
+#' @importFrom Biobase pData exprs fData
+#' 
 aggregateTopn <- function(obj.pep,X,  method='Mean', n=10){
   pepData <- 2^(Biobase::exprs(obj.pep))
   
@@ -814,6 +831,8 @@ aggregateTopn <- function(obj.pep,X,  method='Mean', n=10){
 #' @author Samuel Wieczorek
 #' 
 #' @export
+#' 
+#' @importFrom utils installed.packages
 #' 
 finalizeAggregation <- function(obj.pep, pepData, protData,X, lib.loc=NULL){
   

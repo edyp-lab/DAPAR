@@ -13,27 +13,9 @@ wrapper.normalizeD(obj, method, withTracking = FALSE, ...)
 normalizations of important magnitude), "SumByColumns", "QuantileCentering",
 "Mean Centering", "LOESS" and "vsn".}
 
-\item{type}{For the method "Global Alignment", the parameters are:
-"sum by columns": operates on the original scale (not the log2 one) and propose
-to normalize each abundance by the total abundance of the sample (so as to focus
-on the analyte proportions among each sample).
-"Alignment on all quantiles": proposes to align the quantiles of all the
-replicates; practically it amounts to replace abundances by order statistics.
-For the two other methods, the parameters are "overall" (shift all the
-sample distributions at once) or "within conditions" (shift the sample
-distributions within each condition at a time).}
+\item{withTracking}{xxx}
 
-\item{scaling}{A boolean that indicates if the variance of the data have to
-be forced to unit (variance reduction) or not.}
-
-\item{quantile}{A float that corresponds to the quantile used to align the
-data.}
-
-\item{span}{parameter for LOESS method}
-}
-\value{
-An instance of class \code{MSnSet} where the quantitative
-data in the \code{exprs()} tab has been normalized.
+\item{...}{xxx}
 }
 \description{
 Provides several methods to normalize quantitative data from
@@ -49,7 +31,7 @@ by condition.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-conds <- pData(Exp1_R25_pept)$Condition
+conds <- Biobase::pData(Exp1_R25_pept)$Condition
 obj <- wrapper.normalizeD(obj = Exp1_R25_pept, method = "QuantileCentering", conds=conds, type = "within conditions")
  
 }

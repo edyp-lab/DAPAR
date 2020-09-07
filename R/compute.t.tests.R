@@ -22,6 +22,8 @@
 #' 
 #' @export
 #' 
+#' @importFrom Biobase pData exprs fData
+#' 
 wrapper.t_test_Complete <- function(obj,...){
     
     qData <- Biobase::exprs(obj)
@@ -70,7 +72,9 @@ wrapper.t_test_Complete <- function(obj,...){
 #' 
 #' @export
 #' 
-compute.t.tests <- function(qData,sTab, contrast="OnevsOne", type="Student"){
+#' @importFrom stats t.test
+#' 
+compute.t.tests <- function(qData, sTab, contrast="OnevsOne", type="Student"){
 
     
     switch(type,

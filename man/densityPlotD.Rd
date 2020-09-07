@@ -27,9 +27,6 @@ conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 densityPlotD(Exp1_R25_pept, conds)
 
 }
-\seealso{
-\code{\link{boxPlotD}}, \code{\link{CVDistD}}
-}
 \author{
 Florence Combes, Samuel Wieczorek
 }

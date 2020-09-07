@@ -1,172 +1,6 @@
 
 
 
-
-#' @title Builds a boxplot from a dataframe
-#' 
-#' @param obj xxx
-#' 
-#' @param conds xxx
-#' 
-#' @param legend A vector of the conditions (one string per sample).
-#' 
-#' @param palette xxx
-#' 
-#' @return A boxplot
-#' 
-#' @author Florence Combes, Samuel Wieczorek
-#' 
-#' @seealso \code{\link{densityPlotD}}
-#' 
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-#' boxPlotD(Exp1_R25_pept, conds)
-#' 
-#' @importFrom Biobase exprs pData
-#' @importFrom RColorBrewer brewer.pal
-#' 
-#' @export
-#' 
-boxPlotD <- function(obj,conds, legend=NULL,palette=NULL){
-  qData <- Biobase::exprs(obj)
-  if (is.null(palette)){
-    pal <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
-    
-    for (i in 1:ncol(qData)){
-      palette[i] <- pal[ which(conds[i] == unique(conds))]
-    }
-    
-  }else{
-    if (length(palette) != ncol(qData)){
-      warning("The color palette has not the same dimension as the number of samples")
-      return(NULL)
-    }
-  }
-  
-  
-  boxplot(qData
-          ,las = 1
-          , col = palette
-          , cex = 2
-          , axes=TRUE
-          , xaxt = "n"
-          , ylab = "Log (intensity)"
-          , pt.cex = 4
-          , horizontal = FALSE
-  )
-  
-  
-  if( is.null(legend)){legend <- Biobase::pData(obj)$Condition}
-  axis(side=1,at = 1:ncol(qData), label = legend)
-  #mtext("Samples", side=1,  line=(6+ncol(legend)), cex.lab=1, las=1)
-  
-  abline(h=0) 
-  
-}
-
-
-
-
-
-#' @title Builds a boxplot from a dataframe using the library \code{highcharter}
-#' 
-#' @param obj xxx
-#' 
-#' @param legend A vector of the conditions (one condition per sample).
-#' 
-#' @param palette xxx
-#' 
-#' @return A boxplot
-#' 
-#' @author Samuel Wieczorek
-#' 
-#' @seealso \code{\link{densityPlotD_HC}}
-#' 
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' legend <- Biobase::pData(Exp1_R25_pept)[,"Sample.name"]
-#' boxPlotD_HC(Exp1_R25_pept, legend)
-#' 
-#' @importFrom Biobase exprs
-#' @import highcharter
-#' 
-#' @export
-#' 
-boxPlotD_HC <- function(obj, legend=NULL, palette = NULL){
-  
-  qData <- Biobase::exprs(obj)
-  if( is.null(legend)){legend <- Biobase::pData(obj)[,"Sample.name"]}
-  if (is.null(palette)){palette <- rep("#FFFFFF", ncol(qData))
-  } else {
-    if (length(palette) != ncol(qData)){
-      warning("The color palette has not the same dimension as the number of samples")
-      return(NULL)
-    }
-  }
-  
-  bx <-boxplot(qData, na.rm=TRUE)
-  df_outlier <- data.frame(x=bx$group-1,y = bx$out)
-  
-  tmp <- NULL
-  for (i in 1:ncol(qData)){
-    tmp <- c(tmp, rep(paste(paste0(rep("A", i), collapse=""),legend[i], sep='_'),nrow(qData)))
-  }
-  
-  df <- data.frame(values = as.vector(qData,mode='numeric'),samples = tmp, stringsAsFactors = FALSE)
-  
-  hc <- highcharter::hcboxplot(x=df$values, var = df$samples, colorByPoint = TRUE, outliers = TRUE) %>%
-    hc_chart(type="column") %>%
-    hc_yAxis(title = list(text = "Log (intensity)")) %>%
-    hc_xAxis(title = list(text = "Samples"), categories=legend) %>%
-    hc_colors(palette) %>%
-    hc_add_series(type= "scatter",df_outlier) %>%
-    hc_tooltip(enabled = FALSE) %>%
-    hc_plotOptions(
-      
-      boxplot= list(
-        
-        fillColor= c('lightgrey'),
-        lineWidth= 3,
-        medianColor= 'grey',
-        medianWidth= 3,
-        stemColor= '#A63400',
-        stemDashStyle= 'dot',
-        stemWidth= 1,
-        whiskerColor= '#3D9200',
-        whiskerLength= '20%',
-        whiskerWidth= 3
-      ),
-      scatter = list(
-        marker=list(
-          fillColor = 'white',
-          lineWidth = 0.5,
-          lineColor = 'grey'
-        )
-      )
-    )
-  
-  
-  hc
-  
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #' Builds a heatmap of the quantitative proteomic data of a 
 #' \code{MSnSet} object.
 #' 
@@ -199,6 +33,8 @@ boxPlotD_HC <- function(obj, legend=NULL, palette = NULL){
 #' 
 #' @export
 #' 
+#' @importFrom Biobase exprs fData pData
+#'  
 wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete", 
                               dendro = FALSE){
   qData <- Biobase::exprs(obj)
@@ -233,7 +69,7 @@ wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete",
 #' 
 #' @return A heatmap
 #' 
-#' @author Florence Combes, Samuel Wieczorek
+#' @author Florence Combes, Samuel Wieczorek, Enor Fremy
 #' 
 #' @examples
 #' \dontrun{
@@ -246,6 +82,8 @@ wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete",
 #' 
 #' @importFrom gplots heatmap.2
 #' @importFrom RColorBrewer brewer.pal
+#' @importFrom dendextend color_branches get_leaves_branches_col
+#' @importFrom stats as.dendrogram hclust
 #' 
 #' @export
 #' 
@@ -366,6 +204,8 @@ heatmapD <- function(qData, conds, distance="euclidean", cluster="complete", den
 #' heatmap.DAPAR(qData)
 #' 
 #' @export
+#' 
+#' @importFrom grDevices heat.colors
 #' 
 heatmap.DAPAR <- 
   function (x, 

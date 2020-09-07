@@ -1,15 +1,21 @@
 
 #' @title Builds a violinplot from a dataframe
 #' 
-#' @param obj xxx
+#' @param qData xxx
+#' 
+#' @param conds xxx
+#' 
+#' @param keyId xxx
 #' 
 #' @param legend A vector of the conditions (one condition per sample).
 #' 
 #' @param palette xxx
 #' 
+#' @param subset.view xxx
+#' 
 #' @return A violinplot
 #' 
-#' @author Samuel Wieczorek
+#' @author Samuel Wieczorek, Anais Courtier
 #' 
 #' @seealso \code{\link{densityPlotD}}
 #' 
@@ -19,15 +25,15 @@
 #' legend <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 #' conds <- Biobase::pData(Exp1_R25_pept)[["Condition"]]
 #' key <- "Protein_group_IDs"
-#' violinPlotD(exprs(Exp1_R25_pept), conds=legend, keyId=key, palette=c(rep('blue',3), rep('green',3)),subset.view=1:10)
+#' violinPlotD(Biobase::exprs(Exp1_R25_pept), conds=legend, keyId=key, palette=c(rep('blue',3), rep('green',3)),subset.view=1:10)
 #' 
 #' @importFrom vioplot vioplot
 #' 
 #' @importFrom grDevices colorRampPalette
-#' 
 #' @importFrom graphics plot.window axis mtext legend points segments plot.new
 #' 
 #' @importFrom RColorBrewer brewer.pal
+#' @importFrom stats na.omit
 #' 
 #' @export
 #' 

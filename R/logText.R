@@ -36,6 +36,7 @@ getTextForNewDataset <- function(l.params){
 #' getTextForFiltering(list(mvFilterType="wholeMatrix",mvThNA=3))
 #' 
 #' @export
+#' @importFrom utils str
 #' 
 getTextForFiltering <- function(l.params){ 
     # str(l.params) = list(mvFilterType ,

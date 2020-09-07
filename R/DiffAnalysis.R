@@ -332,6 +332,8 @@ Get_AllComparisons <- function(obj){
 #' 
 #' @export
 #' 
+#' @importFrom Biobase pData exprs fData
+#' 
 diffAnaSave <- function (obj, allComp, data=NULL,th_pval=0,th_logFC=0){
     if (is.null(allComp)){
         warning("The analysis has not been completed. Maybe there 
@@ -417,6 +419,8 @@ diffAnaSave <- function (obj, allComp, data=NULL,th_pval=0,th_logFC=0){
 #' signif <- diffAnaGetSignificant(obj)
 #' 
 #' @export
+#' 
+#' @importFrom Biobase pData exprs fData
 #' 
 diffAnaGetSignificant <- function (obj){
     if (is.null(obj)){

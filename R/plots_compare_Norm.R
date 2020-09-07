@@ -26,12 +26,14 @@
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-#' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering","within conditions")
+#' objAfter <- wrapper.normalizeD(obj=Exp1_R25_pept, method="QuantileCentering",conds = conds, type="within conditions")
 #' wrapper.compareNormalizationD(Exp1_R25_pept, objAfter, conds)
 #' 
 #' @importFrom Biobase exprs pData
 #' 
 #' @export
+#' 
+#' @importFrom Biobase exprs fData pData
 #' 
 wrapper.compareNormalizationD <- function(objBefore, objAfter, 
                                           condsForLegend=NULL,
@@ -74,13 +76,14 @@ wrapper.compareNormalizationD <- function(objBefore, objAfter,
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-#' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering", 
-#' "within conditions")
+#' objAfter <- wrapper.normalizeD(obj = Exp1_R25_pept, method = "QuantileCentering",  conds=conds,type = "within conditions")
 #' wrapper.compareNormalizationD_HC(Exp1_R25_pept, objAfter, conds)
 #' 
 #' @importFrom Biobase exprs
 #' 
 #' @export
+#' 
+#' @importFrom Biobase exprs fData pData
 #' 
 wrapper.compareNormalizationD_HC <- function(objBefore, objAfter, 
                                              condsForLegend=NULL,
@@ -120,10 +123,10 @@ wrapper.compareNormalizationD_HC <- function(objBefore, objAfter,
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' qDataBefore <- Biobase::exprs(Exp1_R25_pept)
-#' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-#' objAfter <- wrapper.normalizeD(Exp1_R25_pept,"QuantileCentering","within conditions")
+#' conds <- Biobase::pData(Exp1_R25_pept)$Condition
+#' objAfter <- wrapper.normalizeD(obj=Exp1_R25_pept, method="QuantileCentering", conds = conds, type="within conditions")
 #' compareNormalizationD(qDataBefore, Biobase::exprs(objAfter), conds)
-#' 
+#'  
 #' @importFrom RColorBrewer brewer.pal
 #' 
 #' @export
@@ -227,7 +230,7 @@ compareNormalizationD <- function(qDataBefore,
 #' obj <- Exp1_R25_pept[1:1000]
 #' qDataBefore <- Biobase::exprs(obj)
 #' conds <- Biobase::pData(obj)[,"Condition"]
-#' objAfter <- wrapper.normalizeD(obj,"QuantileCentering","within conditions")
+#' objAfter <- wrapper.normalizeD(obj, method = "QuantileCentering", conds =conds, type = "within conditions")
 #' compareNormalizationD_HC(qDataBefore, Biobase::exprs(objAfter), conds)
 #' 
 #' @import highcharter

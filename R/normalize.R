@@ -36,27 +36,18 @@ else
 #' @param method One of the following : "GlobalQuantileAlignment" (for
 #' normalizations of important magnitude), "SumByColumns", "QuantileCentering",
 #' "Mean Centering", "LOESS" and "vsn".
-#' @param type For the method "Global Alignment", the parameters are:
-#' "sum by columns": operates on the original scale (not the log2 one) and propose
-#' to normalize each abundance by the total abundance of the sample (so as to focus
-#' on the analyte proportions among each sample).
-#' "Alignment on all quantiles": proposes to align the quantiles of all the
-#' replicates; practically it amounts to replace abundances by order statistics.
-#' For the two other methods, the parameters are "overall" (shift all the
-#' sample distributions at once) or "within conditions" (shift the sample
-#' distributions within each condition at a time).
-#' @param scaling A boolean that indicates if the variance of the data have to
-#' be forced to unit (variance reduction) or not.
-#' @param quantile A float that corresponds to the quantile used to align the
-#' data.
-#' @param span parameter for LOESS method
-#' @return An instance of class \code{MSnSet} where the quantitative
-#' data in the \code{exprs()} tab has been normalized.
+#' 
+#' @param withTracking xxx
+#' 
+#' @param ... xxx
 #' @author Samuel Wieczorek, Thomas Burger, Helene Borges
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' conds <- pData(Exp1_R25_pept)$Condition
+#' conds <- Biobase::pData(Exp1_R25_pept)$Condition
 #' obj <- wrapper.normalizeD(obj = Exp1_R25_pept, method = "QuantileCentering", conds=conds, type = "within conditions")
+#'  
+#' @importFrom Biobase pData exprs fData
 #'  
 #' @export
 #'
@@ -72,7 +63,7 @@ wrapper.normalizeD <- function(obj, method, withTracking=FALSE, ...){
   
   switch(method,
   GlobalQuantileAlignment = {
-    exprs(obj) <- GlobalQuantileAlignment(qData)
+    Biobase::exprs(obj) <- GlobalQuantileAlignment(qData)
            # Biobase::exprs(obj) <- normalize.quantiles(qData)
            # dimnames(Biobase::exprs(obj)) <- list(rownames(qData),colnames(qData))
            # obj@processingData@processing <- c(obj@processingData@processing, msg_method, msg_type)
@@ -80,7 +71,7 @@ wrapper.normalizeD <- function(obj, method, withTracking=FALSE, ...){
            
          },
   SumByColumns = {
-    exprs(obj) <- SumByColumns(qData, ...)
+    Biobase::exprs(obj) <- SumByColumns(qData, ...)
            # t <- 2^(Biobase::exprs(obj))
            # 
            # if (type == "overall"){
@@ -107,7 +98,7 @@ wrapper.normalizeD <- function(obj, method, withTracking=FALSE, ...){
           },
          
 QuantileCentering = {
-  exprs(obj) <- QuantileCentering(qData, ...)
+  Biobase::exprs(obj) <- QuantileCentering(qData, ...)
            # q <- function(x) { quantile(x, probs=quantile, na.rm=TRUE) }
            # medianOverSamples <- apply(Biobase::exprs(obj), 2, q)
            # 
@@ -134,7 +125,7 @@ QuantileCentering = {
            
          },
 MeanCentering = {
-  exprs(obj) <- MeanCentering(qData, ...)
+  Biobase::exprs(obj) <- MeanCentering(qData, ...)
   # meanOverSamples <- apply(Biobase::exprs(obj), 2, mean, na.rm = TRUE)
   #          
   #          if (type == "overall"){
@@ -169,7 +160,7 @@ MeanCentering = {
            
          },
          vsn = {
-           exprs(obj) <- vsn(qData, ...)
+           Biobase::exprs(obj) <- vsn(qData, ...)
            # if(type == "overall"){
            #   vsn.fit <- vsn::vsnMatrix(2^(Biobase::exprs(obj)))
            #   Biobase::exprs(obj) <- vsn::predict(vsn.fit, 2^(Biobase::exprs(obj)))
@@ -189,7 +180,7 @@ MeanCentering = {
          ###############
          # data must be log-expressed.
          LOESS = {
-           exprs(obj) <- LOESS(qData, ...)
+           Biobase::exprs(obj) <- LOESS(qData, ...)
            # if(type == "overall"){
            #   # "..." to pass the span parameter to the loess function
            #   Biobase::exprs(obj) <- limma::normalizeCyclicLoess(x = Biobase::exprs(obj), method = "fast", span = span)
@@ -227,9 +218,8 @@ MeanCentering = {
 #' @author Samuel Wieczorek, Thomas Burger, Helene Borges, Anais Courtier, Enora Fremy
 #' 
 #' @examples
-#' library(QFeatures)
-#' utils::data(Exp1_R25_pept, package='DAPARdata2')
-#' qData <- assay(Exp1_R25_pept[['original']])
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' qData <- Biobase::exprs(Exp1_R25_pept)
 #' normalized <- GlobalQuantileAlignment(qData)
 #' 
 #' @export
@@ -248,8 +238,9 @@ GlobalQuantileAlignment <- function(qData) {
 #' 
 #' @param conds xxx
 #' 
-#' @param type "overall" (shift all the sample distributions at once) or
-#' "within conditions" (shift the sample distributions within each condition at a time).
+#' @param type  Available values are "overall" (shift all the
+#' sample distributions at once) or "within conditions" (shift the sample
+#' distributions within each condition at a time).
 #' 
 #' @param subset.norm A vector of index indicating rows to be used for normalization
 #' 
@@ -258,11 +249,9 @@ GlobalQuantileAlignment <- function(qData) {
 #' @author Samuel Wieczorek, Thomas Burger, Helene Borges, Anais Courtier, Enora Fremy
 #' 
 #' @examples
-#' library(QFeatures)
-#' utils::data(Exp1_R25_pept, package='DAPARdata2')
-#' library(QFeatures)
-#' qData <- assay(Exp1_R25_pept[['original_log']])
-#' conds <- colData(Exp1_R25_pept)[["Condition"]]
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' qData <- Biobase::exprs(Exp1_R25_pept)
+#' conds <- Biobase::pData(Exp1_R25_pept)$Condition
 #' normalized <- SumByColumns(qData, conds, type="within conditions", subset.norm=1:10)
 #' 
 #' @export
@@ -340,11 +329,10 @@ SumByColumns <- function(qData, conds=NULL, type=NULL, subset.norm=NULL) {
 #' @author Samuel Wieczorek, Thomas Burger, Helene Borges, Anais Courtier, Enora Fremy
 #' 
 #' @examples
-#' library(QFeatures)
-#' utils::data(Exp1_R25_pept, package='DAPARdata2')
-#' obj <- Exp1_R25_pept[['original_log']]
-#' conds <- colData(Exp1_R25_pept)[['Condition']]
-#' normalized <- QuantileCentering(assay(obj), conds, type="within conditions", subset.norm=1:10)
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R25_pept
+#' conds <- Biobase::pData(Exp1_R25_pept)$Condition
+#' normalized <- QuantileCentering(Biobase::exprs(obj), conds, type="within conditions", subset.norm=1:10)
 #' 
 #' @export
 #' 
@@ -414,10 +402,9 @@ QuantileCentering <- function(qData, conds=NULL, type="overall", subset.norm=NUL
 #' @author Samuel Wieczorek, Thomas Burger, Helene Borges, Anais Courtier, Enora Fremy
 #' 
 #' @examples
-#' library(QFeatures)
-#' utils::data(Exp1_R25_pept, package='DAPARdata2')
-#' qData <- assay(Exp1_R25_pept[['original_log']])
-#' conds <- colData(Exp1_R25_pept)[['Condition']]
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' qData <- Biobase::exprs(Exp1_R25_pept)
+#' conds <- Biobase::pData(Exp1_R25_pept)$Condition
 #' normalized <- MeanCentering(qData, conds, type="overall")
 #' 
 #' @export
@@ -475,10 +462,9 @@ MeanCentering <- function(qData, conds, type='overall', subset.norm=NULL, scalin
 #' @author Thomas Burger, Helene Borges, Anais Courtier, Enora Fremy
 #' 
 #' @examples
-#' library(QFeatures)
-#' utils::data(Exp1_R25_pept, package='DAPARdata2')
-#' qData <- assay(Exp1_R25_pept[['original_log']])
-#' conds <- colData(Exp1_R25_pept)[['Condition']]
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' qData <- Biobase::exprs(Exp1_R25_pept)
+#' conds <- Biobase::pData(Exp1_R25_pept)$Condition
 #' normalized <- vsn(qData, conds, type="overall")
 #' 
 #' @export
@@ -519,10 +505,9 @@ vsn = function(qData, conds, type=NULL) {
 #' @author Thomas Burger, Helene Borges, Anais Courtier, Enora Fremy
 #' 
 #' @examples
-#' library(QFeatures)
-#' utils::data(Exp1_R25_pept, package='DAPARdata2')
-#' qData <- assay(Exp1_R25_pept[['original_log']])
-#' conds <- colData(Exp1_R25_pept)[['Condition']]
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' qData <- Biobase::exprs(Exp1_R25_pept)
+#' conds <- Biobase::pData(Exp1_R25_pept)$Condition
 #' normalized <- LOESS(qData, conds, type="overall")
 #' 
 #' @importFrom limma normalizeCyclicLoess

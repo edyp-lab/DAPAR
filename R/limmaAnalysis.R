@@ -301,6 +301,10 @@ return(design)
 #' make.design.2(Biobase::pData(Exp1_R25_pept))
 #' }
 #' 
+#' @importFrom stats model.matrix rnorm
+#' 
+#' @export
+#' 
 make.design.2=function(sTab){
   Condition <- factor(sTab$Condition, levels=unique(sTab$Condition))
   RepBio <- factor(sTab$Bio.Rep, levels=unique(sTab$Bio.Rep))
@@ -350,7 +354,11 @@ make.design.2=function(sTab){
 #' sTab <-cbind(Biobase::pData(Exp1_R25_pept), Tech.Rep=1:6)
 #' make.design.3(sTab)
 #' 
-make.design.3=function(sTab){
+#' @importFrom stats model.matrix rnorm
+#' 
+#' @export
+#' 
+make.design.3 <- function(sTab){
   
   Condition <- factor(sTab$Condition, levels=unique(sTab$Condition))
   RepBio <- factor(sTab$Bio.Rep, levels=unique(sTab$Bio.Rep))
@@ -414,7 +422,9 @@ make.design.3=function(sTab){
 #' conds <- Biobase::pData(Exp1_R25_pept)$Condition
 #' make.contrast(design, conds)
 #' 
-make.contrast <- function(design,condition, contrast=1){
+#' @export
+#' 
+make.contrast <- function(design, condition, contrast=1){
   
   #######################################################
   aggreg.column.design=function(design,Condition){

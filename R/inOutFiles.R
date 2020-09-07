@@ -58,6 +58,8 @@ saveParameters <- function(obj,name.dataset=NULL,name=NULL,l.params=NULL){
 #' 
 #' @export
 #' 
+#' @importFrom Biobase pData exprs fData
+#'  
 setMEC <- function(obj){
   
   if (is.null( obj@experimentData@other$OriginOfValues)){return()}
@@ -99,6 +101,8 @@ setMEC <- function(obj){
 #' addOriginOfValue(Exp1_R25_pept)
 #' 
 #' @export
+#' 
+#' @importFrom Biobase pData exprs fData
 #' 
 addOriginOfValue <- function(obj,index=NULL){
   
@@ -188,6 +192,9 @@ addOriginOfValue <- function(obj,index=NULL){
 #' createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, indexForOriginOfValue = NULL, pep_prot_data = "peptide")
 #' 
 #' @export
+#' 
+#' @importFrom MSnbase MSnSet
+#' @importFrom utils read.table
 #' 
 createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
                          indexForOriginOfValue = NULL,
@@ -305,6 +312,8 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
 #' 
 #' @export
 #' 
+#' @import openxlsx
+#' 
 writeMSnsetToExcel <- function(obj, filename)
 {
   #require(Matrix)
@@ -395,6 +404,8 @@ writeMSnsetToExcel <- function(obj, filename)
 #' 
 #' @export
 #' 
+#' @importFrom readxl read_excel
+#' 
 readExcel <- function(file, extension, sheet){
   # data <- NULL
   # if (extension=="xls") {
@@ -426,6 +437,8 @@ readExcel <- function(file, extension, sheet){
 #' 
 #' @export
 #' 
+#' @importFrom openxlsx getSheetNames
+#' 
 listSheets <- function(file){
   #require(openxlsx)
   return(openxlsx::getSheetNames(file))
@@ -454,6 +467,9 @@ listSheets <- function(file){
 #' 
 #' @export
 #' 
+#' @importFrom Biobase exprs fData pData
+#' @importFrom utils write.csv zip
+#'
 writeMSnsetToCSV <- function(obj, fname){
   
   #fname <- paste(tempdir(),fname,  sep="/")
@@ -488,6 +504,9 @@ writeMSnsetToCSV <- function(obj, fname){
 #' rbindMSnset(df1, df2)
 #' 
 #' @export
+#' 
+#' @importFrom MSnbase MSnSet
+#' @importFrom Biobase pData fData exprs
 #' 
 rbindMSnset <- function(df1=NULL, df2){
   

@@ -13,7 +13,7 @@
 #' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
 #' ll <- get.pep.prot.cc(X)
 #' 
-#' @importFrom Matrix %&%
+#' @import Matrix
 #' @importFrom graph graphAM connComp 
 #' 
 #' @export
@@ -218,6 +218,9 @@ buildGraph <- function(The.CC, X){
 #' 
 #' @export
 #' 
+#' @import visNetwork
+#' 
+#' 
 display.CC.visNet <- function(g, layout = layout_nicely, 
                        obj=NULL,
                        prot.tooltip=NULL, 
@@ -257,10 +260,6 @@ display.CC.visNet <- function(g, layout = layout_nicely,
 #' @return A plot  
 #' 
 #' @author Thomas Burger, Samuel Wieczorek
-#' 
-#' @examples
-#' \dontrun{
-#' }
 #' 
 #' @export
 #' 

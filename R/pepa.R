@@ -49,6 +49,8 @@
 #' 
 #' @export
 #'
+#'@importFrom stats mad sd
+#'
 fudge2LRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s, alpha = seq(0, 1, 0.05), include.zero = TRUE)
 {
     
@@ -214,6 +216,8 @@ LH1 <- function(X, y1, y2, j){
 #' 
 #' @export
 #'
+#'@importFrom stats logLik lm
+#'
 LH0.lm <- function(X, y1, y2){
     Ytilde <- matrix(c(as.vector(y1), as.vector(y2)), ncol=1)
     p <- ncol(X)
@@ -265,6 +269,8 @@ LH0.lm <- function(X, y1, y2){
 #' @author Thomas Burger, Laurent Jacob
 #' 
 #' @export
+#'
+#'@importFrom stats logLik lm formula
 #'
 LH1.lm <- function(X, y1, y2, j){
     n1 <- ncol(y1)
@@ -351,6 +357,8 @@ LH1.lm <- function(X, y1, y2, j){
 #' @author Thomas Burger, Laurent Jacob
 #' 
 #' @export
+#' 
+#' @importFrom stats residuals
 #'
 samLRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s1){
     s <- lh1.sam <- llr.sam <- rep(NA, p)
@@ -434,6 +442,8 @@ samLRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s1){
 #' @author Thomas Burger, Laurent Jacob
 #' 
 #' @export
+#' 
+#' @importFrom stats residuals pchisq lm
 #'
 pepa.test <- function(X, y, n1, n2, global=FALSE, use.lm=FALSE){
     

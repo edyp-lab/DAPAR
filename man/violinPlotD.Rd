@@ -14,11 +14,17 @@ violinPlotD(
 )
 }
 \arguments{
+\item{qData}{xxx}
+
+\item{conds}{xxx}
+
+\item{keyId}{xxx}
+
 \item{legend}{A vector of the conditions (one condition per sample).}
 
 \item{palette}{xxx}
 
-\item{obj}{xxx}
+\item{subset.view}{xxx}
 }
 \value{
 A violinplot
@@ -32,12 +38,12 @@ library(vioplot)
 legend <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 conds <- Biobase::pData(Exp1_R25_pept)[["Condition"]]
 key <- "Protein_group_IDs"
-violinPlotD(exprs(Exp1_R25_pept), conds=legend, keyId=key, palette=c(rep('blue',3), rep('green',3)),subset.view=1:10)
+violinPlotD(Biobase::exprs(Exp1_R25_pept), conds=legend, keyId=key, palette=c(rep('blue',3), rep('green',3)),subset.view=1:10)
 
 }
 \seealso{
 \code{\link{densityPlotD}}
 }
 \author{
-Samuel Wieczorek
+Samuel Wieczorek, Anais Courtier
 }

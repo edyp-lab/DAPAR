@@ -17,6 +17,9 @@
 #' getPourcentageOfMV(Exp1_R25_pept)
 #' 
 #' @export
+#' 
+#' @importFrom Biobase exprs fData pData
+#' 
 getPourcentageOfMV <- function(obj){
 
   df <- data.frame(Biobase::exprs(obj))
@@ -50,6 +53,8 @@ return(pourcentage)
 #' getNumberOf(Exp1_R25_pept, "Potential_contaminant", "+")
 #' 
 #' @export
+#' 
+#' @importFrom Biobase exprs fData pData
 #' 
 getNumberOf <- function(obj, name=NULL, prefix=NULL){
 if (is.null(name) || is.null(prefix) || (name=="") || (prefix=="")){
@@ -136,6 +141,8 @@ NumericalFiltering <- function(obj, name=NULL, value=NULL, operator=NULL){
 #' NumericalgetIndicesOfLinesToRemove(Exp1_R25_pept, "A_Count", value="6", operator='==')
 #' 
 #' @export
+#' 
+#' @importFrom Biobase exprs fData pData
 #' 
 NumericalgetIndicesOfLinesToRemove <- function(obj, name=NULL, value=NULL, operator=NULL)
 {
@@ -433,6 +440,8 @@ StringBasedFiltering2 <- function(obj, cname=NULL, tag=NULL){
 #' getIndicesOfLinesToRemove(Exp1_R25_pept, "Potential_contaminant", prefix="+")
 #' 
 #' @export
+#' 
+#' @importFrom Biobase exprs fData pData
 #' 
 getIndicesOfLinesToRemove <- function(obj, idLine2Delete=NULL, prefix=NULL)
 {

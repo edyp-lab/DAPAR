@@ -31,11 +31,10 @@ A normalized numeric matrix
 Normalisation QuantileCentering
 }
 \examples{
-library(QFeatures)
-utils::data(Exp1_R25_pept, package='DAPARdata2')
-obj <- Exp1_R25_pept[['original_log']]
-conds <- colData(Exp1_R25_pept)[['Condition']]
-normalized <- QuantileCentering(assay(obj), conds, type="within conditions", subset.norm=1:10)
+utils::data(Exp1_R25_pept, package='DAPARdata')
+obj <- Exp1_R25_pept
+conds <- Biobase::pData(Exp1_R25_pept)$Condition
+normalized <- QuantileCentering(Biobase::exprs(obj), conds, type="within conditions", subset.norm=1:10)
 
 }
 \author{

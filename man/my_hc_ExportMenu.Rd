@@ -23,6 +23,7 @@ hc <- highchart()
 hc_chart(hc,type = "line") 
 hc_add_series(hc,data = c(29, 71, 40))
 my_hc_ExportMenu(hc,filename='foo')
+
 }
 \author{
 Samuel Wieczorek

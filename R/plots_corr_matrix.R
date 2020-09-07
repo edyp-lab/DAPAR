@@ -46,6 +46,7 @@ wrapper.corrMatrixD <- function(obj, rate=5){
 #' wrapper.corrMatrixD_HC(Exp1_R25_pept)
 #'  
 #' @importFrom Biobase exprs pData
+#' @importFrom stats cor
 #' 
 #' @export
 #' 
@@ -82,6 +83,10 @@ wrapper.corrMatrixD_HC <- function(obj, rate=0.5){
 #' corrMatrixD(qData, samplesData)
 #' 
 #' @export
+#' 
+#' @importFrom stats pexp cor
+#' @importFrom ggplot2 element_text qplot theme labs scale_fill_gradientn
+#' @importFrom reshape2 melt
 #' 
 corrMatrixD <- function(qData, samplesData, gradientRate = 5){
   Var1 <- Var2 <- value <- NULL
@@ -144,6 +149,7 @@ corrMatrixD <- function(qData, samplesData, gradientRate = 5){
 #' @importFrom dplyr tbl_df mutate left_join select
 #' @importFrom tidyr gather
 #' @importFrom tibble tibble
+#' @importFrom stats cor
 #' 
 #' @export
 #' 

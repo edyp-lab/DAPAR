@@ -18,6 +18,8 @@
 #' 
 #' @export
 #' 
+#' @importFrom Biobase pData exprs fData
+#' 
 wrapper.impute.mle <- function(obj){
   cond <- as.factor(Biobase::pData(obj)$Condition)
   
@@ -85,6 +87,9 @@ wrapper.impute.mle <- function(obj){
 #' 
 #' @export
 #' 
+#' @importFrom Biobase pData exprs fData
+#' @importFrom imp4p estim.mix impute.rand estim.bound prob.mcar.tab mi.mix
+#' 
 wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, nknn = 15, selec = 600, siz = 500, 
                                      weight = 1, ind.comp = 1, progress.bar = FALSE, x.step.mod = 300,
                                      x.step.pi = 300, nb.rei = 100, method = 4, gridsize = 300, 
@@ -116,7 +121,7 @@ wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, nknn = 15, selec = 600, s
     if (progress.bar == TRUE) {
         cat(paste("\n 2/ Estimation of the mixture model in each sample... \n  "))
     }
-    res = estim.mix(tab = tab, tab.imp = dat.slsa, conditions = conditions, 
+    res = imp4p::estim.mix(tab = tab, tab.imp = dat.slsa, conditions = conditions, 
                     x.step.mod = x.step.mod, 
                     x.step.pi = x.step.pi, nb.rei = nb.rei)
     
@@ -188,6 +193,8 @@ wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, nknn = 15, selec = 600, s
 #' 
 #' @export
 #' 
+#' @importFrom stats rbeta
+#' 
 translatedRandomBeta <- function(n, min, max, param1=3, param2=1){
     scale <- max-min
     simu <- rbeta(n,param1,param2)
@@ -197,8 +204,7 @@ translatedRandomBeta <- function(n, min, max, param1=3, param2=1){
 
 
 ################################################
-#' This method is a wrapper to the function \code{impute.pa} from the package 
-#' \code{imp4p} adapted to objects of class \code{MSnSet}.
+#' This method is a wrapper to the function \code{impute.pa2} adapted to objects of class \code{MSnSet}.
 #' 
 #' @title Missing values imputation from a \code{MSnSet} object
 #' 
@@ -230,6 +236,8 @@ translatedRandomBeta <- function(n, min, max, param1=3, param2=1){
 #' 
 #' @export
 #' 
+#' @importFrom Biobase pData exprs fData
+#' 
 wrapper.impute.pa2 <- function (obj, q.min = 0, q.norm = 3, eps = 0, distribution = "unif"){
   
   ## order exp and pData table before using imp4p functions
@@ -240,10 +248,7 @@ wrapper.impute.pa2 <- function (obj, q.min = 0, q.norm = 3, eps = 0, distributio
   qData <- Biobase::exprs(obj)[,new.order]
   sTab <- Biobase::pData(obj)[new.order,]
   
-  
-  
-  
-  
+
   tab <- qData
   conditions <-  as.factor(sTab$Condition)
     
@@ -254,8 +259,7 @@ wrapper.impute.pa2 <- function (obj, q.min = 0, q.norm = 3, eps = 0, distributio
     tab_imp <- tab_imp[,sample.names.old]
     
     Biobase::exprs(obj) <- tab_imp
-    
-    
+
     return(obj)
 }
 
@@ -298,6 +302,8 @@ wrapper.impute.pa2 <- function (obj, q.min = 0, q.norm = 3, eps = 0, distributio
 #' wrapper.impute.pa2(Exp1_R25_pept[1:1000], distribution="beta")
 #' 
 #' @export
+#' 
+#' @importFrom stats runif
 #' 
 impute.pa2 <- function (tab, conditions, q.min = 0, q.norm = 3, eps = 0, distribution = "unif"){
     tab_imp = tab

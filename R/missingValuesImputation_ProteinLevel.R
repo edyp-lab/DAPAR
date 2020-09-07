@@ -18,6 +18,8 @@
 #' 
 #' @export
 #' 
+#' @importFrom Biobase pData exprs fData
+#'  
 findMECBlock <- function(obj){
     
     conditions <- unique(Biobase::pData(obj)$Condition)
@@ -61,6 +63,8 @@ findMECBlock <- function(obj){
 #' 
 #' @export
 #' 
+#' @importFrom Biobase pData exprs fData
+#' 
 reIntroduceMEC <- function(obj, MECIndex){
     
     for (i in 1:nrow(MECIndex))
@@ -93,6 +97,8 @@ reIntroduceMEC <- function(obj, MECIndex){
 #' wrapper.impute.KNN(Exp1_R25_pept[1:1000], 3)
 #' 
 #' @export
+#' 
+#' @importFrom Biobase pData exprs fData
 #' 
 wrapper.impute.KNN <- function(obj, K){
     #require(impute)
@@ -133,6 +139,8 @@ wrapper.impute.KNN <- function(obj, K){
 #' wrapper.impute.fixedValue(Exp1_R25_pept[1:1000], 0.001)
 #' 
 #' @export
+#' 
+#' @importFrom Biobase pData exprs fData
 #' 
 wrapper.impute.fixedValue <- function(obj, fixVal){
     
@@ -175,6 +183,9 @@ wrapper.impute.fixedValue <- function(obj, fixVal){
 #' 
 #' @export
 #' 
+#' @importFrom Biobase pData exprs fData
+#' @importFrom imp4p impute.pa
+#' 
 wrapper.impute.pa <- function(obj, q.min = 0.025){
     cond <- as.factor(Biobase::pData(obj)$Condition)
     res <- impute.pa(Biobase::exprs(obj), conditions=cond, q.min = q.min, q.norm=3,  eps=0)
@@ -206,6 +217,8 @@ wrapper.impute.pa <- function(obj, q.min = 0.025){
 #' wrapper.impute.detQuant(Exp1_R25_pept)
 #' 
 #' @export
+#' 
+#' @importFrom Biobase pData exprs fData
 #' 
 wrapper.impute.detQuant <- function(obj, qval=0.025, factor=1){
     if (is.null(obj)){return(NULL)}
@@ -301,6 +314,8 @@ impute.detQuant <- function(qData, values){
 #' dat <- wrapper.impute.slsa(dat)
 #' 
 #' @export
+#' 
+#' @importFrom Biobase pData exprs fData
 #' 
 wrapper.impute.slsa <- function(obj){
     

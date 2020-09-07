@@ -1,8 +1,8 @@
 Package: DAPAR
 Type: Package
 Title: Tools for the Differential Analysis of Proteins Abundance with R
-Version: 1.21.0
-Date: 2020-09-03
+Version: 1.21.1
+Date: 2020-09-07
 Authors@R: c(person(given = "Samuel", family = "Wieczorek",
             email = "samuel.wieczorek@cea.fr",
     role = c("aut","cre")),
@@ -33,16 +33,16 @@ Description: This package contains a collection of functions for the
     visualisation and the statistical analysis of proteomic data.
 License: Artistic-2.0
 VignetteBuilder: knitr
-Depends: R (>= 4.0.0), foreach, parallel, doParallel, igraph
-Suggests: BiocGenerics, Biobase, testthat, BiocStyle
-Imports: MSnbase, RColorBrewer,stats,preprocessCore, Cairo,png,
+Depends: R (>= 4.0.0)
+Suggests: BiocGenerics, testthat, BiocStyle
+Imports: Biobase, MSnbase, tibble, RColorBrewer,stats,preprocessCore, Cairo,png,
         lattice,reshape2,gplots,pcaMethods,ggplot2,
         limma,knitr,tmvtnorm,norm,impute, stringr,
         grDevices, graphics, openxlsx, utils, cp4p
         (>= 0.3.5), scales, Matrix, vioplot, imp4p (>= 0.8),
         highcharter, DAPARdata (>= 1.18.0), siggenes, graph, lme4, readxl,
         clusterProfiler, dplyr, tidyr,AnnotationDbi, tidyverse, vsn, FactoMineR, factoextra,
-        visNetwork
+        visNetwork, foreach, parallel, doParallel, igraph, dendextend
 biocViews: Proteomics, Normalization, Preprocessing, MassSpectrometry,
         QualityControl, GO, DataImport
 NeedsCompilation: no

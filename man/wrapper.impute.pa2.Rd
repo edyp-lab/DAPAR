@@ -29,8 +29,7 @@ observed values distribution minus eps. Default is 0.}
 The object \code{obj} which has been imputed
 }
 \description{
-This method is a wrapper to the function \code{impute.pa} from the package 
-\code{imp4p} adapted to objects of class \code{MSnSet}.
+This method is a wrapper to the function \code{impute.pa2} adapted to objects of class \code{MSnSet}.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')

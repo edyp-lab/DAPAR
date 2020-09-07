@@ -22,6 +22,8 @@
 #' 
 #' @export
 #' 
+#' @importFrom Biobase pData exprs fData
+#' 
 wrapper.mvPerLinesHisto <- function(obj, indLegend="auto", showValues=FALSE){
   qData <- Biobase::exprs(obj)
   samplesData <- Biobase::pData(obj)
@@ -52,6 +54,8 @@ wrapper.mvPerLinesHisto <- function(obj, indLegend="auto", showValues=FALSE){
 #' wrapper.mvPerLinesHisto(Exp1_R25_pept)
 #' 
 #' @export
+#' 
+#' @importFrom Biobase pData exprs fData
 #' 
 wrapper.mvPerLinesHisto_HC <- function(obj, indLegend="auto", showValues=FALSE){
   if (is.null(obj)){
@@ -223,6 +227,8 @@ mvPerLinesHisto_HC <- function(qData, samplesData, indLegend="auto", showValues=
 #' 
 #' @export
 #'
+#' @importFrom Biobase pData exprs fData
+#' 
 wrapper.mvPerLinesHistoPerCondition <- function(obj, indLegend="auto", 
                                                 showValues=FALSE){
   qData <- Biobase::exprs(obj)
@@ -250,6 +256,8 @@ wrapper.mvPerLinesHistoPerCondition <- function(obj, indLegend="auto",
 #' 
 #' @export
 #'
+#' @importFrom Biobase pData exprs fData
+#' 
 wrapper.mvPerLinesHistoPerCondition_HC <- function(obj, indLegend="auto", 
                                                    showValues=FALSE, ...){
   if (is.null(obj)){
@@ -435,6 +443,8 @@ mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto",
 #' 
 #' @export
 #'
+#' @importFrom Biobase pData exprs fData
+#'  
 wrapper.mvHisto <- function(obj, indLegend="auto", showValues=FALSE){
   qData <- Biobase::exprs(obj)
   samplesData <- Biobase::pData(obj)
@@ -460,6 +470,8 @@ wrapper.mvHisto <- function(obj, indLegend="auto", showValues=FALSE){
 #' 
 #' @export
 #'
+#' @importFrom Biobase pData exprs fData
+#' 
 wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
   if (is.null(obj)){
     warning("The dataset in NULL. Cannot continue.")
@@ -607,11 +619,7 @@ mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto",
   
   
   return(h1)
-  
-  
-  
-  
-  
+
 }
 
 
@@ -639,6 +647,8 @@ mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto",
 #' 
 #' @export
 #'
+#' @importFrom Biobase pData exprs fData
+#' 
 wrapper.mvImage <- function(obj){
   
   qData <- Biobase::exprs(obj)
@@ -680,6 +690,8 @@ wrapper.mvImage <- function(obj){
 #' mvImage(qData, conds)
 #' 
 #' @export
+#' 
+#' @importFrom stats setNames
 #'
 mvImage <- function(qData, conds){
   
@@ -743,7 +755,8 @@ mvImage <- function(qData, conds){
 #' 
 #' @export
 #'
-
+#' @importFrom Biobase pData exprs fData
+#' 
 wrapper.hc_mvTypePlot2 <- function(obj,...){
   qData <- Biobase::exprs(obj)
   conds <- Biobase::pData(obj)[,"Condition"]

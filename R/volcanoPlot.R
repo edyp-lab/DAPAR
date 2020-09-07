@@ -32,6 +32,9 @@
 #' 
 #' @export
 #'
+#' @importFrom Biobase pData exprs fData
+#' @import graphics
+#' 
 diffAnaVolcanoplot <- function(logFC=NULL, 
                                 pVal=NULL, 
                                 threshold_pVal=1e-60, 
@@ -145,6 +148,8 @@ return(p)
 #' }
 #' 
 #' @export
+#'
+#' @importFrom Biobase pData exprs fData
 #'
 diffAnaVolcanoplot_rCharts <- function(df, 
                                         threshold_pVal=1e-60, 

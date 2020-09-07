@@ -16,8 +16,6 @@
 #' 
 #' @author Florence Combes, Samuel Wieczorek
 #' 
-#' @seealso \code{\link{boxPlotD}}, \code{\link{CVDistD}}
-#' 
 #' @examples 
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
@@ -101,8 +99,6 @@ densityPlotD <- function(obj, conds, legend=NULL,palette = NULL){
 #' @return A density plot
 #' 
 #' @author Samuel Wieczorek
-#' 
-#' @seealso \code{\link{boxPlotD}}, \code{\link{CVDistD}}
 #' 
 #' @examples 
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
