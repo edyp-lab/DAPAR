@@ -37,7 +37,7 @@
 #' 
 boxPlotD_HC <- function(obj, conds, keyId=NULL, legend=NULL, palette = NULL, subset.view=NULL){
   
-  if (is.null(qData)){
+  if (is.null(obj)){
     warning('The dataset in NULL and cannot be shown')
     return(NULL)
   } else {

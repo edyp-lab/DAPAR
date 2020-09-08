@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{dapar_hc_ExportMenu}
 \alias{dapar_hc_ExportMenu}
-\title{Selects lines of dataframes in a MSnset file}
+\title{Customised contextual menu of highcharts plots}
 \usage{
 dapar_hc_ExportMenu(hc, filename)
 }
@@ -10,23 +10,14 @@ dapar_hc_ExportMenu(hc, filename)
 \item{hc}{A highcharter object}
 
 \item{filename}{The filename under which the plot has to be saved}
-
-\item{obj}{A MSnset object}
-
-\item{lineIndices}{The indices of lines to be extracted}
 }
 \value{
-A MSnset object
-
 A contextual menu for highcharts plots
 }
 \description{
-This function overloads the brackets to select lines of dataframes in a MSnset file. It takes 
-into account the slots experimentData / other / OriginOfValues
+Customised contextual menu of highcharts plots
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-res <- tabOperator(Exp1_R25_pept, c(1:10))
 library("highcharter")
 hc <- highchart() 
 hc_chart(hc,type = "line") 
@@ -35,7 +26,5 @@ dapar_hc_ExportMenu(hc,filename='foo')
 
 }
 \author{
-Samuel Wieczorek
-
 Samuel Wieczorek
 }

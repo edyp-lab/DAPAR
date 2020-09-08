@@ -30,19 +30,12 @@ drawn above the bars.}
 }
 \value{
 A histogram
-
-A histogram
 }
 \description{
-This method plots a histogram of missing values.
+This method plots a histogram of missing values. Same as the function \code{mvHisto}
+but uses the package \code{highcharter}
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-qData <- Biobase::exprs(Exp1_R25_pept)
-samplesData <- Biobase::pData(Exp1_R25_pept)
-conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-mvHisto(qData, samplesData, conds, indLegend="auto", showValues=TRUE)
-
 utils::data(Exp1_R25_pept, package='DAPARdata')
 qData <- Biobase::exprs(Exp1_R25_pept)
 samplesData <- Biobase::pData(Exp1_R25_pept)
@@ -51,7 +44,5 @@ mvHisto_HC(qData, samplesData, conds, indLegend="auto", showValues=TRUE)
 
 }
 \author{
-Florence Combes, Samuel Wieczorek
-
 Florence Combes, Samuel Wieczorek
 }

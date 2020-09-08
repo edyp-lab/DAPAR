@@ -186,19 +186,25 @@ wrapper.mvPerLinesHistoPerCondition_HC <- function(obj, ...){
 
 #' This method plots a bar plot which represents the distribution of the 
 #' number of missing values (NA) per lines (ie proteins) and per conditions.
-#' Same as the function \link{mvPerLinesHistoPerCondition} but uses the package
-#' \code{highcharter}.
 #' 
 #' @title Bar plot of missing values per lines and per condition
+#' 
 #' @param qData A dataframe that contains quantitative data.
+#' 
 #' @param samplesData A dataframe where lines correspond to samples and 
 #' columns to the meta-data for those samples.
+#' 
 #' @param indLegend The indice of the column name's in \code{pData()} tab 
+#' 
 #' @param showValues A logical that indicates wether numeric values should be
 #' drawn above the bars.
+#' 
 #' @param palette xxx
+#' 
 #' @return A bar plot
+#' 
 #' @author Samuel Wieczorek
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' qData <- Biobase::exprs(Exp1_R25_pept)
