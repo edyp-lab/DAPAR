@@ -2,7 +2,7 @@
 % Please edit documentation in R/missingValuesPlots.R
 \name{mvPerLinesHisto_HC}
 \alias{mvPerLinesHisto_HC}
-\title{Bar plot of missing values per lines using highcharter}
+\title{Bar plot of missing values per lines}
 \usage{
 mvPerLinesHisto_HC(qData, samplesData, indLegend = "auto", showValues = FALSE)
 }
@@ -19,6 +19,8 @@ drawn above the bars.}
 }
 \value{
 A bar plot
+
+A bar plot
 }
 \description{
 This method plots a bar plot which represents the distribution of the 
@@ -28,9 +30,16 @@ number of missing values (NA) per lines (ie proteins).
 utils::data(Exp1_R25_pept, package='DAPARdata')
 qData <- Biobase::exprs(Exp1_R25_pept)
 samplesData <- Biobase::pData(Exp1_R25_pept)
+mvPerLinesHisto(qData, samplesData)
+
+utils::data(Exp1_R25_pept, package='DAPARdata')
+qData <- Biobase::exprs(Exp1_R25_pept)
+samplesData <- Biobase::pData(Exp1_R25_pept)
 mvPerLinesHisto_HC(qData, samplesData)
 
 }
 \author{
+Florence Combes, Samuel Wieczorek
+
 Florence Combes, Samuel Wieczorek
 }

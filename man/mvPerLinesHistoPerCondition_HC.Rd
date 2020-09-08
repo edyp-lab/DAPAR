@@ -29,6 +29,78 @@ drawn above the bars.}
 A bar plot
 }
 \description{
+#' This method plots a bar plot which represents the distribution of the 
+#' number of missing values (NA) per lines (ie proteins) and per conditions.
+#' 
+#' @title Bar plot of missing values per lines and per condition
+#' @param qData A dataframe that contains quantitative data.
+#' @param samplesData A dataframe where lines correspond to samples and 
+#' columns to the meta-data for those samples.
+#' @param indLegend The indice of the column name's in \code{pData()} tab 
+#' @param showValues A logical that indicates wether numeric values should be
+#' drawn above the bars.
+#' @param palette xxx
+#' @return A bar plot
+#' @author Samuel Wieczorek
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' qData <- Biobase::exprs(Exp1_R25_pept)
+#' samplesData <- Biobase::pData(Exp1_R25_pept)
+#' mvPerLinesHistoPerCondition(qData, samplesData)
+#' 
+#' @export
+#'
+mvPerLinesHistoPerCondition <- function(qData, samplesData, indLegend="auto", 
+                                        showValues=FALSE, palette=NULL){
+  
+  
+  # if (is.null(palette)){
+  #   palette <- RColorBrewer::brewer.pal(ncol(qData),"Dark2")[1:ncol(qData)]
+  # }else{
+  #   if (length(palette) != ncol(qData)){
+  #     warning("The color palette has not the same dimension as the number of samples")
+  #     return(NULL)
+  #   }
+  # }
+  palette <- BuildPalette(samplesData[,"Condition"], palette)
+  if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
+  
+  nbConditions <- length(unique(samplesData[,"Condition"]))
+  
+  ncolMatrix <- max(unlist(lapply(unique(samplesData[,"Condition"]), function(x){length(which(samplesData[,"Condition"]==x))})))
+  m <- matrix(rep(0, nbConditions*(1+ncolMatrix)), 
+              ncol = nbConditions, 
+              dimnames=list(seq(0:(ncolMatrix)),unique(samplesData[,"Condition"])))
+  
+  for (i in unique(samplesData[,"Condition"]))
+  {
+    nSample <- length(which(samplesData[,"Condition"] == i))
+    t <- NULL
+    if (nSample == 1) {
+      t <- table(as.integer(is.na(qData[,which(samplesData[,"Condition"] == i)])))
+    } else {t <- table(rowSums(is.na(qData[,which(samplesData[,"Condition"] == i)])))}
+    
+    m[as.integer(names(t))+1,i] <- t
+  }
+  
+  m <- t(m)
+  
+  x <- barplot(m, 
+               main = "# lines by # of NA",
+               xlab = "# NA per lines",
+               names.arg = as.character(0:ncolMatrix), 
+               col = palette,
+               ylim = c(0, 1.2*max(m)), 
+               xpd = FALSE,
+               las=1,
+               cex.names=1.5,
+               cex.axis=1.5,
+               beside=TRUE
+  )
+  
+}
+}
+\details{
 This method plots a bar plot which represents the distribution of the 
 number of missing values (NA) per lines (ie proteins) and per conditions.
 Same as the function \link{mvPerLinesHistoPerCondition} but uses the package

@@ -1,34 +1,34 @@
-#' This method is a wrapper to plots from a \code{MSnSet} object a 
-#' histogram which represents the distribution of the 
-#' number of missing values (NA) per lines (ie proteins).
-#' 
-#' @title Histogram of missing values per lines from an object 
-#' \code{MSnSet}
-#' 
-#' @param obj An object of class \code{MSnSet}.
-#' 
-#' @param indLegend The indice of the column name's in \code{pData()} tab .
-#' 
-#' @param showValues A logical that indicates wether numeric values should be
-#' drawn above the bars.
-#' 
-#' @return A histogram
-#' 
-#' @author Alexia Dorffer
-#' 
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' wrapper.mvPerLinesHisto(Exp1_R25_pept)
-#' 
-#' @export
-#' 
-#' @importFrom Biobase pData exprs fData
-#' 
-wrapper.mvPerLinesHisto <- function(obj, indLegend="auto", showValues=FALSE){
-  qData <- Biobase::exprs(obj)
-  samplesData <- Biobase::pData(obj)
-  mvPerLinesHisto(qData, samplesData, indLegend, showValues)
-}
+#' #' This method is a wrapper to plots from a \code{MSnSet} object a 
+#' #' histogram which represents the distribution of the 
+#' #' number of missing values (NA) per lines (ie proteins).
+#' #' 
+#' #' @title Histogram of missing values per lines from an object 
+#' #' \code{MSnSet}
+#' #' 
+#' #' @param obj An object of class \code{MSnSet}.
+#' #' 
+#' #' @param indLegend The indice of the column name's in \code{pData()} tab .
+#' #' 
+#' #' @param showValues A logical that indicates wether numeric values should be
+#' #' drawn above the bars.
+#' #' 
+#' #' @return A histogram
+#' #' 
+#' #' @author Alexia Dorffer
+#' #' 
+#' #' @examples
+#' #' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' #' wrapper.mvPerLinesHisto(Exp1_R25_pept)
+#' #' 
+#' #' @export
+#' #' 
+#' #' @importFrom Biobase pData exprs fData
+#' #' 
+#' wrapper.mvPerLinesHisto <- function(obj, indLegend="auto", showValues=FALSE){
+#'   qData <- Biobase::exprs(obj)
+#'   samplesData <- Biobase::pData(obj)
+#'   mvPerLinesHisto(qData, samplesData, indLegend, showValues)
+#' }
 
 
 #' This method is a wrapper to plots from a \code{MSnSet} object a 
@@ -51,7 +51,7 @@ wrapper.mvPerLinesHisto <- function(obj, indLegend="auto", showValues=FALSE){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' wrapper.mvPerLinesHisto(Exp1_R25_pept)
+#' wrapper.mvPerLinesHisto_HC(Exp1_R25_pept)
 #' 
 #' @export
 #' 
@@ -69,67 +69,6 @@ wrapper.mvPerLinesHisto_HC <- function(obj, indLegend="auto", showValues=FALSE){
   return(hc)
 }
 
-#' This method plots a bar plot which represents the distribution of the 
-#' number of missing values (NA) per lines (ie proteins).
-#' 
-#' @title Bar plot of missing values per lines
-#' @param qData A dataframe that contains the data to plot.
-#' @param samplesData A dataframe which contains informations about 
-#' the replicates.
-#' @param indLegend The indice of the column name's in \code{pData()} tab 
-#' @param showValues A logical that indicates wether numeric values should be
-#' drawn above the bars.
-#' @return A bar plot
-#' @author Florence Combes, Samuel Wieczorek
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' qData <- Biobase::exprs(Exp1_R25_pept)
-#' samplesData <- Biobase::pData(Exp1_R25_pept)
-#' mvPerLinesHisto(qData, samplesData)
-#' 
-#' @export
-#'
-mvPerLinesHisto <- function(qData, samplesData, indLegend="auto", showValues=FALSE){
-  
-  if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
-  
-  for (j in 1:length(colnames(qData))){
-    noms <- NULL
-    for (i in 1:length(indLegend)){
-      noms <- paste(noms, samplesData[j,indLegend[i]], sep=" ")
-    }
-    colnames(qData)[j] <- noms
-  }
-  
-  coeffMax <- .1
-  
-  NbNAPerCol <- colSums(is.na(qData))
-  NbNAPerRow <- rowSums(is.na(qData))
-  #par(mar = c(10,3, 3, 3))
-  
-  nb.col <- dim(qData)[2] 
-  nb.na <- NbNAPerRow
-  temp <- table(NbNAPerRow)
-  nb.na2barplot <- c(temp, rep(0,1+ncol(qData)-length(temp)))
-  
-  if (sum(NbNAPerRow) == 0){
-    nb.na2barplot <- rep(0,1+ncol(qData))
-  }
-  
-  print(nb.na2barplot[-1])
-  
-  x <- barplot(nb.na2barplot[-1], 
-               main = "# lines by # of NA",
-               xlab = "# NA per lines",
-               names.arg = as.character(c(1:(ncol(qData)))), 
-               col = c(rep("lightgrey",nb.col-1), "red"),
-               ylim = c(0, 1.2*max(1,nb.na2barplot[-1])), 
-               las=1,
-               cex.names=1.5,
-               cex.axis=1.5
-  )
-  
-}
 
 
 #' This method plots a bar plot which represents the distribution of the 
@@ -209,47 +148,21 @@ mvPerLinesHisto_HC <- function(qData, samplesData, indLegend="auto", showValues=
 
 
 
-#' This method is a wrapper to plots from a \code{MSnSet} object a 
-#' bar plot which represents the distribution of the 
-#' number of missing values (NA) per lines (ie proteins) and per conditions.
-#' 
-#' @title Bar plot of missing values per lines and per conditions from an 
-#' object \code{MSnSet}
-#' @param obj An object of class \code{MSnSet}.
-#' @param indLegend The indice of the column name's in \code{pData()} tab .
-#' @param showValues A logical that indicates wether numeric values should be
-#' drawn above the bars.
-#' @return A bar plot
-#' @author Samuel Wieczorek
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' wrapper.mvPerLinesHistoPerCondition(Exp1_R25_pept)
-#' 
-#' @export
-#'
-#' @importFrom Biobase pData exprs fData
-#' 
-wrapper.mvPerLinesHistoPerCondition <- function(obj, indLegend="auto", 
-                                                showValues=FALSE){
-  qData <- Biobase::exprs(obj)
-  samplesData <- Biobase::pData(obj)
-  mvPerLinesHistoPerCondition(qData, samplesData, indLegend, showValues)
-}
-
-
 #' This method is a wrapper to plots (using highcharts) from a \code{MSnSet} object a 
 #' bar plot which represents the distribution of the 
 #' number of missing values (NA) per lines (ie proteins) and per conditions.
 #' 
 #' @title Bar plot of missing values per lines and per conditions from an 
 #' object \code{MSnSet}
+#' 
 #' @param obj An object of class \code{MSnSet}.
-#' @param indLegend The indice of the column name's in \code{pData()} tab .
-#' @param showValues A logical that indicates wether numeric values should be
-#' drawn above the bars.
+#' 
 #' @param ... xxx
+#' 
 #' @return A bar plot
+#' 
 #' @author Samuel Wieczorek
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' wrapper.mvPerLinesHistoPerCondition_HC(Exp1_R25_pept)
@@ -258,86 +171,14 @@ wrapper.mvPerLinesHistoPerCondition <- function(obj, indLegend="auto",
 #'
 #' @importFrom Biobase pData exprs fData
 #' 
-wrapper.mvPerLinesHistoPerCondition_HC <- function(obj, indLegend="auto", 
-                                                   showValues=FALSE, ...){
+wrapper.mvPerLinesHistoPerCondition_HC <- function(obj, ...){
   if (is.null(obj)){
     warning("The dataset in NULL. Cannot continue.")
     return(NULL)
   }
   qData <- Biobase::exprs(obj)
   samplesData <- Biobase::pData(obj)
-  mvPerLinesHistoPerCondition_HC(qData, samplesData, indLegend, showValues, ...)
-}
-
-
-#' This method plots a bar plot which represents the distribution of the 
-#' number of missing values (NA) per lines (ie proteins) and per conditions.
-#' 
-#' @title Bar plot of missing values per lines and per condition
-#' @param qData A dataframe that contains quantitative data.
-#' @param samplesData A dataframe where lines correspond to samples and 
-#' columns to the meta-data for those samples.
-#' @param indLegend The indice of the column name's in \code{pData()} tab 
-#' @param showValues A logical that indicates wether numeric values should be
-#' drawn above the bars.
-#' @param palette xxx
-#' @return A bar plot
-#' @author Samuel Wieczorek
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' qData <- Biobase::exprs(Exp1_R25_pept)
-#' samplesData <- Biobase::pData(Exp1_R25_pept)
-#' mvPerLinesHistoPerCondition(qData, samplesData)
-#' 
-#' @export
-#'
-mvPerLinesHistoPerCondition <- function(qData, samplesData, indLegend="auto", 
-                                        showValues=FALSE, palette=NULL){
-  
-  
-  if (is.null(palette)){
-    palette <- RColorBrewer::brewer.pal(ncol(qData),"Dark2")[1:ncol(qData)]
-  }else{
-    if (length(palette) != ncol(qData)){
-      warning("The color palette has not the same dimension as the number of samples")
-      return(NULL)
-    }
-  }
-  if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
-  
-  nbConditions <- length(unique(samplesData[,"Condition"]))
-  
-  ncolMatrix <- max(unlist(lapply(unique(samplesData[,"Condition"]), function(x){length(which(samplesData[,"Condition"]==x))})))
-  m <- matrix(rep(0, nbConditions*(1+ncolMatrix)), 
-              ncol = nbConditions, 
-              dimnames=list(seq(0:(ncolMatrix)),unique(samplesData[,"Condition"])))
-  
-  for (i in unique(samplesData[,"Condition"]))
-  {
-    nSample <- length(which(samplesData[,"Condition"] == i))
-    t <- NULL
-    if (nSample == 1) {
-      t <- table(as.integer(is.na(qData[,which(samplesData[,"Condition"] == i)])))
-    } else {t <- table(rowSums(is.na(qData[,which(samplesData[,"Condition"] == i)])))}
-    
-    m[as.integer(names(t))+1,i] <- t
-  }
-  
-  m <- t(m)
-  
-  x <- barplot(m, 
-               main = "# lines by # of NA",
-               xlab = "# NA per lines",
-               names.arg = as.character(0:ncolMatrix), 
-               col = palette,
-               ylim = c(0, 1.2*max(m)), 
-               xpd = FALSE,
-               las=1,
-               cex.names=1.5,
-               cex.axis=1.5,
-               beside=TRUE
-  )
-  
+  mvPerLinesHistoPerCondition_HC(qData, samplesData, ...)
 }
 
 
@@ -362,7 +203,7 @@ mvPerLinesHistoPerCondition <- function(qData, samplesData, indLegend="auto",
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' qData <- Biobase::exprs(Exp1_R25_pept)
 #' samplesData <- Biobase::pData(Exp1_R25_pept)
-#' mvPerLinesHistoPerCondition_HC(qData, samplesData)
+#' mvPerLinesHistoPerCondition_HC(qData, samplesData, palette=(c('#AAAAAA', '#AAAAAA')))
 #' 
 #' @export
 #'
@@ -370,15 +211,8 @@ mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto",
                                            showValues=FALSE, palette=NULL){
   
   conds <- samplesData[,"Condition"]
-  if (is.null(palette)){
-    palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")
-  }else{
-    if (length(palette) != ncol(qData)){
-      warning("The color palette has not the same dimension as the number of samples")
-      return(NULL)
-    }
-  }
   
+  palette <- BuildPalette(conds, palette)
   
   if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
   
@@ -427,31 +261,6 @@ mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto",
 }
 
 
-#' This method plots from a \code{MSnSet} object a histogram of 
-#' missing values.
-#' 
-#' @title Histogram of missing values from a \code{MSnSet} object
-#' @param obj An object of class \code{MSnSet}.
-#' @param indLegend The indices of the column name's in \code{pData()} tab.
-#' @param showValues A logical that indicates wether numeric values should be
-#' drawn above the bars.
-#' @return A histogram
-#' @author Alexia Dorffer
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' wrapper.mvHisto(Exp1_R25_pept, showValues=TRUE)
-#' 
-#' @export
-#'
-#' @importFrom Biobase pData exprs fData
-#'  
-wrapper.mvHisto <- function(obj, indLegend="auto", showValues=FALSE){
-  qData <- Biobase::exprs(obj)
-  samplesData <- Biobase::pData(obj)
-  conds <- samplesData[,"Condition"]
-  mvHisto(qData, samplesData, conds, indLegend, showValues)
-}
-
 
 #' This method plots from a \code{MSnSet} object a histogram of 
 #' missing values.
@@ -476,7 +285,6 @@ wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
   if (is.null(obj)){
     warning("The dataset in NULL. Cannot continue.")
     return(NULL)
-    warning("The dataset in NULL. Cannot continue.")
   }
   
   qData <- Biobase::exprs(obj)
@@ -485,75 +293,6 @@ wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
   mvHisto_HC(qData, samplesData, conds, indLegend, showValues, ...)
 }
 
-
-
-#' This method plots a histogram of missing values.
-#' 
-#' @title Histogram of missing values
-#' @param qData A dataframe that contains quantitative data.
-#' @param samplesData A dataframe where lines correspond to samples and 
-#' columns to the meta-data for those samples.
-#' @param conds A vector of the conditions (one condition per sample).
-#' @param indLegend The indices of the column name's in \code{pData()} tab
-#' @param showValues A logical that indicates wether numeric values should be
-#' drawn above the bars.
-#' @param palette xxx
-#' @return A histogram
-#' @author Florence Combes, Samuel Wieczorek
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' qData <- Biobase::exprs(Exp1_R25_pept)
-#' samplesData <- Biobase::pData(Exp1_R25_pept)
-#' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-#' mvHisto(qData, samplesData, conds, indLegend="auto", showValues=TRUE)
-#' 
-#' @export
-#'
-mvHisto <- function(qData, samplesData, conds, indLegend="auto", showValues=FALSE, palette=NULL){
-  
-  if (is.null(palette)){
-    palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")
-  }else{
-    if (length(palette) != ncol(qData)){
-      warning("The color palette has not the same dimension as the number of samples")
-      return(NULL)
-    }
-  }
-  
-  if (identical(indLegend,"auto")) { 
-    indLegend <- c(2:length(colnames(samplesData)))
-  }
-  
-  
-  colnames(qData) <- samplesData[,"Condition"]
-  
-  coeffMax <- .1
-  
-  NbNAPerCol <- colSums(is.na(qData))
-  NbNAPerRow <- rowSums(is.na(qData))
-  
-  if (sum(NbNAPerCol) == 0) {if (sum(NbNAPerCol) == 0){
-    NbNAPerCol <- rep(0,1+ncol(qData))
-  }} 
-  x <- barplot(NbNAPerCol, 
-               main = "# NA per columns",
-               col=palette,
-               las=1,
-               ylim = c(0, 1.2*max(1,NbNAPerCol)),
-               names.arg = c(1:18), 
-               cex.names=1.5,
-               cex.axis=1.5,
-               axisnames = FALSE
-  )
-  
-  par(xpd = TRUE)
-  graphics::text(x, -3,
-                 label = colnames(qData),
-                 srt = 45,
-                 adj=1,
-                 cex=1.4)
-  
-}
 
 
 
@@ -582,14 +321,9 @@ mvHisto <- function(qData, samplesData, conds, indLegend="auto", showValues=FALS
 #'
 mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto", 
                        showValues=FALSE, palette = NULL){
-  if (is.null(palette)){
-    palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")
-  }else{
-    if (length(palette) != ncol(qData)){
-      warning("The color palette has not the same dimension as the number of samples")
-      return(NULL)
-    }
-  }
+  
+  
+  palette <- BuildPalette(conds, palette)
   
   
   if (identical(indLegend,"auto")) { 

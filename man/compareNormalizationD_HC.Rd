@@ -8,9 +8,11 @@ uses the library \code{highcharter}}
 compareNormalizationD_HC(
   qDataBefore,
   qDataAfter,
-  condsForLegend = NULL,
-  indData2Show = NULL,
-  palette = NULL
+  conds = NULL,
+  palette = NULL,
+  subset.view = NULL,
+  n = 100,
+  type = "scatter"
 )
 }
 \arguments{
@@ -20,14 +22,22 @@ normalization.}
 \item{qDataAfter}{A dataframe that contains quantitative data after 
 normalization.}
 
+\item{palette}{xxx}
+
+\item{subset.view}{xxx}
+
+\item{n}{An integer that is equal to the maximum number of displayed points. 
+This number must be less or equal to the size 
+of the dataset. If it is less than it, it is a random selection}
+
+\item{type}{scatter or line}
+
 \item{condsForLegend}{A vector of the conditions (one condition 
 per sample).}
 
 \item{indData2Show}{A vector of the indices of the columns to show in 
 the plot. The indices are those of indices of 
 the columns int the data.frame qDataBefore.}
-
-\item{palette}{xxx}
 }
 \value{
 A plot
@@ -37,12 +47,12 @@ Plot to compare the quantitative proteomics data before and after
 normalization using the library \code{highcharter}
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-obj <- Exp1_R25_pept[1:1000]
+utils::data(Exp1_R25_prot, package='DAPARdata')
+obj <- Exp1_R25_prot
 qDataBefore <- Biobase::exprs(obj)
 conds <- Biobase::pData(obj)[,"Condition"]
 objAfter <- wrapper.normalizeD(obj, method = "QuantileCentering", conds =conds, type = "within conditions")
-compareNormalizationD_HC(qDataBefore, Biobase::exprs(objAfter), conds)
+compareNormalizationD_HC(qDataBefore=qDataBefore, qDataAfter=Biobase::exprs(objAfter), conds=conds, n=100)
 
 }
 \author{

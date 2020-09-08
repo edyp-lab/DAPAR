@@ -25,7 +25,7 @@ number of missing values (NA) per lines (ie proteins).
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-wrapper.mvPerLinesHisto(Exp1_R25_pept)
+wrapper.mvPerLinesHisto_HC(Exp1_R25_pept)
 
 }
 \author{

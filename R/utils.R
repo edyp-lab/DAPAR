@@ -1,3 +1,43 @@
+#' @title Builds a complete color palette for the conditions given in argument
+#' 
+#' @description xxxx
+#' 
+#' @param conds The extended vector of samples conditions
+#' 
+#' @param base_palette The basic color (HEX code) used to build the complete palette. This vector have the same length as unique(conds)
+#' 
+#' @return A vector composer of HEX color code for the conditions
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' conditions <- Biobase::pData(Exp1_R25_pept)$Condition
+#' BuildPalette(conditions, c('AAAAAA', 'BBBBBB'))
+#' 
+#' @export
+#' 
+#' @importFrom RColorBrewer brewer.pal
+#' 
+#' 
+BuildPalette <- function(conds, base_palette){
+  
+  palette <- NULL
+  if (is.null(base_palette)){
+    palette.init <- RColorBrewer::brewer.pal(8,"Dark2")[1:max(3,length(unique(conds)))]
+  } else {
+    palette.init <- base_palette
+  }
+  
+  for (i in 1:length(conds)){
+    palette[i] <- palette.init[which(conds[i] == unique(conds))]
+  }
+  return(palette)
+  
+}      
+
+
+
 #' Returns the contents of the slot processing of an object of class \code{MSnSet}
 #' 
 #' @title Returns the contains of the slot processing  of an object of 
@@ -323,3 +363,85 @@ nonzero <- function(x){
 #    
 #     return(tmp)
 # }
+
+
+
+
+
+#' @title Customised contextual menu of highcharts plots
+#' 
+#' @param hc A highcharter object
+#' 
+#' @param filename The filename under which the plot has to be saved
+#' 
+#' @return A contextual menu for highcharts plots
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' library("highcharter")
+#' hc <- highchart() 
+#' hc_chart(hc,type = "line") 
+#' hc_add_series(hc,data = c(29, 71, 40))
+#' dapar_hc_ExportMenu(hc,filename='foo')
+#' 
+#' @export
+#' 
+#' @importFrom highcharter hc_exporting
+#' 
+dapar_hc_ExportMenu <- function(hc, filename){
+  hc_exporting(hc, enabled=TRUE,
+               filename = filename,
+               buttons= list(
+                 contextButton= list(
+                   menuItems= list('downloadPNG', 'downloadSVG','downloadPDF')
+                 )
+               )
+  )
+}
+
+
+
+
+
+
+#' @title Customised resetZoomButton of highcharts plots
+#' 
+#' @param hc A highcharter object
+#' 
+#' @param chartType The type of the plot
+#' 
+#' @param zoomType The type of the zoom (one of "x", "y", "xy", "None")
+#' 
+#' @param width xxx
+#' 
+#' @param height xxx
+#' 
+#' @return A highchart plot
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' library("highcharter")
+#' hc <- highchart() 
+#' hc_chart(hc,type = "line") 
+#' hc_add_series(hc,data = c(29, 71, 40))
+#' dapar_hc_chart(hc,filename='foo')
+#' 
+#' @export
+#' 
+#' @importFrom highcharter hc_chart
+#' 
+dapar_hc_chart <- function(hc,  chartType, zoomType="None", width=0, height=0){
+  hc %>% 
+    hc_chart(type = chartType, 
+             zoomType=zoomType,
+             showAxes = TRUE,
+             width = width,
+             height = height,
+             resetZoomButton= list(
+               position = list(
+                 align= 'left',
+                 verticalAlign = 'top')
+             ))
+}
