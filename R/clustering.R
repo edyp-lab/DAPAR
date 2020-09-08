@@ -7,8 +7,10 @@
 ##' data).
 ##'
 ##' @param ESet_obj ExpressionSet object containing all the data
-##' @return a dataframe in wide format providing the standardized mean of
-##' abondances for each protein/peptide in each condition.
+##' @return a dataframe in wide format providing (in the case of 3 or more
+##' conditions) the standardized means of intensities for each protein/peptide
+##' in each condition. If there are less than 3 conditions, standardization
+##' cannot be performed and only the means of intensities are returned.
 ##' @author Hélène Borges
 ##' @examples
 ##' standardiseMeanIntensities(my_expresion_set)
@@ -35,9 +37,15 @@ standardiseMeanIntensities <- function(ESet_obj){
         eset_s <- Mfuzz::standardise(eset)
         standards <- eset_s@assayData$exprs
         standardized_means <- dplyr::bind_cols(feature = dplyr::as_tibble(averaged_data[,1]), dplyr::as_tibble(standards))
+        return(standardized_means)
+    }else{
+        message("There are no sufficient conditions to achieve standardization
+                (minimum is 3). This is why no standardization is carried out on
+                the data. Only mean intensities are returned. ")
+        return(averaged_data)
     }
 
-    return(standardized_means)
+
 }
 
 
@@ -71,7 +79,6 @@ checkClusterability <- function(standards){
 }
 
 ##' Visualize the clusters according to pvalue thresholds
-##'
 ##' @param dat the standardize data returned by the function [checkClusterability()]
 ##' @param clust_model the clustering model obtained with dat.
 ##' @param adjusted_pValues vector of the adjusted pvalues obtained for each protein with
@@ -100,12 +107,15 @@ visualizeClusters <- function(dat, clust_model, adjusted_pValues, FDR_th = NULL,
 
     str_try <- stringr::str_glue("<{FDR_th}")
     str_max <- stringr::str_glue(">{max(FDR_th)}")
-    dat$FDR_threshold <- cut(adjusted_pValues, c(-Inf,FDR_th,Inf), c(str_try, str_max))
+
+    dat$FDR_threshold <- cut(adjusted_pValues, breaks = c(-Inf,FDR_th,Inf), labels = c(str_try, str_max))
     desc_th <- FDR_th[order(FDR_th, decreasing = TRUE)]
     str_desc <- stringr::str_glue("<{desc_th}")
+
     dat$FDR_threshold <- factor(dat$FDR_threshold,
                                 levels = c(str_max, str_desc))
 
+    dat$adjusted_pvalues <- adjusted_pValues
     if(methods::is(clust_model, "factor")){
         dat$cluster <- clust_model
     }else if(methods::is(clust_model, "kmeans")){
@@ -123,13 +133,16 @@ visualizeClusters <- function(dat, clust_model, adjusted_pValues, FDR_th = NULL,
         return(NULL)
     }
     melted <- reshape2::melt(dat,
-                             id.vars = c("value", "cluster", "FDR_threshold"),
+                             id.vars = c("value", "cluster", "adjusted_pvalues", "FDR_threshold"),
                              value.name = "intensity",
                              variable.name = "Condition")
     palette2use <- c("#DEDEDE","#FFC125", "#FF8C00", "#CD3700", "#8B0000")
-    names(palette2use) <- levels(dat$FDR_threshold)
+
+    names(palette2use) <- levels(melted$FDR_threshold)
+
     colScale <- ggplot2::scale_colour_manual(name = "FDR threshold",
                                              values = palette2use)
+
 
     return(ggplot2::ggplot(data = melted,
                            ggplot2::aes(x = Condition, y = intensity, group = value, colour = FDR_threshold)) +
@@ -217,7 +230,7 @@ visualizeClusters <- function(dat, clust_model, adjusted_pValues, FDR_th = NULL,
 ##'
 ##' @examples
 ##' test_anova <- wrapperClassic1wayAnova(fibrose)
-##' test_clust_pipeline <- runClustering(obj = fibrose,
+##' test_clust_pipeline <- wrapperRunClustering(obj = fibrose,
 ##'                                      clustering_method = "affinityPropReduced", adjusted_pvals = test_anova$P_Value$anova1way)
 wrapperRunClustering <- function(obj, clustering_method, conditions_order = NULL, k_clusters = NULL, adjusted_pvals, ttl = "", subttl = "", FDR_thresholds = NULL){
     res <- list("model" = NULL, "ggplot" = NULL)
@@ -240,12 +253,15 @@ wrapperRunClustering <- function(obj, clustering_method, conditions_order = NULL
             return(NULL)
         }
     }
+    print("average and standardization step...")
     standardized_means <- standardiseMeanIntensities(obj)
-
+    standardized_means <- na.omit(standardized_means)
+    print("average and standardization step...done")
     if(clustering_method == "affinityProp"){
         res$model <- apcluster::apcluster(apcluster::negDistMat(r=2), standardized_means[,-1])
 
     }else if(clustering_method == "affinityPropReduced"){
+        print("running affinity propagation reduced algorithm")
         res$model <- apcluster::apcluster(apcluster::negDistMat(r=2), standardized_means[,-1], q=0)
     }else if(clustering_method == "kmeans"){
         if(is.null(k_clusters)){
