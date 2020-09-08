@@ -1,7 +1,7 @@
 
 #' @title Builds a violinplot from a dataframe
 #' 
-#' @param qData xxx
+#' @param obj xxx
 #' 
 #' @param conds xxx
 #' 
@@ -20,12 +20,12 @@
 #' @seealso \code{\link{densityPlotD}}
 #' 
 #' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' utils::data(Exp1_R25_prot, package='DAPARdata')
+#' obj <- Exp1_R25_prot
 #' library(vioplot)
-#' legend <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-#' conds <- Biobase::pData(Exp1_R25_pept)[["Condition"]]
-#' key <- "Protein_group_IDs"
-#' violinPlotD(Biobase::exprs(Exp1_R25_pept), conds=legend, keyId=key, palette=c(rep('blue',3), rep('green',3)),subset.view=1:10)
+#' legend <- conds <- Biobase::pData(obj)$Condition
+#' key <- "Protein_IDs"
+#' violinPlotD(obj, conds=legend, keyId=key, legend=legend, palette=c(rep('blue',3), rep('green',3)),subset.view=1:10)
 #' 
 #' @importFrom vioplot vioplot
 #' 
@@ -37,17 +37,20 @@
 #' 
 #' @export
 #' 
-violinPlotD <- function(qData, conds, keyId, legend=NULL, palette = NULL, subset.view=NULL){
+violinPlotD <- function(obj, conds, keyId, legend=NULL, palette = NULL, subset.view=NULL){
   
   
   graphics::plot.new()
   
-  if (is.null(qData)) {
+  if (is.null(obj)) {
     warning('The dataset in NULL and cannot be shown')
     return(NULL)
-  }
+  } else 
+    qData <- Biobase::exprs(obj)
   
   
+    
+    
   if(missing(conds))
     stop("'conds' is missing.")
   
@@ -60,11 +63,16 @@ violinPlotD <- function(qData, conds, keyId, legend=NULL, palette = NULL, subset
   if (!is.null(subset.view)) {
     if (is.null(keyId)|| missing(keyId))
       stop("'keyId' is missing.")
+    else {
+      if (!grep(keyId, colnames(Biobase::fData(obj))))
+        stop("'keyId' does not belong to metadata")
+    }
   }
   
   
   #palette <- BuildPalette(conds, palette)
-  if (is.null(palette)){palette <- rep("#FFFFFF", ncol(qData))
+  if (is.null(palette)){
+    palette <- rep("#FFFFFF", ncol(qData))
   } else {
     if (length(palette) != ncol(qData)){
       warning("The color palette has not the same dimension as the number of samples")
@@ -75,7 +83,8 @@ violinPlotD <- function(qData, conds, keyId, legend=NULL, palette = NULL, subset
   graphics::plot.window(xlim=c(0,ncol(qData)+1),
                         ylim=c(min(na.omit(qData)),max(na.omit(qData)))
   )
-  title( ylab="Log (intensity)")
+  title( ylab="Log (intensity)",
+         xlab = 'Samples')
   
   for (i in 1:ncol(qData)) {
     vioplot::vioplot(na.omit(qData[,i]), col = palette[i], add=TRUE, at=i)
@@ -100,7 +109,7 @@ violinPlotD <- function(qData, conds, keyId, legend=NULL, palette = NULL, subset
       )
     }
     
-    graphics::mtext("Samples",side=1,line=6+length(colnames(legend)), cex.lab=1, las=1)
+    #graphics::mtext("Samples",side=1,line=6+length(colnames(legend)), cex.lab=1, las=1)
   }
   
   # Display of rows to highlight (index of row in subset.view) 
@@ -117,7 +126,14 @@ violinPlotD <- function(qData, conds, keyId, legend=NULL, palette = NULL, subset
       }
       graphics::points(y=qData[i,ncol(qData)],x=ncol(qData),pch=16,col=pal[n])
     }
-    graphics::legend("topleft",legend=idVector[subset.view],lty=1,lwd=2,col=pal,pch=16,bg="transparent",bty="n")
+    graphics::legend("topleft",
+                     legend=Biobase::fData(obj)[subset.view, keyId],
+                     lty=1,
+                     lwd=2,
+                     col=pal,
+                     pch=16,
+                     bg="transparent",
+                     bty="n")
   }
   
 }

@@ -6,7 +6,7 @@
 #' 
 #' @export
 #'
-normalizeMethodsWithTracking.dapar <- function(withTracking = FALSE){
+normalizeMethods.dapar <- function(withTracking = FALSE){
   if (withTracking)
     c("SumByColumns", "QuantileCentering", "MeanCentering")
 else 
