@@ -20,7 +20,7 @@ the pvalue of all the comparisons (one column for one comparison). The names of 
 are identical and correspond to the description of the comparison.
 }
 \description{
-This function is xxxx
+xxxx
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')

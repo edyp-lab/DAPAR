@@ -12,7 +12,7 @@ limmaCompleteTest(qData, sTab, comp.type = "OnevsOne")
 \item{sTab}{A dataframe of experimental design (pData()).}
 
 \item{comp.type}{A string that corresponds to the type of comparison. 
-Values are: 'OnevsOne' and 'OnevsAll'; default is 'OnevsOne'.}
+Values are: 'anova1way', 'OnevsOne' and 'OnevsAll'; default is 'OnevsOne'.}
 }
 \value{
 A list of two dataframes : logFC and P_Value. The first one contains
@@ -26,13 +26,11 @@ This function is a limmaCompleteTest
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept
-keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
-obj <- mvFilterFromIndices(obj, keepThat)
 qData <- Biobase::exprs(obj)
 sTab <- Biobase::pData(obj)
-limma <- limmaCompleteTest(qData,sTab)
+limma <- limmaCompleteTest(qData, sTab, comp.type='anova1way')
 
 }
 \author{
-Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
+Hélène Borges, Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
 }

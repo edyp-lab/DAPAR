@@ -1,7 +1,7 @@
 Package: DAPAR
 Type: Package
 Title: Tools for the Differential Analysis of Proteins Abundance with R
-Version: 1.21.1
+Version: 1.21.2
 Date: 2020-09-07
 Authors@R: c(person(given = "Samuel", family = "Wieczorek",
             email = "samuel.wieczorek@cea.fr",
@@ -15,11 +15,11 @@ Authors@R: c(person(given = "Samuel", family = "Wieczorek",
             person(given = "Vasile-Cosmin", family ="Lazar",
             email = "vcosminlazar@gmail.com",
     role = "ctb"),
-            person(given = "Alexia", family ="Dorffer",
-            email = "alexia.dorffer@gmail.com",
-    role = "ctb"),
 		person(given = "Enora", family ="Fremy",
             email = "enora.fremy@cea.fr",
+    role = "ctb"),
+    	person(given = "Helene", family ="Borges",
+            email = "helen.borges@cea.fr",
     role = "ctb"))
 Author: Samuel Wieczorek [cre,aut],
     Florence Combes [aut],
@@ -27,6 +27,7 @@ Author: Samuel Wieczorek [cre,aut],
     Cosmin Lazar [ctb],
     Alexia Dorffer [ctb],
     Anais Courtier [ctb],
+    Helene Borges [ctb],
     Enora Fremy [ctb]
 Maintainer: Samuel Wieczorek <samuel.wieczorek@cea.fr>
 Description: This package contains a collection of functions for the
@@ -39,10 +40,10 @@ Imports: Biobase, MSnbase, tibble, RColorBrewer,stats,preprocessCore, Cairo,png,
         lattice,reshape2,gplots,pcaMethods,ggplot2,
         limma,knitr,tmvtnorm,norm,impute, stringr,
         grDevices, graphics, openxlsx, utils, cp4p
-        (>= 0.3.5), scales, Matrix, vioplot, imp4p (>= 0.8),
+        (>= 0.3.5), scales, Matrix, vioplot, imp4p (>= 0.8), forcats, methods, 
         highcharter, DAPARdata (>= 1.18.0), siggenes, graph, lme4, readxl,
-        clusterProfiler, dplyr, tidyr,AnnotationDbi, tidyverse, vsn, FactoMineR, factoextra,
-        visNetwork, foreach, parallel, doParallel, igraph, dendextend
+        clusterProfiler, dplyr, tidyr,AnnotationDbi, tidyverse, vsn, FactoMineR, factoextra, multcomp, purrr,
+        visNetwork, foreach, parallel, doParallel, igraph, dendextend, Mfuzz, apcluster, diptest, cluster
 biocViews: Proteomics, Normalization, Preprocessing, MassSpectrometry,
         QualityControl, GO, DataImport
 NeedsCompilation: no
