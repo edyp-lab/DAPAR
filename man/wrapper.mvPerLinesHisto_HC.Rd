@@ -19,13 +19,44 @@ drawn above the bars.}
 A histogram
 }
 \description{
+#' This method is a wrapper to plots from a \code{MSnSet} object a 
+#' histogram which represents the distribution of the 
+#' number of missing values (NA) per lines (ie proteins).
+#' 
+#' @title Histogram of missing values per lines from an object 
+#' \code{MSnSet}
+#' 
+#' @param obj An object of class \code{MSnSet}.
+#' 
+#' @param indLegend The indice of the column name's in \code{pData()} tab .
+#' 
+#' @param showValues A logical that indicates wether numeric values should be
+#' drawn above the bars.
+#' 
+#' @return A histogram
+#' 
+#' @author Alexia Dorffer
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' wrapper.mvPerLinesHisto(Exp1_R25_pept)
+#' 
+#' @export
+#' 
+#' @importFrom Biobase pData exprs fData
+#' 
+wrapper.mvPerLinesHisto <- function(obj, indLegend="auto", showValues=FALSE){
+  qData <- Biobase::exprs(obj)
+  samplesData <- Biobase::pData(obj)
+  mvPerLinesHisto(qData, samplesData, indLegend, showValues)
+}
 This method is a wrapper to plots from a \code{MSnSet} object a 
 histogram which represents the distribution of the 
 number of missing values (NA) per lines (ie proteins).
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-wrapper.mvPerLinesHisto(Exp1_R25_pept)
+wrapper.mvPerLinesHisto_HC(Exp1_R25_pept)
 
 }
 \author{

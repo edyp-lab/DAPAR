@@ -53,7 +53,7 @@ else
 #'
 wrapper.normalizeD <- function(obj, method, withTracking=FALSE, ...){
 
-  
+
   if (!(method %in% normalizeMethods.dapar(withTracking))){
     stop("'method' is not correct")
   }

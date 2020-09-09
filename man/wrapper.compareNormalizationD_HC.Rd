@@ -32,6 +32,53 @@ the columns int the data.frame qDataBefore.}
 A plot
 }
 \description{
+#' Wrapper to the function that plot to compare the quantitative proteomics 
+#' data before and after normalization
+#' 
+#' @title Builds a plot from a dataframe
+#' 
+#' @param objBefore A dataframe that contains quantitative data before 
+#' normalization.
+#' 
+#' @param objAfter A dataframe that contains quantitative data after 
+#' normalization.
+#' 
+#' @param conds A vector of the conditions (one condition per sample).
+#' 
+#' @param indData2Show A vector of the indices of the columns to show in the 
+#' plot. The indices are those of indices of 
+#' the columns int the data.frame qDataBefore.
+#' 
+#' @param ... arguments for palette
+#' 
+#' @return A plot
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+#' objAfter <- wrapper.normalizeD(obj=Exp1_R25_pept, method="QuantileCentering",conds = conds, type="within conditions")
+#' wrapper.compareNormalizationD(Exp1_R25_pept, objAfter, conds)
+#' 
+#' @importFrom Biobase exprs pData
+#' 
+#' @export
+#' 
+#' @importFrom Biobase exprs fData pData
+#' 
+wrapper.compareNormalizationD <- function(objBefore, objAfter, 
+                                          conds=NULL,
+                                          indData2Show=NULL,
+                                          ...){
+  
+  qDataBefore <- Biobase::exprs(objBefore)
+  qDataAfter <- Biobase::exprs(objAfter)
+  if (is.null(conds)){
+    conds <- Biobase::pData(objBefore)[,"Condition"]}
+  
+  compareNormalizationD(qDataBefore, qDataAfter, conds, indData2Show, ...)
+}
 Wrapper to the function that plot to compare the quantitative proteomics 
 data before and after normalization. Same as the function \link{wrapper.compareNormalizationD}
 but uses the package \code{highcharter}

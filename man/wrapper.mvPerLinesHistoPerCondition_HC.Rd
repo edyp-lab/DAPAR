@@ -5,20 +5,10 @@
 \title{Bar plot of missing values per lines and per conditions from an 
 object \code{MSnSet}}
 \usage{
-wrapper.mvPerLinesHistoPerCondition_HC(
-  obj,
-  indLegend = "auto",
-  showValues = FALSE,
-  ...
-)
+wrapper.mvPerLinesHistoPerCondition_HC(obj, ...)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
-
-\item{indLegend}{The indice of the column name's in \code{pData()} tab .}
-
-\item{showValues}{A logical that indicates wether numeric values should be
-drawn above the bars.}
 
 \item{...}{xxx}
 }
