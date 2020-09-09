@@ -28,7 +28,6 @@
 #' }
 
 #' Builds a correlation matrix based on a \code{MSnSet} object. 
-#' Same as the function \code{\link{wrapper.corrMatrixD}} but uses the package \code{highcharter}
 #' 
 #' @title Displays a correlation matrix of the quantitative data of the
 #' \code{exprs()} table

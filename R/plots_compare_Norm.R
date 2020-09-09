@@ -211,10 +211,6 @@ wrapper.compareNormalizationD_HC <- function(objBefore, objAfter,
 #' @param conds A vector of the conditions (one condition 
 #' per sample).
 #' 
-#' @param indData2Show A vector of the indices of the columns to show in 
-#' the plot. The indices are those of indices of 
-#' the columns int the data.frame qDataBefore.
-#' 
 #' @param palette xxx
 #' 
 #' @param subset.view xxx

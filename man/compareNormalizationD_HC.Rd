@@ -34,10 +34,6 @@ This number must be less or equal to the size
 of the dataset. If it is less than it, it is a random selection}
 
 \item{type}{scatter or line}
-
-\item{indData2Show}{A vector of the indices of the columns to show in 
-the plot. The indices are those of indices of 
-the columns int the data.frame qDataBefore.}
 }
 \value{
 A plot

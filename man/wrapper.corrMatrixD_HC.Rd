@@ -44,8 +44,7 @@ wrapper.corrMatrixD <- function(obj, rate=5){
   samplesData <- Biobase::pData(obj)
   corrMatrixD(qData, samplesData, rate)
 }
-Builds a correlation matrix based on a \code{MSnSet} object. 
-Same as the function \code{\link{wrapper.corrMatrixD}} but uses the package \code{highcharter}
+Builds a correlation matrix based on a \code{MSnSet} object.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')

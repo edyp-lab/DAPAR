@@ -13,7 +13,7 @@
 #' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
 #' ll <- get.pep.prot.cc(X)
 #' 
-#' @import Matrix
+#' @importFrom Matrix %&%
 #' @importFrom graph graphAM connComp 
 #' 
 #' @export

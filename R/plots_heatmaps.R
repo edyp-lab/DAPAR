@@ -206,6 +206,7 @@ heatmapD <- function(qData, conds, distance="euclidean", cluster="complete", den
 #' @export
 #' 
 #' @importFrom grDevices heat.colors
+#' @importFrom graphics image
 #' 
 heatmap.DAPAR <- 
   function (x, 
@@ -272,7 +273,7 @@ heatmap.DAPAR <-
     x <- t(x)
     
     
-    image(1:nc, 1:nr, x, xlim = 0.5 + c(0, nc), ylim = 0.5 + 
+    graphics::image(1:nc, 1:nr, x, xlim = 0.5 + c(0, nc), ylim = 0.5 + 
             c(0, nr), axes = FALSE, xlab = "", ylab = "", col = col, 
           breaks = breaks)
     
@@ -330,7 +331,7 @@ heatmap.DAPAR <-
       max.raw <- max.breaks
       
       z <- seq(min.raw, max.raw, by = min(diff(breaks)/100))
-      image(z = matrix(z, ncol = 1), col = col, breaks = tmpbreaks, 
+      graphics::image(z = matrix(z, ncol = 1), col = col, breaks = tmpbreaks, 
             xaxt = "n", yaxt = "n")
       par(usr = c(0, 1, 0, 1))
       lv <- pretty(breaks)
