@@ -2,7 +2,7 @@
 #' 
 #' @param withTracking xxx
 #' 
-#' @name normalizeMethodsWithTracking.dapar
+#' @name normalizeMethods.dapar
 #' 
 #' @export
 #'
@@ -54,7 +54,7 @@ else
 wrapper.normalizeD <- function(obj, method, withTracking=FALSE, ...){
 
   
-  if (!(method %in% normalizeMethodsWithTracking.dapar())){
+  if (!(method %in% normalizeMethods.dapar(withTracking))){
     stop("'method' is not correct")
   }
   

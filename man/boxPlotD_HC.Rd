@@ -5,7 +5,7 @@
 \title{Builds a boxplot from a dataframe using the library \code{highcharter}}
 \usage{
 boxPlotD_HC(
-  qData,
+  obj,
   conds,
   keyId = NULL,
   legend = NULL,
@@ -14,7 +14,7 @@ boxPlotD_HC(
 )
 }
 \arguments{
-\item{qData}{Numeric matrix}
+\item{obj}{Numeric matrix}
 
 \item{conds}{xxx}
 
@@ -33,11 +33,11 @@ A boxplot
 Boxplot for quantitative proteomics data using the library \code{highcharter}
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-qData <- Biobase::exprs((Exp1_R25_pept))
-conds <- legend <- Biobase::pData(Exp1_R25_pept)[["Condition"]]
-key <- "Protein_group_IDs"
-boxPlotD_HC(qData, conds, key, legend, c(rep('blue',3), rep('green',3)), 1:10)
+utils::data(Exp1_R25_prot, package='DAPARdata')
+obj <- Exp1_R25_prot
+conds <- legend <- Biobase::pData(obj)$Condition
+key <- "Protein_IDs"
+boxPlotD_HC(obj, conds, key, legend, c(rep('blue',3), rep('green',3)), 1:10)
 
 }
 \author{

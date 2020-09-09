@@ -5,7 +5,7 @@
 \title{Builds a violinplot from a dataframe}
 \usage{
 violinPlotD(
-  qData,
+  obj,
   conds,
   keyId,
   legend = NULL,
@@ -14,7 +14,7 @@ violinPlotD(
 )
 }
 \arguments{
-\item{qData}{xxx}
+\item{obj}{xxx}
 
 \item{conds}{xxx}
 
@@ -33,12 +33,12 @@ A violinplot
 Builds a violinplot from a dataframe
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
+utils::data(Exp1_R25_prot, package='DAPARdata')
+obj <- Exp1_R25_prot
 library(vioplot)
-legend <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-conds <- Biobase::pData(Exp1_R25_pept)[["Condition"]]
-key <- "Protein_group_IDs"
-violinPlotD(Biobase::exprs(Exp1_R25_pept), conds=legend, keyId=key, palette=c(rep('blue',3), rep('green',3)),subset.view=1:10)
+legend <- conds <- Biobase::pData(obj)$Condition
+key <- "Protein_IDs"
+violinPlotD(obj, conds=legend, keyId=key, legend=legend, palette=c(rep('blue',3), rep('green',3)),subset.view=1:10)
 
 }
 \seealso{
