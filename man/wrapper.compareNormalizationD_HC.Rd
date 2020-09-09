@@ -8,7 +8,6 @@ wrapper.compareNormalizationD_HC(
   objBefore,
   objAfter,
   condsForLegend = NULL,
-  indData2Show = NULL,
   ...
 )
 }
@@ -21,10 +20,6 @@ normalization.}
 
 \item{condsForLegend}{A vector of the conditions (one condition 
 per sample).}
-
-\item{indData2Show}{A vector of the indices of the columns to show in the 
-plot. The indices are those of indices of 
-the columns int the data.frame qDataBefore.}
 
 \item{...}{arguments for palette}
 }
@@ -80,8 +75,7 @@ wrapper.compareNormalizationD <- function(objBefore, objAfter,
   compareNormalizationD(qDataBefore, qDataAfter, conds, indData2Show, ...)
 }
 Wrapper to the function that plot to compare the quantitative proteomics 
-data before and after normalization. Same as the function \link{wrapper.compareNormalizationD}
-but uses the package \code{highcharter}
+data before and after normalization.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')

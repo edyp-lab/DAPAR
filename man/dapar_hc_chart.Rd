@@ -26,9 +26,9 @@ Customised resetZoomButton of highcharts plots
 \examples{
 library("highcharter")
 hc <- highchart() 
-hc_chart(hc,type = "line") 
-hc_add_series(hc,data = c(29, 71, 40))
-dapar_hc_chart(hc,filename='foo')
+hc_chart(hc) 
+hc_add_series(hc, data = c(29, 71, 40))
+dapar_hc_chart(hc, chartType='line')
 
 }
 \author{

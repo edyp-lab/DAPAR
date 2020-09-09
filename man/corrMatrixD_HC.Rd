@@ -81,8 +81,7 @@ corrMatrixD <- function(qData, samplesData, gradientRate = 5){
 }
 }
 \details{
-Correlation matrix based on a \code{MSnSet} object. Same as the 
-function \link{corrMatrixD} but uses the package \code{highcharter}
+Correlation matrix based on a \code{MSnSet} object.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')

@@ -399,9 +399,9 @@ dapar_hc_ExportMenu <- function(hc, filename){
 #' @examples
 #' library("highcharter")
 #' hc <- highchart() 
-#' hc_chart(hc,type = "line") 
-#' hc_add_series(hc,data = c(29, 71, 40))
-#' dapar_hc_chart(hc,filename='foo')
+#' hc_chart(hc) 
+#' hc_add_series(hc, data = c(29, 71, 40))
+#' dapar_hc_chart(hc, chartType='line')
 #' 
 #' @export
 #' 
@@ -419,4 +419,5 @@ dapar_hc_chart <- function(hc,  chartType, zoomType="None", width=0, height=0){
                  align= 'left',
                  verticalAlign = 'top')
              ))
+  hc
 }

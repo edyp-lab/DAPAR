@@ -122,8 +122,7 @@ wrapper.corrMatrixD_HC <- function(obj, rate=0.5, showDataLabels=TRUE){
 
 
 
-#' Correlation matrix based on a \code{MSnSet} object. Same as the 
-#' function \link{corrMatrixD} but uses the package \code{highcharter}
+#' Correlation matrix based on a \code{MSnSet} object.
 #' 
 #' @title Displays a correlation matrix of the quantitative data of the
 #' \code{exprs()} table.
