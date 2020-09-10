@@ -36,7 +36,7 @@
 #' 
 #' @param rate A float that defines the gradient of colors.
 #' 
-#' @param showDataLabels xxx
+#' @param showValues xxx
 #' 
 #' @return A colored correlation matrix
 #' 
@@ -51,11 +51,11 @@
 #' 
 #' @export
 #' 
-wrapper.corrMatrixD_HC <- function(obj, rate=0.5, showDataLabels=TRUE){
+wrapper.corrMatrixD_HC <- function(obj, rate=0.5, showValues=TRUE){
   qData <- Biobase::exprs(obj)
   samplesData <- Biobase::pData(obj)
   data <- cor(qData,use = 'pairwise.complete.obs')
-  corrMatrixD_HC(data,samplesData, rate, showDataLabels)
+  corrMatrixD_HC(data,samplesData, rate, showValues)
 }
 
 #' 
@@ -134,7 +134,7 @@ wrapper.corrMatrixD_HC <- function(obj, rate=0.5, showDataLabels=TRUE){
 #' @param rate The rate parameter to control the exponential law for 
 #' the gradient of colors
 #' 
-#' @param showDataLabels xxx
+#' @param showValues xxx
 #' 
 #' @return A colored correlation matrix
 #' 
@@ -155,7 +155,7 @@ wrapper.corrMatrixD_HC <- function(obj, rate=0.5, showDataLabels=TRUE){
 #' 
 #' @export
 #' 
-corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5, showDataLabels=TRUE) {
+corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5, showValues=TRUE) {
   
   df <- as.data.frame(object)
   
@@ -202,7 +202,7 @@ corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5, showDataLabels
       series = list(
         boderWidth = 0,
         dataConditions = list(enabled = TRUE),
-        dataLabels = list(enabled = showDataLabels)
+        dataLabels = list(enabled = showValues)
       )) %>% 
     hc_tooltip(formatter = fntltp) %>% 
     hc_legend(align = "right", layout = "vertical",

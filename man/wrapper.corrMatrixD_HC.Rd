@@ -5,14 +5,14 @@
 \title{Displays a correlation matrix of the quantitative data of the
 \code{exprs()} table}
 \usage{
-wrapper.corrMatrixD_HC(obj, rate = 0.5, showDataLabels = TRUE)
+wrapper.corrMatrixD_HC(obj, rate = 0.5, showValues = TRUE)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
 
 \item{rate}{A float that defines the gradient of colors.}
 
-\item{showDataLabels}{xxx}
+\item{showValues}{xxx}
 }
 \value{
 A colored correlation matrix

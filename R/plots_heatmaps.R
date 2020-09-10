@@ -32,8 +32,6 @@
 #' @importFrom Biobase exprs pData
 #' 
 #' @export
-#' 
-#' @importFrom Biobase exprs fData pData
 #'  
 wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete", 
                               dendro = FALSE){

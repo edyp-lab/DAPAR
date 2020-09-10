@@ -5,7 +5,7 @@
 \title{Displays a correlation matrix of the quantitative data of the
 \code{exprs()} table.}
 \usage{
-corrMatrixD_HC(object, samplesData = NULL, rate = 0.5, showDataLabels = TRUE)
+corrMatrixD_HC(object, samplesData = NULL, rate = 0.5, showValues = TRUE)
 }
 \arguments{
 \item{object}{The result of the \code{cor} function.}
@@ -16,7 +16,7 @@ columns to the meta-data for those samples.}
 \item{rate}{The rate parameter to control the exponential law for 
 the gradient of colors}
 
-\item{showDataLabels}{xxx}
+\item{showValues}{xxx}
 }
 \value{
 A colored correlation matrix
