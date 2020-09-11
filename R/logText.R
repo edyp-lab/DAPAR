@@ -52,7 +52,10 @@ getTextForFiltering <- function(l.params){
   txt <- paste(txt,"<li>Filter type: ", l.params$mvFilterType,"</li>")
   
   if (! (l.params$mvFilterType %in% c("None", "EmptyLines"))){
-    txt <- paste(txt,"<li>Minimal nb of values: ", l.params$mvThNA,"</li>")
+    if (l.params$val_vs_percent == 'Value')
+      txt <- paste(txt,"<li>Minimal nb of values: ", l.params$mvThNA,"</li>")
+    else if (l.params$val_vs_percent == 'Percentage')
+      txt <- paste(txt,"<li>Minimal % of values: ", l.params$mvThNA_percent,"</li>")
     }
   
   if (!is.null(l.params$stringFilter.df) && nrow(l.params$stringFilter.df) > 1){
