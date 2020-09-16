@@ -11,7 +11,7 @@
 #' @author Samuel Wieczorek
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#'  obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
+#' obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
 #' res.pca <- wrapper.pca(obj)
 #' 
 #' @importFrom FactoMineR PCA
@@ -990,11 +990,11 @@ wrapper.corrMatrixD <- function(obj, rate=5){
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' wrapper.corrMatrixD_HC(Exp1_R25_pept)
-wrapper.corrMatrixD_HC <- function(obj, rate=0.5){
+wrapper.corrMatrixD_HC <- function(obj, rate=0.5, showValues=TRUE){
   qData <- Biobase::exprs(obj)
   samplesData <- Biobase::pData(obj)
   data <- cor(qData,use = 'pairwise.complete.obs')
-  corrMatrixD_HC(data,samplesData, rate)
+  corrMatrixD_HC(data,samplesData, rate, showValues)
 }
 
 
@@ -1060,16 +1060,17 @@ corrMatrixD <- function(qData, samplesData, gradientRate = 5){
 #' @return A colored correlation matrix
 #' @author Samuel Wieczorek
 #' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' qData <- Biobase::exprs(Exp1_R25_pept)
-#' samplesData <- Biobase::pData(Exp1_R25_pept)
+#' utils::data(Exp1_R25_prot, package='DAPARdata')
+#' qData <- Biobase::exprs(Exp1_R25_prot)
+#' samplesData <- Biobase::pData(Exp1_R25_prot)
 #' res <- cor(qData,use = 'pairwise.complete.obs')
 #' corrMatrixD_HC(res, samplesData)
 #' 
 #' @importFrom dplyr tbl_df mutate left_join tibble
 #' @importFrom tidyr gather
+#' @import highcharter
 #' 
-corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
+corrMatrixD_HC <- function(object, samplesData = NULL, rate = 0.5, showValues = TRUE) {
   
   df <- as.data.frame(object)
   
@@ -1116,7 +1117,7 @@ corrMatrixD_HC <- function(object,samplesData = NULL, rate = 0.5) {
       series = list(
         boderWidth = 0,
         dataConditions = list(enabled = TRUE),
-        dataLabels = list(enabled = TRUE)
+        dataLabels = list(enabled = showValues)
       )) %>% 
     hc_tooltip(formatter = fntltp) %>% 
     hc_legend(align = "right", layout = "vertical",
