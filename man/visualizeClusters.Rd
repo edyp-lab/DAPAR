@@ -2,7 +2,7 @@
 % Please edit documentation in R/clustering.R
 \name{visualizeClusters}
 \alias{visualizeClusters}
-\title{Visualize the clusters according to pvalue thresholds}
+\title{Visualization of clusters according to pvalue thresholds}
 \usage{
 visualizeClusters(
   dat,
@@ -33,15 +33,18 @@ For the sake of readability, a maximum of 4 values can be specified.}
 a ggplot object
 }
 \description{
-Visualize the clusters according to pvalue thresholds
+Visualization of clusters according to pvalue thresholds
 }
 \examples{
-test_anova <- wrapperClassic1wayAnova(fibrose)
-vizu <- visualizeClusters(dat = standardized_means,
-                          clust_model = km_model,
-                          adjusted_pValues = test_anova$P_Value$anova1way,
-                          FDR_th = c(0.001,0.005,0.01,0.05),
-                          ttl = "Clustering of protein profiles")
+utils::data(Exp1_R25_prot, package='DAPARdata')
+obj <- Exp1_R25_prot[1:1000]
+keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+obj <- mvFilterFromIndices(obj, keepThat)
+standards <- standardiseMeanIntensities(obj)
+anovatest <- wrapperClassic1wayAnova(obj)
+standards_only <- dplyr::select_if(standards, is.numeric)
+model <- kmeans(standards_only, centers = 3, nstart = 25)
+vizu <- visualizeClusters(dat = standards, clust_model = model, adjusted_pValues = anovatest$P_Value$anova_1way_pval)
                           
 }
 \author{

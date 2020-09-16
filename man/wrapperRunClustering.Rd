@@ -2,7 +2,7 @@
 % Please edit documentation in R/clustering.R
 \name{wrapperRunClustering}
 \alias{wrapperRunClustering}
-\title{Run a clustering pipeline of protein/peptide abundance profiles.}
+\title{Clustering pipeline of protein/peptide abundance profiles.}
 \usage{
 wrapperRunClustering(
   obj,
@@ -84,9 +84,13 @@ check the clusterability of the data and estimate a number of clusters using
   values. This should lead to a smaller number of final clusters.
 }
 \examples{
-test_anova <- wrapperClassic1wayAnova(fibrose)
-test_clust_pipeline <- wrapperRunClustering(obj = fibrose,
-                                 clustering_method = "affinityPropReduced", adjusted_pvals = test_anova$P_Value$anova1way)
+utils::data(Exp1_R25_prot, package='DAPARdata')
+obj <- Exp1_R25_prot[1:1000]
+keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+obj <- mvFilterFromIndices(obj, keepThat)
+test_anova <- wrapperClassic1wayAnova(obj)
+test_clust_pipeline <- wrapperRunClustering(obj = obj,
+                                 clustering_method = "affinityPropReduced", adjusted_pvals = test_anova$P_Value$anova_1way_pval)
 
 }
 \references{

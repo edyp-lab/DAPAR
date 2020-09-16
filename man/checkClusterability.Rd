@@ -4,7 +4,7 @@
 \alias{checkClusterability}
 \title{Prepare the data for subsequent clustering}
 \usage{
-checkClusterability(standards)
+checkClusterability(standards, b = 500)
 }
 \arguments{
 \item{standards}{a dataframe containing the standardized mean intensities}
@@ -22,7 +22,12 @@ package). Then the function checks that these data are clusterizable or not
  approach.
 }
 \examples{
-checkClusterability(standardized_means)
+utils::data(Exp1_R25_prot, package='DAPARdata')
+obj <- Exp1_R25_prot[1:1000]
+keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+obj <- mvFilterFromIndices(obj, keepThat)
+st <- standardiseMeanIntensities(obj)
+checkClusterability(st, b=100)
 
 }
 \author{

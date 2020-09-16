@@ -23,7 +23,9 @@ the array data in the same order than the condition column in the phenotype
 data).
 }
 \examples{
-standardiseMeanIntensities(my_expresion_set)
+utils::data(Exp1_R25_prot, package='DAPARdata')
+obj <- Exp1_R25_prot[1:1000]
+st <- standardiseMeanIntensities(obj)
 
 }
 \author{

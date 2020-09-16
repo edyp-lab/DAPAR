@@ -39,6 +39,16 @@ group), but also to midly unbalanced designs.
 The Dunnett's test compares a single control group to all other groups.
 Make sure the factor levels are properly ordered.
 }
+\examples{
+utils::data(Exp1_R25_prot, package='DAPARdata')
+obj <- Exp1_R25_prot[1:1000]
+keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+obj <- mvFilterFromIndices(obj, keepThat)
+anova_tests <- t(apply(exprs(obj),1, classic1wayAnova, conditions=as.factor(pData(obj)$Condition)))
+names(anova_tests) <- rownames(exprs(obj))
+pht <- postHocTest(aov_fits = anova_tests)
+
+}
 \author{
 Hélène Borges
 }

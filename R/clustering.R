@@ -7,13 +7,18 @@
 #' data).
 #'
 #' @param ESet_obj ExpressionSet object containing all the data
+#' 
 #' @return a dataframe in wide format providing (in the case of 3 or more
 #' conditions) the standardized means of intensities for each protein/peptide
 #' in each condition. If there are less than 3 conditions, standardization
 #' cannot be performed and only the means of intensities are returned.
+#' 
 #' @author Hélène Borges
+#' 
 #' @examples
-#' standardiseMeanIntensities(my_expresion_set)
+#' utils::data(Exp1_R25_prot, package='DAPARdata')
+#' obj <- Exp1_R25_prot[1:1000]
+#' st <- standardiseMeanIntensities(obj)
 #' 
 #' @export
 #' 
@@ -75,20 +80,38 @@ standardiseMeanIntensities <- function(ESet_obj){
 #' @author Hélène Borges
 #' 
 #' @examples
-#' checkClusterability(standardized_means)
+#' utils::data(Exp1_R25_prot, package='DAPARdata')
+#' obj <- Exp1_R25_prot[1:1000]
+#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' obj <- mvFilterFromIndices(obj, keepThat)
+#' st <- standardiseMeanIntensities(obj)
+#' checkClusterability(st, b=100)
 #' 
 #' @export
 #' 
 #' @importFrom cluster clusGap
 #' @importFrom diptest dip.test
 #' 
-checkClusterability <- function(standards){
+checkClusterability <- function(standards, b=500){
+    
+    if(methods::is(standards, "data.frame")){
+        # if there are columns with something other than numeric values
+        if(!is.numeric(standards)){
+            # then we only keep the columns with numeric values
+            standards <- dplyr::select_if(standards, is.numeric)
+        }
+        # we transform into a matrix to be usable by dip.test
+        standards <- as.matrix(standards)
+    }else if(!methods::is(standards, "matrix") || !methods::is(standards, "data.frame")){
+        stop("Input must be a matrix or a dataframe")
+    }
     # on vérifie la clusterabilité des données
     dip_res <- diptest::dip.test(x = standards)
+    print("dip test done")
     # d.power = 2 correspond au critère de Tibshirani. B = 500 permet d'avoir
     # des résultats stables d'une simulation à l'autre.
-    gap_cluster <- cluster::clusGap(standards, FUNcluster = kmeans, nstart = 20, K.max = 10, d.power = 2, B = 500)
-
+    gap_cluster <- cluster::clusGap(standards, FUNcluster = kmeans, nstart = 20, K.max = 10, d.power = 2, B = b)
+    
     return(list(
         "dip_test" = dip_res,
         "gap_cluster" = gap_cluster
@@ -97,7 +120,8 @@ checkClusterability <- function(standards){
 
 
 
-#' Visualize the clusters according to pvalue thresholds
+
+#' @title Visualization of clusters according to pvalue thresholds
 #' 
 #' @param dat the standardize data returned by the function [checkClusterability()]
 #' 
@@ -119,12 +143,15 @@ checkClusterability <- function(standards){
 #' @author Hélène Borges
 #' 
 #' @examples
-#' test_anova <- wrapperClassic1wayAnova(fibrose)
-#' vizu <- visualizeClusters(dat = standardized_means,
-#'                           clust_model = km_model,
-#'                           adjusted_pValues = test_anova$P_Value$anova1way,
-#'                           FDR_th = c(0.001,0.005,0.01,0.05),
-#'                           ttl = "Clustering of protein profiles")
+#' utils::data(Exp1_R25_prot, package='DAPARdata')
+#' obj <- Exp1_R25_prot[1:1000]
+#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' obj <- mvFilterFromIndices(obj, keepThat)
+#' standards <- standardiseMeanIntensities(obj)
+#' anovatest <- wrapperClassic1wayAnova(obj)
+#' standards_only <- dplyr::select_if(standards, is.numeric)
+#' model <- kmeans(standards_only, centers = 3, nstart = 25)
+#' vizu <- visualizeClusters(dat = standards, clust_model = model, adjusted_pValues = anovatest$P_Value$anova_1way_pval)
 #'                           
 #' @export
 #' 
@@ -135,7 +162,7 @@ checkClusterability <- function(standards){
 #'              
 visualizeClusters <- function(dat, clust_model, adjusted_pValues, FDR_th = NULL, ttl = "", subttl = ""){
     if(is.null(FDR_th)){
-        FDR_th <- c(0.001,0.005,0.01,0.05)
+        FDR_th <- c(0.001, 0.005, 0.01, 0.05)
     }else if(length(FDR_th) > 4){
         message("Too many FDR thresholds provided. Please do not exceed 4 values")
         return(NULL)
@@ -144,7 +171,7 @@ visualizeClusters <- function(dat, clust_model, adjusted_pValues, FDR_th = NULL,
     str_try <- stringr::str_glue("<{FDR_th}")
     str_max <- stringr::str_glue(">{max(FDR_th)}")
 
-    dat$FDR_threshold <- cut(adjusted_pValues, breaks = c(-Inf,FDR_th,Inf), labels = c(str_try, str_max))
+    dat$FDR_threshold <- cut(adjusted_pValues, breaks = c(-Inf, FDR_th, Inf), labels = c(str_try, str_max))
     desc_th <- FDR_th[order(FDR_th, decreasing = TRUE)]
     str_desc <- stringr::str_glue("<{desc_th}")
 
@@ -203,16 +230,19 @@ visualizeClusters <- function(dat, clust_model, adjusted_pValues, FDR_th = NULL,
 
 
 
-#' Run a clustering pipeline of protein/peptide abundance profiles.
+#' @title Clustering pipeline of protein/peptide abundance profiles.
 #'
 #' @description This function does all of the steps necessary to obtain a
 #' clustering model and its graph from average abundances of proteins/peptides.
 #'  It is possible to carry out either a kmeans model or an affinity
 #'  propagation model. See details for exact steps.
+#'  
 #' @param obj ExpressionSet or MSnSet object.
+#' 
 #' @param clustering_method character string. Three possible values are "kmeans",
 #' "affinityProp" and "affinityPropReduced. See the details section for more
 #' explanation.
+#' 
 #' @param k_clusters integer or NULL. Number of clusters to run the kmeans
 #' algorithm. If `clustering_method` is set to "kmeans" and this parameter is
 #' set to NULL, then a kmeans model will be realized with an optimal number of
@@ -222,9 +252,13 @@ visualizeClusters <- function(dat, clust_model, adjusted_pValues, FDR_th = NULL,
 #' levels in the phenotype data. Default value is NULL, which means that it is the
 #' order of the condition present in the phenotype data of "obj" which is
 #' taken to create the profiles.
+#' 
 #' @param adjusted_pvals vector of adjusted pvalues returned by the [wrapperClassic1wayAnova()]
+#' 
 #' @param ttl the title for the final plot
+#' 
 #' @param subttl the subtitle for the final plot
+#' 
 #' @param FDR_thresholds vector containing the different threshold
 #' values to be used to color the profiles according to their adjusted pvalue.
 #' The default value (NULL) generates 4 thresholds: [0.001, 0.005, 0.01, 0.05].
@@ -233,6 +267,7 @@ visualizeClusters <- function(dat, clust_model, adjusted_pValues, FDR_th = NULL,
 #'  0.01 and 0.05, and those> 0.05. The highest given value will be considered
 #'  as the threshold of insignificance, the profiles having a pvalue> this
 #'  threshold value will then be colored in gray.
+#'  
 #' @details The first step consists in averaging the abundances of
 #' proteins/peptides according to the different conditions defined in the
 #' phenotype data of the expressionSet / MSnSet. Then we standardize the data,
@@ -268,14 +303,19 @@ visualizeClusters <- function(dat, clust_model, adjusted_pValues, FDR_th = NULL,
 #' Frey, B. J. and Dueck, D. (2007) Clustering by passing messages between data points. *Science* 315, 972-976. DOI: \href{https://science.sciencemag.org/content/315/5814/972}{10.1126/science.1136800}
 #'
 #' @examples
-#' test_anova <- wrapperClassic1wayAnova(fibrose)
-#' test_clust_pipeline <- wrapperRunClustering(obj = fibrose,
-#'                                  clustering_method = "affinityPropReduced", adjusted_pvals = test_anova$P_Value$anova1way)
+#' utils::data(Exp1_R25_prot, package='DAPARdata')
+#' obj <- Exp1_R25_prot[1:1000]
+#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' obj <- mvFilterFromIndices(obj, keepThat)
+#' test_anova <- wrapperClassic1wayAnova(obj)
+#' test_clust_pipeline <- wrapperRunClustering(obj = obj,
+#'                                  clustering_method = "affinityPropReduced", adjusted_pvals = test_anova$P_Value$anova_1way_pval)
 #' 
 #' @export
 #' 
 #' @importFrom apcluster apcluster
 #' @importFrom forcats as_factor fct_relevel
+#' @importFrom stats kmeans
 #' 
 wrapperRunClustering <- function(obj, clustering_method, conditions_order = NULL, k_clusters = NULL, adjusted_pvals, ttl = "", subttl = "", FDR_thresholds = NULL){
     res <- list("model" = NULL, "ggplot" = NULL)
@@ -302,23 +342,26 @@ wrapperRunClustering <- function(obj, clustering_method, conditions_order = NULL
     standardized_means <- standardiseMeanIntensities(obj)
     standardized_means <- na.omit(standardized_means)
     print("average and standardization step...done")
+    
+    standards_only <- dplyr::select_if(standardized_means, is.numeric)
+    
     if(clustering_method == "affinityProp"){
-        res$model <- apcluster::apcluster(apcluster::negDistMat(r=2), standardized_means[,-1])
-
+        res$model <- apcluster::apcluster(apcluster::negDistMat(r=2), standards_only)
+        
     }else if(clustering_method == "affinityPropReduced"){
         print("running affinity propagation reduced algorithm")
-        res$model <- apcluster::apcluster(apcluster::negDistMat(r=2), standardized_means[,-1], q=0)
+        res$model <- apcluster::apcluster(apcluster::negDistMat(r=2), standards_only, q=0)
     }else if(clustering_method == "kmeans"){
         if(is.null(k_clusters)){
-            res <- list("model" = NULL, "dip" = dip_test, "ggplot" = NULL)
-            checked_means <- checkClusterability(standardized_means)
+            res <- list("model" = NULL, "dip" = NULL, "ggplot" = NULL)
+            checked_means <- checkClusterability(standards_only)
             res$dip <- checked_means$dip_test
             best_k <- checked_means$gap_cluster
-            res$model <- kmeans(standardized_means, centers = best_k, nstart = 25)
+            res$model <- kmeans(standards_only, centers = best_k, nstart = 25)
         }else if(k_clusters > 1){
             best_k <- k_clusters
-            res$model <- kmeans(standardized_means, centers = best_k, nstart = 25)
-        }else{ # correspond au cas k = 1 donc pas besoin de clustering
+            res$model <- kmeans(standards_only, centers = best_k, nstart = 25)
+        }else{ # corresponds to the case k = 1 so no need for clustering
             one_cluster <- as.factor(rep_len(1, nrow(standardized_means)))
             res$ggplot <- visualizeClusters(dat = standardized_means,
                                             clust_model = one_cluster,
@@ -329,7 +372,7 @@ wrapperRunClustering <- function(obj, clustering_method, conditions_order = NULL
             )
             return(res)
         }
-
+        
     }else{
         message("Wrong method given. Valid names are affinityProp, affinityPropReduced and kmeans.")
         return(NULL)

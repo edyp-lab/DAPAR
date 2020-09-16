@@ -29,7 +29,7 @@ wrapper.t_test_Complete <- function(obj,...){
     qData <- Biobase::exprs(obj)
     sTab <- pData(obj)
     
-    ttest <- compute.t.tests(qData,sTab=pData(obj),...)
+    ttest <- compute.t.tests(qData, sTab=pData(obj), ...)
     
     return (ttest)
 }
@@ -68,7 +68,7 @@ wrapper.t_test_Complete <- function(obj,...){
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' sTab <- Biobase::pData(obj)
 #' qData <- Biobase::exprs(obj)
-#' ttest <- compute.t.tests(qData,sTab ,"OnevsOne")
+#' ttest <- compute.t.tests(qData, sTab)
 #' 
 #' @export
 #' 

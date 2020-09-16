@@ -33,9 +33,8 @@ yes. There are two possible post-hoc tests: the Tukey Honest Significant Differe
 (specified as "TukeyHSD") and the Dunnett test (specified as "Dunnett").
 }
 \examples{
-require(DAPARdata)
-data(Exp1_R25_pept)
-obj <- Exp1_R25_pept[1:1000]
+utils::data(Exp1_R25_prot, package='DAPARdata')
+obj <- Exp1_R25_prot[1:1000]
 keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 obj <- mvFilterFromIndices(obj, keepThat)
 anovatest <- wrapperClassic1wayAnova(obj)

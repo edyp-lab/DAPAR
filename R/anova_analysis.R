@@ -10,6 +10,15 @@
 #' 
 #' @return A named vector containing all the different values of the aov model
 #' 
+#' @examples 
+#' utils::data(Exp1_R25_prot, package='DAPARdata')
+#' obj <- Exp1_R25_prot[1:1000]
+#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' obj <- mvFilterFromIndices(obj, keepThat)
+#' anova_tests <- t(apply(exprs(obj),1, classic1wayAnova, conditions=as.factor(pData(obj)$Condition)))
+#' 
+#' @importFrom stats aov
+#' 
 #' @export
 #' 
 classic1wayAnova <- function(current_line, conditions){
@@ -46,9 +55,8 @@ classic1wayAnova <- function(current_line, conditions){
 #' corresponding p-values.
 #' 
 #' @examples
-#' require(DAPARdata)
-#' data(Exp1_R25_pept)
-#' obj <- Exp1_R25_pept[1:1000]
+#' utils::data(Exp1_R25_prot, package='DAPARdata')
+#' obj <- Exp1_R25_prot[1:1000]
 #' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' anovatest <- wrapperClassic1wayAnova(obj)
@@ -94,7 +102,20 @@ wrapperClassic1wayAnova <- function(obj, with_post_hoc = "No", post_hoc_test = "
 #'
 #' @return a list of 2 dataframes containing the logFC values and pvalues for
 #' each comparison.
+#' 
 #' @author Hélène Borges
+#' 
+#' @examples 
+#' utils::data(Exp1_R25_prot, package='DAPARdata')
+#' obj <- Exp1_R25_prot[1:1000]
+#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' obj <- mvFilterFromIndices(obj, keepThat)
+#' anova_tests <- t(apply(exprs(obj),1, classic1wayAnova, conditions=as.factor(pData(obj)$Condition)))
+#' names(anova_tests) <- rownames(exprs(obj))
+#' tms <- lapply(anova_tests,
+#'              function(x) summary(multcomp::glht(x, linfct = multcomp::mcp(conditions = "Tukey")),
+#'                    test = multcomp::adjusted("none")))
+#' res <- formatPHResults(tms)
 #' 
 #' @export
 #' 
@@ -159,6 +180,15 @@ formatPHResults <- function(post_hoc_models_summaries){
 #' corresponding pvalues.
 #' 
 #' @author Hélène Borges
+#' 
+#' @examples 
+#' utils::data(Exp1_R25_prot, package='DAPARdata')
+#' obj <- Exp1_R25_prot[1:1000]
+#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' obj <- mvFilterFromIndices(obj, keepThat)
+#' anova_tests <- t(apply(exprs(obj),1, classic1wayAnova, conditions=as.factor(pData(obj)$Condition)))
+#' names(anova_tests) <- rownames(exprs(obj))
+#' pht <- postHocTest(aov_fits = anova_tests)
 #' 
 #' @export
 #' 
