@@ -174,14 +174,14 @@ getListNbValuesInLines <- function(obj, type="wholeMatrix"){
          allCond = {
                     tmp <- NULL
                     for (cond in unique(Biobase::pData(obj)$Condition)){
-                     tmp <- c(tmp, length(which(Biobase::pData(obj)$Condition== cond)))
+                     tmp <- c(tmp, length(which(Biobase::pData(obj)$Condition == cond)))
                   }
                   ll <- seq(0,min(tmp))
                   },
          atLeastOneCond = {
                    tmp <- NULL
                   for (cond in unique(Biobase::pData(obj)$Condition)){
-                       tmp <- c(tmp, length(which(Biobase::pData(obj)$Condition== cond)))
+                       tmp <- c(tmp, length(which(Biobase::pData(obj)$Condition == cond)))
                    }
                    ll <- seq(0,max(tmp))
                     }
