@@ -73,6 +73,8 @@ standardiseMeanIntensities <- function(ESet_obj){
 #'
 #' @param standards a dataframe containing the standardized mean intensities
 #' 
+#' @param b xxx
+#' 
 #' @return a list of 2 elements:
 #' * dip_test: the result of the clusterability of the data
 #' * gap_cluster: the gap statistic obtained with the function [cluster::clusGap()].
@@ -162,53 +164,53 @@ checkClusterability <- function(standards, b=500){
 #'              
 visualizeClusters <- function(dat, clust_model, adjusted_pValues, FDR_th = NULL, ttl = "", subttl = ""){
     if(is.null(FDR_th)){
-        FDR_th <- c(0.001, 0.005, 0.01, 0.05)
+        FDR_th <- c(0.001,0.005,0.01,0.05)
     }else if(length(FDR_th) > 4){
         message("Too many FDR thresholds provided. Please do not exceed 4 values")
         return(NULL)
     }
-
+    
     str_try <- stringr::str_glue("<{FDR_th}")
     str_max <- stringr::str_glue(">{max(FDR_th)}")
-
-    dat$FDR_threshold <- cut(adjusted_pValues, breaks = c(-Inf, FDR_th, Inf), labels = c(str_try, str_max))
+    
+    dat$FDR_threshold <- cut(adjusted_pValues, breaks = c(-Inf,FDR_th,Inf), labels = c(str_try, str_max))
     desc_th <- FDR_th[order(FDR_th, decreasing = TRUE)]
     str_desc <- stringr::str_glue("<{desc_th}")
-
+    
     dat$FDR_threshold <- factor(dat$FDR_threshold,
                                 levels = c(str_max, str_desc))
-
+    
     dat$adjusted_pvalues <- adjusted_pValues
     if(methods::is(clust_model, "factor")){
         dat$cluster <- clust_model
     }else if(methods::is(clust_model, "kmeans")){
         dat$cluster <- as.factor(clust_model$cluster)
-
+        
     }else if(methods::is(clust_model, "APResult")){
         dat$cluster <- NA
         for(k in seq_len(length(clust_model@clusters))){
             dat$cluster[clust_model@clusters[[k]]] <- k
         }
-
+        
     }else{
         message("Wrong model. Currently, only the Kmeans and the Affinity
                 Propagation models are supported.")
         return(NULL)
     }
     melted <- reshape2::melt(dat,
-                             id.vars = c("value", "cluster", "adjusted_pvalues", "FDR_threshold"),
+                             id.vars = c("feature", "cluster", "adjusted_pvalues", "FDR_threshold"),
                              value.name = "intensity",
                              variable.name = "Condition")
     palette2use <- c("#DEDEDE","#FFC125", "#FF8C00", "#CD3700", "#8B0000")
-
+    
     names(palette2use) <- levels(melted$FDR_threshold)
-
+    
     colScale <- ggplot2::scale_colour_manual(name = "FDR threshold",
                                              values = palette2use)
-
-
+    
+    
     return(ggplot2::ggplot(data = melted,
-                           ggplot2::aes(x = Condition, y = intensity, group = value, colour = FDR_threshold)) +
+                           ggplot2::aes(x = Condition, y = intensity, group = feature, colour = FDR_threshold)) +
                ggplot2::geom_line(size = 1) +
                ggplot2::facet_wrap(~ cluster) +
                colScale +
@@ -227,6 +229,7 @@ visualizeClusters <- function(dat, clust_model, adjusted_pValues, FDR_th = NULL,
                )
     )
 }
+
 
 
 

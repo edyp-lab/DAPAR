@@ -8,6 +8,8 @@ checkClusterability(standards, b = 500)
 }
 \arguments{
 \item{standards}{a dataframe containing the standardized mean intensities}
+
+\item{b}{xxx}
 }
 \value{
 a list of 2 elements:

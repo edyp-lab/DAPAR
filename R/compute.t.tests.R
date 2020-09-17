@@ -1,49 +1,12 @@
 
 
 
-#' This function is a wrapper xxxxx
-#'
-#' @title xxxxx
-#' 
-#' @param obj An object of class \code{MSnSet} with no missing values
-#' 
-#' @param ... See \code{compute.t.tests}
-#' 
-#' @return xxxxxxx
-#' 
-#' @author Samuel Wieczorek
-#' 
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj <- Exp1_R25_pept[1:1000]
-#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
-#' obj <- mvFilterFromIndices(obj, keepThat)
-#' ttest <- wrapper.t_test_Complete(obj, 1)
-#' 
-#' @export
-#' 
-#' @importFrom Biobase pData exprs fData
-#' 
-wrapper.t_test_Complete <- function(obj,...){
-    
-    qData <- Biobase::exprs(obj)
-    sTab <- pData(obj)
-    
-    ttest <- compute.t.tests(qData, sTab=pData(obj), ...)
-    
-    return (ttest)
-}
-
-
-
 
 #' This function is xxxxxx
 #'
 #' @title xxxxxx
 #' 
-#' @param qData A matrix of quantitative data, without any missing values.
-#' 
-#' @param sTab xxxx 
+#' @param obj A matrix of quantitative data, without any missing values.
 #' 
 #' @param contrast Indicates if the test consists of the comparison of each 
 #' biological condition versus 
@@ -66,23 +29,21 @@ wrapper.t_test_Complete <- function(obj,...){
 #' obj <- Exp1_R25_pept[1:1000]
 #' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
-#' sTab <- Biobase::pData(obj)
-#' qData <- Biobase::exprs(obj)
-#' ttest <- compute.t.tests(qData, sTab)
-#' 
-#' @export
+#' ttest <- compute_t_tests(obj)
 #' 
 #' @importFrom stats t.test
 #' 
-compute.t.tests <- function(qData, sTab, contrast="OnevsOne", type="Student"){
+#' @export
+#'
+compute_t_tests <- function(obj, contrast="OnevsOne", type="Student"){
 
-    
     switch(type,
            Student=.type <- TRUE,
            Welch=.type <- FALSE)
     
     
-    
+    qData <- Biobase::exprs(obj)
+    sTab <- Biobase::pData(obj)
 res<-list()
 logFC <- list()
 P_Value <- list()

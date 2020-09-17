@@ -1,8 +1,8 @@
 Package: DAPAR
 Type: Package
 Title: Tools for the Differential Analysis of Proteins Abundance with R
-Version: 1.21.2
-Date: 2020-09-07
+Version: 1.21.3
+Date: 2020-09-17
 Authors@R: c(person(given = "Samuel", family = "Wieczorek",
             email = "samuel.wieczorek@cea.fr",
     role = c("aut","cre")),
@@ -50,3 +50,30 @@ NeedsCompilation: no
 RoxygenNote: 7.1.1
 Packaged: 2017-10-13 11:13:04 UTC; sw175264
 Encoding: UTF-8
+Collate:
+    "agregation.R"
+    "anova_analysis.R"
+    "bioAnalysis.R"                         
+    "clustering.R"
+    "compute.t.tests.R"
+    "DiffAnalysis.R"                        
+    "get_pep_prot_cc.R"
+    "inOutFiles.R"
+    "limmaAnalysis.R"                       
+    "logText.R"
+    "missingValuesFilter.R"
+    "missingValuesImputation_PeptideLevel.R"
+    "missingValuesImputation_ProteinLevel.R"
+    "missingValuesPlots.R"
+    "normalize.R"                           
+    "pepa.R"
+    "plots_boxplot.R"
+    "plots_compare_Norm.R"                  
+    "plots_corr_matrix.R"
+    "plots_density.R"
+    "plots_density_CV.R"                    
+    "plots_heatmaps.R"
+    "plots_pca.R"
+    "plots_violin.R"                        
+    "utils.R"
+    "volcanoPlot.R"     
