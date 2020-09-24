@@ -44,8 +44,8 @@ utils::data(Exp1_R25_prot, package='DAPARdata')
 obj <- Exp1_R25_prot[1:1000]
 keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 obj <- mvFilterFromIndices(obj, keepThat)
-anova_tests <- t(apply(exprs(obj),1, classic1wayAnova, conditions=as.factor(pData(obj)$Condition)))
-names(anova_tests) <- rownames(exprs(obj))
+anova_tests <- t(apply(Biobase::exprs(obj),1, classic1wayAnova, conditions=as.factor(Biobase::pData(obj)$Condition)))
+names(anova_tests) <- rownames(Biobase::exprs(obj))
 pht <- postHocTest(aov_fits = anova_tests)
 
 }

@@ -126,8 +126,8 @@ addOriginOfValue <- function(obj,index=NULL){
   colnames(OriginOfValues) <- paste0("OriginOfValue",colnames(Biobase::exprs(obj)))
   colnames(OriginOfValues) <- gsub(".", "_", colnames(OriginOfValues), fixed=TRUE)
   
-  #indMin <- length(colnames(fData(obj)))
-  #indMax <- length(colnames(fData(obj))) + length(OriginOfValues)
+  #indMin <- length(colnames(Biobase::fData(obj)))
+  #indMax <- length(colnames(Biobase::fData(obj))) + length(OriginOfValues)
   Biobase::fData(obj) <- cbind(Biobase::fData(obj), OriginOfValues, deparse.level = 0)
   
   obj@experimentData@other$OriginOfValues <- colnames(OriginOfValues)
@@ -330,9 +330,9 @@ writeMSnsetToExcel <- function(obj, filename)
   
   
   if (is.null(obj@experimentData@other$OriginOfValues)){
-    listPOV <-  which(is.na(exprs(obj)), arr.ind=TRUE)
+    listPOV <-  which(is.na(Biobase::exprs(obj)), arr.ind=TRUE)
   } else {
-    mat <- fData(obj)[,obj@experimentData@other$OriginOfValues]
+    mat <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
     listPOV <- which(mat=="POV", arr.ind=TRUE)
     listMEC <- which(mat=="MEC", arr.ind=TRUE)
   }
@@ -516,9 +516,9 @@ rbindMSnset <- function(df1=NULL, df2){
   }
   if (is.null(df1) && is.null(df2)){return(NULL)}
   
-  tmp.exprs <- rbind(exprs(df1), exprs(df2))
-  tmp.fData <- rbind(fData(df1), fData(df2))
-  tmp.pData <- pData(df1)
+  tmp.exprs <- rbind(Biobase::exprs(df1), Biobase::exprs(df2))
+  tmp.fData <- rbind(Biobase::fData(df1), Biobase::fData(df2))
+  tmp.pData <- Biobase::pData(df1)
   
   obj <-  MSnSet(exprs = tmp.exprs, fData = tmp.fData, pData = tmp.pData)
   obj@protocolData <- df1@protocolData

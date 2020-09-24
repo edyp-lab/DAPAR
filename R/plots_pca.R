@@ -48,7 +48,7 @@ wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
   # parameters available to the user
   variance.scaling <- TRUE
   
-  res.pca <- FactoMineR::PCA(exprs(obj), scale.unit = var.scaling, ncp=ncp, graph=FALSE)
+  res.pca <- FactoMineR::PCA(Biobase::exprs(obj), scale.unit = var.scaling, ncp=ncp, graph=FALSE)
   # si warning pour les missing values, le reproduire dans l'interface graphique
   
   return(res.pca)

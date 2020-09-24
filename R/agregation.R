@@ -511,8 +511,8 @@ aggregateIter <- function(obj.pep, X, init.method='Sum', method='Mean', n=NULL){
   
   protData <- matrix(rep(0,ncol(X)*ncol(obj.pep)), nrow=ncol(X))
   
-  for (cond in unique(pData(obj.pep)$Condition)){
-    condsIndices <- which(pData(obj.pep)$Condition == cond)
+  for (cond in unique(Biobase::pData(obj.pep)$Condition)){
+    condsIndices <- which(Biobase::pData(obj.pep)$Condition == cond)
     qData <- qData.pep[,condsIndices]
     print(paste0("Condition ", cond))
     protData[,condsIndices]  <- inner.aggregate.iter(qData, X, init.method, method, n)

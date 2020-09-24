@@ -306,13 +306,14 @@ visualizeClusters <- function(dat, clust_model, adjusted_pValues, FDR_th = NULL,
 #' Frey, B. J. and Dueck, D. (2007) Clustering by passing messages between data points. *Science* 315, 972-976. DOI: \href{https://science.sciencemag.org/content/315/5814/972}{10.1126/science.1136800}
 #'
 #' @examples
+#' \dontrun{
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
 #' obj <- Exp1_R25_prot[1:1000]
 #' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' test_anova <- wrapperClassic1wayAnova(obj)
 #' test_clust_pipeline <- wrapperRunClustering(obj = obj,
-#'                                  clustering_method = "affinityPropReduced", adjusted_pvals = test_anova$P_Value$anova_1way_pval)
+#'   }                               clustering_method = "affinityPropReduced", adjusted_pvals = test_anova$P_Value$anova_1way_pval)
 #' 
 #' @export
 #' 

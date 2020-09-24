@@ -347,7 +347,7 @@ diffAnaSave <- function (obj, allComp, data=NULL,th_pval=0,th_logFC=0){
   .fc <- as.data.frame(allComp$logFC)
   .pval <- as.data.frame(allComp$P_Value)
   cnames <- c(colnames(allComp$logFC), colnames(allComp$P_Value))
-  ind <- which(colnames(fData(obj)) %in% cnames)
+  ind <- which(colnames(Biobase::fData(obj)) %in% cnames)
   if (length(ind) > 0) {
       Biobase::fData(obj) <- Biobase::fData(obj)[,-ind]
   }

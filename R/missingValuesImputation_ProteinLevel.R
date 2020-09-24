@@ -144,7 +144,7 @@ wrapper.impute.KNN <- function(obj, K){
 #' 
 wrapper.impute.fixedValue <- function(obj, fixVal){
     
-    Biobase::exprs(obj)[is.na(exprs(obj))] <- fixVal
+    Biobase::exprs(obj)[is.na(Biobase::exprs(obj))] <- fixVal
     return (obj)
 }
 

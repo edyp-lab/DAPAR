@@ -84,13 +84,14 @@ check the clusterability of the data and estimate a number of clusters using
   values. This should lead to a smaller number of final clusters.
 }
 \examples{
+\dontrun{
 utils::data(Exp1_R25_prot, package='DAPARdata')
 obj <- Exp1_R25_prot[1:1000]
 keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 obj <- mvFilterFromIndices(obj, keepThat)
 test_anova <- wrapperClassic1wayAnova(obj)
 test_clust_pipeline <- wrapperRunClustering(obj = obj,
-                                 clustering_method = "affinityPropReduced", adjusted_pvals = test_anova$P_Value$anova_1way_pval)
+  }                               clustering_method = "affinityPropReduced", adjusted_pvals = test_anova$P_Value$anova_1way_pval)
 
 }
 \references{

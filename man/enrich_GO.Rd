@@ -38,7 +38,7 @@ it returns an enrichResult instance.
 \donttest{
 utils::data(Exp1_R25_prot, package='DAPARdata')
 univ<-univ_AnnotDbPkg("org.Sc.sgd.db") #univ is the background
-ego<-enrich_GO(data=fData(Exp1_R25_prot)$Protein.IDs, idFrom="UNIPROT", 
+ego<-enrich_GO(data=Biobase::fData(Exp1_R25_prot)$Protein.IDs, idFrom="UNIPROT", 
 orgdb="org.Sc.sgd.db",ont="MF", pval=0.05, universe = univ)
 }
 
