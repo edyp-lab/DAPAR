@@ -135,10 +135,12 @@ plotJitter <- function(list.of.cc){
 ##' @return A plot  
 ##' @author Thomas Burger, Samuel Wieczorek
 ##' @examples
+##' \dontrun{
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' X <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein_group_IDs", FALSE)
 ##' ll <- get.pep.prot.cc(X)
 ##' g <- buildGraph(ll[[1]], X)
+##' }
 buildGraph <- function(The.CC, X){
   
   subX <- as.matrix(X[The.CC$peptides, The.CC$proteins])
@@ -178,11 +180,13 @@ buildGraph <- function(The.CC, X){
 ##' @return A plot  
 ##' @author Thomas Burger, Samuel Wieczorek
 ##' @examples
+##' \dontrun{
 ##' utils::data(Exp1_R25_pept, package='DAPARdata') 
 ##' X <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein_group_IDs", FALSE)
 ##' ll <- get.pep.prot.cc(X)
 ##' g <- buildGraph(ll[[1]], X)
 ##' display.CC.visNet(g)
+##' }
 display.CC.visNet <- function(g, layout = layout_nicely, 
                        obj=NULL,
                        prot.tooltip=NULL, 

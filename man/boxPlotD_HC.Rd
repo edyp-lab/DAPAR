@@ -20,9 +20,11 @@ A boxplot
 Boxplot for quantitative proteomics data using the library \code{highcharter}
 }
 \examples{
+\dontrun{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 legend <- Biobase::pData(Exp1_R25_pept)[,"Sample.name"]
 boxPlotD_HC(Exp1_R25_pept, legend)
+}
 }
 \seealso{
 \code{\link{densityPlotD_HC}}

@@ -207,9 +207,11 @@ abline(h=0)
 ##' @author Samuel Wieczorek
 ##' @seealso \code{\link{densityPlotD_HC}}
 ##' @examples
+##' \dontrun{
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' legend <- Biobase::pData(Exp1_R25_pept)[,"Sample.name"]
 ##' boxPlotD_HC(Exp1_R25_pept, legend)
+##' }
 boxPlotD_HC <- function(obj, legend=NULL, palette = NULL){
 
   
@@ -384,11 +386,13 @@ compareNormalizationD(qDataBefore, qDataAfter, condsForLegend, indData2Show, ...
 ##' @return A plot
 ##' @author Samuel Wieczorek
 ##' @examples
+##' \dontrun{
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' objAfter <- wrapper.normalizeD(Exp1_R25_pept, "QuantileCentering", 
 ##' "within conditions")
 ##' wrapper.compareNormalizationD_HC(Exp1_R25_pept, objAfter, conds)
+##' }
 wrapper.compareNormalizationD_HC <- function(objBefore, objAfter, 
                                           condsForLegend=NULL,
                                           indData2Show=NULL,
@@ -730,8 +734,10 @@ densityPlotD_HC <- function(obj, legend=NULL, palette = NULL){
 ##' @return A density plot
 ##' @author Alexia Dorffer
 ##' @examples
+##' \dontrun{
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' wrapper.CVDistD(Exp1_R25_pept)
+##' }
 wrapper.CVDistD <- function(obj, ...){
 qData <- Biobase::exprs(obj)
 conds <- Biobase::pData(obj)[,"Condition"]
@@ -772,9 +778,11 @@ wrapper.CVDistD_HC <- function(obj, ...){
 ##' @author Florence Combes, Samuel Wieczorek
 ##' @seealso \code{\link{densityPlotD}}.
 ##' @examples
+##' \dontrun{
 ##' utils::data(Exp1_R25_pept, package='DAPARdata')
 ##' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 ##' CVDistD(Biobase::exprs(Exp1_R25_pept), conds)
+##' }
 CVDistD <- function(qData, conds=NULL, palette = NULL){
     
 if (is.null(conds)) {return(NULL)}
