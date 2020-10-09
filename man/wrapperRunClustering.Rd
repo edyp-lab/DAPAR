@@ -2,7 +2,7 @@
 % Please edit documentation in R/clustering.R
 \name{wrapperRunClustering}
 \alias{wrapperRunClustering}
-\title{Clustering pipeline of protein/peptide abundance profiles.}
+\title{Run a clustering pipeline of protein/peptide abundance profiles.}
 \usage{
 wrapperRunClustering(
   obj,
@@ -61,37 +61,36 @@ clustering model and its graph from average abundances of proteins/peptides.
 \details{
 The first step consists in averaging the abundances of
 proteins/peptides according to the different conditions defined in the
-phenotype data of the expressionSet / MSnSet. Then we standardize the data,
-check the clusterability of the data and estimate a number of clusters using
- the gap statistic method. This optimal k is used only in the case where we
- ask to realize a kmeans model without specifying the desired number of
- clusters (`clustering_method =" kmeans "` and `k_clusters = NULL`). We
- advise however to specify a k for the kmeans, because the gap stat gives
- the smallest possible k, whereas in biology a small number of clusters can
- turn out to be uninformative. If you want to run a kmeans but you don't
- know what number of clusters to give, you can let the pipeline run the
- first time without specifying `k_clusters`, in order to view the profiles
- the first time and choose by the following is a more appropriate value of
- k. If it is assumed that the data can be structured with a large number of
- clusters, it is recommended to use the affinity propagation model instead.
- This method simultaneously considers all the data as exemplary potentials,
- unlike hard clustering (kmeans) which initializes with a number k of points
-  taken at random. The "affinityProp" model will use a q parameter set to NA,
-  meaning that exemplar preferences are set to the median of non-Inf values
-  in the similarity matrix (set q to 0.5 will be the same). The
-  "affinityPropReduced" model will use a q set to 0, meaning that exemplar
-  preferences are set to the sample quantile with threshold 0 of non-Inf
-  values. This should lead to a smaller number of final clusters.
+phenotype data of the expressionSet / MSnSet. Then we standardize the data 
+if there are more than 2 conditions. If the user asks to realize a kmeans 
+model without specifying the desired number of
+clusters (`clustering_method =" kmeans "` and `k_clusters = NULL`), the 
+function checks data's clusterability and estimates a number of clusters k using
+the gap statistic method. It is advise however to specify a k for the 
+kmeans, because the gap stat gives the smallest possible k, whereas in 
+biology a small number of clusters can turn out to be uninformative. 
+If you want to run a kmeans but you don't know what number of clusters to 
+give, you can let the pipeline run the first time without specifying 
+`k_clusters`, in order to view the profiles the first time and choose by the
+following is a more appropriate value of k.
+If it is assumed that the data can be structured with a large number of
+clusters, it is recommended to use the affinity propagation model instead.
+This method simultaneously considers all the data as exemplary potentials,
+unlike hard clustering (kmeans) which initializes with a number k of points
+taken at random. The "affinityProp" model will use a q parameter set to NA,
+meaning that exemplar preferences are set to the median of non-Inf values
+in the similarity matrix (set q to 0.5 will be the same). The
+"affinityPropReduced" model will use a q set to 0, meaning that exemplar
+preferences are set to the sample quantile with threshold 0 of non-Inf
+values. This should lead to a smaller number of final clusters.
 }
 \examples{
-\dontrun{
 utils::data(Exp1_R25_prot, package='DAPARdata')
 obj <- Exp1_R25_prot[1:1000]
 keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 obj <- mvFilterFromIndices(obj, keepThat)
-test_anova <- wrapperClassic1wayAnova(obj)
-test_clust_pipeline <- wrapperRunClustering(obj = obj,
-  }                               clustering_method = "affinityPropReduced", adjusted_pvals = test_anova$P_Value$anova_1way_pval)
+expR25_ttest <- compute_t_tests(obj)
+wrapperRunClustering(obj = obj, adjusted_pvals = expR25_ttest$P_Value$`25fmol_vs_10fmol_pval`)
 
 }
 \references{
@@ -100,5 +99,5 @@ Tibshirani, R., Walther, G. and Hastie, T. (2001). Estimating the number of data
 Frey, B. J. and Dueck, D. (2007) Clustering by passing messages between data points. *Science* 315, 972-976. DOI: \href{https://science.sciencemag.org/content/315/5814/972}{10.1126/science.1136800}
 }
 \author{
-Hélène Borges
+Helene Borges
 }

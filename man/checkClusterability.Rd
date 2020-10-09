@@ -7,9 +7,10 @@
 checkClusterability(standards, b = 500)
 }
 \arguments{
-\item{standards}{a dataframe containing the standardized mean intensities}
+\item{standards}{a matrix or dataframe containing only the standardized mean intensities
+returned by the function [standardiseMeanIntensities()]}
 
-\item{b}{xxx}
+\item{b}{Parameter B of the function [gap_cluster()]}
 }
 \value{
 a list of 2 elements:
@@ -28,10 +29,15 @@ utils::data(Exp1_R25_prot, package='DAPARdata')
 obj <- Exp1_R25_prot[1:1000]
 keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 obj <- mvFilterFromIndices(obj, keepThat)
-st <- standardiseMeanIntensities(obj)
-checkClusterability(st, b=100)
+averaged_means <- averageIntensities(obj)
+only_means <- dplyr::select_if(averaged_means, is.numeric)
+only_features <- dplyr::select_if(averaged_means, is.character)
+means <- purrr::map(purrr::array_branch(as.matrix(only_means), 1),mean)
+centered <- only_means - unlist(means)
+centered_means <- dplyr::bind_cols(feature = dplyr::as_tibble(only_features), dplyr::as_tibble(centered))
+checkClust <- checkClusterability(centered_means, b=100)
 
 }
 \author{
-Hélène Borges
+Helene Borges
 }
