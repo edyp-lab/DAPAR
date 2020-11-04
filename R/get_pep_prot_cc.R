@@ -13,7 +13,7 @@
 #' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
 #' ll <- get.pep.prot.cc(X)
 #' 
-#' @importFrom Matrix %&%
+#' @importFrom Matrix crossprod %&%
 #' @importFrom graph graphAM connComp 
 #' 
 #' @export
@@ -32,7 +32,10 @@ get.pep.prot.cc <- function(X){
   A <- B <- g <- NULL
   ### Adjacency matrix construction
   # boolean matrix product
-  A <- as.matrix(t(X) %&% X) 
+  #A <- as.matrix(t(X) %&% X) 
+  print("Start computing boolean matrix product")
+  A <- Matrix::crossprod(X, boolArith =  TRUE)
+  print("End of computing boolean matrix product")
   # remove self-connecting edges
   diag(A) <- rep(0,p)
   A <- matrix(as.numeric(A[,]), ncol=p) # goes back to classical matrix format
