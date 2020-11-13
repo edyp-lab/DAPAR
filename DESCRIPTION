@@ -34,7 +34,7 @@ Description: This package contains a collection of functions for the
     visualisation and the statistical analysis of proteomic data.
 License: Artistic-2.0
 VignetteBuilder: knitr
-Depends: R (>= 4.0.0)
+Depends: R (>= 4.1.0)
 Suggests: BiocGenerics, testthat, BiocStyle
 Imports: Biobase, MSnbase, tibble, RColorBrewer,stats,preprocessCore, Cairo,png,
         lattice,reshape2,gplots,pcaMethods,ggplot2,
@@ -50,6 +50,8 @@ NeedsCompilation: no
 RoxygenNote: 7.1.1
 Packaged: 2017-10-13 11:13:04 UTC; sw175264
 Encoding: UTF-8
+URL: http://www.prostar-proteomics.org/
+BugReports: https://github.com/samWieczorek/DAPAR/issues
 Collate:
     "agregation.R"
     "anova_analysis.R"
