@@ -287,7 +287,10 @@ mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto",
 #'
 #' @importFrom Biobase pData exprs fData
 #' 
-wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
+wrapper.mvHisto_HC <- function(obj, 
+                               indLegend="auto", 
+                               showValues=FALSE, 
+                               ...){
   if (is.null(obj)){
     warning("The dataset in NULL. Cannot continue.")
     return(NULL)
@@ -325,8 +328,12 @@ wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
 #' 
 #' @export
 #'
-mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto", 
-                       showValues=FALSE, palette = NULL){
+mvHisto_HC <- function(qData, 
+                       samplesData, 
+                       conds, 
+                       indLegend="auto", 
+                       showValues=FALSE, 
+                       palette = NULL){
   
   
   palette <- BuildPalette(conds, palette)
