@@ -313,7 +313,7 @@ wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
 #' @param indLegend The indices of the column name's in \code{pData()} tab
 #' @param showValues A logical that indicates wether numeric values should be
 #' drawn above the bars.
-#' @param palette xxx
+#' @param base_palette xxx
 #' @return A histogram
 #' @author Florence Combes, Samuel Wieczorek
 #' @examples
@@ -326,11 +326,11 @@ wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
 #' @export
 #'
 mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto", 
-                       showValues=FALSE, palette = NULL){
+                       showValues=FALSE, base_palette = NULL){
   
   
-  palette <- BuildPalette(conds, palette)
-  
+  palette <- BuildPalette(conds, base_palette)
+  print(palette)
   
   if (identical(indLegend,"auto")) { 
     indLegend <- c(2:length(colnames(samplesData)))
@@ -535,11 +535,12 @@ hc_mvTypePlot2 <- function(qData, conds, palette = NULL, typeofMV=NULL, title=NU
   if (is.null(conds)){return(NULL)}
   
   if (is.null(palette)){
-    palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
+    palette <- grDevices::colorRampPalette(brewer.pal(8, "Dark2"))(length(unique(conds)))
   }else{
     if (length(palette) != length(unique(conds))){
-      warning("The color palette has not the same dimension as the number of conditions")
-      return(NULL)
+      warning("The color palette has not the same dimension as the number of conditions. Set to default palette.")
+      palette <- grDevices::colorRampPalette(brewer.pal(8, "Dark2"))(length(unique(conds)))
+      #return(NULL)
     }
   }
   

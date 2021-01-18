@@ -196,9 +196,14 @@ addOriginOfValue <- function(obj,index=NULL){
 #' @importFrom MSnbase MSnSet
 #' @importFrom utils read.table
 #' 
-createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
+createMSnset <- function(file,
+                         metadata=NULL,
+                         indExpData,
+                         indFData,
+                         indiceID=NULL,
                          indexForOriginOfValue = NULL,
-                         logData=FALSE, replaceZeros=FALSE,
+                         logData=FALSE, 
+                         replaceZeros=FALSE,
                          pep_prot_data=NULL,
                          proteinId = NULL,
                          versions=NULL){

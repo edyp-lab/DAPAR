@@ -37,7 +37,12 @@
 #' 
 #' @export
 #' 
-violinPlotD <- function(obj, conds, keyId, legend=NULL, palette = NULL, subset.view=NULL){
+violinPlotD <- function(obj, 
+                        conds, 
+                        keyId, 
+                        legend=NULL, 
+                        palette = NULL, 
+                        subset.view=NULL){
   
   
   graphics::plot.new()

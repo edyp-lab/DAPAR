@@ -10,7 +10,7 @@ mvHisto_HC(
   conds,
   indLegend = "auto",
   showValues = FALSE,
-  palette = NULL
+  base_palette = NULL
 )
 }
 \arguments{
@@ -26,7 +26,7 @@ columns to the meta-data for those samples.}
 \item{showValues}{A logical that indicates wether numeric values should be
 drawn above the bars.}
 
-\item{palette}{xxx}
+\item{base_palette}{xxx}
 }
 \value{
 A histogram
