@@ -33,13 +33,11 @@ densityPlotD <- function(obj, conds, legend=NULL,palette = NULL){
   if (is.null(legend) ) { legend <- Biobase::pData(obj)[,"Condition"]}
   
   if (is.null(palette)){
-    #palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")
-    palette <- grDevices::colorRampPalette(brewer.pal(8, "Dark2"))(length(unique(conds)))
+    palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")
   }else{
     if (length(palette) != ncol(qData)){
-      warning("The color palette has not the same dimension as the number of samples. Set to default palette.")
-      palette <- grDevices::colorRampPalette(brewer.pal(8, "Dark2"))(length(unique(conds)))
-      #return(NULL)
+      warning("The color palette has not the same dimension as the number of samples")
+      return(NULL)
     }
   }
   

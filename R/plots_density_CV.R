@@ -93,12 +93,10 @@ CVDistD <- function(qData, conds=NULL, palette = NULL){
   
   if (is.null(conds)) {return(NULL)}
   if (is.null(palette)){
-    #palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
-    palette <- grDevices::colorRampPalette(brewer.pal(8, "Dark2"))(length(unique(conds)))
+    palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
   }else{
     if (length(palette) != ncol(qData)){
-      warning("The color palette has not the same dimension as the number of samples. Set to default palette.")
-      palette <- grDevices::colorRampPalette(brewer.pal(8, "Dark2"))(length(unique(conds)))
+      warning("The color palette has not the same dimension as the number of samples")
       return(NULL)
     }
   }
@@ -198,13 +196,11 @@ CVDistD_HC <- function(qData, conds=NULL, palette = NULL){
   n <- length(conditions)
   
   if (is.null(palette)){
-    #palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")[1:n]
-    palette <- grDevices::colorRampPalette(brewer.pal(8, "Dark2"))(length(conditions))
+    palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")[1:n]
   }else{
     if (length(palette) != ncol(qData)){
       warning("The color palette has not the same dimension as the number of samples")
-      palette <- grDevices::colorRampPalette(brewer.pal(8, "Dark2"))(length(conditions))
-      #return(NULL)
+      return(NULL)
     }
   }
   

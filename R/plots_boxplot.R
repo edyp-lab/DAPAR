@@ -30,7 +30,6 @@
 #' @importFrom grDevices colorRampPalette boxplot.stats
 #' 
 #' @importFrom RColorBrewer brewer.pal
-#' @importFrom grDevices colorRampPalette
 #' 
 #' @importFrom stats na.exclude
 #' 
@@ -208,7 +207,7 @@ boxPlotD_HC <- function(obj, conds, keyId=NULL, legend=NULL, palette = NULL, sub
     # Display of rows to highlight (index of row in subset.view) 
   if(!is.null(subset.view)){
     idVector <- keyId
-    pal=grDevices::colorRampPalette(RColorBrewer::brewer.pal(8, "Set1"))(length(subset.view))  
+    pal=grDevices::colorRampPalette(RColorBrewer::brewer.pal(8, "Set1"))(length(subset.view))    
     n=0
     for(i in subset.view){
       n=n+1

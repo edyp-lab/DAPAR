@@ -4,10 +4,9 @@
 #' 
 #' @param conds The extended vector of samples conditions
 #' 
-#' @param base_palette The basic color (HEX code) used to build the complete palette. This vector have the same length as unique(conds).
-#' Default base palette is 'Dark2' from the package RColorBrewer.
+#' @param base_palette The basic color (HEX code) used to build the complete palette. This vector have the same length as unique(conds)
 #' 
-#' @return A vector composed of HEX color code for the conditions
+#' @return A vector composer of HEX color code for the conditions
 #' 
 #' @author Samuel Wieczorek
 #' 
@@ -21,19 +20,17 @@
 #' @importFrom RColorBrewer brewer.pal
 #' 
 #' 
-BuildPalette <- function(conds, base_palette=NULL){
-  
-  if (!is.null(base_palette) && length(unique(conds)) != length(base_palette)){
-    stop('The length of `conds` must be equal to the length of `base_palette`.')
-  }
+BuildPalette <- function(conds, base_palette){
   
   palette <- NULL
   if (is.null(base_palette)){
-    base_palette <- grDevices::colorRampPalette(brewer.pal(8, "Dark2"))(length(unique(conds)))
+    palette.init <- RColorBrewer::brewer.pal(8,"Dark2")[1:max(3,length(unique(conds)))]
+  } else {
+    palette.init <- base_palette
   }
   
   for (i in 1:length(conds)){
-    palette[i] <- base_palette[which(conds[i] == unique(conds))]
+    palette[i] <- palette.init[which(conds[i] == unique(conds))]
   }
   return(palette)
   

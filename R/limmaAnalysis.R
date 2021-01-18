@@ -647,11 +647,11 @@ formatLimmaResult <- function(fit, conds, contrast){
     }
     if(contrast==2){
       #hierarchic only
-      #compa <- stringr::str_match_all(colnames(fit$p.value)[i], "[[:space:]]Condition([[:digit:]]+)[[:space:]]")[[1]]
+      #compa<-str_match_all(colnames(fit$p.value)[i], "[[:space:]]Condition([[:digit:]]+)[[:space:]]")[[1]]
       #cn[i]<-paste(levels(Conditions)[as.numeric(compa[1,2])], "vs(all-",levels(Conditions)[as.numeric(compa[1,2])], ")", sep="")
 
       #hier and non hier
-      compa <- stringr::str_match_all(colnames(fit$p.value)[i], "[[:space:]]Condition([[:digit:]]+)")[[1]]
+      compa<-str_match_all(colnames(fit$p.value)[i], "[[:space:]]Condition([[:digit:]]+)")[[1]]
       cn[i]<-paste(unique(conds)[as.numeric(compa[1,2])], "_vs_(all-",unique(conds)[as.numeric(compa[1,2])], ")", sep="")
     }
   }

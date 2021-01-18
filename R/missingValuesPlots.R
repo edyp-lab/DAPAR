@@ -326,11 +326,11 @@ wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
 #' @export
 #'
 mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto", 
-                       showValues=FALSE, base_palette = NULL){
+                       showValues=FALSE, palette = NULL){
   
   
-  palette <- BuildPalette(conds, base_palette)
-  print(palette)
+  palette <- BuildPalette(conds, palette)
+  
   
   if (identical(indLegend,"auto")) { 
     indLegend <- c(2:length(colnames(samplesData)))
@@ -535,12 +535,11 @@ hc_mvTypePlot2 <- function(qData, conds, palette = NULL, typeofMV=NULL, title=NU
   if (is.null(conds)){return(NULL)}
   
   if (is.null(palette)){
-    palette <- grDevices::colorRampPalette(brewer.pal(8, "Dark2"))(length(unique(conds)))
+    palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
   }else{
     if (length(palette) != length(unique(conds))){
-      warning("The color palette has not the same dimension as the number of conditions. Set to default palette.")
-      palette <- grDevices::colorRampPalette(brewer.pal(8, "Dark2"))(length(unique(conds)))
-      #return(NULL)
+      warning("The color palette has not the same dimension as the number of conditions")
+      return(NULL)
     }
   }
   
