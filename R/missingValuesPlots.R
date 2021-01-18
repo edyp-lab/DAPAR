@@ -287,10 +287,7 @@ mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto",
 #'
 #' @importFrom Biobase pData exprs fData
 #' 
-wrapper.mvHisto_HC <- function(obj, 
-                               indLegend="auto", 
-                               showValues=FALSE, 
-                               ...){
+wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
   if (is.null(obj)){
     warning("The dataset in NULL. Cannot continue.")
     return(NULL)
@@ -328,16 +325,12 @@ wrapper.mvHisto_HC <- function(obj,
 #' 
 #' @export
 #'
-mvHisto_HC <- function(qData, 
-                       samplesData, 
-                       conds, 
-                       indLegend="auto", 
-                       showValues=FALSE, 
-                       palette = NULL){
+mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto", 
+                       showValues=FALSE, base_palette = NULL){
   
   
-  palette <- BuildPalette(conds, palette)
-  
+  palette <- BuildPalette(conds, base_palette)
+  print(palette)
   
   if (identical(indLegend,"auto")) { 
     indLegend <- c(2:length(colnames(samplesData)))
@@ -542,11 +535,12 @@ hc_mvTypePlot2 <- function(qData, conds, palette = NULL, typeofMV=NULL, title=NU
   if (is.null(conds)){return(NULL)}
   
   if (is.null(palette)){
-    palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")[1:length(unique(conds))]
+    palette <- grDevices::colorRampPalette(brewer.pal(8, "Dark2"))(length(unique(conds)))
   }else{
     if (length(palette) != length(unique(conds))){
-      warning("The color palette has not the same dimension as the number of conditions")
-      return(NULL)
+      warning("The color palette has not the same dimension as the number of conditions. Set to default palette.")
+      palette <- grDevices::colorRampPalette(brewer.pal(8, "Dark2"))(length(unique(conds)))
+      #return(NULL)
     }
   }
   

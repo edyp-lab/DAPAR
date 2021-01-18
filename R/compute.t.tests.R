@@ -15,7 +15,7 @@
 #' or each condition versus all others (contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
 #' H1:"C1!=(C2+C3)/2", etc. if there are three conditions).
 #' 
-#' @param type Available values are: 'Sudent' (default), 'Welch'.
+#' @param type xxxxx
 #' 
 #' @return A list of two items : logFC and P_Value; both are dataframe. The first one contains
 #' the logFC values of all the comparisons (one column for one comparison), the second one contains
@@ -29,7 +29,7 @@
 #' obj <- Exp1_R25_pept[1:1000]
 #' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
-#' ttest <- compute_t_tests(obj, type='Welch')
+#' ttest <- compute_t_tests(obj)
 #' 
 #' @importFrom stats t.test
 #' 
