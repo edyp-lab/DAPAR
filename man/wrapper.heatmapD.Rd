@@ -34,7 +34,7 @@ Builds a heatmap of the quantitative proteomic data of a
 \examples{
 \dontrun{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
+obj <- mvFilter(Exp1_R25_pept[1:1000], "WholeMatrix", 6)
 wrapper.heatmapD(obj)
 }
 

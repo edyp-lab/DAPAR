@@ -25,7 +25,7 @@
 #' @examples
 #' \dontrun{
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
+#' obj <- mvFilter(Exp1_R25_pept[1:1000], "WholeMatrix", 6)
 #' wrapper.heatmapD(obj)
 #' }
 #' 
@@ -72,7 +72,7 @@ wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete",
 #' @examples
 #' \dontrun{
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj <- mvFilter(Exp1_R25_pept[1:1000], "wholeMatrix", 6)
+#' obj <- mvFilter(Exp1_R25_pept[1:1000], "WholeMatrix", 6)
 #' qData <- Biobase::exprs(obj)
 #' conds <- pData(obj)[['Condition']]
 #' heatmapD(qData, conds)
@@ -197,7 +197,7 @@ heatmapD <- function(qData, conds, distance="euclidean", cluster="complete", den
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
+#' obj <- mvFilter(Exp1_R25_pept, "WholeMatrix", 6)
 #' qData <- Biobase::exprs(obj)
 #' heatmap.DAPAR(qData)
 #' 

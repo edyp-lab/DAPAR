@@ -160,7 +160,7 @@ is.MV <- function(data){
 #'
 #' @importFrom Biobase pData exprs fData
 #' 
-getListNbValuesInLines <- function(obj, type="wholeMatrix"){
+getListNbValuesInLines <- function(obj, type="WholeMatrix"){
   if (is.null(obj)){return()}
   
   if(is.null(obj@experimentData@other$OriginOfValues)){
@@ -168,17 +168,17 @@ getListNbValuesInLines <- function(obj, type="wholeMatrix"){
   }
   data <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
   switch(type,
-         wholeMatrix= {
+         WholeMatrix= {
            ll <- unique(ncol(data) - apply(is.MV(data), 1, sum))
            },
-         allCond = {
+         AllCond = {
                     tmp <- NULL
                     for (cond in unique(Biobase::pData(obj)$Condition)){
                      tmp <- c(tmp, length(which(Biobase::pData(obj)$Condition == cond)))
                   }
                   ll <- seq(0,min(tmp))
                   },
-         atLeastOneCond = {
+         AtLeastOneCond = {
                    tmp <- NULL
                   for (cond in unique(Biobase::pData(obj)$Condition)){
                        tmp <- c(tmp, length(which(Biobase::pData(obj)$Condition == cond)))

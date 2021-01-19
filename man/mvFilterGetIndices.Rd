@@ -4,16 +4,24 @@
 \alias{mvFilterGetIndices}
 \title{Filter lines in the matrix of intensities w.r.t. some criteria}
 \usage{
-mvFilterGetIndices(obj, type, th = NULL)
+mvFilterGetIndices(
+  obj,
+  percent = FALSE,
+  condition = "WholeMatrix",
+  threshold = NULL
+)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet} containing
 quantitative data.}
 
-\item{type}{Method used to choose the lines to delete.
-Values are : "None", "EmptyLines", "wholeMatrix", "allCond", "atLeastOneCond"}
+\item{percent}{TRUE or FALSE. Default is FALSE..}
 
-\item{th}{An integer value of the threshold}
+\item{condition}{Method used to choose the lines to delete.
+Values are : "None", "EmptyLines", "WholeMatrix", "AllCond", "AtLeastOneCond"}
+
+\item{threshold}{An integer value of the threshold if percent is FALSE. Otherwise, a floating
+number between 0 and 1.}
 }
 \value{
 An vector of indices that correspond to the lines to keep.
@@ -27,18 +35,20 @@ The condition may be on the whole line or condition by condition.
 }
 \details{
 The different methods are :
-"wholeMatrix": given a threshold \code{th}, only the lines that contain
+"WholeMatrix": given a threshold \code{th}, only the lines that contain
 at least \code{th} values are kept.
-"allCond": given a threshold \code{th}, only the lines which contain
+"AllCond": given a threshold \code{th}, only the lines which contain
 at least \code{th} values for each of the conditions are kept.
-"atLeastOneCond": given a threshold \code{th}, only the lines that contain
+"AtLeastOneCond": given a threshold \code{th}, only the lines that contain
 at least \code{th} values, and for at least one condition, are kept.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-mvFilterGetIndices(Exp1_R25_pept, "wholeMatrix", 2)
+keepThat <- mvFilterGetIndices(Exp1_R25_pept, condition = "WholeMatrix", threshold=2)
+keepThat <- mvFilterGetIndices(Exp1_R25_pept, condition = "EmptyLines")
+keepThat <- mvFilterGetIndices(Exp1_R25_pept, condition = "WholeMatrix", percent=TRUE, threshold=0.5)
 
 }
 \author{
-Florence Combes, Samuel Wieczorek
+Enora Fremy, Samuel Wieczorek
 }

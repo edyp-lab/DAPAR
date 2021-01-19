@@ -11,7 +11,7 @@ mvFilter(obj, type, th, processText = NULL)
 quantitative data.}
 
 \item{type}{Method used to choose the lines to delete.
-Values are : "None", "wholeMatrix", "allCond", "atLeastOneCond"}
+Values are : "None", "WholeMatrix", "AllCond", "AtLeastOneCond"}
 
 \item{th}{An integer value of the threshold}
 
@@ -30,16 +30,16 @@ The condition may be on the whole line or condition by condition.
 }
 \details{
 The different methods are :
-"wholeMatrix": given a threshold \code{th}, only the lines that contain
+"WholeMatrix": given a threshold \code{th}, only the lines that contain
 at least \code{th} values are kept.
-"allCond": given a threshold \code{th}, only the lines which contain
+"AllCond": given a threshold \code{th}, only the lines which contain
 at least \code{th} values for each of the conditions are kept.
-"atLeastOneCond": given a threshold \code{th}, only the lines that contain
+"AtLeastOneCond": given a threshold \code{th}, only the lines that contain
 at least \code{th} values, and for at least one condition, are kept.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-mvFilter(Exp1_R25_pept, "wholeMatrix", 2)
+mvFilter(Exp1_R25_pept, "WholeMatrix", 2)
 
 }
 \author{

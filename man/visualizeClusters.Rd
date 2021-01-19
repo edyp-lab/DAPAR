@@ -39,7 +39,7 @@ Visualize the clusters according to pvalue thresholds
 library(dplyr)
 utils::data(Exp1_R25_prot, package='DAPARdata')
 obj <- Exp1_R25_prot[1:100]
-keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+keepThat <- mvFilterGetIndices(obj, condition='WholeMatrix', threshold=ncol(obj))
 obj <- mvFilterFromIndices(obj, keepThat)
 expR25_ttest <- compute_t_tests(obj)
 averaged_means <- averageIntensities(obj)
