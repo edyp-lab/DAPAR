@@ -2,7 +2,7 @@ context("Missing values filter")
 
 require(DAPARdata)
 data(Exp1_R2_pept)
-obj <- Exp1_R2_pept
+obj <- Exp1_R2_pept[1:50]
 test <- Exp1_R2_pept[130:140]
 test2 <- Exp1_R2_pept[20:28]
 

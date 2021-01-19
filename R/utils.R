@@ -1,3 +1,54 @@
+
+
+#' @title Extends a base-palette of the package RColorBrewer to n colors.
+#' 
+#' @description The colors in the returned palette are always in the same order
+#' 
+#' @param n The number of desired colors in the palette
+#' 
+#' @param base The name of the palette of the package RColorBrewer from which the extended palette is built.
+#' Default value is 'Set1'.
+#' 
+#' @return A vector composed of n color code.
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' ExtendPalette(12)
+#' 
+#' @export
+#' 
+#' @importFrom RColorBrewer brewer.pal
+#' @importFrom grDevices colorRampPalette
+#' 
+#' 
+ExtendPalette <- function(n = 0, base = "Set1"){
+  palette <- NULL
+  nMaxColors <- RColorBrewer::brewer.pal.info[base, 'maxcolors']
+  limit <- nMaxColors*(nMaxColors-1)/2
+  if (n > limit){
+    stop('Number of colors exceed limit of ', limit, ' colors per palette.')
+  }
+  
+  if(n > nMaxColors){
+    palette <- RColorBrewer::brewer.pal(nMaxColors, base)
+    allComb <- combn(palette, 2)
+    
+    for (i in 1:(n-nMaxColors)){
+      palette <- c(palette, grDevices::colorRampPalette(allComb[,i])(3)[2])
+    }
+    
+  } else {
+    palette <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(nMaxColors, base))(n)
+  }
+  palette
+}
+
+
+
+
+
+
 #' @title Builds a complete color palette for the conditions given in argument
 #' 
 #' @description xxxx
