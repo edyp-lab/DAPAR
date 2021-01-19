@@ -45,6 +45,8 @@ at least \code{th} values, and for at least one condition, are kept.
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 mvFilterGetIndices(Exp1_R25_pept, condition = "WholeMatrix", threshold=2)
+mvFilterGetIndices(Exp1_R25_pept, condition = "EmptyLines")
+mvFilterGetIndices(Exp1_R25_prot, condition = "WholeMatrix", percent=TRUE, threshold=0.5)
 
 }
 \author{

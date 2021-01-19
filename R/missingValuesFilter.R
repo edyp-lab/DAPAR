@@ -647,6 +647,8 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' mvFilterGetIndices(Exp1_R25_pept, condition = "WholeMatrix", threshold=2)
+#' mvFilterGetIndices(Exp1_R25_pept, condition = "EmptyLines")
+#' mvFilterGetIndices(Exp1_R25_prot, condition = "WholeMatrix", percent=TRUE, threshold=0.5)
 #' 
 #' @export
 #' 
@@ -661,27 +663,26 @@ mvFilterGetIndices <- function(obj,
     return (NULL)
   }
   
-  if (!(percent %in% c(T, F))){
-    warning("Param `type` is not correct.")
-    return (NULL)
-  } else {
-    if (!isTRUE(percent)){
-      paramth <- c(seq(0, nrow(Biobase::pData(obj)), 1))
-      if (!(threshold %in% paramth)){
-        warning(paste0("Param `threshold` is not correct. It must an integer greater than or equal to 0 and less or equal than ",
-                nrow(Biobase::pData(obj))))
-        return (NULL)
-      }
+  if (condition != 'EmptyLines')
+    if (!(percent %in% c(T, F))){
+      warning("Param `type` is not correct.")
+      return (NULL)
     } else {
-      if (threshold < 0 || threshold > 1){
-        warning("Param `threshold` is not correct. It must be greater than 0 and less than 1.")
-        return (NULL)
+      if (!isTRUE(percent)){
+        paramth <- c(seq(0, nrow(Biobase::pData(obj)), 1))
+        if (!(threshold %in% paramth)){
+          warning(paste0("Param `threshold` is not correct. It must an integer greater than or equal to 0 and less or equal than ",
+                  nrow(Biobase::pData(obj))))
+          return (NULL)
+        }
+      } else {
+        if (threshold < 0 || threshold > 1){
+          warning("Param `threshold` is not correct. It must be greater than 0 and less than 1.")
+          return (NULL)
+        }
       }
-    }
-  }
-  
-  
-  
+   }
+
   keepThat <- NULL
   if (is.null(obj@experimentData@other$OriginOfValues)){
     data <- Biobase::exprs(obj)
@@ -698,7 +699,7 @@ mvFilterGetIndices <- function(obj,
     keepThat <- which(apply(!DAPAR::is.MV(data), 1, sum) >= 1)
   } else if (condition == "WholeMatrix") {
     if (isTRUE(percent)) {
-      keepthat <- which(rowSums(!DAPAR::is.MV(data))/ncol(data) >= threshold) 
+      keepThat <- which(rowSums(!DAPAR::is.MV(data))/ncol(data) >= threshold) 
     } else {
       keepThat <- which(apply(!DAPAR::is.MV(data), 1, sum) >= threshold)
     }

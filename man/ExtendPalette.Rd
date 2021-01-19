@@ -20,6 +20,14 @@ The colors in the returned palette are always in the same order
 }
 \examples{
 ExtendPalette(12)
+nPalette <- 15
+par(mfrow=c(nPalette,1))
+par(mar=c(0.5, 4.5, 0.5, 0.5))
+for (i in 8:nPalette){
+  palette <- ExtendPalette(n=i, base = 'Set1')
+  barplot(1:length(palette), col=palette)
+  print(palette)
+}
 
 }
 \author{
