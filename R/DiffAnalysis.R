@@ -17,7 +17,7 @@
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:1000]
-#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' qData <- Biobase::exprs(obj)
 #' sTab <- Biobase::pData(obj)
@@ -227,7 +227,7 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0, palette=NULL){
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:1000]
-#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' qData <- Biobase::exprs(obj)
 #' sTab <- Biobase::pData(obj)
@@ -271,7 +271,7 @@ diffAnaComputeFDR <- function(logFC, pval,threshold_PVal=0, threshold_LogFC = 0,
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept
-#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' qData <- Biobase::exprs(obj)
 #' sTab <- Biobase::pData(obj)
@@ -327,7 +327,7 @@ Get_AllComparisons <- function(obj){
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept
-#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' qData <- Biobase::exprs(obj)
 #' sTab <- Biobase::pData(obj)
@@ -414,7 +414,7 @@ diffAnaSave <- function (obj, allComp, data=NULL,th_pval=0,th_logFC=0){
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept
-#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' qData <- Biobase::exprs(obj)
 #' sTab <- Biobase::pData(obj)
@@ -460,7 +460,7 @@ diffAnaGetSignificant <- function (obj){
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:1000]
-#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' qData <- Biobase::exprs(obj)
 #' sTab <- Biobase::pData(obj)
@@ -497,7 +497,7 @@ return(p)
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept
-#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' qData <- Biobase::exprs(obj)
 #' sTab <- Biobase::pData(obj)

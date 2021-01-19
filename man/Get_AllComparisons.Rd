@@ -20,7 +20,7 @@ in an object of class \code{MSnSet}.
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept
-keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
 obj <- mvFilterFromIndices(obj, keepThat)
 qData <- Biobase::exprs(obj)
 sTab <- Biobase::pData(obj)

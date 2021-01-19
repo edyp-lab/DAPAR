@@ -77,7 +77,7 @@ an object of class \code{MSnSet}.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-dat <- mvFilter(Exp1_R25_pept[1:1000], type="allCond", th = 1)
+dat <- mvFilter(Exp1_R25_pept[1:1000], type="AllCond", th = 1)
 dat <- wrapper.dapar.impute.mi(dat, nb.iter=1)
 
 }

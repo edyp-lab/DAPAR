@@ -15,7 +15,7 @@
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#'  obj <- mvFilter(Exp1_R25_pept, "wholeMatrix", 6)
+#'obj <- mvFilter(Exp1_R25_pept, "WholeMatrix", 6)
 #' res.pca <- wrapper.pca(obj)
 #' 
 #' @importFrom Biobase exprs pData

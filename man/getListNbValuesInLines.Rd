@@ -4,7 +4,7 @@
 \alias{getListNbValuesInLines}
 \title{Returns the possible number of values in lines in the data}
 \usage{
-getListNbValuesInLines(obj, type = "wholeMatrix")
+getListNbValuesInLines(obj, type = "WholeMatrix")
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}}

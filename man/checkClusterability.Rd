@@ -27,7 +27,7 @@ package). Then the function checks that these data are clusterizable or not
 \examples{
 utils::data(Exp1_R25_prot, package='DAPARdata')
 obj <- Exp1_R25_prot[1:1000]
-keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
 obj <- mvFilterFromIndices(obj, keepThat)
 averaged_means <- averageIntensities(obj)
 only_means <- dplyr::select_if(averaged_means, is.numeric)

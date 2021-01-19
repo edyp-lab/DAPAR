@@ -23,7 +23,7 @@
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:1000]
-#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' qData <- Biobase::exprs(obj)
 #' sTab <- Biobase::pData(obj)
@@ -129,7 +129,7 @@ return(p)
 #' library(highcharter) 
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:1000]
-#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' qData <- Biobase::exprs(obj)
 #' sTab <- Biobase::pData(obj)

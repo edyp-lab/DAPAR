@@ -18,7 +18,7 @@
 #' @examples
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
 #' obj <- Exp1_R25_prot[1:1000]
-#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' averageIntensities(obj)
 #' 
@@ -75,7 +75,7 @@ averageIntensities <- function(ESet_obj){
 #' @examples
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
 #' obj <- Exp1_R25_prot[1:1000]
-#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' averaged_means <- averageIntensities(obj)
 #' only_means <- dplyr::select_if(averaged_means, is.numeric)
@@ -141,7 +141,7 @@ checkClusterability <- function(standards, b = 500){
 #' library(dplyr)
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
 #' obj <- Exp1_R25_prot[1:100]
-#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' expR25_ttest <- compute_t_tests(obj)
 #' averaged_means <- averageIntensities(obj)
@@ -315,7 +315,7 @@ visualizeClusters <- function(dat, clust_model, adjusted_pValues, FDR_th = NULL,
 #' @examples
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
 #' obj <- Exp1_R25_prot[1:1000]
-#' keepThat <- mvFilterGetIndices(obj, 'wholeMatrix', ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' expR25_ttest <- compute_t_tests(obj)
 #' wrapperRunClustering(obj = obj, adjusted_pvals = expR25_ttest$P_Value$`25fmol_vs_10fmol_pval`)
