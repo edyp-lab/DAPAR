@@ -38,6 +38,10 @@ obj <- Exp1_R25_prot
 library(vioplot)
 legend <- conds <- Biobase::pData(obj)$Condition
 key <- "Protein_IDs"
+violinPlotD(obj, conds, key, legend, NULL, 1:10)
+palette <- ExtendPalette(length(unique(conds)))
+violinPlotD(obj, conds, key, legend, palette, 1:10)
+
 violinPlotD(obj, conds=legend, keyId=key, legend=legend, palette=c(rep('blue',3), rep('green',3)),subset.view=1:10)
 
 }

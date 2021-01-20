@@ -36,7 +36,9 @@ number of missing values (NA) per lines (ie proteins) and per conditions.
 utils::data(Exp1_R25_pept, package='DAPARdata')
 qData <- Biobase::exprs(Exp1_R25_pept)
 samplesData <- Biobase::pData(Exp1_R25_pept)
-mvPerLinesHistoPerCondition_HC(qData, samplesData, palette=(c('#AAAAAA', '#AAAAAA')))
+pal <- ExtendPalette(length(unique( samplesData[,"Condition"])), 'Dark2')
+mvPerLinesHistoPerCondition_HC(qData, samplesData, palette=pal)
+mvPerLinesHistoPerCondition_HC(qData, samplesData)
 
 }
 \author{

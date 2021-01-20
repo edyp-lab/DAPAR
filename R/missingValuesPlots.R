@@ -281,12 +281,8 @@ mvPerLinesHistoPerCondition_HC <- function(qData,
   
   for (i in 1:nbConditions){
     h1 <- h1 %>% hc_add_series(data=m[,unique(samplesData[,"Condition"])[i]]) }
-  
-  
+
   return(h1)
-  
-  
-  
 }
 
 
@@ -336,24 +332,40 @@ wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
 #' @param indLegend The indices of the column name's in \code{pData()} tab
 #' @param showValues A logical that indicates wether numeric values should be
 #' drawn above the bars.
-#' @param base_palette xxx
+#' @param palette xxx
 #' @return A histogram
 #' @author Florence Combes, Samuel Wieczorek
+#' 
+#' @import highcharter
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' qData <- Biobase::exprs(Exp1_R25_pept)
 #' samplesData <- Biobase::pData(Exp1_R25_pept)
 #' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-#' mvHisto_HC(qData, samplesData, conds, indLegend="auto", showValues=TRUE)
+#' mvHisto_HC(qData, samplesData, conds,  showValues=TRUE)
 #' 
 #' @export
 #'
-mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto", 
-                       showValues=FALSE, base_palette = NULL){
+mvHisto_HC <- function(qData, 
+                       samplesData, 
+                       conds, 
+                       indLegend="auto", 
+                       showValues=FALSE, 
+                       palette = NULL){
   
   
-  palette <- GetColorsForConditions(conds, base_palette)
-  print(palette)
+  myColors <- NULL
+  if (is.null(palette)){
+    warning("Color palette set to default.")
+    myColors <-  GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
+  } else {
+    if (length(palette) != length(unique(conds))){
+      warning("The color palette has not the same dimension as the number of samples")
+      myColors <- GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
+    } else 
+      myColors <- palette
+  }
   
   if (identical(indLegend,"auto")) { 
     indLegend <- c(2:length(colnames(samplesData)))
@@ -370,8 +382,8 @@ mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto",
   h1 <-  highchart() %>%
     my_hc_chart(chartType = "column") %>%
     hc_title(text = "#NA by replicate") %>%
-    hc_add_series(df,type="column", colorByPoint = TRUE) %>%
-    hc_colors(palette) %>%
+    hc_add_series(df, type="column", colorByPoint = TRUE) %>%
+    #hc_colors(ExtendPalette(length(unique(conds)))) %>%
     hc_plotOptions( column = list(stacking = "normal"),
                     animation=list(duration = 100)) %>%
     hc_legend(enabled = FALSE) %>%
@@ -379,10 +391,8 @@ mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto",
     my_hc_ExportMenu(filename = "missingValuesPlot_3") %>%
     hc_tooltip(headerFormat= '',
                pointFormat = "{point.y}")
-  
-  
-  return(h1)
 
+  return(h1)
 }
 
 
