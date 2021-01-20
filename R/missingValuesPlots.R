@@ -344,6 +344,8 @@ wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
 #' samplesData <- Biobase::pData(Exp1_R25_pept)
 #' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 #' mvHisto_HC(qData, samplesData, conds,  showValues=TRUE)
+#' pal <- ExtendPalette(2, 'Dark2')
+#' mvHisto_HC(qData, samplesData, conds,  showValues=TRUE, palette=pal)
 #' 
 #' @export
 #'
@@ -364,7 +366,7 @@ mvHisto_HC <- function(qData,
       warning("The color palette has not the same dimension as the number of samples")
       myColors <- GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
     } else 
-      myColors <- palette
+      myColors <- GetColorsForConditions(conds, palette)
   }
   
   if (identical(indLegend,"auto")) { 
@@ -383,7 +385,7 @@ mvHisto_HC <- function(qData,
     my_hc_chart(chartType = "column") %>%
     hc_title(text = "#NA by replicate") %>%
     hc_add_series(df, type="column", colorByPoint = TRUE) %>%
-    #hc_colors(ExtendPalette(length(unique(conds)))) %>%
+    hc_colors(myColors) %>%
     hc_plotOptions( column = list(stacking = "normal"),
                     animation=list(duration = 100)) %>%
     hc_legend(enabled = FALSE) %>%
@@ -495,7 +497,7 @@ mvImage <- function(qData, conds){
   }
   
   
-  heatmap.DAPAR(exprso,
+  heatmapForMissingValues(exprso,
                 col = colorRampPalette(c("yellow", "red"))(100),
                 key=TRUE,
                 srtCol= 0,
@@ -549,37 +551,57 @@ wrapper.hc_mvTypePlot2 <- function(obj,...){
 #' and the considered condition.
 #' 
 #' @title Distribution of Observed values with respect to intensity values
+#' 
 #' @param qData A dataframe that contains quantitative data.
+#' 
 #' @param conds A vector of the conditions (one condition per sample).
+#' 
 #' @param palette The different colors for conditions
+#' 
 #' @param typeofMV xxx
+#' 
 #' @param title The title of the plot
+#' 
+#' @import highcharter
+#' 
 #' @return Density plots
+#' 
 #' @author Samuel Wieczorek
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' qData <- Biobase::exprs(Exp1_R25_pept)
 #' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 #' hc_mvTypePlot2(qData, conds, title="POV distribution")
+#' pal <- ExtendPalette(length(unique(conds)), 'Dark2')
+#' hc_mvTypePlot2(qData, conds, title="POV distribution", palette=pal)
 #' 
 #' @export
 #'
-hc_mvTypePlot2 <- function(qData, conds, palette = NULL, typeofMV=NULL, title=NULL){
+hc_mvTypePlot2 <- function(qData,
+                           conds, 
+                           palette = NULL, 
+                           typeofMV=NULL, 
+                           title=NULL){
   if (is.null(conds)){return(NULL)}
   
+  myColors <- NULL
   if (is.null(palette)){
-    palette <- grDevices::colorRampPalette(brewer.pal(8, "Dark2"))(length(unique(conds)))
-  }else{
+    warning("Color palette set to default.")
+    palette <- ExtendPalette(length(unique(conds)))
+  } else {
     if (length(palette) != length(unique(conds))){
-      warning("The color palette has not the same dimension as the number of conditions. Set to default palette.")
-      palette <- grDevices::colorRampPalette(brewer.pal(8, "Dark2"))(length(unique(conds)))
-      #return(NULL)
+      warning("The color palette has not the same dimension as the number of samples")
+      palette <- ExtendPalette(length(unique(conds)))
     }
+      
   }
   
   conditions <- conds
-  mTemp <- nbNA <- nbValues <- matrix(rep(0,nrow(qData)*length(unique(conditions))), nrow=nrow(qData),
-                                      dimnames=list(NULL,unique(conditions)))
+  mTemp <- nbNA <- nbValues <- matrix(rep(0,nrow(qData)*length(unique(conditions))), 
+                                      nrow=nrow(qData),
+                                      dimnames=list(NULL,unique(conditions))
+                                      )
   dataCond <- data.frame()
   ymax <- 0
   series <- list()

@@ -150,7 +150,9 @@ qDataBefore <- Biobase::exprs(obj)
 conds <- Biobase::pData(obj)[,"Condition"]
 objAfter <- wrapper.normalizeD(obj, method = "QuantileCentering", conds =conds, type = "within conditions")
 compareNormalizationD_HC(qDataBefore=qDataBefore, qDataAfter=Biobase::exprs(objAfter), conds=conds, n=100)
-
+pal <- ExtendPalette(2, "Dark2")
+compareNormalizationD_HC(qDataBefore=qDataBefore, qDataAfter=Biobase::exprs(objAfter), conds=conds, n=100, palette=pal)
+ 
 }
 \author{
 Samuel Wieczorek

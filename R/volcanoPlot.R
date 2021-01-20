@@ -151,11 +151,11 @@ return(p)
 #'
 #' @importFrom Biobase pData exprs fData
 #'
-diffAnaVolcanoplot_rCharts <- function(df, 
-                                        threshold_pVal=1e-60, 
-                                        threshold_logFC=0, 
-                                        conditions=NULL, 
-                                        clickFunction=NULL,
+diffAnaVolcanoplot_rCharts <- function(df,
+                                       threshold_pVal=1e-60,
+                                       threshold_logFC=0,
+                                       conditions=NULL,
+                                       clickFunction=NULL,
                                        palette=NULL,
                                        swap = FALSE){
     
@@ -169,7 +169,12 @@ diffAnaVolcanoplot_rCharts <- function(df,
     
     if(is.null(palette)){
       palette <- list(In='orange', Out='gray')
-    } 
+    } else {
+      if (length(palette) != 2){
+        warning('The palette must be a list of two items: In and Out. Set to default.')
+        palette <- list(In='orange', Out='gray')
+      }
+    }
     
     df <- cbind(df, 
                 g=ifelse(df$y >= threshold_pVal & abs(df$x) >= threshold_logFC, "g1", "g2")

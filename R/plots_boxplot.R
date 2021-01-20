@@ -71,7 +71,7 @@ boxPlotD_HC <- function(obj,
       warning("The color palette has not the same dimension as the number of samples")
       myColors <- GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
     } else 
-      myColors <- palette
+      myColors <- GetColorsForConditions(conds, palette)
   }
   
   

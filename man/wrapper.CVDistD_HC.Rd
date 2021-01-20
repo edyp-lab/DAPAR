@@ -15,39 +15,10 @@ wrapper.CVDistD_HC(obj, ...)
 A density plot
 }
 \description{
-#' Builds a densityplot of the CV of entities in the exprs() table
-#' of an object \code{MSnSet}. The variance is calculated for each 
-#' condition present
-#' in the dataset (see the slot \code{'Condition'} in the \code{pData()} table).
-#' 
-#' @title Distribution of CV of entities
-#' 
-#' @param obj An object of class \code{MSnSet}.
-#' 
-#' @param ... arguments for palette
-#' 
-#' @return A density plot
-#' 
-#' @author Alexia Dorffer
-#' 
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' wrapper.CVDistD(Exp1_R25_pept)
-#' 
-#' @importFrom Biobase exprs pData
-#' 
-#' @export
-#' 
-wrapper.CVDistD <- function(obj, ...){
-  qData <- Biobase::exprs(obj)
-  conds <- Biobase::pData(obj)[,"Condition"]
-  CVDistD(qData, conds, ...)
-}
 Builds a densityplot of the CV of entities in the exprs() table. 
 of an object \code{MSnSet}. The variance is calculated for each 
 condition present
 in the dataset (see the slot \code{'Condition'} in the \code{pData()} table).
-Same as the function \code{\link{wrapper.CVDistD}} but uses the package \code{highcharter}
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')

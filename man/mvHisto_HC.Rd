@@ -40,7 +40,9 @@ utils::data(Exp1_R25_pept, package='DAPARdata')
 qData <- Biobase::exprs(Exp1_R25_pept)
 samplesData <- Biobase::pData(Exp1_R25_pept)
 conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-mvHisto_HC(qData, samplesData, conds, indLegend="auto", showValues=TRUE)
+mvHisto_HC(qData, samplesData, conds,  showValues=TRUE)
+pal <- ExtendPalette(2, 'Dark2')
+mvHisto_HC(qData, samplesData, conds,  showValues=TRUE, palette=pal)
 
 }
 \author{

@@ -48,6 +48,9 @@
 #'   compareNormalizationD(qDataBefore, qDataAfter, conds, indData2Show, ...)
 #' }
 
+
+
+
 #' Wrapper to the function that plot to compare the quantitative proteomics 
 #' data before and after normalization.
 #' 
@@ -80,7 +83,8 @@
 #' 
 #' @importFrom Biobase exprs fData pData
 #' 
-wrapper.compareNormalizationD_HC <- function(objBefore, objAfter, 
+wrapper.compareNormalizationD_HC <- function(objBefore, 
+                                             objAfter, 
                                              condsForLegend=NULL,
                                              ...){
   
@@ -232,7 +236,9 @@ wrapper.compareNormalizationD_HC <- function(objBefore, objAfter,
 #' conds <- Biobase::pData(obj)[,"Condition"]
 #' objAfter <- wrapper.normalizeD(obj, method = "QuantileCentering", conds =conds, type = "within conditions")
 #' compareNormalizationD_HC(qDataBefore=qDataBefore, qDataAfter=Biobase::exprs(objAfter), conds=conds, n=100)
-#' 
+#' pal <- ExtendPalette(2, "Dark2")
+#' compareNormalizationD_HC(qDataBefore=qDataBefore, qDataAfter=Biobase::exprs(objAfter), conds=conds, n=100, palette=pal)
+#'  
 #' @import highcharter
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom tibble as_tibble
@@ -248,14 +254,10 @@ compareNormalizationD_HC <- function(qDataBefore,
                                      n = 100,
                                      type = 'scatter'){
   
-  if (is.null(conds)){
-    warning("'conds' is null.")
-    return(NULL)
-  }
-  
-  print(str(subset.view))
-  print(paste0('subset.view:',subset.view))
-  
+  if (missing(conds))
+    stop("'conds' is missing")
+
+ 
   if (!is.null(subset.view) && length(subset.view) > 0)
   {
     if (nrow(qDataBefore) > 1)
@@ -295,20 +297,24 @@ compareNormalizationD_HC <- function(qDataBefore,
       }
   }
   
-  palette <- GetColorsForConditions(conds, palette)
-  # if (is.null(palette)){palette <- rep("#FFFFFF", ncol(qDataBefore))
-  # } else {
-  #   if (length(palette) != ncol(qDataBefore)){
-  #     warning("The color palette has not the same dimension as the number of samples")
-  #     return(NULL)
-  #   }
-  # }
+  
+  myColors <- NULL
+  if (is.null(palette)){
+    warning("Color palette set to default.")
+    myColors <-   GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
+  } else {
+    if (length(palette) != length(unique(conds))){
+      warning("The color palette has not the same dimension as the number of samples")
+      myColors <- GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
+    } else 
+      myColors <- GetColorsForConditions(conds, palette)
+  }
   
   x <- qDataBefore
   y <- qDataAfter/qDataBefore
   
   ##Colors definition
-  legendColor <- unique(palette)
+  legendColor <- unique(myColors)
   txtLegend <- unique(conds)
   
   
@@ -325,7 +331,7 @@ compareNormalizationD_HC <- function(qDataBefore,
   h1 <-  highchart() %>% 
     dapar_hc_chart( chartType = type) %>%
     hc_add_series_list(series) %>%
-    hc_colors(palette) %>%
+    hc_colors(myColors) %>%
     hc_tooltip(list(enabled=F)) %>%
     dapar_hc_ExportMenu(filename = "compareNormalization")
   h1

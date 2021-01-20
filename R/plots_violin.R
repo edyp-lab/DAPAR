@@ -17,8 +17,6 @@
 #' 
 #' @author Samuel Wieczorek, Anais Courtier
 #' 
-#' @seealso \code{\link{densityPlotD}}
-#' 
 #' @examples
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
 #' obj <- Exp1_R25_prot
@@ -26,17 +24,13 @@
 #' legend <- conds <- Biobase::pData(obj)$Condition
 #' key <- "Protein_IDs"
 #' violinPlotD(obj, conds, key, legend, NULL, 1:10)
-#' palette <- ExtendPalette(length(unique(conds)))
-#' violinPlotD(obj, conds, key, legend, palette, 1:10)
-#' 
-#' violinPlotD(obj, conds=legend, keyId=key, legend=legend, palette=c(rep('blue',3), rep('green',3)),subset.view=1:10)
+#' pal <- ExtendPalette(length(unique(conds)))
+#' violinPlotD(obj, conds, key, legend, pal, 1:10)
 #' 
 #' @importFrom vioplot vioplot
 #' 
-#' @importFrom grDevices colorRampPalette
 #' @importFrom graphics plot.window axis mtext legend points segments plot.new
 #' 
-#' @importFrom RColorBrewer brewer.pal
 #' @importFrom stats na.omit
 #' 
 #' @export
@@ -76,13 +70,13 @@ violinPlotD <- function(obj,
   
   myColors <- NULL
   if (is.null(palette)){
-    myColors <-  rep("#FFFFFF", ncol(qData))
+    myColors <-  GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
   } else {
     if (length(palette) != length(unique(conds))){
       warning("The color palette has not the same dimension as the number of samples")
       return(NULL)
     } else 
-      myColors <- GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
+      myColors <- GetColorsForConditions(conds, palette)
   }
   
   graphics::plot.window(xlim=c(0,ncol(qData)+1),
