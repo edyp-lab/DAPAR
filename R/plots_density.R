@@ -41,8 +41,8 @@ densityPlotD_HC <- function(obj,
     myColors <- GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
   } else {
     if (length(palette) != length(unique(conds))){
-      warning("The color palette has not the same dimension as the number of samples")
-      return(NULL)
+      warning("The color palette has not the same dimension as the number of samples. Set to default.")
+      myColors <- GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
     } else 
       myColors <- GetColorsForConditions(conds, palette)
   }

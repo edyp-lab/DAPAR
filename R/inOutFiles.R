@@ -90,7 +90,7 @@ setMEC <- function(obj){
 #' 
 #' @param obj An object of class \code{MSnSet}
 #' 
-#' @param index A list of integer xxxxxxx
+#' @param names A list of integer xxxxxxx
 #' 
 #' @return An instance of class \code{MSnSet}.
 #' 
@@ -104,7 +104,8 @@ setMEC <- function(obj){
 #' 
 #' @importFrom Biobase pData exprs fData
 #' 
-addOriginOfValue <- function(obj,index=NULL){
+addOriginOfValue <- function(obj,
+                             names = NULL){
   
   if (!is.null(obj@experimentData@other$OriginOfValues)) {
     print("Dataframe already exists. No modification has been made to the MSnset object.")
@@ -112,8 +113,8 @@ addOriginOfValue <- function(obj,index=NULL){
   }
   
   
-  if (!is.null(index)) {
-    OriginOfValues <- Biobase::fData(obj)[,index]
+  if (!is.null(names)) {
+    OriginOfValues <- Biobase::fData(obj)[,names]
   } else {   
     OriginOfValues <- data.frame(matrix(rep("unknown", nrow(Biobase::exprs(obj))*ncol(Biobase::exprs(obj))), 
                                         nrow=nrow(Biobase::exprs(obj)),
@@ -212,6 +213,9 @@ createMSnset <- function(file,
     data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
   } else {data <- file}
   
+  
+  colnamesForOriginOfValue <- colnames(data)[indexForOriginOfValue]
+  
   ## replace all blanks by a dot
   ##   cols <- gsub(" ","\\.",  colnames(data)[indExpData])
   ##   dotIndice <- regexpr(pattern = '.',cols, fixed=TRUE) [1]
@@ -232,7 +236,7 @@ createMSnset <- function(file,
   # }else{rownames(Intensity) <- data[,indiceID]}
   
   ##building fData of MSnSet file
-  fd <- data.frame( data[,indFData],stringsAsFactors = FALSE)
+  fd <- data.frame( data[,indFData], stringsAsFactors = FALSE)
   
   if (is.null(indiceID)) {
     rownames(fd) <- rep(paste(pep_prot_data, "_", 1:nrow(fd), sep=""))
@@ -244,7 +248,7 @@ createMSnset <- function(file,
   
   colnames(fd) <- gsub(".", "_", colnames(data)[indFData], fixed=TRUE)
   
-  pd <- as.data.frame(metadata,stringsAsFactors = FALSE)
+  pd <- as.data.frame(metadata, stringsAsFactors = FALSE)
   rownames(pd) <- gsub(".", "_", pd$Sample.name, fixed=TRUE)
   pd$Sample.name <- gsub(".", "_", pd$Sample.name, fixed=TRUE)
   
@@ -284,7 +288,7 @@ createMSnset <- function(file,
   
   obj@experimentData@other$RawPValues <- FALSE
   
-  obj <- addOriginOfValue(obj,indexForOriginOfValue)
+  obj <- addOriginOfValue(obj, colnamesForOriginOfValue)
   
   return(obj)
 }
