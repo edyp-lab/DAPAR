@@ -10,9 +10,10 @@
 #' 
 #' @param legend A vector of the conditions (one condition per sample).
 #' 
-#' @param palette xxx
+#' @param palette A basis palette for the boxes which length must be equal
+#' to the number of unique conditions in the dataset.
 #' 
-#' @param subset.view A vector of index indicating rows to highlight
+#' @param subset.view A vector of index indicating which rows to highlight
 #' 
 #' @return A boxplot
 #' 
@@ -23,7 +24,9 @@
 #' obj <- Exp1_R25_prot
 #' conds <- legend <- Biobase::pData(obj)$Condition
 #' key <- "Protein_IDs"
-#' boxPlotD_HC(obj, conds, key, legend, c(rep('blue',3), rep('green',3)), 1:10)
+#' boxPlotD_HC(obj, conds, key, legend, NULL, 1:10)
+#' palette <- ExtendPalette(length(unique(conds)))
+#' boxPlotD_HC(obj, conds, key, legend, palette, 1:10)
 #' 
 #' @import highcharter
 #' 
@@ -36,7 +39,12 @@
 #' 
 #' @export
 #' 
-boxPlotD_HC <- function(obj, conds, keyId=NULL, legend=NULL, palette = NULL, subset.view=NULL){
+boxPlotD_HC <- function(obj, 
+                        conds, 
+                        keyId=NULL, 
+                        legend=NULL, 
+                        palette = NULL, 
+                        subset.view=NULL){
   
   if (is.null(obj)){
     warning('The dataset in NULL and cannot be shown')
@@ -52,6 +60,18 @@ boxPlotD_HC <- function(obj, conds, keyId=NULL, legend=NULL, palette = NULL, sub
     legend <- conds
     for (i in unique(conds))
       legend[which(conds==i)] <- paste0(i, '_', 1:length(which(conds==i)))
+  }
+  
+  myColors <- NULL
+  if (is.null(palette)){
+    warning("Color palette set to default.")
+    myColors <-   GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
+  } else {
+    if (length(palette) != length(unique(conds))){
+      warning("The color palette has not the same dimension as the number of samples")
+      myColors <- GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
+    } else 
+      myColors <- palette
   }
   
   
@@ -185,14 +205,7 @@ boxPlotD_HC <- function(obj, conds, keyId=NULL, legend=NULL, palette = NULL, sub
     hc
   }
   
-  #palette <- BuildPalette(conds, palette)
-  if (is.null(palette)){palette <- rep("#FFFFFF", ncol(qData))
-  } else {
-    if (length(palette) != ncol(qData)){
-      warning("The color palette has not the same dimension as the number of samples")
-      return(NULL)
-    }
-  }
+  
   
   df <- data.frame(cbind(categ =rep(colnames(qData),nrow(qData)),
                          value = as.vector(apply(qData, 1, function(x) as.vector(x)))))
@@ -202,13 +215,13 @@ boxPlotD_HC <- function(obj, conds, keyId=NULL, legend=NULL, palette = NULL, sub
                                                     chart_title = "",
                                                     chart_x_axis_label = "Samples",
                                                     show_outliers = TRUE, 
-                                                    boxcolors = palette,
+                                                    boxcolors = myColors,
                                                     box_line_colors = "black")
   
     # Display of rows to highlight (index of row in subset.view) 
   if(!is.null(subset.view)){
     idVector <- keyId
-    pal=grDevices::colorRampPalette(RColorBrewer::brewer.pal(8, "Set1"))(length(subset.view))  
+    pal = ExtendPalette(length(subset.view), "Dark2") 
     n=0
     for(i in subset.view){
       n=n+1

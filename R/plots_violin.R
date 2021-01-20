@@ -25,6 +25,10 @@
 #' library(vioplot)
 #' legend <- conds <- Biobase::pData(obj)$Condition
 #' key <- "Protein_IDs"
+#' violinPlotD(obj, conds, key, legend, NULL, 1:10)
+#' palette <- ExtendPalette(length(unique(conds)))
+#' violinPlotD(obj, conds, key, legend, palette, 1:10)
+#' 
 #' violinPlotD(obj, conds=legend, keyId=key, legend=legend, palette=c(rep('blue',3), rep('green',3)),subset.view=1:10)
 #' 
 #' @importFrom vioplot vioplot
@@ -44,18 +48,14 @@ violinPlotD <- function(obj,
                         palette = NULL, 
                         subset.view=NULL){
   
-  
   graphics::plot.new()
-  
+ 
   if (is.null(obj)) {
     warning('The dataset in NULL and cannot be shown')
     return(NULL)
   } else 
     qData <- Biobase::exprs(obj)
   
-  
-    
-    
   if(missing(conds))
     stop("'conds' is missing.")
   
@@ -74,15 +74,15 @@ violinPlotD <- function(obj,
     }
   }
   
-  
-  #palette <- BuildPalette(conds, palette)
+  myColors <- NULL
   if (is.null(palette)){
-    palette <- rep("#FFFFFF", ncol(qData))
+    myColors <-  rep("#FFFFFF", ncol(qData))
   } else {
-    if (length(palette) != ncol(qData)){
+    if (length(palette) != length(unique(conds))){
       warning("The color palette has not the same dimension as the number of samples")
       return(NULL)
-    }
+    } else 
+      myColors <- GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
   }
   
   graphics::plot.window(xlim=c(0,ncol(qData)+1),
@@ -92,7 +92,7 @@ violinPlotD <- function(obj,
          xlab = 'Samples')
   
   for (i in 1:ncol(qData)) {
-    vioplot::vioplot(na.omit(qData[,i]), col = palette[i], add=TRUE, at=i)
+    vioplot::vioplot(na.omit(qData[,i]), col = myColors[i], add=TRUE, at=i)
   }
   
   
@@ -120,7 +120,7 @@ violinPlotD <- function(obj,
   # Display of rows to highlight (index of row in subset.view) 
   if(!is.null(subset.view)){
     idVector <- keyId
-    pal <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(8, "Set1"))(length(subset.view))
+    pal <- ExtendPalette(length(subset.view), "Dark2") 
     
     n=0
     for (i in subset.view) {
@@ -142,49 +142,3 @@ violinPlotD <- function(obj,
   }
   
 }
-
-
-
-# 
-# violinPlotD <- function(obj, legend=NULL, palette = NULL){
-#   plot.new()
-#   qData <- Biobase::exprs(obj)
-#   
-#   if (!is.null(palette)) {
-#     if (length(palette) != ncol(qData)){
-#       warning("The color palette has not the same dimension as the number of samples")
-#       return(NULL)
-#     }
-#   } else {
-#     palette <- rep('#FFFFFF',ncol(qData))
-#   }
-#   
-#   
-#   plot.window(xlim=c(0,ncol(qData)+1),
-#               ylim=c(min(na.omit(qData)),max(na.omit(qData))))
-#   title( ylab="Log (intensity)")
-#   
-#   for (i in 1:ncol(qData)) {
-#     vioplot(na.omit(qData[,i]), col = palette[i], add=TRUE, at=i)}
-#   
-#   
-#   axis(2, yaxp = c(floor(min(na.omit(qData))), 
-#                    floor(max(na.omit(qData))), 5), las=1)
-#   
-#   if( !is.null(legend)) {
-#     if (is.vector(legend) ){
-#       N <- 1} else{ N <- ncol(legend)}
-#     
-#     for (i in 1:N){
-#       axis(side=1,
-#            at = 1:ncol(qData),
-#            label = if (is.vector(legend) ) 
-#            {legend} else {legend[,i]},
-#            line= 2*i-1
-#       )
-#     }
-#     
-#     mtext("Samples",side=1,line=6+length(colnames(legend)), cex.lab=1, las=1)
-#   }
-#   
-# }

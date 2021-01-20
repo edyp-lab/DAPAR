@@ -85,7 +85,11 @@ wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete",
 #' 
 #' @export
 #' 
-heatmapD <- function(qData, conds, distance="euclidean", cluster="complete", dendro = FALSE){
+heatmapD <- function(qData, 
+                     conds, 
+                     distance="euclidean", 
+                     cluster="complete", 
+                     dendro = FALSE){
   ##Check parameters
   # paramdist <- c("euclidean", "manhattan") 
   # if (!(distance %in% paramdist)){
@@ -122,7 +126,7 @@ heatmapD <- function(qData, conds, distance="euclidean", cluster="complete", den
   x[is.na(x)] <- -1e5
   dist= dist(x, method=distance)
   hcluster = hclust(dist, method=cluster)
-  palette <- BuildPalette(conds)
+  palette <- GetColorsForConditions(conds)
   #palette.init <- RColorBrewer::brewer.pal(8,"Dark2")[1:length(unique(conds))]
   #palette.init <- grDevices::colorRampPalette(brewer.pal(8, "Dark2"))(length(unique(conds)))
   #for (i in 1:length(conds)){
@@ -200,14 +204,14 @@ heatmapD <- function(qData, conds, distance="euclidean", cluster="complete", den
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- mvFilter(Exp1_R25_pept, "WholeMatrix", 6)
 #' qData <- Biobase::exprs(obj)
-#' heatmap.DAPAR(qData)
+#' heatmapForMissingValues(qData)
 #' 
 #' @export
 #' 
 #' @importFrom grDevices heat.colors
 #' @importFrom graphics image
 #' 
-heatmap.DAPAR <- 
+heatmapForMissingValues <- 
   function (x, 
             col = heat.colors(100),
             srtCol=NULL,

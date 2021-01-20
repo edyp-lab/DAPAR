@@ -57,7 +57,9 @@
 #' 
 #' @importFrom Biobase pData exprs fData
 #' 
-wrapper.mvPerLinesHisto_HC <- function(obj, indLegend="auto", showValues=FALSE){
+wrapper.mvPerLinesHisto_HC <- function(obj, 
+                                       indLegend="auto", 
+                                       showValues=FALSE){
   if (is.null(obj)){
     warning("The dataset in NULL. Cannot continue.")
     return(NULL)
@@ -91,7 +93,10 @@ wrapper.mvPerLinesHisto_HC <- function(obj, indLegend="auto", showValues=FALSE){
 #' 
 #' @export
 #'
-mvPerLinesHisto_HC <- function(qData, samplesData, indLegend="auto", showValues=FALSE){
+mvPerLinesHisto_HC <- function(qData, 
+                               samplesData, 
+                               indLegend="auto", 
+                               showValues=FALSE){
   
   if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
   
@@ -209,25 +214,43 @@ wrapper.mvPerLinesHistoPerCondition_HC <- function(obj, ...){
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' qData <- Biobase::exprs(Exp1_R25_pept)
 #' samplesData <- Biobase::pData(Exp1_R25_pept)
-#' mvPerLinesHistoPerCondition_HC(qData, samplesData, palette=(c('#AAAAAA', '#AAAAAA')))
+#' pal <- ExtendPalette(length(unique( samplesData[,"Condition"])), 'Dark2')
+#' mvPerLinesHistoPerCondition_HC(qData, samplesData, palette=pal)
+#' mvPerLinesHistoPerCondition_HC(qData, samplesData)
 #' 
 #' @export
 #'
-mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto", 
-                                           showValues=FALSE, palette=NULL){
+mvPerLinesHistoPerCondition_HC <- function(qData, 
+                                           samplesData, 
+                                           indLegend="auto", 
+                                           showValues=FALSE,
+                                           palette=NULL){
   
   conds <- samplesData[,"Condition"]
   
-  palette <- BuildPalette(conds, palette)
+  myColors <- NULL
+  if (is.null(palette)){
+    warning("Color palette set to default.")
+    myColors <-  GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
+  } else {
+    if (length(palette) != length(unique(conds))){
+      warning("The color palette has not the same dimension as the number of samples")
+      myColors <- GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
+    } else 
+      myColors <- palette
+  }
   
   if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
   
   nbConditions <- length(unique(samplesData[,"Condition"]))
   
-  ncolMatrix <- max(unlist(lapply(unique(samplesData[,"Condition"]), function(x){length(which(samplesData[,"Condition"]==x))})))
+  ncolMatrix <- max(unlist(lapply(unique(samplesData[,"Condition"]), 
+                                  function(x){length(which(samplesData[,"Condition"]==x))}
+                                  )))
   m <- matrix(rep(0, nbConditions*(1+ncolMatrix)), 
               ncol = nbConditions, 
-              dimnames=list(seq(0:(ncolMatrix)),unique(samplesData[,"Condition"])))
+              dimnames=list(seq(0:(ncolMatrix)),
+                            unique(samplesData[,"Condition"])))
   
   for (i in unique(samplesData[,"Condition"]))
   {
@@ -249,7 +272,7 @@ mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto",
     hc_plotOptions( column = list(stacking = ""),
                     dataLabels = list(enabled = FALSE),
                     animation=list(duration = 100)) %>%
-    hc_colors(unique(palette)) %>%
+    hc_colors(unique(myColors)) %>%
     hc_legend(enabled = FALSE) %>%
     hc_xAxis(categories = row.names(m), title = list(text = "#[NA values] per line (condition-wise)")) %>%
     my_hc_ExportMenu(filename = "missingValuesPlot_2") %>%
@@ -329,7 +352,7 @@ mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto",
                        showValues=FALSE, base_palette = NULL){
   
   
-  palette <- BuildPalette(conds, base_palette)
+  palette <- GetColorsForConditions(conds, base_palette)
   print(palette)
   
   if (identical(indLegend,"auto")) { 

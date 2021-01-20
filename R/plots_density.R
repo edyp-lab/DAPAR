@@ -1,88 +1,90 @@
 
 
-#' Densityplot of quantitative proteomics data over samples.
+#' #' Densityplot of quantitative proteomics data over samples.
+#' #' 
+#' #' @title Builds a densityplot from a dataframe
+#' #' 
+#' #' @param obj xxx
+#' #' 
+#' #' @param conds xxx
+#' #' 
+#' #' @param legend A vector of the conditions (one condition per sample).
+#' #' 
+#' #' @param palette xxx
+#' #' 
+#' #' @return A density plot
+#' #' 
+#' #' @author Florence Combes, Samuel Wieczorek
+#' #' 
+#' #' @examples 
+#' #' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' #' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+#' #' densityPlotD(Exp1_R25_pept, conds)
+#' #' 
+#' #' @importFrom Biobase exprs pData
+#' #' 
+#' #' @export
+#' #' 
+#' densityPlotD <- function(obj, 
+#'                          conds, 
+#'                          legend=NULL,
+#'                          palette = NULL){
+#'   
+#'   qData <- Biobase::exprs(obj)
+#'   
+#'   if (is.null(legend) ) { legend <- Biobase::pData(obj)[,"Condition"]}
+#'   
+#'   myColors <- NULL
+#'   if (is.null(palette)){
+#'     myColors <-  rep("#FFFFFF", ncol(qData))
+#'   } else {
+#'     if (length(palette) != length(unique(conds))){
+#'       warning("The color palette has not the same dimension as the number of samples")
+#'       return(NULL)
+#'     } else 
+#'       myColors <- GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
+#'   }
+#'   
+#'   
+#'   ### Range of axis definition
+#'   axis.limits <- matrix(data = 0, nrow = 4, ncol = ncol(qData))
+#'   for (i in 1:ncol(qData)){
+#'     dens <- density(qData[,i], na.rm = TRUE)
+#'     axis.limits[,i] <- c(min(dens$x), max(dens$x), min(dens$y), max(dens$y))
+#'   }
+#'   lim.x <- range(min(axis.limits[1,]), max(axis.limits[2,]))
+#'   lim.y <- range(min(axis.limits[3,]), max(axis.limits[4,]))
+#'   
+#'   
+#'   
+#'   plot(x =NULL
+#'        , ylab ="Density"
+#'        , xlab = "log(intensity)"
+#'        , col = myColors
+#'        ,xlim = lim.x
+#'        ,ylim = lim.y
+#'        ,las = 1
+#'        ,cex.lab = 1
+#'        ,cex.axis = 1
+#'        ,cex.main = 3)
+#'   
+#'   for (i in ncol(qData)){
+#'     lines(density(qData[,i], na.rm=TRUE), col = myColors[i])
+#'   }
+#'   
+#'   
+#'   legend("topleft"         
+#'          , legend = unique(myColors)
+#'          , col = unique(myColors)
+#'          , pch = 15 
+#'          , bty = "n"
+#'          , pt.cex = 2
+#'          , cex = 1
+#'          , horiz = FALSE
+#'          , inset=c(0,0)
+#'   )
+#' }
 #' 
-#' @title Builds a densityplot from a dataframe
-#' 
-#' @param obj xxx
-#' 
-#' @param conds xxx
-#' 
-#' @param legend A vector of the conditions (one condition per sample).
-#' 
-#' @param palette xxx
-#' 
-#' @return A density plot
-#' 
-#' @author Florence Combes, Samuel Wieczorek
-#' 
-#' @examples 
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-#' densityPlotD(Exp1_R25_pept, conds)
-#' 
-#' @importFrom Biobase exprs pData
-#' @importFrom RColorBrewer brewer.pal
-#' 
-#' @export
-#' 
-densityPlotD <- function(obj, conds, legend=NULL,palette = NULL){
-  
-  qData <- Biobase::exprs(obj)
-  
-  if (is.null(legend) ) { legend <- Biobase::pData(obj)[,"Condition"]}
-  
-  if (is.null(palette)){
-    #palette <- RColorBrewer::brewer.pal(length(unique(conds)),"Dark2")
-    palette <- grDevices::colorRampPalette(brewer.pal(8, "Dark2"))(length(unique(conds)))
-  }else{
-    if (length(palette) != ncol(qData)){
-      warning("The color palette has not the same dimension as the number of samples. Set to default palette.")
-      palette <- grDevices::colorRampPalette(brewer.pal(8, "Dark2"))(length(unique(conds)))
-      #return(NULL)
-    }
-  }
-  
-  
-  ### Range of axis definition
-  axis.limits <- matrix(data = 0, nrow = 4, ncol = ncol(qData))
-  for (i in 1:ncol(qData)){
-    dens <- density(qData[,i], na.rm = TRUE)
-    axis.limits[,i] <- c(min(dens$x), max(dens$x), min(dens$y), max(dens$y))
-  }
-  lim.x <- range(min(axis.limits[1,]), max(axis.limits[2,]))
-  lim.y <- range(min(axis.limits[3,]), max(axis.limits[4,]))
-  
-  
-  
-  plot(x =NULL
-       , ylab ="Density"
-       , xlab = "log(intensity)"
-       , col = palette
-       ,xlim = lim.x
-       ,ylim = lim.y
-       ,las = 1
-       ,cex.lab = 1
-       ,cex.axis = 1
-       ,cex.main = 3)
-  
-  for (i in ncol(qData)){
-    lines(density(qData[,i], na.rm=TRUE), col = palette[i])
-  }
-  
-  
-  legend("topleft"         
-         , legend = unique(legend)
-         , col = unique(palette)
-         , pch = 15 
-         , bty = "n"
-         , pt.cex = 2
-         , cex = 1
-         , horiz = FALSE
-         , inset=c(0,0)
-  )
-}
-
 
 
 
@@ -105,33 +107,39 @@ densityPlotD <- function(obj, conds, legend=NULL,palette = NULL){
 #' @examples 
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' densityPlotD_HC(Exp1_R25_pept)
+#' conds <- Biobase::pData(Exp1_R25_pept)$Condition
+#' pal <- ExtendPalette(length(unique(conds)), 'Dark2')
+#' densityPlotD_HC(Exp1_R25_pept, palette=pal)
 #' 
 #' @import highcharter
 #' @importFrom Biobase exprs pData
 #' 
 #' @export
 #' 
-densityPlotD_HC <- function(obj, legend=NULL, palette = NULL){
+densityPlotD_HC <- function(obj, 
+                            legend=NULL, 
+                            palette = NULL){
   
   qData <- Biobase::exprs(obj)
+  conds <- Biobase::pData(obj)$Condition
   
   if (is.null(legend) ) { legend<- Biobase::pData(obj)[,"Condition"]}
-  
-  # if (is.null(palette)){
-  #   nbConds <- length(unique(condsForLegend))
-  #   palette <- brewer.pal(nbConds, "Dark2")[1:nbConds]
-  #    temp <- NULL
-  #   for (i in 1:ncol(qData)){
-  #     temp[i] <- palette[ which(condsForLegend[i] == unique(condsForLegend))]
-  #   }
-  #   palette <- temp
-  #   
-  # }else{
-  
+
+  myColors <- NULL
+  if (is.null(palette)){
+    myColors <- GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
+  } else {
+    if (length(palette) != length(unique(conds))){
+      warning("The color palette has not the same dimension as the number of samples")
+      return(NULL)
+    } else 
+      myColors <- palette
+  }
   
   h1 <-  highchart() %>% 
     hc_title(text = "Density plot") %>% 
     my_hc_chart(chartType = "spline", zoomType="x") %>%
+    hc_colors(myColors) %>%
     hc_legend(enabled = TRUE) %>%
     hc_xAxis(title = list(text = "log(Intensity)")) %>%
     hc_yAxis(title = list(text = "Density")) %>%
@@ -149,30 +157,18 @@ densityPlotD_HC <- function(obj, legend=NULL, palette = NULL){
           enabled = FALSE)
       )
     )
-  
-  if (!is.null(palette)) {
-    if (length(palette) != ncol(qData)){
-      warning("The color palette has not the same dimension as the number of samples")
-      return(NULL)
-    }
-    h1 <- h1 %>% hc_colors(palette)
-  }
-  
+ 
   if (is.null(legend)) {
     legend <- paste0("series", 1:ncol(qData))
   }
   
   for (i in 1:ncol(qData)){
-    
     tmp <- data.frame(x = density(qData[,i], na.rm = TRUE)$x, 
                       y = density(qData[,i], na.rm = TRUE)$y)
     
     h1 <- h1 %>% hc_add_series(data=list_parse(tmp), name=legend[i]) 
-    
   }
-  
-  
+
   return(h1)
-  
 }
 

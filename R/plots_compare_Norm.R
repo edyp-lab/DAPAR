@@ -295,7 +295,7 @@ compareNormalizationD_HC <- function(qDataBefore,
       }
   }
   
-  palette <- BuildPalette(conds, palette)
+  palette <- GetColorsForConditions(conds, palette)
   # if (is.null(palette)){palette <- rep("#FFFFFF", ncol(qDataBefore))
   # } else {
   #   if (length(palette) != ncol(qDataBefore)){
