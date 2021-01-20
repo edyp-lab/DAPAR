@@ -26,6 +26,9 @@
 #' 
 #' @export
 #' 
+#' @importFrom RColorBrewer brewer.pal
+#' @importFrom grDevices colorRampPalette
+#' 
 hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0, palette=NULL){
      if (is.null(df_logFC) || threshold_LogFC < 0){
       hc <- NULL
@@ -35,11 +38,13 @@ hc_logFC_DensityPlot <-function(df_logFC, threshold_LogFC = 0, palette=NULL){
   
   
   if (is.null(palette)){
-    palette <- RColorBrewer::brewer.pal(ncol(df_logFC),"Paired")[1:ncol(df_logFC)]
+    palette <- grDevices::colorRampPalette(brewer.pal(8, "Paired"))(ncol(df_logFC))
+    
   }else{
     if (length(palette) != ncol(df_logFC)){
-      warning("The color palette has not the same dimension as the number of samples")
-      return(NULL)
+      warning("The color palette has not the same dimension as the number of samples. Set to default palette.")
+      palette <- grDevices::colorRampPalette(brewer.pal(8, "Paired"))(ncol(df_logFC))
+     # return(NULL)
     }
   }
   

@@ -19,7 +19,7 @@ Authors@R: c(person(given = "Samuel", family = "Wieczorek",
             email = "enora.fremy@cea.fr",
     role = "ctb"),
     	person(given = "Helene", family ="Borges",
-            email = "helen.borges@cea.fr",
+            email = "helene.borges@cea.fr",
     role = "ctb"))
 Author: Samuel Wieczorek [cre,aut],
     Florence Combes [aut],
