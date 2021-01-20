@@ -214,7 +214,6 @@ createMSnset <- function(file,
   } else {data <- file}
   
   
-  colnamesForOriginOfValue <- colnames(data)[indexForOriginOfValue]
   
   ## replace all blanks by a dot
   ##   cols <- gsub(" ","\\.",  colnames(data)[indExpData])
@@ -287,6 +286,10 @@ createMSnset <- function(file,
   
   
   obj@experimentData@other$RawPValues <- FALSE
+  
+  colnamesForOriginOfValue <- NULL
+  if (!is.null(indexForOriginOfValue))
+    colnamesForOriginOfValue <- colnames(data)[indexForOriginOfValue]
   
   obj <- addOriginOfValue(obj, colnamesForOriginOfValue)
   
