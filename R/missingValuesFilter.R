@@ -839,6 +839,54 @@ return(keepThat)
 }
 
 
+#' Filter peptides/features after their identification method
+#'
+#' @description Identification xxx (output MaxQuant): By MS/MS, By matching, Missing Value
+#' #################################################################
+#' Remove lines in the data according to the proportion of missing
+#' values. This proportion is calculated differently depending on whether we
+#' want a certain proportion of missing values (NA) to remain on:
+#' * the entire matrix, regardless of the conditions: the rows containing a
+#' proportion of NA equal or below the threshold will be kept.
+#' * all the conditions: the lines for which all the conditions have a NA
+#' proportion equal to or less than the fixed proportion will be kept.
+#' * at least one condition: the lines for which at least one condition is
+#' equal to or less than the fixed proportion of NA will be kept.
+#'
+#' @param obj  An object of class \code{MSnSet} containing quantitative data
+#' and phenotype data.
+#'
+#' @param intensities_proportion float between 0 and 1 corresponding to the proportion
+#' of intensities to keep in the lines.
+#'
+#' @param mode character string. Four possibilities corresponding to the
+#' description above: "None", "WholeMatrix", "AllCond" and "AtLeastOneCond".
+#'
+#' @return the object given as input but with the lines not respecting the
+#' proportion of NA requested in less.
+#'
+#' @author Hélène Borges, Samuel Wieczorek
+#'
+#' @examples
+#' utils::data(Exp1_R25_prot, package='DAPARdata')
+#' filtered <- filterByProportion(obj = Exp1_R25_prot, intensities_proportion = 0.8, mode = "AtLeastOneCond")
+#'
+#' @export
+#'
+#' @importFrom stringr str_glue
+#' @importFrom Biobase exprs pData fData
+#' @import dplyr
+#' @importFrom tidyr pivot_longer
+#' @importFrom methods is
+#'
+#' #################################################################
+filt_Marianne <- function(obj) {
+
+  for (i in 81:86){
+    print(as.data.frame(table((Biobase::fData(obj))[i])))
+  }
+  somme <- table(Biobase::fData(obj))[81:86]
+}
 
 #' #' Filter missing values by proportion
 #' #'
