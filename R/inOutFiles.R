@@ -1,4 +1,3 @@
-
 #' Saves the parameters of a tool in the pipeline of Prostar
 #' 
 #' @title Saves the parameters of a tool in the pipeline of Prostar
@@ -90,7 +89,7 @@ setMEC <- function(obj){
 #' 
 #' @param obj An object of class \code{MSnSet}
 #' 
-#' @param index A list of integer xxxxxxx
+#' @param names A list of integer xxxxxxx
 #' 
 #' @return An instance of class \code{MSnSet}.
 #' 
@@ -104,7 +103,8 @@ setMEC <- function(obj){
 #' 
 #' @importFrom Biobase pData exprs fData
 #' 
-addOriginOfValue <- function(obj,index=NULL){
+addOriginOfValue <- function(obj,
+                             names = NULL){
   
   if (!is.null(obj@experimentData@other$OriginOfValues)) {
     print("Dataframe already exists. No modification has been made to the MSnset object.")
@@ -112,8 +112,8 @@ addOriginOfValue <- function(obj,index=NULL){
   }
   
   
-  if (!is.null(index)) {
-    OriginOfValues <- Biobase::fData(obj)[,index]
+  if (!is.null(names)) {
+    OriginOfValues <- Biobase::fData(obj)[,names]
   } else {   
     OriginOfValues <- data.frame(matrix(rep("unknown", nrow(Biobase::exprs(obj))*ncol(Biobase::exprs(obj))), 
                                         nrow=nrow(Biobase::exprs(obj)),
@@ -196,9 +196,14 @@ addOriginOfValue <- function(obj,index=NULL){
 #' @importFrom MSnbase MSnSet
 #' @importFrom utils read.table
 #' 
-createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
+createMSnset <- function(file,
+                         metadata=NULL,
+                         indExpData,
+                         indFData,
+                         indiceID=NULL,
                          indexForOriginOfValue = NULL,
-                         logData=FALSE, replaceZeros=FALSE,
+                         logData=FALSE, 
+                         replaceZeros=FALSE,
                          pep_prot_data=NULL,
                          proteinId = NULL,
                          versions=NULL){
@@ -206,6 +211,8 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
   if (!is.data.frame(file)){ #the variable is a path to a text file
     data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
   } else {data <- file}
+  
+  
   
   ## replace all blanks by a dot
   ##   cols <- gsub(" ","\\.",  colnames(data)[indExpData])
@@ -227,7 +234,7 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
   # }else{rownames(Intensity) <- data[,indiceID]}
   
   ##building fData of MSnSet file
-  fd <- data.frame( data[,indFData],stringsAsFactors = FALSE)
+  fd <- data.frame( data[,indFData], stringsAsFactors = FALSE)
   
   if (is.null(indiceID)) {
     rownames(fd) <- rep(paste(pep_prot_data, "_", 1:nrow(fd), sep=""))
@@ -239,7 +246,7 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
   
   colnames(fd) <- gsub(".", "_", colnames(data)[indFData], fixed=TRUE)
   
-  pd <- as.data.frame(metadata,stringsAsFactors = FALSE)
+  pd <- as.data.frame(metadata, stringsAsFactors = FALSE)
   rownames(pd) <- gsub(".", "_", pd$Sample.name, fixed=TRUE)
   pd$Sample.name <- gsub(".", "_", pd$Sample.name, fixed=TRUE)
   
@@ -279,7 +286,11 @@ createMSnset <- function(file,metadata=NULL,indExpData,indFData,indiceID=NULL,
   
   obj@experimentData@other$RawPValues <- FALSE
   
-  obj <- addOriginOfValue(obj,indexForOriginOfValue)
+  colnamesForOriginOfValue <- NULL
+  if (!is.null(indexForOriginOfValue))
+    colnamesForOriginOfValue <- colnames(data)[indexForOriginOfValue]
+  
+  obj <- addOriginOfValue(obj, colnamesForOriginOfValue)
   
   return(obj)
 }

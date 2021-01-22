@@ -4,15 +4,16 @@
 \alias{BuildPalette}
 \title{Builds a complete color palette for the conditions given in argument}
 \usage{
-BuildPalette(conds, base_palette)
+BuildPalette(conds, base_palette = NULL)
 }
 \arguments{
 \item{conds}{The extended vector of samples conditions}
 
-\item{base_palette}{The basic color (HEX code) used to build the complete palette. This vector have the same length as unique(conds)}
+\item{base_palette}{The basic color (HEX code) used to build the complete palette. This vector have the same length as unique(conds).
+Default base palette is 'Dark2' from the package RColorBrewer.}
 }
 \value{
-A vector composer of HEX color code for the conditions
+A vector composed of HEX color code for the conditions
 }
 \description{
 xxxx

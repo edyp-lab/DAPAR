@@ -4,12 +4,12 @@
 \alias{addOriginOfValue}
 \title{Sets the OriginOfValues dataframe}
 \usage{
-addOriginOfValue(obj, index = NULL)
+addOriginOfValue(obj, names = NULL)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}}
 
-\item{index}{A list of integer xxxxxxx}
+\item{names}{A list of integer xxxxxxx}
 }
 \value{
 An instance of class \code{MSnSet}.

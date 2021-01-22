@@ -213,8 +213,11 @@ wrapper.mvPerLinesHistoPerCondition_HC <- function(obj, ...){
 #' 
 #' @export
 #'
-mvPerLinesHistoPerCondition_HC <- function(qData, samplesData, indLegend="auto", 
-                                           showValues=FALSE, palette=NULL){
+mvPerLinesHistoPerCondition_HC <- function(qData, 
+                                           samplesData, 
+                                           indLegend="auto", 
+                                           showValues=FALSE, 
+                                           palette=NULL){
   
   conds <- samplesData[,"Condition"]
   
@@ -313,7 +316,7 @@ wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
 #' @param indLegend The indices of the column name's in \code{pData()} tab
 #' @param showValues A logical that indicates wether numeric values should be
 #' drawn above the bars.
-#' @param palette xxx
+#' @param base_palette xxx
 #' @return A histogram
 #' @author Florence Combes, Samuel Wieczorek
 #' @examples
@@ -325,8 +328,12 @@ wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
 #' 
 #' @export
 #'
-mvHisto_HC <- function(qData, samplesData, conds, indLegend="auto", 
-                       showValues=FALSE, base_palette = NULL){
+mvHisto_HC <- function(qData, 
+                       samplesData, 
+                       conds, 
+                       indLegend="auto", 
+                       showValues=FALSE, 
+                       base_palette = NULL){
   
   
   palette <- BuildPalette(conds, base_palette)
