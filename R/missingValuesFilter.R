@@ -20,16 +20,16 @@
 #' @importFrom Biobase exprs fData pData
 #' 
 getPourcentageOfMV <- function(obj){
-
+  
   df <- data.frame(Biobase::exprs(obj))
-
-NA.count<-apply(df, 2,
-                function(x) length(which(is.na(data.frame(x))==TRUE)) )
-
-
-pourcentage <- 100 * round(sum(NA.count) /(nrow(df)* ncol(df)), digits=4)
-
-return(pourcentage)
+  
+  NA.count<-apply(df, 2,
+                  function(x) length(which(is.na(data.frame(x))==TRUE)) )
+  
+  
+  pourcentage <- 100 * round(sum(NA.count) /(nrow(df)* ncol(df)), digits=4)
+  
+  return(pourcentage)
 }
 
 
@@ -57,16 +57,16 @@ return(pourcentage)
 #' @importFrom Biobase exprs fData pData
 #' 
 getNumberOf <- function(obj, name=NULL, prefix=NULL){
-if (is.null(name) || is.null(prefix) || (name=="") || (prefix=="")){
+  if (is.null(name) || is.null(prefix) || (name=="") || (prefix=="")){
     return(0)}
-if (!(is.null(name) || !is.null(name==""))
-    && (is.null(prefix) || (prefix==""))){return(0)}
-
-if(nchar(prefix) > 0){
+  if (!(is.null(name) || !is.null(name==""))
+      && (is.null(prefix) || (prefix==""))){return(0)}
+  
+  if(nchar(prefix) > 0){
     count <- length(which(substr(Biobase::fData(obj)[,name], 0, 1) == prefix))
-} else { count <- 0}
-
-return(count)
+  } else { count <- 0}
+  
+  return(count)
 }
 
 
@@ -97,23 +97,23 @@ return(count)
 #' 
 NumericalFiltering <- function(obj, name=NULL, value=NULL, operator=NULL){
   if ((is.null(name) || (name == ""))) {return(NULL)}
-
+  
   deleted <- NULL
   ind <- NULL
   ind <- NumericalgetIndicesOfLinesToRemove(obj,name, value, operator)
-
+  
   if (!is.null(ind) && (length(ind) > 0)){
     deleted <- obj[ind]
-
+    
     obj <- deleteLinesFromIndices(obj, ind,
                                   paste("\"",
                                         length(ind),
                                         " lines were removed from dataset.\"",
                                         sep="")
     )
-
+    
   }
-
+  
   return(list(obj=obj, deleted=deleted))
 }
 
@@ -150,10 +150,10 @@ NumericalgetIndicesOfLinesToRemove <- function(obj, name=NULL, value=NULL, opera
   if ((value == "") || is.null(value)|| (operator=="") || is.null(operator)) {
     # warning ("No change was made")
     return (NULL)}
-
+  
   data <- Biobase::fData(obj)[,name]
   ind <- which(eval(parse(text=paste0("data", operator, value))))
-
+  
   return(ind)
 }
 
@@ -182,38 +182,38 @@ NumericalgetIndicesOfLinesToRemove <- function(obj, name=NULL, value=NULL, opera
 #' @export
 #' 
 proportionConRev_HC <- function(nBoth = 0, nCont=0, nRev=0, lDataset=0){
-    if (is.null(nCont) && is.null(nBoth) && is.null(nRev) && is.null(lDataset)){return(NULL)}
-
-    total <- nBoth + nCont + nRev + lDataset
-    pctGood <- 100 * round(lDataset/total,  digits=4)
-    pctBoth <- 100 * round(nBoth/total,  digits=4)
-    pctContaminants <- 100 * round(nCont/total,  digits=4)
-    pctReverse <- 100 * round(nRev/total,  digits=4)
-
-    counts <- c(lDataset, nCont, nRev, nBoth)
-    slices <- c(pctGood, pctContaminants, pctReverse ,pctBoth)
-    lbls <- c("Quantitative data", "Contaminants", "Reverse", "Both contaminants & Reverse")
-    #pct <- c(pctGood, pctContaminants, pctReverse  ,pctBoth)
-    lbls <- paste(lbls, " (", counts, " lines)", sep="")
-
-    mydata <- data.frame(test=c(pctGood, pctContaminants, pctReverse ,pctBoth))
-
-    highchart() %>%
-        my_hc_chart(chartType = "bar") %>%
-        hc_yAxis(title = list(text = "Pourcentage")) %>%
-        hc_xAxis(categories=lbls) %>%
-        hc_legend(enabled = FALSE) %>%
-        hc_plotOptions(column = list(
-            dataLabels = list(enabled = TRUE),
-            stacking = "normal",
-            enableMouseTracking = FALSE)
-        ) %>%
-        hc_add_series(data  = mydata$test,
-                      dataLabels = list(enabled = TRUE, format='{point.y}%'),
+  if (is.null(nCont) && is.null(nBoth) && is.null(nRev) && is.null(lDataset)){return(NULL)}
+  
+  total <- nBoth + nCont + nRev + lDataset
+  pctGood <- 100 * round(lDataset/total,  digits=4)
+  pctBoth <- 100 * round(nBoth/total,  digits=4)
+  pctContaminants <- 100 * round(nCont/total,  digits=4)
+  pctReverse <- 100 * round(nRev/total,  digits=4)
+  
+  counts <- c(lDataset, nCont, nRev, nBoth)
+  slices <- c(pctGood, pctContaminants, pctReverse ,pctBoth)
+  lbls <- c("Quantitative data", "Contaminants", "Reverse", "Both contaminants & Reverse")
+  #pct <- c(pctGood, pctContaminants, pctReverse  ,pctBoth)
+  lbls <- paste(lbls, " (", counts, " lines)", sep="")
+  
+  mydata <- data.frame(test=c(pctGood, pctContaminants, pctReverse ,pctBoth))
+  
+  highchart() %>%
+    my_hc_chart(chartType = "bar") %>%
+    hc_yAxis(title = list(text = "Pourcentage")) %>%
+    hc_xAxis(categories=lbls) %>%
+    hc_legend(enabled = FALSE) %>%
+    hc_plotOptions(column = list(
+      dataLabels = list(enabled = TRUE),
+      stacking = "normal",
+      enableMouseTracking = FALSE)
+    ) %>%
+    hc_add_series(data  = mydata$test,
+                  dataLabels = list(enabled = TRUE, format='{point.y}%'),
                   colorByPoint = TRUE) %>%
-      my_hc_ExportMenu(filename = "contaminants")
-
-
+    my_hc_ExportMenu(filename = "contaminants")
+  
+  
 }
 
 
@@ -241,14 +241,14 @@ proportionConRev_HC <- function(nBoth = 0, nCont=0, nRev=0, lDataset=0){
 #' @export
 #' 
 removeLines <- function(obj, idLine2Delete=NULL, prefix=NULL){
-if ((prefix == "") || is.null(prefix)) {
+  if ((prefix == "") || is.null(prefix)) {
     #warning ("No change was made")
     return (obj)}
-    t <- (prefix == substring(Biobase::fData(obj)[,idLine2Delete],1,nchar(prefix)))
-    ind <- which( t== TRUE)
-    obj <- obj[-ind ]
-
-return(obj)
+  t <- (prefix == substring(Biobase::fData(obj)[,idLine2Delete],1,nchar(prefix)))
+  ind <- which( t== TRUE)
+  obj <- obj[-ind ]
+  
+  return(obj)
 }
 
 
@@ -289,77 +289,77 @@ return(obj)
 StringBasedFiltering <- function(obj, 
                                  idCont2Delete=NULL, prefix_Cont=NULL, 
                                  idRev2Delete=NULL, prefix_Rev=NULL){
-
-    deleted.both <- deleted.contaminants <- deleted.reverse <- NULL
-
-    ##
-    ##Search for both
-    ##
-    if ((!is.null(idCont2Delete) || (idCont2Delete != "")) &&
-        (!is.null(idRev2Delete) || (idRev2Delete != ""))) {
-        indContaminants <- indReverse <- indBoth <- NULL
-        indContaminants <- getIndicesOfLinesToRemove(obj,idCont2Delete,  prefix_Cont)
-        indReverse <- getIndicesOfLinesToRemove(obj, idRev2Delete, prefix_Rev)
-        indBoth <- intersect(indContaminants, indReverse)
-
-        if (!is.null(indBoth) && (length(indBoth) > 0)){
-                deleted.both <- obj[indBoth]
-                obj <- deleteLinesFromIndices(obj, indBoth,
-                                               paste("\"",
-                                                     length(indBoth),
-                                                     " both contaminants and reverse were removed from dataset.\"",
-                                                     sep="")
-                )
-            }
+  
+  deleted.both <- deleted.contaminants <- deleted.reverse <- NULL
+  
+  ##
+  ##Search for both
+  ##
+  if ((!is.null(idCont2Delete) || (idCont2Delete != "")) &&
+      (!is.null(idRev2Delete) || (idRev2Delete != ""))) {
+    indContaminants <- indReverse <- indBoth <- NULL
+    indContaminants <- getIndicesOfLinesToRemove(obj,idCont2Delete,  prefix_Cont)
+    indReverse <- getIndicesOfLinesToRemove(obj, idRev2Delete, prefix_Rev)
+    indBoth <- intersect(indContaminants, indReverse)
+    
+    if (!is.null(indBoth) && (length(indBoth) > 0)){
+      deleted.both <- obj[indBoth]
+      obj <- deleteLinesFromIndices(obj, indBoth,
+                                    paste("\"",
+                                          length(indBoth),
+                                          " both contaminants and reverse were removed from dataset.\"",
+                                          sep="")
+      )
     }
-
-    ##
-    ##Search for contaminants
-    ##
-    if ((!is.null(idCont2Delete) || (idCont2Delete != ""))) {
-        indContaminants <- NULL
-        indContaminants <- getIndicesOfLinesToRemove(obj,idCont2Delete,  prefix_Cont)
-
-        if (!is.null(indContaminants) && (length(indContaminants) > 0)){
-                deleted.contaminants <- obj[indContaminants]
-
-                obj <- deleteLinesFromIndices(obj, indContaminants,
-                                               paste("\"",
-                                                     length(indContaminants),
-                                                     " contaminants were removed from dataset.\"",
-                                                     sep="")
-                )
-
-        }
+  }
+  
+  ##
+  ##Search for contaminants
+  ##
+  if ((!is.null(idCont2Delete) || (idCont2Delete != ""))) {
+    indContaminants <- NULL
+    indContaminants <- getIndicesOfLinesToRemove(obj,idCont2Delete,  prefix_Cont)
+    
+    if (!is.null(indContaminants) && (length(indContaminants) > 0)){
+      deleted.contaminants <- obj[indContaminants]
+      
+      obj <- deleteLinesFromIndices(obj, indContaminants,
+                                    paste("\"",
+                                          length(indContaminants),
+                                          " contaminants were removed from dataset.\"",
+                                          sep="")
+      )
+      
     }
-
-
-    ##
-    ## Search for reverse
-    ##
-    if ((!is.null(idRev2Delete) || (idRev2Delete != ""))) {
-        indReverse <- getIndicesOfLinesToRemove(obj, idRev2Delete, prefix_Rev)
-
-        if (!is.null(indReverse)){
-            if (length(indReverse) > 0)  {
-                deleted.reverse <- obj[indReverse]
-
-                obj <- deleteLinesFromIndices(obj, indReverse,
-                                               paste("\"",
-                                                     length(indReverse),
-                                                     " reverse were removed from dataset.\"",
-                                                     sep="")
-                )
-
-            }
-        }
+  }
+  
+  
+  ##
+  ## Search for reverse
+  ##
+  if ((!is.null(idRev2Delete) || (idRev2Delete != ""))) {
+    indReverse <- getIndicesOfLinesToRemove(obj, idRev2Delete, prefix_Rev)
+    
+    if (!is.null(indReverse)){
+      if (length(indReverse) > 0)  {
+        deleted.reverse <- obj[indReverse]
+        
+        obj <- deleteLinesFromIndices(obj, indReverse,
+                                      paste("\"",
+                                            length(indReverse),
+                                            " reverse were removed from dataset.\"",
+                                            sep="")
+        )
+        
+      }
     }
-
-
-    return(list(obj=obj,
-                deleted.both=deleted.both,
-                deleted.contaminants=deleted.contaminants,
-                deleted.reverse=deleted.reverse))
+  }
+  
+  
+  return(list(obj=obj,
+              deleted.both=deleted.both,
+              deleted.contaminants=deleted.contaminants,
+              deleted.reverse=deleted.reverse))
 }
 
 
@@ -390,29 +390,29 @@ StringBasedFiltering <- function(obj,
 #' @export
 #' 
 StringBasedFiltering2 <- function(obj, cname=NULL, tag=NULL){
-
+  
   deleted <- NULL
-
+  
   ##
   ##Search for contaminants
   ##
   if ((!is.null(cname) || (cname != ""))) {
     ind <- NULL
     ind <- getIndicesOfLinesToRemove(obj,cname,  tag)
-
+    
     if (!is.null(ind) && (length(ind) > 0)){
       deleted <- obj[ind]
-
+      
       obj <- deleteLinesFromIndices(obj, ind,
                                     paste("\"",
                                           length(ind),
                                           " contaminants were removed from dataset.\"",
                                           sep="")
       )
-
+      
     }
   }
-
+  
   return(list(obj=obj, deleted=deleted))
 }
 
@@ -445,12 +445,12 @@ StringBasedFiltering2 <- function(obj, cname=NULL, tag=NULL){
 #' 
 getIndicesOfLinesToRemove <- function(obj, idLine2Delete=NULL, prefix=NULL)
 {
-if ((prefix == "") || is.null(prefix)) {
-   # warning ("No change was made")
+  if ((prefix == "") || is.null(prefix)) {
+    # warning ("No change was made")
     return (NULL)}
-t <- (prefix == substring(Biobase::fData(obj)[,idLine2Delete],1,nchar(prefix)))
-ind <- which( t== TRUE)
-return(ind)
+  t <- (prefix == substring(Biobase::fData(obj)[,idLine2Delete],1,nchar(prefix)))
+  ind <- which( t== TRUE)
+  return(ind)
 }
 
 
@@ -496,28 +496,28 @@ mvFilter <- function(obj,
                      th,
                      processText=NULL )
 {
-    #Check parameters
-    paramtype <- c("None", "WholeMatrix", "AllCond", "AtLeastOneCond")
-    if (sum(is.na(match(type, paramtype)==TRUE))>0){
-        warning("Param type is not correct.")
-        return (NULL)
-    }
-
-    paramth<-c(seq(0, nrow(Biobase::pData(obj)), 1))
-    if (sum(is.na(match(th, paramth)==TRUE))>0){
-        warning("Param th is not correct.")
-        return (NULL)
-    }
-
-    if(!is.integer(th)){th <- as.integer(th)}
-
-    keepThat <- mvFilterGetIndices(obj, condition = type, threshold=th)
-
-obj <- obj[keepThat]
-
-    obj@processingData@processing <-
-        c(obj@processingData@processing, processText)
-    return(obj)
+  #Check parameters
+  paramtype <- c("None", "WholeMatrix", "AllCond", "AtLeastOneCond")
+  if (sum(is.na(match(type, paramtype)==TRUE))>0){
+    warning("Param type is not correct.")
+    return (NULL)
+  }
+  
+  paramth<-c(seq(0, nrow(Biobase::pData(obj)), 1))
+  if (sum(is.na(match(th, paramth)==TRUE))>0){
+    warning("Param th is not correct.")
+    return (NULL)
+  }
+  
+  if(!is.integer(th)){th <- as.integer(th)}
+  
+  keepThat <- mvFilterGetIndices(obj, condition = type, threshold=th)
+  
+  obj <- obj[keepThat]
+  
+  obj@processingData@processing <-
+    c(obj@processingData@processing, processText)
+  return(obj)
 }
 
 
@@ -561,17 +561,17 @@ mvFilterFromIndices <- function(obj,
                                 keepThat = NULL, 
                                 processText="" )
 {
-
-if (is.null(keepThat)) {return(obj)}
-obj <- obj[keepThat]
-
-# if (!is.null(obj@experimentData@other$OriginOfValues)){
-#     obj@experimentData@other$OriginOfValues <- obj@experimentData@other$OriginOfValues[keepThat,]
-# }
-obj@processingData@processing <-
+  
+  if (is.null(keepThat)) {return(obj)}
+  obj <- obj[keepThat]
+  
+  # if (!is.null(obj@experimentData@other$OriginOfValues)){
+  #     obj@experimentData@other$OriginOfValues <- obj@experimentData@other$OriginOfValues[keepThat,]
+  # }
+  obj@processingData@processing <-
     c(obj@processingData@processing, processText)
-
-return(obj)
+  
+  return(obj)
 }
 
 
@@ -601,14 +601,14 @@ return(obj)
 #' 
 deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
 {
-
-    if (is.null(deleteThat)) {return(obj)}
-    obj <- obj[-deleteThat]
-
-    obj@processingData@processing <-  c(obj@processingData@processing, processText)
-    if (grepl("contaminants", processText)){obj@experimentData@other$contaminantsRemoved <- TRUE}
-    if (grepl("reverse", processText)){obj@experimentData@other$reverseRemoved <- TRUE }
-    return(obj)
+  
+  if (is.null(deleteThat)) {return(obj)}
+  obj <- obj[-deleteThat]
+  
+  obj@processingData@processing <-  c(obj@processingData@processing, processText)
+  if (grepl("contaminants", processText)){obj@experimentData@other$contaminantsRemoved <- TRUE}
+  if (grepl("reverse", processText)){obj@experimentData@other$reverseRemoved <- TRUE }
+  return(obj)
 }
 
 
@@ -672,7 +672,7 @@ mvFilterGetIndices <- function(obj,
         paramth <- c(seq(0, nrow(Biobase::pData(obj)), 1))
         if (!(threshold %in% paramth)){
           warning(paste0("Param `threshold` is not correct. It must an integer greater than or equal to 0 and less or equal than ",
-                  nrow(Biobase::pData(obj))))
+                         nrow(Biobase::pData(obj))))
           return (NULL)
         }
       } else {
@@ -681,8 +681,8 @@ mvFilterGetIndices <- function(obj,
           return (NULL)
         }
       }
-   }
-
+    }
+  
   keepThat <- NULL
   if (is.null(obj@experimentData@other$OriginOfValues)){
     data <- Biobase::exprs(obj)
@@ -692,7 +692,7 @@ mvFilterGetIndices <- function(obj,
     data <- dplyr::select(Biobase::fData(obj),
                           obj@experimentData@other$OriginOfValues)
   }
-
+  
   if (condition == "None") {
     keepThat <- seq(1:nrow(data))
   } else if (condition == "EmptyLines") {
@@ -779,63 +779,63 @@ mvFilterGetIndices <- function(obj,
 #' @export
 #' 
 mvFilterGetIndices_old <- function(obj,
-                               type, 
-                               th=NULL)
+                                   type, 
+                                   th=NULL)
 {
-#Check parameters
-paramtype<-c("None", "EmptyLines", "WholeMatrix", "AllCond", "AtLeastOneCond")
-if (sum(is.na(match(type, paramtype)==TRUE))>0){
+  #Check parameters
+  paramtype<-c("None", "EmptyLines", "WholeMatrix", "AllCond", "AtLeastOneCond")
+  if (sum(is.na(match(type, paramtype)==TRUE))>0){
     warning("Param type is not correct.")
     return (NULL)
-}
-
-paramth<-c(seq(0, nrow(Biobase::pData(obj)), 1))
-if (sum(is.na(match(th, paramth)==TRUE))>0){
+  }
+  
+  paramth<-c(seq(0, nrow(Biobase::pData(obj)), 1))
+  if (sum(is.na(match(th, paramth)==TRUE))>0){
     warning("Param th is not correct.")
     return (NULL)
-}
-
-keepThat <- NULL
-if (is.null(obj@experimentData@other$OriginOfValues)){
+  }
+  
+  keepThat <- NULL
+  if (is.null(obj@experimentData@other$OriginOfValues)){
     data <- Biobase::exprs(obj)
     warning('There is no slot OriginOfValues in which to search for indices. The search will
             be proceeded in the intensities tab based on NA values')
-} else {
+  } else {
     data <- dplyr::select(Biobase::fData(obj),obj@experimentData@other$OriginOfValues)
-}
-
-if (type == "None"){
+  }
+  
+  if (type == "None"){
     keepThat <- seq(1:nrow(data))
-} else if (type == "EmptyLines"){
+  } else if (type == "EmptyLines"){
     keepThat <- which(apply(!is.MV(data), 1, sum) >= 1)
-} else if (type == "WholeMatrix"){
+  } else if (type == "WholeMatrix"){
     keepThat <- which(apply(!is.MV(data), 1, sum) >= th)
-} else if (type == "AtLeastOneCond" || type == "AllCond"){
-
+  } else if (type == "AtLeastOneCond" || type == "AllCond"){
+    
     conditions <- unique(Biobase::pData(obj)$Condition)
     nbCond <- length(conditions)
     keepThat <- NULL
     s <- matrix(rep(0, nrow(data)*nbCond),nrow=nrow(data),
                 ncol=nbCond)
-
+    
     for (c in 1:nbCond){
-        ind <- which(Biobase::pData(obj)$Condition == conditions[c])
-        if (length(ind) == 1){
-            s[,c] <- (!is.MV(data[,ind]) >= th)}
-        else {
-            s[,c] <- (apply(!is.MV(data[,ind]), 1, sum) >= th)
-        }
+      ind <- which(Biobase::pData(obj)$Condition == conditions[c])
+      if (length(ind) == 1){
+        s[,c] <- (!is.MV(data[,ind]) >= th)}
+      else {
+        s[,c] <- (apply(!is.MV(data[,ind]), 1, sum) >= th)
+      }
     }
-
-
+    
+    
     if (type == "AllCond") {
-        keepThat <- which(rowSums(s) == nbCond)
+      keepThat <- which(rowSums(s) == nbCond)
     }
     else if (type == "AtLeastOneCond") {
-        keepThat <- which(rowSums(s) >= 1)
+      keepThat <- which(rowSums(s) >= 1)
     }
-}
-return(keepThat)
+  }
+  return(keepThat)
 }
 
 
@@ -852,40 +852,68 @@ return(keepThat)
 #' proportion equal to or less than the fixed proportion will be kept.
 #' * at least one condition: the lines for which at least one condition is
 #' equal to or less than the fixed proportion of NA will be kept.
-#'
+#' #############################################################
+#' 
 #' @param obj  An object of class \code{MSnSet} containing quantitative data
 #' and phenotype data.
-#'
-#' @param intensities_proportion float between 0 and 1 corresponding to the proportion
-#' of intensities to keep in the lines.
-#'
+#' 
 #' @param mode character string. Four possibilities corresponding to the
 #' description above: "None", "WholeMatrix", "AllCond" and "AtLeastOneCond".
 #'
-#' @return the object given as input but with the lines not respecting the
-#' proportion of NA requested in less.
+#' @param th integer between 0 and either nb samples if "WholeMatrix" or min(nb samples per condition) if "AllCond" or "AtLeastOneCond".
 #'
-#' @author Hélène Borges, Samuel Wieczorek
+#' @return the object given as input minus the lines without enough identification
+#'
+#' @author Enora Fremy
 #'
 #' @examples
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
-#' filtered <- filterByProportion(obj = Exp1_R25_prot, intensities_proportion = 0.8, mode = "AtLeastOneCond")
+#' filtered <- filt_Marianne(obj = Exp1_R25_prot, th=2,  mode = "AtLeastOneCond")
 #'
 #' @export
 #'
-#' @importFrom stringr str_glue
-#' @importFrom Biobase exprs pData fData
-#' @import dplyr
-#' @importFrom tidyr pivot_longer
-#' @importFrom methods is
+#' @importFrom Biobase pData fData
 #'
-#' #################################################################
-filt_Marianne <- function(obj) {
 
-  for (i in 81:86){
-    print(as.data.frame(table((Biobase::fData(obj))[i])))
+filt_Marianne <- function(obj) {
+  
+  # for (i in 81:86){
+  #   print(as.data.frame(table((Biobase::fData(obj))[i])))
+  # }
+  fdata <- Biobase::fData(obj)[81:86]
+  
+  # calculer identifcation en fonction PSMs et abondance ? Normalement non parce que filtrage sur msnset
+  # compter nb MS/MS pour chaque features (et selon cas dans chaque condition)
+  # somme de chaque, somme de chaque dans chaque condition plus le maximum de chaque valeur
+  # creer vecteurs contenant ces valeurs ? ou nouvelles colonnes ?
+  
+  # vector containing sum of 'By MS/MS'
+  # "None", "WholeMatrix", "AllCond" and "AtLeastOneCond".
+  new_vec_sum <- vector()
+  for (i in 1:nrow(fdata)) {
+    print(i)
+    if (mode=='AllCond'|mode='AtLeastOneCond'){
+      condition <- Biobase::pData(obj)['Condition']
+      condition <- condition[,1]
+      # sep by condition
+      # count nb of replicates by condition
+      # condition_nouvelle_boucle
+      indices_replicates <- list()
+      for (i in 1:length(unique(condition))) {
+        #find how increment name in list in loop > assign?
+        indices_replicates <- list(paste0('cond',i) = which(condition==unique(condition)[i]))
+      }
+      ###############################################################################
+      intermediR <- as.data.frame(table(t(fdata[i,indices_replicates])))
+      
+      new_vec_max <- c(new_vec_max,intermediR[intermediR$Var1=='By MS/MS',2])
+      ###############################################################################
+    }
+    else if (mode=='WholeMatrix' {
+      intermediR <- as.data.frame(table(t(fdata[i,])))
+      new_vec_sum <- c(new_vec_sum,intermediR[intermediR$Var1=='By MS/MS',2])
+    }
   }
-  somme <- table(Biobase::fData(obj))[81:86]
 }
 
 #' #' Filter missing values by proportion
