@@ -873,11 +873,11 @@ mvFilterGetIndices_old <- function(obj,
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj<-Exp1_R25_pept
-#' (fData(obj))[1:30,66:71]
-#' (fData(obj))[mvFilterGetIndices_Marianne(Exp1_R25_pept, condition = "WholeMatrix", threshold=1),66:71]
+#' View((fData(obj))[mvFilterGetIndices_Marianne(Exp1_R25_pept, condition = "WholeMatrix", threshold=1),66:71])
+#' View((fData(obj))[mvFilterGetIndices_Marianne(Exp1_R25_pept, condition = "EmptyLines"),66:71])
 #' (fData(obj))[mvFilterGetIndices_Marianne(Exp1_R25_pept, condition = "WholeMatrix", threshold=2),66:71]
-#' (fData(obj))[mvFilterGetIndices_Marianne(Exp1_R25_pept, condition = "AllCond",  threshold=2),66:71]
-#' (fData(obj))[mvFilterGetIndices_Marianne(Exp1_R25_pept, condition = "AtLeastOneCond",  threshold=2),66:71]
+#' (fData(obj))[mvFilterGetIndices_Marianne(Exp1_R25_pept, condition = "AllCond",  threshold=1),66:71]
+#' (fData(obj))[mvFilterGetIndices_Marianne(Exp1_R25_pept, condition = "AtLeastOneCond",  threshold=1),66:71]
 #' 
 #' @export
 #' 
@@ -886,30 +886,35 @@ mvFilterGetIndices_Marianne <- function(obj,
                                         condition = 'WholeMatrix', 
                                         threshold = NULL){
   #Check parameters
-  paramtype<-c("None", "WholeMatrix", "AllCond", "AtLeastOneCond")
+  paramtype<-c("None", "EmptyLines", "WholeMatrix", "AllCond", "AtLeastOneCond")
   if (!(condition %in% paramtype)){
     warning("Param `type` is not correct.")
     return (NULL)
   }
   
-  if (!(percent %in% c(T, F))){
-    warning("Param `type` is not correct.")
-    return (NULL)
-  } else {
-    if (!isTRUE(percent)){
-      paramth <- c(seq(0, nrow(Biobase::pData(obj)), 1))
-      if (!(threshold %in% paramth)){
-        warning(paste0("Param `threshold` is not correct. It must an integer greater than or equal to 0 and less or equal than ",
-                       nrow(Biobase::pData(obj))))
+  if (condition != 'EmptyLines')
+    if (!(percent %in% c(T, F))){
+      warning("Param `type` is not correct.")
+      return (NULL)
+      if (!(percent %in% c(T, F))){
+        warning("Param `type` is not correct.")
         return (NULL)
-      }
-    } else {
-      if (threshold < 0 || threshold > 1){
-        warning("Param `threshold` is not correct. It must be greater than 0 and less than 1.")
-        return (NULL)
+      } else {
+        if (!isTRUE(percent)){
+          paramth <- c(seq(0, nrow(Biobase::pData(obj)), 1))
+          if (!(threshold %in% paramth)){
+            warning(paste0("Param `threshold` is not correct. It must an integer greater than or equal to 0 and less or equal than ",
+                           nrow(Biobase::pData(obj))))
+            return (NULL)
+          }
+        } else {
+          if (threshold < 0 || threshold > 1){
+            warning("Param `threshold` is not correct. It must be greater than 0 and less than 1.")
+            return (NULL)
+          }
+        }
       }
     }
-  }
   
   keepThat <- NULL
   if (is.null(obj@experimentData@other$OriginOfValues)){
@@ -923,6 +928,8 @@ mvFilterGetIndices_Marianne <- function(obj,
   
   if (condition == "None") {
     keepThat <- seq(1:nrow(data))
+  } else if (condition == "EmptyLines") {
+    keepThat <- which(apply(!is.byMSMS(data), 1, sum) >= 1) # row with only 'by MS/MS'
   } else if (condition == "WholeMatrix") {
     if (isTRUE(percent)) {
       keepThat <- which(rowSums(!is.byMSMS(data))/ncol(data) >= threshold) 
