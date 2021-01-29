@@ -208,7 +208,7 @@ wrapper.compareNormalizationD_HC <- function(objBefore, objAfter,
 #' @param qDataAfter A dataframe that contains quantitative data after 
 #' normalization.
 #' 
-#' @param id xxx
+#' @param keyId xxx
 #' 
 #' @param conds A vector of the conditions (one condition 
 #' per sample).
@@ -234,9 +234,9 @@ wrapper.compareNormalizationD_HC <- function(objBefore, objAfter,
 #' conds <- Biobase::pData(obj)[,"Condition"]
 #' id <- fData(obj)[,obj@experimentData@other$proteinId]
 #' objAfter <- wrapper.normalizeD(obj, method = "QuantileCentering", conds =conds, type = "within conditions")
-#' compareNormalizationD_HC(qDataBefore=qDataBefore, qDataAfter=Biobase::exprs(objAfter), id = id, conds=conds, n=100)
+#' compareNormalizationD_HC(qDataBefore=qDataBefore, qDataAfter=Biobase::exprs(objAfter), keyId = id, conds=conds, n=100)
 #' 
-#' compareNormalizationD_HC(qDataBefore=qDataBefore, qDataAfter=Biobase::exprs(objAfter), id = id, subset.view=1:4, conds=conds, n=100)
+#' compareNormalizationD_HC(qDataBefore=qDataBefore, qDataAfter=Biobase::exprs(objAfter), keyId = id, subset.view=1:4, conds=conds, n=100)
 #' 
 #' @import highcharter
 #' @importFrom RColorBrewer brewer.pal
@@ -247,7 +247,7 @@ wrapper.compareNormalizationD_HC <- function(objBefore, objAfter,
 #' 
 compareNormalizationD_HC <- function(qDataBefore,
                                      qDataAfter,
-                                     id = NULL,
+                                     keyId = NULL,
                                      conds =NULL,
                                      palette = NULL,
                                      subset.view = NULL,
@@ -258,12 +258,12 @@ compareNormalizationD_HC <- function(qDataBefore,
     warning("'conds' is null.")
     return(NULL)
   }
- if (is.null(id))
-   id <- 1:length(qDataBefore)
+ if (is.null(keyId))
+   keyId <- 1:length(qDataBefore)
 
   if (!is.null(subset.view) && length(subset.view) > 0)
   {
-    id <- id[subset.view]
+    keyId <- keyId[subset.view]
     if (nrow(qDataBefore) > 1)
       if (length(subset.view)==1){
         qDataBefore <- as_tibble(cbind(t(qDataBefore[subset.view,])))
@@ -295,7 +295,7 @@ compareNormalizationD_HC <- function(qDataBefore,
     }
     
     ind <- sample(seq_len(nrow(qDataBefore)),n)
-    id <- id[ind]
+    keyId <- keyId[ind]
     if (nrow(qDataBefore) > 1)
       if (length(ind) == 1){
         qDataBefore <- as_tibble(cbind(t(qDataBefore[ind,])))
@@ -328,7 +328,7 @@ compareNormalizationD_HC <- function(qDataBefore,
     tmp <- list(name=colnames(x)[i],
                 data =list_parse(data.frame(x = x[,i],
                                             y = y[,i],
-                                            name=id)
+                                            name=keyId)
     )
     )
     series[[i]] <- tmp
