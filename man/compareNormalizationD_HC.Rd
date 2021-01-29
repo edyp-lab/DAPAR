@@ -8,6 +8,7 @@ uses the library \code{highcharter}}
 compareNormalizationD_HC(
   qDataBefore,
   qDataAfter,
+  id = NULL,
   conds = NULL,
   palette = NULL,
   subset.view = NULL,
@@ -21,6 +22,8 @@ normalization.}
 
 \item{qDataAfter}{A dataframe that contains quantitative data after 
 normalization.}
+
+\item{id}{xxx}
 
 \item{conds}{A vector of the conditions (one condition 
 per sample).}
@@ -148,8 +151,11 @@ utils::data(Exp1_R25_prot, package='DAPARdata')
 obj <- Exp1_R25_prot
 qDataBefore <- Biobase::exprs(obj)
 conds <- Biobase::pData(obj)[,"Condition"]
+id <- fData(obj)[,obj@experimentData@other$proteinId]
 objAfter <- wrapper.normalizeD(obj, method = "QuantileCentering", conds =conds, type = "within conditions")
-compareNormalizationD_HC(qDataBefore=qDataBefore, qDataAfter=Biobase::exprs(objAfter), conds=conds, n=100)
+compareNormalizationD_HC(qDataBefore=qDataBefore, qDataAfter=Biobase::exprs(objAfter), id = id, conds=conds, n=100)
+
+compareNormalizationD_HC(qDataBefore=qDataBefore, qDataAfter=Biobase::exprs(objAfter), id = id, subset.view=1:4, conds=conds, n=100)
 
 }
 \author{
