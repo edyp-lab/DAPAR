@@ -208,6 +208,8 @@ wrapper.compareNormalizationD_HC <- function(objBefore, objAfter,
 #' @param qDataAfter A dataframe that contains quantitative data after 
 #' normalization.
 #' 
+#' @param id xxx
+#' 
 #' @param conds A vector of the conditions (one condition 
 #' per sample).
 #' 
@@ -230,8 +232,11 @@ wrapper.compareNormalizationD_HC <- function(objBefore, objAfter,
 #' obj <- Exp1_R25_prot
 #' qDataBefore <- Biobase::exprs(obj)
 #' conds <- Biobase::pData(obj)[,"Condition"]
+#' id <- fData(obj)[,obj@experimentData@other$proteinId]
 #' objAfter <- wrapper.normalizeD(obj, method = "QuantileCentering", conds =conds, type = "within conditions")
-#' compareNormalizationD_HC(qDataBefore=qDataBefore, qDataAfter=Biobase::exprs(objAfter), conds=conds, n=100)
+#' compareNormalizationD_HC(qDataBefore=qDataBefore, qDataAfter=Biobase::exprs(objAfter), id = id, conds=conds, n=100)
+#' 
+#' compareNormalizationD_HC(qDataBefore=qDataBefore, qDataAfter=Biobase::exprs(objAfter), id = id, subset.view=1:4, conds=conds, n=100)
 #' 
 #' @import highcharter
 #' @importFrom RColorBrewer brewer.pal
@@ -242,6 +247,7 @@ wrapper.compareNormalizationD_HC <- function(objBefore, objAfter,
 #' 
 compareNormalizationD_HC <- function(qDataBefore,
                                      qDataAfter,
+                                     id = NULL,
                                      conds =NULL,
                                      palette = NULL,
                                      subset.view = NULL,
@@ -252,21 +258,25 @@ compareNormalizationD_HC <- function(qDataBefore,
     warning("'conds' is null.")
     return(NULL)
   }
-  
-  print(str(subset.view))
-  print(paste0('subset.view:',subset.view))
-  
+ if (is.null(id))
+   id <- 1:length(qDataBefore)
+
   if (!is.null(subset.view) && length(subset.view) > 0)
   {
+    id <- id[subset.view]
     if (nrow(qDataBefore) > 1)
       if (length(subset.view)==1){
         qDataBefore <- as_tibble(cbind(t(qDataBefore[subset.view,])))
         qDataAfter <- as_tibble(cbind(t(qDataAfter[subset.view,])))
       } else {
         qDataBefore <- as_tibble(cbind(qDataBefore[subset.view,]))
-        qDataAfter <- as_tibble(cbind(qDataBefore[subset.view,]))
+        qDataAfter <- as_tibble(cbind(qDataAfter[subset.view,]))
       }
-  }
+  } 
+  # else {
+  #       qDataBefore <- as_tibble(cbind(t(qDataBefore)))
+  #       qDataAfter <- as_tibble(cbind(t(qDataAfter)))
+  # }
   
   
   if (!match(type, c('scatter', 'line') )){
@@ -274,7 +284,7 @@ compareNormalizationD_HC <- function(qDataBefore,
     return(NULL)
   }
   
-  
+ # browser()
   if (is.null(n)){
     n <- seq_len(nrow(qDataBefore))
   } else {
@@ -285,6 +295,7 @@ compareNormalizationD_HC <- function(qDataBefore,
     }
     
     ind <- sample(seq_len(nrow(qDataBefore)),n)
+    id <- id[ind]
     if (nrow(qDataBefore) > 1)
       if (length(ind) == 1){
         qDataBefore <- as_tibble(cbind(t(qDataBefore[ind,])))
@@ -316,7 +327,8 @@ compareNormalizationD_HC <- function(qDataBefore,
   for (i in 1:length(conds)){
     tmp <- list(name=colnames(x)[i],
                 data =list_parse(data.frame(x = x[,i],
-                                            y = y[,i])
+                                            y = y[,i],
+                                            name=id)
     )
     )
     series[[i]] <- tmp
@@ -326,7 +338,7 @@ compareNormalizationD_HC <- function(qDataBefore,
     dapar_hc_chart( chartType = type) %>%
     hc_add_series_list(series) %>%
     hc_colors(palette) %>%
-    hc_tooltip(list(enabled=F)) %>%
+    hc_tooltip(headerFormat= '',pointFormat = "Id: {point.name}") %>%
     dapar_hc_ExportMenu(filename = "compareNormalization")
   h1
   

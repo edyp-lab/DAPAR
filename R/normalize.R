@@ -296,7 +296,7 @@ SumByColumns <- function(qData, conds=NULL, type=NULL, subset.norm=NULL) {
       indices <- which(conds== l)
       
       if(length(subset.norm)==1){
-        sum_cols=e[subset.norm,indices]
+        sum_cols=e[subset.norm, indices]
       }else{
         sum_cols <- colSums(e[subset.norm,indices], na.rm=TRUE)
       }
