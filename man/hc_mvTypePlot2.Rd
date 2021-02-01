@@ -4,14 +4,14 @@
 \alias{hc_mvTypePlot2}
 \title{Distribution of Observed values with respect to intensity values}
 \usage{
-hc_mvTypePlot2(qData, conds, palette = NULL, typeofMV = NULL, title = NULL)
+hc_mvTypePlot2(qData, conds, pal = NULL, typeofMV = NULL, title = NULL)
 }
 \arguments{
 \item{qData}{A dataframe that contains quantitative data.}
 
 \item{conds}{A vector of the conditions (one condition per sample).}
 
-\item{palette}{The different colors for conditions}
+\item{pal}{The different colors for conditions}
 
 \item{typeofMV}{xxx}
 
@@ -36,7 +36,7 @@ qData <- Biobase::exprs(Exp1_R25_pept)
 conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 hc_mvTypePlot2(qData, conds, title="POV distribution")
 pal <- ExtendPalette(length(unique(conds)), 'Dark2')
-hc_mvTypePlot2(qData, conds, title="POV distribution", palette=pal)
+hc_mvTypePlot2(qData, conds, title="POV distribution", pal=pal)
 
 }
 \author{

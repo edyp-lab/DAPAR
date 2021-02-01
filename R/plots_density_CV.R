@@ -41,7 +41,7 @@ wrapper.CVDistD_HC <- function(obj, ...){
 #' 
 #' @param conds A vector of the conditions (one condition per sample).
 #' 
-#' @param palette xxx
+#' @param pal xxx
 #' 
 #' @return A density plot
 #' 
@@ -61,7 +61,7 @@ wrapper.CVDistD_HC <- function(obj, ...){
 #' 
 CVDistD_HC <- function(qData, 
                        conds=NULL, 
-                       palette = NULL){
+                       pal = NULL){
   
   if (is.null(conds)) {
     warning("The vector of conditions is empty. The plot cannot be drawn.")
@@ -71,19 +71,19 @@ CVDistD_HC <- function(qData,
   n <- length(conditions)
   
   
-  if (is.null(palette)){
-    palette <-  ExtendPalette(n)
+  if (is.null(pal)){
+    pal <-  ExtendPalette(n)
   } else {
-    if (length(palette) != n){
+    if (length(pal) != n){
       warning("The color palette has not the same dimension as the number of samples. Set to default.")
-      palette <- ExtendPalette(n)
+      pal <- ExtendPalette(n)
     }
   }
 
   
   h1 <-  highchart() %>% 
     my_hc_chart(chartType = "spline", zoomType="x") %>%
-    hc_colors(palette) %>%
+    hc_colors(pal) %>%
     hc_legend(enabled = TRUE) %>%
     hc_xAxis(title = list(text = "CV(log(Intensity))")) %>%
     hc_yAxis(title = list(text = "Density")) %>%

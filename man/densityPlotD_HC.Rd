@@ -4,7 +4,7 @@
 \alias{densityPlotD_HC}
 \title{Builds a densityplot from a dataframe}
 \usage{
-densityPlotD_HC(obj, legend = NULL, palette = NULL)
+densityPlotD_HC(obj, legend = NULL, pal = NULL)
 }
 \arguments{
 \item{obj}{xxx}
@@ -12,7 +12,7 @@ densityPlotD_HC(obj, legend = NULL, palette = NULL)
 \item{legend}{A vector of the conditions (one condition 
 per sample).}
 
-\item{palette}{xxx}
+\item{pal}{xxx}
 }
 \value{
 A density plot
@@ -25,7 +25,7 @@ utils::data(Exp1_R25_pept, package='DAPARdata')
 densityPlotD_HC(Exp1_R25_pept)
 conds <- Biobase::pData(Exp1_R25_pept)$Condition
 pal <- ExtendPalette(2, 'Dark2')
-densityPlotD_HC(Exp1_R25_pept, palette=pal)
+densityPlotD_HC(Exp1_R25_pept, pal=pal)
 
 }
 \author{

@@ -4,7 +4,7 @@
 \alias{hc_logFC_DensityPlot}
 \title{Density plots of logFC values}
 \usage{
-hc_logFC_DensityPlot(df_logFC, threshold_LogFC = 0, palette = NULL)
+hc_logFC_DensityPlot(df_logFC, threshold_LogFC = 0, pal = NULL)
 }
 \arguments{
 \item{df_logFC}{A dataframe that contains the logFC values}
@@ -12,7 +12,7 @@ hc_logFC_DensityPlot(df_logFC, threshold_LogFC = 0, palette = NULL)
 \item{threshold_LogFC}{The threshold on log(Fold Change) to
 distinguish between differential and non-differential data}
 
-\item{palette}{xxx}
+\item{pal}{xxx}
 }
 \value{
 A highcharts density plot
@@ -31,7 +31,7 @@ sTab <- Biobase::pData(obj)
 res <- limmaCompleteTest(qData, sTab, comp.type = "OnevsAll")
 hc_logFC_DensityPlot(res$logFC, threshold_LogFC=1)
 pal <- ExtendPalette(2, 'Dark2')
-hc_logFC_DensityPlot(res$logFC, threshold_LogFC=1, palette=pal)
+hc_logFC_DensityPlot(res$logFC, threshold_LogFC=1, pal=pal)
 
 }
 \author{

@@ -4,12 +4,12 @@
 \alias{GetColorsForConditions}
 \title{Builds a complete color palette for the conditions given in argument}
 \usage{
-GetColorsForConditions(conds, palette = NULL)
+GetColorsForConditions(conds, pal = NULL)
 }
 \arguments{
 \item{conds}{The extended vector of samples conditions}
 
-\item{palette}{A vector of HEX color code that form the basis palette from which to build
+\item{pal}{A vector of HEX color code that form the basis palette from which to build
 the complete color vector for the conditions.}
 }
 \value{

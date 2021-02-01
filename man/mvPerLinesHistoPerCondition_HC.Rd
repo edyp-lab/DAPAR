@@ -9,7 +9,7 @@ mvPerLinesHistoPerCondition_HC(
   samplesData,
   indLegend = "auto",
   showValues = FALSE,
-  palette = NULL
+  pal = NULL
 )
 }
 \arguments{
@@ -23,7 +23,7 @@ columns to the meta-data for those samples.}
 \item{showValues}{A logical that indicates wether numeric values should be
 drawn above the bars.}
 
-\item{palette}{xxx}
+\item{pal}{xxx}
 }
 \value{
 A bar plot
@@ -37,7 +37,7 @@ utils::data(Exp1_R25_pept, package='DAPARdata')
 qData <- Biobase::exprs(Exp1_R25_pept)
 samplesData <- Biobase::pData(Exp1_R25_pept)
 pal <- ExtendPalette(length(unique( samplesData[,"Condition"])), 'Dark2')
-mvPerLinesHistoPerCondition_HC(qData, samplesData, palette=pal)
+mvPerLinesHistoPerCondition_HC(qData, samplesData, pal=pal)
 mvPerLinesHistoPerCondition_HC(qData, samplesData)
 
 }

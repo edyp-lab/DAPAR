@@ -10,7 +10,7 @@ mvHisto_HC(
   conds,
   indLegend = "auto",
   showValues = FALSE,
-  palette = NULL
+  pal = NULL
 )
 }
 \arguments{
@@ -26,7 +26,7 @@ columns to the meta-data for those samples.}
 \item{showValues}{A logical that indicates wether numeric values should be
 drawn above the bars.}
 
-\item{palette}{xxx}
+\item{pal}{xxx}
 }
 \value{
 A histogram
@@ -42,7 +42,7 @@ samplesData <- Biobase::pData(Exp1_R25_pept)
 conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 mvHisto_HC(qData, samplesData, conds,  showValues=TRUE)
 pal <- ExtendPalette(2, 'Dark2')
-mvHisto_HC(qData, samplesData, conds,  showValues=TRUE, palette=pal)
+mvHisto_HC(qData, samplesData, conds,  showValues=TRUE, pal=pal)
 
 }
 \author{

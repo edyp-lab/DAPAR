@@ -204,7 +204,7 @@ wrapper.mvPerLinesHistoPerCondition_HC <- function(obj, ...){
 #' @param showValues A logical that indicates wether numeric values should be
 #' drawn above the bars.
 #' 
-#' @param palette xxx
+#' @param pal xxx
 #' 
 #' @return A bar plot
 #' 
@@ -215,7 +215,7 @@ wrapper.mvPerLinesHistoPerCondition_HC <- function(obj, ...){
 #' qData <- Biobase::exprs(Exp1_R25_pept)
 #' samplesData <- Biobase::pData(Exp1_R25_pept)
 #' pal <- ExtendPalette(length(unique( samplesData[,"Condition"])), 'Dark2')
-#' mvPerLinesHistoPerCondition_HC(qData, samplesData, palette=pal)
+#' mvPerLinesHistoPerCondition_HC(qData, samplesData, pal=pal)
 #' mvPerLinesHistoPerCondition_HC(qData, samplesData)
 #' 
 #' @export
@@ -224,20 +224,20 @@ mvPerLinesHistoPerCondition_HC <- function(qData,
                                            samplesData, 
                                            indLegend="auto", 
                                            showValues=FALSE,
-                                           palette=NULL){
+                                           pal=NULL){
   
   conds <- samplesData[,"Condition"]
   
   myColors <- NULL
-  if (is.null(palette)){
+  if (is.null(pal)){
     warning("Color palette set to default.")
     myColors <-  GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
   } else {
-    if (length(palette) != length(unique(conds))){
+    if (length(pal) != length(unique(conds))){
       warning("The color palette has not the same dimension as the number of samples")
       myColors <- GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
     } else 
-      myColors <- palette
+      myColors <- pal
   }
   
   if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
@@ -332,7 +332,7 @@ wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
 #' @param indLegend The indices of the column name's in \code{pData()} tab
 #' @param showValues A logical that indicates wether numeric values should be
 #' drawn above the bars.
-#' @param palette xxx
+#' @param pal xxx
 #' @return A histogram
 #' @author Florence Combes, Samuel Wieczorek
 #' 
@@ -345,7 +345,7 @@ wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
 #' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 #' mvHisto_HC(qData, samplesData, conds,  showValues=TRUE)
 #' pal <- ExtendPalette(2, 'Dark2')
-#' mvHisto_HC(qData, samplesData, conds,  showValues=TRUE, palette=pal)
+#' mvHisto_HC(qData, samplesData, conds,  showValues=TRUE, pal=pal)
 #' 
 #' @export
 #'
@@ -354,19 +354,19 @@ mvHisto_HC <- function(qData,
                        conds, 
                        indLegend="auto", 
                        showValues=FALSE, 
-                       palette = NULL){
+                       pal = NULL){
   
   
   myColors <- NULL
-  if (is.null(palette)){
+  if (is.null(pal)){
     warning("Color palette set to default.")
     myColors <-  GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
   } else {
-    if (length(palette) != length(unique(conds))){
+    if (length(pal) != length(unique(conds))){
       warning("The color palette has not the same dimension as the number of samples")
       myColors <- GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
     } else 
-      myColors <- GetColorsForConditions(conds, palette)
+      myColors <- GetColorsForConditions(conds, pal)
   }
   
   if (identical(indLegend,"auto")) { 
@@ -556,7 +556,7 @@ wrapper.hc_mvTypePlot2 <- function(obj,...){
 #' 
 #' @param conds A vector of the conditions (one condition per sample).
 #' 
-#' @param palette The different colors for conditions
+#' @param pal The different colors for conditions
 #' 
 #' @param typeofMV xxx
 #' 
@@ -574,25 +574,25 @@ wrapper.hc_mvTypePlot2 <- function(obj,...){
 #' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 #' hc_mvTypePlot2(qData, conds, title="POV distribution")
 #' pal <- ExtendPalette(length(unique(conds)), 'Dark2')
-#' hc_mvTypePlot2(qData, conds, title="POV distribution", palette=pal)
+#' hc_mvTypePlot2(qData, conds, title="POV distribution", pal=pal)
 #' 
 #' @export
 #'
 hc_mvTypePlot2 <- function(qData,
                            conds, 
-                           palette = NULL, 
+                           pal = NULL, 
                            typeofMV=NULL, 
                            title=NULL){
   if (is.null(conds)){return(NULL)}
   
   myColors <- NULL
-  if (is.null(palette)){
+  if (is.null(pal)){
     warning("Color palette set to default.")
-    palette <- ExtendPalette(length(unique(conds)))
+    pal <- ExtendPalette(length(unique(conds)))
   } else {
-    if (length(palette) != length(unique(conds))){
+    if (length(pal) != length(unique(conds))){
       warning("The color palette has not the same dimension as the number of samples")
-      palette <- ExtendPalette(length(unique(conds)))
+      pal <- ExtendPalette(length(unique(conds)))
     }
       
   }
@@ -631,7 +631,7 @@ hc_mvTypePlot2 <- function(qData,
         if (max(tmp$y) > ymax) { ymax <- max(tmp$y)}
       }
       series[[j]] <- tmp
-      myColors <- c(myColors, palette[which(unique(conditions)==iCond)])
+      myColors <- c(myColors, pal[which(unique(conditions)==iCond)])
       j <- j+1
     }
     
@@ -651,8 +651,7 @@ hc_mvTypePlot2 <- function(qData,
              # max = ymax,
              tickInterval= 0.5
     ) %>%
-    # hc_colors(palette) %>%
-    hc_tooltip(headerFormat= '',
+   hc_tooltip(headerFormat= '',
                pointFormat = "<b> {series.name} </b>: {point.y} ",
                valueDecimals = 2) %>%
     my_hc_ExportMenu(filename = "POV_distribution") %>%
@@ -682,7 +681,7 @@ hc_mvTypePlot2 <- function(qData,
   for (c in 1:length(unique(conds))){
     hc <-  hc_add_series(hc,data = data.frame(),
                          name = unique(conds)[c],
-                         color = palette[c],
+                         color = pal[c],
                          marker = list(symbol = "circle"),
                          type = "line")
   }

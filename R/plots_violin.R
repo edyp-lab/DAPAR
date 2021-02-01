@@ -9,7 +9,7 @@
 #' 
 #' @param legend A vector of the conditions (one condition per sample).
 #' 
-#' @param palette xxx
+#' @param pal xxx
 #' 
 #' @param subset.view xxx
 #' 
@@ -39,7 +39,7 @@ violinPlotD <- function(obj,
                         conds, 
                         keyId, 
                         legend=NULL, 
-                        palette = NULL, 
+                        pal = NULL, 
                         subset.view=NULL){
   
   graphics::plot.new()
@@ -69,14 +69,14 @@ violinPlotD <- function(obj,
   }
   
   myColors <- NULL
-  if (is.null(palette)){
+  if (is.null(pal)){
     myColors <-  GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
   } else {
-    if (length(palette) != length(unique(conds))){
+    if (length(pal) != length(unique(conds))){
       warning("The color palette has not the same dimension as the number of samples")
       return(NULL)
     } else 
-      myColors <- GetColorsForConditions(conds, palette)
+      myColors <- GetColorsForConditions(conds, pal)
   }
   
   graphics::plot.window(xlim=c(0,ncol(qData)+1),

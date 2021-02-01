@@ -9,7 +9,7 @@
 #' @param legend A vector of the conditions (one condition 
 #' per sample).
 #' 
-#' @param palette xxx
+#' @param pal xxx
 #' 
 #' @return A density plot
 #' 
@@ -20,7 +20,7 @@
 #' densityPlotD_HC(Exp1_R25_pept)
 #' conds <- Biobase::pData(Exp1_R25_pept)$Condition
 #' pal <- ExtendPalette(2, 'Dark2')
-#' densityPlotD_HC(Exp1_R25_pept, palette=pal)
+#' densityPlotD_HC(Exp1_R25_pept, pal=pal)
 #' 
 #' @import highcharter
 #' @importFrom Biobase exprs pData
@@ -29,7 +29,7 @@
 #' 
 densityPlotD_HC <- function(obj, 
                             legend=NULL, 
-                            palette = NULL){
+                            pal = NULL){
   
   qData <- Biobase::exprs(obj)
   conds <- Biobase::pData(obj)$Condition
@@ -37,14 +37,14 @@ densityPlotD_HC <- function(obj,
   if (is.null(legend) ) { legend<- Biobase::pData(obj)[,"Condition"]}
 
   myColors <- NULL
-  if (is.null(palette)){
+  if (is.null(pal)){
     myColors <- GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
   } else {
-    if (length(palette) != length(unique(conds))){
+    if (length(pal) != length(unique(conds))){
       warning("The color palette has not the same dimension as the number of samples. Set to default.")
       myColors <- GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
     } else 
-      myColors <- GetColorsForConditions(conds, palette)
+      myColors <- GetColorsForConditions(conds, pal)
   }
   
   h1 <-  highchart() %>% 

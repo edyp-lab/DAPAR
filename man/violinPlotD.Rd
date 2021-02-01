@@ -4,14 +4,7 @@
 \alias{violinPlotD}
 \title{Builds a violinplot from a dataframe}
 \usage{
-violinPlotD(
-  obj,
-  conds,
-  keyId,
-  legend = NULL,
-  palette = NULL,
-  subset.view = NULL
-)
+violinPlotD(obj, conds, keyId, legend = NULL, pal = NULL, subset.view = NULL)
 }
 \arguments{
 \item{obj}{xxx}
@@ -22,7 +15,7 @@ violinPlotD(
 
 \item{legend}{A vector of the conditions (one condition per sample).}
 
-\item{palette}{xxx}
+\item{pal}{xxx}
 
 \item{subset.view}{xxx}
 }

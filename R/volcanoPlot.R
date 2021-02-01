@@ -120,7 +120,7 @@ return(p)
 #' @param clickFunction A string that contains a JavaScript function used to 
 #' show info from slots in df. The variable this.index refers to the slot 
 #' named index and allows to retrieve the right row to show in the tooltip.
-#' @param palette xxx
+#' @param pal xxx
 #' @param swap A boolean that indicates if the conditions have been swaped 
 #' @return An interactive volcanoplot
 #' @author Samuel Wieczorek
@@ -156,7 +156,7 @@ diffAnaVolcanoplot_rCharts <- function(df,
                                        threshold_logFC=0,
                                        conditions=NULL,
                                        clickFunction=NULL,
-                                       palette=NULL,
+                                       pal=NULL,
                                        swap = FALSE){
     
   
@@ -167,12 +167,12 @@ diffAnaVolcanoplot_rCharts <- function(df,
             JS("function(event) {Shiny.onInputChange('eventPointClicked', [this.index]+'_'+ [this.series.name]);}")
     }
     
-    if(is.null(palette)){
-      palette <- list(In='orange', Out='gray')
+    if(is.null(pal)){
+      pal <- list(In='orange', Out='gray')
     } else {
-      if (length(palette) != 2){
+      if (length(pal) != 2){
         warning('The palette must be a list of two items: In and Out. Set to default.')
-        palette <- list(In='orange', Out='gray')
+        pal <- list(In='orange', Out='gray')
       }
     }
     
@@ -206,7 +206,7 @@ diffAnaVolcanoplot_rCharts <- function(df,
     
     h1 <-  highchart() %>%
         hc_add_series(data = df, type = "scatter", hcaes(x,y,group=g)) %>%
-        hc_colors(c(palette$In, palette$Out)) %>%
+        hc_colors(c(pal$In, pal$Out)) %>%
         my_hc_chart(zoomType = "xy",chartType="scatter") %>%
         hc_legend(enabled = FALSE) %>%
        hc_title(text = title,
