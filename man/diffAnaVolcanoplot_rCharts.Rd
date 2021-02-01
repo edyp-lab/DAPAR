@@ -10,7 +10,7 @@ diffAnaVolcanoplot_rCharts(
   threshold_logFC = 0,
   conditions = NULL,
   clickFunction = NULL,
-  palette = NULL,
+  pal = NULL,
   swap = FALSE
 )
 }
@@ -37,7 +37,7 @@ differential analysis.}
 show info from slots in df. The variable this.index refers to the slot 
 named index and allows to retrieve the right row to show in the tooltip.}
 
-\item{palette}{xxx}
+\item{pal}{xxx}
 
 \item{swap}{A boolean that indicates if the conditions have been swaped}
 }

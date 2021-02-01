@@ -24,9 +24,9 @@ nPalette <- 10
 par(mfrow=c(nPalette,1))
 par(mar=c(0.5, 4.5, 0.5, 0.5))
 for (i in 1:nPalette){
-  palette <- ExtendPalette(n=i, base = 'Dark2')
-  barplot(1:length(palette), col=palette)
-  print(palette)
+  pal <- ExtendPalette(n=i, base = 'Dark2')
+  barplot(1:length(pal), col=pal)
+  print(pal)
 }
 
 }

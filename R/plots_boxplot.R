@@ -10,7 +10,7 @@
 #' 
 #' @param legend A vector of the conditions (one condition per sample).
 #' 
-#' @param palette A basis palette for the boxes which length must be equal
+#' @param pal A basis palette for the boxes which length must be equal
 #' to the number of unique conditions in the dataset.
 #' 
 #' @param subset.view A vector of index indicating which rows to highlight
@@ -25,8 +25,8 @@
 #' conds <- legend <- Biobase::pData(obj)$Condition
 #' key <- "Protein_IDs"
 #' boxPlotD_HC(obj, conds, key, legend, NULL, 1:10)
-#' palette <- ExtendPalette(length(unique(conds)))
-#' boxPlotD_HC(obj, conds, key, legend, palette, 1:10)
+#' pal <- ExtendPalette(length(unique(conds)))
+#' boxPlotD_HC(obj, conds, key, legend, pal, 1:10)
 #' 
 #' @import highcharter
 #' 
@@ -43,7 +43,7 @@ boxPlotD_HC <- function(obj,
                         conds, 
                         keyId=NULL, 
                         legend=NULL, 
-                        palette = NULL, 
+                        pal = NULL, 
                         subset.view=NULL){
   
   if (is.null(obj)){
@@ -63,15 +63,15 @@ boxPlotD_HC <- function(obj,
   }
   
   myColors <- NULL
-  if (is.null(palette)){
+  if (is.null(pal)){
     warning("Color palette set to default.")
     myColors <-   GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
   } else {
-    if (length(palette) != length(unique(conds))){
+    if (length(pal) != length(unique(conds))){
       warning("The color palette has not the same dimension as the number of samples")
       myColors <- GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
     } else 
-      myColors <- GetColorsForConditions(conds, palette)
+      myColors <- GetColorsForConditions(conds, pal)
   }
   
   

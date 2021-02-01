@@ -1,52 +1,3 @@
-#' 
-#' 
-#' #' Wrapper to the function that plot to compare the quantitative proteomics 
-#' #' data before and after normalization
-#' #' 
-#' #' @title Builds a plot from a dataframe
-#' #' 
-#' #' @param objBefore A dataframe that contains quantitative data before 
-#' #' normalization.
-#' #' 
-#' #' @param objAfter A dataframe that contains quantitative data after 
-#' #' normalization.
-#' #' 
-#' #' @param conds A vector of the conditions (one condition per sample).
-#' #' 
-#' #' @param indData2Show A vector of the indices of the columns to show in the 
-#' #' plot. The indices are those of indices of 
-#' #' the columns int the data.frame qDataBefore.
-#' #' 
-#' #' @param ... arguments for palette
-#' #' 
-#' #' @return A plot
-#' #' 
-#' #' @author Samuel Wieczorek
-#' #' 
-#' #' @examples
-#' #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' #' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-#' #' objAfter <- wrapper.normalizeD(obj=Exp1_R25_pept, method="QuantileCentering",conds = conds, type="within conditions")
-#' #' wrapper.compareNormalizationD(Exp1_R25_pept, objAfter, conds)
-#' #' 
-#' #' @importFrom Biobase exprs pData
-#' #' 
-#' #' @export
-#' #' 
-#' #' @importFrom Biobase exprs fData pData
-#' #' 
-#' wrapper.compareNormalizationD <- function(objBefore, objAfter, 
-#'                                           conds=NULL,
-#'                                           indData2Show=NULL,
-#'                                           ...){
-#'   
-#'   qDataBefore <- Biobase::exprs(objBefore)
-#'   qDataAfter <- Biobase::exprs(objAfter)
-#'   if (is.null(conds)){
-#'     conds <- Biobase::pData(objBefore)[,"Condition"]}
-#'   
-#'   compareNormalizationD(qDataBefore, qDataAfter, conds, indData2Show, ...)
-#' }
 
 
 
@@ -94,110 +45,6 @@ wrapper.compareNormalizationD_HC <- function(objBefore,
   compareNormalizationD_HC(qDataBefore, qDataAfter, condsForLegend, ...)
 }
 
-#' 
-#' 
-#' #' Plot to compare the quantitative proteomics data before and after 
-#' #' normalization
-#' #' 
-#' #' @title Builds a plot from a dataframe
-#' #' 
-#' #' @param qDataBefore A dataframe that contains quantitative data before 
-#' #' normalization.
-#' #' 
-#' #' @param qDataAfter A dataframe that contains quantitative data after 
-#' #' normalization.
-#' #' 
-#' #' @param condsForLegend A vector of the conditions (one condition 
-#' #' per sample).
-#' #' 
-#' #' @param indData2Show A vector of the indices of the columns to show in 
-#' #' the plot. The indices are those of indices of 
-#' #' the columns int the data.frame qDataBefore.
-#' #' 
-#' #' @param palette xxx
-#' #' 
-#' #' @return A plot
-#' #' 
-#' #' @author Samuel Wieczorek
-#' #' 
-#' #' @examples
-#' #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' #' qDataBefore <- Biobase::exprs(Exp1_R25_pept)
-#' #' conds <- Biobase::pData(Exp1_R25_pept)$Condition
-#' #' objAfter <- wrapper.normalizeD(obj=Exp1_R25_pept, method="QuantileCentering", conds = conds, type="within conditions")
-#' #' compareNormalizationD(qDataBefore, Biobase::exprs(objAfter), conds)
-#' #'  
-#' #' @importFrom RColorBrewer brewer.pal
-#' #' 
-#' #' @export
-#' #' 
-#' compareNormalizationD <- function(qDataBefore,
-#'                                   qDataAfter,
-#'                                   condsForLegend=NULL,
-#'                                   indData2Show=NULL,
-#'                                   palette = NULL){
-#'   
-#'   if (is.null(condsForLegend)) return(NULL)
-#'   if (is.null(indData2Show)) {indData2Show <- c(1:ncol(qDataAfter)) }
-#'   
-#'   if (is.null(palette)){
-#'     tmp <- RColorBrewer::brewer.pal(length(unique(condsForLegend)),"Dark2")[1:length(unique(condsForLegend))]
-#'     
-#'     for (i in 1:ncol(qDataBefore)){
-#'       palette[i] <- tmp[ which(condsForLegend[i] == unique(condsForLegend))]
-#'     }
-#'     
-#'   }else{
-#'     if (length(palette) != ncol(qDataBefore)){
-#'       warning("The color palette has not the same dimension as the number of samples")
-#'       return(NULL)
-#'     }
-#'   }
-#'   
-#'   x <- qDataBefore
-#'   y <- qDataAfter/qDataBefore
-#'   
-#'   lim.x <- range(min(x, na.rm=TRUE), max(x, na.rm=TRUE))
-#'   lim.y <- range(min(y, na.rm=TRUE), max(y, na.rm=TRUE))
-#'   
-#'   
-#'   ##Colors definition
-#'   legendColor <- unique(palette)
-#'   txtLegend <- unique(condsForLegend)
-#'   
-#'   
-#'   
-#'   plot(x=NULL
-#'        ,xlim = lim.x
-#'        ,ylim = lim.y
-#'        , cex = 1
-#'        , axes=TRUE
-#'        , xlab = "Intensities before normalization"
-#'        , ylab = "Intensities after normalization / Intensities before 
-#'     normalization"
-#'        ,cex.lab = 1
-#'        ,cex.axis = 1
-#'        ,cex.main = 3)
-#'   
-#'   
-#'   for (i in indData2Show){
-#'     points(x[,i], y[,i], col = palette[i], cex = 1,pch=16)
-#'   }
-#'   
-#'   legend("topleft"
-#'          , legend = txtLegend
-#'          , col = legendColor
-#'          , pch = 15 
-#'          , bty = "n"
-#'          , pt.cex = 2
-#'          , cex = 1
-#'          , horiz = FALSE
-#'          , inset=c(0,0)
-#'   )
-#'   
-#'   
-#' }
-
 
 
 #' Plot to compare the quantitative proteomics data before and after 
@@ -212,10 +59,12 @@ wrapper.compareNormalizationD_HC <- function(objBefore,
 #' @param qDataAfter A dataframe that contains quantitative data after 
 #' normalization.
 #' 
+#' @param keyId xxx
+#' 
 #' @param conds A vector of the conditions (one condition 
 #' per sample).
 #' 
-#' @param palette xxx
+#' @param pal xxx
 #' 
 #' @param subset.view xxx
 #' 
@@ -234,11 +83,13 @@ wrapper.compareNormalizationD_HC <- function(objBefore,
 #' obj <- Exp1_R25_prot
 #' qDataBefore <- Biobase::exprs(obj)
 #' conds <- Biobase::pData(obj)[,"Condition"]
+#' id <- fData(obj)[,obj@experimentData@other$proteinId]
+#' pal <- ExtendPalette(2)
 #' objAfter <- wrapper.normalizeD(obj, method = "QuantileCentering", conds =conds, type = "within conditions")
-#' compareNormalizationD_HC(qDataBefore=qDataBefore, qDataAfter=Biobase::exprs(objAfter), conds=conds, n=100)
-#' pal <- ExtendPalette(2, "Dark2")
-#' compareNormalizationD_HC(qDataBefore=qDataBefore, qDataAfter=Biobase::exprs(objAfter), conds=conds, n=100, palette=pal)
-#'  
+#' compareNormalizationD_HC(qDataBefore=qDataBefore, qDataAfter=Biobase::exprs(objAfter), keyId = id, conds=conds, n=100)
+#' 
+#' compareNormalizationD_HC(qDataBefore=qDataBefore, qDataAfter=Biobase::exprs(objAfter), keyId = id, pal=pal, subset.view=1:4, conds=conds, n=100)
+#' 
 #' @import highcharter
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom tibble as_tibble
@@ -248,27 +99,36 @@ wrapper.compareNormalizationD_HC <- function(objBefore,
 #' 
 compareNormalizationD_HC <- function(qDataBefore,
                                      qDataAfter,
+                                     keyId = NULL,
                                      conds =NULL,
-                                     palette = NULL,
+                                     pal = NULL,
                                      subset.view = NULL,
                                      n = 100,
                                      type = 'scatter'){
   
-  if (missing(conds))
-    stop("'conds' is missing")
-
- 
+  if (is.null(conds)){
+    warning("'conds' is null.")
+    return(NULL)
+  }
+  if (is.null(keyId))
+    keyId <- 1:length(qDataBefore)
+  
   if (!is.null(subset.view) && length(subset.view) > 0)
   {
+    keyId <- keyId[subset.view]
     if (nrow(qDataBefore) > 1)
       if (length(subset.view)==1){
         qDataBefore <- as_tibble(cbind(t(qDataBefore[subset.view,])))
         qDataAfter <- as_tibble(cbind(t(qDataAfter[subset.view,])))
       } else {
         qDataBefore <- as_tibble(cbind(qDataBefore[subset.view,]))
-        qDataAfter <- as_tibble(cbind(qDataBefore[subset.view,]))
+        qDataAfter <- as_tibble(cbind(qDataAfter[subset.view,]))
       }
-  }
+  } 
+  # else {
+  #       qDataBefore <- as_tibble(cbind(t(qDataBefore)))
+  #       qDataAfter <- as_tibble(cbind(t(qDataAfter)))
+  # }
   
   
   if (!match(type, c('scatter', 'line') )){
@@ -276,7 +136,7 @@ compareNormalizationD_HC <- function(qDataBefore,
     return(NULL)
   }
   
-  
+  # browser()
   if (is.null(n)){
     n <- seq_len(nrow(qDataBefore))
   } else {
@@ -287,6 +147,7 @@ compareNormalizationD_HC <- function(qDataBefore,
     }
     
     ind <- sample(seq_len(nrow(qDataBefore)),n)
+    keyId <- keyId[ind]
     if (nrow(qDataBefore) > 1)
       if (length(ind) == 1){
         qDataBefore <- as_tibble(cbind(t(qDataBefore[ind,])))
@@ -297,17 +158,16 @@ compareNormalizationD_HC <- function(qDataBefore,
       }
   }
   
-  
   myColors <- NULL
-  if (is.null(palette)){
+  if (is.null(pal)){
     warning("Color palette set to default.")
     myColors <-   GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
   } else {
-    if (length(palette) != length(unique(conds))){
+    if (length(pal) != length(unique(conds))){
       warning("The color palette has not the same dimension as the number of samples")
       myColors <- GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
     } else 
-      myColors <- GetColorsForConditions(conds, palette)
+      myColors <- GetColorsForConditions(conds, pal)
   }
   
   x <- qDataBefore
@@ -322,8 +182,9 @@ compareNormalizationD_HC <- function(qDataBefore,
   for (i in 1:length(conds)){
     tmp <- list(name=colnames(x)[i],
                 data =list_parse(data.frame(x = x[,i],
-                                            y = y[,i])
-    )
+                                            y = y[,i],
+                                            name=keyId)
+                )
     )
     series[[i]] <- tmp
   }
@@ -332,7 +193,7 @@ compareNormalizationD_HC <- function(qDataBefore,
     dapar_hc_chart( chartType = type) %>%
     hc_add_series_list(series) %>%
     hc_colors(myColors) %>%
-    hc_tooltip(list(enabled=F)) %>%
+    hc_tooltip(headerFormat= '',pointFormat = "Id: {point.name}") %>%
     dapar_hc_ExportMenu(filename = "compareNormalization")
   h1
   

@@ -126,13 +126,13 @@ heatmapD <- function(qData,
   x[is.na(x)] <- -1e5
   dist= dist(x, method=distance)
   hcluster = hclust(dist, method=cluster)
-  palette <- GetColorsForConditions(conds)
+  pal <- GetColorsForConditions(conds)
   #palette.init <- RColorBrewer::brewer.pal(8,"Dark2")[1:length(unique(conds))]
   #palette.init <- grDevices::colorRampPalette(brewer.pal(8, "Dark2"))(length(unique(conds)))
   #for (i in 1:length(conds)){
   #  palette[i] <- palette.init[which(conds[i] == unique(conds))]
   #}
-  cols_branches <- palette
+  cols_branches <- pal
   dend1 <- as.dendrogram(hcluster)
   dend1 <- dendextend::color_branches(dend1, k = length(conds), col = cols_branches)
   col_labels <- dendextend::get_leaves_branches_col(dend1)

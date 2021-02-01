@@ -8,7 +8,7 @@
 #' @param threshold_LogFC The threshold on log(Fold Change) to
 #' distinguish between differential and non-differential data 
 #' 
-#' @param palette xxx
+#' @param pal xxx
 #' 
 #' @return A highcharts density plot
 #' 
@@ -24,7 +24,7 @@
 #' res <- limmaCompleteTest(qData, sTab, comp.type = "OnevsAll")
 #' hc_logFC_DensityPlot(res$logFC, threshold_LogFC=1)
 #' pal <- ExtendPalette(2, 'Dark2')
-#' hc_logFC_DensityPlot(res$logFC, threshold_LogFC=1, palette=pal)
+#' hc_logFC_DensityPlot(res$logFC, threshold_LogFC=1, pal=pal)
 #' 
 #' @export
 #' 
@@ -33,21 +33,22 @@
 #' 
 hc_logFC_DensityPlot <-function(df_logFC, 
                                 threshold_LogFC = 0, 
-                                palette = NULL){
+                                pal = NULL){
   if (is.null(df_logFC) || threshold_LogFC < 0){
     hc <- NULL
     return(NULL)
   }
   
   myColors <- NULL
-  if (is.null(palette)){
+  if (is.null(pal)){
     warning("Color palette set to default.")
-    palette <- ExtendPalette(ncol(df_logFC), "Paired")
+    myColors <- ExtendPalette(ncol(df_logFC), "Paired")
   } else {
-    if (length(palette) != ncol(df_logFC)){
+    if (length(pal) != ncol(df_logFC)){
       warning("The color palette has not the same dimension as the number of samples")
-      palette <- ExtendPalette(ncol(df_logFC), "Paired")
+      myColors <- ExtendPalette(pal, "Paired")
     }
+    myColors <- pal
   }
   
   nValues <- nrow(df_logFC)*ncol(df_logFC)
@@ -59,7 +60,7 @@ hc_logFC_DensityPlot <-function(df_logFC,
     hc_title(text = "log(FC) repartition") %>% 
     my_hc_chart(chartType = "spline", zoomType="x") %>%
     hc_legend(enabled = TRUE) %>%
-    hc_colors(palette) %>%
+    hc_colors(myColors) %>%
     hc_xAxis(title = list(text = "log(FC)"),
              plotBands = list(list(from= -threshold_LogFC, to = threshold_LogFC, color = "lightgrey")),
              plotLines=list(list(color= "grey" , width = 2, value = 0, zIndex = 5))
