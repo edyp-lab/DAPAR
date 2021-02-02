@@ -1136,7 +1136,7 @@ mvFilterGetIndices_Marianne <- function(obj,
 #' #' @return the object given as input but with the lines not respecting the
 #' #' proportion of NA requested in less.
 #' #' 
-#' #' @author HÃ©lÃ¨ne Borges, Samuel Wieczorek
+#' #' @author Hélène Borges, Samuel Wieczorek
 #' #' 
 #' #' @examples
 #' #' utils::data(Exp1_R25_prot, package='DAPARdata')
