@@ -696,12 +696,12 @@ mvFilterGetIndices <- function(obj,
   if (condition == "None") {
     keepThat <- seq(1:nrow(data))
   } else if (condition == "EmptyLines") {
-    keepThat <- which(apply(!DAPAR::is.MV(data), 1, sum) >= 1)
+    keepThat <- which(apply(!is.MV(data), 1, sum) >= 1) # at least one value different of NA
   } else if (condition == "WholeMatrix") {
     if (isTRUE(percent)) {
-      keepThat <- which(rowSums(!DAPAR::is.MV(data))/ncol(data) >= threshold) 
+      keepThat <- which(rowSums(!is.MV(data))/ncol(data) >= threshold) 
     } else {
-      keepThat <- which(apply(!DAPAR::is.MV(data), 1, sum) >= threshold)
+      keepThat <- which(apply(!is.MV(data), 1, sum) >= threshold)
     }
   } else if (condition == "AtLeastOneCond" || condition == "AllCond") {
     
@@ -715,16 +715,16 @@ mvFilterGetIndices <- function(obj,
     if (isTRUE(percent)) {
       for (c in 1:nbCond) {
         ind <- which(Biobase::pData(obj)$Condition == conditions[c])
-        s[,c] <- (rowSums(!DAPAR::is.MV(data[,ind]))/length(ind)) >= threshold
+        s[,c] <- (rowSums(!is.MV(data[,ind]))/length(ind)) >= threshold
       }
     } else {
       for (c in 1:nbCond) {
         ind <- which(Biobase::pData(obj)$Condition == conditions[c])
         if (length(ind) == 1){
-          s[,c] <- (!DAPAR::is.MV(data[,ind]) >= threshold) 
+          s[,c] <- (!is.MV(data[,ind]) >= threshold) 
         }
         else {
-          s[,c] <- (apply(!DAPAR::is.MV(data[,ind]), 1, sum)) >= threshold
+          s[,c] <- (apply(!is.MV(data[,ind]), 1, sum)) >= threshold
         }
       }
     }
@@ -929,12 +929,12 @@ mvFilterGetIndices_Marianne <- function(obj,
   if (condition == "None") {
     keepThat <- seq(1:nrow(data))
   } else if (condition == "EmptyLines") {
-    keepThat <- which(apply(!is.byMSMS(data), 1, sum) >= 1) # row with only 'by MS/MS'
+    keepThat <- which(apply(is.byMSMS(data), 1, sum) >= 1) # row with at least one 'by MS/MS'
   } else if (condition == "WholeMatrix") {
     if (isTRUE(percent)) {
-      keepThat <- which(rowSums(!is.byMSMS(data))/ncol(data) >= threshold) 
+      keepThat <- which(rowSums(is.byMSMS(data))/ncol(data) >= threshold) 
     } else {
-      keepThat <- which(apply(!is.byMSMS(data), 1, sum) >= threshold)
+      keepThat <- which(apply(is.byMSMS(data), 1, sum) >= threshold)
     }
   } else if (condition == "AtLeastOneCond" || condition == "AllCond") {
     
@@ -954,10 +954,10 @@ mvFilterGetIndices_Marianne <- function(obj,
       for (c in 1:nbCond) {
         ind <- which(Biobase::pData(obj)$Condition == conditions[c])
         if (length(ind) == 1){
-          s[,c] <- (!is.byMSMS(data[,ind]) >= threshold) 
+          s[,c] <- (is.byMSMS(data[,ind]) >= threshold) 
         }
         else {
-          s[,c] <- (apply(!is.byMSMS(data[,ind]), 1, sum)) >= threshold
+          s[,c] <- (apply(is.byMSMS(data[,ind]), 1, sum)) >= threshold
         }
       }
     }
