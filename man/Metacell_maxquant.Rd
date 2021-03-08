@@ -9,6 +9,8 @@ Metacell_maxquant(qData, conds, df)
 \arguments{
 \item{qData}{An object of class \code{MSnSet}}
 
+\item{conds}{xxx}
+
 \item{df}{A list of integer xxxxxxx}
 }
 \value{
@@ -25,7 +27,7 @@ metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, stringsA
 conds <- metadata$Condition
 qData <- data[,56:61]
 df <- data[ , 43:48]
-Metacell_maxquant(qData, donds, df)
+df <- Metacell_maxquant(qData, conds, df)
 
 }
 \author{
