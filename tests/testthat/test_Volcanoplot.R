@@ -1,8 +1,8 @@
-context("Descriptive Statistics using visualTest")
-library(DAPARdata)
-data(Exp1_R25_prot)
-test <- Exp1_R25_prot[1:100]
-test <- mvFilter(test, "wholeMatrix", 6)
+# context("Descriptive Statistics using visualTest")
+# library(DAPARdata)
+# data(Exp1_R25_prot)
+# test <- Exp1_R25_prot[1:100]
+# test <- mvFilter(test, "wholeMatrix", 6)
 
 # test_that("diffAnaVolcanoplot", {
 #     condition1 <- '25fmol'

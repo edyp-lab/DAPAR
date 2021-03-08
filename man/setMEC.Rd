@@ -4,10 +4,14 @@
 \alias{setMEC}
 \title{Sets the MEC tag in the OriginOfValues}
 \usage{
-setMEC(obj)
+setMEC(qData, conds, df)
 }
 \arguments{
-\item{obj}{An object of class \code{MSnSet}}
+\item{qData}{xxx}
+
+\item{conds}{xxx}
+
+\item{df}{An object of class \code{MSnSet}}
 }
 \value{
 An instance of class \code{MSnSet}.
@@ -17,7 +21,9 @@ Sets the MEC tag in the OriginOfValues
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-setMEC(Exp1_R25_pept)
+cols.for.ident <- xxxxx
+df <- Biobase::fData(obj)[, cols.for.ident]
+setMEC(df, Exp1_R25_pept)
 
 }
 \author{

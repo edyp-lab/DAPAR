@@ -46,7 +46,11 @@ saveParameters <- function(obj,name.dataset=NULL,name=NULL,l.params=NULL){
 #' 
 #' @title Sets the MEC tag in the OriginOfValues
 #' 
-#' @param obj An object of class \code{MSnSet}
+#' @param qData xxx
+#' 
+#' @param conds xxx
+#' 
+#' @param df An object of class \code{MSnSet}
 #' 
 #' @return An instance of class \code{MSnSet}.
 #' 
@@ -54,35 +58,219 @@ saveParameters <- function(obj,name.dataset=NULL,name=NULL,l.params=NULL){
 #' 
 #' @examples 
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' setMEC(Exp1_R25_pept)
+#' cols.for.ident <- xxxxx
+#' df <- Biobase::fData(obj)[, cols.for.ident]
+#' setMEC(df, Exp1_R25_pept)
 #' 
 #' @export
 #' 
 #' @importFrom Biobase pData exprs fData
 #'  
-setMEC <- function(obj){
+setMEC <- function(qData, conds, df){
   
-  if (is.null( obj@experimentData@other$OriginOfValues)){return()}
-  
-  conditions <- unique(Biobase::pData(obj)$Condition)
+  conditions <- unique(conds)
   nbCond <- length(conditions)
   
   for (cond in 1:nbCond){
-    ind <- which(Biobase::pData(obj)$Condition == conditions[cond])
-    if (length(ind) == 1) {
-      lNA <- which(is.na(Biobase::exprs(obj)[,ind]))
-    } else {
-      lNA <- which(apply(is.na(Biobase::exprs(obj)[,ind]), 1, sum)==length(ind))
-    }
+    ind <- which(conds == conditions[cond])
+    
+    if (length(ind) == 1)
+      lNA <- which(is.na(qData[,ind]))
+    else
+      lNA <- which(apply(is.na(qData[,ind]), 1, sum)==length(ind))
+    
     if (length(lNA) > 0)
-    {
-      Biobase::fData(obj)[lNA,obj@experimentData@other$OriginOfValues[ind]] <- "MEC"
-    }
+      df[lNA, ind] <- "Missing-NA-MEC"
   }
-  return(obj)
+  return(df)
 }
 
 
+
+
+#' @title xxxx
+#' 
+#' @description 
+#' xxxxxx
+#' 
+#' @param from xxx
+#' 
+#' @param qData An object of class \code{MSnSet}
+#' 
+#' @param df A list of integer xxxxxxx
+#' 
+#' @return xxxxx
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples 
+#' file <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
+#' data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
+#' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
+#' metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, stringsAsFactors = FALSE)
+#' conds <- metadata$Condition
+#' qData <- data[,56:61]
+#' df <- data[ , 43:48]
+#' df <- BuildMetaCell(from = 'maxquant', qData = qData, conds = conds, df = df)
+#' df <- BuildMetaCell(from = 'proline', qData = qData, conds = conds, df = df)
+#' 
+#' @export
+#' 
+#' @importFrom Biobase pData exprs fData
+#' 
+BuildMetaCell <- function(from = NULL, qData = NULL, conds = NULL, df = NULL){
+  if (is.null(from))
+    stop("'from' is required.")
+  if (is.null(qData))
+    stop("'qData' is required.")
+  if (is.null(conds))
+    stop("'conds' is required.")
+  if (is.null(df) && from != 'proline')
+    stop("'df' is required.")
+  
+  switch(from,
+         maxquant = df <- Metacell_maxquant(qData, conds, df),
+         proline = df <- Metacell_proline(qData, conds, df)
+  )
+
+  return(df)
+}
+
+
+
+
+#' #' @title xx
+#' #' 
+#' controled.vocable <- list('quantiValue-direct' = 'Quantitative Value - Direct',
+#'                           'quantiValue-indirect' = 'Quantitative Value - Indirect',
+#'                           'missingValue-NA-POV' = 'Missing Value - NA - POV-MNAR',
+#'                           'missingValue-NA-POV' = 'Missing Value - NA - POV-MCAR',
+#'                           'missingValue-NA-MEC' = 'Missing Value - NA - MEC',
+#'                           'missingValue-imputed' = 
+#'                           )
+#' 1.1.    Direct
+#' 1.2.    Indirect
+#' 
+#' 2.       Missing value
+#' 
+#' 2.1.    N.A.
+#' 
+#' 2.1.1.POV
+#' 2.1.1.1.             MNAR
+#' 2.1.1.2.             MCAR
+#' 
+#' 2.1.2.MEC
+#' 
+#' 2.2.    Imputed
+#' 2.2.1.Algorithm 1
+#' 2.2.2.Algorithm 2
+#' 2.2.3.Etc.
+#' 
+#' 3.       Undefined
+
+
+
+
+#' @title Sets the OriginOfValues dataframe
+#' 
+#' @description 
+#' xxxxxx
+#' 
+#' @param qData An object of class \code{MSnSet}
+#' 
+#' @param conds xxx
+#' 
+#' @param df A list of integer xxxxxxx
+#' 
+#' @return xxxxx
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples 
+#' file <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
+#' data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
+#' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
+#' metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, stringsAsFactors = FALSE)
+#' conds <- metadata$Condition
+#' qData <- data[,56:61]
+#' df <- data[ , 43:48]
+#' Metacell_proline(qData, conds, df)
+#' 
+#' @export
+#' 
+#' @importFrom Biobase pData exprs fData
+#' 
+Metacell_proline <- function(qData, conds, df){
+  
+  if (is.null(df))
+    df <- data.frame(matrix(rep("undefined", nrow(qData)*ncol(qData)), 
+                      nrow=nrow(qData),
+                      ncol=ncol(qData)),
+               stringsAsFactors = FALSE) 
+  
+  #prod <- qData*df
+  
+  df[df > 0] <- 'quantValue-direct'
+  df[df == 0 && qData > 0] <- 'quantValue-indirect'
+  df[is.na(df)] <-  "Missing-NA-POV"
+  df <- setMEC(qData, conds, df)
+  
+  
+  rownames(df) <- rownames(df)
+  colnames(df) <- paste0("metacell", colnames(qData))
+  colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
+  
+  return(df)
+}
+
+#' @title Sets the OriginOfValues dataframe
+#' 
+#' @description 
+#' xxxxxx
+#' 
+#' @param qData An object of class \code{MSnSet}
+#' 
+#' @param df A list of integer xxxxxxx
+#' 
+#' @return xxxxx
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples 
+#' file <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
+#' data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
+#' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
+#' metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, stringsAsFactors = FALSE)
+#' conds <- metadata$Condition
+#' qData <- data[,56:61]
+#' df <- data[ , 43:48]
+#' Metacell_maxquant(qData, donds, df)
+#' 
+#' @export
+#' 
+#' @importFrom Biobase pData exprs fData
+#' 
+Metacell_maxquant <- function(qData, conds, df){
+  
+  if (is.null(df))
+    df <- data.frame(matrix(rep("undefined", nrow(qData)*ncol(qData)), 
+                          nrow=nrow(qData),
+                          ncol=ncol(qData)),
+                   stringsAsFactors = FALSE) 
+
+  
+  df[df=='By MS/MS'] <- 'quantValue-direct'
+  df[df=='By matching'] <- 'quantValue-indirect'
+  df[is.na(df)] <-  "Missing-NA-POV"
+  df <- setMEC(qData, conds, df)
+  
+  
+  rownames(df) <- rownames(df)
+  colnames(df) <- paste0("metacell", colnames(qData))
+  colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
+  
+  return(df)
+}
 
 #' Sets the OriginOfValues dataframe in the fData table
 #' 
