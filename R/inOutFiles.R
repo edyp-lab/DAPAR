@@ -42,9 +42,9 @@ saveParameters <- function(obj,name.dataset=NULL,name=NULL,l.params=NULL){
 
 
 
-#' Sets the MEC tag in the OriginOfValues
+#' Sets the MEC tag in the metacell
 #' 
-#' @title Sets the MEC tag in the OriginOfValues
+#' @title Sets the MEC tag in the metacell
 #' 
 #' @param qData xxx
 #' 
@@ -80,7 +80,7 @@ setMEC <- function(qData, conds, df){
       lNA <- which(apply(is.na(qData[,ind]), 1, sum)==length(ind))
     
     if (length(lNA) > 0)
-      df[lNA, ind] <- "Missing-NA-MEC"
+      df[lNA, ind] <- controled.vocable()$MEC
   }
   return(df)
 }
@@ -137,41 +137,28 @@ BuildMetaCell <- function(from = NULL, qData = NULL, conds = NULL, df = NULL){
 }
 
 
+#' @title xxx
+#' 
+#' @description
+#' xxxx
+#' 
+#' @export
+#'
+controled.vocable <- function(){
+  list('direct' = 'quantiValue-direct',
+  'indirect' =    'quantiValue-indirect',
+  'POV' =         'missingValue-NA-POV',
+  'MCAR' =        'missingValue-NA-POV-MCAR',
+  'MNAR' =        'missingValue-NA-POV-MNAR',
+  'MEC' =         'missingValue-NA-MEC',
+  'imputed' =     'missingValue-imputed-algo',
+  'unknown' =     'unknown') 
 
-
-#' #' @title xx
-#' #' 
-#' controled.vocable <- list('quantiValue-direct' = 'Quantitative Value - Direct',
-#'                           'quantiValue-indirect' = 'Quantitative Value - Indirect',
-#'                           'missingValue-NA-POV' = 'Missing Value - NA - POV-MNAR',
-#'                           'missingValue-NA-POV' = 'Missing Value - NA - POV-MCAR',
-#'                           'missingValue-NA-MEC' = 'Missing Value - NA - MEC',
-#'                           'missingValue-imputed' = 
-#'                           )
-#' 1.1.    Direct
-#' 1.2.    Indirect
-#' 
-#' 2.       Missing value
-#' 
-#' 2.1.    N.A.
-#' 
-#' 2.1.1.POV
-#' 2.1.1.1.             MNAR
-#' 2.1.1.2.             MCAR
-#' 
-#' 2.1.2.MEC
-#' 
-#' 2.2.    Imputed
-#' 2.2.1.Algorithm 1
-#' 2.2.2.Algorithm 2
-#' 2.2.3.Etc.
-#' 
-#' 3.       Undefined
+}
 
 
 
-
-#' @title Sets the OriginOfValues dataframe
+#' @title Sets the metacell dataframe
 #' 
 #' @description 
 #' xxxxxx
@@ -208,9 +195,9 @@ Metacell_proline <- function(qData, conds, df){
                       ncol=ncol(qData)),
                stringsAsFactors = FALSE) 
 
-  df[df > 0] <- 'quantValue-direct'
-  df[df == 0 && qData > 0] <- 'quantValue-indirect'
-  df[is.na(df)] <-  "Missing-NA-POV"
+  df[df > 0] <- controled.vocable()$direct
+  df[df == 0 && qData > 0] <- controled.vocable()$indirect
+  df[is.na(df)] <-  controled.vocable()$POV
   df <- setMEC(qData, conds, df)
   
   colnames(df) <- paste0("metacell_", colnames(qData))
@@ -219,7 +206,7 @@ Metacell_proline <- function(qData, conds, df){
   return(df)
 }
 
-#' @title Sets the OriginOfValues dataframe
+#' @title Sets the metacell dataframe
 #' 
 #' @description 
 #' xxxxxx
@@ -251,15 +238,15 @@ Metacell_proline <- function(qData, conds, df){
 Metacell_maxquant <- function(qData, conds, df){
   
   if (is.null(df))
-    df <- data.frame(matrix(rep("undefined", nrow(qData)*ncol(qData)), 
+    df <- data.frame(matrix(rep("unknown", nrow(qData)*ncol(qData)), 
                           nrow=nrow(qData),
                           ncol=ncol(qData)),
                    stringsAsFactors = FALSE) 
 
   
-  df[df=='By MS/MS'] <- 'quantValue-direct'
-  df[df=='By matching'] <- 'quantValue-indirect'
-  df[is.na(df)] <-  "Missing-NA-POV"
+  df[df=='By MS/MS'] <- controled.vocable()$direct
+  df[df=='By matching'] <- controled.vocable()$indirect
+  df[is.na(df)] <-  controled.vocable()$POV
   df <- setMEC(qData, conds, df)
   
   colnames(df) <- paste0("metacell_", colnames(qData))
@@ -267,61 +254,6 @@ Metacell_maxquant <- function(qData, conds, df){
   
   return(df)
 }
-
-#' 
-#' #' Sets the OriginOfValues dataframe in the fData table
-#' #' 
-#' #' @title Sets the OriginOfValues dataframe
-#' #' 
-#' #' @param obj An object of class \code{MSnSet}
-#' #' 
-#' #' @param names A list of integer xxxxxxx
-#' #' 
-#' #' @return An instance of class \code{MSnSet}.
-#' #' 
-#' #' @author Samuel Wieczorek
-#' #' 
-#' #' @examples 
-#' #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' #' addOriginOfValue(Exp1_R25_pept)
-#' #' 
-#' #' @export
-#' #' 
-#' #' @importFrom Biobase pData exprs fData
-#' #' 
-#' addOriginOfValue <- function(obj,
-#'                              names = NULL){
-#'   
-#'   if (!is.null(obj@experimentData@other$OriginOfValues)) {
-#'     print("Dataframe already exists. No modification has been made to the MSnset object.")
-#'     return (obj)
-#'   }
-#'   
-#'   
-#'   if (!is.null(names)) {
-#'     OriginOfValues <- Biobase::fData(obj)[,names]
-#'   } else {   
-#'     OriginOfValues <- data.frame(matrix(rep("unknown", nrow(Biobase::exprs(obj))*ncol(Biobase::exprs(obj))), 
-#'                                         nrow=nrow(Biobase::exprs(obj)),
-#'                                         ncol=ncol(Biobase::exprs(obj))),
-#'                                  stringsAsFactors = FALSE)
-#'   }
-#'   
-#'   OriginOfValues[is.na(obj)] <-  "POV"
-#'   rownames(OriginOfValues) <- rownames(Biobase::fData(obj))
-#'   colnames(OriginOfValues) <- paste0("OriginOfValue",colnames(Biobase::exprs(obj)))
-#'   colnames(OriginOfValues) <- gsub(".", "_", colnames(OriginOfValues), fixed=TRUE)
-#'   
-#'   #indMin <- length(colnames(Biobase::fData(obj)))
-#'   #indMax <- length(colnames(Biobase::fData(obj))) + length(OriginOfValues)
-#'   Biobase::fData(obj) <- cbind(Biobase::fData(obj), OriginOfValues, deparse.level = 0)
-#'   
-#'   obj@experimentData@other$OriginOfValues <- colnames(OriginOfValues)
-#'   
-#'   obj <- setMEC(obj)
-#'   
-#'   return(obj)
-#' }
 
 
 
@@ -470,7 +402,7 @@ createMSnset <- function(file,
                             df = metacell)
   
   Biobase::fData(obj) <- cbind(Biobase::fData(obj), metacell, deparse.level = 0)
-  obj@experimentData@other$OriginOfValues <- colnames(metacell)
+  obj@experimentData@other$names.metacell <- colnames(metacell)
   
   
   return(obj)
@@ -521,12 +453,12 @@ writeMSnsetToExcel <- function(obj, filename)
                                          Biobase::exprs(obj)), rowNames = FALSE)
   
   
-  if (is.null(obj@experimentData@other$OriginOfValues)){
+  if (is.null(obj@experimentData@other$names.metacell)){
     listPOV <-  which(is.na(Biobase::exprs(obj)), arr.ind=TRUE)
   } else {
-    mat <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
-    listPOV <- which(mat=="POV", arr.ind=TRUE)
-    listMEC <- which(mat=="MEC", arr.ind=TRUE)
+    mat <- Biobase::fData(obj)[,obj@experimentData@other$names.metacell]
+    listPOV <- which(match.metacell(mat, 'POV'), arr.ind=TRUE)
+    listMEC <- which(match.metacell(mat, 'MEC'), arr.ind=TRUE)
   }
   
   openxlsx::addStyle(wb, sheet=n, cols = listPOV[,"col"]+1, rows = listPOV[,"row"]+1, style = POV_Style)

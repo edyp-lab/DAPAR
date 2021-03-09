@@ -19,36 +19,6 @@ xxxxx
 \description{
 xxxxxx
 }
-\details{
-#' @title xx
-#' 
-controled.vocable <- list('quantiValue-direct' = 'Quantitative Value - Direct',
-                          'quantiValue-indirect' = 'Quantitative Value - Indirect',
-                          'missingValue-NA-POV' = 'Missing Value - NA - POV-MNAR',
-                          'missingValue-NA-POV' = 'Missing Value - NA - POV-MCAR',
-                          'missingValue-NA-MEC' = 'Missing Value - NA - MEC',
-                          'missingValue-imputed' = 
-                          )
-1.1.    Direct
-1.2.    Indirect
-
-2.       Missing value
-
-2.1.    N.A.
-
-2.1.1.POV
-2.1.1.1.             MNAR
-2.1.1.2.             MCAR
-
-2.1.2.MEC
-
-2.2.    Imputed
-2.2.1.Algorithm 1
-2.2.2.Algorithm 2
-2.2.3.Etc.
-
-3.       Undefined
-}
 \examples{
 file <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
 data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
