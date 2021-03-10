@@ -15,29 +15,6 @@ getListNbValuesInLines(obj, type = "WholeMatrix")
 An integer
 }
 \description{
-#' Similar to the function \code{is.na} but focused on the equality with the identification of the peptides ('By MS/MS')
-#' 
-#' @title Similar to the function \code{is.na} but focused on the equality with the identification of the peptides ('By MS/MS')
-#' 
-#' @param data A data.frame
-#' 
-#' @return A boolean dataframe 
-#' 
-#' @author Samuel Wieczorek, Enora Fremy
-#' 
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj <- Exp1_R25_pept
-#' data <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
-#' is.byMSMS(data)
-#' 
-#' @export
-#'
-is.byMSMS <- function(data){
-  byMSMS =is.OfType(data, "By MS/MS")
-  df <- byMSMS
-  return (df)
-}
 Returns the possible number of values in lines in a matrix.
 }
 \examples{

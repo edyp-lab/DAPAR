@@ -428,7 +428,7 @@ wrapper.mvImage <- function(obj){
   
   qData <- Biobase::exprs(obj)
   conds <- Biobase::pData(obj)[ , "Condition"]
-  metac <- Biobase::fData(obj)[ , obj@experimentData@other$names.metacell]
+  metac <- Biobase::fData(obj)[ , obj@experimentData@other$names_metacell]
   indices <- which(apply(match.metacell(metac, "MEC"), 1, sum) >0)
   
   if (length(indices)==0){

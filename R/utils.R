@@ -65,22 +65,27 @@ return (n)
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept
-#' data <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
+#' data <- BuildMetaCell(qData = Biobase::exprs(obj), conds = Biobase::pData(obj)$Condition)
 #' match.metacell(data, "MEC")
 #'
 #' @export
 #'
 match.metacell <- function(data, type){
   if (!(type %in% names(controled.vocable())))
-    stop(paste0("'type' is not correct. It must be one of the following: ', names(controled.vocable), collapse = ' '"))
+    stop(paste0("'type' is not correct. It must be one of the following: ', names(controled.vocable()), collapse = ' '"))
   
-  return(data==controled.vocable()$type)
+  return(data==controled.vocable()[[type]])
 }
+
+
+
 
 #' @title xxxx
 #' 
 #' @description
 #' xxxxx
+#' 
+#' @param pattern xxx
 #' 
 #' @author Samuel Wieczorek
 #' 
@@ -115,10 +120,10 @@ search.metacell.tags <- function(pattern){
 getListNbValuesInLines <- function(obj, type="WholeMatrix"){
   if (is.null(obj)){return(NULL)}
   
-  if(is.null(obj@experimentData@other$names.metacell)){
+  if(is.null(obj@experimentData@other$names_metacell)){
     ll <- seq(0,ncol(obj))
   }
-  data <- Biobase::fData(obj)[,obj@experimentData@other$names.metacell]
+  data <- Biobase::fData(obj)[,obj@experimentData@other$names_metacell]
   switch(type,
          WholeMatrix= {
            ll <- unique(ncol(data) - apply(match.metacell(data, 'NA'), 1, sum))

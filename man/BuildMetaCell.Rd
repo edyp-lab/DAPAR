@@ -11,6 +11,8 @@ BuildMetaCell(from = NULL, qData = NULL, conds = NULL, df = NULL)
 
 \item{qData}{An object of class \code{MSnSet}}
 
+\item{conds}{xxx}
+
 \item{df}{A list of integer xxxxxxx}
 }
 \value{

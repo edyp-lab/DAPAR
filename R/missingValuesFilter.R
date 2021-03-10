@@ -682,13 +682,12 @@ mvFilterGetIndices <- function(obj,
     }
   
   keepThat <- NULL
-  if (is.null(obj@experimentData@other$names.metacell)){
-    data <- Biobase::exprs(obj)
-    warning("The dataset contains no slot 'names.metacell' in which to search for indices. The search will
-            be proceeded in the intensities tab based on NA values")
+  if (is.null(obj@experimentData@other$names_metacell)){
+    data <- BuildMetaCell(qData = Biobase::exprs(obj), conds = Biobase::pData(obj)$Condition)
+    warning("The dataset contains no slot 'names_metacell' in which to search for indices. Generic metacell data are set.")
   } else {
     data <- dplyr::select(Biobase::fData(obj),
-                          obj@experimentData@other$names.metacell)
+                          obj@experimentData@other$names_metacell)
   }
   
   if (condition == "None") {
@@ -794,12 +793,12 @@ mvFilterGetIndices_old <- function(obj,
   }
   
   keepThat <- NULL
-  if (is.null(obj@experimentData@other$names.metacell)){
+  if (is.null(obj@experimentData@other$names_metacell)){
     data <- Biobase::exprs(obj)
-    warning("There is no slot 'names.metacell' in which to search for indices. The search will
+    warning("There is no slot 'names_metacell' in which to search for indices. The search will
             be proceeded in the intensities tab based on NA values")
   } else {
-    data <- dplyr::select(Biobase::fData(obj),obj@experimentData@other$names.metacell)
+    data <- dplyr::select(Biobase::fData(obj),obj@experimentData@other$names_metacell)
   }
   
   if (type == "None"){
@@ -915,13 +914,12 @@ mvFilterGetIndices_Marianne <- function(obj,
     }
   
   keepThat <- NULL
-  if (is.null(obj@experimentData@other$names.metacell)){
-    data <- Biobase::exprs(obj)
-    warning("The dataset contains no slot 'names.metacell' in which to search for indices. The search will
-            be proceeded in the intensities tab based on NA values")
+  if (is.null(obj@experimentData@other$names_metacell)){
+    data <- BuildMetaCell(qData = Biobase::exprs(obj), conds = Biobase::pData(obj)$Condition)
+    warning("The dataset contains no slot 'names_metacell' in which to search for indices. Generic metacell data are set.")
   } else {
     data <- dplyr::select(Biobase::fData(obj),
-                          obj@experimentData@other$names.metacell)
+                          obj@experimentData@other$names_metacell)
   }
   
   if (condition == "None") {

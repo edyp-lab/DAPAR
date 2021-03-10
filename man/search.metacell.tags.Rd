@@ -6,6 +6,9 @@
 \usage{
 search.metacell.tags(pattern)
 }
+\arguments{
+\item{pattern}{xxx}
+}
 \description{
 xxxxx
 }

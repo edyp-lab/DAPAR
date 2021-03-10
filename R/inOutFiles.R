@@ -80,7 +80,7 @@ setMEC <- function(qData, conds, df){
       lNA <- which(apply(is.na(qData[,ind]), 1, sum)==length(ind))
     
     if (length(lNA) > 0)
-      df[lNA, ind] <- controled.vocable()$MEC
+      df[lNA, ind] <- controled.vocable()$MEC_MNAR
   }
   return(df)
 }
@@ -96,6 +96,8 @@ setMEC <- function(qData, conds, df){
 #' @param from xxx
 #' 
 #' @param qData An object of class \code{MSnSet}
+#' 
+#' @param conds xxx
 #' 
 #' @param df A list of integer xxxxxxx
 #' 
@@ -119,18 +121,21 @@ setMEC <- function(qData, conds, df){
 #' @importFrom Biobase pData exprs fData
 #' 
 BuildMetaCell <- function(from = NULL, qData = NULL, conds = NULL, df = NULL){
-  if (is.null(from))
-    stop("'from' is required.")
+  #if (is.null(from))
+  #  stop("'from' is required.")
   if (is.null(qData))
     stop("'qData' is required.")
   if (is.null(conds))
     stop("'conds' is required.")
-  if (is.null(df) && from != 'proline')
-    stop("'df' is required.")
+  # if (is.null(df) && from != 'proline')
+  #   stop("'df' is required.")
   
-  switch(from,
-         maxquant = df <- Metacell_maxquant(qData, conds, df),
-         proline = df <- Metacell_proline(qData, conds, df)
+  if (is.null(df))
+    df <- Metacell_generic(qData, conds)
+  else
+    switch(from,
+           maxquant = df <- Metacell_maxquant(qData, conds, df),
+           proline = df <- Metacell_proline(qData, conds, df)
   )
 
   return(df)
@@ -145,18 +150,76 @@ BuildMetaCell <- function(from = NULL, qData = NULL, conds = NULL, df = NULL){
 #' @export
 #' 
 controled.vocable <- function(){
-  list( 'direct' =      'quantiValue-direct',
-        'indirect' =    'quantiValue-indirect',
-        'POV' =         'missingValue-NA-POV',
-        'POV-MCAR' =    'missingValue-NA-POV-MCAR',
-        'POV-MNAR' =    'missingValue-NA-POV-MNAR',
-        'MEC' =         'missingValue-NA-MEC',
-        'MEC-MCAR' =    'missingValue-NA-MEC-MCAR',
-        'MEC-MNAR' =    'missingValue-NA-MEC-MNAR',
-        'imputed' =     'missingValue-imputed-algo',
-        'unknown' =     'unknown') 
+  list( 'direct' =           'quantiValue-direct',
+        'indirect' =         'quantiValue-indirect',
+        'missingValue' =     'missingValue',
+        'NA' =               'missingValue-NA',
+        'POV' =              'missingValue-NA-POV',
+        'POV_MCAR' =         'missingValue-NA-POV-MCAR',
+        'POV_MNAR' =         'missingValue-NA-POV-MNAR',
+        'MEC' =              'missingValue-NA-MEC',
+        'MEC_MCAR' =         'missingValue-NA-MEC-MCAR',
+        'MEC_MNAR' =         'missingValue-NA-MEC-MNAR',
+        'imputed' =          'missingValue-NA-imputed',
+        'imputed_algo' =     'missingValue-NA-imputed-algo',
+        'unknown' =          'unknown') 
 
 }
+
+
+
+
+#' @title Sets the metacell dataframe
+#' 
+#' @description
+#' In the quantitative columns, a missing value is identified by no value rather
+#' than a value equal to 0. 
+#' Conversion rules
+#' Quanti			Tag		
+#' NA or 0		NA		
+#'
+#' 
+#' @param qData An object of class \code{MSnSet}
+#' 
+#' @param conds xxx
+#' 
+#' @return xxxxx
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples 
+#' file <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
+#' data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
+#' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
+#' metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, stringsAsFactors = FALSE)
+#' conds <- metadata$Condition
+#' qData <- data[,56:61]
+#' df <- data[ , 43:48]
+#' df <- Metacell_generic(qData, conds)
+#' 
+#' @export
+#' 
+#' @importFrom Biobase pData exprs fData
+#' 
+Metacell_generic <- function(qData, conds){
+  
+  df <- data.frame(matrix(rep(controled.vocable()$unknown, nrow(qData)*ncol(qData)),
+                          nrow = nrow(qData),
+                          ncol = ncol(qData)),
+                   stringsAsFactors = FALSE) 
+  
+  # Rule 1
+  df[is.na(qData)] <-  controled.vocable()$POV_MCAR
+  df[qData == 0] <-  controled.vocable()$POV_MCAR
+  df <- setMEC(qData, conds, df)
+  
+  colnames(df) <- paste0("metacell_", colnames(qData))
+  colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
+  
+  return(df)
+}
+
+
 
 
 
@@ -204,7 +267,7 @@ Metacell_proline <- function(qData, conds, df){
                stringsAsFactors = FALSE) 
 
   # Rule 1
-  df[is.na(qData)] <-  controled.vocable()$POV
+  df[is.na(qData)] <-  controled.vocable()$POV_MCAR
   df <- setMEC(qData, conds, df)
   
   # Rule 2
@@ -272,7 +335,7 @@ Metacell_maxquant <- function(qData, conds, df){
   
   
   # Add details for NA values
-  df[is.na(qData)] <-  controled.vocable()$POV
+  df[is.na(qData)] <-  controled.vocable()$POV_MCAR
   df <- setMEC(qData, conds, df)
   
   
@@ -322,6 +385,8 @@ Metacell_maxquant <- function(qData, conds, df){
 #' 
 #' @param versions A list of the following items: Prostar_Version, DAPAR_Version
 #' peptides or proteins.
+#' 
+#' @param software xxx
 #' 
 #' @return An instance of class \code{MSnSet}.
 #' 
@@ -481,10 +546,10 @@ writeMSnsetToExcel <- function(obj, filename)
                                          Biobase::exprs(obj)), rowNames = FALSE)
   
   
-  if (is.null(obj@experimentData@other$names.metacell)){
+  if (is.null(obj@experimentData@other$names_metacell)){
     listPOV <-  which(is.na(Biobase::exprs(obj)), arr.ind=TRUE)
   } else {
-    mat <- Biobase::fData(obj)[,obj@experimentData@other$names.metacell]
+    mat <- Biobase::fData(obj)[,obj@experimentData@other$names_metacell]
     listPOV <- which(match.metacell(mat, 'POV'), arr.ind=TRUE)
     listMEC <- which(match.metacell(mat, 'MEC'), arr.ind=TRUE)
   }

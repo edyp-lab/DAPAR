@@ -2,110 +2,28 @@
 % Please edit documentation in R/utils.R
 \name{match.metacell}
 \alias{match.metacell}
-\title{#' Similar to the function \code{is.na} but focused on the equality with the paramter 'type'.
-#' 
-#' @title Similar to the function \code{is.na} but focused on the equality with the paramter 'type'.
-#' 
-#' @param data A data.frame
-#' 
-#' @param type The value to search in the dataframe
-#' 
-#' @return A boolean dataframe 
-#' 
-#' @author Samuel Wieczorek
-#' 
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj <- Exp1_R25_pept
-#' data <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
-#' is.OfType(data, "MEC")
-#' 
-#' @export
-#'
-is.OfType <- function(data, type){
-  return (type == data)
-}
-#' Similar to the function \code{is.na} but focused on the equality with the missing 
-#' values in the dataset (type 'POV' and 'MEC')
-#' 
-#' @title Similar to the function \code{is.na} but focused on the equality with the missing 
-#' values in the dataset (type 'POV' and 'MEC')
-#' 
-#' @param data A data.frame
-#' 
-#' @return A boolean dataframe 
-#' 
-#' @author Samuel Wieczorek
-#' 
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj <- Exp1_R25_pept
-#' data <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
-#' is.MV(data)
-#' 
-#' @export
-#'
-is.MV <- function(data){
-  #MV=is.OfType(data, "MV")
-  POV=is.OfType(data, "POV")
-  MEC=is.OfType(data, "MEC")
-  isNA = is.na(data)
-  df <- POV | MEC | isNA
-  return (df)
-}}
+\title{Similar to the function \code{is.na} but focused on the equality with the paramter 'type'.}
 \usage{
 match.metacell(data, type)
 }
+\arguments{
+\item{data}{A data.frame}
+
+\item{type}{The value to search in the dataframe}
+}
+\value{
+A boolean dataframe
+}
 \description{
-#' Similar to the function \code{is.na} but focused on the equality with the paramter 'type'.
-#' 
-#' @title Similar to the function \code{is.na} but focused on the equality with the paramter 'type'.
-#' 
-#' @param data A data.frame
-#' 
-#' @param type The value to search in the dataframe
-#' 
-#' @return A boolean dataframe 
-#' 
-#' @author Samuel Wieczorek
-#' 
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj <- Exp1_R25_pept
-#' data <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
-#' is.OfType(data, "MEC")
-#' 
-#' @export
-#'
-is.OfType <- function(data, type){
-  return (type == data)
+Similar to the function \code{is.na} but focused on the equality with the paramter 'type'.
 }
-#' Similar to the function \code{is.na} but focused on the equality with the missing 
-#' values in the dataset (type 'POV' and 'MEC')
-#' 
-#' @title Similar to the function \code{is.na} but focused on the equality with the missing 
-#' values in the dataset (type 'POV' and 'MEC')
-#' 
-#' @param data A data.frame
-#' 
-#' @return A boolean dataframe 
-#' 
-#' @author Samuel Wieczorek
-#' 
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj <- Exp1_R25_pept
-#' data <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
-#' is.MV(data)
-#' 
-#' @export
-#'
-is.MV <- function(data){
-  #MV=is.OfType(data, "MV")
-  POV=is.OfType(data, "POV")
-  MEC=is.OfType(data, "MEC")
-  isNA = is.na(data)
-  df <- POV | MEC | isNA
-  return (df)
+\examples{
+utils::data(Exp1_R25_pept, package='DAPARdata')
+obj <- Exp1_R25_pept
+data <- BuildMetaCell(qData = Biobase::exprs(obj), conds = Biobase::pData(obj)$Condition)
+match.metacell(data, "MEC")
+
 }
+\author{
+Samuel Wieczorek
 }

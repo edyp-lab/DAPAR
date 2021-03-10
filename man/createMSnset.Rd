@@ -48,64 +48,13 @@ intensity have to be replaced by NA (Default is FALSE)}
 
 \item{versions}{A list of the following items: Prostar_Version, DAPAR_Version
 peptides or proteins.}
+
+\item{software}{xxx}
 }
 \value{
 An instance of class \code{MSnSet}.
 }
 \description{
-#' Sets the OriginOfValues dataframe in the fData table
-#' 
-#' @title Sets the OriginOfValues dataframe
-#' 
-#' @param obj An object of class \code{MSnSet}
-#' 
-#' @param names A list of integer xxxxxxx
-#' 
-#' @return An instance of class \code{MSnSet}.
-#' 
-#' @author Samuel Wieczorek
-#' 
-#' @examples 
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' addOriginOfValue(Exp1_R25_pept)
-#' 
-#' @export
-#' 
-#' @importFrom Biobase pData exprs fData
-#' 
-addOriginOfValue <- function(obj,
-                             names = NULL){
-  
-  if (!is.null(obj@experimentData@other$OriginOfValues)) {
-    print("Dataframe already exists. No modification has been made to the MSnset object.")
-    return (obj)
-  }
-  
-  
-  if (!is.null(names)) {
-    OriginOfValues <- Biobase::fData(obj)[,names]
-  } else {   
-    OriginOfValues <- data.frame(matrix(rep("unknown", nrow(Biobase::exprs(obj))*ncol(Biobase::exprs(obj))), 
-                                        nrow=nrow(Biobase::exprs(obj)),
-                                        ncol=ncol(Biobase::exprs(obj))),
-                                 stringsAsFactors = FALSE)
-  }
-  
-  OriginOfValues[is.na(obj)] <-  "POV"
-  rownames(OriginOfValues) <- rownames(Biobase::fData(obj))
-  colnames(OriginOfValues) <- paste0("OriginOfValue",colnames(Biobase::exprs(obj)))
-  colnames(OriginOfValues) <- gsub(".", "_", colnames(OriginOfValues), fixed=TRUE)
-  
-  #indMin <- length(colnames(Biobase::fData(obj)))
-  #indMax <- length(colnames(Biobase::fData(obj))) + length(OriginOfValues)
-  Biobase::fData(obj) <- cbind(Biobase::fData(obj), OriginOfValues, deparse.level = 0)
-  
-  obj@experimentData@other$OriginOfValues <- colnames(OriginOfValues)
-  
-  obj <- setMEC(obj)
-  
-  return(obj)
-}
 Builds an object of class \code{MSnSet} from a 
 single tabulated-like file for quantitative and meta-data and a dataframe 
 for the samples description. It differs from

@@ -872,7 +872,7 @@ finalizeAggregation <- function(obj.pep, pepData, protData,X, lib.loc=NULL){
   obj.prot@experimentData@other <- obj.pep@experimentData@other
   obj.prot@experimentData@other$typeOfData <- "protein"
   
-  obj.prot@experimentData@other$names.metacell <- NULL
+  obj.prot@experimentData@other$names_metacell <- NULL
   if (length(grep('Prostar', installed.packages(lib.loc=lib.loc$Prostar.loc))) >0){
     obj.prot@experimentData@other$Prostar_Version <- installed.packages(lib.loc = lib.loc$Prostar.loc)["Prostar","Version"]
   } else {

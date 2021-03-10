@@ -2,7 +2,7 @@
 % Please edit documentation in R/inOutFiles.R
 \name{setMEC}
 \alias{setMEC}
-\title{Sets the MEC tag in the OriginOfValues}
+\title{Sets the MEC tag in the metacell}
 \usage{
 setMEC(qData, conds, df)
 }
@@ -17,7 +17,7 @@ setMEC(qData, conds, df)
 An instance of class \code{MSnSet}.
 }
 \description{
-Sets the MEC tag in the OriginOfValues
+Sets the MEC tag in the metacell
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
