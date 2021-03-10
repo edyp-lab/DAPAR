@@ -74,7 +74,17 @@ match.metacell <- function(data, type){
   if (!(type %in% names(controled.vocable())))
     stop(paste0("'type' is not correct. It must be one of the following: ', names(controled.vocable()), collapse = ' '"))
   
-  return(data==controled.vocable()[[type]])
+  ll.res <- lapply(unname(search.metacell.tags('NA')), function(x){df==x})
+  
+  res <- NULL
+  for (i in 1:length(ll.res))
+    if (i==1){
+      res <- ll.res[[1]]
+    } else {
+      res <- res | ll.res[[i]]
+    }
+  
+  return(res)
 }
 
 

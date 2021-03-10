@@ -321,6 +321,8 @@ wrapper.impute.slsa <- function(obj){
     
     
     # sort conditions to be compliant with impute.slsa
+    
+    
     conds <- factor(Biobase::pData(obj)$Condition, levels=unique(Biobase::pData(obj)$Condition))
     sample.names.old <- Biobase::pData(obj)$Sample.name
     sTab <- Biobase::pData(obj)
@@ -332,6 +334,11 @@ wrapper.impute.slsa <- function(obj){
     #restore old order
     res <- res[,sample.names.old]
     
-    Biobase::exprs(obj) <-res
+    Biobase::exprs(obj) <- res
+    
+    # Update metacell
+        
+    ind <- match.metacell(Biobase::fData(obj)[, obj@experimentData@other$names_metacell], 'NA') & res > 0 & !is.na(res)
+    Biobase::fData(obj)[, obj@experimentData@other$names_metacell][ind] <- paste0(controled.vocable()$imputed, '_slsa')
     return (obj)
 }

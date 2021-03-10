@@ -160,8 +160,8 @@ controled.vocable <- function(){
         'MEC' =              'missingValue-NA-MEC',
         'MEC_MCAR' =         'missingValue-NA-MEC-MCAR',
         'MEC_MNAR' =         'missingValue-NA-MEC-MNAR',
-        'imputed' =          'missingValue-NA-imputed',
-        'imputed_algo' =     'missingValue-NA-imputed-algo',
+        'imputed' =          'missingValue-imputed',
+        'imputed_algo' =     'missingValue-imputed-algo',
         'unknown' =          'unknown') 
 
 }
