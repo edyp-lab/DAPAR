@@ -48,86 +48,49 @@ n <- sum(apply(is.na(as.matrix(qData)), 1, all))
 return (n)
 }
 
+
+
 #' Similar to the function \code{is.na} but focused on the equality with the paramter 'type'.
-#' 
+#'
 #' @title Similar to the function \code{is.na} but focused on the equality with the paramter 'type'.
-#' 
+#'
 #' @param data A data.frame
-#' 
+#'
 #' @param type The value to search in the dataframe
+#'
+#' @return A boolean dataframe
+#'
+#' @author Samuel Wieczorek
+#'
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R25_pept
+#' data <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
+#' match.metacell(data, "MEC")
+#'
+#' @export
+#'
+match.metacell <- function(data, type){
+  if (!(type %in% names(controled.vocable())))
+    stop(paste0("'type' is not correct. It must be one of the following: ', names(controled.vocable), collapse = ' '"))
+  
+  return(data==controled.vocable()$type)
+}
+
+#' @title xxxx
 #' 
-#' @return A boolean dataframe 
+#' @description
+#' xxxxx
 #' 
 #' @author Samuel Wieczorek
 #' 
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj <- Exp1_R25_pept
-#' data <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
-#' is.OfType(data, "MEC")
-#' 
 #' @export
-#'
-is.OfType <- function(data, type){
-  return (type == data)
+#' 
+search.metacell.tags <- function(pattern){
+  unlist(controled.vocable()[unlist(lapply(controled.vocable(), function(x){length(grep(pattern, x))==1}))])
 }
 
 
-
-
-
-#' Similar to the function \code{is.na} but focused on the equality with the missing 
-#' values in the dataset (type 'POV' and 'MEC')
-#' 
-#' @title Similar to the function \code{is.na} but focused on the equality with the missing 
-#' values in the dataset (type 'POV' and 'MEC')
-#' 
-#' @param data A data.frame
-#' 
-#' @return A boolean dataframe 
-#' 
-#' @author Samuel Wieczorek
-#' 
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj <- Exp1_R25_pept
-#' data <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
-#' is.MV(data)
-#' 
-#' @export
-#'
-is.MV <- function(data){
-  #MV=is.OfType(data, "MV")
-  POV=is.OfType(data, "POV")
-  MEC=is.OfType(data, "MEC")
-  isNA = is.na(data)
-  df <- POV | MEC | isNA
-  return (df)
-}
-
-#' Similar to the function \code{is.na} but focused on the equality with the identification of the peptides ('By MS/MS')
-#' 
-#' @title Similar to the function \code{is.na} but focused on the equality with the identification of the peptides ('By MS/MS')
-#' 
-#' @param data A data.frame
-#' 
-#' @return A boolean dataframe 
-#' 
-#' @author Samuel Wieczorek, Enora Fremy
-#' 
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj <- Exp1_R25_pept
-#' data <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
-#' is.byMSMS(data)
-#' 
-#' @export
-#'
-is.byMSMS <- function(data){
-  byMSMS =is.OfType(data, "By MS/MS")
-  df <- byMSMS
-  return (df)
-}
 
 #' Returns the possible number of values in lines in a matrix.
 #' 
@@ -152,13 +115,13 @@ is.byMSMS <- function(data){
 getListNbValuesInLines <- function(obj, type="WholeMatrix"){
   if (is.null(obj)){return(NULL)}
   
-  if(is.null(obj@experimentData@other$OriginOfValues)){
+  if(is.null(obj@experimentData@other$names.metacell)){
     ll <- seq(0,ncol(obj))
   }
-  data <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
+  data <- Biobase::fData(obj)[,obj@experimentData@other$names.metacell]
   switch(type,
          WholeMatrix= {
-           ll <- unique(ncol(data) - apply(is.MV(data), 1, sum))
+           ll <- unique(ncol(data) - apply(match.metacell(data, 'NA'), 1, sum))
            },
          AllCond = {
                     tmp <- NULL

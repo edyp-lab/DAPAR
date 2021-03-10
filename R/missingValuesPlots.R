@@ -427,9 +427,9 @@ mvHisto_HC <- function(qData,
 wrapper.mvImage <- function(obj){
   
   qData <- Biobase::exprs(obj)
-  conds <- Biobase::pData(obj)[,"Condition"]
-  originValues <- Biobase::fData(obj)[,obj@experimentData@other$OriginOfValues]
-  indices <- which(apply(is.OfType(originValues, "MEC"),1,sum) >0)
+  conds <- Biobase::pData(obj)[ , "Condition"]
+  metac <- Biobase::fData(obj)[ , obj@experimentData@other$names.metacell]
+  indices <- which(apply(match.metacell(metac, "MEC"), 1, sum) >0)
   
   if (length(indices)==0){
     warning("The dataset contains no Missing value on Entire Condition. So this plot is not available.")
@@ -612,7 +612,7 @@ hc_mvTypePlot2 <- function(qData,
     if (length(which(conditions==iCond)) == 1){
       
       mTemp[,iCond] <- qData[,which(conditions==iCond)]
-      nbNA[,iCond] <- as.integer(is.OfType(qData[,which(conditions==iCond)]))
+      nbNA[,iCond] <- as.integer(match.metacell(qData[,which(conditions==iCond)]))
       nbValues[,iCond] <- length(which(conditions==iCond)) - nbNA[,iCond]
     } else {
       mTemp[,iCond] <- apply(qData[,which(conditions==iCond)], 1, mean, na.rm=TRUE)

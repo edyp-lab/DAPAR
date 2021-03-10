@@ -84,7 +84,7 @@ wrapper.compareNormalizationD_HC <- function(objBefore,
 #' obj <- Exp1_R25_prot
 #' qDataBefore <- Biobase::exprs(obj)
 #' conds <- Biobase::pData(obj)[,"Condition"]
-#' id <- fData(obj)[,obj@experimentData@other$proteinId]
+#' id <- Biobase::fData(obj)[,obj@experimentData@other$proteinId]
 #' pal <- ExtendPalette(2)
 #' objAfter <- wrapper.normalizeD(obj, method = "QuantileCentering", conds =conds, type = "within conditions")
 #' compareNormalizationD_HC(qDataBefore=qDataBefore, qDataAfter=Biobase::exprs(objAfter), keyId = id, conds=conds, n=100)

@@ -565,8 +565,6 @@ mvFilterFromIndices <- function(obj,
   if (is.null(keepThat)) {return(obj)}
   obj <- obj[keepThat]
   
-  # if (!is.null(obj@experimentData@other$OriginOfValues)){
-  #     obj@experimentData@other$OriginOfValues <- obj@experimentData@other$OriginOfValues[keepThat,]
   # }
   obj@processingData@processing <-
     c(obj@processingData@processing, processText)
@@ -684,24 +682,24 @@ mvFilterGetIndices <- function(obj,
     }
   
   keepThat <- NULL
-  if (is.null(obj@experimentData@other$OriginOfValues)){
+  if (is.null(obj@experimentData@other$names.metacell)){
     data <- Biobase::exprs(obj)
-    warning('The dataset contains no slot OriginOfValues in which to search for indices. The search will
-            be proceeded in the intensities tab based on NA values')
+    warning("The dataset contains no slot 'names.metacell' in which to search for indices. The search will
+            be proceeded in the intensities tab based on NA values")
   } else {
     data <- dplyr::select(Biobase::fData(obj),
-                          obj@experimentData@other$OriginOfValues)
+                          obj@experimentData@other$names.metacell)
   }
   
   if (condition == "None") {
     keepThat <- seq(1:nrow(data))
   } else if (condition == "EmptyLines") {
-    keepThat <- which(apply(!is.MV(data), 1, sum) >= 1) # at least one value different of NA
+    keepThat <- which(apply(!match.metacell(data, 'NA'), 1, sum) >= 1) # at least one value different of NA
   } else if (condition == "WholeMatrix") {
     if (isTRUE(percent)) {
-      keepThat <- which(rowSums(!is.MV(data))/ncol(data) >= threshold) 
+      keepThat <- which(rowSums(!match.metacell(data, 'NA'))/ncol(data) >= threshold) 
     } else {
-      keepThat <- which(apply(!is.MV(data), 1, sum) >= threshold)
+      keepThat <- which(apply(!match.metacell(data, 'NA'), 1, sum) >= threshold)
     }
   } else if (condition == "AtLeastOneCond" || condition == "AllCond") {
     
@@ -715,16 +713,16 @@ mvFilterGetIndices <- function(obj,
     if (isTRUE(percent)) {
       for (c in 1:nbCond) {
         ind <- which(Biobase::pData(obj)$Condition == conditions[c])
-        s[,c] <- (rowSums(!is.MV(data[,ind]))/length(ind)) >= threshold
+        s[,c] <- (rowSums(!match.metacell(data[,ind], 'NA'))/length(ind)) >= threshold
       }
     } else {
       for (c in 1:nbCond) {
         ind <- which(Biobase::pData(obj)$Condition == conditions[c])
         if (length(ind) == 1){
-          s[,c] <- (!is.MV(data[,ind]) >= threshold) 
+          s[,c] <- (!match.metacell(data[,ind], 'NA') >= threshold) 
         }
         else {
-          s[,c] <- (apply(!is.MV(data[,ind]), 1, sum)) >= threshold
+          s[,c] <- (apply(!match.metacell(data[,ind], 'NA'), 1, sum)) >= threshold
         }
       }
     }
@@ -796,20 +794,20 @@ mvFilterGetIndices_old <- function(obj,
   }
   
   keepThat <- NULL
-  if (is.null(obj@experimentData@other$OriginOfValues)){
+  if (is.null(obj@experimentData@other$names.metacell)){
     data <- Biobase::exprs(obj)
-    warning('There is no slot OriginOfValues in which to search for indices. The search will
-            be proceeded in the intensities tab based on NA values')
+    warning("There is no slot 'names.metacell' in which to search for indices. The search will
+            be proceeded in the intensities tab based on NA values")
   } else {
-    data <- dplyr::select(Biobase::fData(obj),obj@experimentData@other$OriginOfValues)
+    data <- dplyr::select(Biobase::fData(obj),obj@experimentData@other$names.metacell)
   }
   
   if (type == "None"){
     keepThat <- seq(1:nrow(data))
   } else if (type == "EmptyLines"){
-    keepThat <- which(apply(!is.MV(data), 1, sum) >= 1)
+    keepThat <- which(apply(!match.metacell(data, 'NA'), 1, sum) >= 1)
   } else if (type == "WholeMatrix"){
-    keepThat <- which(apply(!is.MV(data), 1, sum) >= th)
+    keepThat <- which(apply(!match.metacell(data, 'NA'), 1, sum) >= th)
   } else if (type == "AtLeastOneCond" || type == "AllCond"){
     
     conditions <- unique(Biobase::pData(obj)$Condition)
@@ -821,9 +819,9 @@ mvFilterGetIndices_old <- function(obj,
     for (c in 1:nbCond){
       ind <- which(Biobase::pData(obj)$Condition == conditions[c])
       if (length(ind) == 1){
-        s[,c] <- (!is.MV(data[,ind]) >= th)}
+        s[,c] <- (!match.metacell(data[,ind], 'NA') >= th)}
       else {
-        s[,c] <- (apply(!is.MV(data[,ind]), 1, sum) >= th)
+        s[,c] <- (apply(!match.metacell(data[,ind], 'NA'), 1, sum) >= th)
       }
     }
     
@@ -917,24 +915,24 @@ mvFilterGetIndices_Marianne <- function(obj,
     }
   
   keepThat <- NULL
-  if (is.null(obj@experimentData@other$OriginOfValues)){
+  if (is.null(obj@experimentData@other$names.metacell)){
     data <- Biobase::exprs(obj)
-    warning('The dataset contains no slot OriginOfValues in which to search for indices. The search will
-            be proceeded in the intensities tab based on NA values')
+    warning("The dataset contains no slot 'names.metacell' in which to search for indices. The search will
+            be proceeded in the intensities tab based on NA values")
   } else {
     data <- dplyr::select(Biobase::fData(obj),
-                          obj@experimentData@other$OriginOfValues)
+                          obj@experimentData@other$names.metacell)
   }
   
   if (condition == "None") {
     keepThat <- seq(1:nrow(data))
   } else if (condition == "EmptyLines") {
-    keepThat <- which(apply(is.byMSMS(data), 1, sum) >= 1) # row with at least one 'by MS/MS'
+    keepThat <- which(apply(match.metacell(data, 'direct'), 1, sum) >= 1) # row with at least one 'by MS/MS'
   } else if (condition == "WholeMatrix") {
     if (isTRUE(percent)) {
-      keepThat <- which(rowSums(is.byMSMS(data))/ncol(data) >= threshold) 
+      keepThat <- which(rowSums(match.metacell(data, 'direct'))/ncol(data) >= threshold) 
     } else {
-      keepThat <- which(apply(is.byMSMS(data), 1, sum) >= threshold)
+      keepThat <- which(apply(match.metacell(data, 'direct'), 1, sum) >= threshold)
     }
   } else if (condition == "AtLeastOneCond" || condition == "AllCond") {
     
@@ -948,16 +946,16 @@ mvFilterGetIndices_Marianne <- function(obj,
     if (isTRUE(percent)) {
       for (c in 1:nbCond) {
         ind <- which(Biobase::pData(obj)$Condition == conditions[c])
-        s[,c] <- (rowSums(!is.byMSMS(data[,ind]))/length(ind)) >= threshold
+        s[,c] <- (rowSums(!match.metacell(data[, ind], 'direct'))/length(ind)) >= threshold
       }
     } else {
       for (c in 1:nbCond) {
         ind <- which(Biobase::pData(obj)$Condition == conditions[c])
         if (length(ind) == 1){
-          s[,c] <- (is.byMSMS(data[,ind]) >= threshold) 
+          s[,c] <- (match.metacell(data[, ind], 'direct') >= threshold) 
         }
         else {
-          s[,c] <- (apply(is.byMSMS(data[,ind]), 1, sum)) >= threshold
+          s[,c] <- (apply(match.metacell(data[, ind], 'direct'), 1, sum)) >= threshold
         }
       }
     }
@@ -1136,7 +1134,7 @@ mvFilterGetIndices_Marianne <- function(obj,
 #' #' @return the object given as input but with the lines not respecting the
 #' #' proportion of NA requested in less.
 #' #' 
-#' #' @author Hélène Borges, Samuel Wieczorek
+#' #' @author H?l?ne Borges, Samuel Wieczorek
 #' #' 
 #' #' @examples
 #' #' utils::data(Exp1_R25_prot, package='DAPARdata')

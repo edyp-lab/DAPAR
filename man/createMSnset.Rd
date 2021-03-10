@@ -10,12 +10,13 @@ createMSnset(
   indExpData,
   indFData,
   indiceID = NULL,
-  indexForOriginOfValue = NULL,
+  indexForMetacell = NULL,
   logData = FALSE,
   replaceZeros = FALSE,
   pep_prot_data = NULL,
   proteinId = NULL,
-  versions = NULL
+  versions = NULL,
+  software = NULL
 )
 }
 \arguments{
@@ -33,7 +34,7 @@ rows for the \code{exprs()} and \code{fData()} tables}
 \item{indiceID}{The indice of the column containing the ID of entities 
 (peptides or proteins)}
 
-\item{indexForOriginOfValue}{xxxxxxxxxxx}
+\item{indexForMetacell}{xxxxxxxxxxx}
 
 \item{logData}{A boolean value to indicate if the data have to be
 log-transformed (Default is FALSE)}
@@ -52,6 +53,59 @@ peptides or proteins.}
 An instance of class \code{MSnSet}.
 }
 \description{
+#' Sets the OriginOfValues dataframe in the fData table
+#' 
+#' @title Sets the OriginOfValues dataframe
+#' 
+#' @param obj An object of class \code{MSnSet}
+#' 
+#' @param names A list of integer xxxxxxx
+#' 
+#' @return An instance of class \code{MSnSet}.
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples 
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' addOriginOfValue(Exp1_R25_pept)
+#' 
+#' @export
+#' 
+#' @importFrom Biobase pData exprs fData
+#' 
+addOriginOfValue <- function(obj,
+                             names = NULL){
+  
+  if (!is.null(obj@experimentData@other$OriginOfValues)) {
+    print("Dataframe already exists. No modification has been made to the MSnset object.")
+    return (obj)
+  }
+  
+  
+  if (!is.null(names)) {
+    OriginOfValues <- Biobase::fData(obj)[,names]
+  } else {   
+    OriginOfValues <- data.frame(matrix(rep("unknown", nrow(Biobase::exprs(obj))*ncol(Biobase::exprs(obj))), 
+                                        nrow=nrow(Biobase::exprs(obj)),
+                                        ncol=ncol(Biobase::exprs(obj))),
+                                 stringsAsFactors = FALSE)
+  }
+  
+  OriginOfValues[is.na(obj)] <-  "POV"
+  rownames(OriginOfValues) <- rownames(Biobase::fData(obj))
+  colnames(OriginOfValues) <- paste0("OriginOfValue",colnames(Biobase::exprs(obj)))
+  colnames(OriginOfValues) <- gsub(".", "_", colnames(OriginOfValues), fixed=TRUE)
+  
+  #indMin <- length(colnames(Biobase::fData(obj)))
+  #indMax <- length(colnames(Biobase::fData(obj))) + length(OriginOfValues)
+  Biobase::fData(obj) <- cbind(Biobase::fData(obj), OriginOfValues, deparse.level = 0)
+  
+  obj@experimentData@other$OriginOfValues <- colnames(OriginOfValues)
+  
+  obj <- setMEC(obj)
+  
+  return(obj)
+}
 Builds an object of class \code{MSnSet} from a 
 single tabulated-like file for quantitative and meta-data and a dataframe 
 for the samples description. It differs from
@@ -67,7 +121,7 @@ metadata = read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
 indExpData <- c(56:61)
 indFData <- c(1:55,62:71)
 indiceID <- 64
-createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, indexForOriginOfValue = NULL, pep_prot_data = "peptide")
+createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, indexForMetacell = c(43:48), pep_prot_data = "peptide", software = 'maxquant')
 
 }
 \author{
