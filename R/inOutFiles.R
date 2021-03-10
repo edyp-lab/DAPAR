@@ -143,16 +143,18 @@ BuildMetaCell <- function(from = NULL, qData = NULL, conds = NULL, df = NULL){
 #' xxxx
 #' 
 #' @export
-#'
+#' 
 controled.vocable <- function(){
-  list('direct' = 'quantiValue-direct',
-  'indirect' =    'quantiValue-indirect',
-  'POV' =         'missingValue-NA-POV',
-  'MCAR' =        'missingValue-NA-POV-MCAR',
-  'MNAR' =        'missingValue-NA-POV-MNAR',
-  'MEC' =         'missingValue-NA-MEC',
-  'imputed' =     'missingValue-imputed-algo',
-  'unknown' =     'unknown') 
+  list( 'direct' =      'quantiValue-direct',
+        'indirect' =    'quantiValue-indirect',
+        'POV' =         'missingValue-NA-POV',
+        'POV-MCAR' =    'missingValue-NA-POV-MCAR',
+        'POV-MNAR' =    'missingValue-NA-POV-MNAR',
+        'MEC' =         'missingValue-NA-MEC',
+        'MEC-MCAR' =    'missingValue-NA-MEC-MCAR',
+        'MEC-MNAR' =    'missingValue-NA-MEC-MNAR',
+        'imputed' =     'missingValue-imputed-algo',
+        'unknown' =     'unknown') 
 
 }
 
@@ -160,8 +162,14 @@ controled.vocable <- function(){
 
 #' @title Sets the metacell dataframe
 #' 
-#' @description 
-#' xxxxxx
+#' @description
+#' In the quantitative columns, a missing value is identified by no value rather
+#' than a value equal to 0. 
+#' Conversion rules
+#' Quanti			PSM Count 						    Tag		
+#' N.A.			  whatever (== 0 or NA)		  NA		
+#' > 0				> 0							          direct	
+#' > 0				== 0						          indirect
 #' 
 #' @param qData An object of class \code{MSnSet}
 #' 
@@ -190,15 +198,20 @@ controled.vocable <- function(){
 Metacell_proline <- function(qData, conds, df){
   
   if (is.null(df))
-    df <- data.frame(matrix(rep("undefined", nrow(qData)*ncol(qData)), 
+    df <- data.frame(matrix(rep(controled.vocable()$unknown, nrow(qData)*ncol(qData)), 
                       nrow=nrow(qData),
                       ncol=ncol(qData)),
                stringsAsFactors = FALSE) 
 
-  df[df > 0] <- controled.vocable()$direct
-  df[df == 0 && qData > 0] <- controled.vocable()$indirect
-  df[is.na(df)] <-  controled.vocable()$POV
+  # Rule 1
+  df[is.na(qData)] <-  controled.vocable()$POV
   df <- setMEC(qData, conds, df)
+  
+  # Rule 2
+  df[df > 0 && qData > 0] <- controled.vocable()$direct
+  
+  # Rule 3
+  df[df == 0 && qData > 0] <- controled.vocable()$indirect
   
   colnames(df) <- paste0("metacell_", colnames(qData))
   colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
@@ -209,7 +222,11 @@ Metacell_proline <- function(qData, conds, df){
 #' @title Sets the metacell dataframe
 #' 
 #' @description 
-#' xxxxxx
+#' Conversion rules for maxquant
+#' Quanti         Identification       								            Tag
+#'  == 0			    whatever ('By MS/MS', N.A., 'By Matching')	    NA
+#'  > 0				    'By MS/MS'											                direct
+#'  > 0				    'By matching'										                indirect	
 #' 
 #' @param qData An object of class \code{MSnSet}
 #' 
@@ -238,17 +255,27 @@ Metacell_proline <- function(qData, conds, df){
 Metacell_maxquant <- function(qData, conds, df){
   
   if (is.null(df))
-    df <- data.frame(matrix(rep("unknown", nrow(qData)*ncol(qData)), 
+    df <- data.frame(matrix(rep(controled.vocable()$unknown, nrow(qData)*ncol(qData)), 
                           nrow=nrow(qData),
                           ncol=ncol(qData)),
                    stringsAsFactors = FALSE) 
 
   
-  df[is.na(qData)] <-  controled.vocable()$POV
-  df[qData == 0] <-  controled.vocable()$POV
+  # Rule 1
+  df[qData == 0] <-  NA
+  
+  # Rule 2
   df[df=='By MS/MS'] <- controled.vocable()$direct
+  
+  # Rule 3
   df[df=='By matching'] <- controled.vocable()$indirect
+  
+  
+  # Add details for NA values
+  df[is.na(qData)] <-  controled.vocable()$POV
   df <- setMEC(qData, conds, df)
+  
+  
   
   colnames(df) <- paste0("metacell_", colnames(qData))
   colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
