@@ -115,6 +115,7 @@ wrapper.impute.KNN <- function(obj, K){
         Biobase::exprs(obj)[,ind] <- resKNN[[1]]
     }
     
+    obj <- UpdateMetacell(obj, 'knn') 
     
     return(obj)
 }
@@ -143,8 +144,8 @@ wrapper.impute.KNN <- function(obj, K){
 #' @importFrom Biobase pData exprs fData
 #' 
 wrapper.impute.fixedValue <- function(obj, fixVal){
-    
     Biobase::exprs(obj)[is.na(Biobase::exprs(obj))] <- fixVal
+    obj <- UpdateMetacell(obj, 'fixedValue') 
     return (obj)
 }
 
@@ -186,10 +187,13 @@ wrapper.impute.fixedValue <- function(obj, fixVal){
 #' @importFrom Biobase pData exprs fData
 #' @importFrom imp4p impute.pa
 #' 
-wrapper.impute.pa <- function(obj, q.min = 0.025){
+wrapper.impute.pa <- function(obj = NULL, q.min = 0.025){
     cond <- as.factor(Biobase::pData(obj)$Condition)
     res <- impute.pa(Biobase::exprs(obj), conditions=cond, q.min = q.min, q.norm=3,  eps=0)
     Biobase::exprs(obj) <- res[["tab.imp"]]
+    
+    obj <- UpdateMetacell(obj, 'impute_pa') 
+    
     return (obj)
 }
 
@@ -220,7 +224,7 @@ wrapper.impute.pa <- function(obj, q.min = 0.025){
 #' 
 #' @importFrom Biobase pData exprs fData
 #' 
-wrapper.impute.detQuant <- function(obj, qval=0.025, factor=1){
+wrapper.impute.detQuant <- function(obj = NULL, qval=0.025, factor=1){
     if (is.null(obj)){return(NULL)}
     
     qData <- Biobase::exprs(obj)
@@ -231,6 +235,9 @@ wrapper.impute.detQuant <- function(obj, qval=0.025, factor=1){
     obj@processingData@processing <- c(obj@processingData@processing,msg)
     
     obj@experimentData@other$imputation.method <- "detQuantile"
+    
+    obj <- UpdateMetacell(obj, 'detQuant') 
+    
     return(obj)
 }
 
@@ -321,8 +328,6 @@ wrapper.impute.slsa <- function(obj){
     
     
     # sort conditions to be compliant with impute.slsa
-    
-    
     conds <- factor(Biobase::pData(obj)$Condition, levels=unique(Biobase::pData(obj)$Condition))
     sample.names.old <- Biobase::pData(obj)$Sample.name
     sTab <- Biobase::pData(obj)
@@ -336,9 +341,6 @@ wrapper.impute.slsa <- function(obj){
     
     Biobase::exprs(obj) <- res
     
-    # Update metacell
-        
-    ind <- match.metacell(Biobase::fData(obj)[, obj@experimentData@other$names_metacell], 'NA') & res > 0 & !is.na(res)
-    Biobase::fData(obj)[, obj@experimentData@other$names_metacell][ind] <- paste0(controled.vocable()$imputed, '_slsa')
+    obj <- UpdateMetacell(obj, 'slsa')
     return (obj)
 }

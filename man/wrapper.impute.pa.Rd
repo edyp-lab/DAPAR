@@ -4,7 +4,7 @@
 \alias{wrapper.impute.pa}
 \title{Imputation of peptides having no values in a biological condition.}
 \usage{
-wrapper.impute.pa(obj, q.min = 0.025)
+wrapper.impute.pa(obj = NULL, q.min = 0.025)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}

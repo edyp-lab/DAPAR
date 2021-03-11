@@ -26,6 +26,8 @@ wrapper.impute.mle <- function(obj){
   res <- imp4p::impute.mle(Biobase::exprs(obj), conditions=cond)
   
   Biobase::exprs(obj) <-res
+  obj <- UpdateMetacell(obj, 'mle') 
+  
   return (obj)
 }
 
@@ -163,6 +165,7 @@ wrapper.dapar.impute.mi <- function (obj, nb.iter = 3, nknn = 15, selec = 600, s
     obj@processingData@processing <- c(obj@processingData@processing,msg)
     
     obj@experimentData@other$imputation.method <- "imp4p"
+    obj <- UpdateMetacell(obj, 'detQuant') 
     
     return(obj)
     
@@ -259,7 +262,8 @@ wrapper.impute.pa2 <- function (obj, q.min = 0, q.norm = 3, eps = 0, distributio
     tab_imp <- tab_imp[,sample.names.old]
     
     Biobase::exprs(obj) <- tab_imp
-
+    obj <- UpdateMetacell(obj, 'pa2') 
+    
     return(obj)
 }
 

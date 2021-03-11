@@ -5,7 +5,7 @@
 \title{Wrapper of the function \code{\link{impute.detQuant}} for objects
 of class \code{MSnSet}}
 \usage{
-wrapper.impute.detQuant(obj, qval = 0.025, factor = 1)
+wrapper.impute.detQuant(obj = NULL, qval = 0.025, factor = 1)
 }
 \arguments{
 \item{obj}{An instance of class \code{MSnSet}}
