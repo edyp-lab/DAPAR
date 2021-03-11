@@ -4,12 +4,15 @@
 \alias{wrapper.impute.fixedValue}
 \title{Missing values imputation from a \code{MSnSet} object}
 \usage{
-wrapper.impute.fixedValue(obj, fixVal)
+wrapper.impute.fixedValue(obj = NULL, fixVal, na.type = NULL)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
 
-\item{fixVal}{A float .}
+\item{fixVal}{A float.}
+
+\item{na.type}{A string which indicates the type of missing values to impute. 
+Available values are: `NA` (for both POV and MEC), `POV`, `MEC`.}
 }
 \value{
 The object \code{obj} which has been imputed

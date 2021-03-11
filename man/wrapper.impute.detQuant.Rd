@@ -5,7 +5,7 @@
 \title{Wrapper of the function \code{\link{impute.detQuant}} for objects
 of class \code{MSnSet}}
 \usage{
-wrapper.impute.detQuant(obj = NULL, qval = 0.025, factor = 1)
+wrapper.impute.detQuant(obj = NULL, qval = 0.025, factor = 1, na.type = NULL)
 }
 \arguments{
 \item{obj}{An instance of class \code{MSnSet}}
@@ -13,6 +13,9 @@ wrapper.impute.detQuant(obj = NULL, qval = 0.025, factor = 1)
 \item{qval}{An expression set containing quantitative values of various replicates}
 
 \item{factor}{A scaling factor to multiply the imputation value with}
+
+\item{na.type}{A string which indicates the type of missing values to impute. 
+Available values are: `NA` (for both POV and MEC), `POV`, `MEC`.}
 }
 \value{
 An imputed instance of class \code{MSnSet}

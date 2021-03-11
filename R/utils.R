@@ -97,14 +97,22 @@ match.metacell <- function(data, type){
 #' 
 #' @param obj xxx
 #' 
+#' @param na.type xxx
+#' 
 #' @param method xxx
 #' 
 #' @author Samuel Wieczorek
 #' 
 #' @export
 #' 
-UpdateMetacell <- function(obj){
-  ind <- match.metacell(Biobase::fData(obj)[, obj@experimentData@other$names_metacell], 'NA') & Biobase::exprs(obj) > 0 & !is.na(Biobase::exprs(obj))
+UpdateMetacell <- function(obj=NULL, na.type=NULL, method=''){
+  if (is.null(obj))
+    stop("'obj' is required.")
+  if (is.null(na.type))
+    stop("'na.type' is required. Available values are: NA, POV, MEC.")
+  
+  
+  ind <- match.metacell(Biobase::fData(obj)[, obj@experimentData@other$names_metacell], na.type) & Biobase::exprs(obj) > 0 & !is.na(Biobase::exprs(obj))
   Biobase::fData(obj)[, obj@experimentData@other$names_metacell][ind] <- paste0(controled.vocable()$imputed, '_', method)
   return(obj)
 }

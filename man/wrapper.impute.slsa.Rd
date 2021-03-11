@@ -4,10 +4,13 @@
 \alias{wrapper.impute.slsa}
 \title{Imputation of peptides having no values in a biological condition.}
 \usage{
-wrapper.impute.slsa(obj)
+wrapper.impute.slsa(obj, na.type = NULL)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
+
+\item{na.type}{A string which indicates the type of missing values to impute. 
+Available values are: `NA` (for both POV and MEC), `POV`, `MEC`.}
 }
 \value{
 The \code{exprs(obj)} matrix with imputed values instead of missing values.

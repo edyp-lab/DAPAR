@@ -4,12 +4,15 @@
 \alias{wrapper.impute.pa}
 \title{Imputation of peptides having no values in a biological condition.}
 \usage{
-wrapper.impute.pa(obj = NULL, q.min = 0.025)
+wrapper.impute.pa(obj = NULL, q.min = 0.025, na.type = NULL)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
 
 \item{q.min}{Same as the function \code{impute.pa} in the package \code{imp4p}}
+
+\item{na.type}{A string which indicates the type of missing values to impute. 
+Available values are: `NA` (for both POV and MEC), `POV`, `MEC`.}
 }
 \value{
 The \code{exprs(obj)} matrix with imputed values instead of missing values.
