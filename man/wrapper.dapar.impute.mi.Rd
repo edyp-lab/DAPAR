@@ -70,7 +70,7 @@ wrapper.dapar.impute.mi(
 \item{distribution}{The type of distribution used. Values are \code{unif} (default) or \code{beta}.}
 
 \item{na.type}{A string which indicates the type of missing values to impute. 
-Available values are: `NA` (for both POV and MEC), `POV`, `MEC`.}
+Available values are: `NA` (for both POV and MEC).}
 }
 \value{
 The \code{exprs(obj)} matrix with imputed values instead of missing values.

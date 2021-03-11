@@ -26,7 +26,10 @@ of class \code{MSnSet}
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-wrapper.impute.detQuant(Exp1_R25_pept)
+obj <- Exp1_R25_pept[1:10]
+obj.imp.pov <- wrapper.impute.detQuant(obj, na.type='POV')
+obj.imp.mec <- wrapper.impute.detQuant(obj, na.type='MEC')
+obj.imp.na <- wrapper.impute.detQuant(obj, na.type='NA')
 
 }
 \author{

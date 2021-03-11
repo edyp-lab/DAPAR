@@ -74,7 +74,7 @@ match.metacell <- function(data, type){
   if (!(type %in% names(controled.vocable())))
     stop(paste0("'type' is not correct. It must be one of the following: ', names(controled.vocable()), collapse = ' '"))
   
-  ll.res <- lapply(unname(search.metacell.tags('NA')), function(x){data==x})
+  ll.res <- lapply(unname(search.metacell.tags(type)), function(x){data==x})
   
   res <- NULL
   for (i in 1:length(ll.res))
@@ -88,6 +88,9 @@ match.metacell <- function(data, type){
 }
 
 
+GetMetacell <- function(obj){
+  Biobase::fData(obj)[, obj@experimentData@other$names_metacell]
+}
 
 #' @title
 #' Update metacell after imputation
@@ -97,15 +100,15 @@ match.metacell <- function(data, type){
 #' 
 #' @param obj xxx
 #' 
-#' @param na.type xxx
-#' 
 #' @param method xxx
+#' 
+#' @param na.type xxx
 #' 
 #' @author Samuel Wieczorek
 #' 
 #' @export
 #' 
-UpdateMetacell <- function(obj=NULL, na.type=NULL, method=''){
+UpdateMetacell <- function(obj=NULL, method='', na.type=NULL){
   if (is.null(obj))
     stop("'obj' is required.")
   if (is.null(na.type))

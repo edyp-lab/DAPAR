@@ -4,7 +4,7 @@
 \alias{wrapper.impute.fixedValue}
 \title{Missing values imputation from a \code{MSnSet} object}
 \usage{
-wrapper.impute.fixedValue(obj = NULL, fixVal, na.type = NULL)
+wrapper.impute.fixedValue(obj = NULL, fixVal = 0, na.type = NULL)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
@@ -23,7 +23,10 @@ objects of class \code{MSnSet} and imputes missing values with a fixed value.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-wrapper.impute.fixedValue(Exp1_R25_pept[1:1000], 0.001)
+obj <- Exp1_R25_pept[1:10,]
+obj.imp <- wrapper.impute.fixedValue(obj, 0.001, na.type = 'POV')
+obj.imp <- wrapper.impute.fixedValue(obj, 0.001, na.type = 'MEC')
+obj.imp <- wrapper.impute.fixedValue(obj, 0.001, na.type = 'NA')
 
 }
 \author{

@@ -8,7 +8,7 @@
 #' @param obj An object of class \code{MSnSet}.
 #' 
 #' @param na.type A string which indicates the type of missing values to impute. 
-#' Available values are: `NA` (for both POV and MEC), `POV`, `MEC`.
+#' Available values are: `NA` (for both POV and MEC).
 #' 
 #' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
 #' 
@@ -27,9 +27,9 @@ wrapper.impute.mle <- function(obj=NULL, na.type=NULL){
   if (is.null(obj))
     stop("'obj' is required.")
   if (is.null(na.type))
-    stop("'na.type' is required. Available values are: 'NA' (for both POV and MEC), 'POV', 'MEC'.")
-  else if (!(na.type %in% c('NA', 'POV', 'MEC')))
-    stop("Available values for na.type are: 'NA' (for both POV and MEC), 'POV', 'MEC'.")
+    stop("'na.type' is required. Available values are: 'NA' (for both POV and MEC).")
+  else if (!(na.type %in% c('NA')))
+    stop("Available values for na.type are: 'NA' (for both POV and MEC).")
   
   cond <- as.factor(Biobase::pData(obj)$Condition)
   
@@ -89,7 +89,7 @@ wrapper.impute.mle <- function(obj=NULL, na.type=NULL){
 #' @param distribution The type of distribution used. Values are \code{unif} (default) or \code{beta}.
 #' 
 #' @param na.type A string which indicates the type of missing values to impute. 
-#' Available values are: `NA` (for both POV and MEC), `POV`, `MEC`.
+#' Available values are: `NA` (for both POV and MEC).
 #' 
 #' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
 #' 
@@ -130,9 +130,9 @@ wrapper.dapar.impute.mi <- function (obj=NULL,
   if (is.null(obj))
     stop("'obj' is required.")
   if (is.null(na.type))
-    stop("'na.type' is required. Available values are: 'NA' (for both POV and MEC), 'POV', 'MEC'.")
-  else if (!(na.type %in% c('NA', 'POV', 'MEC')))
-    stop("Available values for na.type are: 'NA' (for both POV and MEC), 'POV', 'MEC'.")
+    stop("'na.type' is required. Available values are: 'NA' (for both POV and MEC).")
+  else if (!(na.type %in% c('NA')))
+    stop("Available values for na.type are: 'NA' (for both POV and MEC).")
   
   
   

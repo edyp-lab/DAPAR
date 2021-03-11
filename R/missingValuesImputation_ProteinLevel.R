@@ -112,8 +112,7 @@ wrapper.impute.KNN <- function(obj=NULL, K, na.type = NULL){
     else if (!(na.type %in% c('NA', 'POV', 'MEC')))
         stop("Available values for na.type are: 'NA' (for both POV and MEC), 'POV', 'MEC'.")
         
-    
-    
+   
     data <- Biobase::exprs(obj)
     
     conditions <- unique(Biobase::pData(obj)$Condition)
@@ -126,7 +125,9 @@ wrapper.impute.KNN <- function(obj=NULL, K, na.type = NULL){
         Biobase::exprs(obj)[,ind] <- resKNN[[1]]
     }
     
-    obj <- UpdateMetacell(obj, na.type, 'knn') 
+    
+    Biobase::exprs(obj)[Biobase::exprs(obj) == 0] <-NA
+    obj <- UpdateMetacell(obj, 'knn', na.type) 
     
     return(obj)
 }
@@ -151,38 +152,30 @@ wrapper.impute.KNN <- function(obj=NULL, K, na.type = NULL){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' wrapper.impute.fixedValue(Exp1_R25_pept[1:1000], 0.001)
+#' obj <- Exp1_R25_pept[1:10,]
+#' obj.imp <- wrapper.impute.fixedValue(obj, 0.001, na.type = 'POV')
+#' obj.imp <- wrapper.impute.fixedValue(obj, 0.001, na.type = 'MEC')
+#' obj.imp <- wrapper.impute.fixedValue(obj, 0.001, na.type = 'NA')
 #' 
 #' @export
 #' 
 #' @importFrom Biobase pData exprs fData
 #' 
-wrapper.impute.fixedValue <- function(obj=NULL, fixVal, na.type = NULL){
+wrapper.impute.fixedValue <- function(obj=NULL, fixVal=0, na.type = NULL){
     if (is.null(obj))
         stop("'obj' is required.")
+    if(fixVal == 0)
+        warning('Be aware that fixVal = 0. No imputation will be realize.')
     if (is.null(na.type))
         stop("'na.type' is required. Available values are: 'NA' (for both POV and MEC), 'POV', 'MEC'.")
     else if (!(na.type %in% c('NA', 'POV', 'MEC')))
         stop("Available values for na.type are: 'NA' (for both POV and MEC), 'POV', 'MEC'.")
     
-    
-    Biobase::exprs(obj)[is.na(Biobase::exprs(obj))] <- fixVal
+    ind.na.type <- match.metacell(Biobase::fData(obj)[, obj@experimentData@other$names_metacell], na.type)
+    Biobase::exprs(obj)[is.na(Biobase::exprs(obj)) & ind.na.type] <- fixVal
     obj <- UpdateMetacell(obj, 'fixedValue', na.type) 
     return (obj)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -196,7 +189,7 @@ wrapper.impute.fixedValue <- function(obj=NULL, fixVal, na.type = NULL){
 #' @param q.min Same as the function \code{impute.pa} in the package \code{imp4p}
 #' 
 #' @param na.type A string which indicates the type of missing values to impute. 
-#' Available values are: `NA` (for both POV and MEC), `POV`, `MEC`.
+#' Available values are: `NA` (for both POV and MEC).
 #' 
 #' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
 #' 
@@ -204,21 +197,22 @@ wrapper.impute.fixedValue <- function(obj=NULL, fixVal, na.type = NULL){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' dat <- mvFilter(Exp1_R25_pept[1:1000], type="AllCond", th = 1)
-#' dat <- wrapper.impute.pa(dat)
+#' obj <- Exp1_R25_pept[1:10]
+#' obj <- mvFilter(obj, type="AllCond", th = 1)
+#' obj.imp <- wrapper.impute.pa(obj)
 #' 
 #' @export
 #' 
 #' @importFrom Biobase pData exprs fData
 #' @importFrom imp4p impute.pa
 #' 
-wrapper.impute.pa <- function(obj = NULL, q.min = 0.025, na.type=NULL){
+wrapper.impute.pa <- function(obj = NULL, q.min = 0.025, na.type='NA'){
     if (is.null(obj))
         stop("'obj' is required.")
     if (is.null(na.type))
-        stop("'na.type' is required. Available values are: 'NA' (for both POV and MEC), 'POV', 'MEC'.")
-    else if (!(na.type %in% c('NA', 'POV', 'MEC')))
-        stop("Available values for na.type are: 'NA' (for both POV and MEC), 'POV', 'MEC'.")
+        stop("'na.type' is required. Available values are: 'NA' (for both POV and MEC).")
+    else if (!(na.type %in% c('NA')))
+        stop("Available values for na.type are: 'NA' (for both POV and MEC).")
     
     
     
@@ -255,7 +249,10 @@ wrapper.impute.pa <- function(obj = NULL, q.min = 0.025, na.type=NULL){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' wrapper.impute.detQuant(Exp1_R25_pept)
+#' obj <- Exp1_R25_pept[1:10]
+#' obj.imp.pov <- wrapper.impute.detQuant(obj, na.type='POV')
+#' obj.imp.mec <- wrapper.impute.detQuant(obj, na.type='MEC')
+#' obj.imp.na <- wrapper.impute.detQuant(obj, na.type='NA')
 #' 
 #' @export
 #' 
@@ -273,13 +270,13 @@ wrapper.impute.detQuant <- function(obj = NULL, qval=0.025, factor=1, na.type = 
     qData <- Biobase::exprs(obj)
     values <- getQuantile4Imp(qData, qval, factor)
     
-    Biobase::exprs(obj) <- impute.detQuant(qData, values$shiftedImpVal)
+    Biobase::exprs(obj) <- impute.detQuant(qData, values$shiftedImpVal, na.type)
     msg <- "Missing values imputation using deterministic quantile"
     obj@processingData@processing <- c(obj@processingData@processing,msg)
     
     obj@experimentData@other$imputation.method <- "detQuantile"
     
-    obj <- UpdateMetacell(obj, 'detQuant', na.type) 
+    obj <- UpdateMetacell(obj = obj, method='detQuant', na.type=na.type) 
     
     return(obj)
 }
@@ -325,22 +322,32 @@ getQuantile4Imp <- function(qData, qval=0.025, factor=1){
 #' 
 #' @param values A vector with as many elements as the number of colums of qData
 #' 
+#' @param na.type xxx
+#' 
 #' @return An imputed dataset
 #' 
-#' @author Thomas Burger
+#' @author Thomas Burger, Samuel Wieczorek
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' qData <- Biobase::exprs(Exp1_R25_pept)
 #' values <- getQuantile4Imp(qData)$shiftedImpVal
-#' impute.detQuant(qData, values) 
+#' impute.detQuant(qData, values, na.type = 'MEC') 
 #' 
 #' @export
 #' 
-impute.detQuant <- function(qData, values){
-    for(i in 1:dim(qData)[2]){
+impute.detQuant <- function(qData, values, na.type=NULL){
+    if (is.null(na.type))
+        stop("'na.type' is required. Available values are: 'NA' (for both POV and MEC), 'POV', 'MEC'.")
+    else if (!(na.type %in% c('NA', 'POV', 'MEC')))
+        stop("Available values for na.type are: 'NA' (for both POV and MEC), 'POV', 'MEC'.")
+    
+    #browser()
+    for(i in 1:ncol(qData)){
         col <- qData[,i]
-        col[which(is.na(col))] <- values[i]
+        ind.na.type <- match.metacell(Biobase::fData(obj)[, obj@experimentData@other$names_metacell[i]], na.type)
+        
+        col[which(is.na(col) & ind.na.type)] <- values[i]
         qData[,i] <- col
     }
     return(qData)
@@ -363,8 +370,9 @@ impute.detQuant <- function(qData, values){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' dat <- DAPAR::mvFilter(Exp1_R25_pept[1:1000], type="AllCond", th = 1)
-#' dat <- wrapper.impute.slsa(dat)
+#' obj <- Exp1_R25_pept[1:10]
+#' obj <- DAPAR::mvFilter(obj, type="AllCond", th = 1)
+#' obj.slsa <- wrapper.impute.slsa(obj, na.type = 'POV')
 #' 
 #' @export
 #' 
@@ -374,10 +382,12 @@ wrapper.impute.slsa <- function(obj, na.type = NULL){
     if (is.null(obj))
         stop("'obj' is required.")
     if (is.null(na.type))
-        stop("'na.type' is required. Available values are: 'NA' (for both POV and MEC), 'POV', 'MEC'.")
-    else if (!(na.type %in% c('NA', 'POV', 'MEC')))
-        stop("Available values for na.type are: 'NA' (for both POV and MEC), 'POV', 'MEC'.")
+        stop("'na.type' is required. Available values are: 'POV'.")
+    else if (!(na.type %in% c('POV')))
+        stop("Available values for na.type are: 'POV'.")
     
+    
+    MECIndex <- findMECBlock(obj)
     
     # sort conditions to be compliant with impute.slsa
     conds <- factor(Biobase::pData(obj)$Condition, levels=unique(Biobase::pData(obj)$Condition))
@@ -386,12 +396,18 @@ wrapper.impute.slsa <- function(obj, na.type = NULL){
     new.order <- unlist(lapply(split(sTab, conds), function(x) {x['Sample.name']}))
     qData <- Biobase::exprs(obj)[,new.order]
     
-    res <- imp4p::impute.slsa(qData, conditions=conds, nknn=15, selec="all", weight=1,ind.comp=1)
+    res <- imp4p::impute.slsa(qData, 
+                              conditions=conds, 
+                              nknn=15, 
+                              selec="all", 
+                              weight=1,
+                              ind.comp=1)
     
     #restore old order
     res <- res[,sample.names.old]
     
     Biobase::exprs(obj) <- res
+    obj <- reIntroduceMEC(obj, MECIndex)
     
     obj <- UpdateMetacell(obj, 'slsa', na.type)
     return (obj)

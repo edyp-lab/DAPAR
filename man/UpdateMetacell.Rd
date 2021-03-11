@@ -4,14 +4,14 @@
 \alias{UpdateMetacell}
 \title{Update metacell after imputation}
 \usage{
-UpdateMetacell(obj = NULL, na.type = NULL, method = "")
+UpdateMetacell(obj = NULL, method = "", na.type = NULL)
 }
 \arguments{
 \item{obj}{xxx}
 
-\item{na.type}{xxx}
-
 \item{method}{xxx}
+
+\item{na.type}{xxx}
 }
 \description{
 Update the metacell information of missing values that were imputed

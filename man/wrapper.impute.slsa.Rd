@@ -21,8 +21,9 @@ This method is a wrapper to the function \code{impute.slsa} of the package
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-dat <- DAPAR::mvFilter(Exp1_R25_pept[1:1000], type="AllCond", th = 1)
-dat <- wrapper.impute.slsa(dat)
+obj <- Exp1_R25_pept[1:10]
+obj <- DAPAR::mvFilter(obj, type="AllCond", th = 1)
+obj.slsa <- wrapper.impute.slsa(obj, na.type = 'POV')
 
 }
 \author{

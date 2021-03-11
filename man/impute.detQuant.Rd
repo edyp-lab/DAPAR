@@ -4,12 +4,14 @@
 \alias{impute.detQuant}
 \title{Deterministic imputation}
 \usage{
-impute.detQuant(qData, values)
+impute.detQuant(qData, values, na.type = NULL)
 }
 \arguments{
 \item{qData}{An expression set containing quantitative or missing values}
 
 \item{values}{A vector with as many elements as the number of colums of qData}
+
+\item{na.type}{xxx}
 }
 \value{
 An imputed dataset
@@ -21,9 +23,9 @@ This method replaces each missing value by a given value
 utils::data(Exp1_R25_pept, package='DAPARdata')
 qData <- Biobase::exprs(Exp1_R25_pept)
 values <- getQuantile4Imp(qData)$shiftedImpVal
-impute.detQuant(qData, values) 
+impute.detQuant(qData, values, na.type = 'MEC') 
 
 }
 \author{
-Thomas Burger
+Thomas Burger, Samuel Wieczorek
 }
