@@ -16,8 +16,9 @@
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' dat <- mvFilter(Exp1_R25_pept[1:1000,], type="AllCond", th = 1)
-#' dat <- wrapper.impute.mle(dat)
+#' obj <- Exp1_R25_pept[1:10,]
+#' obj <- mvFilter(obj, type="EmptyLines", th=0)
+#' obj.mle <- wrapper.impute.mle(obj, na.type = 'NA')
 #' 
 #' @export
 #' 
@@ -31,8 +32,8 @@ wrapper.impute.mle <- function(obj=NULL, na.type=NULL){
   else if (!(na.type %in% c('NA')))
     stop("Available values for na.type are: 'NA' (for both POV and MEC).")
   
-  cond <- as.factor(Biobase::pData(obj)$Condition)
   
+  cond <- factor(Biobase::pData(obj)$Condition, levels=unique(Biobase::pData(obj)$Condition))
   res <- imp4p::impute.mle(Biobase::exprs(obj), conditions=cond)
   
   Biobase::exprs(obj) <-res
