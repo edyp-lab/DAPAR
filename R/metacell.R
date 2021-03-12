@@ -1,4 +1,67 @@
 
+#' @title Metadata vocabulary for entities
+#' 
+#' @description
+#' This function gives the vocabulary used for the metadata of each entity in
+#' each condition.
+#' Peptide-level vocabulary
+#' 
+#' ├── 1.0 Quantitative Value
+#' |    |
+#' │    |── 1.1 Direct
+#' |    |
+#' │    |── 1.2 Indirect
+#' │
+#' ├── 2.0 Missing value
+#' |    |
+#' │    |── 2.1 Missing POV
+#' |    |
+#' │    |── 2.2 Missing MEC
+#' │
+#' ├── 3.0 Imputed value
+#' |    |
+#' │    |── 3.1 Imputed POV
+#' |    |
+#' │    |── 3.2 Imputed MEC
+#'        
+#' Protein-level vocabulary: same as peptide-level with one more category (Combined Value)
+#' 
+#' @param level A string designing the type of entity/pipeline. Available values are:
+#' `peptide`, `protein`
+#' 
+#' @author Thomas Burger, Samuel Wieczorek
+#' 
+#' @export
+#' 
+metacell.def <- function(level = NULL){
+  if(is.null(level))
+    stop("'level' is required.")
+  
+  switch(level,
+         peptide = setNames(nm = c('quanti',
+                                   'quanti_identified',
+                                   'quanti_recovered',
+                                   'missing',
+                                   'missing_POV',
+                                   'missing_MEC',
+                                   'imputed',
+                                   'imputed_POV',
+                                   'imputed_MEC')) ,
+         
+         protein = setNames(nm = c('quanti',
+                                   'quanti_identified',
+                                   'quanti_recovered',
+                                   'missing',
+                                   'missing_POV',
+                                   'missing_MEC',
+                                   'imputed',
+                                   'imputed_POV',
+                                   'imputed_MEC',
+                                   'combined')
+         )
+         
+  )
+}
 
 
 #' Sets the MEC tag in the metacell
@@ -107,94 +170,7 @@ BuildMetaCell <- function(from = NULL, level = NULL, qData = NULL, conds = NULL,
 }
 
 
-#' #' @title xxx
-#' #' 
-#' #' @description
-#' #' xxxx
-#' #' 
-#' #' @export
-#' #' 
-#' controled.vocable <- function(){
-#'   list( 'direct' =           'quantiValue-direct',
-#'         'indirect' =         'quantiValue-indirect',
-#'         'missingValue' =     'missingValue',
-#'         'NA' =               'missingValue-NA',
-#'         'POV' =              'missingValue-NA-POV',
-#'         'POV_MCAR' =         'missingValue-NA-POV-MCAR',
-#'         'POV_MNAR' =         'missingValue-NA-POV-MNAR',
-#'         'MEC' =              'missingValue-NA-MEC',
-#'         'MEC_MCAR' =         'missingValue-NA-MEC-MCAR',
-#'         'MEC_MNAR' =         'missingValue-NA-MEC-MNAR',
-#'         'imputed' =          'missingValue-imputed',
-#'         'imputed_algo' =     'missingValue-imputed-algo',
-#'         'unknown' =          'unknown') 
-#' 
-#' }
 
-
-#' @title Metadata vocabulary for entities
-#' 
-#' @description
-#' This function gives the vocabulary used for the metadata of each entity in
-#' each condition.
-#' Peptide-level vocabulary
-#' 
-#' ├── 1.0 Quantitative Value
-#' |    |
-#' │    |── 1.1 Direct
-#' |    |
-#' │    |── 1.2 Indirect
-#' │
-#' ├── 2.0 Missing value
-#' |    |
-#' │    |── 2.1 Missing POV
-#' |    |
-#' │    |── 2.2 Missing MEC
-#' │
-#' ├── 3.0 Imputed value
-#' |    |
-#' │    |── 3.1 Imputed POV
-#' |    |
-#' │    |── 3.2 Imputed MEC
-#'        
-#' Protein-level vocabulary: same as peptide-level with one more category (Combined Value)
-#' 
-#' @param level A string designing the type of entity/pipeline. Available values are:
-#' `peptide`, `protein`
-#' 
-#' @author Thomas Burger, Samuel Wieczorek
-#' 
-#' @export
-#' 
-metacell.def <- function(level = NULL){
-  if(is.null(level))
-    stop("'level' is required.")
-  
-  switch(level,
-         peptide = setNames(nm = c('quanti',
-                                   'quanti_direct',
-                                   'quanti_indirect',
-                                   'missing',
-                                   'missing_POV',
-                                   'missing_MEC',
-                                   'imputed',
-                                   'imputed_POV',
-                                   'imputed_MEC')) ,
-         
-         protein = setNames(nm = c('quanti',
-                                   'quanti_direct',
-                                   'quanti_indirect',
-                                   'missing',
-                                   'missing_POV',
-                                   'missing_MEC',
-                                   'imputed',
-                                   'imputed_POV',
-                                   'imputed_MEC',
-                                   'combined')
-         )
-         
-  )
-}
 
 
 #' @title Sets the metacell dataframe
@@ -308,10 +284,10 @@ Metacell_proline <- function(qData, conds, df, level=NULL){
   df <- setMEC(qData, conds, df, level)
   
   # Rule 2
-  df[df > 0 && qData > 0] <- metacell.def(level)['quanti_direct']
+  df[df > 0 && qData > 0] <- metacell.def(level)['quanti_identified']
   
   # Rule 3
-  df[df == 0 && qData > 0] <- metacell.def(level)['quanti_indirect']
+  df[df == 0 && qData > 0] <- metacell.def(level)['quanti_recovered']
   
   colnames(df) <- paste0("metacell_", colnames(qData))
   colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
@@ -371,10 +347,10 @@ Metacell_maxquant <- function(qData, conds, df, level=NULL){
   df[qData == 0] <-  NA
   
   # Rule 2
-  df[df=='By MS/MS'] <- metacell.def(level)['quanti_direct']
+  df[df=='By MS/MS'] <- metacell.def(level)['quanti_identified']
   
   # Rule 3
-  df[df=='By matching'] <- metacell.def(level)['quanti_indirect']
+  df[df=='By matching'] <- metacell.def(level)['quanti_recovered']
   
   
   # Add details for NA values

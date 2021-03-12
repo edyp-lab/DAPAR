@@ -171,7 +171,9 @@ wrapper.impute.fixedValue <- function(obj=NULL, fixVal=0, na.type = NULL){
     else if (!(na.type %in% c('NA', 'POV', 'MEC')))
         stop("Available values for na.type are: 'NA' (for both POV and MEC), 'POV', 'MEC'.")
     
-    ind.na.type <- match.metacell(Biobase::fData(obj)[, obj@experimentData@other$names_metacell], na.type)
+    ind.na.type <- match.metacell(Biobase::fData(obj)[, obj@experimentData@other$names_metacell], 
+                                  na.type,
+                                  level = obj@experimentData@other$typeOfData)
     Biobase::exprs(obj)[is.na(Biobase::exprs(obj)) & ind.na.type] <- fixVal
     obj <- UpdateMetacell(obj, 'fixedValue', na.type) 
     return (obj)
@@ -345,7 +347,9 @@ impute.detQuant <- function(qData, values, na.type=NULL){
     #browser()
     for(i in 1:ncol(qData)){
         col <- qData[,i]
-        ind.na.type <- match.metacell(Biobase::fData(obj)[, obj@experimentData@other$names_metacell[i]], na.type)
+        ind.na.type <- match.metacell(Biobase::fData(obj)[, obj@experimentData@other$names_metacell[i]], 
+                                      na.type,
+                                      level = obj@experimentData@other$typeOfData)
         
         col[which(is.na(col) & ind.na.type)] <- values[i]
         qData[,i] <- col
