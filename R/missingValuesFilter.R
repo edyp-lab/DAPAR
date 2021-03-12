@@ -610,6 +610,115 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
 }
 
 
+#' Returns the indices of the lines the MSnSet object to keep w.r.t. 
+#' the filtering conditions on the number of XXX given data xxx.
+#' The condition may be on the whole line or condition by condition.
+#' 
+#' The different methods are :
+#' "WholeMatrix": given a threshold \code{th}, only the lines that contain
+#' at least \code{th} values are kept.
+#' "AllCond": given a threshold \code{th}, only the lines which contain
+#' at least \code{th} values for each of the conditions are kept.
+#' "AtLeastOneCond": given a threshold \code{th}, only the lines that contain
+#' at least \code{th} values, and for at least one condition, are kept.
+#' 
+#' @title Filter lines in the MSnSet object after the metadata w.r.t. some criteria
+#' 
+#' @param obj An object of class \code{MSnSet} containing
+#' quantitative data (Biobase::exprs) and metadata (Biobase::fData).
+#' 
+#' @param metacell xxx identification label of the data xxx
+#' 
+#' @param remove Filtered lines will be removed after the filtration if FALSE. Else, they will be kept.Default is TRUE. 
+#' 
+#' @param condition Method used to filter. Values are : "WholeMatrix", "AllCond", "AtLeastOneCond"
+#' 
+#' @param percent TRUE or FALSE. Default is FALSE.
+#' 
+#' @param operator A string.
+#'  
+#' @param threshold An integer value of the threshold if percent is FALSE. Otherwise, a floating
+#' number between 0 and 1.
+#' 
+#' @return An vector of indices that correspond to the lines to keep.
+#' 
+#' @author Enora Fremy
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' FilterGetIndices(Exp1_R25_pept, metacell = 'quanti', remove = FALSE, percent=TRUE, condition = "WholeMatrix", threshold=0.5, operator = '>=')
+#' 
+#' @export
+#' 
+filterGetIndices <- function(obj,
+                             metacell = NULL, 
+                             remove = TRUE,
+                             condition = "WholeMatrix", 
+                             percent = FALSE,
+                             operator = NULL,
+                             threshold = NULL) {
+  
+  keepThat <- NULL
+  
+  data <- (Biobase::fData(obj))[,66:71]
+  
+  if (condition == "WholeMatrix") {
+    if (isTRUE(percent)) {
+      inter <- rowSums(match.metacell(data=data, type=metacell, level="peptide"))/ncol(data)
+      keepThat <- which(eval(parse(text=paste0("inter", operator, threshold))))
+    } else {
+      inter <- apply(match.metacell(data=data, type=metacell, level="peptide"), 1, sum)
+      keepThat <- which(eval(parse(text=paste0("inter", operator, threshold))))
+    }
+  } else if (condition == "AtLeastOneCond" || condition == "AllCond") {
+    
+    
+    conditions <- unique(Biobase::pData(obj)$Condition)
+    nbCond <- length(conditions)
+    keepThat <- NULL
+    s <- matrix(rep(0, nrow(data)*nbCond),
+                nrow=nrow(data),
+                ncol=nbCond)
+    
+    
+    if (isTRUE(percent)) {
+      for (c in 1:nbCond) {
+        ind <- which(Biobase::pData(obj)$Condition == conditions[c])
+        inter <- rowSums(match.metacell(data=data[,ind], type=metacell, level="peptide"))/length(ind)
+        s[,c] <- eval(parse(text=paste0("inter", operator, threshold)))
+      }
+    } else {
+      for (c in 1:nbCond) {
+        ind <- which(Biobase::pData(obj)$Condition == conditions[c])
+        if (length(ind) == 1){
+          inter <- match.metacell(data=data[,ind], type=metacell, level="peptide")
+          s[,c] <- eval(parse(text=paste0("inter", operator, threshold)))
+        }
+        else {
+          inter <- apply(match.metacell(data=data[,ind], type=metacell, level="peptide"), 1, sum)
+          s[,c] <- eval(parse(text=paste0("inter", operator, threshold)))
+        }
+      }
+    }
+    
+    
+    switch(condition,
+           AllCond = keepThat <- which(rowSums(s) == nbCond),
+           AtLeastOneCond = keepThat <- which(rowSums(s) >= 1)
+    )
+  }
+  
+  if (isTRUE(remove)) {
+    keepThat <- c(1:nrow(data))[-keepThat]
+  }
+  
+  return(keepThat)
+}
+
+
+
+
+
 
 #' Returns the indices of the lines of \code{exprs()} table to delete w.r.t. 
 #' the conditions on the number of missing values.
@@ -1132,7 +1241,7 @@ mvFilterGetIndices_Marianne <- function(obj,
 #' #' @return the object given as input but with the lines not respecting the
 #' #' proportion of NA requested in less.
 #' #' 
-#' #' @author H?l?ne Borges, Samuel Wieczorek
+#' #' @author Helene Borges, Samuel Wieczorek
 #' #' 
 #' #' @examples
 #' #' utils::data(Exp1_R25_prot, package='DAPARdata')
