@@ -615,11 +615,11 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
 #' The condition may be on the whole line or condition by condition.
 #' 
 #' The different methods are :
-#' "WholeMatrix": given a threshold \code{th}, only the lines that contain
+#' "WholeMatrix": given a threshold \code{th}, xxx only the lines that contain
 #' at least \code{th} values are kept.
-#' "AllCond": given a threshold \code{th}, only the lines which contain
+#' "AllCond": given a threshold \code{th}, xxx only the lines which contain
 #' at least \code{th} values for each of the conditions are kept.
-#' "AtLeastOneCond": given a threshold \code{th}, only the lines that contain
+#' "AtLeastOneCond": given a threshold \code{th}, xxx only the lines that contain
 #' at least \code{th} values, and for at least one condition, are kept.
 #' 
 #' @title Filter lines in the MSnSet object after the metadata w.r.t. some criteria
@@ -656,18 +656,19 @@ filterGetIndices <- function(obj,
                              condition = "WholeMatrix", 
                              percent = FALSE,
                              operator = NULL,
-                             threshold = NULL) {
+                             threshold = NULL,
+                             level = NULL) {
   
   keepThat <- NULL
   
-  data <- (Biobase::fData(obj))[,66:71]
+  data <- Biobase::fData(obj)[,obj@experimentData@other$names_metacell]
   
   if (condition == "WholeMatrix") {
     if (isTRUE(percent)) {
-      inter <- rowSums(match.metacell(data=data, type=metacell, level="peptide"))/ncol(data)
+      inter <- rowSums(match.metacell(data=data, type=metacell, level=level))/ncol(data)
       keepThat <- which(eval(parse(text=paste0("inter", operator, threshold))))
     } else {
-      inter <- apply(match.metacell(data=data, type=metacell, level="peptide"), 1, sum)
+      inter <- apply(match.metacell(data=data, type=metacell, level=level), 1, sum)
       keepThat <- which(eval(parse(text=paste0("inter", operator, threshold))))
     }
   } else if (condition == "AtLeastOneCond" || condition == "AllCond") {
@@ -684,18 +685,18 @@ filterGetIndices <- function(obj,
     if (isTRUE(percent)) {
       for (c in 1:nbCond) {
         ind <- which(Biobase::pData(obj)$Condition == conditions[c])
-        inter <- rowSums(match.metacell(data=data[,ind], type=metacell, level="peptide"))/length(ind)
+        inter <- rowSums(match.metacell(data=data[,ind], type=metacell, level=level))/length(ind)
         s[,c] <- eval(parse(text=paste0("inter", operator, threshold)))
       }
     } else {
       for (c in 1:nbCond) {
         ind <- which(Biobase::pData(obj)$Condition == conditions[c])
         if (length(ind) == 1){
-          inter <- match.metacell(data=data[,ind], type=metacell, level="peptide")
+          inter <- match.metacell(data=data[,ind], type=metacell, level=level)
           s[,c] <- eval(parse(text=paste0("inter", operator, threshold)))
         }
         else {
-          inter <- apply(match.metacell(data=data[,ind], type=metacell, level="peptide"), 1, sum)
+          inter <- apply(match.metacell(data=data[,ind], type=metacell, level=level), 1, sum)
           s[,c] <- eval(parse(text=paste0("inter", operator, threshold)))
         }
       }
