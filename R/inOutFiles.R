@@ -167,6 +167,65 @@ controled.vocable <- function(){
 }
 
 
+#' @title Metadata vocabulary for entities
+#' 
+#' @description
+#' This function gives the vocabulary used for the metadata of each entity in
+#' each condition.
+#' Peptide-level vocabulary
+#'    1. Quantitative Value (= soit non defini par l'utilisateur, mais valeur de quanti présente (c'est donc un genre de "undefined"); soit les sous-catégories ci-dessous)
+#'        1.1. Direct (=byMS/MS)
+#'        1.2. Indirect (=bymatching)
+#'    2. Missing value (= statut pour toutes les cellules, dont la valeur était manquantes à la création du dataset)
+#'        2.1. Missing POV (=après diagnostic du nb de MV par condition)
+#'        2.2. Missing MEC (=après diagnostic du nb de MV par condition)
+#'    3. Imputed value
+#'        3.1. Imputed POV (=2.1 ayant subi une imputation)
+#'        3.2. Imputed MEC (=2.2 ayant subi une imputation)
+#'        
+#' Protein-level vocabulary: same as peptide-level with one more category (Combined Value)
+#' 
+#' @param level A string designing the type of entity/pipeline. Available values are:
+#' `peptide`, `protein`
+#' 
+#' @author Thomas Burger, Samuel Wieczorek
+#' 
+#' @export
+#' 
+metacell.def <- function(level = NULL){
+  is(is.null(level))
+  stop("'level' is required")
+  
+  switch(level,
+         peptide = list( 'direct' =           'quantiValue-direct',
+                         'indirect' =         'quantiValue-indirect',
+                         'missingValue' =     'missingValue',
+                         'NA' =               'missingValue-NA',
+                         'POV' =              'missingValue-NA-POV',
+                         'POV_MCAR' =         'missingValue-NA-POV-MCAR',
+                         'POV_MNAR' =         'missingValue-NA-POV-MNAR',
+                         'MEC' =              'missingValue-NA-MEC',
+                         'MEC_MCAR' =         'missingValue-NA-MEC-MCAR',
+                         'MEC_MNAR' =         'missingValue-NA-MEC-MNAR',
+                         'imputed' =          'missingValue-imputed',
+                         'imputed_algo' =     'missingValue-imputed-algo',
+                         'unknown' =          'unknown') ,
+         protein = list( 'direct' =           'quantiValue-direct',
+                         'indirect' =         'quantiValue-indirect',
+                         'missingValue' =     'missingValue',
+                         'NA' =               'missingValue-NA',
+                         'POV' =              'missingValue-NA-POV',
+                         'POV_MCAR' =         'missingValue-NA-POV-MCAR',
+                         'POV_MNAR' =         'missingValue-NA-POV-MNAR',
+                         'MEC' =              'missingValue-NA-MEC',
+                         'MEC_MCAR' =         'missingValue-NA-MEC-MCAR',
+                         'MEC_MNAR' =         'missingValue-NA-MEC-MNAR',
+                         'imputed' =          'missingValue-imputed',
+                         'imputed_algo' =     'missingValue-imputed-algo',
+                         'unknown' =          'unknown') ,
+         
+         )
+}
 
 
 #' @title Sets the metacell dataframe

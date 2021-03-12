@@ -17,7 +17,7 @@
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:10,]
-#' obj <- mvFilter(obj, type="EmptyLines", th=0)
+#' obj <- mvFilter(obj, type="WholeMatrix", th=1)
 #' obj.mle <- wrapper.impute.mle(obj, na.type = 'NA')
 #' 
 #' @export

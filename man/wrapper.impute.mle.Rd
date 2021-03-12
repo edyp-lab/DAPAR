@@ -21,8 +21,9 @@ This method is a wrapper to the function \code{impute.mle} of the package
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-dat <- mvFilter(Exp1_R25_pept[1:1000,], type="AllCond", th = 1)
-dat <- wrapper.impute.mle(dat)
+obj <- Exp1_R25_pept[1:10,]
+obj <- mvFilter(obj, type="WholeMatrix", th=1)
+obj.mle <- wrapper.impute.mle(obj, na.type = 'NA')
 
 }
 \author{
