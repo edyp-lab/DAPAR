@@ -4,7 +4,7 @@
 \alias{Metacell_proline}
 \title{Sets the metacell dataframe}
 \usage{
-Metacell_proline(qData, conds, df)
+Metacell_proline(qData, conds, df, level = NULL)
 }
 \arguments{
 \item{qData}{An object of class \code{MSnSet}}
@@ -12,6 +12,8 @@ Metacell_proline(qData, conds, df)
 \item{conds}{xxx}
 
 \item{df}{A list of integer xxxxxxx}
+
+\item{level}{xxx}
 }
 \value{
 xxxxx
@@ -33,7 +35,7 @@ metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, stringsA
 conds <- metadata$Condition
 qData <- data[,56:61]
 df <- data[ , 43:48]
-Metacell_proline(qData, conds, df)
+Metacell_proline(qData, conds, df, level = 'peptide')
 
 }
 \author{

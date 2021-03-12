@@ -4,7 +4,7 @@
 \alias{Metacell_maxquant}
 \title{Sets the metacell dataframe}
 \usage{
-Metacell_maxquant(qData, conds, df)
+Metacell_maxquant(qData, conds, df, level = NULL)
 }
 \arguments{
 \item{qData}{An object of class \code{MSnSet}}
@@ -12,6 +12,8 @@ Metacell_maxquant(qData, conds, df)
 \item{conds}{xxx}
 
 \item{df}{A list of integer xxxxxxx}
+
+\item{level}{xxx}
 }
 \value{
 xxxxx
@@ -22,17 +24,6 @@ Quanti         Identification       								            Tag
  == 0			    whatever ('By MS/MS', N.A., 'By Matching')	    NA
  > 0				    'By MS/MS'											                direct
  > 0				    'By matching'										                indirect
-}
-\examples{
-file <- system.file("extdata", "Exp1_R2_prot.txt", package="DAPARdata")
-data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
-metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
-metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, stringsAsFactors = FALSE)
-conds <- metadata$Condition
-qData <- data[,49:54]
-df <- data[ , 36:41]
-df <- Metacell_maxquant(qData, conds, df)
-
 }
 \author{
 Samuel Wieczorek

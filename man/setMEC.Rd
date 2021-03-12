@@ -4,7 +4,7 @@
 \alias{setMEC}
 \title{Sets the MEC tag in the metacell}
 \usage{
-setMEC(qData, conds, df)
+setMEC(qData, conds, df, level)
 }
 \arguments{
 \item{qData}{xxx}
@@ -12,6 +12,8 @@ setMEC(qData, conds, df)
 \item{conds}{xxx}
 
 \item{df}{An object of class \code{MSnSet}}
+
+\item{level}{Type of entity/pipeline}
 }
 \value{
 An instance of class \code{MSnSet}.
@@ -23,7 +25,7 @@ Sets the MEC tag in the metacell
 utils::data(Exp1_R25_pept, package='DAPARdata')
 cols.for.ident <- xxxxx
 df <- Biobase::fData(obj)[, cols.for.ident]
-setMEC(df, Exp1_R25_pept)
+setMEC(df, Exp1_R25_pept, level = 'peptide')
 
 }
 \author{

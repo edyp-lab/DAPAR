@@ -4,10 +4,12 @@
 \alias{search.metacell.tags}
 \title{xxxx}
 \usage{
-search.metacell.tags(pattern)
+search.metacell.tags(pattern, level)
 }
 \arguments{
 \item{pattern}{xxx}
+
+\item{level}{xxx}
 }
 \description{
 xxxxx

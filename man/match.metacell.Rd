@@ -4,12 +4,14 @@
 \alias{match.metacell}
 \title{Similar to the function \code{is.na} but focused on the equality with the paramter 'type'.}
 \usage{
-match.metacell(data, type)
+match.metacell(data, type, level = NULL)
 }
 \arguments{
 \item{data}{A data.frame}
 
 \item{type}{The value to search in the dataframe}
+
+\item{level}{xxx}
 }
 \value{
 A boolean dataframe

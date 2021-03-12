@@ -4,12 +4,14 @@
 \alias{Metacell_generic}
 \title{Sets the metacell dataframe}
 \usage{
-Metacell_generic(qData, conds)
+Metacell_generic(qData, conds, level)
 }
 \arguments{
 \item{qData}{An object of class \code{MSnSet}}
 
 \item{conds}{xxx}
+
+\item{level}{xxx}
 }
 \value{
 xxxxx

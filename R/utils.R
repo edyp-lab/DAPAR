@@ -57,6 +57,8 @@ return (n)
 #' @param data A data.frame
 #'
 #' @param type The value to search in the dataframe
+#' 
+#' @param level xxx
 #'
 #' @return A boolean dataframe
 #'
@@ -70,11 +72,11 @@ return (n)
 #'
 #' @export
 #'
-match.metacell <- function(data, type){
-  if (!(type %in% names(controled.vocable())))
-    stop(paste0("'type' is not correct. It must be one of the following: ', names(controled.vocable()), collapse = ' '"))
+match.metacell <- function(data, type, level=NULL){
+  if (!(type %in% names(metacell.def(level))))
+    stop(paste0("'type' is not correct. It must be one of the following: ", paste0(names(metacell.def()), collapse = ' ')))
   
-  ll.res <- lapply(unname(search.metacell.tags(type)), function(x){data==x})
+  ll.res <- lapply(unname(search.metacell.tags(type, level)), function(x){data==x})
   
   res <- NULL
   for (i in 1:length(ll.res))
@@ -104,11 +106,13 @@ GetMetacell <- function(obj){
 #' 
 #' @param na.type xxx
 #' 
+#' @param level xxx
+#' 
 #' @author Samuel Wieczorek
 #' 
 #' @export
 #' 
-UpdateMetacell <- function(obj=NULL, method='', na.type=NULL){
+UpdateMetacell <- function(obj=NULL, method='', na.type=NULL, level = NULL){
   if (is.null(obj))
     stop("'obj' is required.")
   if (is.null(na.type))
@@ -116,7 +120,7 @@ UpdateMetacell <- function(obj=NULL, method='', na.type=NULL){
   
   
   ind <- match.metacell(Biobase::fData(obj)[, obj@experimentData@other$names_metacell], na.type) & Biobase::exprs(obj) > 0 & !is.na(Biobase::exprs(obj))
-  Biobase::fData(obj)[, obj@experimentData@other$names_metacell][ind] <- paste0(controled.vocable()$imputed, '_', method)
+  Biobase::fData(obj)[, obj@experimentData@other$names_metacell][ind] <- paste0(metacell.def(level)$imputed, '_', method)
   return(obj)
 }
 
@@ -128,12 +132,14 @@ UpdateMetacell <- function(obj=NULL, method='', na.type=NULL){
 #' 
 #' @param pattern xxx
 #' 
+#' @param level xxx
+#' 
 #' @author Samuel Wieczorek
 #' 
 #' @export
 #' 
-search.metacell.tags <- function(pattern){
-  unlist(controled.vocable()[unlist(lapply(controled.vocable(), function(x){length(grep(pattern, x))==1}))])
+search.metacell.tags <- function(pattern, level){
+  unlist(metacell.def(level)[unlist(lapply(metacell.def(level), function(x){length(grep(pattern, x))==1}))])
 }
 
 

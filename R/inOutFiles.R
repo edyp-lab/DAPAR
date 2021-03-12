@@ -52,6 +52,8 @@ saveParameters <- function(obj,name.dataset=NULL,name=NULL,l.params=NULL){
 #' 
 #' @param df An object of class \code{MSnSet}
 #' 
+#' @param level Type of entity/pipeline
+#' 
 #' @return An instance of class \code{MSnSet}.
 #' 
 #' @author Samuel Wieczorek
@@ -60,13 +62,13 @@ saveParameters <- function(obj,name.dataset=NULL,name=NULL,l.params=NULL){
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' cols.for.ident <- xxxxx
 #' df <- Biobase::fData(obj)[, cols.for.ident]
-#' setMEC(df, Exp1_R25_pept)
+#' setMEC(df, Exp1_R25_pept, level = 'peptide')
 #' 
 #' @export
 #' 
 #' @importFrom Biobase pData exprs fData
 #'  
-setMEC <- function(qData, conds, df){
+setMEC <- function(qData, conds, df, level){
   
   conditions <- unique(conds)
   nbCond <- length(conditions)
@@ -80,7 +82,7 @@ setMEC <- function(qData, conds, df){
       lNA <- which(apply(is.na(qData[,ind]), 1, sum)==length(ind))
     
     if (length(lNA) > 0)
-      df[lNA, ind] <- controled.vocable()$MEC_MNAR
+      df[lNA, ind] <- metacell.def(level)$MEC
   }
   return(df)
 }
@@ -238,6 +240,8 @@ metacell.def <- function(level = NULL){
 #' 
 #' @param conds xxx
 #' 
+#' @param level xxx
+#' 
 #' @return xxxxx
 #' 
 #' @author Samuel Wieczorek
@@ -256,16 +260,16 @@ metacell.def <- function(level = NULL){
 #' 
 #' @importFrom Biobase pData exprs fData
 #' 
-Metacell_generic <- function(qData, conds){
+Metacell_generic <- function(qData, conds, level){
   
-  df <- data.frame(matrix(rep(controled.vocable()$unknown, nrow(qData)*ncol(qData)),
+  df <- data.frame(matrix(rep(metacell.def(level)$undefined, nrow(qData)*ncol(qData)),
                           nrow = nrow(qData),
                           ncol = ncol(qData)),
                    stringsAsFactors = FALSE) 
   
   # Rule 1
-  df[is.na(qData)] <-  controled.vocable()$POV_MCAR
-  df[qData == 0] <-  controled.vocable()$POV_MCAR
+  df[is.na(qData)] <-  metacell.def(level)$POV
+  df[qData == 0] <-  metacell.def(level)$POV
   df <- setMEC(qData, conds, df)
   
   colnames(df) <- paste0("metacell_", colnames(qData))
@@ -295,6 +299,8 @@ Metacell_generic <- function(qData, conds){
 #' 
 #' @param df A list of integer xxxxxxx
 #' 
+#' @param level xxx
+#' 
 #' @return xxxxx
 #' 
 #' @author Samuel Wieczorek
@@ -307,29 +313,29 @@ Metacell_generic <- function(qData, conds){
 #' conds <- metadata$Condition
 #' qData <- data[,56:61]
 #' df <- data[ , 43:48]
-#' Metacell_proline(qData, conds, df)
+#' Metacell_proline(qData, conds, df, level = 'peptide')
 #' 
 #' @export
 #' 
 #' @importFrom Biobase pData exprs fData
 #' 
-Metacell_proline <- function(qData, conds, df){
+Metacell_proline <- function(qData, conds, df, level=NULL){
   
   if (is.null(df))
-    df <- data.frame(matrix(rep(controled.vocable()$unknown, nrow(qData)*ncol(qData)), 
+    df <- data.frame(matrix(rep(metacell.def(level)$undefined, nrow(qData)*ncol(qData)), 
                       nrow=nrow(qData),
                       ncol=ncol(qData)),
                stringsAsFactors = FALSE) 
 
   # Rule 1
-  df[is.na(qData)] <-  controled.vocable()$POV_MCAR
-  df <- setMEC(qData, conds, df)
+  df[is.na(qData)] <-  metacell.def(level)$POV
+  df <- setMEC(qData, conds, df, level)
   
   # Rule 2
-  df[df > 0 && qData > 0] <- controled.vocable()$direct
+  df[df > 0 && qData > 0] <- metacell.def(level)$direct
   
   # Rule 3
-  df[df == 0 && qData > 0] <- controled.vocable()$indirect
+  df[df == 0 && qData > 0] <- metacell.def(level)$indirect
   
   colnames(df) <- paste0("metacell_", colnames(qData))
   colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
@@ -352,6 +358,8 @@ Metacell_proline <- function(qData, conds, df){
 #' 
 #' @param df A list of integer xxxxxxx
 #' 
+#' @param level xxx
+#' 
 #' @return xxxxx
 #' 
 #' @author Samuel Wieczorek
@@ -364,16 +372,16 @@ Metacell_proline <- function(qData, conds, df){
 #' conds <- metadata$Condition
 #' qData <- data[,49:54]
 #' df <- data[ , 36:41]
-#' df <- Metacell_maxquant(qData, conds, df)
+#' df <- Metacell_maxquant(qData, conds, df, level='protein")
 #' 
 #' @export
 #' 
 #' @importFrom Biobase pData exprs fData
 #' 
-Metacell_maxquant <- function(qData, conds, df){
+Metacell_maxquant <- function(qData, conds, df, level=NULL){
   
   if (is.null(df))
-    df <- data.frame(matrix(rep(controled.vocable()$unknown, nrow(qData)*ncol(qData)), 
+    df <- data.frame(matrix(rep(metacell.def(level)$undefined, nrow(qData)*ncol(qData)), 
                           nrow=nrow(qData),
                           ncol=ncol(qData)),
                    stringsAsFactors = FALSE) 
@@ -383,15 +391,15 @@ Metacell_maxquant <- function(qData, conds, df){
   df[qData == 0] <-  NA
   
   # Rule 2
-  df[df=='By MS/MS'] <- controled.vocable()$direct
+  df[df=='By MS/MS'] <- metacell.def(level)$direct
   
   # Rule 3
-  df[df=='By matching'] <- controled.vocable()$indirect
+  df[df=='By matching'] <- metacell.def(level)$indirect
   
   
   # Add details for NA values
-  df[is.na(qData)] <-  controled.vocable()$POV_MCAR
-  df <- setMEC(qData, conds, df)
+  df[is.na(qData)] <-  metacell.def(level)$POV
+  df <- setMEC(qData, conds, df, level)
   
   
   
