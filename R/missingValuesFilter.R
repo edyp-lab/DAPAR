@@ -656,19 +656,19 @@ filterGetIndices <- function(obj,
                              condition = "WholeMatrix", 
                              percent = FALSE,
                              operator = NULL,
-                             threshold = NULL,
-                             level = NULL) {
+                             threshold = NULL) {
   
   keepThat <- NULL
   
   data <- Biobase::fData(obj)[,obj@experimentData@other$names_metacell]
+  level <- Biobase::fData(obj)[,obj@experimentData@other$typeOfData]
   
   if (condition == "WholeMatrix") {
     if (isTRUE(percent)) {
-      inter <- rowSums(match.metacell(data=data, type=metacell, level=level))/ncol(data)
+      inter <- rowSums(match.metacell(metadata=data, pattern=metacell, level=level))/ncol(data)
       keepThat <- which(eval(parse(text=paste0("inter", operator, threshold))))
     } else {
-      inter <- apply(match.metacell(data=data, type=metacell, level=level), 1, sum)
+      inter <- apply(match.metacell(metadata=data, pattern=metacell, level=level), 1, sum)
       keepThat <- which(eval(parse(text=paste0("inter", operator, threshold))))
     }
   } else if (condition == "AtLeastOneCond" || condition == "AllCond") {
@@ -685,18 +685,18 @@ filterGetIndices <- function(obj,
     if (isTRUE(percent)) {
       for (c in 1:nbCond) {
         ind <- which(Biobase::pData(obj)$Condition == conditions[c])
-        inter <- rowSums(match.metacell(data=data[,ind], type=metacell, level=level))/length(ind)
+        inter <- rowSums(match.metacell(metadata=data[,ind], pattern=metacell, level=level))/length(ind)
         s[,c] <- eval(parse(text=paste0("inter", operator, threshold)))
       }
     } else {
       for (c in 1:nbCond) {
         ind <- which(Biobase::pData(obj)$Condition == conditions[c])
         if (length(ind) == 1){
-          inter <- match.metacell(data=data[,ind], type=metacell, level=level)
+          inter <- match.metacell(metadata=data[,ind], pattern=metacell, level=level)
           s[,c] <- eval(parse(text=paste0("inter", operator, threshold)))
         }
         else {
-          inter <- apply(match.metacell(data=data[,ind], type=metacell, level=level), 1, sum)
+          inter <- apply(match.metacell(metadata=data[,ind], pattern=metacell, level=level), 1, sum)
           s[,c] <- eval(parse(text=paste0("inter", operator, threshold)))
         }
       }
@@ -771,6 +771,8 @@ mvFilterGetIndices <- function(obj,
     return (NULL)
   }
   
+  level <- obj@experimentData@other$typeOfData
+  
   if (condition != 'EmptyLines')
     if (!(percent %in% c(T, F))){
       warning("Param `type` is not correct.")
@@ -792,23 +794,17 @@ mvFilterGetIndices <- function(obj,
     }
   
   keepThat <- NULL
-  if (is.null(obj@experimentData@other$names_metacell)){
-    data <- BuildMetaCell(qData = Biobase::exprs(obj), conds = Biobase::pData(obj)$Condition)
-    warning("The dataset contains no slot 'names_metacell' in which to search for indices. Generic metacell data are set.")
-  } else {
-    data <- dplyr::select(Biobase::fData(obj),
-                          obj@experimentData@other$names_metacell)
-  }
+  data <- dplyr::select(Biobase::fData(obj), obj@experimentData@other$names_metacell)
   
   if (condition == "None") {
     keepThat <- seq(1:nrow(data))
   } else if (condition == "EmptyLines") {
-    keepThat <- which(apply(!match.metacell(data, 'NA'), 1, sum) >= 1) # at least one value different of NA
+    keepThat <- which(apply(!match.metacell(metadata = data, 'missing', level), 1, sum) >= 1) # at least one value different of NA
   } else if (condition == "WholeMatrix") {
     if (isTRUE(percent)) {
-      keepThat <- which(rowSums(!match.metacell(data, 'NA'))/ncol(data) >= threshold) 
+      keepThat <- which(rowSums(!match.metacell(metadata=data, 'missing', level))/ncol(data) >= threshold) 
     } else {
-      keepThat <- which(apply(!match.metacell(data, 'NA'), 1, sum) >= threshold)
+      keepThat <- which(apply(!match.metacell(metadata=data, 'missing', level), 1, sum) >= threshold)
     }
   } else if (condition == "AtLeastOneCond" || condition == "AllCond") {
     
@@ -822,16 +818,16 @@ mvFilterGetIndices <- function(obj,
     if (isTRUE(percent)) {
       for (c in 1:nbCond) {
         ind <- which(Biobase::pData(obj)$Condition == conditions[c])
-        s[,c] <- (rowSums(!match.metacell(data[,ind], 'NA'))/length(ind)) >= threshold
+        s[,c] <- (rowSums(!match.metacell(data[,ind], 'missing', level))/length(ind)) >= threshold
       }
     } else {
       for (c in 1:nbCond) {
         ind <- which(Biobase::pData(obj)$Condition == conditions[c])
         if (length(ind) == 1){
-          s[,c] <- (!match.metacell(data[,ind], 'NA') >= threshold) 
+          s[,c] <- (!match.metacell(data[,ind], 'missing', level) >= threshold) 
         }
         else {
-          s[,c] <- (apply(!match.metacell(data[,ind], 'NA'), 1, sum)) >= threshold
+          s[,c] <- (apply(!match.metacell(data[,ind], 'missing', level), 1, sum)) >= threshold
         }
       }
     }
@@ -881,7 +877,7 @@ mvFilterGetIndices <- function(obj,
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' mvFilterGetIndices(Exp1_R25_pept, "wholeMatrix", 2)
+#' mvFilterGetIndices_old(Exp1_R25_pept, "wholeMatrix", 2)
 #' 
 #' @export
 #' 
@@ -902,6 +898,8 @@ mvFilterGetIndices_old <- function(obj,
     return (NULL)
   }
   
+  level <- obj@experimentData@other$typeOfData
+  
   keepThat <- NULL
   if (is.null(obj@experimentData@other$names_metacell)){
     data <- Biobase::exprs(obj)
@@ -914,9 +912,9 @@ mvFilterGetIndices_old <- function(obj,
   if (type == "None"){
     keepThat <- seq(1:nrow(data))
   } else if (type == "EmptyLines"){
-    keepThat <- which(apply(!match.metacell(data, 'NA'), 1, sum) >= 1)
+    keepThat <- which(apply(!match.metacell(data, 'missing', level), 1, sum) >= 1)
   } else if (type == "WholeMatrix"){
-    keepThat <- which(apply(!match.metacell(data, 'NA'), 1, sum) >= th)
+    keepThat <- which(apply(!match.metacell(data, 'missing', level), 1, sum) >= th)
   } else if (type == "AtLeastOneCond" || type == "AllCond"){
     
     conditions <- unique(Biobase::pData(obj)$Condition)
@@ -928,9 +926,9 @@ mvFilterGetIndices_old <- function(obj,
     for (c in 1:nbCond){
       ind <- which(Biobase::pData(obj)$Condition == conditions[c])
       if (length(ind) == 1){
-        s[,c] <- (!match.metacell(data[,ind], 'NA') >= th)}
+        s[,c] <- (!match.metacell(data[,ind], 'missing', level) >= th)}
       else {
-        s[,c] <- (apply(!match.metacell(data[,ind], 'NA'), 1, sum) >= th)
+        s[,c] <- (apply(!match.metacell(data[,ind], 'missing', level), 1, sum) >= th)
       }
     }
     
@@ -999,6 +997,8 @@ mvFilterGetIndices_Marianne <- function(obj,
     return (NULL)
   }
   
+  level <- obj@experimentData@other$typeOfData
+  
   if (condition != 'EmptyLines')
     if (!(percent %in% c(T, F))){
       warning("Param `type` is not correct.")
@@ -1024,23 +1024,19 @@ mvFilterGetIndices_Marianne <- function(obj,
     }
   
   keepThat <- NULL
-  if (is.null(obj@experimentData@other$names_metacell)){
-    data <- BuildMetaCell(qData = Biobase::exprs(obj), conds = Biobase::pData(obj)$Condition)
-    warning("The dataset contains no slot 'names_metacell' in which to search for indices. Generic metacell data are set.")
-  } else {
-    data <- dplyr::select(Biobase::fData(obj),
+  data <- dplyr::select(Biobase::fData(obj),
                           obj@experimentData@other$names_metacell)
-  }
+
   
   if (condition == "None") {
     keepThat <- seq(1:nrow(data))
   } else if (condition == "EmptyLines") {
-    keepThat <- which(apply(match.metacell(data, 'direct'), 1, sum) >= 1) # row with at least one 'by MS/MS'
+    keepThat <- which(apply(match.metacell(data, 'quanti_identified', level), 1, sum) >= 1) # row with at least one 'by MS/MS'
   } else if (condition == "WholeMatrix") {
     if (isTRUE(percent)) {
-      keepThat <- which(rowSums(match.metacell(data, 'direct'))/ncol(data) >= threshold) 
+      keepThat <- which(rowSums(match.metacell(data, 'quanti_identified', level))/ncol(data) >= threshold) 
     } else {
-      keepThat <- which(apply(match.metacell(data, 'direct'), 1, sum) >= threshold)
+      keepThat <- which(apply(match.metacell(data, 'quanti_identified', level), 1, sum) >= threshold)
     }
   } else if (condition == "AtLeastOneCond" || condition == "AllCond") {
     
@@ -1054,16 +1050,16 @@ mvFilterGetIndices_Marianne <- function(obj,
     if (isTRUE(percent)) {
       for (c in 1:nbCond) {
         ind <- which(Biobase::pData(obj)$Condition == conditions[c])
-        s[,c] <- (rowSums(!match.metacell(data[, ind], 'direct'))/length(ind)) >= threshold
+        s[,c] <- (rowSums(!match.metacell(data[, ind], 'quanti_identified', level))/length(ind)) >= threshold
       }
     } else {
       for (c in 1:nbCond) {
         ind <- which(Biobase::pData(obj)$Condition == conditions[c])
         if (length(ind) == 1){
-          s[,c] <- (match.metacell(data[, ind], 'direct') >= threshold) 
+          s[,c] <- (match.metacell(data[, ind], 'quanti_identified', level) >= threshold) 
         }
         else {
-          s[,c] <- (apply(match.metacell(data[, ind], 'direct'), 1, sum)) >= threshold
+          s[,c] <- (apply(match.metacell(data[, ind], 'quanti_identified', level), 1, sum)) >= threshold
         }
       }
     }

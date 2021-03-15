@@ -465,7 +465,6 @@ inner.aggregate.iter <- function(pepData, X,init.method='Sum', method='Mean', n=
     mean.prot.new[is.na(mean.prot.new)] <- 0
     
     conv <- mean(abs(mean.prot.new - mean.prot))
-    print(paste0("conv : ", conv))
   }
   return(as.matrix(yprot))
 }
@@ -514,7 +513,6 @@ aggregateIter <- function(obj.pep, X, init.method='Sum', method='Mean', n=NULL){
   for (cond in unique(Biobase::pData(obj.pep)$Condition)){
     condsIndices <- which(Biobase::pData(obj.pep)$Condition == cond)
     qData <- qData.pep[,condsIndices]
-    print(paste0("Condition ", cond))
     protData[,condsIndices]  <- inner.aggregate.iter(qData, X, init.method, method, n)
   }
   obj.prot <- finalizeAggregation(obj.pep, qData.pep, protData, X)

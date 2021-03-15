@@ -2,17 +2,17 @@
 % Please edit documentation in R/metacell.R
 \name{search.metacell.tags}
 \alias{search.metacell.tags}
-\title{xxxx}
+\title{Search pattern in metacell vocabulary}
 \usage{
 search.metacell.tags(pattern, level)
 }
 \arguments{
-\item{pattern}{xxx}
+\item{pattern}{The string to search.}
 
-\item{level}{xxx}
+\item{level}{The available levels are : names()}
 }
 \description{
-Gives tags containing pattern as parent and all its children
+Gives all the tags of the metadata vocabulary containing the pattern (parent and all its children).
 }
 \examples{
 search.metacell.tags('POV', 'peptide')

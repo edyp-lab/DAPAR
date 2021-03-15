@@ -4,10 +4,10 @@
 \alias{getQuantile4Imp}
 \title{Quantile imputation value definition}
 \usage{
-getQuantile4Imp(qData, qval = 0.025, factor = 1)
+getQuantile4Imp(qdata, qval = 0.025, factor = 1)
 }
 \arguments{
-\item{qData}{An expression set containing quantitative values of various replicates}
+\item{qdata}{An expression set containing quantitative values of various replicates}
 
 \item{qval}{The quantile used to define the imputation value}
 
@@ -21,8 +21,8 @@ This method returns the q-th quantile of each column of an expression set, up to
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-qData <- Biobase::exprs(Exp1_R25_pept)
-getQuantile4Imp(qData) 
+qdata <- Biobase::exprs(Exp1_R25_pept)
+quant <- getQuantile4Imp(qdata) 
 
 }
 \author{

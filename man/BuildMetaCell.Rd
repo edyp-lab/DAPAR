@@ -4,14 +4,14 @@
 \alias{BuildMetaCell}
 \title{xxxx}
 \usage{
-BuildMetaCell(from = NULL, level = NULL, qData = NULL, conds = NULL, df = NULL)
+BuildMetaCell(from, level, qdata = NULL, conds = NULL, df = NULL)
 }
 \arguments{
 \item{from}{xxx}
 
 \item{level}{xxx}
 
-\item{qData}{An object of class \code{MSnSet}}
+\item{qdata}{An object of class \code{MSnSet}}
 
 \item{conds}{xxx}
 
@@ -29,10 +29,10 @@ data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
 metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
 metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, stringsAsFactors = FALSE)
 conds <- metadata$Condition
-qData <- data[,56:61]
+qdata <- data[,56:61]
 df <- data[ , 43:48]
-df <- BuildMetaCell(from = 'maxquant', level='peptide', qData = qData, conds = conds, df = df)
-df <- BuildMetaCell(from = 'proline', level='peptide', qData = qData, conds = conds, df = df)
+df <- BuildMetaCell(from = 'maxquant', level='peptide', qdata = qdata, conds = conds, df = df)
+df <- BuildMetaCell(from = 'proline', level='peptide', qdata = qdata, conds = conds, df = df)
 
 }
 \author{

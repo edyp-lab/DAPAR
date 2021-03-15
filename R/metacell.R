@@ -33,8 +33,8 @@
 #' 
 #' @export
 #' 
-metacell.def <- function(level = NULL){
-  if(is.null(level))
+metacell.def <- function(level){
+  if(missing(level))
     stop("'level' is required.")
   
   switch(level,
@@ -68,7 +68,7 @@ metacell.def <- function(level = NULL){
 #' 
 #' @title Sets the MEC tag in the metacell
 #' 
-#' @param qData xxx
+#' @param qdata xxx
 #' 
 #' @param conds xxx
 #' 
@@ -90,7 +90,7 @@ metacell.def <- function(level = NULL){
 #' 
 #' @importFrom Biobase pData exprs fData
 #'  
-setMEC <- function(qData, conds, df, level){
+setMEC <- function(qdata, conds, df, level){
   
   conditions <- unique(conds)
   nbCond <- length(conditions)
@@ -99,9 +99,9 @@ setMEC <- function(qData, conds, df, level){
     ind <- which(conds == conditions[cond])
     
     if (length(ind) == 1)
-      lNA <- which(is.na(qData[,ind]))
+      lNA <- which(is.na(qdata[,ind]))
     else
-      lNA <- which(apply(is.na(qData[,ind]), 1, sum)==length(ind))
+      lNA <- which(apply(is.na(qdata[,ind]), 1, sum)==length(ind))
     
     if (length(lNA) > 0)
       df[lNA, ind] <- metacell.def(level)['missing_MEC']
@@ -121,7 +121,7 @@ setMEC <- function(qData, conds, df, level){
 #' 
 #' @param level xxx
 #' 
-#' @param qData An object of class \code{MSnSet}
+#' @param qdata An object of class \code{MSnSet}
 #' 
 #' @param conds xxx
 #' 
@@ -137,20 +137,22 @@ setMEC <- function(qData, conds, df, level){
 #' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
 #' metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, stringsAsFactors = FALSE)
 #' conds <- metadata$Condition
-#' qData <- data[,56:61]
+#' qdata <- data[,56:61]
 #' df <- data[ , 43:48]
-#' df <- BuildMetaCell(from = 'maxquant', level='peptide', qData = qData, conds = conds, df = df)
-#' df <- BuildMetaCell(from = 'proline', level='peptide', qData = qData, conds = conds, df = df)
+#' df <- BuildMetaCell(from = 'maxquant', level='peptide', qdata = qdata, conds = conds, df = df)
+#' df <- BuildMetaCell(from = 'proline', level='peptide', qdata = qdata, conds = conds, df = df)
 #' 
 #' @export
 #' 
 #' @importFrom Biobase pData exprs fData
 #' 
-BuildMetaCell <- function(from = NULL, level = NULL, qData = NULL, conds = NULL, df = NULL){
-  #if (is.null(from))
-  #  stop("'from' is required.")
-  if (is.null(qData))
-    stop("'qData' is required.")
+BuildMetaCell <- function(from, level, qdata = NULL, conds = NULL, df = NULL){
+  if (missing(from))
+    stop("'from' is required.")
+  if (missing(level))
+    stop("'level' is required.")
+  if (is.null(qdata))
+    stop("'qdata' is required.")
   if (is.null(conds))
     stop("'conds' is required.")
   if (is.null(level))
@@ -159,11 +161,11 @@ BuildMetaCell <- function(from = NULL, level = NULL, qData = NULL, conds = NULL,
   #   stop("'df' is required.")
   
   if (is.null(df))
-    df <- Metacell_generic(qData, conds, level)
+    df <- Metacell_generic(qdata, conds, level)
   else
     switch(from,
-           maxquant = df <- Metacell_maxquant(qData, conds, df, level),
-           proline = df <- Metacell_proline(qData, conds, df, level)
+           maxquant = df <- Metacell_maxquant(qdata, conds, df, level),
+           proline = df <- Metacell_proline(qdata, conds, df, level)
     )
   
   return(df)
@@ -183,7 +185,7 @@ BuildMetaCell <- function(from = NULL, level = NULL, qData = NULL, conds = NULL,
 #' NA or 0		NA		
 #'
 #' 
-#' @param qData An object of class \code{MSnSet}
+#' @param qdata An object of class \code{MSnSet}
 #' 
 #' @param conds xxx
 #' 
@@ -199,27 +201,34 @@ BuildMetaCell <- function(from = NULL, level = NULL, qData = NULL, conds = NULL,
 #' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
 #' metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, stringsAsFactors = FALSE)
 #' conds <- metadata$Condition
-#' qData <- data[,56:61]
+#' qdata <- data[,56:61]
 #' df <- data[ , 43:48]
-#' df <- Metacell_generic(qData, conds)
+#' df <- Metacell_generic(qdata, conds)
 #' 
 #' @export
 #' 
 #' @importFrom Biobase pData exprs fData
 #' 
-Metacell_generic <- function(qData, conds, level){
+Metacell_generic <- function(qdata, conds, level){
   
-  df <- data.frame(matrix(rep(metacell.def(level)['quanti'], nrow(qData)*ncol(qData)),
-                          nrow = nrow(qData),
-                          ncol = ncol(qData)),
+  if (missing(qdata))
+    stop("'qdata' is required")
+  if (missing(conds))
+    stop("'conds' is required.")
+  if (missing(level))
+    stop("'level' is required.")
+
+  df <- data.frame(matrix(rep(metacell.def(level)['quanti'], nrow(qdata)*ncol(qdata)),
+                          nrow = nrow(qdata),
+                          ncol = ncol(qdata)),
                    stringsAsFactors = FALSE) 
   
   # Rule 1
-  df[is.na(qData)] <-  metacell.def(level)['missing_POV']
-  df[qData == 0] <-  metacell.def(level)['missing_POV']
-  df <- setMEC(qData, conds, df)
+  df[is.na(qdata)] <-  metacell.def(level)['missing_POV']
+  df[qdata == 0] <-  metacell.def(level)['missing_POV']
+  df <- setMEC(qdata, conds, df)
   
-  colnames(df) <- paste0("metacell_", colnames(qData))
+  colnames(df) <- paste0("metacell_", colnames(qdata))
   colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
   
   return(df)
@@ -245,7 +254,7 @@ Metacell_generic <- function(qData, conds, level){
 #' |  > 0		  		|   unknown col   | 1.0 |
 #' |--------------|-----------------|-----|
 #' 
-#' @param qData An object of class \code{MSnSet}
+#' @param qdata An object of class \code{MSnSet}
 #' 
 #' @param conds xxx
 #' 
@@ -263,33 +272,40 @@ Metacell_generic <- function(qData, conds, level){
 #' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
 #' metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, stringsAsFactors = FALSE)
 #' conds <- metadata$Condition
-#' qData <- data[,56:61]
+#' qdata <- data[,56:61]
 #' df <- data[ , 43:48]
-#' Metacell_proline(qData, conds, df, level = 'peptide')
+#' Metacell_proline(qdata, conds, df, level = 'peptide')
 #' 
 #' @export
 #' 
 #' @importFrom Biobase pData exprs fData
 #' 
-Metacell_proline <- function(qData, conds, df, level=NULL){
+Metacell_proline <- function(qdata, conds, df, level=NULL){
+  if (missing(qdata))
+    stop("'qdata' is required")
+  if (missing(conds))
+    stop("'conds' is required.")
+  if (missing(level))
+    stop("'level' is required.")
+  
   
   if (is.null(df))
-    df <- data.frame(matrix(rep(metacell.def(level)['quanti'], nrow(qData)*ncol(qData)), 
-                            nrow=nrow(qData),
-                            ncol=ncol(qData)),
+    df <- data.frame(matrix(rep(metacell.def(level)['quanti'], nrow(qdata)*ncol(qdata)), 
+                            nrow=nrow(qdata),
+                            ncol=ncol(qdata)),
                      stringsAsFactors = FALSE) 
   
   # Rule 1
-  df[is.na(qData)] <-  metacell.def(level)['missing_POV']
-  df <- setMEC(qData, conds, df, level)
+  df[is.na(qdata)] <-  metacell.def(level)['missing_POV']
+  df <- setMEC(qdata, conds, df, level)
   
   # Rule 2
-  df[df > 0 && qData > 0] <- metacell.def(level)['quanti_identified']
+  df[df > 0 && qdata > 0] <- metacell.def(level)['quanti_identified']
   
   # Rule 3
-  df[df == 0 && qData > 0] <- metacell.def(level)['quanti_recovered']
+  df[df == 0 && qdata > 0] <- metacell.def(level)['quanti_recovered']
   
-  colnames(df) <- paste0("metacell_", colnames(qData))
+  colnames(df) <- paste0("metacell_", colnames(qdata))
   colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
   
   return(df)
@@ -308,7 +324,7 @@ Metacell_proline <- function(qData, conds, df, level=NULL){
 #' |  > 0				|       unknown col			|    1.0 |
 #' |------------|-----------------------|--------|
 #' 
-#' @param qData An object of class \code{MSnSet}
+#' @param qdata An object of class \code{MSnSet}
 #' 
 #' @param conds xxx
 #' 
@@ -326,25 +342,33 @@ Metacell_proline <- function(qData, conds, df, level=NULL){
 #' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
 #' metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, stringsAsFactors = FALSE)
 #' conds <- metadata$Condition
-#' qData <- data[,49:54]
+#' qdata <- data[,49:54]
 #' df <- data[ , 36:41]
-#' df <- Metacell_maxquant(qData, conds, df, level='protein')
+#' df <- Metacell_maxquant(qdata, conds, df, level='protein')
 #' 
 #' @export
 #' 
 #' @importFrom Biobase pData exprs fData
 #' 
-Metacell_maxquant <- function(qData, conds, df, level=NULL){
+Metacell_maxquant <- function(qdata, conds, df, level=NULL){
+  
+  if (missing(qdata))
+    stop("'qdata' is required")
+  if (missing(conds))
+    stop("'conds' is required.")
+  if (missing(level))
+    stop("'level' is required.")
+  
   
   if (is.null(df))
-    df <- data.frame(matrix(rep(metacell.def(level)['quanti'], nrow(qData)*ncol(qData)), 
-                            nrow=nrow(qData),
-                            ncol=ncol(qData)),
+    df <- data.frame(matrix(rep(metacell.def(level)['quanti'], nrow(qdata)*ncol(qdata)), 
+                            nrow=nrow(qdata),
+                            ncol=ncol(qdata)),
                      stringsAsFactors = FALSE) 
   
   
   # Rule 1
-  df[qData == 0] <-  NA
+  df[qdata == 0] <-  NA
   
   # Rule 2
   df[df=='By MS/MS'] <- metacell.def(level)['quanti_identified']
@@ -354,12 +378,12 @@ Metacell_maxquant <- function(qData, conds, df, level=NULL){
   
   
   # Add details for NA values
-  df[is.na(qData)] <-  metacell.def(level)['missing_POV']
-  df <- setMEC(qData, conds, df, level)
+  df[is.na(qdata)] <-  metacell.def(level)['missing_POV']
+  df <- setMEC(qdata, conds, df, level)
   
   
   
-  colnames(df) <- paste0("metacell_", colnames(qData))
+  colnames(df) <- paste0("metacell_", colnames(qdata))
   colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
   
   return(df)
@@ -374,7 +398,7 @@ Metacell_maxquant <- function(qData, conds, df, level=NULL){
 #'
 #' @title Similar to the function \code{is.na} but focused on the equality with the paramter 'type'.
 #'
-#' @param data A data.frame
+#' @param metadata A data.frame
 #'
 #' @param type The value to search in the dataframe
 #' 
@@ -387,16 +411,24 @@ Metacell_maxquant <- function(qData, conds, df, level=NULL){
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:10,]
-#' data <- Biobase::fData(obj)[, obj@experimentData@other$names_metacell]
-#' match.metacell(data, type="MV_MEC", level = 'peptide')
+#' metadata <- Biobase::fData(obj)[, obj@experimentData@other$names_metacell]
+#' m <- match.metacell(metadata, type="missing_MEC", level = 'peptide')
 #'
 #' @export
 #'
-match.metacell <- function(data, type, level=NULL){
-  if (!(type %in% metacell.def(level)))
-    stop(paste0("'type' is not correct. It must be one of the following: ", paste0(metacell.def(level), collapse = ' ')))
+match.metacell <- function(metadata, pattern, level){
+  if (missing(metadata))
+    stop("'metadata' is required")
+  if (missing(pattern))
+    stop("'pattern' is required.")
+  if (missing(level))
+    stop("'level' is required.")
   
-  ll.res <- lapply(unname(search.metacell.tags(type, level)), function(x){data==x})
+  
+  if (!(pattern %in% metacell.def(level)))
+    stop(paste0("'pattern' is not correct. Availablevalues are: ", paste0(metacell.def(level), collapse = ' ')))
+  
+  ll.res <- lapply(unname(search.metacell.tags(pattern = pattern, level)), function(x){metadata==x})
   
   res <- NULL
   for (i in 1:length(ll.res))
@@ -410,8 +442,18 @@ match.metacell <- function(data, type, level=NULL){
 }
 
 
+#'
+#' @export
+#'
 GetMetacell <- function(obj){
-  Biobase::fData(obj)[, obj@experimentData@other$names_metacell]
+
+  value <- Biobase::fData(obj)[, obj@experimentData@other$names_metacell]
+  if(is.null(value)){
+    warning(" The metacell dataframe does not exist. Returns NULL.")
+    return(NULL)
+  } else 
+    return(value)
+  
 }
 
 #' @title
@@ -430,27 +472,33 @@ GetMetacell <- function(obj){
 #' 
 #' @export
 #' 
-UpdateMetacell <- function(obj=NULL, method='', na.type=NULL){
-  if (is.null(obj))
+UpdateMetacell <- function(obj, method='', na.type){
+  if (missing(obj))
     stop("'obj' is required.")
-  if (is.null(na.type))
-    stop("'na.type' is required. Available values are: NA, POV, MEC.")
+  if (missing(na.type)){
+    values <- unname(search.metacell.tags('missing', obj@experimentData@other$typeOfData))
+    stop("'na.type' is required. Available values are: ", paste0(values, collapse=' '))
+  }
   
   level <- obj@experimentData@other$typeOfData
-  ind <- match.metacell(Biobase::fData(obj)[, obj@experimentData@other$names_metacell], na.type) & Biobase::exprs(obj) > 0 & !is.na(Biobase::exprs(obj))
-  Biobase::fData(obj)[, obj@experimentData@other$names_metacell][ind] <- paste0(metacell.def(level)['imputed'], '_', method)
+  ind <- match.metacell(metadata = Biobase::fData(obj)[, obj@experimentData@other$names_metacell], 
+                        pattern = na.type, 
+                        level = level) & Biobase::exprs(obj) > 0 & !is.na(Biobase::exprs(obj))
+  precise.na.type <- unlist(strsplit(na.type, split='_'))[length(unlist(strsplit(na.type, split='_')))]
+  Biobase::fData(obj)[, obj@experimentData@other$names_metacell][ind] <- paste0(metacell.def(level)['imputed'], '_', precise.na.type)
   return(obj)
 }
 
 
-#' @title xxxx
+#' @title
+#' Search pattern in metacell vocabulary
 #' 
 #' @description
-#' Gives tags containing pattern as parent and all its children
+#' Gives all the tags of the metadata vocabulary containing the pattern (parent and all its children).
 #' 
-#' @param pattern xxx
+#' @param pattern The string to search.
 #' 
-#' @param level xxx
+#' @param level The available levels are : names()
 #' 
 #' @author Samuel Wieczorek
 #' 
@@ -462,5 +510,11 @@ UpdateMetacell <- function(obj=NULL, method='', na.type=NULL){
 #' @export
 #' 
 search.metacell.tags <- function(pattern, level){
+  if(missing(pattern))
+    stop("'pattern' is required.")
+  if(missing(level))
+    stop("'level' is required.")
+  
+  
   unlist(metacell.def(level)[unlist(lapply(metacell.def(level), function(x){length(grep(pattern, x))==1}))])
 }

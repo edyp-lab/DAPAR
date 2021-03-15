@@ -4,7 +4,7 @@
 \alias{wrapper.impute.pa}
 \title{Imputation of peptides having no values in a biological condition.}
 \usage{
-wrapper.impute.pa(obj = NULL, q.min = 0.025, na.type = "NA")
+wrapper.impute.pa(obj = NULL, q.min = 0.025, na.type)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
@@ -25,7 +25,7 @@ This method is a wrapper to the function \code{impute.pa} of the package
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept[1:10]
 obj <- mvFilter(obj, type="AllCond", th = 1)
-obj.imp <- wrapper.impute.pa(obj)
+obj.imp.pov <- wrapper.impute.pa(obj, na.type = 'missing_POV')
 
 }
 \author{

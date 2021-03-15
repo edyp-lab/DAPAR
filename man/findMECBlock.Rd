@@ -17,7 +17,7 @@ This method finds the LAPALA in a dataset.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-obj <- Exp1_R25_pept[1:1000]
+obj <- Exp1_R25_pept[1:100]
 lapala <- findMECBlock(obj)
 
 }

@@ -270,7 +270,6 @@ plotJitter_rCharts <- function(df, clickFunction=NULL){
   
   #df <- GetDataForPlotJitter(list.of.cc)
   print("In DAPAR::diffAnaVolcanoplot_rCharts")
-  print(str(df))
   xtitle <- "TO DO"
   
   if (is.null(clickFunction)){

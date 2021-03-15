@@ -4,7 +4,7 @@
 \alias{metacell.def}
 \title{Metadata vocabulary for entities}
 \usage{
-metacell.def(level = NULL)
+metacell.def(level)
 }
 \arguments{
 \item{level}{A string designing the type of entity/pipeline. Available values are:
@@ -34,31 +34,6 @@ Peptide-level vocabulary
 │    |── 3.2 Imputed MEC
        
 Protein-level vocabulary: same as peptide-level with one more category (Combined Value)
-}
-\details{
-#' @title xxx
-#' 
-#' @description
-#' xxxx
-#' 
-#' @export
-#' 
-controled.vocable <- function(){
-  list( 'direct' =           'quantiValue-direct',
-        'indirect' =         'quantiValue-indirect',
-        'missingValue' =     'missingValue',
-        'NA' =               'missingValue-NA',
-        'POV' =              'missingValue-NA-POV',
-        'POV_MCAR' =         'missingValue-NA-POV-MCAR',
-        'POV_MNAR' =         'missingValue-NA-POV-MNAR',
-        'MEC' =              'missingValue-NA-MEC',
-        'MEC_MCAR' =         'missingValue-NA-MEC-MCAR',
-        'MEC_MNAR' =         'missingValue-NA-MEC-MNAR',
-        'imputed' =          'missingValue-imputed',
-        'imputed_algo' =     'missingValue-imputed-algo',
-        'unknown' =          'unknown') 
-
-}
 }
 \author{
 Thomas Burger, Samuel Wieczorek

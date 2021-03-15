@@ -185,7 +185,7 @@ createMSnset <- function(file,
 
   metacell <- BuildMetaCell(from = software,
                             level = pep_prot_data,
-                            qData = Biobase::exprs(obj), 
+                            qdata = Biobase::exprs(obj), 
                             conds = Biobase::pData(obj)$Condition, 
                             df = metacell)
   

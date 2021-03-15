@@ -4,14 +4,14 @@
 \alias{match.metacell}
 \title{Similar to the function \code{is.na} but focused on the equality with the paramter 'type'.}
 \usage{
-match.metacell(data, type, level = NULL)
+match.metacell(metadata, pattern, level)
 }
 \arguments{
-\item{data}{A data.frame}
-
-\item{type}{The value to search in the dataframe}
+\item{metadata}{A data.frame}
 
 \item{level}{xxx}
+
+\item{type}{The value to search in the dataframe}
 }
 \value{
 A boolean dataframe
@@ -22,8 +22,8 @@ Similar to the function \code{is.na} but focused on the equality with the paramt
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept[1:10,]
-data <- Biobase::fData(obj)[, obj@experimentData@other$names_metacell]
-match.metacell(data, type="MV_MEC", level = 'peptide')
+metadata <- Biobase::fData(obj)[, obj@experimentData@other$names_metacell]
+m <- match.metacell(metadata, type="missing_MEC", level = 'peptide')
 
 }
 \author{

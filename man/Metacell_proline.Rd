@@ -4,10 +4,10 @@
 \alias{Metacell_proline}
 \title{Sets the metacell dataframe}
 \usage{
-Metacell_proline(qData, conds, df, level = NULL)
+Metacell_proline(qdata, conds, df, level = NULL)
 }
 \arguments{
-\item{qData}{An object of class \code{MSnSet}}
+\item{qdata}{An object of class \code{MSnSet}}
 
 \item{conds}{xxx}
 
@@ -38,9 +38,9 @@ data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
 metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
 metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, stringsAsFactors = FALSE)
 conds <- metadata$Condition
-qData <- data[,56:61]
+qdata <- data[,56:61]
 df <- data[ , 43:48]
-Metacell_proline(qData, conds, df, level = 'peptide')
+Metacell_proline(qdata, conds, df, level = 'peptide')
 
 }
 \author{

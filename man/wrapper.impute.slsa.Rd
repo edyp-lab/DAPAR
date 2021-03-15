@@ -4,7 +4,7 @@
 \alias{wrapper.impute.slsa}
 \title{Imputation of peptides having no values in a biological condition.}
 \usage{
-wrapper.impute.slsa(obj, na.type = NULL)
+wrapper.impute.slsa(obj = NULL, na.type = NULL)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
@@ -16,14 +16,71 @@ Available values are: `NA` (for both POV and MEC), `POV`, `MEC`.}
 The \code{exprs(obj)} matrix with imputed values instead of missing values.
 }
 \description{
+#' This method replaces each missing value by a given value
+#'
+#' @title Deterministic imputation
+#' 
+#' @param qdata An expression set containing quantitative or missing values
+#' 
+#' @param metadata xxx
+#' 
+#' @param values A vector with as many elements as the number of colums of qdata
+#' 
+#' @param na.type xxx
+#' 
+#' @return An imputed dataset
+#' 
+#' @author Thomas Burger, Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' qdata <- Biobase::exprs(Exp1_R25_pept)
+#' meta <- 
+#' values <- getQuantile4Imp(qdata)$shiftedImpVal
+#' obj.imp.mec <- impute.detQuant(qdata, values, na.type = 'missing_POV') 
+#' obj.imp.mec <- impute.detQuant(qdata, values, na.type = 'missing_MEC')
+#' obj.imp.na <- impute.detQuant(qdata, values, na.type = 'missing') 
+#' 
+#' @export
+#' 
+impute.detQuant <- function(qdata, metadata, values, na.type=NULL){
+    availablePatterns <- unname(search.metacell.tags(pattern=na.type, 
+                                                     level=obj@experimentData@other$typeOfData))
+    if (is.null(na.type))
+        stop(paste0("'na.type' is required. Available values are:.", 
+                    paste0(metacell.def(), collapse=' '))
+        )
+    else if (!(na.type %in% search.metacell.tags(pattern=na.type, 
+                                                 level=obj@experimentData@other$typeOfData)))
+        stop(paste0("Available values for na.type are: ", 
+                    paste0(availablePatterns, collapse=' '))
+        )
+    
+    if(missing(metadata))
+        stop("`metadata` is missing.")
+    
+    
+    #browser()
+    for(i in 1:ncol(qdata)){
+        col <- qdata[,i]
+        ind.na.type <- match.metacell(Biobase::fData(obj)[, obj@experimentData@other$names_metacell[i]], 
+                                      pattern = na.type,
+                                      level = obj@experimentData@other$typeOfData)
+        
+        col[which(is.na(col) & ind.na.type)] <- values[i]
+        qdata[,i] <- col
+    }
+    return(qdata)
+}
+}
+\details{
 This method is a wrapper to the function \code{impute.slsa} of the package
 \code{imp4p} adapted to an object of class \code{MSnSet}.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept[1:10]
-obj <- DAPAR::mvFilter(obj, type="AllCond", th = 1)
-obj.slsa <- wrapper.impute.slsa(obj, na.type = 'POV')
+obj.slsa.pov <- wrapper.impute.slsa(obj, na.type = 'missing_POV')
 
 }
 \author{

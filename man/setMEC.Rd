@@ -4,10 +4,10 @@
 \alias{setMEC}
 \title{Sets the MEC tag in the metacell}
 \usage{
-setMEC(qData, conds, df, level)
+setMEC(qdata, conds, df, level)
 }
 \arguments{
-\item{qData}{xxx}
+\item{qdata}{xxx}
 
 \item{conds}{xxx}
 

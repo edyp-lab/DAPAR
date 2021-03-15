@@ -5,7 +5,7 @@
 \title{Missing values imputation using the LSimpute algorithm.}
 \usage{
 wrapper.dapar.impute.mi(
-  obj = NULL,
+  obj,
   nb.iter = 3,
   nknn = 15,
   selec = 600,
@@ -24,8 +24,7 @@ wrapper.dapar.impute.mi(
   eps = 0,
   methodi = "slsa",
   lapala = TRUE,
-  distribution = "unif",
-  na.type = NULL
+  distribution = "unif"
 )
 }
 \arguments{
@@ -68,9 +67,6 @@ wrapper.dapar.impute.mi(
 \item{lapala}{xxxxxxxxxxx}
 
 \item{distribution}{The type of distribution used. Values are \code{unif} (default) or \code{beta}.}
-
-\item{na.type}{A string which indicates the type of missing values to impute. 
-Available values are: `NA` (for both POV and MEC).}
 }
 \value{
 The \code{exprs(obj)} matrix with imputed values instead of missing values.
@@ -81,8 +77,10 @@ an object of class \code{MSnSet}.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-dat <- mvFilter(Exp1_R25_pept[1:1000], type="AllCond", th = 1)
-dat <- wrapper.dapar.impute.mi(dat, nb.iter=1)
+obj <- Exp1_R25_pept[1:100]
+obj <- mvFilter(obj, type="WholeMatrix", th = 1)
+obj.imp.na <- wrapper.dapar.impute.mi(obj, nb.iter=1, lapala = TRUE)
+obj.imp.pov <- wrapper.dapar.impute.mi(obj, nb.iter=1, lapala = FALSE)
 
 }
 \author{

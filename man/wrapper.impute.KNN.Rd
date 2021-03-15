@@ -4,7 +4,7 @@
 \alias{wrapper.impute.KNN}
 \title{KNN missing values imputation from a \code{MSnSet} object}
 \usage{
-wrapper.impute.KNN(obj = NULL, K, na.type = NULL)
+wrapper.impute.KNN(obj = NULL, K, na.type)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
@@ -12,19 +12,22 @@ wrapper.impute.KNN(obj = NULL, K, na.type = NULL)
 \item{K}{the number of neighbors.}
 
 \item{na.type}{A string which indicates the type of missing values to impute. 
-Available values are: `NA` (for both POV and MEC), `POV`, `MEC`.}
+Available values are: `missing_POV`.}
 }
 \value{
 The object \code{obj} which has been imputed
 }
 \description{
+Can impute only POV missing values
+}
+\details{
 This method is a wrapper for
 objects of class \code{MSnSet} and imputes missing values with a fixed value.
 This function imputes the missing values condition by condition.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-wrapper.impute.KNN(obj = Exp1_R25_pept[1:1000], K=3, na.type = 'POV')
+obj.imp.pov <- wrapper.impute.KNN(obj = Exp1_R25_pept[1:10], K=3, na.type = 'missing_POV')
 
 }
 \author{

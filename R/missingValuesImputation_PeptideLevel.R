@@ -18,19 +18,19 @@
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:10,]
 #' obj <- mvFilter(obj, type="WholeMatrix", th=1)
-#' obj.mle <- wrapper.impute.mle(obj, na.type = 'NA')
+#' obj.imp.na <- wrapper.impute.mle(obj, na.type = 'missing')
 #' 
 #' @export
 #' 
 #' @importFrom Biobase pData exprs fData
 #' 
-wrapper.impute.mle <- function(obj=NULL, na.type=NULL){
-  if (is.null(obj))
+wrapper.impute.mle <- function(obj, na.type){
+  if (missing(obj))
     stop("'obj' is required.")
-  if (is.null(na.type))
-    stop("'na.type' is required. Available values are: 'NA' (for both POV and MEC).")
-  else if (!(na.type %in% c('NA')))
-    stop("Available values for na.type are: 'NA' (for both POV and MEC).")
+  if (missing(na.type))
+    stop("'na.type' is required. Available value is 'missing'")
+  else if (!(na.type %in% c('missing')))
+    stop("Available value for na.type ais: 'missing'.")
   
   
   cond <- factor(Biobase::pData(obj)$Condition, levels=unique(Biobase::pData(obj)$Condition))
@@ -89,24 +89,23 @@ wrapper.impute.mle <- function(obj=NULL, na.type=NULL){
 #' 
 #' @param distribution The type of distribution used. Values are \code{unif} (default) or \code{beta}.
 #' 
-#' @param na.type A string which indicates the type of missing values to impute. 
-#' Available values are: `NA` (for both POV and MEC).
-#' 
 #' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
 #' 
 #' @author Samuel Wieczorek
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' dat <- mvFilter(Exp1_R25_pept[1:1000], type="AllCond", th = 1)
-#' dat <- wrapper.dapar.impute.mi(dat, nb.iter=1)
+#' obj <- Exp1_R25_pept[1:100]
+#' obj <- mvFilter(obj, type="WholeMatrix", th = 1)
+#' obj.imp.na <- wrapper.dapar.impute.mi(obj, nb.iter=1, lapala = TRUE)
+#' obj.imp.pov <- wrapper.dapar.impute.mi(obj, nb.iter=1, lapala = FALSE)
 #' 
 #' @export
 #' 
 #' @importFrom Biobase pData exprs fData
 #' @importFrom imp4p estim.mix impute.rand estim.bound prob.mcar.tab mi.mix
 #' 
-wrapper.dapar.impute.mi <- function (obj=NULL, 
+wrapper.dapar.impute.mi <- function (obj, 
                                      nb.iter = 3, 
                                      nknn = 15, 
                                      selec = 600, 
@@ -125,17 +124,11 @@ wrapper.dapar.impute.mi <- function (obj=NULL,
                                      eps = 0, 
                                      methodi = "slsa",
                                      lapala = TRUE, 
-                                     distribution="unif",
-                                     na.type = NULL) {
+                                     distribution="unif") {
     
-  if (is.null(obj))
+  if (missing(obj))
     stop("'obj' is required.")
-  if (is.null(na.type))
-    stop("'na.type' is required. Available values are: 'NA' (for both POV and MEC).")
-  else if (!(na.type %in% c('NA')))
-    stop("Available values for na.type are: 'NA' (for both POV and MEC).")
-  
-  
+ 
   
     ## order exp and pData table before using imp4p functions
   conds <- factor(Biobase::pData(obj)$Condition, levels=unique(Biobase::pData(obj)$Condition))
@@ -176,18 +169,31 @@ wrapper.dapar.impute.mi <- function (obj=NULL,
     if (progress.bar == TRUE) {
         cat(paste("\n 4/ Multiple imputation strategy with mi.mix ... \n  "))
     }
-    data.mi = mi.mix(tab = tab, tab.imp = dat.slsa, prob.MCAR = proba, 
-                     conditions = conditions, repbio = repbio, reptech = reptech, 
-                     nb.iter = nb.iter, nknn = nknn, weight = weight, selec = selec, 
-                     siz = siz, ind.comp = ind.comp,  q = q, 
+    data.mi = mi.mix(tab = tab, 
+                     tab.imp = dat.slsa, 
+                     prob.MCAR = proba, 
+                     conditions = conditions, 
+                     repbio = repbio, 
+                     reptech = reptech, 
+                     nb.iter = nb.iter, 
+                     nknn = nknn, 
+                     weight = weight, 
+                     selec = selec, 
+                     siz = siz, 
+                     ind.comp = ind.comp,  
+                     q = q, 
                      progress.bar = progress.bar)
     
     if (lapala == TRUE){
         if (progress.bar == TRUE) {
             cat(paste("\n\n 5/ Imputation of rows with only missing values in a condition with impute.pa ... \n  "))
         }
-        data.final = impute.pa2(tab = data.mi, conditions = conditions, 
-                                q.min = q.min, q.norm = q.norm, eps = eps, distribution = distribution)
+        data.final = impute.pa2(tab = data.mi, 
+                                conditions = conditions, 
+                                q.min = q.min, 
+                                q.norm = q.norm, 
+                                eps = eps, 
+                                distribution = distribution)
     } else {
         data.final <- data.mi
     }
@@ -203,6 +209,10 @@ wrapper.dapar.impute.mi <- function (obj=NULL,
     obj@processingData@processing <- c(obj@processingData@processing,msg)
     
     obj@experimentData@other$imputation.method <- "imp4p"
+    na.type <- 'missing_POV'
+    if(isTRUE(lapala))
+      na.type <- 'missing'
+    
     obj <- UpdateMetacell(obj, 'mi', na.type) 
     
     return(obj)
@@ -267,34 +277,26 @@ translatedRandomBeta <- function(n, min, max, param1=3, param2=1){
 #' 
 #' @param distribution The type of distribution used. Values are \code{unif} (default) or \code{beta}.
 #' 
-#' @param na.type A string which indicates the type of missing values to impute. 
-#' Available values are: `NA` (for both POV and MEC), `POV`, `MEC`.
-#' 
 #' @return The object \code{obj} which has been imputed
 #' 
 #' @author Thomas Burger, Samuel Wieczorek
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' wrapper.impute.pa2(Exp1_R25_pept[1:1000], distribution="beta")
+#' obj.imp.pa2 <- wrapper.impute.pa2(Exp1_R25_pept[1:100], distribution="beta")
 #' 
 #' @export
 #' 
 #' @importFrom Biobase pData exprs fData
 #' 
-wrapper.impute.pa2 <- function (obj=NULL,
+wrapper.impute.pa2 <- function (obj,
                                 q.min = 0,
                                 q.norm = 3,
                                 eps = 0,
-                                distribution = "unif",
-                                na.type = NULL){
-  if (is.null(obj))
+                                distribution = "unif"){
+  if (missing(obj))
     stop("'obj' is required.")
-  if (is.null(na.type))
-    stop("'na.type' is required. Available values are: 'NA' (for both POV and MEC), 'POV', 'MEC'.")
-  else if (!(na.type %in% c('NA', 'POV', 'MEC')))
-    stop("Available values for na.type are: 'NA' (for both POV and MEC), 'POV', 'MEC'.")
-  
+ 
   ## order exp and pData table before using imp4p functions
   conds <- factor(Biobase::pData(obj)$Condition, levels=unique(Biobase::pData(obj)$Condition))
   sample.names.old <- Biobase::pData(obj)$Sample.name
@@ -306,17 +308,16 @@ wrapper.impute.pa2 <- function (obj=NULL,
 
   tab <- qData
   conditions <-  as.factor(sTab$Condition)
+  tab_imp <- impute.pa2(tab, conditions, q.min, q.norm, eps, distribution)
     
-    tab_imp <- impute.pa2(tab, conditions, q.min, q.norm, eps, distribution)
+  # restore previous order
+  colnames(tab_imp) <- new.order
+  tab_imp <- tab_imp[,sample.names.old]
     
-    # restore previous order
-    colnames(tab_imp) <- new.order
-    tab_imp <- tab_imp[,sample.names.old]
+  Biobase::exprs(obj) <- tab_imp
+  obj <- UpdateMetacell(obj, 'pa2', 'missing') 
     
-    Biobase::exprs(obj) <- tab_imp
-    obj <- UpdateMetacell(obj, 'pa2') 
-    
-    return(obj)
+  return(obj)
 }
 
 
@@ -355,7 +356,7 @@ wrapper.impute.pa2 <- function (obj=NULL,
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' wrapper.impute.pa2(Exp1_R25_pept[1:1000], distribution="beta")
+#' obj.imp <- wrapper.impute.pa2(Exp1_R25_pept[1:100], distribution="beta")
 #' 
 #' @export
 #' 

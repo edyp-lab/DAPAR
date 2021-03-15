@@ -80,7 +80,7 @@ getListNbValuesInLines <- function(obj, type="WholeMatrix"){
   data <- Biobase::fData(obj)[,obj@experimentData@other$names_metacell]
   switch(type,
          WholeMatrix= {
-           ll <- unique(ncol(data) - apply(match.metacell(data, 'NA'), 1, sum))
+           ll <- unique(ncol(data) - apply(match.metacell(data, 'missing', obj@experimentData@other$typeOfData), 1, sum))
            },
          AllCond = {
                     tmp <- NULL

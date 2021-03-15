@@ -41,11 +41,11 @@ The condition may be on the whole line or condition by condition.
 }
 \details{
 The different methods are :
-"WholeMatrix": given a threshold \code{th}, only the lines that contain
+"WholeMatrix": given a threshold \code{th}, xxx only the lines that contain
 at least \code{th} values are kept.
-"AllCond": given a threshold \code{th}, only the lines which contain
+"AllCond": given a threshold \code{th}, xxx only the lines which contain
 at least \code{th} values for each of the conditions are kept.
-"AtLeastOneCond": given a threshold \code{th}, only the lines that contain
+"AtLeastOneCond": given a threshold \code{th}, xxx only the lines that contain
 at least \code{th} values, and for at least one condition, are kept.
 }
 \examples{

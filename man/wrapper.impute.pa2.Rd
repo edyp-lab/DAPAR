@@ -4,14 +4,7 @@
 \alias{wrapper.impute.pa2}
 \title{Missing values imputation from a \code{MSnSet} object}
 \usage{
-wrapper.impute.pa2(
-  obj = NULL,
-  q.min = 0,
-  q.norm = 3,
-  eps = 0,
-  distribution = "unif",
-  na.type = NULL
-)
+wrapper.impute.pa2(obj, q.min = 0, q.norm = 3, eps = 0, distribution = "unif")
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
@@ -31,9 +24,6 @@ generated. This maximal value is defined by the quantile q.min of the
 observed values distribution minus eps. Default is 0.}
 
 \item{distribution}{The type of distribution used. Values are \code{unif} (default) or \code{beta}.}
-
-\item{na.type}{A string which indicates the type of missing values to impute. 
-Available values are: `NA` (for both POV and MEC), `POV`, `MEC`.}
 }
 \value{
 The object \code{obj} which has been imputed
@@ -43,7 +33,7 @@ This method is a wrapper to the function \code{impute.pa2} adapted to objects of
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-wrapper.impute.pa2(Exp1_R25_pept[1:1000], distribution="beta")
+obj.imp.pa2 <- wrapper.impute.pa2(Exp1_R25_pept[1:100], distribution="beta")
 
 }
 \author{

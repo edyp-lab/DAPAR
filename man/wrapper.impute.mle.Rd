@@ -4,7 +4,7 @@
 \alias{wrapper.impute.mle}
 \title{Imputation of peptides having no values in a biological condition.}
 \usage{
-wrapper.impute.mle(obj = NULL, na.type = NULL)
+wrapper.impute.mle(obj, na.type)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
@@ -23,7 +23,7 @@ This method is a wrapper to the function \code{impute.mle} of the package
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept[1:10,]
 obj <- mvFilter(obj, type="WholeMatrix", th=1)
-obj.mle <- wrapper.impute.mle(obj, na.type = 'NA')
+obj.imp.na <- wrapper.impute.mle(obj, na.type = 'missing')
 
 }
 \author{

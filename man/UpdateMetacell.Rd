@@ -4,7 +4,7 @@
 \alias{UpdateMetacell}
 \title{Update metacell after imputation}
 \usage{
-UpdateMetacell(obj = NULL, method = "", na.type = NULL)
+UpdateMetacell(obj, method = "", na.type)
 }
 \arguments{
 \item{obj}{xxx}

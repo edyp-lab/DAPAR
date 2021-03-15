@@ -5,7 +5,7 @@
 \title{Wrapper of the function \code{\link{impute.detQuant}} for objects
 of class \code{MSnSet}}
 \usage{
-wrapper.impute.detQuant(obj = NULL, qval = 0.025, factor = 1, na.type = NULL)
+wrapper.impute.detQuant(obj, qval = 0.025, factor = 1, na.type)
 }
 \arguments{
 \item{obj}{An instance of class \code{MSnSet}}
@@ -27,9 +27,9 @@ of class \code{MSnSet}
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept[1:10]
-obj.imp.pov <- wrapper.impute.detQuant(obj, na.type='POV')
-obj.imp.mec <- wrapper.impute.detQuant(obj, na.type='MEC')
-obj.imp.na <- wrapper.impute.detQuant(obj, na.type='NA')
+obj.imp.pov <- wrapper.impute.detQuant(obj, na.type='missing_POV')
+obj.imp.mec <- wrapper.impute.detQuant(obj, na.type='missing_MEC')
+obj.imp.na <- wrapper.impute.detQuant(obj, na.type='missing')
 
 }
 \author{

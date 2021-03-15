@@ -4,10 +4,10 @@
 \alias{Metacell_maxquant}
 \title{Sets the metacell dataframe}
 \usage{
-Metacell_maxquant(qData, conds, df, level = NULL)
+Metacell_maxquant(qdata, conds, df, level = NULL)
 }
 \arguments{
-\item{qData}{An object of class \code{MSnSet}}
+\item{qdata}{An object of class \code{MSnSet}}
 
 \item{conds}{xxx}
 
@@ -35,9 +35,9 @@ data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
 metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
 metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, stringsAsFactors = FALSE)
 conds <- metadata$Condition
-qData <- data[,49:54]
+qdata <- data[,49:54]
 df <- data[ , 36:41]
-df <- Metacell_maxquant(qData, conds, df, level='protein')
+df <- Metacell_maxquant(qdata, conds, df, level='protein')
 
 }
 \author{
