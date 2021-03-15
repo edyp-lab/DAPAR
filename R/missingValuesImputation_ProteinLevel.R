@@ -232,10 +232,10 @@ wrapper.impute.pa <- function(obj = NULL, q.min = 0.025, na.type){
 
 
 
-#' This method is a wrapper of the function \code{\link{impute.detQuant}} for objects
+#' This method is a wrapper of the function `impute.detQuant` for objects
 #' of class \code{MSnSet} 
 #' 
-#' @title Wrapper of the function \code{\link{impute.detQuant}} for objects
+#' @title Wrapper of the function `impute.detQuant` for objects
 #' of class \code{MSnSet}
 #' 
 #' @param obj An instance of class \code{MSnSet}

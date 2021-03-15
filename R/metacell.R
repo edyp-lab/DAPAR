@@ -6,19 +6,19 @@
 #' each condition.
 #' Peptide-level vocabulary
 #' 
-#' ├── 1.0 Quantitative Value
+#' |── 1.0 Quantitative Value
 #' |    |
 #' │    |── 1.1 Direct
 #' |    |
 #' │    |── 1.2 Indirect
 #' │
-#' ├── 2.0 Missing value
+#' |──2.0 Missing value
 #' |    |
 #' │    |── 2.1 Missing POV
 #' |    |
 #' │    |── 2.2 Missing MEC
 #' │
-#' ├── 3.0 Imputed value
+#' |── 3.0 Imputed value
 #' |    |
 #' │    |── 3.1 Imputed POV
 #' |    |
@@ -203,7 +203,7 @@ BuildMetaCell <- function(from, level, qdata = NULL, conds = NULL, df = NULL){
 #' conds <- metadata$Condition
 #' qdata <- data[,56:61]
 #' df <- data[ , 43:48]
-#' df <- Metacell_generic(qdata, conds)
+#' df <- Metacell_generic(qdata, conds, level='peptide')
 #' 
 #' @export
 #' 
@@ -400,7 +400,7 @@ Metacell_maxquant <- function(qdata, conds, df, level=NULL){
 #'
 #' @param metadata A data.frame
 #'
-#' @param type The value to search in the dataframe
+#' @param pattern The value to search in the dataframe
 #' 
 #' @param level xxx
 #'
@@ -442,7 +442,13 @@ match.metacell <- function(metadata, pattern, level){
 }
 
 
-#'
+#' @title xxxx
+#' 
+#' @description
+#' xxxx
+#' 
+#' @param obj xxxx
+#' 
 #' @export
 #'
 GetMetacell <- function(obj){

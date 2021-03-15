@@ -2,7 +2,7 @@
 % Please edit documentation in R/missingValuesImputation_ProteinLevel.R
 \name{wrapper.impute.detQuant}
 \alias{wrapper.impute.detQuant}
-\title{Wrapper of the function \code{\link{impute.detQuant}} for objects
+\title{Wrapper of the function `impute.detQuant` for objects
 of class \code{MSnSet}}
 \usage{
 wrapper.impute.detQuant(obj, qval = 0.025, factor = 1, na.type)
@@ -21,7 +21,7 @@ Available values are: `NA` (for both POV and MEC), `POV`, `MEC`.}
 An imputed instance of class \code{MSnSet}
 }
 \description{
-This method is a wrapper of the function \code{\link{impute.detQuant}} for objects
+This method is a wrapper of the function `impute.detQuant` for objects
 of class \code{MSnSet}
 }
 \examples{

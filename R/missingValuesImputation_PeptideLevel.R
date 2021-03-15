@@ -131,58 +131,49 @@ wrapper.dapar.impute.mi <- function (obj,
  
   
     ## order exp and pData table before using imp4p functions
-  conds <- factor(Biobase::pData(obj)$Condition, levels=unique(Biobase::pData(obj)$Condition))
-  sample.names.old <- Biobase::pData(obj)$Sample.name
-  sTab <- Biobase::pData(obj)
-  new.order <- unlist(lapply(split(sTab, conds), function(x) {x['Sample.name']}))
-  qData <- Biobase::exprs(obj)[,new.order]
-  sTab <- Biobase::pData(obj)[new.order,]
-  
-  
-  
-    conditions <- as.factor(sTab$Condition)
-    repbio <- as.factor(sTab$Bio.Rep)
-    reptech <-as.factor(sTab$Tech.Rep)
-    
-    tab <- qData
-    
+   conds <- factor(Biobase::pData(obj)$Condition, levels=unique(Biobase::pData(obj)$Condition))
+   sample.names.old <- Biobase::pData(obj)$Sample.name
+   sTab <- Biobase::pData(obj)
+   qData <- Biobase::exprs(obj)
+   new.order <- unlist(lapply(split(sTab, conds), function(x) {x['Sample.name']}))
+   qData <- Biobase::exprs(obj)[,new.order]
+   sTab <- Biobase::pData(obj)[new.order,]
+
+   conditions <- as.factor(sTab$Condition)
+   repbio <- sTab$Bio.Rep
+   reptech <- sTab$Tech.Rep
+   
     if (progress.bar == TRUE) {
         cat(paste("\n 1/ Initial imputation under the MCAR assumption with impute.rand ... \n  "))
     }
-    dat.slsa = imp4p::impute.rand(tab = tab, conditions = conditions)
+    dat.slsa = imp4p::impute.rand(tab = qData, conditions = conditions)
     
     if (progress.bar == TRUE) {
         cat(paste("\n 2/ Estimation of the mixture model in each sample... \n  "))
     }
-    res = imp4p::estim.mix(tab = tab, tab.imp = dat.slsa, conditions = conditions, 
-                    x.step.mod = x.step.mod, 
-                    x.step.pi = x.step.pi, nb.rei = nb.rei)
+    res = imp4p::estim.mix(tab = qData, 
+                           tab.imp = dat.slsa, 
+                           conditions = conditions)
     
     
     if (progress.bar == TRUE) {
         cat(paste("\n 3/ Estimation of the probabilities each missing value is MCAR... \n  "))
     }
-    born = estim.bound(tab = tab, conditions = conditions, q = q)
-    proba = prob.mcar.tab(born$tab.upper, res)
+    born = imp4p::estim.bound(tab = qData, conditions = conditions)
+    proba = imp4p::prob.mcar.tab(born$tab.upper, res)
     
     
     if (progress.bar == TRUE) {
         cat(paste("\n 4/ Multiple imputation strategy with mi.mix ... \n  "))
     }
-    data.mi = mi.mix(tab = tab, 
+    
+    data.mi = imp4p::mi.mix(tab = qData, 
                      tab.imp = dat.slsa, 
                      prob.MCAR = proba, 
                      conditions = conditions, 
                      repbio = repbio, 
                      reptech = reptech, 
-                     nb.iter = nb.iter, 
-                     nknn = nknn, 
-                     weight = weight, 
-                     selec = selec, 
-                     siz = siz, 
-                     ind.comp = ind.comp,  
-                     q = q, 
-                     progress.bar = progress.bar)
+                     nb.iter = nb.iter)
     
     if (lapala == TRUE){
         if (progress.bar == TRUE) {

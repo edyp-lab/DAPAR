@@ -15,19 +15,19 @@ This function gives the vocabulary used for the metadata of each entity in
 each condition.
 Peptide-level vocabulary
 
-├── 1.0 Quantitative Value
+|── 1.0 Quantitative Value
 |    |
 │    |── 1.1 Direct
 |    |
 │    |── 1.2 Indirect
 │
-├── 2.0 Missing value
+|──2.0 Missing value
 |    |
 │    |── 2.1 Missing POV
 |    |
 │    |── 2.2 Missing MEC
 │
-├── 3.0 Imputed value
+|── 3.0 Imputed value
 |    |
 │    |── 3.1 Imputed POV
 |    |

@@ -31,7 +31,7 @@ metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, stringsA
 conds <- metadata$Condition
 qdata <- data[,56:61]
 df <- data[ , 43:48]
-df <- Metacell_generic(qdata, conds)
+df <- Metacell_generic(qdata, conds, level='peptide')
 
 }
 \author{

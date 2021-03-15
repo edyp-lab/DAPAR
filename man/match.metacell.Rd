@@ -9,9 +9,9 @@ match.metacell(metadata, pattern, level)
 \arguments{
 \item{metadata}{A data.frame}
 
-\item{level}{xxx}
+\item{pattern}{The value to search in the dataframe}
 
-\item{type}{The value to search in the dataframe}
+\item{level}{xxx}
 }
 \value{
 A boolean dataframe
