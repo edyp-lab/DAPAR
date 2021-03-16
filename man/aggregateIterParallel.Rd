@@ -30,13 +30,11 @@ xxxxx
 Method to xxxxx
 }
 \examples{
-\dontrun{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 protID <- "Protein_group_IDs"
-obj.pep <- Exp1_R25_pept[1:1000]
+obj.pep <- Exp1_R25_pept[1:10]
 X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 aggregateIterParallel(obj.pep, X)
-}
 
 }
 \author{

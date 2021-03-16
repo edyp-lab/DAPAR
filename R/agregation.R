@@ -94,25 +94,21 @@ getProteinsStats <- function(matShared){
 #' @author Samuel Wieczorek
 #' 
 #' @examples
-#' \dontrun{
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' protID <- "Protein_group_IDs"
-#' obj.pep <- Exp1_R25_pept[1:1000]
+#' obj.pep <- Exp1_R25_pept[1:10]
 #' M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 #' data <- Biobase::fData(obj.pep)
 #' protData <- DAPAR::aggregateMean(obj.pep, M)
 #' name <- "Protein_group_IDs"
 #' proteinNames <- rownames(Biobase::fData(protData))
 #' BuildColumnToProteinDataset(data, M, name,proteinNames )
-#' }
 #' 
 #' @export
 #' 
 BuildColumnToProteinDataset <- function(peptideData, matAdj, columnName, proteinNames){
   nbProt <- ncol(matAdj)
   newCol <- rep("", nbProt)
-  
-  #print(head(rownames(peptideData)))
   i <- 1
   for (p in proteinNames){
     listeIndicePeptides <- names(which(matAdj[,p] == 1))
@@ -146,17 +142,15 @@ BuildColumnToProteinDataset <- function(peptideData, matAdj, columnName, protein
 #' @author Samuel Wieczorek
 #' 
 #' @examples
-#' \dontrun{
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' protID <- "Protein_group_IDs"
-#' obj.pep <- Exp1_R25_pept[1:1000]
+#' obj.pep <- Exp1_R25_pept[1:10]
 #' M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 #' data <- Biobase::fData(obj.pep)
 #' protData <- DAPAR::aggregateSum(obj.pep, M)
 #' name <- "Protein_group_IDs"
 #' proteinNames <- rownames(Biobase::fData(protData))
 #' BuildColumnToProteinDataset_par(data, M, name,proteinNames )
-#' }
 #' 
 #' @export
 #' 
@@ -222,7 +216,7 @@ CountPep <- function (M) {
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' mat <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs")
+#' mat <- BuildAdjacencyMatrix(Exp1_R25_pept[1:10], "Protein_group_IDs")
 #' GraphPepProt(mat)
 #' 
 #' @export
@@ -271,7 +265,7 @@ GraphPepProt <- function(mat){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
+#' BuildAdjacencyMatrix(Exp1_R25_pept[1:10], "Protein_group_IDs", TRUE)
 #' 
 #' @export
 #' 
@@ -338,13 +332,11 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
 #' @author Alexia Dorffer
 #' 
 #' @examples
-#' \dontrun{
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' protID <- "Protein_group_IDs"
-#' obj.pep <- Exp1_R25_pept[1:1000]
+#' obj.pep <- Exp1_R25_pept[1:10]
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 #' DAPAR::aggregateSum(obj.pep, X)
-#' }
 #' 
 #' @export
 #' 
@@ -378,13 +370,11 @@ aggregateSum <- function(obj.pep, X){
 #' @author Samuel Wieczorek
 #' 
 #' @examples
-#' \dontrun{
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' protID <- "Protein_group_IDs"
-#' obj.pep <- Exp1_R25_pept[1:1000]
+#' obj.pep <- Exp1_R25_pept[1:10]
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 #' aggregateIterParallel(obj.pep, X)
-#' }
 #' 
 #' @export
 #' 
@@ -434,9 +424,9 @@ aggregateIterParallel <- function(obj.pep, X, init.method='Sum', method='Mean', 
 #' 
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' protID <- "Protein_group_IDs"
-#' obj.pep <- Exp1_R25_pept[1:1000]
+#' obj.pep <- Exp1_R25_pept[1:10]
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-#' DAPAR::inner.aggregate.iter(exprs(obj.pep), X)
+#' qdata.agg <- DAPAR::inner.aggregate.iter(exprs(obj.pep), X)
 #' 
 #' @export
 #' 
@@ -509,12 +499,10 @@ inner.aggregate.iter <- function(pepData, X,init.method='Sum', method='Mean', n=
 #' @author Samuel Wieczorek
 #' 
 #' @examples
-#' \dontrun{
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' protID <- "Protein_group_IDs"
-#' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
-#' aggregateIter(Exp1_R25_pept[1:1000],X=X)
-#' }
+#' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:10], protID, FALSE)
+#' aggregateIter(Exp1_R25_pept[1:10],X=X)
 #' 
 #' @export
 #' 
@@ -635,10 +623,8 @@ splitAdjacencyMat <- function(X){
     tmpSpec <- X
     tmpShared <- X
   }
-  
-  
+
   return (list(Xshared = tmpShared, Xspec = tmpSpec))
-  
 }
 
 #' Method to compute the detailed number of quantified peptides used for aggregating each protein
@@ -897,13 +883,13 @@ finalizeAggregation <- function(obj.pep, pepData, protData, X, lib.loc=NULL){
   obj.prot@experimentData@other$typeOfData <- "protein"
   
   
-  if (length(grep('Prostar', installed.packages(lib.loc=lib.loc$Prostar.loc))) >0)
-    obj.prot@experimentData@other$Prostar_Version <- installed.packages(lib.loc = lib.loc$Prostar.loc)["Prostar","Version"]
+  if (length(grep('Prostar', installed.packages())) >0)
+    obj.prot@experimentData@other$Prostar_Version <- installed.packages()["Prostar","Version"]
   else
     obj.prot@experimentData@other$Prostar_Version <- NA
   
-  if (length(grep('DAPAR', installed.packages(lib.loc=lib.loc$DAPAR.loc))) >0)
-    obj.prot@experimentData@other$DAPAR_Version <- installed.packages(lib.loc = lib.loc$DAPAR.loc)["DAPAR","Version"]
+  if (length(grep('DAPAR', installed.packages())) >0)
+    obj.prot@experimentData@other$DAPAR_Version <- installed.packages()["DAPAR","Version"]
   else
     obj.prot@experimentData@other$DAPAR_Version <- NA
   
@@ -950,6 +936,11 @@ finalizeAggregation <- function(obj.pep, pepData, protData, X, lib.loc=NULL){
 #' # Post processing
 #' Update metacell with POV/MEC status for the categories 2.0 and 3.0
 #' TODO
+#' 
+#' @param met xxx
+#' 
+#' @param level xxx
+#' 
 #' 
 metacombine <- function(met, level) {
   #browser()

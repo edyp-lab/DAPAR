@@ -21,9 +21,9 @@ specific peptides, shared peptides or a mixture of two.
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 protID <- "Protein_group_IDs"
-obj <- Exp1_R25_pept[1:1000]
+obj <- Exp1_R25_pept[1:20]
 MShared <- BuildAdjacencyMatrix(obj, protID, FALSE)
-getProteinsStats(MShared)
+getProteinsStats(matShared=MShared)
 
 }
 \author{

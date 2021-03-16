@@ -24,12 +24,10 @@ A protein object of class \code{MSnset}
 Method to xxxxx
 }
 \examples{
-\dontrun{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 protID <- "Protein_group_IDs"
-X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
-aggregateIter(Exp1_R25_pept[1:1000],X=X)
-}
+X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:10], protID, FALSE)
+aggregateIter(Exp1_R25_pept[1:10],X=X)
 
 }
 \author{

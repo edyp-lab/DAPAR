@@ -6,6 +6,11 @@
 \usage{
 metacombine(met, level)
 }
+\arguments{
+\item{met}{xxx}
+
+\item{level}{xxx}
+}
 \description{
 Agregation rules for the cells metadata. Please refer to the metacell vocabulary
 in `metacell.def()`
