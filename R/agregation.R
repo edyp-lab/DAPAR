@@ -14,40 +14,59 @@
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' protID <- "Protein_group_IDs"
-#' obj <- Exp1_R25_pept[1:1000]
+#' obj <- Exp1_R25_pept[1:20]
 #' MShared <- BuildAdjacencyMatrix(obj, protID, FALSE)
-#' getProteinsStats(MShared)
+#' getProteinsStats(matShared=MShared)
 #' 
 #' @export
 #' 
 getProteinsStats <- function(matShared){
-  if (is.null(matShared)){return(NULL)}
-  #if(!is.matrix(matUnique) || !is.matrix(matShared)){return(NULL)}
+  if(missing(matShared))
+    stop("'matShared' is needed.")
+  if (is.null(matShared))
+    stop("'matShared' is NULL")
   
+  nbPeptide <- 0
   
   ind.shared.Pep <- which(rowSums(as.matrix(matShared))>1)
-  ind.unique.Pep <- which(rowSums(as.matrix(matShared))==1)
-  
   M.shared.Pep <- matShared[ind.shared.Pep,]
-  M.shared.Pep <- M.shared.Pep[,-which(colSums(as.matrix(M.shared.Pep))==0)]
+  if (length(ind.shared.Pep)==1){
+    j <- which(as.matrix(M.shared.Pep)==0)
+    M.shared.Pep <- M.shared.Pep[-j]
+    pep.names.shared <- names(M.shared.Pep)
+  } else {
+    j <- which(colSums(as.matrix(M.shared.Pep))==0)
+    M.shared.Pep <- M.shared.Pep[,-j]
+    pep.names.shared <- colnames(M.shared.Pep)
+  }
   
+  
+  ind.unique.Pep <- which(rowSums(as.matrix(matShared))==1)
   M.unique.Pep <- matShared[ind.unique.Pep,]
-  M.unique.Pep <- M.unique.Pep[,-which(colSums(as.matrix(M.unique.Pep))==0)]
+  if (length(ind.unique.Pep)==1){
+    j <- which(as.matrix(M.unique.Pep)==0)
+    M.unique.Pep <- M.unique.Pep[-j]
+    pep.names.unique <- names(M.unique.Pep)
+  } else {
+    j <- which(colSums(as.matrix(M.unique.Pep))==0)
+    M.unique.Pep <- M.unique.Pep[,-j]
+    pep.names.unique <- colnames(M.unique.Pep)
+  }
+   
+
   
-  
-  pep.names.shared <- colnames(M.shared.Pep)
-  pep.names.unique <- colnames(M.unique.Pep)
   protOnlyShared <- setdiff(pep.names.shared, intersect(pep.names.shared, pep.names.unique))
   protOnlyUnique <- setdiff(pep.names.unique, intersect(pep.names.shared, pep.names.unique))
   protMix <- intersect(pep.names.shared, pep.names.unique)
   
   
-  return (list(nbPeptides = nrow(M.unique.Pep)+nrow(M.shared.Pep),
-               nbSpecificPeptides = nrow(M.unique.Pep),
-               nbSharedPeptides = nrow(M.shared.Pep),
+  
+  return (list(nbPeptides = length(ind.unique.Pep) + length(ind.shared.Pep),
+               nbSpecificPeptides = length(ind.unique.Pep),
+               nbSharedPeptides = length(ind.shared.Pep),
                nbProt = length(protOnlyShared)+length(protOnlyUnique)+length(protMix),
-               protOnlyUniquePep =protOnlyUnique,
-               protOnlySharedPep =protOnlyShared,
+               protOnlyUniquePep = protOnlyUnique,
+               protOnlySharedPep = protOnlyShared,
                protMixPep = protMix))
 }
 
@@ -561,13 +580,12 @@ GetNbPeptidesUsed <- function(X, pepData){
 #' @author Alexia Dorffer
 #' 
 #' @examples
-#' \dontrun{
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj.pep <- Exp1_R25_pept[1:1000]
+#' obj.pep <- Exp1_R25_pept[1:10]
+#' obj.pep.imp <- wrapper.impute.detQuant(obj.pep, na.type='missing')
 #' protID <- "Protein_group_IDs"
-#' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-#' aggregateMean(obj.pep, X)
-#' }
+#' X <- BuildAdjacencyMatrix(obj.pep.imp, protID, FALSE)
+#' obj.prot <- aggregateMean(obj.pep.imp, X)
 #' 
 #' @export
 #' 
@@ -575,7 +593,7 @@ GetNbPeptidesUsed <- function(X, pepData){
 #' 
 aggregateMean <- function(obj.pep, X){
   pepData <- 2^(Biobase::exprs(obj.pep))
-  protData <- inner.mean(pepData, X)
+  protData <- inner.mean(pepData, as.matrix(X))
   obj.prot <- finalizeAggregation(obj.pep, pepData, protData, X)
   return(obj.prot)
 }
@@ -636,7 +654,7 @@ splitAdjacencyMat <- function(X){
 #' @author Samuel Wieczorek
 #' 
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj.pep <- Exp1_R25_pept[1:1000]
+#' obj.pep <- Exp1_R25_pept[1:10]
 #' protID <- "Protein_group_IDs"
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 #' GetDetailedNbPeptidesUsed(X, obj.pep)
@@ -666,10 +684,10 @@ GetDetailedNbPeptidesUsed <- function(X, pepData){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj.pep <- Exp1_R25_pept[1:1000]
+#' obj.pep <- Exp1_R25_pept[1:10]
 #' protID <- "Protein_group_IDs"
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-#' GetDetailedNbPeptides(X)
+#' n <- GetDetailedNbPeptides(X)
 #' 
 #' @export
 #' 
@@ -699,8 +717,9 @@ GetDetailedNbPeptides <- function(X){
 #' 
 
 inner.sum <- function(pepData, X){
+  X <- as.matrix(X)
   pepData[is.na(pepData)] <- 0
-  Mp <- t(X) %*% pepData
+  Mp <- t(as.matrix(X)) %*% pepData
   return(Mp)
 }
 
@@ -715,8 +734,8 @@ inner.sum <- function(pepData, X){
 #' 
 #' @author Samuel Wieczorek
 #' 
-
 inner.mean <- function(pepData, X){
+  X <- as.matrix(X)
   Mp <- inner.sum(pepData, X)
   Mp <- Mp / GetNbPeptidesUsed(X, pepData)
   
@@ -741,8 +760,9 @@ inner.mean <- function(pepData, X){
 #' 
 #' @author Samuel Wieczorek
 #' 
-inner.aggregate.topn <-function(pepData,X, method='Mean', n=10){
+inner.aggregate.topn <-function(pepData, X, method='Mean', n=10){
   
+  X <- as.matrix(X)
   med <- apply(pepData, 1, median)
   xmed <- as(X * med, "dgCMatrix")
   for (c in 1:ncol(X)){
@@ -786,7 +806,7 @@ inner.aggregate.topn <-function(pepData,X, method='Mean', n=10){
 #' @examples
 #' \dontrun{
 #' utils::data(Exp1_R25_pept, package='DAPARdata') 
-#' obj.pep <- Exp1_R25_pept[1:1000]
+#' obj.pep <- Exp1_R25_pept[1:10]
 #' protID <- "Protein_group_IDs"
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 #' DAPAR::aggregateTopn(obj.pep, X, n=3)
@@ -832,7 +852,7 @@ aggregateTopn <- function(obj.pep,X,  method='Mean', n=10){
 #' 
 #' @importFrom utils installed.packages
 #' 
-finalizeAggregation <- function(obj.pep, pepData, protData,X, lib.loc=NULL){
+finalizeAggregation <- function(obj.pep, pepData, protData, X, lib.loc=NULL){
   
   protData <- as.matrix(protData)
   X <- as.matrix(X)
@@ -855,33 +875,135 @@ finalizeAggregation <- function(obj.pep, pepData, protData,X, lib.loc=NULL){
   rownames(pepTotalUsed) <- colnames(X)
   
   n <- GetDetailedNbPeptides(X)
-  
+  #browser()
+  metacell <- symprod(mat = t(X), 
+                      meta = Biobase::fData(obj.pep)[, obj.pep@experimentData@other$names_metacell],
+                      level = obj.pep@experimentData@other$typeOfData)
+  colnames(metacell) <- obj.pep@experimentData@other$names_metacell
   fd <- data.frame(colnames(X), 
                    nPepTotal = n$nTotal,
                    nPepShared = n$nShared, 
                    nPepSpec = n$nSpec, 
                    pepSpecUsed, 
                    pepSharedUsed, 
-                   pepTotalUsed)
+                   pepTotalUsed, 
+                   metacell)
   
   obj.prot <- MSnSet(exprs = log2(protData), 
                      fData = fd, 
                      pData = Biobase::pData(obj.pep))
+  
   obj.prot@experimentData@other <- obj.pep@experimentData@other
   obj.prot@experimentData@other$typeOfData <- "protein"
   
-  obj.prot@experimentData@other$names_metacell <- NULL
-  if (length(grep('Prostar', installed.packages(lib.loc=lib.loc$Prostar.loc))) >0){
-    obj.prot@experimentData@other$Prostar_Version <- installed.packages(lib.loc = lib.loc$Prostar.loc)["Prostar","Version"]
-  } else {
-    obj.prot@experimentData@other$Prostar_Version <- NA
-  }
   
-  if (length(grep('DAPAR', installed.packages(lib.loc=lib.loc$DAPAR.loc))) >0){
+  if (length(grep('Prostar', installed.packages(lib.loc=lib.loc$Prostar.loc))) >0)
+    obj.prot@experimentData@other$Prostar_Version <- installed.packages(lib.loc = lib.loc$Prostar.loc)["Prostar","Version"]
+  else
+    obj.prot@experimentData@other$Prostar_Version <- NA
+  
+  if (length(grep('DAPAR', installed.packages(lib.loc=lib.loc$DAPAR.loc))) >0)
     obj.prot@experimentData@other$DAPAR_Version <- installed.packages(lib.loc = lib.loc$DAPAR.loc)["DAPAR","Version"]
-  } else {
+  else
     obj.prot@experimentData@other$DAPAR_Version <- NA
-  }
+  
+  
   return (obj.prot)
 }
 
+
+
+
+#' @title
+#' Agregate metadata
+#' 
+#' @description 
+#' Agregation rules for the cells metadata. Please refer to the metacell vocabulary
+#' in `metacell.def()`
+#' 
+#' # Basic agreagtion
+#' Agregation of non imputed values (2.X) with quantitative values (1.0, 1.X, 3.0, 3.X)
+#' |----------------------------
+#' Not possible
+#' |----------------------------
+#' 
+#' Agregation of different types of missing values (among 2.1, 2.2)
+#' |----------------------------
+#' * Agregation of 2.1 peptides between each other gives a missing value non imputed (2.0)
+#' * Agreagtion of 2.2 peptides between each other givesa missing value non imputed (2.0)
+#' * Agregation of a mix of 2.1 and 2.2 gives a missing value non imputed (2.0)
+#' |----------------------------
+#' 
+#' 
+#' Agregation of a mix of quantitative values (among 1.0, 1.1, 1.2, 3.0, 3.X)
+#' |----------------------------
+#' * if the type of all the peptides to agregate is 1.0, 1.1 or 1.2, then the final
+#' metadata is set the this tag
+#' * if the set of metacell to agregate is a mix of 1.0, 1.1 or 1.2, then the final
+#' metadata is set to 1.0
+#' * if the set of metacell to agregate is a mix of 3.X and 3.0, then the final
+#' metadata is set to 3.0
+#' * if the set of metacell to agregate is a mix of 3.X and 3.0 and other (X.X), then the final
+#' metadata is set to 4.0
+#' |----------------------------
+#' 
+#' # Post processing
+#' Update metacell with POV/MEC status for the categories 2.0 and 3.0
+#' TODO
+#' 
+metacombine <- function(met, level) {
+  #browser()
+  tag <- NULL
+  
+  u_met <- unique(met)
+  if(length(unlist(lapply(u_met, function(x) grep('missing', search.metacell.tags(x, level))))) > 0 &&
+     length(unlist(lapply(u_met, function(x) grep('quanti', search.metacell.tags(x, level))))) > 0)
+    stop("You try to combine missing values (2.X) with quantitative values (1.X or 3.X).")
+  
+  # Agregation of a mix of 2.1 and 2.2 gives a missing value non imputed (2.0)
+  # Agreagtion of 2.2 peptides between each other givesa missing value non imputed (2.0)
+  # Agregation of 2.1 peptides between each other gives a missing value non imputed (2.0)
+  if (length(unlist(lapply(u_met, function(x) grep('missing', search.metacell.tags(x, level))))) == length(u_met))
+    tag <- 'missing'
+  
+  # if the type of all the peptides to agregate is 1.0, 1.1 or 1.2, then the final
+  # metadata is set the this tag
+  if ( length(u_met)==1) {
+    if (length(grep('quanti', search.metacell.tags('quanti', level)))> 0) 
+      tag <- u_met
+  } else {
+    # if the set of metacell to agregate is a mix of 1.0, 1.1 or 1.2, then the final
+    # metadata is set to 1.0
+    if (length(unlist(lapply(u_met, function(x) grep('quanti', search.metacell.tags(x, level))))) == length(u_met))
+      tag <- 'quanti'
+  }
+  
+  # If the set of metacell to agregate is a mix of 3.X and 3.0, then the final
+  # metadata is set to 3.0
+  if (length(unlist(lapply(u_met, function(x) grep('imputed', search.metacell.tags(x, level))))) == length(u_met))
+    tag <- 'imputed'
+  
+  # If the set of metacell to agregate is a mix of 3.X and 3.0 and other (X.X), then the final
+  # metadata is set to 4.0
+  tmp <- u_met
+  i <- grep('imputed', tmp)
+  if (length(i)>0)
+    if (length(tmp[-i]) >0)
+      tag <- 'combined'
+  
+  #print(paste0(paste0(met, collapse=' '), ' **** ', u_met, ' ---> ', tag))
+  return(tag)
+}
+
+
+
+symprod <- function(mat, meta, level){
+  rowcol <- function(row, col) col[row>0]
+  sapply(1:ncol(meta), 
+         function(j)
+           sapply(1:nrow(mat), 
+                  function(i) 
+                    metacombine(rowcol(mat[i,], meta[,j]), level)
+                  )
+         )
+} 

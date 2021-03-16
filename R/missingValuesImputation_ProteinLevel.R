@@ -298,7 +298,7 @@ wrapper.impute.detQuant <- function(obj, qval=0.025, factor=1, na.type){
     obj@processingData@processing <- c(obj@processingData@processing,msg)
     
     obj@experimentData@other$imputation.method <- "detQuantile"
-    
+    #browser()
     obj <- UpdateMetacell(obj = obj, method='detQuant', na.type=na.type) 
     
     return(obj)

@@ -8,23 +8,46 @@
 #' 
 #' |── 1.0 Quantitative Value
 #' |    |
-#' │    |── 1.1 Direct
+#' │    |── 1.1 Identified (color 4, white)
 #' |    |
-#' │    |── 1.2 Indirect
+#' │    |── 1.2 Recovered (color 3, lightgrey)
 #' │
-#' |──2.0 Missing value
+#' |──2.0 Missing value (no color)
 #' |    |
-#' │    |── 2.1 Missing POV
+#' │    |── 2.1 Missing POV (color 1)
 #' |    |
-#' │    |── 2.2 Missing MEC
+#' │    |── 2.2 Missing MEC (color 2)
 #' │
 #' |── 3.0 Imputed value
 #' |    |
-#' │    |── 3.1 Imputed POV
+#' │    |── 3.1 Imputed POV (color 1)
 #' |    |
-#' │    |── 3.2 Imputed MEC
+#' │    |── 3.2 Imputed MEC (color 2)
 #'        
-#' Protein-level vocabulary: same as peptide-level with one more category (Combined Value)
+#'  
+#'  
+#' Protein-level vocabulary:
+#' 
+#' |── 1.0 Quantitative Value
+#' |    |
+#' │    |── 1.1 Identified (color 4, white)
+#' |    |
+#' │    |── 1.2 Recovered (color 3, lightgrey)
+#' │
+#' |──2.0 Missing value
+#' |    |
+#' │    |── 2.1 Missing POV (color 1)
+#' |    |
+#' │    |── 2.2 Missing MEC (color 2)
+#' │
+#' |── 3.0 Imputed value
+#' |    |
+#' │    |── 3.1 Imputed POV (color 1)
+#' |    |
+#' │    |── 3.2 Imputed MEC (color 2)
+#' │
+#' |── 4.0 Combined value (color 3bis, light-lightgrey)
+#' 
 #' 
 #' @param level A string designing the type of entity/pipeline. Available values are:
 #' `peptide`, `protein`
@@ -489,9 +512,12 @@ UpdateMetacell <- function(obj, method='', na.type){
   level <- obj@experimentData@other$typeOfData
   ind <- match.metacell(metadata = Biobase::fData(obj)[, obj@experimentData@other$names_metacell], 
                         pattern = na.type, 
-                        level = level) & Biobase::exprs(obj) > 0 & !is.na(Biobase::exprs(obj))
-  precise.na.type <- unlist(strsplit(na.type, split='_'))[length(unlist(strsplit(na.type, split='_')))]
-  Biobase::fData(obj)[, obj@experimentData@other$names_metacell][ind] <- paste0(metacell.def(level)['imputed'], '_', precise.na.type)
+                        level = level) & !is.na(Biobase::exprs(obj))
+  
+  Biobase::fData(obj)[, obj@experimentData@other$names_metacell][ind] <- gsub("missing", 
+                                                                              "imputed", 
+                                                                              Biobase::fData(obj)[, obj@experimentData@other$names_metacell][ind],
+                                                                              fixed = TRUE)
   return(obj)
 }
 
