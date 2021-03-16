@@ -663,14 +663,6 @@ filterGetIndices <- function(obj,
   data <- Biobase::fData(obj)[,obj@experimentData@other$names_metacell]
   level <- obj@experimentData@other$typeOfData
   
-  print("data")
-  print(data)
-  print("metacell")
-  print(metacell)
-  print("level")
-  print(level)
-  print("match.metacell")
-  print(match.metacell(metadata=data, pattern=metacell, level=level))
   
   if (condition == "WholeMatrix") {
     if (isTRUE(percent)) {
