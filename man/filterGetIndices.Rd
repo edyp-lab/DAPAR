@@ -50,7 +50,7 @@ at least \code{th} values, and for at least one condition, are kept.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-FilterGetIndices(Exp1_R25_pept, metacell = 'quanti', remove = FALSE, percent=TRUE, condition = "WholeMatrix", threshold=0.5, operator = '>=')
+filterGetIndices(Exp1_R25_pept, metacell = 'quanti', remove = FALSE, percent=TRUE, condition = "WholeMatrix", threshold=0.5, operator = '>=')
 
 }
 \author{
