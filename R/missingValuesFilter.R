@@ -646,7 +646,7 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' FilterGetIndices(Exp1_R25_pept, metacell = 'quanti', remove = FALSE, percent=TRUE, condition = "WholeMatrix", threshold=0.5, operator = '>=')
+#' filterGetIndices(Exp1_R25_pept, metacell = 'quanti', remove = FALSE, percent=TRUE, condition = "WholeMatrix", threshold=0.5, operator = '>=')
 #' 
 #' @export
 #' 
@@ -661,7 +661,16 @@ filterGetIndices <- function(obj,
   keepThat <- NULL
   
   data <- Biobase::fData(obj)[,obj@experimentData@other$names_metacell]
-  level <- Biobase::fData(obj)[,obj@experimentData@other$typeOfData]
+  level <- obj@experimentData@other$typeOfData
+  
+  print("data")
+  print(data)
+  print("metacell")
+  print(metacell)
+  print("level")
+  print(level)
+  print("match.metacell")
+  print(match.metacell(metadata=data, pattern=metacell, level=level))
   
   if (condition == "WholeMatrix") {
     if (isTRUE(percent)) {
