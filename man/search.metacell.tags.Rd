@@ -12,7 +12,8 @@ search.metacell.tags(pattern, level)
 \item{level}{The available levels are : names()}
 }
 \description{
-Gives all the tags of the metadata vocabulary containing the pattern (parent and all its children).
+Gives all the tags of the metadata vocabulary containing the pattern 
+(parent and all its children).
 }
 \examples{
 search.metacell.tags('POV', 'peptide')

@@ -22,5 +22,6 @@ normalized <- GlobalQuantileAlignment(qData)
 
 }
 \author{
-Samuel Wieczorek, Thomas Burger, Helene Borges, Anais Courtier, Enora Fremy
+Samuel Wieczorek, Thomas Burger, Helene Borges, Anais Courtier, 
+Enora Fremy
 }

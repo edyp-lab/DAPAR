@@ -16,7 +16,8 @@ of the MSnset object.}
 \item{columnName}{The name of the column in fData(peptides_MSnset) that 
 the user wants to keep in the new protein data.frame.}
 
-\item{proteinNames}{The names of the protein in the new dataset (i.e. rownames)}
+\item{proteinNames}{The names of the protein in the new dataset 
+(i.e. rownames)}
 }
 \value{
 A vector

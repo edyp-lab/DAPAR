@@ -4,7 +4,7 @@
 \alias{finalizeAggregation}
 \title{Finalizes the aggregation process}
 \usage{
-finalizeAggregation(obj.pep, pepData, protData, X, lib.loc = NULL)
+finalizeAggregation(obj.pep, pepData, protData, X)
 }
 \arguments{
 \item{obj.pep}{A peptide object of class \code{MSnset}}
@@ -15,9 +15,6 @@ finalizeAggregation(obj.pep, pepData, protData, X, lib.loc = NULL)
 
 \item{X}{An adjacency matrix in which lines and columns correspond 
 respectively to peptides and proteins.}
-
-\item{lib.loc}{A list of two items (lib.loc$Prostar.loc and lib.loc$DAPAR.loc) to provide the 
-location of the installed packages}
 }
 \value{
 A protein object of class \code{MSnset}

@@ -20,7 +20,8 @@ normalizations of important magnitude), "SumByColumns", "QuantileCentering",
 \description{
 Provides several methods to normalize quantitative data from
 a \code{MSnSet} object.
-They are organized in six main families : GlobalQuantileAlignement, sumByColumns, QuantileCentering, MeanCentering, LOESS, vsn
+They are organized in six main families : GlobalQuantileAlignement, 
+sumByColumns, QuantileCentering, MeanCentering, LOESS, vsn
 For the first family, there is no type.
 For the five other families, two type categories are available :
 "Overall" which means that the value for each protein
@@ -32,7 +33,8 @@ by condition.
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 conds <- Biobase::pData(Exp1_R25_pept)$Condition
-obj <- wrapper.normalizeD(obj = Exp1_R25_pept, method = "QuantileCentering", conds=conds, type = "within conditions")
+obj <- wrapper.normalizeD(obj = Exp1_R25_pept, method = "QuantileCentering", 
+conds=conds, type = "within conditions")
  
 }
 \author{

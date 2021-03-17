@@ -15,7 +15,8 @@ GetNbPeptidesUsed(X, pepData)
 A data.frame
 }
 \description{
-Method to compute the number of quantified peptides used for aggregating each protein
+Method to compute the number of quantified peptides used for aggregating 
+each protein
 }
 \author{
 Samuel Wieczorek

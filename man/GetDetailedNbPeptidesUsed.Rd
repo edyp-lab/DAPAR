@@ -2,7 +2,8 @@
 % Please edit documentation in R/agregation.R
 \name{GetDetailedNbPeptidesUsed}
 \alias{GetDetailedNbPeptidesUsed}
-\title{Computes the detailed number of peptides used for aggregating each protein}
+\title{Computes the detailed number of peptides used for aggregating 
+each protein}
 \usage{
 GetDetailedNbPeptidesUsed(X, pepData)
 }
@@ -15,7 +16,8 @@ GetDetailedNbPeptidesUsed(X, pepData)
 A list of two items
 }
 \description{
-Method to compute the detailed number of quantified peptides used for aggregating each protein
+Method to compute the detailed number of quantified peptides used for 
+aggregating each protein
 }
 \author{
 Samuel Wieczorek

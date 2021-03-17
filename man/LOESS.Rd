@@ -12,7 +12,8 @@ LOESS(qData, conds, type = "overall", span = 0.7)
 \item{conds}{xxx}
 
 \item{type}{"overall" (shift all the sample distributions at once) or
-"within conditions" (shift the sample distributions within each condition at a time).}
+"within conditions" (shift the sample distributions within each 
+condition at a time).}
 
 \item{span}{xxx}
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/agregation.R
 \name{metacombine}
 \alias{metacombine}
-\title{Agregate metadata}
+\title{Combine peptide metadata to build protein metadata}
 \usage{
 metacombine(met, level)
 }
@@ -12,33 +12,36 @@ metacombine(met, level)
 \item{level}{xxx}
 }
 \description{
-Agregation rules for the cells metadata. Please refer to the metacell vocabulary
-in `metacell.def()`
+Agregation rules for the cells metadata of peptides. 
+Please refer to the metacell vocabulary in `metacell.def()`
 
 # Basic agreagtion
-Agregation of non imputed values (2.X) with quantitative values (1.0, 1.X, 3.0, 3.X)
+Agregation of non imputed values (2.X) with quantitative values 
+(1.0, 1.X, 3.0, 3.X)
 |----------------------------
 Not possible
 |----------------------------
 
 Agregation of different types of missing values (among 2.1, 2.2)
 |----------------------------
-* Agregation of 2.1 peptides between each other gives a missing value non imputed (2.0)
-* Agreagtion of 2.2 peptides between each other givesa missing value non imputed (2.0)
+* Agregation of 2.1 peptides between each other gives a missing value 
+  non imputed (2.0)
+* Agreagtion of 2.2 peptides between each other givesa missing value 
+  non imputed (2.0)
 * Agregation of a mix of 2.1 and 2.2 gives a missing value non imputed (2.0)
 |----------------------------
 
 
 Agregation of a mix of quantitative values (among 1.0, 1.1, 1.2, 3.0, 3.X)
 |----------------------------
-* if the type of all the peptides to agregate is 1.0, 1.1 or 1.2, then the final
-metadata is set the this tag
-* if the set of metacell to agregate is a mix of 1.0, 1.1 or 1.2, then the final
-metadata is set to 1.0
-* if the set of metacell to agregate is a mix of 3.X and 3.0, then the final
-metadata is set to 3.0
-* if the set of metacell to agregate is a mix of 3.X and 3.0 and other (X.X), then the final
-metadata is set to 4.0
+* if the type of all the peptides to agregate is 1.0, 1.1 or 1.2, 
+  then the final metadata is set the this tag
+* if the set of metacell to agregate is a mix of 1.0, 1.1 or 1.2, 
+  then the final metadata is set to 1.0
+* if the set of metacell to agregate is a mix of 3.X and 3.0, 
+  then the final metadata is set to 3.0
+* if the set of metacell to agregate is a mix of 3.X and 3.0 and other (X.X),
+  then the final metadata is set to 4.0
 |----------------------------
 
 # Post processing

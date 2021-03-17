@@ -49,8 +49,8 @@
 #' |── 4.0 Combined value (color 3bis, light-lightgrey)
 #' 
 #' 
-#' @param level A string designing the type of entity/pipeline. Available values are:
-#' `peptide`, `protein`
+#' @param level A string designing the type of entity/pipeline. 
+#' Available values are: `peptide`, `protein`
 #' 
 #' @author Thomas Burger, Samuel Wieczorek
 #' 
@@ -133,6 +133,51 @@ setMEC <- function(qdata, conds, df, level){
 }
 
 
+#' @title Sets the MEC tag in the metacell
+#' 
+#' @description 
+#' This function is based on the metacell dataframe to look for either missing
+#' values (used to update an initial dataset) or imputed values (used when
+#' post processing protein metacell after aggregation)
+#' 
+#' @param qdata xxx
+#' 
+#' @param conds xxx
+#' 
+#' @param df An object of class \code{MSnSet}
+#' 
+#' @param pattern A string to search in metadata that defines if the cell is 
+#' missing or imputed. Available values are `missing` or `imputed`.
+#' 
+#' @param level Type of entity/pipeline
+#' 
+#' @return An instance of class \code{MSnSet}.
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples 
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R25_pept[1:10]
+#' cols.for.ident <- obj@experimentData@other$names_metacell
+#' conds <- Biobase::pData(obj)$Condition
+#' df <- Biobase::fData(obj)[, cols.for.ident]
+#' setMEC2(conds, df, pattern = 'missing', level = 'peptide')
+#' 
+#' @export
+#' 
+#' @importFrom Biobase pData exprs fData
+#'  
+setMEC2 <- function(conds, df, pattern, level){
+  
+  conditions <- unique(conds)
+  
+  for (i in 1:length(conditions)){
+    ind.samples <- which(conds==conditions[i])
+    ind <- match.metacell(df[, ind.samples], pattern, level)
+    df[rowSums(ind)==length(ind.samples), ind.samples] <- paste0(pattern, '_MEC')
+  }
+  return(df)
+}
 
 
 #' @title xxxx
@@ -157,13 +202,17 @@ setMEC <- function(qdata, conds, df, level){
 #' @examples 
 #' file <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
 #' data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
-#' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
-#' metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, stringsAsFactors = FALSE)
+#' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", 
+#' package="DAPARdata")
+#' metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, 
+#' stringsAsFactors = FALSE)
 #' conds <- metadata$Condition
 #' qdata <- data[,56:61]
 #' df <- data[ , 43:48]
-#' df <- BuildMetaCell(from = 'maxquant', level='peptide', qdata = qdata, conds = conds, df = df)
-#' df <- BuildMetaCell(from = 'proline', level='peptide', qdata = qdata, conds = conds, df = df)
+#' df <- BuildMetaCell(from = 'maxquant', level='peptide', qdata = qdata, 
+#' conds = conds, df = df)
+#' df <- BuildMetaCell(from = 'proline', level='peptide', qdata = qdata, 
+#' conds = conds, df = df)
 #' 
 #' @export
 #' 
@@ -222,7 +271,8 @@ BuildMetaCell <- function(from, level, qdata = NULL, conds = NULL, df = NULL){
 #' file <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
 #' data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
 #' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
-#' metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, stringsAsFactors = FALSE)
+#' metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, 
+#' stringsAsFactors = FALSE)
 #' conds <- metadata$Condition
 #' qdata <- data[,56:61]
 #' df <- data[ , 43:48]
@@ -292,8 +342,10 @@ Metacell_generic <- function(qdata, conds, level){
 #' @examples 
 #' file <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
 #' data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
-#' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
-#' metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, stringsAsFactors = FALSE)
+#' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", 
+#' package="DAPARdata")
+#' metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, 
+#' stringsAsFactors = FALSE)
 #' conds <- metadata$Condition
 #' qdata <- data[,56:61]
 #' df <- data[ , 43:48]
@@ -362,8 +414,10 @@ Metacell_proline <- function(qdata, conds, df, level=NULL){
 #' @examples 
 #' file <- system.file("extdata", "Exp1_R2_prot.txt", package="DAPARdata")
 #' data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
-#' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
-#' metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, stringsAsFactors = FALSE)
+#' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", 
+#' package="DAPARdata")
+#' metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, 
+#' stringsAsFactors = FALSE)
 #' conds <- metadata$Condition
 #' qdata <- data[,49:54]
 #' df <- data[ , 36:41]
@@ -384,7 +438,8 @@ Metacell_maxquant <- function(qdata, conds, df, level=NULL){
   
   
   if (is.null(df))
-    df <- data.frame(matrix(rep(metacell.def(level)['quanti'], nrow(qdata)*ncol(qdata)), 
+    df <- data.frame(matrix(rep(metacell.def(level)['quanti'], 
+                                nrow(qdata)*ncol(qdata)), 
                             nrow=nrow(qdata),
                             ncol=ncol(qdata)),
                      stringsAsFactors = FALSE) 
@@ -417,9 +472,11 @@ Metacell_maxquant <- function(qdata, conds, df, level=NULL){
 
 
 
-#' Similar to the function \code{is.na} but focused on the equality with the paramter 'type'.
+#' Similar to the function \code{is.na} but focused on the equality with 
+#' the paramter 'type'.
 #'
-#' @title Similar to the function \code{is.na} but focused on the equality with the paramter 'type'.
+#' @title Similar to the function \code{is.na} but focused on the equality 
+#' with the paramter 'type'.
 #'
 #' @param metadata A data.frame
 #'
@@ -449,9 +506,11 @@ match.metacell <- function(metadata, pattern, level){
   
   
   if (!(pattern %in% metacell.def(level)))
-    stop(paste0("'pattern' is not correct. Availablevalues are: ", paste0(metacell.def(level), collapse = ' ')))
+    stop(paste0("'pattern' is not correct. Availablevalues are: ", 
+                paste0(metacell.def(level), collapse = ' ')))
   
-  ll.res <- lapply(unname(search.metacell.tags(pattern = pattern, level)), function(x){metadata==x})
+  ll.res <- lapply(unname(search.metacell.tags(pattern = pattern, level)), 
+                   function(x){metadata==x})
   
   res <- NULL
   for (i in 1:length(ll.res))
@@ -505,8 +564,10 @@ UpdateMetacell <- function(obj, method='', na.type){
   if (missing(obj))
     stop("'obj' is required.")
   if (missing(na.type)){
-    values <- unname(search.metacell.tags('missing', obj@experimentData@other$typeOfData))
-    stop("'na.type' is required. Available values are: ", paste0(values, collapse=' '))
+    values <- unname(search.metacell.tags('missing', 
+                                          obj@experimentData@other$typeOfData))
+    stop("'na.type' is required. Available values are: ", 
+         paste0(values, collapse=' '))
   }
   
   level <- obj@experimentData@other$typeOfData
@@ -526,7 +587,8 @@ UpdateMetacell <- function(obj, method='', na.type){
 #' Search pattern in metacell vocabulary
 #' 
 #' @description
-#' Gives all the tags of the metadata vocabulary containing the pattern (parent and all its children).
+#' Gives all the tags of the metadata vocabulary containing the pattern 
+#' (parent and all its children).
 #' 
 #' @param pattern The string to search.
 #' 
@@ -536,7 +598,7 @@ UpdateMetacell <- function(obj, method='', na.type){
 #' 
 #' @examples
 #' search.metacell.tags('POV', 'peptide')
-#' search.metacell.tags('MV_POV', 'peptide')
+#' search.metacell.tags('missing_POV', 'peptide')
 #' search.metacell.tags('quanti', 'peptide')
 #' 
 #' @export
@@ -547,6 +609,8 @@ search.metacell.tags <- function(pattern, level){
   if(missing(level))
     stop("'level' is required.")
   
+  lastchar <- unlist(strsplit(pattern, split=''))[nchar(pattern)]
   
-  unlist(metacell.def(level)[unlist(lapply(metacell.def(level), function(x){length(grep(pattern, x))==1}))])
+  unlist(metacell.def(level)[unlist(lapply(metacell.def(level), 
+                                           function(x){length(grep(pattern, x))==1}))])
 }

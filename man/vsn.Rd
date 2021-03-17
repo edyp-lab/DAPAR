@@ -12,7 +12,8 @@ vsn(qData, conds, type = NULL)
 \item{conds}{xxx}
 
 \item{type}{"overall" (shift all the sample distributions at once) or
-"within conditions" (shift the sample distributions within each condition at a time).}
+"within conditions" (shift the sample distributions within each condition 
+at a time).}
 }
 \value{
 A normalized numeric matrix

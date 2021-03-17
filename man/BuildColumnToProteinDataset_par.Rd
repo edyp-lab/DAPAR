@@ -16,15 +16,16 @@ of the MSnset object.}
 \item{columnName}{The name of the column in fData(peptides_MSnset) that 
 the user wants to keep in the new protein data.frame.}
 
-\item{proteinNames}{The names of the protein in the new dataset (i.e. rownames)}
+\item{proteinNames}{The names of the protein in the new dataset 
+(i.e. rownames)}
 }
 \value{
 A vector
 }
 \description{
 This function creates a column for the protein dataset after agregation 
-by using the previous peptide dataset. It is a parallel version of the function
-\code{BuildColumnToProteinDataset}
+by using the previous peptide dataset. It is a parallel version of 
+the function \code{BuildColumnToProteinDataset}
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')

@@ -7,8 +7,8 @@
 metacell.def(level)
 }
 \arguments{
-\item{level}{A string designing the type of entity/pipeline. Available values are:
-`peptide`, `protein`}
+\item{level}{A string designing the type of entity/pipeline. 
+Available values are: `peptide`, `protein`}
 }
 \description{
 This function gives the vocabulary used for the metadata of each entity in

@@ -87,7 +87,8 @@ getProteinsStats <- function(matShared){
 #' @param columnName The name of the column in fData(peptides_MSnset) that 
 #' the user wants to keep in the new protein data.frame.
 #' 
-#' @param proteinNames The names of the protein in the new dataset (i.e. rownames)
+#' @param proteinNames The names of the protein in the new dataset 
+#' (i.e. rownames)
 #' 
 #' @return A vector
 #' 
@@ -106,7 +107,10 @@ getProteinsStats <- function(matShared){
 #' 
 #' @export
 #' 
-BuildColumnToProteinDataset <- function(peptideData, matAdj, columnName, proteinNames){
+BuildColumnToProteinDataset <- function(peptideData, 
+                                        matAdj, 
+                                        columnName, 
+                                        proteinNames){
   nbProt <- ncol(matAdj)
   newCol <- rep("", nbProt)
   i <- 1
@@ -121,8 +125,8 @@ BuildColumnToProteinDataset <- function(peptideData, matAdj, columnName, protein
 
 
 #' This function creates a column for the protein dataset after agregation 
-#' by using the previous peptide dataset. It is a parallel version of the function
-#' \code{BuildColumnToProteinDataset}
+#' by using the previous peptide dataset. It is a parallel version of 
+#' the function \code{BuildColumnToProteinDataset}
 #' 
 #' @title creates a column for the protein dataset after agregation by
 #'  using the previous peptide dataset.
@@ -135,7 +139,8 @@ BuildColumnToProteinDataset <- function(peptideData, matAdj, columnName, protein
 #' @param columnName The name of the column in fData(peptides_MSnset) that 
 #' the user wants to keep in the new protein data.frame.
 #' 
-#' @param proteinNames The names of the protein in the new dataset (i.e. rownames)
+#' @param proteinNames The names of the protein in the new dataset 
+#' (i.e. rownames)
 #' 
 #' @return A vector
 #' 
@@ -157,7 +162,10 @@ BuildColumnToProteinDataset <- function(peptideData, matAdj, columnName, protein
 #' @importFrom doParallel registerDoParallel 
 #' @importFrom foreach foreach
 #' 
-BuildColumnToProteinDataset_par <- function(peptideData, matAdj, columnName, proteinNames){
+BuildColumnToProteinDataset_par <- function(peptideData, 
+                                            matAdj, 
+                                            columnName, 
+                                            proteinNames){
   doParallel::registerDoParallel()
   
   nbProt <- ncol(matAdj)
@@ -189,7 +197,7 @@ BuildColumnToProteinDataset_par <- function(peptideData, matAdj, columnName, pro
 #' library(DAPARdata)
 #' utils::data(Exp1_R25_pept)
 #' protID <- "Protein_group_IDs"
-#' M <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], protID, FALSE)
+#' M <- BuildAdjacencyMatrix(Exp1_R25_pept[1:10], protID, FALSE)
 #' CountPep(M)
 #' 
 #' @export
@@ -389,7 +397,9 @@ aggregateIterParallel <- function(obj.pep, X, init.method='Sum', method='Mean', 
   qData.pep <- 2^(Biobase::exprs(obj.pep))
   protData <- matrix(rep(0,ncol(X)*nrow(X)), nrow=ncol(X))
   
-  protData <- foreach(cond=1:length(unique(Biobase::pData(obj.pep)$Condition)), .combine=cbind, .packages = "MSnbase") %dopar% {
+  protData <- foreach(cond=1:length(unique(Biobase::pData(obj.pep)$Condition)), 
+                      .combine=cbind, 
+                      .packages = "MSnbase") %dopar% {
     
     condsIndices <- which(Biobase::pData(obj.pep)$Condition == unique(Biobase::pData(obj.pep)$Condition)[cond])
     qData <- qData.pep[,condsIndices]
@@ -430,7 +440,11 @@ aggregateIterParallel <- function(obj.pep, X, init.method='Sum', method='Mean', 
 #' 
 #' @export
 #' 
-inner.aggregate.iter <- function(pepData, X,init.method='Sum', method='Mean', n=NULL){
+inner.aggregate.iter <- function(pepData, 
+                                 X,
+                                 init.method='Sum', 
+                                 method='Mean', 
+                                 n=NULL){
   
   
   if (!(init.method %in% c("Sum", "Mean"))) {
@@ -464,7 +478,8 @@ inner.aggregate.iter <- function(pepData, X,init.method='Sum', method='Mean', n=
     X.new <- X.tmp/rowSums(as.matrix(X.tmp), na.rm = TRUE)
     X.new[is.na(X.new)] <- 0
     
-    # l'appel ? la fonction ci-dessous d?pend des param?tres choisis par l'utilisateur
+    # l'appel ? la fonction ci-dessous d?pend des param?tres choisis par 
+    # l'utilisateur
     switch(method,
            Mean = yprot <- inner.mean(pepData, X.new),
            onlyN = yprot <- inner.aggregate.topn(pepData,X.new,'Mean', n)
@@ -508,10 +523,15 @@ inner.aggregate.iter <- function(pepData, X,init.method='Sum', method='Mean', n=
 #' 
 #' @importFrom Biobase pData exprs fData
 #' 
-aggregateIter <- function(obj.pep, X, init.method='Sum', method='Mean', n=NULL){
+aggregateIter <- function(obj.pep, 
+                          X, 
+                          init.method='Sum', 
+                          method='Mean', 
+                          n=NULL){
   
   ### a reproduire iterativement pour chaque condition
-  # Initialisation: presque aucune d?pendance ? l'initialisation prendre "sum overall" et  matAdj = X par simplicit?
+  # Initialisation: presque aucune d?pendance ? l'initialisation prendre 
+  # "sum overall" et  matAdj = X par simplicit?
   #X <- as.matrix(X)
   qData.pep <- 2^(Biobase::exprs(obj.pep))
   
@@ -520,7 +540,11 @@ aggregateIter <- function(obj.pep, X, init.method='Sum', method='Mean', n=NULL){
   for (cond in unique(Biobase::pData(obj.pep)$Condition)){
     condsIndices <- which(Biobase::pData(obj.pep)$Condition == cond)
     qData <- qData.pep[,condsIndices]
-    protData[,condsIndices]  <- inner.aggregate.iter(qData, X, init.method, method, n)
+    protData[,condsIndices]  <- inner.aggregate.iter(qData, 
+                                                     X, 
+                                                     init.method, 
+                                                     method, 
+                                                     n)
   }
   obj.prot <- finalizeAggregation(obj.pep, qData.pep, protData, X)
   return(obj.prot)
@@ -530,7 +554,8 @@ aggregateIter <- function(obj.pep, X, init.method='Sum', method='Mean', n=NULL){
 
 
 
-#' Method to compute the number of quantified peptides used for aggregating each protein
+#' Method to compute the number of quantified peptides used for aggregating 
+#' each protein
 #' 
 #' @title Computes the number of peptides used for aggregating each protein 
 #' 
@@ -627,9 +652,11 @@ splitAdjacencyMat <- function(X){
   return (list(Xshared = tmpShared, Xspec = tmpSpec))
 }
 
-#' Method to compute the detailed number of quantified peptides used for aggregating each protein
+#' Method to compute the detailed number of quantified peptides used for 
+#' aggregating each protein
 #' 
-#' @title Computes the detailed number of peptides used for aggregating each protein 
+#' @title Computes the detailed number of peptides used for aggregating 
+#' each protein 
 #' 
 #' @param X An adjacency matrix
 #' 
@@ -827,9 +854,6 @@ aggregateTopn <- function(obj.pep,X,  method='Mean', n=10){
 #' 
 #' @param protData xxxxx
 #' 
-#' @param lib.loc A list of two items (lib.loc$Prostar.loc and lib.loc$DAPAR.loc) to provide the 
-#' location of the installed packages
-#' 
 #' @return A protein object of class \code{MSnset}
 #' 
 #' @author Samuel Wieczorek
@@ -838,7 +862,7 @@ aggregateTopn <- function(obj.pep,X,  method='Mean', n=10){
 #' 
 #' @importFrom utils installed.packages
 #' 
-finalizeAggregation <- function(obj.pep, pepData, protData, X, lib.loc=NULL){
+finalizeAggregation <- function(obj.pep, pepData, protData, X){
   
   protData <- as.matrix(protData)
   X <- as.matrix(X)
@@ -862,10 +886,10 @@ finalizeAggregation <- function(obj.pep, pepData, protData, X, lib.loc=NULL){
   
   n <- GetDetailedNbPeptides(X)
   #browser()
-  metacell <- symprod(mat = t(X), 
-                      meta = Biobase::fData(obj.pep)[, obj.pep@experimentData@other$names_metacell],
-                      level = obj.pep@experimentData@other$typeOfData)
-  colnames(metacell) <- obj.pep@experimentData@other$names_metacell
+  metacell <- AggregateMetacell(mat = t(X), obj = obj.pep)
+  
+  
+  
   fd <- data.frame(colnames(X), 
                    nPepTotal = n$nTotal,
                    nPepShared = n$nShared, 
@@ -883,17 +907,22 @@ finalizeAggregation <- function(obj.pep, pepData, protData, X, lib.loc=NULL){
   obj.prot@experimentData@other$typeOfData <- "protein"
   
   
-  if (length(grep('Prostar', installed.packages())) >0)
-    obj.prot@experimentData@other$Prostar_Version <- installed.packages()["Prostar","Version"]
-  else
-    obj.prot@experimentData@other$Prostar_Version <- NA
-  
-  if (length(grep('DAPAR', installed.packages())) >0)
-    obj.prot@experimentData@other$DAPAR_Version <- installed.packages()["DAPAR","Version"]
-  else
-    obj.prot@experimentData@other$DAPAR_Version <- NA
+  obj.prot@experimentData@other$Prostar_Version <- NA
+  tryCatch({
+    find.package("Prostar")
+    obj.prot@experimentData@other$Prostar_Version <- Biobase::package.version('Prostar')
+  },
+  error = function(e) obj.prot@experimentData@other$Prostar_Version <- NA
+  )
   
   
+  tryCatch({
+    find.package("DAPAR")
+    obj.prot@experimentData@other$Prostar_Version <- Biobase::package.version('DAPAR')
+  },
+  error = function(e) obj.prot@experimentData@other$Prostar_Version <- NA
+  )
+
   return (obj.prot)
 }
 
@@ -901,36 +930,39 @@ finalizeAggregation <- function(obj.pep, pepData, protData, X, lib.loc=NULL){
 
 
 #' @title
-#' Agregate metadata
+#' Combine peptide metadata to build protein metadata
 #' 
 #' @description 
-#' Agregation rules for the cells metadata. Please refer to the metacell vocabulary
-#' in `metacell.def()`
+#' Agregation rules for the cells metadata of peptides. 
+#' Please refer to the metacell vocabulary in `metacell.def()`
 #' 
 #' # Basic agreagtion
-#' Agregation of non imputed values (2.X) with quantitative values (1.0, 1.X, 3.0, 3.X)
+#' Agregation of non imputed values (2.X) with quantitative values 
+#' (1.0, 1.X, 3.0, 3.X)
 #' |----------------------------
 #' Not possible
 #' |----------------------------
 #' 
 #' Agregation of different types of missing values (among 2.1, 2.2)
 #' |----------------------------
-#' * Agregation of 2.1 peptides between each other gives a missing value non imputed (2.0)
-#' * Agreagtion of 2.2 peptides between each other givesa missing value non imputed (2.0)
+#' * Agregation of 2.1 peptides between each other gives a missing value 
+#'   non imputed (2.0)
+#' * Agreagtion of 2.2 peptides between each other givesa missing value 
+#'   non imputed (2.0)
 #' * Agregation of a mix of 2.1 and 2.2 gives a missing value non imputed (2.0)
 #' |----------------------------
 #' 
 #' 
 #' Agregation of a mix of quantitative values (among 1.0, 1.1, 1.2, 3.0, 3.X)
 #' |----------------------------
-#' * if the type of all the peptides to agregate is 1.0, 1.1 or 1.2, then the final
-#' metadata is set the this tag
-#' * if the set of metacell to agregate is a mix of 1.0, 1.1 or 1.2, then the final
-#' metadata is set to 1.0
-#' * if the set of metacell to agregate is a mix of 3.X and 3.0, then the final
-#' metadata is set to 3.0
-#' * if the set of metacell to agregate is a mix of 3.X and 3.0 and other (X.X), then the final
-#' metadata is set to 4.0
+#' * if the type of all the peptides to agregate is 1.0, 1.1 or 1.2, 
+#'   then the final metadata is set the this tag
+#' * if the set of metacell to agregate is a mix of 1.0, 1.1 or 1.2, 
+#'   then the final metadata is set to 1.0
+#' * if the set of metacell to agregate is a mix of 3.X and 3.0, 
+#'   then the final metadata is set to 3.0
+#' * if the set of metacell to agregate is a mix of 3.X and 3.0 and other (X.X),
+#'   then the final metadata is set to 4.0
 #' |----------------------------
 #' 
 #' # Post processing
@@ -974,8 +1006,8 @@ metacombine <- function(met, level) {
   if (length(unlist(lapply(u_met, function(x) grep('imputed', search.metacell.tags(x, level))))) == length(u_met))
     tag <- 'imputed'
   
-  # If the set of metacell to agregate is a mix of 3.X and 3.0 and other (X.X), then the final
-  # metadata is set to 4.0
+  # If the set of metacell to agregate is a mix of 3.X and 3.0 and other (X.X), 
+  # then the final metadata is set to 4.0
   tmp <- u_met
   i <- grep('imputed', tmp)
   if (length(i)>0)
@@ -987,14 +1019,42 @@ metacombine <- function(met, level) {
 }
 
 
-
-symprod <- function(mat, meta, level){
+#' @title 
+#' Symbolic product of matrices
+#' 
+#' @description 
+#' Execute a product two matrices: the first is an adjacency one  while the
+#' second if a simple dataframe
+#' 
+#' @param mat An adjacency matrix between peptides and proteins
+#' 
+#' @param obj.pep A dataframe of the cell metadata for peptides
+#' 
+#' @return xxxx
+#' 
+#' @author Samuel Wieczorek
+#' 
+AggregateMetacell <- function(mat, obj.pep){
+  
+  meta = Biobase::fData(obj.pep)[, obj.pep@experimentData@other$names_metacell]
+  level = obj.pep@experimentData@other$typeOfData
   rowcol <- function(row, col) col[row>0]
-  sapply(1:ncol(meta), 
+  
+  df <- sapply(1:ncol(meta), 
          function(j)
            sapply(1:nrow(mat), 
                   function(i) 
                     metacombine(rowcol(mat[i,], meta[,j]), level)
                   )
          )
+  colnames(df) <- obj.pep@experimentData@other$names_metacell
+  
+  
+  # Post processing of metacell to discover imputed_POV, imputed_MEC
+  df[df == 'imputed'] <- 'imputed_POV'
+  conds <- Biobase::pData(obj.pep)$Condition
+  df <- setMEC2(conds, df, pattern = 'imputed', level)
+  
+  df
+  
 } 
