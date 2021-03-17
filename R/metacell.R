@@ -167,14 +167,26 @@ setMEC <- function(qdata, conds, df, level){
 #' 
 #' @importFrom Biobase pData exprs fData
 #'  
-setMEC2 <- function(conds, df, pattern, level){
+Set_POV_MEC_tags <- function(conds, df, level){
   
-  conditions <- unique(conds)
+  u_conds <- unique(conds)
   
-  for (i in 1:length(conditions)){
-    ind.samples <- which(conds==conditions[i])
-    ind <- match.metacell(df[, ind.samples], pattern, level)
-    df[rowSums(ind)==length(ind.samples), ind.samples] <- paste0(pattern, '_MEC')
+  for (i in 1:length(u_conds)){
+    ind.samples <- which(conds == u_conds[i])
+    
+    ind.imputed <- match.metacell(df[, ind.samples], 'imputed', level)
+    ind.missing <- match.metacell(df[, ind.samples], 'missing', level)  
+    ind.missing.pov <- ind.missing & rowSums(ind.missing) < length(ind.samples) & rowSums(ind.missing) > 0
+    ind.missing.mec <- ind.missing &  rowSums(ind.missing) == length(ind.samples)
+    
+    ind.imputed.pov <- ind.imputed & rowSums(ind.imputed) < length(ind.samples) & rowSums(ind.imputed) > 0
+    ind.imputed.mec <- ind.imputed &  rowSums(ind.imputed) == length(ind.samples)
+    
+    df[,ind.samples][ind.imputed.mec] <- 'imputed_MEC'
+    df[,ind.samples][ind.missing.mec] <- 'missing_MEC'
+    df[,ind.samples][ind.imputed.pov] <- 'imputed_POV'
+    df[,ind.samples][ind.missing.pov]  <- 'missing_POV'
+
   }
   return(df)
 }
@@ -227,11 +239,8 @@ BuildMetaCell <- function(from, level, qdata = NULL, conds = NULL, df = NULL){
     stop("'qdata' is required.")
   if (is.null(conds))
     stop("'conds' is required.")
-  if (is.null(level))
-    stop("'level' is required.")
-  # if (is.null(df) && from != 'proline')
-  #   stop("'df' is required.")
-  
+
+
   if (is.null(df))
     df <- Metacell_generic(qdata, conds, level)
   else
@@ -297,9 +306,9 @@ Metacell_generic <- function(qdata, conds, level){
                    stringsAsFactors = FALSE) 
   
   # Rule 1
-  df[is.na(qdata)] <-  metacell.def(level)['missing_POV']
-  df[qdata == 0] <-  metacell.def(level)['missing_POV']
-  df <- setMEC(qdata, conds, df)
+  qdata[qdata == 0] <- NA
+  df[is.na(qdata)] <-  'missing'
+  df <- Set_POV_MEC_tags(conds, df, level)
   
   colnames(df) <- paste0("metacell_", colnames(qdata))
   colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
@@ -371,8 +380,8 @@ Metacell_proline <- function(qdata, conds, df, level=NULL){
                      stringsAsFactors = FALSE) 
   
   # Rule 1
-  df[is.na(qdata)] <-  metacell.def(level)['missing_POV']
-  df <- setMEC(qdata, conds, df, level)
+  df[is.na(qdata)] <-  'missing'
+  df <- Set_POV_MEC_tags(conds, df, level)
   
   # Rule 2
   df[df > 0 && qdata > 0] <- metacell.def(level)['quanti_identified']
@@ -412,16 +421,16 @@ Metacell_proline <- function(qdata, conds, df, level=NULL){
 #' @author Samuel Wieczorek
 #' 
 #' @examples 
-#' file <- system.file("extdata", "Exp1_R2_prot.txt", package="DAPARdata")
+#' file <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
 #' data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
 #' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", 
 #' package="DAPARdata")
 #' metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, 
 #' stringsAsFactors = FALSE)
 #' conds <- metadata$Condition
-#' qdata <- data[,49:54]
-#' df <- data[ , 36:41]
-#' df <- Metacell_maxquant(qdata, conds, df, level='protein')
+#' qdata <- data[1:10,56:61]
+#' df <- data[1:10 , 43:48]
+#' df2 <- Metacell_maxquant(qdata, conds, df, level='peptide')
 #' 
 #' @export
 #' 
@@ -446,7 +455,7 @@ Metacell_maxquant <- function(qdata, conds, df, level=NULL){
   
   
   # Rule 1
-  df[qdata == 0] <-  NA
+  qdata[qdata == 0] <-  NA
   
   # Rule 2
   df[df=='By MS/MS'] <- metacell.def(level)['quanti_identified']
@@ -456,10 +465,8 @@ Metacell_maxquant <- function(qdata, conds, df, level=NULL){
   
   
   # Add details for NA values
-  df[is.na(qdata)] <-  metacell.def(level)['missing_POV']
-  df <- setMEC(qdata, conds, df, level)
-  
-  
+  df[is.na(qdata)] <-  'missing'
+  df <- Set_POV_MEC_tags(conds, df, level)
   
   colnames(df) <- paste0("metacell_", colnames(qdata))
   colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
