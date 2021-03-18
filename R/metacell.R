@@ -86,51 +86,51 @@ metacell.def <- function(level){
   )
 }
 
-
-#' Sets the MEC tag in the metacell
 #' 
-#' @title Sets the MEC tag in the metacell
-#' 
-#' @param qdata xxx
-#' 
-#' @param conds xxx
-#' 
-#' @param df An object of class \code{MSnSet}
-#' 
-#' @param level Type of entity/pipeline
-#' 
-#' @return An instance of class \code{MSnSet}.
-#' 
-#' @author Samuel Wieczorek
-#' 
-#' @examples 
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' cols.for.ident <- xxxxx
-#' df <- Biobase::fData(obj)[, cols.for.ident]
-#' setMEC(df, Exp1_R25_pept, level = 'peptide')
-#' 
-#' @export
-#' 
-#' @importFrom Biobase pData exprs fData
-#'  
-setMEC <- function(qdata, conds, df, level){
-  
-  conditions <- unique(conds)
-  nbCond <- length(conditions)
-  
-  for (cond in 1:nbCond){
-    ind <- which(conds == conditions[cond])
-    
-    if (length(ind) == 1)
-      lNA <- which(is.na(qdata[,ind]))
-    else
-      lNA <- which(apply(is.na(qdata[,ind]), 1, sum)==length(ind))
-    
-    if (length(lNA) > 0)
-      df[lNA, ind] <- metacell.def(level)['missing_MEC']
-  }
-  return(df)
-}
+#' #' Sets the MEC tag in the metacell
+#' #' 
+#' #' @title Sets the MEC tag in the metacell
+#' #' 
+#' #' @param qdata xxx
+#' #' 
+#' #' @param conds xxx
+#' #' 
+#' #' @param df An object of class \code{MSnSet}
+#' #' 
+#' #' @param level Type of entity/pipeline
+#' #' 
+#' #' @return An instance of class \code{MSnSet}.
+#' #' 
+#' #' @author Samuel Wieczorek
+#' #' 
+#' #' @examples 
+#' #' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' #' cols.for.ident <- xxxxx
+#' #' df <- Biobase::fData(obj)[, cols.for.ident]
+#' #' setMEC(df, Exp1_R25_pept, level = 'peptide')
+#' #' 
+#' #' @export
+#' #' 
+#' #' @importFrom Biobase pData exprs fData
+#' #'  
+#' setMEC <- function(qdata, conds, df, level){
+#'   
+#'   conditions <- unique(conds)
+#'   nbCond <- length(conditions)
+#'   
+#'   for (cond in 1:nbCond){
+#'     ind <- which(conds == conditions[cond])
+#'     
+#'     if (length(ind) == 1)
+#'       lNA <- which(is.na(qdata[,ind]))
+#'     else
+#'       lNA <- which(apply(is.na(qdata[,ind]), 1, sum)==length(ind))
+#'     
+#'     if (length(lNA) > 0)
+#'       df[lNA, ind] <- metacell.def(level)['missing_MEC']
+#'   }
+#'   return(df)
+#' }
 
 
 #' @title Sets the MEC tag in the metacell
@@ -146,9 +146,6 @@ setMEC <- function(qdata, conds, df, level){
 #' 
 #' @param df An object of class \code{MSnSet}
 #' 
-#' @param pattern A string to search in metadata that defines if the cell is 
-#' missing or imputed. Available values are `missing` or `imputed`.
-#' 
 #' @param level Type of entity/pipeline
 #' 
 #' @return An instance of class \code{MSnSet}.
@@ -161,7 +158,7 @@ setMEC <- function(qdata, conds, df, level){
 #' cols.for.ident <- obj@experimentData@other$names_metacell
 #' conds <- Biobase::pData(obj)$Condition
 #' df <- Biobase::fData(obj)[, cols.for.ident]
-#' setMEC2(conds, df, pattern = 'missing', level = 'peptide')
+#' Set_POV_MEC_tags(conds, df, level = 'peptide')
 #' 
 #' @export
 #' 

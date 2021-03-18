@@ -17,7 +17,7 @@ Gives all the tags of the metadata vocabulary containing the pattern
 }
 \examples{
 search.metacell.tags('POV', 'peptide')
-search.metacell.tags('MV_POV', 'peptide')
+search.metacell.tags('missing_POV', 'peptide')
 search.metacell.tags('quanti', 'peptide')
 
 }

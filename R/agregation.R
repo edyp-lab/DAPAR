@@ -973,48 +973,67 @@ finalizeAggregation <- function(obj.pep, pepData, protData, X){
 #' 
 #' @param level xxx
 #' 
+#' @examples
+#' ll <- unname(metacell.def('peptide'))
+#' for (i in 1:length(ll))
+#' test <- lapply(combn(ll, i, simplify = FALSE), function(x) tag <- metacombine(x, 'peptide'))
+#' 
 #' 
 metacombine <- function(met, level) {
   #browser()
   tag <- NULL
   
   u_met <- unique(met)
-  if(length(unlist(lapply(u_met, function(x) grep('missing', search.metacell.tags(x, level))))) > 0 &&
-     length(unlist(lapply(u_met, function(x) grep('quanti', search.metacell.tags(x, level))))) > 0)
-    stop("You try to combine missing values (2.X) with quantitative values (1.X or 3.X).")
   
-  # Agregation of a mix of 2.1 and 2.2 gives a missing value non imputed (2.0)
-  # Agreagtion of 2.2 peptides between each other givesa missing value non imputed (2.0)
-  # Agregation of 2.1 peptides between each other gives a missing value non imputed (2.0)
-  if (length(unlist(lapply(u_met, function(x) grep('missing', search.metacell.tags(x, level))))) == length(u_met))
-    tag <- 'missing'
+  nb.tags <- lapply(metacell.def(level), function(x) as.numeric(x %in% u_met))
+  n.imputed <- length(grep('imputed', u_met))
+  n.missing <- length(grep('missing', u_met))
+  n.quanti <- length(grep('quanti', u_met))
+  n.combined <- length(grep('combined', u_met))
+  
+  
+  if(n.missing > 0 && (n.imputed > 0 || n.quanti > 0)) tag <- 'STOP'
+   # stop("You try to combine missing values (2.X) with quantitative values (1.X or 3.X).")
+  
+  # sw : Agregation of a mix of 2.X gives a missing value non imputed (2.0)
+  if (n.missing > 0 && n.quanti == 0 && n.imputed == 0) tag <- 'missing'
+  
+  
+  # # Agregation of a mix of 2.1 and 2.2 gives a missing value non imputed (2.0)
+  # if (length(u_met)== length(grep('missing_', u_met))) tag <- 'missing'
+  # 
+  # # Agreagtion of 2.2 peptides between each other givesa missing value non imputed (2.0)
+  # if (length(u_met)==1 && 'missing_MEC' == u_met) tag <- 'missing'
+  # 
+  # # Agreagtion of 2.2 peptides between each other gives a missing value non imputed (2.0)
+  # if (length(u_met)==1 && 'missing_POV' == u_met) tag <- 'missing'
+  #     
+  # # Agregation of 2.1 peptides between each other gives a missing value non imputed (2.0)
+  # if (length(u_met)==1 && 'missing_MEC' == u_met) tag <- 'missing'
   
   # if the type of all the peptides to agregate is 1.0, 1.1 or 1.2, then the final
   # metadata is set the this tag
-  if ( length(u_met)==1) {
-    if (length(grep('quanti', search.metacell.tags('quanti', level)))> 0) 
-      tag <- u_met
-  } else {
-    # if the set of metacell to agregate is a mix of 1.0, 1.1 or 1.2, then the final
-    # metadata is set to 1.0
-    if (length(unlist(lapply(u_met, function(x) grep('quanti', search.metacell.tags(x, level))))) == length(u_met))
-      tag <- 'quanti'
-  }
+  if (length(u_met)==1 && u_met == 'quanti') tag <- 'quanti'
+  if (length(u_met)==1 && u_met == 'quanti_identified') tag <- 'quanti_identified'
+  if (length(u_met)==1 && u_met == 'quanti_recovered') tag <- 'quanti_recovered'
   
+  
+  # if the set of metacell to agregate is a mix of 1.0, 1.1 or 1.2, then the final
+  # metadata is set to 1.0
+  if (n.quanti > 1 && n.imputed == 0 && n.missing==0 && n.combined ==0) tag <- 'quanti'
+   
+
   # If the set of metacell to agregate is a mix of 3.X and 3.0, then the final
   # metadata is set to 3.0
-  if (length(unlist(lapply(u_met, function(x) grep('imputed', search.metacell.tags(x, level))))) == length(u_met))
-    tag <- 'imputed'
-  
+  if (n.quanti == 0 && n.imputed > 0 && n.missing == 0 && n.combined == 0) tag <- 'imputed'
+
   # If the set of metacell to agregate is a mix of 3.X and 3.0 and other (X.X), 
   # then the final metadata is set to 4.0
-  tmp <- u_met
-  i <- grep('imputed', tmp)
-  if (length(i)>0)
-    if (length(tmp[-i]) >0)
-      tag <- 'combined'
+  if (n.quanti > 0 && n.imputed > 0 && n.missing == 0)
+    tag <- 'combined'
   
-  #print(paste0(paste0(met, collapse=' '), ' **** ', u_met, ' ---> ', tag))
+  #print(paste0(paste0(met, collapse=' '), ' **** ', paste0(u_met, collapse=' '), ' ---> ', tag))
+  print(paste0(paste0(u_met, collapse=' '), ' ---> ', tag))
   return(tag)
 }
 
@@ -1051,9 +1070,8 @@ AggregateMetacell <- function(mat, obj.pep){
   
   
   # Post processing of metacell to discover imputed_POV, imputed_MEC
-  df[df == 'imputed'] <- 'imputed_POV'
   conds <- Biobase::pData(obj.pep)$Condition
-  df <- setMEC2(conds, df, pattern = 'imputed', level)
+  df <- Set_POV_MEC_tags(conds, df, level)
   
   df
   
