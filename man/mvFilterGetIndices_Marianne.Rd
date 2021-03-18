@@ -20,8 +20,8 @@ quantitative data.}
 \item{condition}{Method used to choose the lines to delete.
 Values are : "None", "WholeMatrix", "AllCond", "AtLeastOneCond"}
 
-\item{threshold}{An integer value of the threshold if percent is FALSE. Otherwise, a floating
-number between 0 and 1.}
+\item{threshold}{An integer value of the threshold if percent is FALSE. 
+Otherwise, a floating number between 0 and 1.}
 }
 \value{
 An vector of indices that correspond to the lines to keep.
@@ -29,8 +29,8 @@ An vector of indices that correspond to the lines to keep.
 \description{
 Returns the indices of the lines of \code{exprs()} table to delete w.r.t. 
 the conditions on the number of missing values.
-The user chooses the minimum amount of peptides identified by MS/MS that is acceptable and
-the filter delete lines that do not respect this condition.
+The user chooses the minimum amount of peptides identified by MS/MS that is 
+acceptable and the filter delete lines that do not respect this condition.
 The condition may be on the whole line or condition by condition.
 }
 \details{
@@ -44,12 +44,15 @@ at least \code{th} 'by MS/MS', and for at least one condition, are kept.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-obj<-Exp1_R25_pept
-View((fData(obj))[mvFilterGetIndices_Marianne(Exp1_R25_pept, condition = "WholeMatrix", threshold=1),66:71])
-View((fData(obj))[mvFilterGetIndices_Marianne(Exp1_R25_pept, condition = "EmptyLines"),66:71])
-(fData(obj))[mvFilterGetIndices_Marianne(Exp1_R25_pept, condition = "WholeMatrix", threshold=2),66:71]
-(fData(obj))[mvFilterGetIndices_Marianne(Exp1_R25_pept, condition = "AllCond",  threshold=1),66:71]
-(fData(obj))[mvFilterGetIndices_Marianne(Exp1_R25_pept, condition = "AtLeastOneCond",  threshold=1),66:71]
+obj<-Exp1_R25_pept[1:100]
+ind <- mvFilterGetIndices_Marianne(obj, condition = "WholeMatrix", 
+threshold=1)
+ind <- mvFilterGetIndices_Marianne(obj, condition = "EmptyLines")
+ind <-mvFilterGetIndices_Marianne(obj, condition = "WholeMatrix", 
+threshold=2)
+ind <-mvFilterGetIndices_Marianne(obj, condition = "AllCond",  threshold=1)
+ind <-mvFilterGetIndices_Marianne(obj,condition = "AtLeastOneCond",
+threshold=1)
 
 }
 \author{

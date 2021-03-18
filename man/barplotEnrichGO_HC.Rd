@@ -2,7 +2,8 @@
 % Please edit documentation in R/bioAnalysis.R
 \name{barplotEnrichGO_HC}
 \alias{barplotEnrichGO_HC}
-\title{A barplot that shows the result of a GO enrichment, using the package \code{highcharter}}
+\title{A barplot that shows the result of a GO enrichment, using the 
+package \code{highcharter}}
 \usage{
 barplotEnrichGO_HC(ego, maxRes = 5, title = NULL)
 }

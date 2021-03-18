@@ -18,13 +18,13 @@ wrapperRunClustering(
 \arguments{
 \item{obj}{ExpressionSet or MSnSet object.}
 
-\item{clustering_method}{character string. Three possible values are "kmeans",
-"affinityProp" and "affinityPropReduced. See the details section for more
-explanation.}
+\item{clustering_method}{character string. Three possible values are 
+"kmeans", "affinityProp" and "affinityPropReduced. See the details section 
+for more explanation.}
 
 \item{conditions_order}{vector specifying the order of the Condition factor
-levels in the phenotype data. Default value is NULL, which means that it is the
-order of the condition present in the phenotype data of "obj" which is
+levels in the phenotype data. Default value is NULL, which means that it is 
+the order of the condition present in the phenotype data of "obj" which is
 taken to create the profiles.}
 
 \item{k_clusters}{integer or NULL. Number of clusters to run the kmeans
@@ -33,7 +33,8 @@ set to NULL, then a kmeans model will be realized with an optimal number of
 clusters `k` estimated by the Gap statistic method. Ignored for the Affinity
  propagation model.}
 
-\item{adjusted_pvals}{vector of adjusted pvalues returned by the [wrapperClassic1wayAnova()]}
+\item{adjusted_pvals}{vector of adjusted pvalues returned by the 
+[wrapperClassic1wayAnova()]}
 
 \item{ttl}{the title for the final plot}
 
@@ -49,8 +50,8 @@ The default value (NULL) generates 4 thresholds: [0.001, 0.005, 0.01, 0.05].
  threshold value will then be colored in gray.}
 }
 \value{
-a list of 2 elements: "model" is the clustering model, "ggplot" is the ggplot
-of profiles clustering.
+a list of 2 elements: "model" is the clustering model, "ggplot" is 
+the ggplot of profiles clustering.
 }
 \description{
 This function does all of the steps necessary to obtain a
@@ -65,8 +66,8 @@ phenotype data of the expressionSet / MSnSet. Then we standardize the data
 if there are more than 2 conditions. If the user asks to realize a kmeans 
 model without specifying the desired number of
 clusters (`clustering_method =" kmeans "` and `k_clusters = NULL`), the 
-function checks data's clusterability and estimates a number of clusters k using
-the gap statistic method. It is advise however to specify a k for the 
+function checks data's clusterability and estimates a number of clusters k 
+using the gap statistic method. It is advise however to specify a k for the 
 kmeans, because the gap stat gives the smallest possible k, whereas in 
 biology a small number of clusters can turn out to be uninformative. 
 If you want to run a kmeans but you don't know what number of clusters to 
@@ -87,16 +88,22 @@ values. This should lead to a smaller number of final clusters.
 \examples{
 utils::data(Exp1_R25_prot, package='DAPARdata')
 obj <- Exp1_R25_prot[1:1000]
-keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+threshold=ncol(obj))
 obj <- mvFilterFromIndices(obj, keepThat)
 expR25_ttest <- compute_t_tests(obj)
-wrapperRunClustering(obj = obj, adjusted_pvals = expR25_ttest$P_Value$`25fmol_vs_10fmol_pval`)
+wrapperRunClustering(obj = obj, 
+adjusted_pvals = expR25_ttest$P_Value$`25fmol_vs_10fmol_pval`)
 
 }
 \references{
-Tibshirani, R., Walther, G. and Hastie, T. (2001). Estimating the number of data clusters via the Gap statistic. *Journal of the Royal Statistical Society* B, 63, 411–423.
+Tibshirani, R., Walther, G. and Hastie, T. (2001). Estimating the number of 
+data clusters via the Gap statistic. 
+*Journal of the Royal Statistical Society* B, 63, 411–423.
 
-Frey, B. J. and Dueck, D. (2007) Clustering by passing messages between data points. *Science* 315, 972-976. DOI: \href{https://science.sciencemag.org/content/315/5814/972}{10.1126/science.1136800}
+Frey, B. J. and Dueck, D. (2007) Clustering by passing messages between 
+data points. *Science* 315, 972-976. 
+DOI: \href{https://science.sciencemag.org/content/315/5814/972}{10.1126/science.1136800}
 }
 \author{
 Helene Borges

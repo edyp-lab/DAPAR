@@ -39,7 +39,7 @@ at least \code{th} values, and for at least one condition, are kept.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-mvFilter(Exp1_R25_pept, "WholeMatrix", 2)
+obj <- mvFilter(Exp1_R25_pept[1:100], "WholeMatrix", 2)
 
 }
 \author{

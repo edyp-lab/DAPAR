@@ -18,13 +18,15 @@ distinguish between differential and non-differential data}
 A highcharts density plot
 }
 \description{
-This function show the density plots of Fold Change (the same as calculated by limma) for a list 
-of the comparisons of conditions in a differnetial analysis.
+This function show the density plots of Fold Change (the same as calculated 
+by limma) for a list of the comparisons of conditions in a differential 
+analysis.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept[1:1000]
-keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+threshold=ncol(obj))
 obj <- mvFilterFromIndices(obj, keepThat)
 qData <- Biobase::exprs(obj)
 sTab <- Biobase::pData(obj)

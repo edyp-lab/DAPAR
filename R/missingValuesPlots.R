@@ -153,8 +153,8 @@ mvPerLinesHisto_HC <- function(qData,
 
 
 
-#' This method is a wrapper to plots (using highcharts) from a \code{MSnSet} object a 
-#' bar plot which represents the distribution of the 
+#' This method is a wrapper to plots (using highcharts) from a \code{MSnSet} 
+#' object a bar plot which represents the distribution of the 
 #' number of missing values (NA) per lines (ie proteins) and per conditions.
 #' 
 #' @title Bar plot of missing values per lines and per conditions from an 
@@ -321,8 +321,8 @@ wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
 
 
 
-#' This method plots a histogram of missing values. Same as the function \code{mvHisto}
-#' but uses the package \code{highcharter}
+#' This method plots a histogram of missing values. Same as the function 
+#' \code{mvHisto} but uses the package \code{highcharter}
 #' 
 #' @title Histogram of missing values
 #' @param qData A dataframe that contains quantitative data.
@@ -412,7 +412,7 @@ mvHisto_HC <- function(qData,
 #' @author Alexia Dorffer
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj <- Exp1_R25_pept
+#' obj <- Exp1_R25_pept[1:100,]
 #' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=1)
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' wrapper.mvImage(obj)
@@ -429,7 +429,8 @@ wrapper.mvImage <- function(obj){
   qData <- Biobase::exprs(obj)
   conds <- Biobase::pData(obj)[ , "Condition"]
   metac <- Biobase::fData(obj)[ , obj@experimentData@other$names_metacell]
-  indices <- which(apply(match.metacell(metac, "MEC"), 1, sum) >0)
+  level <- obj@experimentData@other$typeOfData
+  indices <- which(apply(match.metacell(metac, "missing_MEC", level), 1, sum) >0)
   
   if (length(indices)==0){
     warning("The dataset contains no Missing value on Entire Condition. So this plot is not available.")
@@ -513,13 +514,12 @@ mvImage <- function(qData, conds){
 
 
 
-
-
-#' This method is a wrapper for the function \code{\link{hc_mvTypePlot2}} adapted to objects
-#' of class \code{MSnSet}).
-
 #' @title Distribution of observed values with respect to intensity values 
 #' from a \code{MSnSet} object
+#' 
+#' @description This method is a wrapper for the function 
+#' \code{\link{hc_mvTypePlot2}} adapted to objects of class \code{MSnSet}).
+#' 
 #' @param obj An object of class \code{MSnSet}.
 #' @param ... See \code{\link{hc_mvTypePlot2}} 
 #' @return A scatter plot

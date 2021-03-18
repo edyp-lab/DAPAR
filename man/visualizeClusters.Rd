@@ -18,8 +18,9 @@ visualizeClusters(
 
 \item{clust_model}{the clustering model obtained with dat.}
 
-\item{adjusted_pValues}{vector of the adjusted pvalues obtained for each protein with
-a 1-way ANOVA (for example obtained with the function [wrapperClassic1wayAnova()]).}
+\item{adjusted_pValues}{vector of the adjusted pvalues obtained for each 
+protein with a 1-way ANOVA (for example obtained with the function 
+[wrapperClassic1wayAnova()]).}
 
 \item{FDR_th}{the thresholds of FDR pvalues for the coloring of the profiles.
 The default (NULL) creates 4 thresholds: 0.001, 0.005, 0.01, 0.05
@@ -39,7 +40,8 @@ Visualize the clusters according to pvalue thresholds
 library(dplyr)
 utils::data(Exp1_R25_prot, package='DAPARdata')
 obj <- Exp1_R25_prot[1:100]
-keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+threshold=ncol(obj))
 obj <- mvFilterFromIndices(obj, keepThat)
 expR25_ttest <- compute_t_tests(obj)
 averaged_means <- averageIntensities(obj)
@@ -47,13 +49,14 @@ only_means <- dplyr::select_if(averaged_means, is.numeric)
 only_features <- dplyr::select_if(averaged_means, is.character)
 means <- purrr::map(purrr::array_branch(as.matrix(only_means), 1),mean)
 centered <- only_means - unlist(means)
-centered_means <- dplyr::bind_cols(feature = dplyr::as_tibble(only_features), dplyr::as_tibble(centered))
+centered_means <- dplyr::bind_cols(feature = dplyr::as_tibble(only_features), 
+dplyr::as_tibble(centered))
 difference <- only_means[,1] - only_means[,2]
 clusters <- as.data.frame(difference) \%>\%
     dplyr::mutate(cluster = dplyr::if_else(difference > 0, 1,2))
 vizu <- visualizeClusters(dat = centered_means,
                           clust_model = as.factor(clusters$cluster),
-                          adjusted_pValues = expR25_ttest$P_Value$`25fmol_vs_10fmol_pval`,
+         adjusted_pValues = expR25_ttest$P_Value$`25fmol_vs_10fmol_pval`,
                           FDR_th = c(0.001,0.005,0.01,0.05),
                           ttl = "Clustering of protein profiles")
                           

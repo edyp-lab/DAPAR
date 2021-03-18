@@ -65,12 +65,14 @@ including metadata.
 \examples{
 require(Matrix)
 exprsFile <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
-metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
+metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", 
+package="DAPARdata")
 metadata = read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
 indExpData <- c(56:61)
 indFData <- c(1:55,62:71)
 indiceID <- 64
-createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, indexForMetacell = c(43:48), pep_prot_data = "peptide", software = 'maxquant')
+createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, 
+indexForMetacell = c(43:48), pep_prot_data = "peptide", software = 'maxquant')
 
 }
 \author{

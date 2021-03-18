@@ -2,13 +2,14 @@
 % Please edit documentation in R/missingValuesFilter.R
 \name{filterGetIndices}
 \alias{filterGetIndices}
-\title{Filter lines in the MSnSet object after the metadata w.r.t. some criteria}
+\title{Filter lines in the MSnSet object after the metadata w.r.t. 
+some criteria}
 \usage{
 filterGetIndices(
   obj,
   metacell = NULL,
   remove = TRUE,
-  condition = "WholeMatrix",
+  condition = "None",
   percent = FALSE,
   operator = NULL,
   threshold = NULL
@@ -20,16 +21,18 @@ quantitative data (Biobase::exprs) and metadata (Biobase::fData).}
 
 \item{metacell}{xxx identification label of the data xxx}
 
-\item{remove}{Filtered lines will be removed after the filtration if FALSE. Else, they will be kept.Default is TRUE.}
+\item{remove}{Filtered lines will be removed after the filtration if FALSE. 
+Else, they will be kept.Default is TRUE.}
 
-\item{condition}{Method used to filter. Values are : "WholeMatrix", "AllCond", "AtLeastOneCond"}
+\item{condition}{Method used to filter. Values are : "WholeMatrix", 
+"AllCond", "AtLeastOneCond"}
 
 \item{percent}{TRUE or FALSE. Default is FALSE.}
 
 \item{operator}{A string.}
 
-\item{threshold}{An integer value of the threshold if percent is FALSE. Otherwise, a floating
-number between 0 and 1.}
+\item{threshold}{An integer value of the threshold if percent is FALSE. 
+Otherwise, a floating number between 0 and 1.}
 }
 \value{
 An vector of indices that correspond to the lines to keep.
@@ -45,12 +48,15 @@ The different methods are :
 at least \code{th} values are kept.
 "AllCond": given a threshold \code{th}, xxx only the lines which contain
 at least \code{th} values for each of the conditions are kept.
-"AtLeastOneCond": given a threshold \code{th}, xxx only the lines that contain
-at least \code{th} values, and for at least one condition, are kept.
+"AtLeastOneCond": given a threshold \code{th}, xxx only the lines that 
+contain at least \code{th} values, and for at least one condition, are kept.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-filterGetIndices(Exp1_R25_pept, metacell = 'quanti', remove = FALSE, percent=TRUE, condition = "WholeMatrix", threshold=0.5, operator = '>=')
+ind <- filterGetIndices(Exp1_R25_pept[1:100], metacell = 'quanti', remove = FALSE, 
+percent=TRUE, condition = "WholeMatrix", threshold=0.5, operator = '>=')
+ind <- filterGetIndices(Exp1_R25_pept[1:100], metacell = 'quanti', remove = FALSE, 
+condition = "WholeLine")
 
 }
 \author{

@@ -32,8 +32,8 @@ drawn above the bars.}
 A histogram
 }
 \description{
-This method plots a histogram of missing values. Same as the function \code{mvHisto}
-but uses the package \code{highcharter}
+This method plots a histogram of missing values. Same as the function 
+\code{mvHisto} but uses the package \code{highcharter}
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')

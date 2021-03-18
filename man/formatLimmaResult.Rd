@@ -15,9 +15,10 @@ formatLimmaResult(fit, conds, contrast)
 }
 \value{
 A list of two dataframes : logFC and P_Value. The first one contains
-the logFC values of all the comparisons (one column for one comparison), the second one contains
-the pvalue of all the comparisons (one column for one comparison). The names of the columns for those two dataframes
-are identical and correspond to the description of the comparison.
+the logFC values of all the comparisons (one column for one comparison), 
+the second one contains the pvalue of all the comparisons (one column for 
+one comparison). The names of the columns for those two dataframes are 
+identical and correspond to the description of the comparison.
 }
 \description{
 xxxx
@@ -25,7 +26,8 @@ xxxx
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept
-keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+threshold=ncol(obj))
 obj <- mvFilterFromIndices(obj, keepThat)
 qData <- Biobase::exprs(obj)
 sTab <- Biobase::pData(obj)

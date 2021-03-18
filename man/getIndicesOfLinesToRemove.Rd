@@ -23,7 +23,8 @@ prefix string
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-getIndicesOfLinesToRemove(Exp1_R25_pept, "Potential_contaminant", prefix="+")
+ind <- getIndicesOfLinesToRemove(Exp1_R25_pept[1:100], "Potential_contaminant", 
+prefix="+")
 
 }
 \author{

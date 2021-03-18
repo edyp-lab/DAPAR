@@ -13,7 +13,7 @@
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' getPourcentageOfMV(Exp1_R25_pept)
+#' getPourcentageOfMV(Exp1_R25_pept[1:100,])
 #' 
 #' @export
 #' 
@@ -50,7 +50,7 @@ getPourcentageOfMV <- function(obj){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' getNumberOf(Exp1_R25_pept, "Potential_contaminant", "+")
+#' getNumberOf(Exp1_R25_pept[1:100], "Potential_contaminant", "+")
 #' 
 #' @export
 #' 
@@ -91,7 +91,7 @@ getNumberOf <- function(obj, name=NULL, prefix=NULL){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' NumericalFiltering(Exp1_R25_pept, 'A_Count', '6', '==')
+#' NumericalFiltering(Exp1_R25_pept[1:100], 'A_Count', '6', '==')
 #' 
 #' @export
 #' 
@@ -139,7 +139,8 @@ NumericalFiltering <- function(obj, name=NULL, value=NULL, operator=NULL){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' NumericalgetIndicesOfLinesToRemove(Exp1_R25_pept, "A_Count", value="6", operator='==')
+#' NumericalgetIndicesOfLinesToRemove(Exp1_R25_pept[1:100], "A_Count", value="6", 
+#' operator='==')
 #' 
 #' @export
 #' 
@@ -159,12 +160,13 @@ NumericalgetIndicesOfLinesToRemove <- function(obj, name=NULL, value=NULL, opera
 
 
 
-#' Plots a barplot of proportion of contaminants and reverse. Same as the function
-#' \code{proportionConRev} but uses the package \code{highcharter}
+#' Plots a barplot of proportion of contaminants and reverse. Same as the 
+#' function \code{proportionConRev} but uses the package \code{highcharter}
 #' 
 #' @title Barplot of proportion of contaminants and reverse
 #' 
-#' @param nBoth The number of both contaminants and reverse identified in the dataset.
+#' @param nBoth The number of both contaminants and reverse identified in 
+#' the dataset.
 #' 
 #' @param nCont The number of contaminants identified in the dataset.
 #' 
@@ -235,8 +237,8 @@ proportionConRev_HC <- function(nBoth = 0, nCont=0, nRev=0, lDataset=0){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' removeLines(Exp1_R25_pept, "Potential_contaminant")
-#' removeLines(Exp1_R25_pept, "Reverse")
+#' removeLines(Exp1_R25_pept[1:100], "Potential_contaminant")
+#' removeLines(Exp1_R25_pept[1:100], "Reverse")
 #' 
 #' @export
 #' 
@@ -253,36 +255,41 @@ removeLines <- function(obj, idLine2Delete=NULL, prefix=NULL){
 
 
 
-#' This function removes lines in the dataset based on prefix strings (contaminants, reverse or both).
+#' This function removes lines in the dataset based on prefix strings 
+#' (contaminants, reverse or both).
 #' 
-#' @title Removes lines in the dataset based on a prefix strings (contaminants, reverse or both).
+#' @title Removes lines in the dataset based on a prefix strings (contaminants, 
+#' reverse or both).
 #' 
 #' @param obj An object of class \code{MSnSet}.
 #' 
 #' @param idCont2Delete The name of the column that correspond to the 
 #' contaminants to filter
 #' 
-#' @param prefix_Cont A character string that is the prefix for the contaminants to find in the data
+#' @param prefix_Cont A character string that is the prefix for the 
+#' contaminants to find in the data
 #' 
 #' @param idRev2Delete The name of the column that correspond to the 
 #' reverse data to filter
 #' 
-#' @param prefix_Rev A character string that is the prefix for the reverse to find in the data
+#' @param prefix_Rev A character string that is the prefix for the reverse to 
+#' find in the data
 #' 
 #' @return An list of 4 items :
 #' obj : an object of class \code{MSnSet} in which the lines have been deleted
-#' deleted.both : an object of class \code{MSnSet} which contains the deleted lines 
-#' corresponding to both contaminants and reverse, 
-#' deleted.contaminants : n object of class \code{MSnSet} which contains the deleted lines 
-#' corresponding to contaminants, 
-#' deleted.reverse : an object of class \code{MSnSet} which contains the deleted lines 
-#' corresponding to reverse,
+#' deleted.both : an object of class \code{MSnSet} which contains the deleted 
+#' lines corresponding to both contaminants and reverse, 
+#' deleted.contaminants : n object of class \code{MSnSet} which contains the 
+#' deleted lines corresponding to contaminants, 
+#' deleted.reverse : an object of class \code{MSnSet} which contains the 
+#' deleted lines corresponding to reverse,
 #' 
 #' @author Samuel Wieczorek
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' StringBasedFiltering(Exp1_R25_pept, 'Potential_contaminant', '+', 'Reverse', '+')
+#' StringBasedFiltering(Exp1_R25_pept[1:100], 'Potential_contaminant', '+', 
+#' 'Reverse', '+')
 #' 
 #' @export
 #' 
@@ -375,7 +382,8 @@ StringBasedFiltering <- function(obj,
 #' 
 #' @param cname The name of the column that correspond to the line to filter
 #' 
-#' @param tag A character string that is the prefix for the contaminants to find in the data
+#' @param tag A character string that is the prefix for the contaminants to 
+#' find in the data
 #' 
 #' @return An list of 4 items :
 #' obj : an object of class \code{MSnSet} in which the lines have been deleted
@@ -385,7 +393,7 @@ StringBasedFiltering <- function(obj,
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' StringBasedFiltering2(Exp1_R25_pept, 'Potential_contaminant', '+')
+#' obj.filter <- StringBasedFiltering2(Exp1_R25_pept[1:100], 'Potential_contaminant', '+')
 #' 
 #' @export
 #' 
@@ -437,7 +445,8 @@ StringBasedFiltering2 <- function(obj, cname=NULL, tag=NULL){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' getIndicesOfLinesToRemove(Exp1_R25_pept, "Potential_contaminant", prefix="+")
+#' ind <- getIndicesOfLinesToRemove(Exp1_R25_pept[1:100], "Potential_contaminant", 
+#' prefix="+")
 #' 
 #' @export
 #' 
@@ -487,7 +496,7 @@ getIndicesOfLinesToRemove <- function(obj, idLine2Delete=NULL, prefix=NULL)
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' mvFilter(Exp1_R25_pept, "WholeMatrix", 2)
+#' obj <- mvFilter(Exp1_R25_pept[1:100], "WholeMatrix", 2)
 #' 
 #' @export
 #' 
@@ -553,7 +562,7 @@ mvFilter <- function(obj,
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' mvFilterFromIndices(Exp1_R25_pept, c(1:10))
+#' obj.filter <- mvFilterFromIndices(Exp1_R25_pept[1:100], c(1:10))
 #' 
 #' @export
 #' 
@@ -593,7 +602,7 @@ mvFilterFromIndices <- function(obj,
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' deleteLinesFromIndices(Exp1_R25_pept, c(1:10))
+#' obj <- deleteLinesFromIndices(Exp1_R25_pept[1:100], c(1:10))
 #' 
 #' @export
 #' 
@@ -619,26 +628,29 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
 #' at least \code{th} values are kept.
 #' "AllCond": given a threshold \code{th}, xxx only the lines which contain
 #' at least \code{th} values for each of the conditions are kept.
-#' "AtLeastOneCond": given a threshold \code{th}, xxx only the lines that contain
-#' at least \code{th} values, and for at least one condition, are kept.
+#' "AtLeastOneCond": given a threshold \code{th}, xxx only the lines that 
+#' contain at least \code{th} values, and for at least one condition, are kept.
 #' 
-#' @title Filter lines in the MSnSet object after the metadata w.r.t. some criteria
+#' @title Filter lines in the MSnSet object after the metadata w.r.t. 
+#' some criteria
 #' 
 #' @param obj An object of class \code{MSnSet} containing
 #' quantitative data (Biobase::exprs) and metadata (Biobase::fData).
 #' 
 #' @param metacell xxx identification label of the data xxx
 #' 
-#' @param remove Filtered lines will be removed after the filtration if FALSE. Else, they will be kept.Default is TRUE. 
+#' @param remove Filtered lines will be removed after the filtration if FALSE. 
+#' Else, they will be kept.Default is TRUE. 
 #' 
-#' @param condition Method used to filter. Values are : "WholeMatrix", "AllCond", "AtLeastOneCond"
+#' @param condition Method used to filter. Values are : "WholeMatrix", 
+#' "AllCond", "AtLeastOneCond"
 #' 
 #' @param percent TRUE or FALSE. Default is FALSE.
 #' 
 #' @param operator A string.
 #'  
-#' @param threshold An integer value of the threshold if percent is FALSE. Otherwise, a floating
-#' number between 0 and 1.
+#' @param threshold An integer value of the threshold if percent is FALSE. 
+#' Otherwise, a floating number between 0 and 1.
 #' 
 #' @return An vector of indices that correspond to the lines to keep.
 #' 
@@ -646,8 +658,10 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' filterGetIndices(Exp1_R25_pept, metacell = 'quanti', remove = FALSE, percent=TRUE, condition = "WholeMatrix", threshold=0.5, operator = '>=')
-#' filterGetIndices(Exp1_R25_pept, metacell = 'quanti', remove = FALSE, condition = "WholeLine")
+#' ind <- filterGetIndices(Exp1_R25_pept[1:100], metacell = 'quanti', remove = FALSE, 
+#' percent=TRUE, condition = "WholeMatrix", threshold=0.5, operator = '>=')
+#' ind <- filterGetIndices(Exp1_R25_pept[1:100], metacell = 'quanti', remove = FALSE, 
+#' condition = "WholeLine")
 #' 
 #' @export
 #' 
@@ -781,8 +795,8 @@ filterGetIndices <- function(obj,
 #' @param condition Method used to choose the lines to delete.
 #' Values are : "None", "EmptyLines", "WholeMatrix", "AllCond", "AtLeastOneCond"
 #' 
-#' @param threshold An integer value of the threshold if percent is FALSE. Otherwise, a floating
-#' number between 0 and 1.
+#' @param threshold An integer value of the threshold if percent is FALSE. 
+#' Otherwise, a floating number between 0 and 1.
 #' 
 #' @return An vector of indices that correspond to the lines to keep.
 #' 
@@ -790,9 +804,10 @@ filterGetIndices <- function(obj,
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' mvFilterGetIndices(Exp1_R25_pept, condition = "WholeMatrix", threshold=2)
-#' mvFilterGetIndices(Exp1_R25_pept, condition = "EmptyLines")
-#' mvFilterGetIndices(Exp1_R25_pept, condition = "WholeMatrix", percent=TRUE, threshold=0.5)
+#' ind <- mvFilterGetIndices(Exp1_R25_pept[1:100], condition = "WholeMatrix", threshold=2)
+#' ind <- mvFilterGetIndices(Exp1_R25_pept[1:100], condition = "EmptyLines")
+#' ind <- mvFilterGetIndices(Exp1_R25_pept[1:100], condition = "WholeMatrix", percent=TRUE, 
+#' threshold=0.5)
 #' 
 #' @export
 #' 
@@ -913,7 +928,7 @@ mvFilterGetIndices <- function(obj,
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' mvFilterGetIndices_old(Exp1_R25_pept, "wholeMatrix", 2)
+#' ind <- mvFilterGetIndices_old(Exp1_R25_pept[1:100], "wholeMatrix", 2)
 #' 
 #' @export
 #' 
@@ -982,8 +997,8 @@ mvFilterGetIndices_old <- function(obj,
 
 #' Returns the indices of the lines of \code{exprs()} table to delete w.r.t. 
 #' the conditions on the number of missing values.
-#' The user chooses the minimum amount of peptides identified by MS/MS that is acceptable and
-#' the filter delete lines that do not respect this condition.
+#' The user chooses the minimum amount of peptides identified by MS/MS that is 
+#' acceptable and the filter delete lines that do not respect this condition.
 #' The condition may be on the whole line or condition by condition.
 #' 
 #' The different methods are :
@@ -1004,8 +1019,8 @@ mvFilterGetIndices_old <- function(obj,
 #' @param condition Method used to choose the lines to delete.
 #' Values are : "None", "WholeMatrix", "AllCond", "AtLeastOneCond"
 #' 
-#' @param threshold An integer value of the threshold if percent is FALSE. Otherwise, a floating
-#' number between 0 and 1.
+#' @param threshold An integer value of the threshold if percent is FALSE. 
+#' Otherwise, a floating number between 0 and 1.
 #' 
 #' @return An vector of indices that correspond to the lines to keep.
 #' 
@@ -1013,12 +1028,15 @@ mvFilterGetIndices_old <- function(obj,
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj<-Exp1_R25_pept
-#' View((fData(obj))[mvFilterGetIndices_Marianne(Exp1_R25_pept, condition = "WholeMatrix", threshold=1),66:71])
-#' View((fData(obj))[mvFilterGetIndices_Marianne(Exp1_R25_pept, condition = "EmptyLines"),66:71])
-#' (fData(obj))[mvFilterGetIndices_Marianne(Exp1_R25_pept, condition = "WholeMatrix", threshold=2),66:71]
-#' (fData(obj))[mvFilterGetIndices_Marianne(Exp1_R25_pept, condition = "AllCond",  threshold=1),66:71]
-#' (fData(obj))[mvFilterGetIndices_Marianne(Exp1_R25_pept, condition = "AtLeastOneCond",  threshold=1),66:71]
+#' obj<-Exp1_R25_pept[1:100]
+#' ind <- mvFilterGetIndices_Marianne(obj, condition = "WholeMatrix", 
+#' threshold=1)
+#' ind <- mvFilterGetIndices_Marianne(obj, condition = "EmptyLines")
+#' ind <-mvFilterGetIndices_Marianne(obj, condition = "WholeMatrix", 
+#' threshold=2)
+#' ind <-mvFilterGetIndices_Marianne(obj, condition = "AllCond",  threshold=1)
+#' ind <-mvFilterGetIndices_Marianne(obj,condition = "AtLeastOneCond",
+#' threshold=1)
 #' 
 #' @export
 #' 
@@ -1114,9 +1132,9 @@ mvFilterGetIndices_Marianne <- function(obj,
 
 #' #' Filter missing values by proportion
 #' #'
-#' #' @description Remove lines in the data according to the proportion of missing
-#' #' values. This proportion is calculated differently depending on whether we
-#' #' want a certain proportion of missing values (NA) to remain on:
+#' #' @description Remove lines in the data according to the proportion of 
+#' #' missing values. This proportion is calculated differently depending on 
+#' #' whether we want a certain proportion of missing values (NA) to remain on:
 #' #' * the entire matrix, regardless of the conditions: the rows containing a
 #' #' proportion of NA equal or below the threshold will be kept.
 #' #' * all the conditions: the lines for which all the conditions have a NA
@@ -1127,8 +1145,8 @@ mvFilterGetIndices_Marianne <- function(obj,
 #' #' @param obj  An object of class \code{MSnSet} containing quantitative data
 #' #' and phenotype data.
 #' #' 
-#' #' @param intensities_proportion float between 0 and 1 corresponding to the proportion
-#' #' of intensities to keep in the lines.
+#' #' @param intensities_proportion float between 0 and 1 corresponding to the
+#' #' proportion of intensities to keep in the lines.
 #' #' 
 #' #' @param mode character string. Four possibilities corresponding to the
 #' #' description above: "None", "WholeMatrix", "AllCond" and "AtLeastOneCond".
@@ -1140,7 +1158,9 @@ mvFilterGetIndices_Marianne <- function(obj,
 #' #' 
 #' #' @examples
 #' #' utils::data(Exp1_R25_prot, package='DAPARdata')
-#' #' filtered <- filterByProportion(obj = Exp1_R25_prot, intensities_proportion = 0.8, mode = "atLeastOneCond")
+#' #' obj <- Exp1_R25_prot[1:100]
+#' #' filtered <- filterByProportion(obj = obj, 
+#' #' intensities_proportion = 0.8, mode = "atLeastOneCond")
 #' #' 
 #' #' @export
 #' #' 

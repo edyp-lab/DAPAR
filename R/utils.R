@@ -1,10 +1,5 @@
 
 
-
-
-
-#' Returns the contents of the slot processing of an object of class \code{MSnSet}
-#' 
 #' @title Returns the contains of the slot processing  of an object of 
 #' class \code{MSnSet}
 #' 
@@ -218,11 +213,14 @@ my_hc_chart <- function(hc,  chartType,zoomType="None"){
 
 
 
-#' This function retrieves the indices of non-zero elements in sparse matrices
-#' of class dgCMatrix from package Matrix. This function is largely inspired from 
-#' the package \code{RINGO}
+
 #' 
 #' @title Retrieve the indices of non-zero elements in sparse matrices
+#' 
+#' @description 
+#' This function retrieves the indices of non-zero elements in sparse matrices
+#' of class dgCMatrix from package Matrix. This function is largely inspired 
+#' from the package \code{RINGO}
 #' 
 #' @param x A sparse matrix of class dgCMatrix
 #' 
@@ -232,7 +230,8 @@ my_hc_chart <- function(hc,  chartType,zoomType="None"){
 #' 
 #' @examples
 #' library(Matrix)
-#' mat <- Matrix(c(0,0,0,0,0,1,0,0,1,1,0,0,0,0,1),nrow=5, byrow=TRUE, sparse=TRUE)
+#' mat <- Matrix(c(0,0,0,0,0,1,0,0,1,1,0,0,0,0,1),nrow=5, byrow=TRUE, 
+#' sparse=TRUE)
 #' res <- nonzero(mat)
 #' 
 #' @export

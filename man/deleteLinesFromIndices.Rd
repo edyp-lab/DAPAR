@@ -25,7 +25,7 @@ Delete the lines of \code{exprs()} table identified by their indice.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-deleteLinesFromIndices(Exp1_R25_pept, c(1:10))
+obj <- deleteLinesFromIndices(Exp1_R25_pept[1:100], c(1:10))
 
 }
 \author{

@@ -16,11 +16,11 @@ A Excel file (.xlsx)
 }
 \description{
 This function exports a \code{MSnSet} data object to a Excel file.
-Each of the three data.frames in the \code{MSnSet} object (ie experimental data,
-phenoData and metaData are respectively integrated into separate sheets in
-the Excel file).
-The colored cells in the experimental data correspond to the original missing values
-which have been imputed.
+Each of the three data.frames in the \code{MSnSet} object (ie experimental 
+data, phenoData and metaData are respectively integrated into separate sheets 
+in the Excel file).
+The colored cells in the experimental data correspond to the original 
+missing values which have been imputed.
 }
 \examples{
 \donttest{

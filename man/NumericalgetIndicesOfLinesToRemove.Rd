@@ -29,7 +29,8 @@ prefix string
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-NumericalgetIndicesOfLinesToRemove(Exp1_R25_pept, "A_Count", value="6", operator='==')
+NumericalgetIndicesOfLinesToRemove(Exp1_R25_pept[1:100], "A_Count", value="6", 
+operator='==')
 
 }
 \author{

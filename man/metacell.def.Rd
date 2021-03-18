@@ -15,47 +15,47 @@ This function gives the vocabulary used for the metadata of each entity in
 each condition.
 Peptide-level vocabulary
 
-|── 1.0 Quantitative Value
+|-- 1.0 Quantitative Value
 |    |
-│    |── 1.1 Identified (color 4, white)
+|    |-- 1.1 Identified (color 4, white)
 |    |
-│    |── 1.2 Recovered (color 3, lightgrey)
-│
-|──2.0 Missing value (no color)
+|    |-- 1.2 Recovered (color 3, lightgrey)
+|
+|-- 2.0 Missing value (no color)
 |    |
-│    |── 2.1 Missing POV (color 1)
+|    |-- 2.1 Missing POV (color 1)
 |    |
-│    |── 2.2 Missing MEC (color 2)
-│
-|── 3.0 Imputed value
+|    |-- 2.2 Missing MEC (color 2)
+|
+|-- 3.0 Imputed value
 |    |
-│    |── 3.1 Imputed POV (color 1)
+|    |-- 3.1 Imputed POV (color 1)
 |    |
-│    |── 3.2 Imputed MEC (color 2)
+|    |-- 3.2 Imputed MEC (color 2)
        
  
  
 Protein-level vocabulary:
 
-|── 1.0 Quantitative Value
+|-- 1.0 Quantitative Value
 |    |
-│    |── 1.1 Identified (color 4, white)
+|    |-- 1.1 Identified (color 4, white)
 |    |
-│    |── 1.2 Recovered (color 3, lightgrey)
-│
-|──2.0 Missing value
+|    |-- 1.2 Recovered (color 3, lightgrey)
+|
+|-- 2.0 Missing value
 |    |
-│    |── 2.1 Missing POV (color 1)
+|    |-- 2.1 Missing POV (color 1)
 |    |
-│    |── 2.2 Missing MEC (color 2)
-│
-|── 3.0 Imputed value
+|    |-- 2.2 Missing MEC (color 2)
+|
+|-- 3.0 Imputed value
 |    |
-│    |── 3.1 Imputed POV (color 1)
+|    |-- 3.1 Imputed POV (color 1)
 |    |
-│    |── 3.2 Imputed MEC (color 2)
-│
-|── 4.0 Combined value (color 3bis, light-lightgrey)
+|    |-- 3.2 Imputed MEC (color 2)
+|
+|-- 4.0 Combined value (color 3bis, light-lightgrey)
 }
 \author{
 Thomas Burger, Samuel Wieczorek

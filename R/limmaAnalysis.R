@@ -410,13 +410,14 @@ make.design.3 <- function(sTab){
 #' 
 #' @title Builds the contrast matrix
 #' 
-#' @param design The data.frame which correspond to the pData function of MSnbase
+#' @param design The data.frame which correspond to the pData function of 
+#' MSnbase
 #' 
 #' @param condition xxxxx
 #' 
-#' @param contrast An integer that Indicates if the test consists of the comparison of each 
-#' biological condition versus each of the other ones (Contrast=1; 
-#' for example H0:"C1=C2" vs H1:"C1!=C2", etc.) 
+#' @param contrast An integer that Indicates if the test consists of the 
+#' comparison of each biological condition versus each of the other ones 
+#' (Contrast=1; for example H0:"C1=C2" vs H1:"C1!=C2", etc.) 
 #' or each condition versus all others (Contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
 #'  H1:"C1!=(C2+C3)/2", etc. if there are three conditions).
 #'  
@@ -535,8 +536,9 @@ make.contrast <- function(design, condition, contrast=1){
 #' Values are: 'anova1way', 'OnevsOne' and 'OnevsAll'; default is 'OnevsOne'.
 #' 
 #' @return A list of two dataframes : logFC and P_Value. The first one contains
-#' the logFC values of all the comparisons (one column for one comparison), the second one contains
-#' the pvalue of all the comparisons (one column for one comparison). The names of the columns for those two dataframes
+#' the logFC values of all the comparisons (one column for one comparison), 
+#' the second one contains the pvalue of all the comparisons (one column for 
+#' one comparison). The names of the columns for those two dataframes
 #' are identical and correspond to the description of the comparison. 
 #' 
 #' @author Hélène Borges, Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
@@ -611,16 +613,18 @@ limmaCompleteTest <- function(qData, sTab, comp.type="OnevsOne"){
 #' @param contrast xxxx
 #' 
 #' @return A list of two dataframes : logFC and P_Value. The first one contains
-#' the logFC values of all the comparisons (one column for one comparison), the second one contains
-#' the pvalue of all the comparisons (one column for one comparison). The names of the columns for those two dataframes
-#' are identical and correspond to the description of the comparison. 
+#' the logFC values of all the comparisons (one column for one comparison), 
+#' the second one contains the pvalue of all the comparisons (one column for 
+#' one comparison). The names of the columns for those two dataframes are 
+#' identical and correspond to the description of the comparison. 
 #' 
 #' @author Samuel Wieczorek
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept
-#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+#' threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' qData <- Biobase::exprs(obj)
 #' sTab <- Biobase::pData(obj)

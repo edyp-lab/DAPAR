@@ -13,7 +13,8 @@ wrapper.impute.mle(obj, na.type)
 Available values are: `NA` (for both POV and MEC).}
 }
 \value{
-The \code{exprs(obj)} matrix with imputed values instead of missing values.
+The \code{exprs(obj)} matrix with imputed values instead of missing 
+values.
 }
 \description{
 This method is a wrapper to the function \code{impute.mle} of the package

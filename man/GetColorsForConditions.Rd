@@ -9,8 +9,8 @@ GetColorsForConditions(conds, pal = NULL)
 \arguments{
 \item{conds}{The extended vector of samples conditions}
 
-\item{pal}{A vector of HEX color code that form the basis palette from which to build
-the complete color vector for the conditions.}
+\item{pal}{A vector of HEX color code that form the basis palette from which 
+to build the complete color vector for the conditions.}
 }
 \value{
 A vector composed of HEX color code for the conditions

@@ -29,7 +29,8 @@
 #' @examples
 #' \donttest{
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
-#' ggo<-group_GO(data=Biobase::fData(Exp1_R25_prot)$Protein.IDs, idFrom="UNIPROT", 
+#' obj <- Exp1_R25_prot
+#' ggo<-group_GO(data=Biobase::fData(obj)$Protein.IDs, idFrom="UNIPROT", 
 #' orgdb="org.Sc.sgd.db", ont="MF", level=2)
 #' }
 #' 
@@ -90,8 +91,9 @@ group_GO <- function(data, idFrom,  orgdb, ont, level, readable=FALSE){
 #' @examples
 #' \donttest{
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
+#' obj <- Exp1_R25_prot
 #' univ<-univ_AnnotDbPkg("org.Sc.sgd.db") #univ is the background
-#' ego<-enrich_GO(data=Biobase::fData(Exp1_R25_prot)$Protein.IDs, idFrom="UNIPROT", 
+#' ego<-enrich_GO(data=Biobase::fData(obj)$Protein.IDs, idFrom="UNIPROT", 
 #' orgdb="org.Sc.sgd.db",ont="MF", pval=0.05, universe = univ)
 #' }
 #' 
@@ -161,21 +163,26 @@ univ_AnnotDbPkg <- function(orgdb){
 #' @param obj An object of the class \code{MSnSet}
 #' 
 #' @param ggo_res The object returned by the function \code{group_GO} of the 
-#' package \code{DAPAR} or the function \code{groupGO} of the package \code{\link{clusterProfiler}}
+#' package \code{DAPAR} or the function \code{groupGO} of the package
+#'  \code{\link{clusterProfiler}}
 #' 
-#' @param ego_res The object returned by the function \code{enrich_GO} of the package \code{DAPAR}
-#' or the function \code{enrichGO} of the package \code{\link{clusterProfiler}}
+#' @param ego_res The object returned by the function \code{enrich_GO} of the 
+#' package \code{DAPAR} or the function \code{enrichGO} of the package 
+#' \code{\link{clusterProfiler}}
 #' 
-#' @param organism The parameter OrgDb of the functions \code{\link{bitr}}, \code{\link{groupGO}} and \code{\link{enrichGO}}
+#' @param organism The parameter OrgDb of the functions \code{\link{bitr}}, 
+#' \code{\link{groupGO}} and \code{\link{enrichGO}}
 #' 
 #' @param ontology One of "MF", "BP", and "CC" subontologies
 #' 
 #' @param levels A vector of the different GO grouping levels to save
 #' 
-#' @param pvalueCutoff The qvalue cutoff (same parameter as in the function \code{enrichGO} of the package \code{\link{clusterProfiler}})
+#' @param pvalueCutoff The qvalue cutoff (same parameter as in the function 
+#' \code{enrichGO} of the package \code{\link{clusterProfiler}})
 #' 
-#' @param typeUniverse  The type of background to be used. Values are 'Entire Organism', 'Entire dataset' or 'Custom'. In the latter
-#' case, a file should be uploaded by the user
+#' @param typeUniverse  The type of background to be used. Values are 
+#' 'Entire Organism', 'Entire dataset' or 'Custom'. In the latter case, a file 
+#' should be uploaded by the user
 #' 
 #' @return An object of the class \code{MSnSet}
 #' 
@@ -218,13 +225,15 @@ GOAnalysisSave <- function (obj, ggo_res=NULL, ego_res=NULL, organism, ontology,
 
 #' A barplot of GO classification analysis
 #' 
-#' @title A barplot which shows the result of a GO classification, using the package \code{highcharter}
+#' @title A barplot which shows the result of a GO classification, using the 
+#' package \code{highcharter}
 #' 
-#' @param ggo The result of the GO classification, provides either by the function
-#' \code{group_GO} in the package \code{DAPAR} or the function \code{groupGO} 
-#' in the package \code{\link{clusterProfiler}}
+#' @param ggo The result of the GO classification, provides either by the 
+#' function \code{group_GO} in the package \code{DAPAR} or the function 
+#' \code{groupGO} in the package \code{\link{clusterProfiler}}
 #' 
-#' @param maxRes An integer which is the maximum number of classes to display in the plot 
+#' @param maxRes An integer which is the maximum number of classes to display 
+#' in the plot 
 #' 
 #' @param title The title of the plot
 #' 
@@ -263,7 +272,8 @@ barplotGroupGO_HC <- function(ggo, maxRes=5, title=""){
 
 #' A barplot of GO enrichment analysis
 #' 
-#' @title A barplot that shows the result of a GO enrichment, using the package \code{highcharter}
+#' @title A barplot that shows the result of a GO enrichment, using the 
+#' package \code{highcharter}
 #' 
 #' @param ego The result of the GO enrichment, provides either by the function
 #' \code{enrichGO} in the package \code{DAPAR} or the function \code{enrichGO} 
@@ -333,10 +343,12 @@ barplotEnrichGO_HC <- function(ego, maxRes = 5, title=NULL){
 
 #' A scatter plot of GO enrichment analysis
 #' 
-#' @title A dotplot that shows the result of a GO enrichment, using the package \code{highcharter}
+#' @title A dotplot that shows the result of a GO enrichment, using the 
+#' package \code{highcharter}
 #' 
 #' @param ego The result of the GO enrichment, provides either by the function
-#' enrichGO in \code{DAPAR} or the function \code{enrichGO} of the packaage \code{\link{clusterProfiler}}
+#' enrichGO in \code{DAPAR} or the function \code{enrichGO} of the packaage 
+#' \code{\link{clusterProfiler}}
 #' 
 #' @param maxRes The maximum number of categories to display in the plot
 #' 

@@ -13,8 +13,8 @@ proteins. X_(ij)=1 if peptide i belongs to protein j, 0 otherwise.}
 \item{y}{q x n matrix representing the log intensities of q peptides
 among n MS samples.}
 
-\item{n1}{number of samples under condition 1. It is assumed that the first n1 columns of y
-correspond to observations under condition 1.}
+\item{n1}{number of samples under condition 1. It is assumed that the first 
+n1 columns of y correspond to observations under condition 1.}
 
 \item{n2}{number of samples under condition 2.}
 

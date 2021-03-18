@@ -7,13 +7,14 @@
 make.contrast(design, condition, contrast = 1)
 }
 \arguments{
-\item{design}{The data.frame which correspond to the pData function of MSnbase}
+\item{design}{The data.frame which correspond to the pData function of 
+MSnbase}
 
 \item{condition}{xxxxx}
 
-\item{contrast}{An integer that Indicates if the test consists of the comparison of each 
-biological condition versus each of the other ones (Contrast=1; 
-for example H0:"C1=C2" vs H1:"C1!=C2", etc.) 
+\item{contrast}{An integer that Indicates if the test consists of the 
+comparison of each biological condition versus each of the other ones 
+(Contrast=1; for example H0:"C1=C2" vs H1:"C1!=C2", etc.) 
 or each condition versus all others (Contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
  H1:"C1!=(C2+C3)/2", etc. if there are three conditions).}
 }

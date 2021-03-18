@@ -130,20 +130,6 @@ plotJitter <- function(list.of.cc){
   
 }
 
-# 
-# GetDataForPlotJitter <- function(list.of.cc){
-#   if (is.null(list.of.cc)){return()}
-#   length(list.of.cc) # number of CCs
-#   cc.summary <- sapply(list.of.cc, function(x){c(length(x[[1]]),length(x[[2]]))})
-#   rownames(cc.summary) <- c("Nb_proteins","Nb_peptides")
-#   colSums(cc.summary) # total amount of pep and prot in each CC
-#   colnames(cc.summary) <- 1:length(list.of.cc)
-#   cc.summary
-#   rowSums(cc.summary) # c(number of prot, number of pep)
-#   
-#   return(as.data.frame(t(jitter(cc.summary))))
-# }
-
 
 #' Display a CC
 #' 

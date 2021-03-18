@@ -16,7 +16,8 @@ A string
 Build the text information for the filtering process
 }
 \examples{
-getTextForFiltering(list(mvFilterType="WholeMatrix",mvThNA=3, val_vs_percent='Value'))
+getTextForFiltering(list(mvFilterType="WholeMatrix",mvThNA=3, 
+val_vs_percent='Value'))
 
 }
 \author{

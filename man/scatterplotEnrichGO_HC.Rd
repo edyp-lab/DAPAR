@@ -2,13 +2,15 @@
 % Please edit documentation in R/bioAnalysis.R
 \name{scatterplotEnrichGO_HC}
 \alias{scatterplotEnrichGO_HC}
-\title{A dotplot that shows the result of a GO enrichment, using the package \code{highcharter}}
+\title{A dotplot that shows the result of a GO enrichment, using the 
+package \code{highcharter}}
 \usage{
 scatterplotEnrichGO_HC(ego, maxRes = 10, title = NULL)
 }
 \arguments{
 \item{ego}{The result of the GO enrichment, provides either by the function
-enrichGO in \code{DAPAR} or the function \code{enrichGO} of the packaage \code{\link{clusterProfiler}}}
+enrichGO in \code{DAPAR} or the function \code{enrichGO} of the packaage 
+\code{\link{clusterProfiler}}}
 
 \item{maxRes}{The maximum number of categories to display in the plot}
 

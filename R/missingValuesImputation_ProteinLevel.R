@@ -42,8 +42,6 @@ findMECBlock <- function(obj){
 }
 
 
-#' This method is used to put back the LAPALA that have been identified previously
-#'
 #' @title Put back LAPALA into  a \code{MSnSet} object
 #' 
 #' @param obj An object of class \code{MSnSet}.
@@ -58,7 +56,7 @@ findMECBlock <- function(obj){
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:100]
 #' lapala <- findMECBlock(obj)
-#' obj <- wrapper.impute.detQuant(obj)
+#' obj <- wrapper.impute.detQuant(obj, na.type='missing')
 #' obj <- reIntroduceMEC(obj, lapala)
 #' 
 #' @export
@@ -100,7 +98,8 @@ reIntroduceMEC <- function(obj, MECIndex){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj.imp.pov <- wrapper.impute.KNN(obj = Exp1_R25_pept[1:10], K=3, na.type = 'missing_POV')
+#' obj.imp.pov <- wrapper.impute.KNN(obj = Exp1_R25_pept[1:10], K=3, 
+#' na.type = 'missing_POV')
 #' 
 #' @export
 #' 
@@ -108,26 +107,26 @@ reIntroduceMEC <- function(obj, MECIndex){
 #' 
 wrapper.impute.KNN <- function(obj=NULL, K, na.type){
     #require(impute)
-    if (is.null(obj))
+    if (missing(obj))
         stop("'obj' is required.")
+    else if (is.null(obj))
+        stop("'obj' is NULL")
     if (missing(na.type))
         stop("'na.type' is required. Available values are: 'missing_POV'.")
-    else if (!(na.type != 'missing_POV'))
+    else if (na.type != 'missing_POV')
         stop("Available value for na.type is: 'missing_POV'")
 
     data <- Biobase::exprs(obj)
     
     conditions <- unique(Biobase::pData(obj)$Condition)
     nbCond <- length(conditions)
-    
-    
+
     for (cond in 1:nbCond){
         ind <- which(Biobase::pData(obj)$Condition == conditions[cond])
         resKNN <- impute::impute.knn(Biobase::exprs(obj)[,ind] ,k = K, rowmax = 0.99, colmax = 0.99, maxp = 1500, rng.seed = sample(1:1000,1))
         Biobase::exprs(obj)[,ind] <- resKNN[[1]]
     }
-    
-    
+
     Biobase::exprs(obj)[Biobase::exprs(obj) == 0] <-NA
     obj <- UpdateMetacell(obj, 'knn', na.type) 
     
@@ -191,12 +190,14 @@ wrapper.impute.fixedValue <- function(obj, fixVal=0, na.type){
 #' 
 #' @param obj An object of class \code{MSnSet}.
 #' 
-#' @param q.min Same as the function \code{impute.pa} in the package \code{imp4p}
+#' @param q.min Same as the function \code{impute.pa} in the package 
+#' \code{imp4p}
 #' 
 #' @param na.type A string which indicates the type of missing values to impute. 
 #' Available values are: `NA` (for both POV and MEC).
 #' 
-#' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
+#' @return The \code{exprs(obj)} matrix with imputed values instead of 
+#' missing values.
 #' 
 #' @author Samuel Wieczorek
 #' 
@@ -240,7 +241,8 @@ wrapper.impute.pa <- function(obj = NULL, q.min = 0.025, na.type){
 #' 
 #' @param obj An instance of class \code{MSnSet}
 #' 
-#' @param qval An expression set containing quantitative values of various replicates
+#' @param qval An expression set containing quantitative values of various 
+#' replicates
 #' 
 #' @param factor A scaling factor to multiply the imputation value with 
 #' 
@@ -306,18 +308,21 @@ wrapper.impute.detQuant <- function(obj, qval=0.025, factor=1, na.type){
 
 
 
-
-#' This method returns the q-th quantile of each column of an expression set, up to a scaling factor
-#'
 #' @title Quantile imputation value definition
 #' 
-#' @param qdata An expression set containing quantitative values of various replicates
+#' @description 
+#' This method returns the q-th quantile of each column of an expression set,
+#'  up to a scaling factor
+#' 
+#' @param qdata An expression set containing quantitative values of various 
+#' replicates
 #' 
 #' @param qval The quantile used to define the imputation value
 #' 
 #' @param factor A scaling factor to multiply the imputation value with
 #' 
-#' @return A list of two vectors, respectively containing the imputation values and the rescaled imputation values
+#' @return A list of two vectors, respectively containing the imputation values 
+#' and the rescaled imputation values
 #' 
 #' @author Thomas Burger
 #' 
@@ -345,7 +350,8 @@ getQuantile4Imp <- function(qdata, qval=0.025, factor=1){
 #' #' 
 #' #' @param metadata xxx
 #' #' 
-#' #' @param values A vector with as many elements as the number of colums of qdata
+#' #' @param values A vector with as many elements as the number of colums 
+#' #' of qdata
 #' #' 
 #' #' @param na.type xxx
 #' #' 
@@ -405,7 +411,8 @@ getQuantile4Imp <- function(qdata, qval=0.025, factor=1){
 #' @param na.type A string which indicates the type of missing values to impute. 
 #' Available values are: `NA` (for both POV and MEC), `POV`, `MEC`.
 #' 
-#' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
+#' @return The \code{exprs(obj)} matrix with imputed values instead of missing 
+#' values.
 #' 
 #' @author Samuel Wieczorek
 #' 

@@ -23,7 +23,8 @@
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:1000]
-#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+#' threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' qData <- Biobase::exprs(obj)
 #' sTab <- Biobase::pData(obj)
@@ -129,12 +130,14 @@ return(p)
 #' library(highcharter) 
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:1000]
-#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+#' threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' qData <- Biobase::exprs(obj)
 #' sTab <- Biobase::pData(obj)
 #' data <- limmaCompleteTest(qData,sTab)
-#' df <- data.frame(x=data$logFC, y = -log10(data$P_Value),index = as.character(rownames(obj)))
+#' df <- data.frame(x=data$logFC, y = -log10(data$P_Value),
+#' index = as.character(rownames(obj)))
 #' colnames(df) <- c("x", "y", "index")
 #' tooltipSlot <- c("Sequence", "Score")
 #' df <- cbind(df,Biobase::fData(obj)[tooltipSlot])
@@ -142,7 +145,9 @@ return(p)
 #' if (ncol(df) > 3){
 #'     colnames(df)[4:ncol(df)] <- 
 #'     paste("tooltip_", colnames(df)[4:ncol(df)], sep="")}
-#' hc_clickFunction <- JS("function(event) {Shiny.onInputChange('eventPointClicked', [this.index]+'_'+ [this.series.name]);}")
+#' hc_clickFunction <- JS("function(event) {
+#' Shiny.onInputChange('eventPointClicked', 
+#' [this.index]+'_'+ [this.series.name]);}")
 #' cond <- c("25fmol", "10fmol")
 #' diffAnaVolcanoplot_rCharts(df, 2.5, 1, cond,hc_clickFunction) 
 #' }

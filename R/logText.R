@@ -33,7 +33,8 @@ getTextForNewDataset <- function(l.params){
 #' @author Samuel Wieczorek
 #' 
 #' @examples
-#' getTextForFiltering(list(mvFilterType="WholeMatrix",mvThNA=3, val_vs_percent='Value'))
+#' getTextForFiltering(list(mvFilterType="WholeMatrix",mvThNA=3, 
+#' val_vs_percent='Value'))
 #' 
 #' @export
 #' @importFrom utils str

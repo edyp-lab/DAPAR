@@ -20,8 +20,8 @@ quantitative data.}
 \item{condition}{Method used to choose the lines to delete.
 Values are : "None", "EmptyLines", "WholeMatrix", "AllCond", "AtLeastOneCond"}
 
-\item{threshold}{An integer value of the threshold if percent is FALSE. Otherwise, a floating
-number between 0 and 1.}
+\item{threshold}{An integer value of the threshold if percent is FALSE. 
+Otherwise, a floating number between 0 and 1.}
 }
 \value{
 An vector of indices that correspond to the lines to keep.
@@ -44,9 +44,10 @@ at least \code{th} values, and for at least one condition, are kept.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-mvFilterGetIndices(Exp1_R25_pept, condition = "WholeMatrix", threshold=2)
-mvFilterGetIndices(Exp1_R25_pept, condition = "EmptyLines")
-mvFilterGetIndices(Exp1_R25_pept, condition = "WholeMatrix", percent=TRUE, threshold=0.5)
+ind <- mvFilterGetIndices(Exp1_R25_pept[1:100], condition = "WholeMatrix", threshold=2)
+ind <- mvFilterGetIndices(Exp1_R25_pept[1:100], condition = "EmptyLines")
+ind <- mvFilterGetIndices(Exp1_R25_pept[1:100], condition = "WholeMatrix", percent=TRUE, 
+threshold=0.5)
 
 }
 \author{

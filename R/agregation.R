@@ -159,14 +159,26 @@ BuildColumnToProteinDataset <- function(peptideData,
 #' 
 #' @export
 #' 
-#' @importFrom doParallel registerDoParallel 
-#' @importFrom foreach foreach
+#' @import doParallel 
+#' @import foreach
 #' 
 BuildColumnToProteinDataset_par <- function(peptideData, 
                                             matAdj, 
                                             columnName, 
                                             proteinNames){
-  doParallel::registerDoParallel()
+  
+  chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
+  
+  # https://cran.r-project.org/web/packages/policies.html
+  if (nzchar(chk) && chk == "TRUE") {
+    # use 2 cores 
+    num_workers <- 2L
+  } else {
+    # use all cores in devtools::test()
+    num_workers <- parallel::detectCores()
+  }
+  
+  doParallel::registerDoParallel(cores=num_workers)
   
   nbProt <- ncol(matAdj)
   newCol <- rep("", nbProt)
@@ -974,9 +986,12 @@ finalizeAggregation <- function(obj.pep, pepData, protData, X){
 #' @param level xxx
 #' 
 #' @examples
+#' \dontrun{
 #' ll <- unname(metacell.def('peptide'))
 #' for (i in 1:length(ll))
-#' test <- lapply(combn(ll, i, simplify = FALSE), function(x) tag <- metacombine(x, 'peptide'))
+#' test <- lapply(combn(ll, i, simplify = FALSE), 
+#' function(x) tag <- metacombine(x, 'peptide'))
+#' }
 #' 
 #' 
 metacombine <- function(met, level) {
@@ -1033,7 +1048,7 @@ metacombine <- function(met, level) {
     tag <- 'combined'
   
   #print(paste0(paste0(met, collapse=' '), ' **** ', paste0(u_met, collapse=' '), ' ---> ', tag))
-  print(paste0(paste0(u_met, collapse=' '), ' ---> ', tag))
+  #print(paste0(paste0(u_met, collapse=' '), ' ---> ', tag))
   return(tag)
 }
 

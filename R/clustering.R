@@ -18,7 +18,8 @@
 #' @examples
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
 #' obj <- Exp1_R25_prot[1:1000]
-#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+#' threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' averageIntensities(obj)
 #' 
@@ -57,32 +58,35 @@ averageIntensities <- function(ESet_obj){
 #'
 #' @description The first step is to standardize the data (with the \code{Mfuzz}
 #' package). Then the function checks that these data are clusterizable or not
-#'  (use of [diptest::dip.test()] to determine whether the distribution is unimodal or
-#'  multimodal). Finally, it determines the "optimal" k by the Gap statistic
-#'  approach.
+#'  (use of [diptest::dip.test()] to determine whether the distribution is 
+#'  unimodal or #'  multimodal). Finally, it determines the "optimal" k by 
+#'  the Gap statistic approach.
 #'
-#' @param standards a matrix or dataframe containing only the standardized mean intensities
-#' returned by the function [standardiseMeanIntensities()]
+#' @param standards a matrix or dataframe containing only the standardized 
+#' mean intensities returned by the function [standardiseMeanIntensities()]
 #' 
 #' @param b Parameter B of the function [gap_cluster()] 
 #' 
 #' @return a list of 2 elements:
 #' * dip_test: the result of the clusterability of the data
-#' * gap_cluster: the gap statistic obtained with the function [cluster::clusGap()].
+#' * gap_cluster: the gap statistic obtained with the function 
+#' [cluster::clusGap()].
 #' 
 #' @author Helene Borges
 #' 
 #' @examples
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
 #' obj <- Exp1_R25_prot[1:1000]
-#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+#' threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' averaged_means <- averageIntensities(obj)
 #' only_means <- dplyr::select_if(averaged_means, is.numeric)
 #' only_features <- dplyr::select_if(averaged_means, is.character)
 #' means <- purrr::map(purrr::array_branch(as.matrix(only_means), 1),mean)
 #' centered <- only_means - unlist(means)
-#' centered_means <- dplyr::bind_cols(feature = dplyr::as_tibble(only_features), dplyr::as_tibble(centered))
+#' centered_means <- dplyr::bind_cols(feature = dplyr::as_tibble(only_features), 
+#' dplyr::as_tibble(centered))
 #' checkClust <- checkClusterability(centered_means, b=100)
 #' 
 #' @export
@@ -122,8 +126,9 @@ checkClusterability <- function(standards, b = 500){
 #' 
 #' @param clust_model the clustering model obtained with dat.
 #' 
-#' @param adjusted_pValues vector of the adjusted pvalues obtained for each protein with
-#'  a 1-way ANOVA (for example obtained with the function [wrapperClassic1wayAnova()]).
+#' @param adjusted_pValues vector of the adjusted pvalues obtained for each 
+#' protein with a 1-way ANOVA (for example obtained with the function 
+#' [wrapperClassic1wayAnova()]).
 #'  
 #' @param FDR_th the thresholds of FDR pvalues for the coloring of the profiles.
 #' The default (NULL) creates 4 thresholds: 0.001, 0.005, 0.01, 0.05
@@ -141,7 +146,8 @@ checkClusterability <- function(standards, b = 500){
 #' library(dplyr)
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
 #' obj <- Exp1_R25_prot[1:100]
-#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+#' threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' expR25_ttest <- compute_t_tests(obj)
 #' averaged_means <- averageIntensities(obj)
@@ -149,13 +155,14 @@ checkClusterability <- function(standards, b = 500){
 #' only_features <- dplyr::select_if(averaged_means, is.character)
 #' means <- purrr::map(purrr::array_branch(as.matrix(only_means), 1),mean)
 #' centered <- only_means - unlist(means)
-#' centered_means <- dplyr::bind_cols(feature = dplyr::as_tibble(only_features), dplyr::as_tibble(centered))
+#' centered_means <- dplyr::bind_cols(feature = dplyr::as_tibble(only_features), 
+#' dplyr::as_tibble(centered))
 #' difference <- only_means[,1] - only_means[,2]
 #' clusters <- as.data.frame(difference) %>%
 #'     dplyr::mutate(cluster = dplyr::if_else(difference > 0, 1,2))
 #' vizu <- visualizeClusters(dat = centered_means,
 #'                           clust_model = as.factor(clusters$cluster),
-#'                           adjusted_pValues = expR25_ttest$P_Value$`25fmol_vs_10fmol_pval`,
+#'          adjusted_pValues = expR25_ttest$P_Value$`25fmol_vs_10fmol_pval`,
 #'                           FDR_th = c(0.001,0.005,0.01,0.05),
 #'                           ttl = "Clustering of protein profiles")
 #'                           
@@ -166,7 +173,12 @@ checkClusterability <- function(standards, b = 500){
 #' @import ggplot2
 #' @importFrom methods is
 #' 
-visualizeClusters <- function(dat, clust_model, adjusted_pValues, FDR_th = NULL, ttl = "", subttl = ""){
+visualizeClusters <- function(dat, 
+                              clust_model, 
+                              adjusted_pValues, 
+                              FDR_th = NULL, 
+                              ttl = "", 
+                              subttl = ""){
     if(is.null(FDR_th)){
         FDR_th <- c(0.001,0.005,0.01,0.05)
     }else if(length(FDR_th) > 4){
@@ -247,13 +259,13 @@ visualizeClusters <- function(dat, clust_model, adjusted_pValues, FDR_th = NULL,
 #'  
 #' @param obj ExpressionSet or MSnSet object.
 #' 
-#' @param clustering_method character string. Three possible values are "kmeans",
-#' "affinityProp" and "affinityPropReduced. See the details section for more
-#' explanation.
+#' @param clustering_method character string. Three possible values are 
+#' "kmeans", "affinityProp" and "affinityPropReduced. See the details section 
+#' for more explanation.
 #' 
 #' @param conditions_order vector specifying the order of the Condition factor
-#' levels in the phenotype data. Default value is NULL, which means that it is the
-#' order of the condition present in the phenotype data of "obj" which is
+#' levels in the phenotype data. Default value is NULL, which means that it is 
+#' the order of the condition present in the phenotype data of "obj" which is
 #' taken to create the profiles.
 #' 
 #' @param k_clusters integer or NULL. Number of clusters to run the kmeans
@@ -262,7 +274,8 @@ visualizeClusters <- function(dat, clust_model, adjusted_pValues, FDR_th = NULL,
 #' clusters `k` estimated by the Gap statistic method. Ignored for the Affinity
 #'  propagation model.
 #'  
-#' @param adjusted_pvals vector of adjusted pvalues returned by the [wrapperClassic1wayAnova()]
+#' @param adjusted_pvals vector of adjusted pvalues returned by the 
+#' [wrapperClassic1wayAnova()]
 #' 
 #' @param ttl the title for the final plot
 #' 
@@ -283,8 +296,8 @@ visualizeClusters <- function(dat, clust_model, adjusted_pValues, FDR_th = NULL,
 #' if there are more than 2 conditions. If the user asks to realize a kmeans 
 #' model without specifying the desired number of
 #' clusters (`clustering_method =" kmeans "` and `k_clusters = NULL`), the 
-#' function checks data's clusterability and estimates a number of clusters k using
-#' the gap statistic method. It is advise however to specify a k for the 
+#' function checks data's clusterability and estimates a number of clusters k 
+#' using the gap statistic method. It is advise however to specify a k for the 
 #' kmeans, because the gap stat gives the smallest possible k, whereas in 
 #' biology a small number of clusters can turn out to be uninformative. 
 #' If you want to run a kmeans but you don't know what number of clusters to 
@@ -304,21 +317,27 @@ visualizeClusters <- function(dat, clust_model, adjusted_pValues, FDR_th = NULL,
 #' 
 #' @author Helene Borges
 #' 
-#' @return a list of 2 elements: "model" is the clustering model, "ggplot" is the ggplot
-#' of profiles clustering.
+#' @return a list of 2 elements: "model" is the clustering model, "ggplot" is 
+#' the ggplot of profiles clustering.
 #' 
 #' @references
-#' Tibshirani, R., Walther, G. and Hastie, T. (2001). Estimating the number of data clusters via the Gap statistic. *Journal of the Royal Statistical Society* B, 63, 411–423.
+#' Tibshirani, R., Walther, G. and Hastie, T. (2001). Estimating the number of 
+#' data clusters via the Gap statistic. 
+#' *Journal of the Royal Statistical Society* B, 63, 411–423.
 #'
-#' Frey, B. J. and Dueck, D. (2007) Clustering by passing messages between data points. *Science* 315, 972-976. DOI: \href{https://science.sciencemag.org/content/315/5814/972}{10.1126/science.1136800}
+#' Frey, B. J. and Dueck, D. (2007) Clustering by passing messages between 
+#' data points. *Science* 315, 972-976. 
+#' DOI: \href{https://science.sciencemag.org/content/315/5814/972}{10.1126/science.1136800}
 #'
 #' @examples
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
 #' obj <- Exp1_R25_prot[1:1000]
-#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+#' threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' expR25_ttest <- compute_t_tests(obj)
-#' wrapperRunClustering(obj = obj, adjusted_pvals = expR25_ttest$P_Value$`25fmol_vs_10fmol_pval`)
+#' wrapperRunClustering(obj = obj, 
+#' adjusted_pvals = expR25_ttest$P_Value$`25fmol_vs_10fmol_pval`)
 #' 
 #' @export
 #' 

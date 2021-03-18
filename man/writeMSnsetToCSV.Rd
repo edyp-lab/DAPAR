@@ -2,7 +2,8 @@
 % Please edit documentation in R/inOutFiles.R
 \name{writeMSnsetToCSV}
 \alias{writeMSnsetToCSV}
-\title{Exports a MSnset dataset into a zip archive containing three zipped CSV files.}
+\title{Exports a MSnset dataset into a zip archive containing three 
+zipped CSV files.}
 \usage{
 writeMSnsetToCSV(obj, fname)
 }
@@ -15,7 +16,8 @@ writeMSnsetToCSV(obj, fname)
 A compressed file
 }
 \description{
-This function exports a MSnset dataset into three csv files compressed in a zip file
+Exports a MSnset dataset into a zip archive containing three 
+zipped CSV files.
 }
 \examples{
 \donttest{

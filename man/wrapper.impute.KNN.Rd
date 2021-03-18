@@ -27,7 +27,8 @@ This function imputes the missing values condition by condition.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-obj.imp.pov <- wrapper.impute.KNN(obj = Exp1_R25_pept[1:10], K=3, na.type = 'missing_POV')
+obj.imp.pov <- wrapper.impute.KNN(obj = Exp1_R25_pept[1:10], K=3, 
+na.type = 'missing_POV')
 
 }
 \author{

@@ -16,8 +16,9 @@ Values are: 'anova1way', 'OnevsOne' and 'OnevsAll'; default is 'OnevsOne'.}
 }
 \value{
 A list of two dataframes : logFC and P_Value. The first one contains
-the logFC values of all the comparisons (one column for one comparison), the second one contains
-the pvalue of all the comparisons (one column for one comparison). The names of the columns for those two dataframes
+the logFC values of all the comparisons (one column for one comparison), 
+the second one contains the pvalue of all the comparisons (one column for 
+one comparison). The names of the columns for those two dataframes
 are identical and correspond to the description of the comparison.
 }
 \description{

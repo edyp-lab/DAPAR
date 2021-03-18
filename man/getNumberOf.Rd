@@ -22,7 +22,7 @@ the prefix.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-getNumberOf(Exp1_R25_pept, "Potential_contaminant", "+")
+getNumberOf(Exp1_R25_pept[1:100], "Potential_contaminant", "+")
 
 }
 \author{

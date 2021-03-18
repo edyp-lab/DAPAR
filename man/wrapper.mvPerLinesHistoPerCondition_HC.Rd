@@ -16,8 +16,8 @@ wrapper.mvPerLinesHistoPerCondition_HC(obj, ...)
 A bar plot
 }
 \description{
-This method is a wrapper to plots (using highcharts) from a \code{MSnSet} object a 
-bar plot which represents the distribution of the 
+This method is a wrapper to plots (using highcharts) from a \code{MSnSet} 
+object a bar plot which represents the distribution of the 
 number of missing values (NA) per lines (ie proteins) and per conditions.
 }
 \examples{

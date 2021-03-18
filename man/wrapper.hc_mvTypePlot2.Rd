@@ -16,8 +16,8 @@ wrapper.hc_mvTypePlot2(obj, ...)
 A scatter plot
 }
 \description{
-This method is a wrapper for the function \code{\link{hc_mvTypePlot2}} adapted to objects
-of class \code{MSnSet}).
+This method is a wrapper for the function 
+\code{\link{hc_mvTypePlot2}} adapted to objects of class \code{MSnSet}).
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')

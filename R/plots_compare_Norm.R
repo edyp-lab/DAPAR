@@ -26,7 +26,8 @@
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept
 #' conds <- Biobase::pData(obj)[,"Condition"]
-#' objAfter <- wrapper.normalizeD(obj = obj, method = "QuantileCentering",  conds=conds, type = "within conditions")
+#' objAfter <- wrapper.normalizeD(obj = obj, method = "QuantileCentering",  
+#' conds=conds, type = "within conditions")
 #' wrapper.compareNormalizationD_HC(obj, objAfter, conds)
 #' 
 #' @importFrom Biobase exprs
@@ -86,10 +87,14 @@ wrapper.compareNormalizationD_HC <- function(objBefore,
 #' conds <- Biobase::pData(obj)[,"Condition"]
 #' id <- Biobase::fData(obj)[,obj@experimentData@other$proteinId]
 #' pal <- ExtendPalette(2)
-#' objAfter <- wrapper.normalizeD(obj, method = "QuantileCentering", conds =conds, type = "within conditions")
-#' compareNormalizationD_HC(qDataBefore=qDataBefore, qDataAfter=Biobase::exprs(objAfter), keyId = id, conds=conds, n=100)
+#' objAfter <- wrapper.normalizeD(obj, method = "QuantileCentering", 
+#' conds =conds, type = "within conditions")
+#' compareNormalizationD_HC(qDataBefore=qDataBefore, 
+#' qDataAfter=Biobase::exprs(objAfter), keyId = id, conds=conds, n=100)
 #' 
-#' compareNormalizationD_HC(qDataBefore=qDataBefore, qDataAfter=Biobase::exprs(objAfter), keyId = id, pal=pal, subset.view=1:4, conds=conds, n=100)
+#' compareNormalizationD_HC(qDataBefore=qDataBefore, 
+#' qDataAfter=Biobase::exprs(objAfter), keyId = id, pal=pal, subset.view=1:4, 
+#' conds=conds, n=100)
 #' 
 #' @import highcharter
 #' @importFrom RColorBrewer brewer.pal

@@ -2,7 +2,8 @@
 % Please edit documentation in R/inOutFiles.R
 \name{readExcel}
 \alias{readExcel}
-\title{This function reads a sheet of an Excel file and put the data into a data.frame.}
+\title{This function reads a sheet of an Excel file and put the data 
+into a data.frame.}
 \usage{
 readExcel(file, extension, sheet)
 }
@@ -17,7 +18,8 @@ readExcel(file, extension, sheet)
 A data.frame
 }
 \description{
-This function reads a sheet of an Excel file and put the data into a data.frame.
+This function reads a sheet of an Excel file and put the data 
+into a data.frame.
 }
 \author{
 Samuel Wieczorek

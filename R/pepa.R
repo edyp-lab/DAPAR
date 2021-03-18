@@ -417,8 +417,8 @@ samLRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s1){
 #' proteins. X_(ij)=1 if peptide i belongs to protein j, 0 otherwise.
 #' @param y q x n matrix representing the log intensities of q peptides
 #' among n MS samples.
-#' @param n1 number of samples under condition 1. It is assumed that the first n1 columns of y
-#' correspond to observations under condition 1.
+#' @param n1 number of samples under condition 1. It is assumed that the first 
+#' n1 columns of y correspond to observations under condition 1.
 #' @param n2 number of samples under condition 2.
 #' @param global if TRUE, the test statistic for each protein uses all
 #' residues, including the ones for peptides in different connected

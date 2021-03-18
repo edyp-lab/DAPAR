@@ -14,7 +14,8 @@ getProcessingInfo(obj)
 The slot processing of obj@processingData
 }
 \description{
-Returns the contents of the slot processing of an object of class \code{MSnSet}
+Returns the contains of the slot processing  of an object of 
+class \code{MSnSet}
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')

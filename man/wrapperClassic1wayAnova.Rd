@@ -29,13 +29,15 @@ Wrapper for One-way Anova statistical test
 \details{
 This function allows to perform a 1-way Analysis of Variance. Also
 computes the post-hoc tests if the \code{with_post_hoc} parameter is set to
-yes. There are two possible post-hoc tests: the Tukey Honest Significant Differences
-(specified as "TukeyHSD") and the Dunnett test (specified as "Dunnett").
+yes. There are two possible post-hoc tests: the Tukey Honest Significant 
+Differences (specified as "TukeyHSD") and the Dunnett test 
+(specified as "Dunnett").
 }
 \examples{
 utils::data(Exp1_R25_prot, package='DAPARdata')
 obj <- Exp1_R25_prot[1:1000]
-keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+threshold=ncol(obj))
 obj <- mvFilterFromIndices(obj, keepThat)
 anovatest <- wrapperClassic1wayAnova(obj)
 

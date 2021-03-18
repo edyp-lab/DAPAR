@@ -6,47 +6,47 @@
 #' each condition.
 #' Peptide-level vocabulary
 #' 
-#' |── 1.0 Quantitative Value
+#' |-- 1.0 Quantitative Value
 #' |    |
-#' │    |── 1.1 Identified (color 4, white)
+#' |    |-- 1.1 Identified (color 4, white)
 #' |    |
-#' │    |── 1.2 Recovered (color 3, lightgrey)
-#' │
-#' |──2.0 Missing value (no color)
+#' |    |-- 1.2 Recovered (color 3, lightgrey)
+#' |
+#' |-- 2.0 Missing value (no color)
 #' |    |
-#' │    |── 2.1 Missing POV (color 1)
+#' |    |-- 2.1 Missing POV (color 1)
 #' |    |
-#' │    |── 2.2 Missing MEC (color 2)
-#' │
-#' |── 3.0 Imputed value
+#' |    |-- 2.2 Missing MEC (color 2)
+#' |
+#' |-- 3.0 Imputed value
 #' |    |
-#' │    |── 3.1 Imputed POV (color 1)
+#' |    |-- 3.1 Imputed POV (color 1)
 #' |    |
-#' │    |── 3.2 Imputed MEC (color 2)
+#' |    |-- 3.2 Imputed MEC (color 2)
 #'        
 #'  
 #'  
 #' Protein-level vocabulary:
 #' 
-#' |── 1.0 Quantitative Value
+#' |-- 1.0 Quantitative Value
 #' |    |
-#' │    |── 1.1 Identified (color 4, white)
+#' |    |-- 1.1 Identified (color 4, white)
 #' |    |
-#' │    |── 1.2 Recovered (color 3, lightgrey)
-#' │
-#' |──2.0 Missing value
+#' |    |-- 1.2 Recovered (color 3, lightgrey)
+#' |
+#' |-- 2.0 Missing value
 #' |    |
-#' │    |── 2.1 Missing POV (color 1)
+#' |    |-- 2.1 Missing POV (color 1)
 #' |    |
-#' │    |── 2.2 Missing MEC (color 2)
-#' │
-#' |── 3.0 Imputed value
+#' |    |-- 2.2 Missing MEC (color 2)
+#' |
+#' |-- 3.0 Imputed value
 #' |    |
-#' │    |── 3.1 Imputed POV (color 1)
+#' |    |-- 3.1 Imputed POV (color 1)
 #' |    |
-#' │    |── 3.2 Imputed MEC (color 2)
-#' │
-#' |── 4.0 Combined value (color 3bis, light-lightgrey)
+#' |    |-- 3.2 Imputed MEC (color 2)
+#' |
+#' |-- 4.0 Combined value (color 3bis, light-lightgrey)
 #' 
 #' 
 #' @param level A string designing the type of entity/pipeline. 
@@ -139,8 +139,6 @@ metacell.def <- function(level){
 #' This function is based on the metacell dataframe to look for either missing
 #' values (used to update an initial dataset) or imputed values (used when
 #' post processing protein metacell after aggregation)
-#' 
-#' @param qdata xxx
 #' 
 #' @param conds xxx
 #' 
@@ -276,7 +274,8 @@ BuildMetaCell <- function(from, level, qdata = NULL, conds = NULL, df = NULL){
 #' @examples 
 #' file <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
 #' data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
-#' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
+#' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", 
+#' package="DAPARdata")
 #' metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, 
 #' stringsAsFactors = FALSE)
 #' conds <- metadata$Condition
@@ -496,7 +495,7 @@ Metacell_maxquant <- function(qdata, conds, df, level=NULL){
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:10,]
 #' metadata <- Biobase::fData(obj)[, obj@experimentData@other$names_metacell]
-#' m <- match.metacell(metadata, type="missing_MEC", level = 'peptide')
+#' m <- match.metacell(metadata, pattern="missing_MEC", level = 'peptide')
 #'
 #' @export
 #'

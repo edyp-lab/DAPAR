@@ -2,7 +2,8 @@
 % Please edit documentation in R/inOutFiles.R
 \name{rbindMSnset}
 \alias{rbindMSnset}
-\title{Similar to the function \code{rbind} but applies on two subsets of the same \code{MSnSet} object.}
+\title{Similar to the function \code{rbind} but applies on two subsets of 
+the same \code{MSnSet} object.}
 \usage{
 rbindMSnset(df1 = NULL, df2)
 }
@@ -15,7 +16,8 @@ rbindMSnset(df1 = NULL, df2)
 An instance of class \code{MSnSet}.
 }
 \description{
-Similar to the function \code{rbind} but applies on two subsets of the same \code{MSnSet} object.
+Similar to the function \code{rbind} but applies on two subsets of 
+the same \code{MSnSet} object.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')

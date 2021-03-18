@@ -40,25 +40,34 @@ wrapper.dapar.impute.mi(
 
 \item{weight}{Same as the function \code{mi.mix} in the package \code{imp4p}}
 
-\item{ind.comp}{Same as the function \code{mi.mix} in the package \code{imp4p}}
+\item{ind.comp}{Same as the function \code{mi.mix} in the package 
+\code{imp4p}}
 
-\item{progress.bar}{Same as the function \code{mi.mix} in the package \code{imp4p}}
+\item{progress.bar}{Same as the function \code{mi.mix} in the package 
+\code{imp4p}}
 
-\item{x.step.mod}{Same as the function \code{estim.mix} in the package \code{imp4p}}
+\item{x.step.mod}{Same as the function \code{estim.mix} in the package 
+\code{imp4p}}
 
-\item{x.step.pi}{Same as the function \code{estim.mix} in the package \code{imp4p}}
+\item{x.step.pi}{Same as the function \code{estim.mix} in the package 
+\code{imp4p}}
 
-\item{nb.rei}{Same as the function \code{estim.mix} in the package \code{imp4p}}
+\item{nb.rei}{Same as the function \code{estim.mix} in the package 
+\code{imp4p}}
 
-\item{method}{Same as the function \code{estim.mix} in the package \code{imp4p}}
+\item{method}{Same as the function \code{estim.mix} in the package 
+\code{imp4p}}
 
-\item{gridsize}{Same as the function \code{estim.mix} in the package \code{imp4p}}
+\item{gridsize}{Same as the function \code{estim.mix} in the package 
+\code{imp4p}}
 
 \item{q}{Same as the function \code{mi.mix} in the package \code{imp4p}}
 
-\item{q.min}{Same as the function \code{impute.pa} in the package \code{imp4p}}
+\item{q.min}{Same as the function \code{impute.pa} in the package 
+\code{imp4p}}
 
-\item{q.norm}{Same as the function \code{impute.pa} in the package \code{imp4p}}
+\item{q.norm}{Same as the function \code{impute.pa} in the package 
+\code{imp4p}}
 
 \item{eps}{Same as the function \code{impute.pa} in the package \code{imp4p}}
 
@@ -66,21 +75,25 @@ wrapper.dapar.impute.mi(
 
 \item{lapala}{xxxxxxxxxxx}
 
-\item{distribution}{The type of distribution used. Values are \code{unif} (default) or \code{beta}.}
+\item{distribution}{The type of distribution used. Values are \code{unif} 
+(default) or \code{beta}.}
 }
 \value{
-The \code{exprs(obj)} matrix with imputed values instead of missing values.
+The \code{exprs(obj)} matrix with imputed values instead of missing 
+values.
 }
 \description{
-This method is a wrapper to the function \code{impute.mi} of the package \code{imp4p} adapted to
-an object of class \code{MSnSet}.
+This method is a wrapper to the function \code{impute.mi} of the package 
+\code{imp4p} adapted to an object of class \code{MSnSet}.
 }
 \examples{
+\dontrun{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept[1:100]
 obj <- mvFilter(obj, type="WholeMatrix", th = 1)
 obj.imp.na <- wrapper.dapar.impute.mi(obj, nb.iter=1, lapala = TRUE)
 obj.imp.pov <- wrapper.dapar.impute.mi(obj, nb.iter=1, lapala = FALSE)
+}
 
 }
 \author{

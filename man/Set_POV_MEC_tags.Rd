@@ -12,8 +12,6 @@ Set_POV_MEC_tags(conds, df, level)
 \item{df}{An object of class \code{MSnSet}}
 
 \item{level}{Type of entity/pipeline}
-
-\item{qdata}{xxx}
 }
 \value{
 An instance of class \code{MSnSet}.

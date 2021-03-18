@@ -10,7 +10,8 @@ wrapper.impute.detQuant(obj, qval = 0.025, factor = 1, na.type)
 \arguments{
 \item{obj}{An instance of class \code{MSnSet}}
 
-\item{qval}{An expression set containing quantitative values of various replicates}
+\item{qval}{An expression set containing quantitative values of various 
+replicates}
 
 \item{factor}{A scaling factor to multiply the imputation value with}
 

@@ -13,7 +13,8 @@ wrapper.impute.slsa(obj = NULL, na.type = NULL)
 Available values are: `NA` (for both POV and MEC), `POV`, `MEC`.}
 }
 \value{
-The \code{exprs(obj)} matrix with imputed values instead of missing values.
+The \code{exprs(obj)} matrix with imputed values instead of missing 
+values.
 }
 \description{
 #' This method replaces each missing value by a given value
@@ -24,7 +25,8 @@ The \code{exprs(obj)} matrix with imputed values instead of missing values.
 #' 
 #' @param metadata xxx
 #' 
-#' @param values A vector with as many elements as the number of colums of qdata
+#' @param values A vector with as many elements as the number of colums 
+#' of qdata
 #' 
 #' @param na.type xxx
 #' 

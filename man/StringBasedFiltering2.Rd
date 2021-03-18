@@ -11,7 +11,8 @@ StringBasedFiltering2(obj, cname = NULL, tag = NULL)
 
 \item{cname}{The name of the column that correspond to the line to filter}
 
-\item{tag}{A character string that is the prefix for the contaminants to find in the data}
+\item{tag}{A character string that is the prefix for the contaminants to 
+find in the data}
 }
 \value{
 An list of 4 items :
@@ -23,7 +24,7 @@ This function removes lines in the dataset based on prefix strings.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-StringBasedFiltering2(Exp1_R25_pept, 'Potential_contaminant', '+')
+obj.filter <- StringBasedFiltering2(Exp1_R25_pept[1:100], 'Potential_contaminant', '+')
 
 }
 \author{

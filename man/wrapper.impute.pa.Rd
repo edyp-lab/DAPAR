@@ -9,13 +9,15 @@ wrapper.impute.pa(obj = NULL, q.min = 0.025, na.type)
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
 
-\item{q.min}{Same as the function \code{impute.pa} in the package \code{imp4p}}
+\item{q.min}{Same as the function \code{impute.pa} in the package 
+\code{imp4p}}
 
 \item{na.type}{A string which indicates the type of missing values to impute. 
 Available values are: `NA` (for both POV and MEC).}
 }
 \value{
-The \code{exprs(obj)} matrix with imputed values instead of missing values.
+The \code{exprs(obj)} matrix with imputed values instead of 
+missing values.
 }
 \description{
 This method is a wrapper to the function \code{impute.pa} of the package

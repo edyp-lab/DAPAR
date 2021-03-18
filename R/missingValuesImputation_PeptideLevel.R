@@ -10,7 +10,8 @@
 #' @param na.type A string which indicates the type of missing values to impute. 
 #' Available values are: `NA` (for both POV and MEC).
 #' 
-#' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
+#' @return The \code{exprs(obj)} matrix with imputed values instead of missing 
+#' values.
 #' 
 #' @author Samuel Wieczorek
 #' 
@@ -44,8 +45,8 @@ wrapper.impute.mle <- function(obj, na.type){
 
 
 
-#' This method is a wrapper to the function \code{impute.mi} of the package \code{imp4p} adapted to
-#' an object of class \code{MSnSet}.
+#' This method is a wrapper to the function \code{impute.mi} of the package 
+#' \code{imp4p} adapted to an object of class \code{MSnSet}.
 #'
 #' @title Missing values imputation using the LSimpute algorithm.
 #' 
@@ -61,25 +62,34 @@ wrapper.impute.mle <- function(obj, na.type){
 #' 
 #' @param weight Same as the function \code{mi.mix} in the package \code{imp4p}
 #' 
-#' @param ind.comp Same as the function \code{mi.mix} in the package \code{imp4p}
+#' @param ind.comp Same as the function \code{mi.mix} in the package 
+#' \code{imp4p}
 #' 
-#' @param progress.bar Same as the function \code{mi.mix} in the package \code{imp4p}
+#' @param progress.bar Same as the function \code{mi.mix} in the package 
+#' \code{imp4p}
 #' 
-#' @param x.step.mod Same as the function \code{estim.mix} in the package \code{imp4p}
+#' @param x.step.mod Same as the function \code{estim.mix} in the package 
+#' \code{imp4p}
 #' 
-#' @param x.step.pi Same as the function \code{estim.mix} in the package \code{imp4p}
+#' @param x.step.pi Same as the function \code{estim.mix} in the package 
+#' \code{imp4p}
 #' 
-#' @param nb.rei Same as the function \code{estim.mix} in the package \code{imp4p}
+#' @param nb.rei Same as the function \code{estim.mix} in the package 
+#' \code{imp4p}
 #' 
-#' @param method Same as the function \code{estim.mix} in the package \code{imp4p}
+#' @param method Same as the function \code{estim.mix} in the package 
+#' \code{imp4p}
 #' 
-#' @param gridsize Same as the function \code{estim.mix} in the package \code{imp4p}
+#' @param gridsize Same as the function \code{estim.mix} in the package 
+#' \code{imp4p}
 #' 
 #' @param q Same as the function \code{mi.mix} in the package \code{imp4p}
 #' 
-#' @param q.min Same as the function \code{impute.pa} in the package \code{imp4p}
+#' @param q.min Same as the function \code{impute.pa} in the package 
+#' \code{imp4p}
 #' 
-#' @param q.norm Same as the function \code{impute.pa} in the package \code{imp4p}
+#' @param q.norm Same as the function \code{impute.pa} in the package 
+#' \code{imp4p}
 #' 
 #' @param eps Same as the function \code{impute.pa} in the package \code{imp4p}
 #' 
@@ -87,18 +97,22 @@ wrapper.impute.mle <- function(obj, na.type){
 #' 
 #' @param lapala xxxxxxxxxxx
 #' 
-#' @param distribution The type of distribution used. Values are \code{unif} (default) or \code{beta}.
+#' @param distribution The type of distribution used. Values are \code{unif} 
+#' (default) or \code{beta}.
 #' 
-#' @return The \code{exprs(obj)} matrix with imputed values instead of missing values.
+#' @return The \code{exprs(obj)} matrix with imputed values instead of missing 
+#' values.
 #' 
 #' @author Samuel Wieczorek
 #' 
 #' @examples
+#' \dontrun{
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:100]
 #' obj <- mvFilter(obj, type="WholeMatrix", th = 1)
 #' obj.imp.na <- wrapper.dapar.impute.mi(obj, nb.iter=1, lapala = TRUE)
 #' obj.imp.pov <- wrapper.dapar.impute.mi(obj, nb.iter=1, lapala = FALSE)
+#' }
 #' 
 #' @export
 #' 
@@ -246,7 +260,8 @@ translatedRandomBeta <- function(n, min, max, param1=3, param2=1){
 
 
 ################################################
-#' This method is a wrapper to the function \code{impute.pa2} adapted to objects of class \code{MSnSet}.
+#' This method is a wrapper to the function \code{impute.pa2} adapted to 
+#' objects of class \code{MSnSet}.
 #' 
 #' @title Missing values imputation from a \code{MSnSet} object
 #' 
@@ -266,7 +281,8 @@ translatedRandomBeta <- function(n, min, max, param1=3, param2=1){
 #' generated. This maximal value is defined by the quantile q.min of the 
 #' observed values distribution minus eps. Default is 0.
 #' 
-#' @param distribution The type of distribution used. Values are \code{unif} (default) or \code{beta}.
+#' @param distribution The type of distribution used. Values are \code{unif} 
+#' (default) or \code{beta}.
 #' 
 #' @return The object \code{obj} which has been imputed
 #' 

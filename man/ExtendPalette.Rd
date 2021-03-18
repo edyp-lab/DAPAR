@@ -9,8 +9,8 @@ ExtendPalette(n = NULL, base = "Set1")
 \arguments{
 \item{n}{The number of desired colors in the palette}
 
-\item{base}{The name of the palette of the package RColorBrewer from which the extended palette is built.
-Default value is 'Set1'.}
+\item{base}{The name of the palette of the package RColorBrewer from which 
+the extended palette is built. Default value is 'Set1'.}
 }
 \value{
 A vector composed of n color code.

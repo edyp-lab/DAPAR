@@ -11,7 +11,8 @@ saveParameters(obj, name.dataset = NULL, name = NULL, l.params = NULL)
 
 \item{name.dataset}{The name of the dataset}
 
-\item{name}{The name of the tool. Available values are: "Norm, Imputation, anaDiff, GOAnalysis,Aggregation"}
+\item{name}{The name of the tool. Available values are: "Norm, Imputation, 
+anaDiff, GOAnalysis,Aggregation"}
 
 \item{l.params}{A list that contains the parameters}
 }

@@ -7,34 +7,37 @@
 checkClusterability(standards, b = 500)
 }
 \arguments{
-\item{standards}{a matrix or dataframe containing only the standardized mean intensities
-returned by the function [standardiseMeanIntensities()]}
+\item{standards}{a matrix or dataframe containing only the standardized 
+mean intensities returned by the function [standardiseMeanIntensities()]}
 
 \item{b}{Parameter B of the function [gap_cluster()]}
 }
 \value{
 a list of 2 elements:
 * dip_test: the result of the clusterability of the data
-* gap_cluster: the gap statistic obtained with the function [cluster::clusGap()].
+* gap_cluster: the gap statistic obtained with the function 
+[cluster::clusGap()].
 }
 \description{
 The first step is to standardize the data (with the \code{Mfuzz}
 package). Then the function checks that these data are clusterizable or not
- (use of [diptest::dip.test()] to determine whether the distribution is unimodal or
- multimodal). Finally, it determines the "optimal" k by the Gap statistic
- approach.
+ (use of [diptest::dip.test()] to determine whether the distribution is 
+ unimodal or #'  multimodal). Finally, it determines the "optimal" k by 
+ the Gap statistic approach.
 }
 \examples{
 utils::data(Exp1_R25_prot, package='DAPARdata')
 obj <- Exp1_R25_prot[1:1000]
-keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+threshold=ncol(obj))
 obj <- mvFilterFromIndices(obj, keepThat)
 averaged_means <- averageIntensities(obj)
 only_means <- dplyr::select_if(averaged_means, is.numeric)
 only_features <- dplyr::select_if(averaged_means, is.character)
 means <- purrr::map(purrr::array_branch(as.matrix(only_means), 1),mean)
 centered <- only_means - unlist(means)
-centered_means <- dplyr::bind_cols(feature = dplyr::as_tibble(only_features), dplyr::as_tibble(centered))
+centered_means <- dplyr::bind_cols(feature = dplyr::as_tibble(only_features), 
+dplyr::as_tibble(centered))
 checkClust <- checkClusterability(centered_means, b=100)
 
 }

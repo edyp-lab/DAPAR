@@ -19,12 +19,15 @@ Extract logFC and raw pvalues from multiple post-hoc models summaries
 \examples{
 utils::data(Exp1_R25_prot, package='DAPARdata')
 obj <- Exp1_R25_prot[1:1000]
-keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+threshold=ncol(obj))
 obj <- mvFilterFromIndices(obj, keepThat)
-anova_tests <- t(apply(Biobase::exprs(obj),1, classic1wayAnova, conditions=as.factor(Biobase::pData(obj)$Condition)))
+anova_tests <- t(apply(Biobase::exprs(obj),1, classic1wayAnova, 
+conditions=as.factor(Biobase::pData(obj)$Condition)))
 names(anova_tests) <- rownames(Biobase::exprs(obj))
 tms <- lapply(anova_tests,
-             function(x) summary(multcomp::glht(x, linfct = multcomp::mcp(conditions = "Tukey")),
+             function(x) summary(multcomp::glht(x, 
+             linfct = multcomp::mcp(conditions = "Tukey")),
                    test = multcomp::adjusted("none")))
 res <- formatPHResults(tms)
 

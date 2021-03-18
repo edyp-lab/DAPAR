@@ -13,9 +13,11 @@
 #' @examples 
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
 #' obj <- Exp1_R25_prot[1:1000]
-#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+#' threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
-#' anova_tests <- t(apply(Biobase::exprs(obj),1, classic1wayAnova, conditions=as.factor(Biobase::pData(obj)$Condition)))
+#' anova_tests <- t(apply(Biobase::exprs(obj),1, classic1wayAnova, 
+#' conditions=as.factor(Biobase::pData(obj)$Condition)))
 #' 
 #' @importFrom stats aov
 #' 
@@ -45,8 +47,9 @@ classic1wayAnova <- function(current_line, conditions){
 #' 
 #' @details This function allows to perform a 1-way Analysis of Variance. Also
 #' computes the post-hoc tests if the \code{with_post_hoc} parameter is set to
-#' yes. There are two possible post-hoc tests: the Tukey Honest Significant Differences
-#' (specified as "TukeyHSD") and the Dunnett test (specified as "Dunnett").
+#' yes. There are two possible post-hoc tests: the Tukey Honest Significant 
+#' Differences (specified as "TukeyHSD") and the Dunnett test 
+#' (specified as "Dunnett").
 #' 
 #' @return A list of two dataframes. First one called "logFC" contains
 #' all pairwise comparisons logFC values (one column for one comparison) for
@@ -57,7 +60,8 @@ classic1wayAnova <- function(current_line, conditions){
 #' @examples
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
 #' obj <- Exp1_R25_prot[1:1000]
-#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+#' threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' anovatest <- wrapperClassic1wayAnova(obj)
 #' 
@@ -108,12 +112,15 @@ wrapperClassic1wayAnova <- function(obj, with_post_hoc = "No", post_hoc_test = "
 #' @examples 
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
 #' obj <- Exp1_R25_prot[1:1000]
-#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+#' threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
-#' anova_tests <- t(apply(Biobase::exprs(obj),1, classic1wayAnova, conditions=as.factor(Biobase::pData(obj)$Condition)))
+#' anova_tests <- t(apply(Biobase::exprs(obj),1, classic1wayAnova, 
+#' conditions=as.factor(Biobase::pData(obj)$Condition)))
 #' names(anova_tests) <- rownames(Biobase::exprs(obj))
 #' tms <- lapply(anova_tests,
-#'              function(x) summary(multcomp::glht(x, linfct = multcomp::mcp(conditions = "Tukey")),
+#'              function(x) summary(multcomp::glht(x, 
+#'              linfct = multcomp::mcp(conditions = "Tukey")),
 #'                    test = multcomp::adjusted("none")))
 #' res <- formatPHResults(tms)
 #' 
@@ -184,9 +191,11 @@ formatPHResults <- function(post_hoc_models_summaries){
 #' @examples 
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
 #' obj <- Exp1_R25_prot[1:1000]
-#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+#' threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
-#' anova_tests <- t(apply(Biobase::exprs(obj),1, classic1wayAnova, conditions=as.factor(Biobase::pData(obj)$Condition)))
+#' anova_tests <- t(apply(Biobase::exprs(obj),1, classic1wayAnova, 
+#' conditions=as.factor(Biobase::pData(obj)$Condition)))
 #' names(anova_tests) <- rownames(Biobase::exprs(obj))
 #' pht <- postHocTest(aov_fits = anova_tests)
 #' 

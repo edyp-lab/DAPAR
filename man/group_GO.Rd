@@ -34,7 +34,8 @@ instance.
 \examples{
 \donttest{
 utils::data(Exp1_R25_prot, package='DAPARdata')
-ggo<-group_GO(data=Biobase::fData(Exp1_R25_prot)$Protein.IDs, idFrom="UNIPROT", 
+obj <- Exp1_R25_prot
+ggo<-group_GO(data=Biobase::fData(obj)$Protein.IDs, idFrom="UNIPROT", 
 orgdb="org.Sc.sgd.db", ont="MF", level=2)
 }
 

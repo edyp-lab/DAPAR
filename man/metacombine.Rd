@@ -48,3 +48,13 @@ Agregation of a mix of quantitative values (among 1.0, 1.1, 1.2, 3.0, 3.X)
 Update metacell with POV/MEC status for the categories 2.0 and 3.0
 TODO
 }
+\examples{
+\dontrun{
+ll <- unname(metacell.def('peptide'))
+for (i in 1:length(ll))
+test <- lapply(combn(ll, i, simplify = FALSE), 
+function(x) tag <- metacombine(x, 'peptide'))
+}
+
+
+}

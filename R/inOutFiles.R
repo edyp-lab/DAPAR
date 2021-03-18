@@ -7,7 +7,8 @@
 #' 
 #' @param name.dataset The name of the dataset
 #' 
-#' @param name The name of the tool. Available values are: "Norm, Imputation, anaDiff, GOAnalysis,Aggregation"
+#' @param name The name of the tool. Available values are: "Norm, Imputation, 
+#' anaDiff, GOAnalysis,Aggregation"
 #' 
 #' @param l.params A list that contains the parameters
 #' 
@@ -89,12 +90,14 @@ saveParameters <- function(obj,name.dataset=NULL,name=NULL,l.params=NULL){
 #' @examples 
 #' require(Matrix)
 #' exprsFile <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
-#' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
+#' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", 
+#' package="DAPARdata")
 #' metadata = read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
 #' indExpData <- c(56:61)
 #' indFData <- c(1:55,62:71)
 #' indiceID <- 64
-#' createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, indexForMetacell = c(43:48), pep_prot_data = "peptide", software = 'maxquant')
+#' createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, 
+#' indexForMetacell = c(43:48), pep_prot_data = "peptide", software = 'maxquant')
 #' 
 #' @export
 #' 
@@ -198,11 +201,11 @@ createMSnset <- function(file,
 
 
 #' This function exports a \code{MSnSet} data object to a Excel file.
-#' Each of the three data.frames in the \code{MSnSet} object (ie experimental data,
-#' phenoData and metaData are respectively integrated into separate sheets in
-#' the Excel file).
-#' The colored cells in the experimental data correspond to the original missing values
-#' which have been imputed.
+#' Each of the three data.frames in the \code{MSnSet} object (ie experimental 
+#' data, phenoData and metaData are respectively integrated into separate sheets 
+#' in the Excel file).
+#' The colored cells in the experimental data correspond to the original 
+#' missing values which have been imputed.
 #' 
 #' @title This function exports a \code{MSnSet} object to a Excel file.
 #' 
@@ -300,9 +303,9 @@ writeMSnsetToExcel <- function(obj, filename)
   
 }
 
-#' This function reads a sheet of an Excel file and put the data into a data.frame.
-#' 
-#' @title This function reads a sheet of an Excel file and put the data into a data.frame.
+
+#' @title This function reads a sheet of an Excel file and put the data 
+#' into a data.frame.
 #' 
 #' @param file The name of the Excel file.
 #' 
@@ -358,9 +361,8 @@ listSheets <- function(file){
 }
 
 
-#' This function exports a MSnset dataset into three csv files compressed in a zip file
-#' 
-#' @title Exports a MSnset dataset into a zip archive containing three zipped CSV files.
+#' @title Exports a MSnset dataset into a zip archive containing three 
+#' zipped CSV files.
 #' 
 #' @param obj An object of class \code{MSnSet}.
 #' 
@@ -397,9 +399,9 @@ writeMSnsetToCSV <- function(obj, fname){
 }
 
 
-#' Similar to the function \code{rbind} but applies on two subsets of the same \code{MSnSet} object.
-#' 
-#' @title Similar to the function \code{rbind} but applies on two subsets of the same \code{MSnSet} object.
+
+#' @title Similar to the function \code{rbind} but applies on two subsets of 
+#' the same \code{MSnSet} object.
 #' 
 #' @param df1 An object (or subset of) of class \code{MSnSet}. May be NULL
 #' 

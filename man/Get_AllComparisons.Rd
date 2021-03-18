@@ -2,8 +2,8 @@
 % Please edit documentation in R/DiffAnalysis.R
 \name{Get_AllComparisons}
 \alias{Get_AllComparisons}
-\title{Returns list that contains a list of the statistical tests performed with DAPAR and recorded
-in an object of class \code{MSnSet}.}
+\title{Returns list that contains a list of the statistical tests performed 
+with DAPAR and recorded in an object of class \code{MSnSet}.}
 \usage{
 Get_AllComparisons(obj)
 }
@@ -14,13 +14,14 @@ Get_AllComparisons(obj)
 A list of two slots: logFC and P_Value
 }
 \description{
-This method returns a list of the statistical tests performed with DAPAR and recorded
-in an object of class \code{MSnSet}.
+This method returns a list of the statistical tests performed with DAPAR and 
+recorded in an object of class \code{MSnSet}.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept
-keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+threshold=ncol(obj))
 obj <- mvFilterFromIndices(obj, keepThat)
 qData <- Biobase::exprs(obj)
 sTab <- Biobase::pData(obj)

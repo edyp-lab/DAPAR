@@ -15,13 +15,13 @@ reIntroduceMEC(obj, MECIndex)
 The object \code{obj} where LAPALA have been reintroduced
 }
 \description{
-This method is used to put back the LAPALA that have been identified previously
+Put back LAPALA into  a \code{MSnSet} object
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept[1:100]
 lapala <- findMECBlock(obj)
-obj <- wrapper.impute.detQuant(obj)
+obj <- wrapper.impute.detQuant(obj, na.type='missing')
 obj <- reIntroduceMEC(obj, lapala)
 
 }

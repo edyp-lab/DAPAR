@@ -4,8 +4,8 @@
 #' 
 #' @param n The number of desired colors in the palette
 #' 
-#' @param base The name of the palette of the package RColorBrewer from which the extended palette is built.
-#' Default value is 'Set1'.
+#' @param base The name of the palette of the package RColorBrewer from which 
+#' the extended palette is built. Default value is 'Set1'.
 #' 
 #' @return A vector composed of n color code.
 #' 
@@ -63,8 +63,8 @@ ExtendPalette <- function(n = NULL, base = "Set1"){
 #' 
 #' @param conds The extended vector of samples conditions
 #' 
-#' @param pal A vector of HEX color code that form the basis palette from which to build
-#' the complete color vector for the conditions.
+#' @param pal A vector of HEX color code that form the basis palette from which 
+#' to build the complete color vector for the conditions.
 #' 
 #' @return A vector composed of HEX color code for the conditions
 #' 

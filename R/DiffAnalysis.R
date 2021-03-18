@@ -32,7 +32,8 @@
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:1000]
-#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+#' threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' qData <- Biobase::exprs(obj)
 #' sTab <- Biobase::pData(obj)
@@ -63,11 +64,11 @@ diffAnaComputeFDR <- function(logFC,
 
 
 
-#' This method returns a list of the statistical tests performed with DAPAR and recorded
-#' in an object of class \code{MSnSet}.
+#' This method returns a list of the statistical tests performed with DAPAR and 
+#' recorded in an object of class \code{MSnSet}.
 #' 
-#' @title Returns list that contains a list of the statistical tests performed with DAPAR and recorded
-#' in an object of class \code{MSnSet}. 
+#' @title Returns list that contains a list of the statistical tests performed 
+#' with DAPAR and recorded in an object of class \code{MSnSet}. 
 #' 
 #' @param obj An object of class \code{MSnSet}.
 #' 
@@ -78,7 +79,8 @@ diffAnaComputeFDR <- function(logFC,
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept
-#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+#' threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' qData <- Biobase::exprs(obj)
 #' sTab <- Biobase::pData(obj)
@@ -118,7 +120,8 @@ Get_AllComparisons <- function(obj){
 #' 
 #' @param obj An object of class \code{MSnSet}.
 #' 
-#' @param allComp A list of two items which is the result of the function wrapper.limmaCompleteTest or xxxx 
+#' @param allComp A list of two items which is the result of the function 
+#' wrapper.limmaCompleteTest or xxxx 
 #' 
 #' @param data The result of the differential analysis processed 
 #' by \code{\link{limmaCompleteTest}} 
@@ -134,7 +137,8 @@ Get_AllComparisons <- function(obj){
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept
-#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+#' threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' qData <- Biobase::exprs(obj)
 #' sTab <- Biobase::pData(obj)
@@ -225,7 +229,8 @@ diffAnaSave <- function (obj,
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept
-#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+#' threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' qData <- Biobase::exprs(obj)
 #' sTab <- Biobase::pData(obj)
@@ -271,7 +276,8 @@ diffAnaGetSignificant <- function (obj){
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:1000]
-#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+#' threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' qData <- Biobase::exprs(obj)
 #' sTab <- Biobase::pData(obj)
@@ -308,7 +314,8 @@ return(p)
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept
-#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+#' keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+#' threshold=ncol(obj))
 #' obj <- mvFilterFromIndices(obj, keepThat)
 #' qData <- Biobase::exprs(obj)
 #' sTab <- Biobase::pData(obj)

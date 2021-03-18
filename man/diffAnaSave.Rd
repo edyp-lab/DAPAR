@@ -10,7 +10,8 @@ diffAnaSave(obj, allComp, data = NULL, th_pval = 0, th_logFC = 0)
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
 
-\item{allComp}{A list of two items which is the result of the function wrapper.limmaCompleteTest or xxxx}
+\item{allComp}{A list of two items which is the result of the function 
+wrapper.limmaCompleteTest or xxxx}
 
 \item{data}{The result of the differential analysis processed 
 by \code{\link{limmaCompleteTest}}}
@@ -29,7 +30,8 @@ of differential analysis.
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept
-keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=ncol(obj))
+keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
+threshold=ncol(obj))
 obj <- mvFilterFromIndices(obj, keepThat)
 qData <- Biobase::exprs(obj)
 sTab <- Biobase::pData(obj)
