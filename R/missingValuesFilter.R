@@ -618,6 +618,77 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
   return(obj)
 }
 
+#' @title
+#' Lists the metacell scopes for filtering
+#' 
+#' @export
+#' 
+MetacellFilteringScope <- function()
+  c("None", "WholeLine", "WholeMatrix", "AllCond", "AtLeastOneCond")
+  
+
+
+
+GetIndices_WholeMatrix <- function(percent, data, metacell, level, operator, threshold){
+  indices <- NULL
+  if (isTRUE(percent)) {
+    inter <- rowSums(match.metacell(metadata=data, pattern=metacell, level=level))/ncol(data)
+    indices <- which(eval(parse(text=paste0("inter", operator, threshold))))
+  } else {
+    inter <- apply(match.metacell(metadata=data, pattern=metacell, level=level), 1, sum)
+    indices <- which(eval(parse(text=paste0("inter", operator, threshold))))
+  }
+  
+  return(indices)
+}
+
+
+GetIndices_WholeLine <- function(data, metacell, level){
+  inter <- rowSums(match.metacell(metadata=data, pattern=metacell, level=level))/ncol(data)
+  indices <- which(eval(parse(text=paste0("inter", '==', "1"))))
+  return (indices)
+}
+
+
+GetIndices_OnConditions <- function(conds, data, metacell, level, operator, threshold){
+  
+  u_conds <- unique(conds)
+  nbCond <- length(u_conds)
+  indices <- NULL
+  s <- matrix(rep(0, nrow(data)*nbCond),
+              nrow=nrow(data),
+              ncol=nbCond)
+  
+  
+  if (isTRUE(percent)) {
+    for (c in 1:nbCond) {
+      ind <- which(conds == u_conds[c])
+      inter <- rowSums(match.metacell(metadata=data[,ind], pattern=metacell, level=level))/length(ind)
+      s[,c] <- eval(parse(text=paste0("inter", operator, threshold)))
+    }
+  } else {
+    for (c in 1:nbCond) {
+      ind <- which(conds == u_conds[c])
+      if (length(ind) == 1){
+        inter <- match.metacell(metadata=data[,ind], pattern=metacell, level=level)
+        s[,c] <- eval(parse(text=paste0("inter", operator, threshold)))
+      }
+      else {
+        inter <- apply(match.metacell(metadata=data[,ind], pattern=metacell, level=level), 1, sum)
+        s[,c] <- eval(parse(text=paste0("inter", operator, threshold)))
+      }
+    }
+  }
+  
+  
+  switch(condition,
+         AllCond = indices <- which(rowSums(s) == nbCond),
+         AtLeastOneCond = indices <- which(rowSums(s) >= 1)
+  )
+  
+  return(indices)
+}
+
 
 #' Returns the indices of the lines the MSnSet object to keep w.r.t. 
 #' the filtering conditions on the number of XXX given data xxx.
@@ -658,9 +729,9 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' ind <- filterGetIndices(Exp1_R25_pept[1:100], metacell = 'quanti', remove = FALSE, 
+#' ind <- filterGetIndices(Exp1_R25_pept[1:10], metacell = 'missing', remove = FALSE, 
 #' percent=TRUE, condition = "WholeMatrix", threshold=0.5, operator = '>=')
-#' ind <- filterGetIndices(Exp1_R25_pept[1:100], metacell = 'quanti', remove = FALSE, 
+#' ind <- filterGetIndices(Exp1_R25_pept[1:10], metacell = 'quanti', remove = FALSE, 
 #' condition = "WholeLine")
 #' 
 #' @export
@@ -674,96 +745,46 @@ filterGetIndices <- function(obj,
                              threshold = NULL) {
   
   #Check parameters
-  paramtype<-c("None", "WholeLine", "WholeMatrix", "AllCond", "AtLeastOneCond")
-  if (!(condition %in% paramtype)){
-    warning("Param `type` is not correct.")
-    return (NULL)
-  }
-  
-  
+  if (!(condition %in% MetacellFilteringScope))
+    stop("Param `type` is not correct.")
+
   
   level <- obj@experimentData@other$typeOfData
   
   if (condition != 'WholeLine')
-    if (!(percent %in% c(T, F))){
-      warning("Param `type` is not correct.")
-      return (NULL)
-    } else {
+    if (!(percent %in% c(T, F)))
+      stop("Param `percent` is not correct. Value must be equal to TRUE of FALSE.")
+    else {
       if (!isTRUE(percent)){
         paramth <- c(seq(0, nrow(Biobase::pData(obj)), 1))
-        if (!(threshold %in% paramth)){
-          warning(paste0("Param `threshold` is not correct. It must an integer greater than or equal to 0 and less or equal than ",
+        if (!(threshold %in% paramth))
+          stop(paste0("Param `threshold` is not correct. It must an integer greater than or equal to 0 and less or equal than ",
                          nrow(Biobase::pData(obj))))
-          return (NULL)
-        }
-      } else {
-        if (threshold < 0 || threshold > 1){
-          warning("Param `threshold` is not correct. It must be greater than 0 and less than 1.")
-          return (NULL)
-        }
-      }
+      } else
+        if (threshold < 0 || threshold > 1)
+          stop("Param `threshold` is not correct. It must be greater than 0 and less than 1.")
     }
   
-  keepThat <- NULL
+  indices <- NULL
   data <- dplyr::select(Biobase::fData(obj), obj@experimentData@other$names_metacell)
   
   
   if (condition == "None") {
-    keepThat <- seq(1:nrow(data))
+    indices <- seq(1:nrow(data))
   } else if (condition == "WholeLine") {
-    inter <- rowSums(match.metacell(metadata=data, pattern=metacell, level=level))/ncol(data)
-    keepThat <- which(eval(parse(text=paste0("inter", '==', "1"))))
+    indices <- GetIndices_WholeLine(data, metacell, level)
   } else if (condition == "WholeMatrix") {
-    if (isTRUE(percent)) {
-      inter <- rowSums(match.metacell(metadata=data, pattern=metacell, level=level))/ncol(data)
-      keepThat <- which(eval(parse(text=paste0("inter", operator, threshold))))
-    } else {
-      inter <- apply(match.metacell(metadata=data, pattern=metacell, level=level), 1, sum)
-      keepThat <- which(eval(parse(text=paste0("inter", operator, threshold))))
-    }
+    indices <- GetIndices_WholeMatrix(percent, data, metacell, level, operator, threshold)
   } else if (condition == "AtLeastOneCond" || condition == "AllCond") {
     
     
-    conditions <- unique(Biobase::pData(obj)$Condition)
-    nbCond <- length(conditions)
-    keepThat <- NULL
-    s <- matrix(rep(0, nrow(data)*nbCond),
-                nrow=nrow(data),
-                ncol=nbCond)
-    
-    
-    if (isTRUE(percent)) {
-      for (c in 1:nbCond) {
-        ind <- which(Biobase::pData(obj)$Condition == conditions[c])
-        inter <- rowSums(match.metacell(metadata=data[,ind], pattern=metacell, level=level))/length(ind)
-        s[,c] <- eval(parse(text=paste0("inter", operator, threshold)))
-      }
-    } else {
-      for (c in 1:nbCond) {
-        ind <- which(Biobase::pData(obj)$Condition == conditions[c])
-        if (length(ind) == 1){
-          inter <- match.metacell(metadata=data[,ind], pattern=metacell, level=level)
-          s[,c] <- eval(parse(text=paste0("inter", operator, threshold)))
-        }
-        else {
-          inter <- apply(match.metacell(metadata=data[,ind], pattern=metacell, level=level), 1, sum)
-          s[,c] <- eval(parse(text=paste0("inter", operator, threshold)))
-        }
-      }
-    }
-    
-    
-    switch(condition,
-           AllCond = keepThat <- which(rowSums(s) == nbCond),
-           AtLeastOneCond = keepThat <- which(rowSums(s) >= 1)
-    )
   }
   
   if (isTRUE(remove)) {
-    keepThat <- c(1:nrow(data))[-keepThat]
+    indices <- c(1:nrow(data))[-indices]
   }
   
-  return(keepThat)
+  return(indices)
 }
 
 
