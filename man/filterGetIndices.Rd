@@ -53,9 +53,9 @@ contain at least \code{th} values, and for at least one condition, are kept.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-ind <- filterGetIndices(Exp1_R25_pept[1:100], metacell = 'quanti', remove = FALSE, 
+ind <- filterGetIndices(Exp1_R25_pept[1:10], metacell = 'missing', remove = FALSE, 
 percent=TRUE, condition = "WholeMatrix", threshold=0.5, operator = '>=')
-ind <- filterGetIndices(Exp1_R25_pept[1:100], metacell = 'quanti', remove = FALSE, 
+ind <- filterGetIndices(Exp1_R25_pept[1:10], metacell = 'quanti', remove = FALSE, 
 condition = "WholeLine")
 
 }

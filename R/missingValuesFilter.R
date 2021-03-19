@@ -628,8 +628,15 @@ MetacellFilteringScope <- function()
   
 
 
-
-GetIndices_WholeMatrix <- function(percent, data, metacell, level, operator, threshold){
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R25_pept[1:10]
+#' ind <- GetIndices_WholeMatrix(obj, metacell = 'missing', remove = FALSE, 
+#' percent=TRUE, condition = "WholeMatrix", threshold=0.5, operator = '>=')
+#' ind <- filterGetIndices(Exp1_R25_pept[1:10], metacell = 'quanti', remove = FALSE, 
+#' condition = "WholeLine")
+#' 
+GetIndices_WholeMatrix <- function( data, metacell, level, operator, percent, threshold){
   indices <- NULL
   if (isTRUE(percent)) {
     inter <- rowSums(match.metacell(metadata=data, pattern=metacell, level=level))/ncol(data)
@@ -766,32 +773,32 @@ filterGetIndices <- function(obj,
     }
   
   indices <- NULL
-  data <- dplyr::select(Biobase::fData(obj), obj@experimentData@other$names_metacell)
+  data <- GetMetacell(obj)
   
   
   indices <- switch(condition,
                     None = seq(1:nrow(data)),
-                    WholeLine = GetIndices_WholeLine(data, 
-                                                     metacell, 
-                                                     level),
-                    WholeMatrix = GetIndices_WholeMatrix(percent, 
-                                                         data, 
-                                                         metacell, 
-                                                         level, 
-                                                         operator, 
-                                                         threshold),
-                    AtLeastOneCond = GetIndices_OnConditions(Biobase::pData(obj)$Condition, 
-                                                             data, 
-                                                             metacell, 
-                                                             level, 
-                                                             operator, 
-                                                             threshold),
-                    AllCond = GetIndices_OnConditions(Biobase::pData(obj)$Condition, 
-                                                      data, 
-                                                      metacell, 
-                                                      level, 
-                                                      operator, 
-                                                      threshold)
+                    WholeLine = GetIndices_WholeLine(metacell = GetMetacell(obj), 
+                                                     tag = tag, 
+                                                     level = level),
+                    WholeMatrix = GetIndices_WholeMatrix(metacell = GetMetacell(obj), 
+                                                         tag = tag, 
+                                                         level =level, 
+                                                         op = operator, 
+                                                         th = threshold,
+                                                         percent = percent),
+                    AtLeastOneCond = GetIndices_OnConditions(conds =Biobase::pData(obj)$Condition, 
+                                                             metacell = GetMetacell(obj), 
+                                                             tag = tag, 
+                                                             level = level, 
+                                                             op = operator, 
+                                                             th = threshold),
+                    AllCond = GetIndices_OnConditions(conds = Biobase::pData(obj)$Condition, 
+                                                      metacell = GetMetacell(obj), 
+                                                      tag = tag, 
+                                                      level = level, 
+                                                      op = operator, 
+                                                      th = threshold)
                     )
 
   
