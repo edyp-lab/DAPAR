@@ -22,9 +22,11 @@ number of missing values. A white square is plotted for missing values.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-obj <- Exp1_R25_pept[1:100,]
-keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", threshold=1)
-obj <- mvFilterFromIndices(obj, keepThat)
+obj <- Exp1_R25_prot[1:1000]
+level <- obj@experimentData@other$typeOfData
+metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
+indices <- GetIndices_WholeLine(metacell.mask)
+obj <- MetaCellFiltering(obj, indices, cmd='delete')
 wrapper.mvImage(obj)
 
 }

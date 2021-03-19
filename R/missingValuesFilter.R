@@ -1,9 +1,8 @@
-
-
+#' @title Percentage of missing values
+#' 
+#' @description 
 #' Returns the percentage of missing values in the quantitative
 #' data (\code{exprs()} table of the dataset).
-#' 
-#' @title Percentage of missing values
 #' 
 #' @param obj An object of class \code{MSnSet}.
 #' 
@@ -463,72 +462,6 @@ getIndicesOfLinesToRemove <- function(obj, idLine2Delete=NULL, prefix=NULL)
 }
 
 
-#' Filters the lines of \code{exprs()} table with conditions on the number
-#' of missing values.
-#' The user chooses the minimum amount of intensities that is acceptable and
-#' the filter delete lines that do not respect this condition.
-#' The condition may be on the whole line or condition by condition.
-#' 
-#' The different methods are :
-#' "WholeMatrix": given a threshold \code{th}, only the lines that contain
-#' at least \code{th} values are kept.
-#' "AllCond": given a threshold \code{th}, only the lines which contain
-#' at least \code{th} values for each of the conditions are kept.
-#' "AtLeastOneCond": given a threshold \code{th}, only the lines that contain
-#' at least \code{th} values, and for at least one condition, are kept.
-#' 
-#' @title Filter lines in the matrix of intensities w.r.t. some criteria
-#' 
-#' @param obj An object of class \code{MSnSet} containing
-#' quantitative data.
-#' 
-#' @param type Method used to choose the lines to delete.
-#' Values are : "None", "WholeMatrix", "AllCond", "AtLeastOneCond"
-#' 
-#' @param th An integer value of the threshold
-#' 
-#' @param processText A string to be included in the \code{MSnSet}
-#' object for log. 
-#' 
-#' @return An instance of class \code{MSnSet} that have been filtered.
-#' 
-#' @author Florence Combes, Samuel Wieczorek
-#' 
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj <- mvFilter(Exp1_R25_pept[1:100], "WholeMatrix", 2)
-#' 
-#' @export
-#' 
-mvFilter <- function(obj,
-                     type,
-                     th,
-                     processText=NULL )
-{
-  #Check parameters
-  paramtype <- c("None", "WholeMatrix", "AllCond", "AtLeastOneCond")
-  if (sum(is.na(match(type, paramtype)==TRUE))>0){
-    warning("Param type is not correct.")
-    return (NULL)
-  }
-  
-  paramth<-c(seq(0, nrow(Biobase::pData(obj)), 1))
-  if (sum(is.na(match(th, paramth)==TRUE))>0){
-    warning("Param th is not correct.")
-    return (NULL)
-  }
-  
-  if(!is.integer(th)){th <- as.integer(th)}
-  
-  keepThat <- mvFilterGetIndices(obj, condition = type, threshold=th)
-  
-  obj <- obj[keepThat]
-  
-  obj@processingData@processing <-
-    c(obj@processingData@processing, processText)
-  return(obj)
-}
-
 
 
 #' Filters the lines of \code{exprs()} table with conditions on the number
@@ -550,9 +483,11 @@ mvFilter <- function(obj,
 #' @param obj An object of class \code{MSnSet} containing
 #' quantitative data.
 #' 
-#' @param keepThat A vector of integers which are the indices of lines to 
+#' @param indices A vector of integers which are the indices of lines to 
 #' keep.
 #' 
+#' @param cmd xxxx. Available values are: 'delete', 'keep'.
+#' 
 #' @param processText A string to be included in the \code{MSnSet}
 #' object for log. 
 #' 
@@ -562,19 +497,38 @@ mvFilter <- function(obj,
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj.filter <- mvFilterFromIndices(Exp1_R25_pept[1:100], c(1:10))
+#' obj <- Exp1_R25_pept[1:1000]
+#' level <- obj@experimentData@other$typeOfData
+#' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
+#' indices <- GetIndices_WholeLine(metacell.mask)
+#' obj.filter <- MetaCellFiltering(obj, indices, 'delete')
 #' 
 #' @export
 #' 
-mvFilterFromIndices <- function(obj,
-                                keepThat = NULL, 
-                                processText="" )
+MetaCellFiltering <- function(obj,
+                              indices,
+                              cmd,
+                              processText="" )
 {
+  if (missing(obj))
+    stop("'obj' is required;")
+  if (missing(indices))
+    stop("'indices' is required;")
+  if (missing(cmd))
+    stop("'cmd' is required;")
+  else if (!(cmd %in% c('delete', 'keep')))
+    stop("'cmd' must be one of the following values: `delete` or `keep`.")
   
-  if (is.null(keepThat)) {return(obj)}
-  obj <- obj[keepThat]
   
-  # }
+  
+  if (is.null(indices)) {
+    warning("'indices' is NULL. No filtering will be process.")
+    return()
+  }
+  
+  if (cmd == 'remove') obj <- obj[-indices]
+  else if (cmd == 'keep') obj <- obj[indices]
+  
   obj@processingData@processing <-
     c(obj@processingData@processing, processText)
   
@@ -618,6 +572,8 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
   return(obj)
 }
 
+
+
 #' @title
 #' Lists the metacell scopes for filtering
 #' 
@@ -625,69 +581,201 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
 #' 
 MetacellFilteringScope <- function()
   c("None", "WholeLine", "WholeMatrix", "AllCond", "AtLeastOneCond")
-  
 
 
+
+#' @title xxx
+#' 
+#' @export
+#' 
+SymFilteringOperators <- function()
+  c('<=','<', '>=', '>', '=', '!=')
+
+
+#' @title 
+#' Search lines which respects request on one or more conditions.
+#' 
+#' @description 
+#' This function looks for the lines that respect the request in either all conditions
+#' or at least one condition.
+#' 
+#' @param metacell.mask xxx
+#' 
+#' @param op  String for operator to use. List of operators is available with SymFilteringOperators().
+#' 
+#' @param percent A boolean to indicate whether the threshold represent an absolute value (percent = FALSE) or
+#' a percentage (percent=TRUE).
+#' 
+#' @param th A floating number which is in the interval [0, 1]
+#' 
+#' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:10]
-#' ind <- GetIndices_WholeMatrix(obj, metacell = 'missing', remove = FALSE, 
-#' percent=TRUE, condition = "WholeMatrix", threshold=0.5, operator = '>=')
-#' ind <- filterGetIndices(Exp1_R25_pept[1:10], metacell = 'quanti', remove = FALSE, 
-#' condition = "WholeLine")
+#' level <- obj@experimentData@other$typeOfData
+#' pattern <- 'missing'
+#' metacell.mask <- match.metacell(metadata=GetMetacell(obj), pattern=pattern, level=level)
+#' percent <- FALSE
+#' th <- 3
+#' op <- '>='
+#' ind <- GetIndices_WholeMatrix(metacell.mask, op, percent, th)
 #' 
-GetIndices_WholeMatrix <- function( data, metacell, level, operator, percent, threshold){
-  indices <- NULL
-  if (isTRUE(percent)) {
-    inter <- rowSums(match.metacell(metadata=data, pattern=metacell, level=level))/ncol(data)
-    indices <- which(eval(parse(text=paste0("inter", operator, threshold))))
+#' @export
+#' 
+GetIndices_WholeMatrix <- function( metacell.mask, op='==', percent=FALSE, th=0){
+  
+  #Check parameters
+  if (missing(metacell.mask))
+    stop("'metacell.mask' is required.")
+  if(isTRUE(percent)){
+    if (th < 0 || th > 1)
+      stop("With percent=TRUE, the threshold 'th' must be in the interval [0, 1].")
   } else {
-    inter <- apply(match.metacell(metadata=data, pattern=metacell, level=level), 1, sum)
-    indices <- which(eval(parse(text=paste0("inter", operator, threshold))))
+    th.upbound <- ncol(metacell.mask)
+    if (th > th.upbound)
+      stop(paste0("Param `th` is not correct. It must be an integer greater than or equal to 0 and less or equal than ",
+                  th.upbound))
   }
   
+  if (!(op %in% SymFilteringOperators()))
+      stop(paste0("'op' must be one of the followinf values: ",
+                  paste0(SymFilteringOperators(), collapse=' '))
+      )
+ 
+  indices <- NULL
+  if (isTRUE(percent)) {
+    inter <- rowSums(metacell.mask)/ncol(metacell.mask)
+    indices <- which(eval(parse(text=paste0("inter", op, th))))
+  } else {
+    inter <- apply(metacell.mask, 1, sum)
+    indices <- which(eval(parse(text=paste0("inter", op, th))))
+  }
+  
+  
+  if (length(indices)==0) indices <- NULL
   return(indices)
 }
 
 
-GetIndices_WholeLine <- function(data, metacell, level){
-  inter <- rowSums(match.metacell(metadata=data, pattern=metacell, level=level))/ncol(data)
-  indices <- which(eval(parse(text=paste0("inter", '==', "1"))))
+#' @title 
+#' Search lines which respects query on all their elements.
+#' 
+#' @description 
+#' This function looks for the lines where each element respect the query.
+#' 
+#' @param metacell.mask xxx
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R25_pept[20:30]
+#' level <- obj@experimentData@other$typeOfData
+#' pattern <- 'missing_POV'
+#' metacell.mask <- match.metacell(metadata=GetMetacell(obj), pattern=pattern, level=level)
+#' ind <- GetIndices_WholeLine(metacell.mask)
+#'
+#'@export
+#'
+GetIndices_WholeLine <- function(metacell.mask){
+  if(missing(metacell.mask))
+    stop("'metacell.mask' is missing.")
+  
+  indices <- which(rowSums(metacell.mask) == ncol(metacell.mask))
+   if (length(indices)==0) indices <- NULL
   return (indices)
 }
 
 
-GetIndices_OnConditions <- function(conds, data, metacell, level, operator, threshold){
+#' @title 
+#' Search lines which respects request on one or more conditions.
+#' 
+#' @description 
+#' This function looks for the lines that respect the request in either all conditions
+#' or at least one condition.
+#' 
+#' @param metacell.mask xxx
+#' 
+#' @param type Available values are:
+#' * 'AllCond' (the query is valid in all the conditions),
+#' * 'AtLeatOneCond' (the query is valid in at leat one condition.
+#' 
+#' @param conds xxx
+#' 
+#' @param percent xxx
+#' 
+#' @param op  String for operator to use. List of operators is available with SymFilteringOperators().
+#' 
+#' @param th The theshold to apply
+#' 
+#' #' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R25_pept[1:10]
+#' level <- obj@experimentData@other$typeOfData
+#' pattern <- 'missing'
+#' metacell.mask <- match.metacell(metadata=GetMetacell(obj), pattern=pattern, level=level)
+#' type <- 'AllCond'
+#' conds <- Biobase::pData(obj)$Condition
+#' op <- '>='
+#' th <- 2
+#' percent <- T
+#' ind <- GetIndices_OnConditions(metacell.mask, type, conds, percent, op, th)
+#'
+#'@export
+#'
+GetIndices_BasedOnConditions <- function(metacell.mask,
+                                         type,
+                                         conds, 
+                                         percent,
+                                         op, 
+                                         th){
+  
+  #Check parameters
+  if (missing(metacell.mask))
+    stop("'metacell.mask' is missing.")
+  if(missing(conds))
+    stop("'conds' is missing.")
+  if(missing(type))
+    stop("'type' is missing.")
+  if (missing(percent))
+    stop("'percent' is missing.")
+  if(missing(op))
+    stop("'op' is missing.")
+  if(missing(th))
+    stop("'th' is missing.")
+  else if (!(op %in% SymFilteringOperators()))
+    stop(paste0("'op' must be one of the followinf values: ",
+                paste0(SymFilteringOperators(), collapse=' '))
+    )
   
   u_conds <- unique(conds)
   nbCond <- length(u_conds)
-  indices <- NULL
-  s <- matrix(rep(0, nrow(data)*nbCond),
-              nrow=nrow(data),
-              ncol=nbCond)
   
   
-  if (isTRUE(percent)) {
-    for (c in 1:nbCond) {
-      ind <- which(conds == u_conds[c])
-      inter <- rowSums(match.metacell(metadata=data[,ind], pattern=metacell, level=level))/length(ind)
-      s[,c] <- eval(parse(text=paste0("inter", operator, threshold)))
-    }
+  if(isTRUE(percent)){
+    if (th < 0 || th > 1)
+      stop("With percent=TRUE, the threshold 'th' must be in the interval [0, 1].")
   } else {
-    for (c in 1:nbCond) {
-      ind <- which(conds == u_conds[c])
-      if (length(ind) == 1){
-        inter <- match.metacell(metadata=data[,ind], pattern=metacell, level=level)
-        s[,c] <- eval(parse(text=paste0("inter", operator, threshold)))
-      }
-      else {
-        inter <- apply(match.metacell(metadata=data[,ind], pattern=metacell, level=level), 1, sum)
-        s[,c] <- eval(parse(text=paste0("inter", operator, threshold)))
-      }
-    }
+    th.upbound <- min(unlist(lapply(u_conds, function(x) length(which(conds==x)))))
+    if (th > th.upbound)
+      stop(paste0("Param `th` is not correct. It must be an integer greater than or equal to 0 and less or equal than ",
+                  th.upbound))
   }
   
   
+  
+  
+  indices <- NULL
+  s <- matrix(rep(0, nrow(metacell.mask)*nbCond),
+              nrow=nrow(metacell.mask),
+              ncol=nbCond)
+  
+  for (c in 1:nbCond) {
+    ind.cond <- which(conds == u_conds[c])
+    inter <- rowSums(metacell.mask[, ind.cond])
+    if (isTRUE(percent))
+      inter <- inter/length(ind.cond)
+      s[,c] <- eval(parse(text=paste0("inter", operator, threshold)))
+    }
+
   indices <- switch(condition,
                     AllCond = which(rowSums(s) == nbCond),
                     AtLeastOneCond = which(rowSums(s) >= 1)
@@ -695,761 +783,3 @@ GetIndices_OnConditions <- function(conds, data, metacell, level, operator, thre
   
   return(indices)
 }
-
-
-#' Returns the indices of the lines the MSnSet object to keep w.r.t. 
-#' the filtering conditions on the number of XXX given data xxx.
-#' The condition may be on the whole line or condition by condition.
-#' 
-#' The different methods are :
-#' "WholeMatrix": given a threshold \code{th}, xxx only the lines that contain
-#' at least \code{th} values are kept.
-#' "AllCond": given a threshold \code{th}, xxx only the lines which contain
-#' at least \code{th} values for each of the conditions are kept.
-#' "AtLeastOneCond": given a threshold \code{th}, xxx only the lines that 
-#' contain at least \code{th} values, and for at least one condition, are kept.
-#' 
-#' @title Filter lines in the MSnSet object after the metadata w.r.t. 
-#' some criteria
-#' 
-#' @param obj An object of class \code{MSnSet} containing
-#' quantitative data (Biobase::exprs) and metadata (Biobase::fData).
-#' 
-#' @param metacell xxx identification label of the data xxx
-#' 
-#' @param remove Filtered lines will be removed after the filtration if FALSE. 
-#' Else, they will be kept.Default is TRUE. 
-#' 
-#' @param condition Method used to filter. Values are : "WholeMatrix", 
-#' "AllCond", "AtLeastOneCond"
-#' 
-#' @param percent TRUE or FALSE. Default is FALSE.
-#' 
-#' @param operator A string.
-#'  
-#' @param threshold An integer value of the threshold if percent is FALSE. 
-#' Otherwise, a floating number between 0 and 1.
-#' 
-#' @return An vector of indices that correspond to the lines to keep.
-#' 
-#' @author Enora Fremy
-#' 
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' ind <- filterGetIndices(Exp1_R25_pept[1:10], metacell = 'missing', remove = FALSE, 
-#' percent=TRUE, condition = "WholeMatrix", threshold=0.5, operator = '>=')
-#' ind <- filterGetIndices(Exp1_R25_pept[1:10], metacell = 'quanti', remove = FALSE, 
-#' condition = "WholeLine")
-#' 
-#' @export
-#' 
-filterGetIndices <- function(obj,
-                             metacell = NULL, 
-                             remove = TRUE,
-                             condition = "None", 
-                             percent = FALSE,
-                             operator = NULL,
-                             threshold = NULL) {
-  
-  #Check parameters
-  if (!(condition %in% MetacellFilteringScope))
-    stop("Param `type` is not correct.")
-
-  
-  level <- obj@experimentData@other$typeOfData
-  
-  if (condition != 'WholeLine')
-    if (!(percent %in% c(T, F)))
-      stop("Param `percent` is not correct. Value must be equal to TRUE of FALSE.")
-    else {
-      if (!isTRUE(percent)){
-        paramth <- c(seq(0, nrow(Biobase::pData(obj)), 1))
-        if (!(threshold %in% paramth))
-          stop(paste0("Param `threshold` is not correct. It must an integer greater than or equal to 0 and less or equal than ",
-                         nrow(Biobase::pData(obj))))
-      } else
-        if (threshold < 0 || threshold > 1)
-          stop("Param `threshold` is not correct. It must be greater than 0 and less than 1.")
-    }
-  
-  indices <- NULL
-  data <- GetMetacell(obj)
-  
-  
-  indices <- switch(condition,
-                    None = seq(1:nrow(data)),
-                    WholeLine = GetIndices_WholeLine(metacell = GetMetacell(obj), 
-                                                     tag = tag, 
-                                                     level = level),
-                    WholeMatrix = GetIndices_WholeMatrix(metacell = GetMetacell(obj), 
-                                                         tag = tag, 
-                                                         level =level, 
-                                                         op = operator, 
-                                                         th = threshold,
-                                                         percent = percent),
-                    AtLeastOneCond = GetIndices_OnConditions(conds =Biobase::pData(obj)$Condition, 
-                                                             metacell = GetMetacell(obj), 
-                                                             tag = tag, 
-                                                             level = level, 
-                                                             op = operator, 
-                                                             th = threshold),
-                    AllCond = GetIndices_OnConditions(conds = Biobase::pData(obj)$Condition, 
-                                                      metacell = GetMetacell(obj), 
-                                                      tag = tag, 
-                                                      level = level, 
-                                                      op = operator, 
-                                                      th = threshold)
-                    )
-
-  
-  if (isTRUE(remove)) {
-    indices <- c(1:nrow(data))[-indices]
-  }
-  
-  return(indices)
-}
-
-
-
-
-
-
-#' Returns the indices of the lines of \code{exprs()} table to delete w.r.t. 
-#' the conditions on the number of missing values.
-#' The user chooses the minimum amount of intensities that is acceptable and
-#' the filter delete lines that do not respect this condition.
-#' The condition may be on the whole line or condition by condition.
-#' 
-#' The different methods are :
-#' "WholeMatrix": given a threshold \code{th}, only the lines that contain
-#' at least \code{th} values are kept.
-#' "AllCond": given a threshold \code{th}, only the lines which contain
-#' at least \code{th} values for each of the conditions are kept.
-#' "AtLeastOneCond": given a threshold \code{th}, only the lines that contain
-#' at least \code{th} values, and for at least one condition, are kept.
-#' 
-#' @title Filter lines in the matrix of intensities w.r.t. some criteria
-#' 
-#' @param obj An object of class \code{MSnSet} containing
-#' quantitative data.
-#' 
-#' @param percent TRUE or FALSE. Default is FALSE..
-#' 
-#' @param condition Method used to choose the lines to delete.
-#' Values are : "None", "EmptyLines", "WholeMatrix", "AllCond", "AtLeastOneCond"
-#' 
-#' @param threshold An integer value of the threshold if percent is FALSE. 
-#' Otherwise, a floating number between 0 and 1.
-#' 
-#' @return An vector of indices that correspond to the lines to keep.
-#' 
-#' @author Enora Fremy, Samuel Wieczorek
-#' 
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' ind <- mvFilterGetIndices(Exp1_R25_pept[1:100], condition = "WholeMatrix", threshold=2)
-#' ind <- mvFilterGetIndices(Exp1_R25_pept[1:100], condition = "EmptyLines")
-#' ind <- mvFilterGetIndices(Exp1_R25_pept[1:100], condition = "WholeMatrix", percent=TRUE, 
-#' threshold=0.5)
-#' 
-#' @export
-#' 
-mvFilterGetIndices <- function(obj,
-                               percent = FALSE,
-                               condition = 'WholeMatrix', 
-                               threshold = NULL){
-  #Check parameters
-  paramtype<-c("None", "EmptyLines", "WholeMatrix", "AllCond", "AtLeastOneCond")
-  if (!(condition %in% paramtype)){
-    warning("Param `type` is not correct.")
-    return (NULL)
-  }
-  
-  level <- obj@experimentData@other$typeOfData
-  
-  if (condition != 'EmptyLines')
-    if (!(percent %in% c(T, F))){
-      warning("Param `type` is not correct.")
-      return (NULL)
-    } else {
-      if (!isTRUE(percent)){
-        paramth <- c(seq(0, nrow(Biobase::pData(obj)), 1))
-        if (!(threshold %in% paramth)){
-          warning(paste0("Param `threshold` is not correct. It must an integer greater than or equal to 0 and less or equal than ",
-                         nrow(Biobase::pData(obj))))
-          return (NULL)
-        }
-      } else {
-        if (threshold < 0 || threshold > 1){
-          warning("Param `threshold` is not correct. It must be greater than 0 and less than 1.")
-          return (NULL)
-        }
-      }
-    }
-  
-  keepThat <- NULL
-  data <- dplyr::select(Biobase::fData(obj), obj@experimentData@other$names_metacell)
-  
-  if (condition == "None") {
-    keepThat <- seq(1:nrow(data))
-  } else if (condition == "EmptyLines") {
-    keepThat <- which(apply(!match.metacell(metadata = data, 'missing', level), 1, sum) >= 1) # at least one value different of NA
-  } else if (condition == "WholeMatrix") {
-    if (isTRUE(percent)) {
-      keepThat <- which(rowSums(!match.metacell(metadata=data, 'missing', level))/ncol(data) >= threshold) 
-    } else {
-      keepThat <- which(apply(!match.metacell(metadata=data, 'missing', level), 1, sum) >= threshold)
-    }
-  } else if (condition == "AtLeastOneCond" || condition == "AllCond") {
-    
-    conditions <- unique(Biobase::pData(obj)$Condition)
-    nbCond <- length(conditions)
-    keepThat <- NULL
-    s <- matrix(rep(0, nrow(data)*nbCond),
-                nrow=nrow(data),
-                ncol=nbCond)
-    
-    if (isTRUE(percent)) {
-      for (c in 1:nbCond) {
-        ind <- which(Biobase::pData(obj)$Condition == conditions[c])
-        s[,c] <- (rowSums(!match.metacell(data[,ind], 'missing', level))/length(ind)) >= threshold
-      }
-    } else {
-      for (c in 1:nbCond) {
-        ind <- which(Biobase::pData(obj)$Condition == conditions[c])
-        if (length(ind) == 1){
-          s[,c] <- (!match.metacell(data[,ind], 'missing', level) >= threshold) 
-        }
-        else {
-          s[,c] <- (apply(!match.metacell(data[,ind], 'missing', level), 1, sum)) >= threshold
-        }
-      }
-    }
-    
-    switch(condition,
-           AllCond = keepThat <- which(rowSums(s) == nbCond),
-           AtLeastOneCond = keepThat <- which(rowSums(s) >= 1)
-    )
-  }
-  
-  return(keepThat)
-}
-
-
-
-
-
-
-
-#' Returns the indices of the lines of \code{exprs()} table to delete w.r.t. 
-#' the conditions on the number of missing values.
-#' The user chooses the minimum amount of intensities that is acceptable and
-#' the filter delete lines that do not respect this condition.
-#' The condition may be on the whole line or condition by condition.
-#' 
-#' The different methods are :
-#' "WholeMatrix": given a threshold \code{th}, only the lines that contain
-#' at least \code{th} values are kept.
-#' "AllCond": given a threshold \code{th}, only the lines which contain
-#' at least \code{th} values for each of the conditions are kept.
-#' "AtLeastOneCond": given a threshold \code{th}, only the lines that contain
-#' at least \code{th} values, and for at least one condition, are kept.
-#' 
-#' @title Filter lines in the matrix of intensities w.r.t. some criteria
-#' 
-#' @param obj An object of class \code{MSnSet} containing
-#' quantitative data.
-#' 
-#' @param type Method used to choose the lines to delete.
-#' Values are : "None", "EmptyLines", "WholeMatrix", "AllCond", "AtLeastOneCond"
-#' 
-#' @param th An integer value of the threshold
-#' 
-#' @return An vector of indices that correspond to the lines to keep.
-#' 
-#' @author Florence Combes, Samuel Wieczorek
-#' 
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' ind <- mvFilterGetIndices_old(Exp1_R25_pept[1:100], "wholeMatrix", 2)
-#' 
-#' @export
-#' 
-mvFilterGetIndices_old <- function(obj,
-                                   type, 
-                                   th=NULL)
-{
-  #Check parameters
-  paramtype<-c("None", "EmptyLines", "WholeMatrix", "AllCond", "AtLeastOneCond")
-  if (sum(is.na(match(type, paramtype)==TRUE))>0){
-    warning("Param type is not correct.")
-    return (NULL)
-  }
-  
-  paramth<-c(seq(0, nrow(Biobase::pData(obj)), 1))
-  if (sum(is.na(match(th, paramth)==TRUE))>0){
-    warning("Param th is not correct.")
-    return (NULL)
-  }
-  
-  level <- obj@experimentData@other$typeOfData
-  
-  keepThat <- NULL
-  if (is.null(obj@experimentData@other$names_metacell)){
-    data <- Biobase::exprs(obj)
-    warning("There is no slot 'names_metacell' in which to search for indices. The search will
-            be proceeded in the intensities tab based on NA values")
-  } else {
-    data <- dplyr::select(Biobase::fData(obj),obj@experimentData@other$names_metacell)
-  }
-  
-  if (type == "None"){
-    keepThat <- seq(1:nrow(data))
-  } else if (type == "EmptyLines"){
-    keepThat <- which(apply(!match.metacell(data, 'missing', level), 1, sum) >= 1)
-  } else if (type == "WholeMatrix"){
-    keepThat <- which(apply(!match.metacell(data, 'missing', level), 1, sum) >= th)
-  } else if (type == "AtLeastOneCond" || type == "AllCond"){
-    
-    conditions <- unique(Biobase::pData(obj)$Condition)
-    nbCond <- length(conditions)
-    keepThat <- NULL
-    s <- matrix(rep(0, nrow(data)*nbCond),nrow=nrow(data),
-                ncol=nbCond)
-    
-    for (c in 1:nbCond){
-      ind <- which(Biobase::pData(obj)$Condition == conditions[c])
-      if (length(ind) == 1){
-        s[,c] <- (!match.metacell(data[,ind], 'missing', level) >= th)}
-      else {
-        s[,c] <- (apply(!match.metacell(data[,ind], 'missing', level), 1, sum) >= th)
-      }
-    }
-    
-    
-    if (type == "AllCond") {
-      keepThat <- which(rowSums(s) == nbCond)
-    }
-    else if (type == "AtLeastOneCond") {
-      keepThat <- which(rowSums(s) >= 1)
-    }
-  }
-  return(keepThat)
-}
-
-
-#' Returns the indices of the lines of \code{exprs()} table to delete w.r.t. 
-#' the conditions on the number of missing values.
-#' The user chooses the minimum amount of peptides identified by MS/MS that is 
-#' acceptable and the filter delete lines that do not respect this condition.
-#' The condition may be on the whole line or condition by condition.
-#' 
-#' The different methods are :
-#' "WholeMatrix": given a threshold \code{th}, only the lines that contain
-#' at least \code{th} 'by MS/MS' are kept.
-#' "AllCond": given a threshold \code{th}, only the lines which contain
-#' at least \code{th} 'by MS/MS' for each of the conditions are kept.
-#' "AtLeastOneCond": given a threshold \code{th}, only the lines that contain
-#' at least \code{th} 'by MS/MS', and for at least one condition, are kept.
-#' 
-#' @title Filter lines in the matrix of intensities w.r.t. some criteria
-#' 
-#' @param obj An object of class \code{MSnSet} containing
-#' quantitative data.
-#' 
-#' @param percent TRUE or FALSE. Default is FALSE.
-#' 
-#' @param condition Method used to choose the lines to delete.
-#' Values are : "None", "WholeMatrix", "AllCond", "AtLeastOneCond"
-#' 
-#' @param threshold An integer value of the threshold if percent is FALSE. 
-#' Otherwise, a floating number between 0 and 1.
-#' 
-#' @return An vector of indices that correspond to the lines to keep.
-#' 
-#' @author Enora Fremy, Samuel Wieczorek
-#' 
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj<-Exp1_R25_pept[1:100]
-#' ind <- mvFilterGetIndices_Marianne(obj, condition = "WholeMatrix", 
-#' threshold=1)
-#' ind <- mvFilterGetIndices_Marianne(obj, condition = "EmptyLines")
-#' ind <-mvFilterGetIndices_Marianne(obj, condition = "WholeMatrix", 
-#' threshold=2)
-#' ind <-mvFilterGetIndices_Marianne(obj, condition = "AllCond",  threshold=1)
-#' ind <-mvFilterGetIndices_Marianne(obj,condition = "AtLeastOneCond",
-#' threshold=1)
-#' 
-#' @export
-#' 
-mvFilterGetIndices_Marianne <- function(obj,
-                                        percent = FALSE,
-                                        condition = 'WholeMatrix', 
-                                        threshold = NULL){
-  #Check parameters
-  paramtype<-c("None", "EmptyLines", "WholeMatrix", "AllCond", "AtLeastOneCond")
-  if (!(condition %in% paramtype)){
-    warning("Param `type` is not correct.")
-    return (NULL)
-  }
-  
-  level <- obj@experimentData@other$typeOfData
-  
-  if (condition != 'EmptyLines')
-    if (!(percent %in% c(T, F))){
-      warning("Param `type` is not correct.")
-      return (NULL)
-      if (!(percent %in% c(T, F))){
-        warning("Param `type` is not correct.")
-        return (NULL)
-      } else {
-        if (!isTRUE(percent)){
-          paramth <- c(seq(0, nrow(Biobase::pData(obj)), 1))
-          if (!(threshold %in% paramth)){
-            warning(paste0("Param `threshold` is not correct. It must an integer greater than or equal to 0 and less or equal than ",
-                           nrow(Biobase::pData(obj))))
-            return (NULL)
-          }
-        } else {
-          if (threshold < 0 || threshold > 1){
-            warning("Param `threshold` is not correct. It must be greater than 0 and less than 1.")
-            return (NULL)
-          }
-        }
-      }
-    }
-  
-  keepThat <- NULL
-  data <- dplyr::select(Biobase::fData(obj),
-                        obj@experimentData@other$names_metacell)
-  
-  
-  if (condition == "None") {
-    keepThat <- seq(1:nrow(data))
-  } else if (condition == "EmptyLines") {
-    keepThat <- which(apply(match.metacell(data, 'quanti_identified', level), 1, sum) >= 1) # row with at least one 'by MS/MS'
-  } else if (condition == "WholeMatrix") {
-    if (isTRUE(percent)) {
-      keepThat <- which(rowSums(match.metacell(data, 'quanti_identified', level))/ncol(data) >= threshold) 
-    } else {
-      keepThat <- which(apply(match.metacell(data, 'quanti_identified', level), 1, sum) >= threshold)
-    }
-  } else if (condition == "AtLeastOneCond" || condition == "AllCond") {
-    
-    conditions <- unique(Biobase::pData(obj)$Condition)
-    nbCond <- length(conditions)
-    keepThat <- NULL
-    s <- matrix(rep(0, nrow(data)*nbCond),
-                nrow=nrow(data),
-                ncol=nbCond)
-    
-    if (isTRUE(percent)) {
-      for (c in 1:nbCond) {
-        ind <- which(Biobase::pData(obj)$Condition == conditions[c])
-        s[,c] <- (rowSums(!match.metacell(data[, ind], 'quanti_identified', level))/length(ind)) >= threshold
-      }
-    } else {
-      for (c in 1:nbCond) {
-        ind <- which(Biobase::pData(obj)$Condition == conditions[c])
-        if (length(ind) == 1){
-          s[,c] <- (match.metacell(data[, ind], 'quanti_identified', level) >= threshold) 
-        }
-        else {
-          s[,c] <- (apply(match.metacell(data[, ind], 'quanti_identified', level), 1, sum)) >= threshold
-        }
-      }
-    }
-    
-    switch(condition,
-           AllCond = keepThat <- which(rowSums(s) == nbCond),
-           AtLeastOneCond = keepThat <- which(rowSums(s) >= 1)
-    )
-  }
-  
-  return(keepThat)
-}
-
-
-
-
-#' #' Filter missing values by proportion
-#' #'
-#' #' @description Remove lines in the data according to the proportion of 
-#' #' missing values. This proportion is calculated differently depending on 
-#' #' whether we want a certain proportion of missing values (NA) to remain on:
-#' #' * the entire matrix, regardless of the conditions: the rows containing a
-#' #' proportion of NA equal or below the threshold will be kept.
-#' #' * all the conditions: the lines for which all the conditions have a NA
-#' #' proportion equal to or less than the fixed proportion will be kept.
-#' #' * at least one condition: the lines for which at least one condition is
-#' #' equal to or less than the fixed proportion of NA will be kept.
-#' #'
-#' #' @param obj  An object of class \code{MSnSet} containing quantitative data
-#' #' and phenotype data.
-#' #' 
-#' #' @param intensities_proportion float between 0 and 1 corresponding to the
-#' #' proportion of intensities to keep in the lines.
-#' #' 
-#' #' @param mode character string. Four possibilities corresponding to the
-#' #' description above: "None", "WholeMatrix", "AllCond" and "AtLeastOneCond".
-#' #' 
-#' #' @return the object given as input but with the lines not respecting the
-#' #' proportion of NA requested in less.
-#' #' 
-#' #' @author Helene Borges
-#' #' 
-#' #' @examples
-#' #' utils::data(Exp1_R25_prot, package='DAPARdata')
-#' #' obj <- Exp1_R25_prot[1:100]
-#' #' filtered <- filterByProportion(obj = obj, 
-#' #' intensities_proportion = 0.8, mode = "atLeastOneCond")
-#' #' 
-#' #' @export
-#' #' 
-#' #' @importFrom stringr str_glue
-#' #' @importFrom Biobase exprs pData fData
-#' #' @import dplyr
-#' #' @importFrom tidyr pivot_longer
-#' #' @importFrom methods is
-#' #' 
-#' filterByProportion <- function(obj, intensities_proportion, mode = "None"){
-#'   # check if mode is valid
-#'   if(!(mode %in% c("None","WholeMatrix", "AllCond", "AtLeastOneCond"))){
-#'     stop(stringr::str_glue("Wrong mode: {mode} is not a valid string.
-#'                      Please choose between 'None', 'WholeMatrix', 'AllCond' or 'AtLeastOneCond'.",
-#'                            call. =FALSE))
-#'   }
-#'   # check if intensities_proportion is valid
-#'   if(!methods::is(intensities_proportion, "numeric" )){
-#'     stop(stringr::str_glue("Wrong parameter: intensities_proportion needs to be numeric"))
-#'   }else if(!dplyr::between(intensities_proportion,0,1)){
-#'     stop(stringr::str_glue("Wrong parameter: intensities_proportion must be between 0 and 1"))
-#'   }
-#'   
-#'   print(stringr::str_glue("chosen proportion of intensities to be present: {intensities_proportion}"))
-#'   print(stringr::str_glue("chosen mode: {mode}"))
-#'   intensities <- Biobase::exprs(obj)
-#'   sTab <- Biobase::pData(obj)
-#'   sTab$Condition <- as.factor(sTab$Condition)
-#'   
-#'   intensities_t <- as.data.frame(t(intensities))
-#'   intensities_t <- dplyr::bind_cols(intensities_t,
-#'                                     condition = sTab$Condition,
-#'                                     sample = rownames(intensities_t))
-#'   tbl_intensities <- dplyr::as_tibble(intensities_t, rownames = NA)
-#'   longer_intensities <- tbl_intensities %>%
-#'     tidyr::pivot_longer(-c(condition,sample), names_to = "feature", values_to = "intensity")
-#'   # group_by does not keep the initial order when it is not a factor so to keep
-#'   # the protein order, we cheat by transforming feature into a factor.
-#'   longer_intensities$feature <- factor(longer_intensities$feature,
-#'                                        levels = unique(longer_intensities$feature))
-#'   if(mode == "None"){
-#'     to_keep <- obj
-#'   }else if(mode == "WholeMatrix"){
-#'     nb_samples <- ncol(intensities)
-#'     threshold <- ceiling(nb_samples*intensities_proportion)
-#'     print(stringr::str_glue("missing value threshold {threshold}"))
-#'     # for each feature (protein / peptide) we count the number of intensities present
-#'     feat_grp <- longer_intensities %>%
-#'       dplyr::group_by(feature) %>%
-#'       dplyr::summarise(non_na = sum(!is.na(intensity)))
-#'     to_keep <- obj[which(feat_grp$non_na >= threshold),]
-#'     
-#'   }else if(mode == "AllCond" || mode == "AtLeastOneCond"){
-#'     workforces <- longer_intensities %>%
-#'       dplyr::group_by(feature, condition) %>%
-#'       dplyr::count(condition)
-#'     # the number of samples per condition
-#'     workforces <- workforces$n[seq_len(length(levels(sTab$Condition)))]
-#'     
-#'     # for each condition of each feature, we count the number of intensities present
-#'     feat_grp <- longer_intensities %>%
-#'       dplyr::group_by(feature, condition) %>%
-#'       dplyr::summarise(non_na = sum(!is.na(intensity)))
-#'     # the threshold for each condition
-#'     thresholds <- ceiling(workforces*intensities_proportion)
-#'     print(stringr::str_glue("for condition {unique(levels(longer_intensities$condition))} number of samples is {workforces}, so missing value threshold is {thresholds} "))
-#'     # For each feature, each condition is compared with its respective
-#'     # threshold, we put 0 if the protein has a number of intensities lower than
-#'     # the threshold of the corresponding condition, and 1 otherwise
-#'     check_th <- feat_grp %>%
-#'       dplyr::group_by(feature) %>%
-#'       dplyr::mutate(non_na = dplyr::case_when(
-#'         non_na < thresholds ~ 0,
-#'         TRUE ~ 1
-#'       )) %>%
-#'       dplyr::ungroup()
-#'     # if it is allCond then we must find the features for which all the conditions
-#'     # respect the threshold
-#'     if(mode == "AllCond"){
-#'       all_cond_ok <- check_th %>%
-#'         dplyr::group_by(feature) %>%
-#'         dplyr::filter(all(non_na ==1)) %>%
-#'         dplyr::ungroup() %>%
-#'         as.data.frame()
-#'       all_cond_ok$feature <- as.character(all_cond_ok$feature)
-#'       to_keep <- obj[which(rownames(obj) %in% all_cond_ok$feature),]
-#'     }else if(mode == "AtLeastOneCond"){
-#'       # if it is atLeastOneCond then we must find the features for which at
-#'       # least one condition that respects the threshold
-#'       any_cond_ok <- check_th %>%
-#'         dplyr::group_by(feature) %>%
-#'         dplyr::filter(any(non_na ==1)) %>%
-#'         dplyr::ungroup() %>%
-#'         as.data.frame()
-#'       any_cond_ok$feature <- as.character(any_cond_ok$feature)
-#'       to_keep <- obj[which(rownames(obj) %in% any_cond_ok$feature),]
-#'     }
-#'   }
-#'   print(stringr::str_glue("There were initially {nrow(intensities)} features.
-#'                  After filtering out the missing values, {nrow(exprs(to_keep))} remain."))
-#'   return(to_keep)
-#' }
-#' 
-#' 
-#' 
-#' 
-#' 
-#' 
-#' 
-#' #' Filter missing values by proportion
-#' #'
-#' #' @description Remove lines in the data according to the proportion of missing
-#' #' values. This proportion is calculated differently depending on whether we
-#' #' want a certain proportion of missing values (NA) to remain on:
-#' #' * the entire matrix, regardless of the conditions: the rows containing a
-#' #' proportion of NA equal or below the threshold will be kept.
-#' #' * all the conditions: the lines for which all the conditions have a NA
-#' #' proportion equal to or less than the fixed proportion will be kept.
-#' #' * at least one condition: the lines for which at least one condition is
-#' #' equal to or less than the fixed proportion of NA will be kept.
-#' #'
-#' #' @param obj  An object of class \code{MSnSet} containing quantitative data
-#' #' and phenotype data.
-#' #' 
-#' #' @param intensities_proportion float between 0 and 1 corresponding to the proportion
-#' #' of intensities to keep in the lines.
-#' #' 
-#' #' @param mode character string. Four possibilities corresponding to the
-#' #' description above: "None", "WholeMatrix", "AllCond" and "AtLeastOneCond".
-#' #' 
-#' #' @return the object given as input but with the lines not respecting the
-#' #' proportion of NA requested in less.
-#' #' 
-#' #' @author Helene Borges, Samuel Wieczorek
-#' #' 
-#' #' @examples
-#' #' utils::data(Exp1_R25_prot, package='DAPARdata')
-#' #' filtered <- filterByProportion(obj = Exp1_R25_prot, intensities_proportion = 0.8, mode = "AtLeastOneCond")
-#' #' 
-#' #' @export
-#' #' 
-#' #' @importFrom stringr str_glue
-#' #' @importFrom Biobase exprs pData fData
-#' #' @import dplyr
-#' #' @importFrom tidyr pivot_longer
-#' #' @importFrom methods is
-#' #' 
-#' GetIndices_Filter_By_Proportion <- function(obj, intensities_proportion, mode = "None"){
-#'   # check if mode is valid
-#'   if(!(mode %in% c("None","WholeMatrix", "AllCond", "AtLeastOneCond"))){
-#'     stop(stringr::str_glue("Wrong mode: {mode} is not a valid string.
-#'                      Please choose between 'None', 'WholeMatrix', 'AllCond' or 'AtLeastOneCond'.",
-#'                            call. =FALSE))
-#'   }
-#'   # check if intensities_proportion is valid
-#'   if(!methods::is(intensities_proportion, "numeric" )){
-#'     stop(stringr::str_glue("Wrong parameter: intensities_proportion needs to be numeric"))
-#'   }else if(!dplyr::between(intensities_proportion,0,1)){
-#'     stop(stringr::str_glue("Wrong parameter: intensities_proportion must be between 0 and 1"))
-#'   }
-#'   
-#'   
-#'   keepThat <- NULL
-#'   if (is.null(obj@experimentData@other$OriginOfValues)){
-#'     data <- Biobase::exprs(obj)
-#'   } else {
-#'     data <- dplyr::select(Biobase::fData(obj),obj@experimentData@other$OriginOfValues)
-#'   }
-#'   
-#'   
-#'   print(stringr::str_glue("chosen proportion of intensities to be present: {intensities_proportion}"))
-#'   print(stringr::str_glue("chosen mode: {mode}"))
-#'   data <- Biobase::exprs(obj)
-#'   sTab <- Biobase::pData(obj)
-#'   sTab$Condition <- as.factor(sTab$Condition)
-#'   
-#'   data_t <- as.data.frame(t(data))
-#'   data_t <- dplyr::bind_cols(data_t,
-#'                              condition = sTab$Condition,
-#'                              sample = rownames(data_t))
-#'   tbl_data <- dplyr::as_tibble(data_t, rownames = NA)
-#'   longer_data <- tbl_data %>%
-#'     tidyr::pivot_longer(-c(condition,sample), names_to = "feature", values_to = "intensity")
-#'   # group_by does not keep the initial order when it is not a factor so to keep
-#'   # the protein order, we cheat by transforming feature into a factor.
-#'   longer_data$feature <- factor(longer_data$feature,
-#'                                 levels = unique(longer_data$feature))
-#'   if(mode == "None"){
-#'     indices_to_keep <- 1:nrow(obj)
-#'   }else if(mode == "WholeMatrix"){
-#'     nb_samples <- ncol(data)
-#'     threshold <- ceiling(nb_samples*data_proportion)
-#'     print(stringr::str_glue("missing value threshold {threshold}"))
-#'     # for each feature (protein / peptide) we count the number of data present
-#'     feat_grp <- longer_data %>%
-#'       dplyr::group_by(feature) %>%
-#'       dplyr::summarise(non_na = sum(!is.na(intensity)))
-#'     indices_to_keep <- which(feat_grp$non_na >= threshold)
-#'     
-#'   }else if(mode == "AllCond" || mode == "AtLeastOneCond"){
-#'     workforces <- longer_data %>%
-#'       dplyr::group_by(feature, condition) %>%
-#'       dplyr::count(condition)
-#'     # the number of samples per condition
-#'     workforces <- workforces$n[seq_len(length(levels(sTab$Condition)))]
-#'     
-#'     # for each condition of each feature, we count the number of data present
-#'     feat_grp <- longer_data %>%
-#'       dplyr::group_by(feature, condition) %>%
-#'       dplyr::summarise(non_na = sum(!is.na(intensity)))
-#'     # the threshold for each condition
-#'     thresholds <- ceiling(workforces*data_proportion)
-#'     print(stringr::str_glue("for condition {unique(levels(longer_data$condition))} number of samples is {workforces}, so missing value threshold is {thresholds} "))
-#'     # For each feature, each condition is compared with its respective
-#'     # threshold, we put 0 if the protein has a number of data lower than
-#'     # the threshold of the corresponding condition, and 1 otherwise
-#'     check_th <- feat_grp %>%
-#'       dplyr::group_by(feature) %>%
-#'       dplyr::mutate(non_na = dplyr::case_when(
-#'         non_na < thresholds ~ 0,
-#'         TRUE ~ 1
-#'       )) %>%
-#'       dplyr::ungroup()
-#'     # if it is allCond then we must find the features for which all the conditions
-#'     # respect the threshold
-#'     if(mode == "AllCond"){
-#'       all_cond_ok <- check_th %>%
-#'         dplyr::group_by(feature) %>%
-#'         dplyr::filter(all(non_na ==1)) %>%
-#'         dplyr::ungroup() %>%
-#'         as.data.frame()
-#'       all_cond_ok$feature <- as.character(all_cond_ok$feature)
-#'       indices_to_keep <- which(rownames(obj) %in% all_cond_ok$feature)
-#'     }else if(mode == "AtLeastOneCond"){
-#'       # if it is atLeastOneCond then we must find the features for which at
-#'       # least one condition that respects the threshold
-#'       any_cond_ok <- check_th %>%
-#'         dplyr::group_by(feature) %>%
-#'         dplyr::filter(any(non_na ==1)) %>%
-#'         dplyr::ungroup() %>%
-#'         as.data.frame()
-#'       any_cond_ok$feature <- as.character(any_cond_ok$feature)
-#'       indices_to_keep <- which(rownames(obj) %in% any_cond_ok$feature)
-#'     }
-#'   }
-#'   print(stringr::str_glue("There were initially {nrow(data)} features.
-#'                  After filtering out the missing values, {nrow(exprs(to_keep))} remain."))
-#'   return(indices_to_keep)
-#' }

@@ -39,10 +39,11 @@ Visualize the clusters according to pvalue thresholds
 \examples{
 library(dplyr)
 utils::data(Exp1_R25_prot, package='DAPARdata')
-obj <- Exp1_R25_prot[1:100]
-keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
-threshold=ncol(obj))
-obj <- mvFilterFromIndices(obj, keepThat)
+obj <- Exp1_R25_prot[1:1000]
+level <- obj@experimentData@other$typeOfData
+metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
+indices <- GetIndices_WholeLine(metacell.mask)
+obj <- MetaCellFiltering(obj, indices, cmd='delete')
 expR25_ttest <- compute_t_tests(obj)
 averaged_means <- averageIntensities(obj)
 only_means <- dplyr::select_if(averaged_means, is.numeric)

@@ -41,10 +41,11 @@ Make sure the factor levels are properly ordered.
 }
 \examples{
 utils::data(Exp1_R25_prot, package='DAPARdata')
-obj <- Exp1_R25_prot[1:1000]
-keepThat <- mvFilterGetIndices(obj, condition = "WholeMatrix", 
-threshold=ncol(obj))
-obj <- mvFilterFromIndices(obj, keepThat)
+ obj <- Exp1_R25_prot[1:1000]
+level <- obj@experimentData@other$typeOfData
+metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
+indices <- GetIndices_WholeLine(metacell.mask)
+obj <- MetaCellFiltering(obj, indices, cmd='delete')
 anova_tests <- t(apply(Biobase::exprs(obj),1, classic1wayAnova, 
 conditions=as.factor(Biobase::pData(obj)$Condition)))
 names(anova_tests) <- rownames(Biobase::exprs(obj))
