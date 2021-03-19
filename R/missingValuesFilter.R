@@ -681,10 +681,10 @@ GetIndices_OnConditions <- function(conds, data, metacell, level, operator, thre
   }
   
   
-  switch(condition,
-         AllCond = indices <- which(rowSums(s) == nbCond),
-         AtLeastOneCond = indices <- which(rowSums(s) >= 1)
-  )
+  indices <- switch(condition,
+                    AllCond = which(rowSums(s) == nbCond),
+                    AtLeastOneCond = which(rowSums(s) >= 1)
+                    )
   
   return(indices)
 }
@@ -769,16 +769,31 @@ filterGetIndices <- function(obj,
   data <- dplyr::select(Biobase::fData(obj), obj@experimentData@other$names_metacell)
   
   
-  if (condition == "None") {
-    indices <- seq(1:nrow(data))
-  } else if (condition == "WholeLine") {
-    indices <- GetIndices_WholeLine(data, metacell, level)
-  } else if (condition == "WholeMatrix") {
-    indices <- GetIndices_WholeMatrix(percent, data, metacell, level, operator, threshold)
-  } else if (condition == "AtLeastOneCond" || condition == "AllCond") {
-    
-    
-  }
+  indices <- switch(condition,
+                    None = seq(1:nrow(data)),
+                    WholeLine = GetIndices_WholeLine(data, 
+                                                     metacell, 
+                                                     level),
+                    WholeMatrix = GetIndices_WholeMatrix(percent, 
+                                                         data, 
+                                                         metacell, 
+                                                         level, 
+                                                         operator, 
+                                                         threshold),
+                    AtLeastOneCond = GetIndices_OnConditions(Biobase::pData(obj)$Condition, 
+                                                             data, 
+                                                             metacell, 
+                                                             level, 
+                                                             operator, 
+                                                             threshold),
+                    AllCond = GetIndices_OnConditions(Biobase::pData(obj)$Condition, 
+                                                      data, 
+                                                      metacell, 
+                                                      level, 
+                                                      operator, 
+                                                      threshold)
+                    )
+
   
   if (isTRUE(remove)) {
     indices <- c(1:nrow(data))[-indices]
