@@ -32,16 +32,12 @@ getTextForNewDataset <- function(l.params){
 #' 
 #' @author Samuel Wieczorek
 #' 
-#' @examples
-#' getTextForFiltering(list(mvFilterType="WholeMatrix",mvThNA=3, 
-#' val_vs_percent='Value'))
 #' 
 #' @export
 #' @importFrom utils str
 #' 
 getTextForFiltering <- function(l.params){ 
-    # str(l.params) = list(mvFilterType ,
-    #                 mvThNA,
+    # str(l.params) = list(metacellFilter.df ,
     #                 stringFilter.df,
     #                 numericFilter.df)
     
@@ -50,22 +46,19 @@ getTextForFiltering <- function(l.params){
   
   txt <- "<ul>"
     
-  txt <- paste(txt,"<li>Filter type: ", l.params$mvFilterType,"</li>")
-  
-  if (! (l.params$mvFilterType %in% c("None", "EmptyLines"))){
-    if (l.params$val_vs_percent == 'Value')
-      txt <- paste(txt,"<li>Minimal nb of values: ", l.params$mvThNA,"</li>")
-    else if (l.params$val_vs_percent == 'Percentage')
-      txt <- paste(txt,"<li>Minimal % of values: ", l.params$mvThNA_percent,"</li>")
-    }
+  if (!is.null(l.params$metacellFilter) && nrow(l.params$metacellFilter) > 1){
+    ll <- l.params$metacellFilter$query
+    txt <- paste(txt,"<li>Metacell filtering: ",  paste(ll[-1], collapse=", "),"</li>")
+  }
   
   if (!is.null(l.params$stringFilter.df) && nrow(l.params$stringFilter.df) > 1){
         ll <- l.params$stringFilter.df$Filter
-        txt <- paste(txt,"<li>Text filtering based on: ",  paste(ll[-1], collapse=", "),"</li>")
+        txt <- paste(txt,"<li>Text filtering: ",  paste(ll[-1], collapse=", "),"</li>")
   }
+  
   if (!is.null(l.params$numericFilter.df) && nrow(l.params$numericFilter.df) > 1){
     ll <- l.params$numericFilter.df$Filter
-    txt <- paste(txt,"<li>Text filtering based on: ",  paste(ll[-1], collapse=", "),"</li>")
+    txt <- paste(txt,"<li>Numerical filtering: ",  paste(ll[-1], collapse=", "),"</li>")
   }
   txt <- paste(txt,"</ul>" ) 
     return (txt)

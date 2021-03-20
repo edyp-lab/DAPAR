@@ -272,7 +272,7 @@ nonzero <- function(x){
 #' 
 #' @export
 #' 
-#' @importFrom highcharter hc_exporting
+#' @import highcharter
 #' 
 dapar_hc_ExportMenu <- function(hc, filename){
   hc_exporting(hc, enabled=TRUE,
@@ -314,7 +314,7 @@ dapar_hc_ExportMenu <- function(hc, filename){
 #' 
 #' @export
 #' 
-#' @importFrom highcharter hc_chart
+#' @import highcharter
 #' 
 dapar_hc_chart <- function(hc,  chartType, zoomType="None", width=0, height=0){
   hc %>% 

@@ -248,8 +248,9 @@ writeMSnsetToExcel <- function(obj, filename)
     listPOV <-  which(is.na(Biobase::exprs(obj)), arr.ind=TRUE)
   } else {
     mat <- Biobase::fData(obj)[,obj@experimentData@other$names_metacell]
-    listPOV <- which(match.metacell(mat, 'POV'), arr.ind=TRUE)
-    listMEC <- which(match.metacell(mat, 'MEC'), arr.ind=TRUE)
+    level <- obj@experimentData@other$typeOfData
+    listPOV <- which(match.metacell(mat, 'missing_POV', level), arr.ind=TRUE)
+    listMEC <- which(match.metacell(mat, 'missing_MEC', level), arr.ind=TRUE)
   }
   
   openxlsx::addStyle(wb, sheet=n, cols = listPOV[,"col"]+1, rows = listPOV[,"row"]+1, style = POV_Style)

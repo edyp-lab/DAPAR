@@ -554,9 +554,7 @@ wrapper.hc_mvTypePlot2 <- function(obj,...){
 #' 
 #' @title Distribution of Observed values with respect to intensity values
 #' 
-#' @param qData A dataframe that contains quantitative data.
-#' 
-#' @param conds A vector of the conditions (one condition per sample).
+#' @param obj xxx
 #' 
 #' @param pal The different colors for conditions
 #' 
@@ -572,21 +570,22 @@ wrapper.hc_mvTypePlot2 <- function(obj,...){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' qData <- Biobase::exprs(Exp1_R25_pept)
-#' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-#' hc_mvTypePlot2(qData, conds, title="POV distribution")
+#' obj <- Exp1_R25_pept[1:100]
+#' hc_mvTypePlot2(obj, title="POV distribution")
 #' pal <- ExtendPalette(length(unique(conds)), 'Dark2')
-#' hc_mvTypePlot2(qData, conds, title="POV distribution", pal=pal)
+#' hc_mvTypePlot2(obj, title="POV distribution", pal=pal)
+#' 
+#' @import highcharter
 #' 
 #' @export
 #'
-hc_mvTypePlot2 <- function(qData,
-                           conds, 
+hc_mvTypePlot2 <- function(obj,
                            pal = NULL, 
                            typeofMV=NULL, 
                            title=NULL){
-  if (is.null(conds)){return(NULL)}
   
+  conds <- Biobase::pData(obj)[,"Condition"]
+  qData <- Biobase::exprs(obj)
   myColors <- NULL
   if (is.null(pal)){
     warning("Color palette set to default.")
@@ -610,15 +609,22 @@ hc_mvTypePlot2 <- function(qData,
   myColors <- NULL
   j <- 1 
   
+  level <- obj@experimentData@other$typeOfData
+  
   for (iCond in unique(conditions)){
+    
     if (length(which(conditions==iCond)) == 1){
       
       mTemp[,iCond] <- qData[,which(conditions==iCond)]
-      nbNA[,iCond] <- as.integer(match.metacell(qData[,which(conditions==iCond)]))
+      nbNA[,iCond] <- as.integer(match.metacell(GetMetacell(obj)[, which(conditions==iCond)], 
+                                                pattern = 'missing', 
+                                                level= level))
       nbValues[,iCond] <- length(which(conditions==iCond)) - nbNA[,iCond]
     } else {
       mTemp[,iCond] <- apply(qData[,which(conditions==iCond)], 1, mean, na.rm=TRUE)
-      nbNA[,iCond] <- apply(qData[,which(conditions==iCond)],1,function(x) length(which(is.na(x) == TRUE)))
+      nbNA[,iCond] <- rowSums(match.metacell(GetMetacell(obj)[, which(conditions==iCond)], 
+                                             pattern = 'missing', 
+                                             level= level))
       nbValues[,iCond] <- length(which(conditions==iCond)) - nbNA[,iCond]
     }
     
@@ -640,7 +646,7 @@ hc_mvTypePlot2 <- function(qData,
   }
   
   
-  hc <-  highchart() %>%
+  hc <-  highchart(type = "chart") %>%
     hc_title(text = title) %>%
     my_hc_chart(chartType = "spline", zoomType="xy") %>%
     
@@ -676,7 +682,7 @@ hc_mvTypePlot2 <- function(qData,
                                                            y = series[[i]]$y))), 
                         showInLegend=FALSE,
                         color = myColors[i],
-                        name=conds[i])
+                        name=  conds[i])
   }
   
   # add three empty series for the legend entries. Change color and marker symbol
