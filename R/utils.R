@@ -82,9 +82,9 @@ getListNbValuesInLines <- function(obj, type){
   
   ll <- switch(type,
                WholeLine = NULL,
-               WholeMatrix= seq(1, ncol(data)),
-               AllCond = seq(1, min(unlist(lapply(unique(conds), function(x) length(which(conds == x)))))),
-               AtLeastOneCond = seq(1, min(unlist(lapply(unique(conds), function(x) length(which(conds == x))))))
+               WholeMatrix= seq(0, ncol(data)),
+               AllCond = seq(0, min(unlist(lapply(unique(conds), function(x) length(which(conds == x)))))),
+               AtLeastOneCond = seq(0, min(unlist(lapply(unique(conds), function(x) length(which(conds == x))))))
          )
   
   return (ll)
