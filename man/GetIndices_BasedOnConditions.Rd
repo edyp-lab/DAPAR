@@ -31,8 +31,8 @@ type <- 'AllCond'
 conds <- Biobase::pData(obj)$Condition
 op <- '>='
 th <- 2
-percent <- T
-ind <- GetIndices_OnConditions(metacell.mask, type, conds, percent, op, th)}
+percent <- F
+ind <- GetIndices_BasedOnConditions(metacell.mask, type, conds, percent, op, th)}
 }
 \description{
 This function looks for the lines that respect the request in either all conditions

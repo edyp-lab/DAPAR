@@ -60,40 +60,34 @@ return (n)
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' getListNbValuesInLines(Exp1_R25_pept)
+#' getListNbValuesInLines(Exp1_R25_pept, 'WholeMatrix')
 #' 
 #' @export
 #'
 #' @importFrom Biobase pData exprs fData
 #' 
-getListNbValuesInLines <- function(obj, type="WholeMatrix"){
-  if (is.null(obj)){return(NULL)}
+getListNbValuesInLines <- function(obj, type){
+  if(missing(obj))
+    stop("'obj' is required")
+  else if (is.null(obj))
+    stop("'obj' is NULL.")
   
-  if(is.null(obj@experimentData@other$names_metacell)){
-    ll <- seq(0,ncol(obj))
-  }
-  data <- Biobase::fData(obj)[,obj@experimentData@other$names_metacell]
-  switch(type,
-         WholeMatrix= {
-           ll <- unique(ncol(data) - apply(match.metacell(data, 'missing', obj@experimentData@other$typeOfData), 1, sum))
-           },
-         AllCond = {
-                    tmp <- NULL
-                    for (cond in unique(Biobase::pData(obj)$Condition)){
-                     tmp <- c(tmp, length(which(Biobase::pData(obj)$Condition == cond)))
-                  }
-                  ll <- seq(0,min(tmp))
-                  },
-         AtLeastOneCond = {
-                   tmp <- NULL
-                  for (cond in unique(Biobase::pData(obj)$Condition)){
-                       tmp <- c(tmp, length(which(Biobase::pData(obj)$Condition == cond)))
-                   }
-                   ll <- seq(0,max(tmp))
-                    }
+  if(missing(type))
+    stop("'type' is required")
+  else if (!(type %in% MetacellFilteringScope()))
+    stop(paste0("'type' must be one of the following values: ", paste0(MetacellFilteringScope(), collapse= ' ')))
+  
+  data <- GetMetacell(obj)
+  conds <- Biobase::pData(obj)$Condition
+  
+  ll <- switch(type,
+               WholeLine = NULL,
+               WholeMatrix= seq(1, ncol(data)),
+               AllCond = seq(1, min(unlist(lapply(unique(conds), function(x) length(which(conds == x)))))),
+               AtLeastOneCond = seq(1, min(unlist(lapply(unique(conds), function(x) length(which(conds == x))))))
          )
   
-  return (sort(ll))
+  return (ll)
 }
 
 

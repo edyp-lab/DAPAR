@@ -515,34 +515,6 @@ mvImage <- function(qData, conds){
 }
 
 
-
-#' @title Distribution of observed values with respect to intensity values 
-#' from a \code{MSnSet} object
-#' 
-#' @description This method is a wrapper for the function 
-#' \code{\link{hc_mvTypePlot2}} adapted to objects of class \code{MSnSet}).
-#' 
-#' @param obj An object of class \code{MSnSet}.
-#' @param ... See \code{\link{hc_mvTypePlot2}} 
-#' @return A scatter plot
-#' @author Florence Combes, Samuel Wieczorek
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' wrapper.hc_mvTypePlot2(Exp1_R25_pept)
-#' 
-#' @export
-#'
-#' @importFrom Biobase pData exprs fData
-#' 
-wrapper.hc_mvTypePlot2 <- function(obj,...){
-  qData <- Biobase::exprs(obj)
-  conds <- Biobase::pData(obj)[,"Condition"]
-  hc_mvTypePlot2(qData, conds = conds,...)
-}
-
-
-
-
 #' This method shows density plots which represents the repartition of
 #' Partial Observed Values for each replicate in the dataset.
 #' The colors correspond to the different conditions (slot Condition in in the

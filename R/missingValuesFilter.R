@@ -716,8 +716,8 @@ GetIndices_WholeLine <- function(metacell.mask){
 #' conds <- Biobase::pData(obj)$Condition
 #' op <- '>='
 #' th <- 2
-#' percent <- T
-#' ind <- GetIndices_OnConditions(metacell.mask, type, conds, percent, op, th)
+#' percent <- F
+#' ind <- GetIndices_BasedOnConditions(metacell.mask, type, conds, percent, op, th)
 #'
 #'@export
 #'
@@ -735,6 +735,8 @@ GetIndices_BasedOnConditions <- function(metacell.mask,
     stop("'conds' is missing.")
   if(missing(type))
     stop("'type' is missing.")
+  else if (!(type %in% c('AllCond', 'AtLeastOneCond')))
+    stop("'type' must be one of the following: AllCond, AtLeastOneCond.")
   if (missing(percent))
     stop("'percent' is missing.")
   if(missing(op))
@@ -773,10 +775,10 @@ GetIndices_BasedOnConditions <- function(metacell.mask,
     inter <- rowSums(metacell.mask[, ind.cond])
     if (isTRUE(percent))
       inter <- inter/length(ind.cond)
-      s[,c] <- eval(parse(text=paste0("inter", operator, threshold)))
+      s[,c] <- eval(parse(text=paste0("inter", op, th)))
     }
 
-  indices <- switch(condition,
+  indices <- switch(type,
                     AllCond = which(rowSums(s) == nbCond),
                     AtLeastOneCond = which(rowSums(s) >= 1)
                     )

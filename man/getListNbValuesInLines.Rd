@@ -4,7 +4,7 @@
 \alias{getListNbValuesInLines}
 \title{Returns the possible number of values in lines in the data}
 \usage{
-getListNbValuesInLines(obj, type = "WholeMatrix")
+getListNbValuesInLines(obj, type)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}}
@@ -19,7 +19,7 @@ Returns the possible number of values in lines in a matrix.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-getListNbValuesInLines(Exp1_R25_pept)
+getListNbValuesInLines(Exp1_R25_pept, 'WholeMatrix')
 
 }
 \author{
