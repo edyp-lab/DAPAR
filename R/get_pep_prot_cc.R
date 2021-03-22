@@ -145,7 +145,7 @@ plotJitter <- function(list.of.cc){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' X <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein_group_IDs", FALSE)
+#' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
 #' ll <- get.pep.prot.cc(X)
 #' g <- buildGraph(ll[[1]], X)
 #' 
@@ -200,7 +200,7 @@ buildGraph <- function(The.CC, X){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata') 
-#' X <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein_group_IDs", FALSE)
+#' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
 #' ll <- get.pep.prot.cc(X)
 #' g <- buildGraph(ll[[1]], X)
 #' display.CC.visNet(g)

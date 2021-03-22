@@ -27,10 +27,10 @@ package). Then the function checks that these data are clusterizable or not
 }
 \examples{
 utils::data(Exp1_R25_prot, package='DAPARdata')
-obj <- Exp1_R25_prot
+obj <- Exp1_R25_prot[1:100]
 level <- obj@experimentData@other$typeOfData
 metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
-indices <- GetIndices_WholeLine(metacell.mask)
+indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 obj <- MetaCellFiltering(obj, indices, cmd='delete')
 averaged_means <- averageIntensities(obj)
 only_means <- dplyr::select_if(averaged_means, is.numeric)

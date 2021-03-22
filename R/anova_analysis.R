@@ -15,9 +15,9 @@
 #' obj <- Exp1_R25_prot[1:1000]
 #' level <- obj@experimentData@other$typeOfData
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
-#' indices <- GetIndices_WholeLine(metacell.mask)
+#' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' anova_tests <- t(apply(Biobase::exprs(obj),1, classic1wayAnova, 
+#' anova_tests <- t(apply(Biobase::exprs(obj), 1, classic1wayAnova, 
 #' conditions=as.factor(Biobase::pData(obj)$Condition)))
 #' 
 #' @importFrom stats aov
@@ -63,7 +63,7 @@ classic1wayAnova <- function(current_line, conditions){
 #' obj <- Exp1_R25_prot[1:1000]
 #' level <- obj@experimentData@other$typeOfData
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
-#' indices <- GetIndices_WholeLine(metacell.mask)
+#' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
 #' anovatest <- wrapperClassic1wayAnova(obj)
 #' 
@@ -116,7 +116,7 @@ wrapperClassic1wayAnova <- function(obj, with_post_hoc = "No", post_hoc_test = "
 #' obj <- Exp1_R25_prot[1:1000]
 #' level <- obj@experimentData@other$typeOfData
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
-#' indices <- GetIndices_WholeLine(metacell.mask)
+#' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
 #' anova_tests <- t(apply(Biobase::exprs(obj),1, classic1wayAnova, 
 #' conditions=as.factor(Biobase::pData(obj)$Condition)))
@@ -196,7 +196,7 @@ formatPHResults <- function(post_hoc_models_summaries){
 #'  obj <- Exp1_R25_prot[1:1000]
 #' level <- obj@experimentData@other$typeOfData
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
-#' indices <- GetIndices_WholeLine(metacell.mask)
+#' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
 #' anova_tests <- t(apply(Biobase::exprs(obj),1, classic1wayAnova, 
 #' conditions=as.factor(Biobase::pData(obj)$Condition)))

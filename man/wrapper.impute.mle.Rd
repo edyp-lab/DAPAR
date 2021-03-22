@@ -23,7 +23,9 @@ This method is a wrapper to the function \code{impute.mle} of the package
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept[1:10,]
-obj <- mvFilter(obj, type="WholeMatrix", th=1)
+level <- obj@experimentData@other$typeOfData
+metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
+indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 obj.imp.na <- wrapper.impute.mle(obj, na.type = 'missing')
 
 }

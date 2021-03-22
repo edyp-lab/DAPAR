@@ -526,7 +526,7 @@ MetaCellFiltering <- function(obj,
     return()
   }
   
-  if (cmd == 'remove') obj <- obj[-indices]
+  if (cmd == 'delete') obj <- obj[-indices]
   else if (cmd == 'keep') obj <- obj[indices]
   
   obj@processingData@processing <-

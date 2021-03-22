@@ -46,8 +46,12 @@ A heatmap
 Heatmap inspired by the heatmap.2 function.
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-obj <- mvFilter(Exp1_R25_pept, "WholeMatrix", 6)
+utils::data(Exp1_R25_prot, package='DAPARdata')
+obj <- Exp1_R25_prot[1:1000]
+level <- obj@experimentData@other$typeOfData
+metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
+indices <- GetIndices_WholeLine(metacell.mask)
+obj <- MetaCellFiltering(obj, indices, cmd='delete')
 qData <- Biobase::exprs(obj)
 heatmapForMissingValues(qData)
 

@@ -36,7 +36,10 @@ Heatmap of the quantitative proteomic data of a \code{MSnSet} object
 \examples{
 \dontrun{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-obj <- mvFilter(Exp1_R25_pept[1:1000], "WholeMatrix", 6)
+obj <- Exp1_R25_pept[1:10,]
+level <- obj@experimentData@other$typeOfData
+metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
+indices <- GetIndices_WholeLine(metacell.mask)
 qData <- Biobase::exprs(obj)
 conds <- pData(obj)[['Condition']]
 heatmapD(qData, conds)
