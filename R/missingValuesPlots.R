@@ -427,7 +427,12 @@ mvHisto_HC <- function(qData,
 #' @importFrom Biobase pData exprs fData
 #' 
 wrapper.mvImage <- function(obj){
-  
+  if(missing(obj))
+    stop("'obj' is required.")
+  else if (is.null(obj)){
+    warning("'obj' is NULL. Return NULL.")
+    return(NULL)
+  }
   qData <- Biobase::exprs(obj)
   conds <- Biobase::pData(obj)[ , "Condition"]
   metac <- Biobase::fData(obj)[ , obj@experimentData@other$names_metacell]
