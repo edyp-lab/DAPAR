@@ -701,6 +701,7 @@ GetDetailedNbPeptides <- function(X){
 #' 
 
 inner.sum <- function(pepData, X){
+  X <- as.matrix(X)
   pepData[is.na(pepData)] <- 0
   Mp <- t(X) %*% pepData
   return(Mp)
@@ -719,6 +720,7 @@ inner.sum <- function(pepData, X){
 #' 
 
 inner.mean <- function(pepData, X){
+  X <- as.matrix(X)
   Mp <- inner.sum(pepData, X)
   Mp <- Mp / GetNbPeptidesUsed(X, pepData)
   
@@ -744,7 +746,7 @@ inner.mean <- function(pepData, X){
 #' @author Samuel Wieczorek
 #' 
 inner.aggregate.topn <-function(pepData,X, method='Mean', n=10){
-  
+  X <- as.matrix(X)
   med <- apply(pepData, 1, median)
   xmed <- as(X * med, "dgCMatrix")
   for (c in 1:ncol(X)){
