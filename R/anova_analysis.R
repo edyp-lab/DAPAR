@@ -193,7 +193,7 @@ formatPHResults <- function(post_hoc_models_summaries){
 #' 
 #' @examples 
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
-#'  obj <- Exp1_R25_prot[1:1000]
+#' obj <- Exp1_R25_prot[1:1000]
 #' level <- obj@experimentData@other$typeOfData
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)

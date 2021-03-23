@@ -67,7 +67,6 @@ Collate:
     missingValuesFilter.R
     missingValuesImputation_PeptideLevel.R
     missingValuesImputation_ProteinLevel.R
-    missingValuesPlots.R
     normalize.R                           
     pepa.R
     plots_boxplot.R
@@ -82,3 +81,4 @@ Collate:
     volcanoPlot.R   
     palette.R
     hypothesisTest.R
+    metacell_Plots.R

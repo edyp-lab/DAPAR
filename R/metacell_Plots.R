@@ -1,118 +1,57 @@
-#' #' This method is a wrapper to plots from a \code{MSnSet} object a 
-#' #' histogram which represents the distribution of the 
-#' #' number of missing values (NA) per lines (ie proteins).
-#' #' 
-#' #' @title Histogram of missing values per lines from an object 
-#' #' \code{MSnSet}
-#' #' 
-#' #' @param obj An object of class \code{MSnSet}.
-#' #' 
-#' #' @param indLegend The indice of the column name's in \code{pData()} tab .
-#' #' 
-#' #' @param showValues A logical that indicates wether numeric values should be
-#' #' drawn above the bars.
-#' #' 
-#' #' @return A histogram
-#' #' 
-#' #' @author Alexia Dorffer
-#' #' 
-#' #' @examples
-#' #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' #' wrapper.mvPerLinesHisto(Exp1_R25_pept)
-#' #' 
-#' #' @export
-#' #' 
-#' #' @importFrom Biobase pData exprs fData
-#' #' 
-#' wrapper.mvPerLinesHisto <- function(obj, indLegend="auto", showValues=FALSE){
-#'   qData <- Biobase::exprs(obj)
-#'   samplesData <- Biobase::pData(obj)
-#'   mvPerLinesHisto(qData, samplesData, indLegend, showValues)
-#' }
-
-
-#' This method is a wrapper to plots from a \code{MSnSet} object a 
-#' histogram which represents the distribution of the 
-#' number of missing values (NA) per lines (ie proteins).
-#' 
-#' @title Histogram of missing values per lines from an object using highcharter
-#' \code{MSnSet}
-#' 
-#' @param obj An object of class \code{MSnSet}.
-#' 
-#' @param indLegend The indice of the column name's in \code{pData()} tab .
-#' 
-#' @param showValues A logical that indicates wether numeric values should be
-#' drawn above the bars.
-#' 
-#' @return A histogram
-#' 
-#' @author Alexia Dorffer
-#' 
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' wrapper.mvPerLinesHisto_HC(Exp1_R25_pept)
-#' 
-#' @export
-#' 
-#' @importFrom Biobase pData exprs fData
-#' 
-wrapper.mvPerLinesHisto_HC <- function(obj, 
-                                       indLegend="auto", 
-                                       showValues=FALSE){
-  if (is.null(obj)){
-    warning("The dataset in NULL. Cannot continue.")
-    return(NULL)
-  }
-  
-  qData <- Biobase::exprs(obj)
-  samplesData <- Biobase::pData(obj)
-  hc <- mvPerLinesHisto_HC(qData, samplesData, indLegend, showValues)
-  return(hc)
-}
-
-
 
 #' This method plots a bar plot which represents the distribution of the 
 #' number of missing values (NA) per lines (ie proteins).
 #' 
 #' @title Bar plot of missing values per lines using highcharter
-#' @param qData A dataframe that contains the data to plot.
-#' @param samplesData A dataframe which contains informations about 
-#' the replicates.
+#' @param obj xxx.
+#' @param pattern xxx
+#' @param value 'value' or 'percent'
+#' @param stacked TRUE of FALSE
 #' @param indLegend The indice of the column name's in \code{pData()} tab 
-#' @param showValues A logical that indicates wether numeric values should be
+#' @param showValues A logical that indicates whether numeric values should be
 #' drawn above the bars.
 #' @return A bar plot
 #' @author Florence Combes, Samuel Wieczorek
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' qData <- Biobase::exprs(Exp1_R25_pept)
-#' samplesData <- Biobase::pData(Exp1_R25_pept)
-#' mvPerLinesHisto_HC(qData, samplesData)
+#' obj <- Exp1_R25_pept
+#' metacellPerLinesHisto_HC(obj, 'missing')
 #' 
 #' @export
 #'
-mvPerLinesHisto_HC <- function(qData, 
-                               samplesData, 
-                               indLegend="auto", 
-                               showValues=FALSE){
+metacellPerLinesHisto_HC <- function(obj,
+                                     pattern,
+                                     indLegend="auto",
+                                     showValues=FALSE){
   
-  if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
+  if(missing(obj))
+    stop("'obj' is missing.")
+  if (missing(pattern))
+    stop("'pattern' is missing.")
+  else if (pattern %in% c('', 'None')){
+    warning("'pattern' is empty.")
+    return(NULL)
+  }
+  
+  qData <- Biobase::exprs(obj)
+  samplesData <- Biobase::pData(obj)
+  
+  if (identical(indLegend,"auto"))
+    indLegend <- c(2:length(colnames(samplesData)))
+  
   
   for (j in 1:length(colnames(qData))){
     noms <- NULL
-    for (i in 1:length(indLegend)){
-      noms <- paste(noms, samplesData[j,indLegend[i]], sep=" ")
-    }
+    for (i in 1:length(indLegend))
+      noms <- paste(noms, samplesData[j, indLegend[i]], sep=" ")
     colnames(qData)[j] <- noms
   }
   
-  coeffMax <- .1
-  
-  NbNAPerCol <- colSums(is.na(qData))
-  NbNAPerRow <- rowSums(is.na(qData))
-  #par(mar = c(10,3, 3, 3))
+
+  mask <- match.metacell(GetMetacell(obj), 
+                         pattern = pattern, 
+                         level = obj@experimentData@other$typeOfData)
+  NbNAPerRow <- rowSums(mask)
   
   nb.col <- dim(qData)[2] 
   nb.na <- NbNAPerRow
@@ -123,67 +62,27 @@ mvPerLinesHisto_HC <- function(qData,
     nb.na2barplot <- rep(0,1+ncol(qData))
   }
   
-  df <- data.frame(y=nb.na2barplot[-1])
-  myColors = rep("lightgrey",nrow(df))
-  myColors[nrow(df)] <- "red"
-  
-  #df1 <- df2 <- df
-  #df2[1:(nrow(df)-1),] <- 0
-  #df1 [nrow(df),] <- 0
-  
-  
-  #, series = list( pointWidth = 50)
+  df <- data.frame(y=nb.na2barplot[-1],
+                   y_percent = round(100 * nb.na2barplot[-1] / dim(qData)[1], digits = 2))
+  myColors = rep("lightgrey", nrow(df))
+  #myColors[nrow(df)] <- "red"
   
   h1 <-  highchart() %>% 
-    hc_title(text = "#[lines] with X NA values") %>% 
+    hc_title(text = paste0("Nb of lines with x '", pattern, "' tags")) %>% 
     hc_add_series(data = df, type="column", colorByPoint = TRUE) %>%
     hc_colors(myColors) %>%
     hc_plotOptions( column = list(stacking = "normal"),
                     animation=list(duration = 100)) %>%
     hc_legend(enabled = FALSE) %>%
-    hc_xAxis(categories = row.names(df), title = list(text = "#[NA values] per line")) %>%
+    hc_xAxis(categories = row.names(df), title = list(text = paste0("Nb of '", pattern, "' tags in a line"))) %>%
     my_hc_ExportMenu(filename = "missingValuesPlot1") %>%
     hc_tooltip(enabled = TRUE,
                headerFormat= '',
-               pointFormat = "{point.y} ")
+               pointFormat = paste0("{point.y} lines<br>({point.y_percent}% of all lines)")
+    )
   
   return(h1)
   
-}
-
-
-
-#' This method is a wrapper to plots (using highcharts) from a \code{MSnSet} 
-#' object a bar plot which represents the distribution of the 
-#' number of missing values (NA) per lines (ie proteins) and per conditions.
-#' 
-#' @title Bar plot of missing values per lines and per conditions from an 
-#' object \code{MSnSet}
-#' 
-#' @param obj An object of class \code{MSnSet}.
-#' 
-#' @param ... xxx
-#' 
-#' @return A bar plot
-#' 
-#' @author Samuel Wieczorek
-#' 
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' wrapper.mvPerLinesHistoPerCondition_HC(Exp1_R25_pept)
-#' 
-#' @export
-#'
-#' @importFrom Biobase pData exprs fData
-#' 
-wrapper.mvPerLinesHistoPerCondition_HC <- function(obj, ...){
-  if (is.null(obj)){
-    warning("The dataset in NULL. Cannot continue.")
-    return(NULL)
-  }
-  qData <- Biobase::exprs(obj)
-  samplesData <- Biobase::pData(obj)
-  mvPerLinesHistoPerCondition_HC(qData, samplesData, ...)
 }
 
 
@@ -194,10 +93,9 @@ wrapper.mvPerLinesHistoPerCondition_HC <- function(obj, ...){
 #' 
 #' @title Bar plot of missing values per lines and per condition
 #' 
-#' @param qData A dataframe that contains quantitative data.
+#' @param obj xxx
 #' 
-#' @param samplesData A dataframe where lines correspond to samples and 
-#' columns to the meta-data for those samples.
+#' @param pattern xxx
 #' 
 #' @param indLegend The indice of the column name's in \code{pData()} tab 
 #' 
@@ -212,112 +110,97 @@ wrapper.mvPerLinesHistoPerCondition_HC <- function(obj, ...){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' qData <- Biobase::exprs(Exp1_R25_pept)
-#' samplesData <- Biobase::pData(Exp1_R25_pept)
-#' pal <- ExtendPalette(length(unique( samplesData[,"Condition"])), 'Dark2')
-#' mvPerLinesHistoPerCondition_HC(qData, samplesData, pal=pal)
-#' mvPerLinesHistoPerCondition_HC(qData, samplesData)
+#' obj <- Exp1_R25_pept
+#' pal <- ExtendPalette(length(unique( Biobase::pData(obj)$Condition)), 'Dark2')
+#' metacellPerLinesHistoPerCondition_HC(obj, 'missing', pal=pal)
+#' metacellPerLinesHistoPerCondition_HC(obj, 'quanti')
 #' 
 #' @export
 #'
-mvPerLinesHistoPerCondition_HC <- function(qData, 
-                                           samplesData, 
-                                           indLegend="auto", 
-                                           showValues=FALSE,
-                                           pal=NULL){
+metacellPerLinesHistoPerCondition_HC <- function(obj,
+                                                 pattern,
+                                                 indLegend="auto", 
+                                                 showValues=FALSE,
+                                                 pal=NULL){
+  if(missing(obj))
+    stop("'obj' is missing.")
+  if (missing(pattern))
+    stop("'pattern' is missing.")
+  else if (pattern %in% c('', 'None')){
+    warning("'pattern' is empty.")
+    return(NULL)
+  }
   
-  conds <- samplesData[,"Condition"]
+  qData <- Biobase::exprs(obj)
+  samplesData <- Biobase::pData(obj)
+  conds <- samplesData$Condition
+  u_conds <- unique(conds)
+  nbConditions <- length(u_conds)
   
   myColors <- NULL
   if (is.null(pal)){
     warning("Color palette set to default.")
     myColors <-  GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
   } else {
-    if (length(pal) != length(unique(conds))){
+    if (length(pal) != length(u_conds)){
       warning("The color palette has not the same dimension as the number of samples")
       myColors <- GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
     } else 
       myColors <- pal
   }
   
-  if (identical(indLegend,"auto")) { indLegend <- c(2:length(colnames(samplesData)))}
+  if (identical(indLegend,"auto"))
+    indLegend <- c(2:length(colnames(samplesData)))
   
-  nbConditions <- length(unique(samplesData[,"Condition"]))
   
-  ncolMatrix <- max(unlist(lapply(unique(samplesData[,"Condition"]), 
-                                  function(x){length(which(samplesData[,"Condition"]==x))}
+  ncolMatrix <- max(unlist(lapply(u_conds, 
+                                  function(x){length(which(conds==x))}
                                   )))
-  m <- matrix(rep(0, nbConditions*(1+ncolMatrix)), 
-              ncol = nbConditions, 
-              dimnames=list(seq(0:(ncolMatrix)),
-                            unique(samplesData[,"Condition"])))
   
-  for (i in unique(samplesData[,"Condition"]))
+  
+  mask <- match.metacell(GetMetacell(obj), 
+                         pattern = pattern, 
+                         level = obj@experimentData@other$typeOfData)
+  ll.df <- list()
+  for (i in u_conds)
   {
-    nSample <- length(which(samplesData[,"Condition"] == i))
+    df <- as.data.frame(matrix(rep(0, nbConditions*(1+ncolMatrix)), 
+                               ncol = nbConditions, 
+                               dimnames=list(seq(0:(ncolMatrix)),
+                                             c('y', 'y_percent')))
+    )
+    rownames(df) <- 0:(nrow(df)-1)
+    ll.df[[i]] <- df
+    nSample <- length(which(conds == i))
     t <- NULL
-    if (nSample == 1) {
-      t <- table(as.integer(is.na(qData[,which(samplesData[,"Condition"] == i)])))
-    } else {t <- table(rowSums(is.na(qData[,which(samplesData[,"Condition"] == i)])))}
+    if (nSample == 1) 
+      t <- table(as.integer(mask[ ,which(conds == i)]))
+    else
+      t <- table(rowSums(mask[ ,which(conds == i)]))
     
-    m[as.integer(names(t))+1,i] <- t
+    df[as.integer(names(t))+1, 'y'] <- t
+    df[as.integer(names(t))+1, 'y_percent'] <- round(100 *t / nrow(obj), digits = 2)
+    ll.df[[i]] <- df
   }
-  m <- as.data.frame(m)
-  
-  rownames(m) <- 0:(nrow(m)-1)
   
   h1 <-  highchart() %>% 
-    hc_title(text = "#[lines] with X NA values (condition-wise)") %>% 
+    hc_title(text =paste0("Nb of lines containing x '", pattern, "' tags (condition-wise)")) %>% 
     my_hc_chart(chartType = "column") %>%
     hc_plotOptions( column = list(stacking = ""),
                     dataLabels = list(enabled = FALSE),
                     animation=list(duration = 100)) %>%
     hc_colors(unique(myColors)) %>%
     hc_legend(enabled = FALSE) %>%
-    hc_xAxis(categories = row.names(m), title = list(text = "#[NA values] per line (condition-wise)")) %>%
+    hc_xAxis(categories = 0:ncolMatrix, title = list(text = paste0("Nb of '", pattern, "' tags in each line (condition-wise)"))) %>%
     my_hc_ExportMenu(filename = "missingValuesPlot_2") %>%
     hc_tooltip(headerFormat= '',
-               pointFormat = "{point.y} ")
+               pointFormat = "{point.y} lines<br>({point.y_percent}% of all lines)")
   
-  for (i in 1:nbConditions){
-    h1 <- h1 %>% hc_add_series(data=m[,unique(samplesData[,"Condition"])[i]]) }
+  for (i in 1:nbConditions)
+    h1 <- h1 %>% hc_add_series(data = ll.df[[u_conds[i]]]) 
 
   return(h1)
 }
-
-
-
-#' This method plots from a \code{MSnSet} object a histogram of 
-#' missing values.
-#' 
-#' @title Histogram of missing values from a \code{MSnSet} object
-#' @param obj An object of class \code{MSnSet}.
-#' @param indLegend The indices of the column name's in \code{pData()} tab.
-#' @param showValues A logical that indicates wether numeric values should be
-#' drawn above the bars.
-#' @param ... xxx
-#' @return A histogram
-#' @author Alexia Dorffer
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' wrapper.mvHisto_HC(Exp1_R25_pept, showValues=TRUE)
-#' 
-#' @export
-#'
-#' @importFrom Biobase pData exprs fData
-#' 
-wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
-  if (is.null(obj)){
-    warning("The dataset in NULL. Cannot continue.")
-    return(NULL)
-  }
-  
-  qData <- Biobase::exprs(obj)
-  samplesData <- Biobase::pData(obj)
-  conds <- samplesData[,"Condition"]
-  mvHisto_HC(qData, samplesData, conds, indLegend, showValues, ...)
-}
-
 
 
 
@@ -325,10 +208,8 @@ wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
 #' \code{mvHisto} but uses the package \code{highcharter}
 #' 
 #' @title Histogram of missing values
-#' @param qData A dataframe that contains quantitative data.
-#' @param samplesData A dataframe where lines correspond to samples and 
-#' columns to the meta-data for those samples.
-#' @param conds A vector of the conditions (one condition per sample).
+#' @param obj xxx
+#' @param pattern xxx
 #' @param indLegend The indices of the column name's in \code{pData()} tab
 #' @param showValues A logical that indicates wether numeric values should be
 #' drawn above the bars.
@@ -340,22 +221,31 @@ wrapper.mvHisto_HC <- function(obj, indLegend="auto", showValues=FALSE, ...){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' qData <- Biobase::exprs(Exp1_R25_pept)
-#' samplesData <- Biobase::pData(Exp1_R25_pept)
-#' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-#' mvHisto_HC(qData, samplesData, conds,  showValues=TRUE)
+#' obj <- Exp1_R25_pept
+#' pattern <- 'missing_POV'
 #' pal <- ExtendPalette(2, 'Dark2')
-#' mvHisto_HC(qData, samplesData, conds,  showValues=TRUE, pal=pal)
+#' metacellHisto_HC(obj, pattern,  showValues=TRUE, pal=pal)
 #' 
 #' @export
 #'
-mvHisto_HC <- function(qData, 
-                       samplesData, 
-                       conds, 
-                       indLegend="auto", 
-                       showValues=FALSE, 
-                       pal = NULL){
+metacellHisto_HC <- function(obj,
+                             pattern,
+                             indLegend="auto",
+                             showValues=FALSE, 
+                             pal = NULL){
   
+  if(missing(obj))
+    stop("'obj' is missing.")
+  if (missing(pattern))
+    stop("'pattern' is missing.")
+  else if (pattern %in% c('', 'None')){
+    warning("'pattern' is empty.")
+    return(NULL)
+  }
+  
+  qData <- Biobase::exprs(obj)
+  samplesData <- Biobase::pData(obj)
+  conds <- samplesData[,"Condition"]
   
   myColors <- NULL
   if (is.null(pal)){
@@ -374,16 +264,22 @@ mvHisto_HC <- function(qData,
   }
   
   
-  NbNAPerCol <- colSums(is.na(qData))
-  NbNAPerRow <- rowSums(is.na(qData))
   
-  df <- data.frame(NbNAPerCol)
-  names(df) <- 'y'
+  mask <- match.metacell(GetMetacell(obj), 
+                         pattern = pattern, 
+                         level = obj@experimentData@other$typeOfData)
+  
+  NbNAPerCol <- colSums(mask)
+  
+  df <- data.frame(y = NbNAPerCol,
+                   y_percent = round(100 * NbNAPerCol / nrow(mask), digits = 2)
+  )
+  
   
   
   h1 <-  highchart() %>%
     my_hc_chart(chartType = "column") %>%
-    hc_title(text = "#NA by replicate") %>%
+    hc_title(text = paste0("Nb of '", pattern, "' tags by replicate")) %>%
     hc_add_series(df, type="column", colorByPoint = TRUE) %>%
     hc_colors(myColors) %>%
     hc_plotOptions( column = list(stacking = "normal"),
@@ -392,7 +288,7 @@ mvHisto_HC <- function(qData,
     hc_xAxis(categories = conds, title = list(text = "Replicates")) %>%
     my_hc_ExportMenu(filename = "missingValuesPlot_3") %>%
     hc_tooltip(headerFormat= '',
-               pointFormat = "{point.y}")
+               pointFormat = "{point.y} lines<br>({point.y_percent}% of all lines)")
 
   return(h1)
 }
@@ -426,7 +322,7 @@ mvHisto_HC <- function(qData,
 #'
 #' @importFrom Biobase pData exprs fData
 #' 
-wrapper.mvImage <- function(obj){
+wrapper.mvImage <- function(obj, pattern = 'missing_MEC'){
   if(missing(obj))
     stop("'obj' is required.")
   else if (is.null(obj)){
@@ -437,7 +333,7 @@ wrapper.mvImage <- function(obj){
   conds <- Biobase::pData(obj)[ , "Condition"]
   metac <- Biobase::fData(obj)[ , obj@experimentData@other$names_metacell]
   level <- obj@experimentData@other$typeOfData
-  indices <- which(apply(match.metacell(metac, "missing_MEC", level), 1, sum) >0)
+  indices <- which(apply(match.metacell(metac, pattern, level), 1, sum) >0)
   
   if (length(indices)==0){
     warning("The dataset contains no Missing value on Entire Condition. So this plot is not available.")
@@ -558,7 +454,8 @@ mvImage <- function(qData, conds){
 #' @export
 #'
 hc_mvTypePlot2 <- function(obj,
-                           pal = NULL, 
+                           pal = NULL,
+                           pattern,
                            typeofMV=NULL, 
                            title=NULL){
   
@@ -595,13 +492,13 @@ hc_mvTypePlot2 <- function(obj,
       
       mTemp[,iCond] <- qData[,which(conditions==iCond)]
       nbNA[,iCond] <- as.integer(match.metacell(GetMetacell(obj)[, which(conditions==iCond)], 
-                                                pattern = 'missing', 
+                                                pattern = pattern, 
                                                 level= level))
       nbValues[,iCond] <- length(which(conditions==iCond)) - nbNA[,iCond]
     } else {
       mTemp[,iCond] <- apply(qData[,which(conditions==iCond)], 1, mean, na.rm=TRUE)
       nbNA[,iCond] <- rowSums(match.metacell(GetMetacell(obj)[, which(conditions==iCond)], 
-                                             pattern = 'missing', 
+                                             pattern = pattern, 
                                              level= level))
       nbValues[,iCond] <- length(which(conditions==iCond)) - nbNA[,iCond]
     }
@@ -640,7 +537,7 @@ hc_mvTypePlot2 <- function(obj,
    hc_tooltip(headerFormat= '',
                pointFormat = "<b> {series.name} </b>: {point.y} ",
                valueDecimals = 2) %>%
-    my_hc_ExportMenu(filename = "POV_distribution") %>%
+    my_hc_ExportMenu(filename = paste0(pattenr, "_distribution")) %>%
     hc_plotOptions(
       series=list(
         showInLegend = TRUE,
