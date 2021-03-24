@@ -60,30 +60,75 @@ metacell.def <- function(level){
   if(missing(level))
     stop("'level' is required.")
   
+  # switch(level,
+  #        peptide = setNames(nm = c('quanti',
+  #                                  'quanti_identified',
+  #                                  'quanti_recovered',
+  #                                  'missing',
+  #                                  'missing_POV',
+  #                                  'missing_MEC',
+  #                                  'imputed',
+  #                                  'imputed_POV',
+  #                                  'imputed_MEC')) ,
+  #        
+  #        protein = setNames(nm = c('quanti',
+  #                                  'quanti_identified',
+  #                                  'quanti_recovered',
+  #                                  'missing',
+  #                                  'missing_POV',
+  #                                  'missing_MEC',
+  #                                  'imputed',
+  #                                  'imputed_POV',
+  #                                  'imputed_MEC',
+  #                                  'combined')
+  #        )
+  #        
+  # )
+  
+  # switch(level,
+  #        peptide = c('root' = 'root',
+  #                    'root_quanti' = 'quanti',
+  #                    'root_quanti_identified' = 'quanti_identified',
+  #                    'root_quanti_recovered' = 'quanti_recovered',
+  #                    'root_missing' = 'missing',
+  #                    'root_missing_POV' = 'missing_POV',
+  #                    'root_missing_MEC' = 'missing_MEC',
+  #                    'root_imputed' = 'imputed',
+  #                    'root_imputed_POV' = 'imputed_POV',
+  #                    'root_imputed_MEC' = 'imputed_MEC') ,
+  #        
+  #        protein = c('root' = 'root',
+  #                    'root_quanti' = 'quanti',
+  #                    'root_quanti_identified' = 'quanti_identified',
+  #                    'root_quanti_recovered' = 'quanti_recovered',
+  #                    'root_missing' = 'missing',
+  #                    'root_missing_POV' = 'missing_POV',
+  #                    'root_missing_MEC' = 'missing_MEC',
+  #                    'root_imputed' = 'imputed',
+  #                    'root_imputed_POV' = 'imputed_POV',
+  #                    'root_imputed_MEC' = 'imputed_MEC',
+  #                    'root_combined' = 'combined')
+  #        
+  # )
+  
   switch(level,
-         peptide = setNames(nm = c('quanti',
-                                   'quanti_identified',
-                                   'quanti_recovered',
-                                   'missing',
-                                   'missing_POV',
-                                   'missing_MEC',
-                                   'imputed',
-                                   'imputed_POV',
-                                   'imputed_MEC')) ,
+         peptide = { names <- c('root', 'quanti', 'identified', 'recovered', 'missing',
+                                'missing POV', 'missing MEC', 'imputed',
+                                'imputed POV', 'imputedMEC')
+         parent <- c('', 'root', 'quanti', 'quanti', 'root', 'missing', 'missing', 'root', 'imputed', 'imputed')
+         data.frame(parent = parent, row.names = names)
+         },
          
-         protein = setNames(nm = c('quanti',
-                                   'quanti_identified',
-                                   'quanti_recovered',
-                                   'missing',
-                                   'missing_POV',
-                                   'missing_MEC',
-                                   'imputed',
-                                   'imputed_POV',
-                                   'imputed_MEC',
-                                   'combined')
-         )
+         protein = { names <- c('root', 'quanti', 'identified', 'recovered', 'missing',
+                                'missing POV', 'missing MEC', 'imputed',
+                                'imputed POV', 'imputedMEC', 'combined')
+         parent <- c('', 'root', 'quanti', 'quanti', 'root', 'missing', 'missing', 'root', 'imputed', 'imputed', 'root')
+         data.frame(parent = parent, row.names = names)
+         }
          
   )
+  
+  
 }
 
 #' 
@@ -606,14 +651,92 @@ UpdateMetacell <- function(obj, method='', na.type){
 #' 
 #' @export
 #' 
-search.metacell.tags <- function(pattern, level){
+# search.metacell.tags <- function(pattern, level){
+#   if(missing(pattern))
+#     stop("'pattern' is required.")
+#   if(missing(level))
+#     stop("'level' is required.")
+#   
+#   lastchar <- unlist(strsplit(pattern, split=''))[nchar(pattern)]
+#   
+#   unlist(metacell.def(level)[unlist(lapply(metacell.def(level), 
+#                                            function(x){length(grep(pattern, x))==1}))])
+# }
+
+
+
+search.metacell.tags <- function(pattern, level, depth = 'self_neighbors'){
   if(missing(pattern))
     stop("'pattern' is required.")
   if(missing(level))
     stop("'level' is required.")
+  if(!(depth %in% c('node', 'self_neighbors', 'all')))
+    stop("'depth' must be one of the following: node, self_neighbors or all")
+
+
+  is.neighbor <- function(tag, query){
+    prefix.tag <- unlist(strsplit(tag, split='_'))[1:(length(unlist(strsplit(tag, split='_')))-1)]
+    prefix.query <- unlist(strsplit(query, split='_'))[1:(length(unlist(strsplit(query, split='_')))-1)]
+    split.tag <- unlist(strsplit(tag, split='_'))
+    split.query <- unlist(strsplit(query, split='_'))
+    value <- length(split.query) == length(split.tag) + 1 && all(split.tag == split.query[1:length(split.tag)])
+    return(value)
+  }
+  tags <- NULL
+  tags <- switch(depth,
+                 node = unlist(metacell.def(level)[unlist(lapply(metacell.def(level),
+                                                                 function(x){pattern == x}))]),
+                 self_neighbors = unlist(metacell.def(level)[unlist(lapply(names(metacell.def(level)),
+                                                                           function(x){
+                                                                             names(metacell.def(level))[which(pattern== metacell.def(level))] == x ||
+                                                                               is.neighbor(names(metacell.def(level))[which(pattern== metacell.def(level))], x)}
+                 ))]
+                 ),
+                 all = unlist(metacell.def(level)[unlist(lapply(metacell.def(level),
+                                                                function(x){length(grep(pattern, x))==1}))])
+  )
+
+  return(tags)
+
+}
+
+
+
+search.metacell.tags <- function(pattern, level, depth = 'self_neighbors'){
+  if(missing(pattern))
+    stop("'pattern' is required.")
+  if(missing(level))
+    stop("'level' is required.")
+  if(!(depth %in% c('node', 'self_neighbors', 'all')))
+    stop("'depth' must be one of the following: node, self_neighbors or all")
   
-  lastchar <- unlist(strsplit(pattern, split=''))[nchar(pattern)]
   
-  unlist(metacell.def(level)[unlist(lapply(metacell.def(level), 
-                                           function(x){length(grep(pattern, x))==1}))])
+  is.neighbor <- function(tag, query){
+    prefix.tag <- unlist(strsplit(tag, split='_'))[1:(length(unlist(strsplit(tag, split='_')))-1)]
+    prefix.query <- unlist(strsplit(query, split='_'))[1:(length(unlist(strsplit(query, split='_')))-1)]
+    split.tag <- unlist(strsplit(tag, split='_'))
+    split.query <- unlist(strsplit(query, split='_'))
+    value <- length(split.query) == length(split.tag) + 1 && all(split.tag == split.query[1:length(split.tag)])
+    return(value)
+  }
+  tags <- NULL
+  tags <- switch(depth,
+                 node = pattern,
+                 self_neighbors = c(pattern, rownames(metacell.def(level))[which(metacell.def(level)$parent == pattern)]),
+                 all = {
+                   if (length(rownames(metacell.def(level))[which(metacell.def(level)$parent == pattern)])==0) 
+                     search.metacell.tags(pattern, level, 'node')
+                               
+                   else
+                     c(pattern, unlist(lapply(rownames(metacell.def(level))[which(metacell.def(level)$parent == pattern)],
+                              function(x) {
+                                search.metacell.tags(x, level, depth)
+                                }
+                              ))
+                   )
+                 }
+  )
+  
+  return(tags)
+  
 }
