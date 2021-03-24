@@ -4,21 +4,25 @@
 \alias{metacellPerLinesHisto_HC}
 \title{Bar plot of missing values per lines using highcharter}
 \usage{
-metacellPerLinesHisto_HC(obj, pattern, indLegend = "auto", showValues = FALSE)
+metacellPerLinesHisto_HC(
+  obj,
+  pattern,
+  detailed = FALSE,
+  indLegend = "auto",
+  showValues = FALSE
+)
 }
 \arguments{
 \item{obj}{xxx.}
 
 \item{pattern}{xxx}
 
+\item{detailed}{'value' or 'percent'}
+
 \item{indLegend}{The indice of the column name's in \code{pData()} tab}
 
 \item{showValues}{A logical that indicates whether numeric values should be
 drawn above the bars.}
-
-\item{value}{'value' or 'percent'}
-
-\item{stacked}{TRUE of FALSE}
 }
 \value{
 A bar plot

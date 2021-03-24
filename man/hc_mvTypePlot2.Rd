@@ -11,6 +11,8 @@ hc_mvTypePlot2(obj, pal = NULL, pattern, typeofMV = NULL, title = NULL)
 
 \item{pal}{The different colors for conditions}
 
+\item{pattern}{xxx}
+
 \item{typeofMV}{xxx}
 
 \item{title}{The title of the plot}
@@ -31,10 +33,10 @@ and the considered condition.
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept[1:100]
-hc_mvTypePlot2(obj, title="POV distribution")
+hc_mvTypePlot2(obj, pattern = 'missing MEC', title="POV distribution")
 conds <- Biobase::pData(obj)$Condition
 pal <- ExtendPalette(length(unique(conds)), 'Dark2')
-hc_mvTypePlot2(obj, title="POV distribution", pal=pal)
+hc_mvTypePlot2(obj, pattern = 'missing MEC', title="POV distribution", pal=pal)
 
 }
 \author{

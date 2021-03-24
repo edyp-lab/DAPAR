@@ -669,7 +669,7 @@ GetIndices_WholeMatrix <- function( metacell.mask, op='==', percent=FALSE, th=0)
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[20:30]
 #' level <- obj@experimentData@other$typeOfData
-#' pattern <- 'missing_POV'
+#' pattern <- 'missing POV'
 #' metacell.mask <- match.metacell(metadata=GetMetacell(obj), pattern=pattern, level=level)
 #' ind <- GetIndices_WholeLine(metacell.mask)
 #'

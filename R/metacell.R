@@ -53,8 +53,7 @@
 #' Available values are: `peptide`, `protein`
 #' 
 #' @author Thomas Burger, Samuel Wieczorek
-#' 
-#' @export
+#'
 #' 
 metacell.def <- function(level){
   if(missing(level))
@@ -65,8 +64,8 @@ metacell.def <- function(level){
   #                                  'quanti_identified',
   #                                  'quanti_recovered',
   #                                  'missing',
-  #                                  'missing_POV',
-  #                                  'missing_MEC',
+  #                                  'missing POV',
+  #                                  'missing MEC',
   #                                  'imputed',
   #                                  'imputed_POV',
   #                                  'imputed_MEC')) ,
@@ -112,17 +111,55 @@ metacell.def <- function(level){
   # )
   
   switch(level,
-         peptide = { names <- c('root', 'quanti', 'identified', 'recovered', 'missing',
-                                'missing POV', 'missing MEC', 'imputed',
-                                'imputed POV', 'imputedMEC')
-         parent <- c('', 'root', 'quanti', 'quanti', 'root', 'missing', 'missing', 'root', 'imputed', 'imputed')
+         peptide = {
+           names <- c('root', 
+                      'quanti', 
+                      'identified', 
+                      'recovered', 
+                      'missing',
+                      'missing POV', 
+                      'missing MEC', 
+                      'imputed',
+                      'imputed POV', 
+                      'imputed MEC')
+           parent <- c('', 
+                       'root', 
+                       'quanti', 
+                       'quanti', 
+                       'root', 
+                       'missing', 
+                       'missing',
+                       'root',
+                       'imputed',
+                       'imputed')
          data.frame(parent = parent, row.names = names)
          },
          
-         protein = { names <- c('root', 'quanti', 'identified', 'recovered', 'missing',
-                                'missing POV', 'missing MEC', 'imputed',
-                                'imputed POV', 'imputedMEC', 'combined')
-         parent <- c('', 'root', 'quanti', 'quanti', 'root', 'missing', 'missing', 'root', 'imputed', 'imputed', 'root')
+         
+         protein = {
+           names <- c('root',
+                      'quanti',
+                      'identified',
+                      'recovered',
+                      'missing',
+                      'missing POV',
+                      'missing MEC',
+                      'imputed',
+                      'imputed POV',
+                      'imputed MEC',
+                      'combined')
+           parent <- c('',
+                       'root',
+                       'quanti',
+                       'quanti',
+                       'root',
+                       'missing',
+                       'missing',
+                       'root',
+                       'imputed',
+                       'imputed',
+                       'root')
+         
          data.frame(parent = parent, row.names = names)
          }
          
@@ -131,51 +168,18 @@ metacell.def <- function(level){
   
 }
 
+
+#' @title 
+#' xxxxx
 #' 
-#' #' Sets the MEC tag in the metacell
-#' #' 
-#' #' @title Sets the MEC tag in the metacell
-#' #' 
-#' #' @param qdata xxx
-#' #' 
-#' #' @param conds xxx
-#' #' 
-#' #' @param df An object of class \code{MSnSet}
-#' #' 
-#' #' @param level Type of entity/pipeline
-#' #' 
-#' #' @return An instance of class \code{MSnSet}.
-#' #' 
-#' #' @author Samuel Wieczorek
-#' #' 
-#' #' @examples 
-#' #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' #' cols.for.ident <- xxxxx
-#' #' df <- Biobase::fData(obj)[, cols.for.ident]
-#' #' setMEC(df, Exp1_R25_pept, level = 'peptide')
-#' #' 
-#' #' @export
-#' #' 
-#' #' @importFrom Biobase pData exprs fData
-#' #'  
-#' setMEC <- function(qdata, conds, df, level){
-#'   
-#'   conditions <- unique(conds)
-#'   nbCond <- length(conditions)
-#'   
-#'   for (cond in 1:nbCond){
-#'     ind <- which(conds == conditions[cond])
-#'     
-#'     if (length(ind) == 1)
-#'       lNA <- which(is.na(qdata[,ind]))
-#'     else
-#'       lNA <- which(apply(is.na(qdata[,ind]), 1, sum)==length(ind))
-#'     
-#'     if (length(lNA) > 0)
-#'       df[lNA, ind] <- metacell.def(level)['missing_MEC']
-#'   }
-#'   return(df)
-#' }
+#' @description xxx
+#' 
+#' @param level xxx
+#' 
+#' @export
+#' 
+GetMetacellDef <- function(level)
+  rownames(metacell.def(level))
 
 
 #' @title Sets the MEC tag in the metacell
@@ -222,10 +226,10 @@ Set_POV_MEC_tags <- function(conds, df, level){
     ind.imputed.pov <- ind.imputed & rowSums(ind.imputed) < length(ind.samples) & rowSums(ind.imputed) > 0
     ind.imputed.mec <- ind.imputed &  rowSums(ind.imputed) == length(ind.samples)
     
-    df[,ind.samples][ind.imputed.mec] <- 'imputed_MEC'
-    df[,ind.samples][ind.missing.mec] <- 'missing_MEC'
-    df[,ind.samples][ind.imputed.pov] <- 'imputed_POV'
-    df[,ind.samples][ind.missing.pov]  <- 'missing_POV'
+    df[,ind.samples][ind.imputed.mec] <- 'imputed MEC'
+    df[,ind.samples][ind.missing.mec] <- 'missing MEC'
+    df[,ind.samples][ind.imputed.pov] <- 'imputed POV'
+    df[,ind.samples][ind.missing.pov]  <- 'missing POV'
 
   }
   return(df)
@@ -341,7 +345,7 @@ Metacell_generic <- function(qdata, conds, level){
   if (missing(level))
     stop("'level' is required.")
 
-  df <- data.frame(matrix(rep(metacell.def(level)['quanti'], nrow(qdata)*ncol(qdata)),
+  df <- data.frame(matrix(rep('quanti', nrow(qdata)*ncol(qdata)),
                           nrow = nrow(qdata),
                           ncol = ncol(qdata)),
                    stringsAsFactors = FALSE) 
@@ -415,7 +419,7 @@ Metacell_proline <- function(qdata, conds, df, level=NULL){
   
   
   if (is.null(df))
-    df <- data.frame(matrix(rep(metacell.def(level)['quanti'], nrow(qdata)*ncol(qdata)), 
+    df <- data.frame(matrix(rep('quanti', nrow(qdata)*ncol(qdata)), 
                             nrow=nrow(qdata),
                             ncol=ncol(qdata)),
                      stringsAsFactors = FALSE) 
@@ -425,10 +429,10 @@ Metacell_proline <- function(qdata, conds, df, level=NULL){
   df <- Set_POV_MEC_tags(conds, df, level)
   
   # Rule 2
-  df[df > 0 && qdata > 0] <- metacell.def(level)['quanti_identified']
+  df[df > 0 && qdata > 0] <- 'identified'
   
   # Rule 3
-  df[df == 0 && qdata > 0] <- metacell.def(level)['quanti_recovered']
+  df[df == 0 && qdata > 0] <- 'recovered'
   
   colnames(df) <- paste0("metacell_", colnames(qdata))
   colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
@@ -488,7 +492,7 @@ Metacell_maxquant <- function(qdata, conds, df, level=NULL){
   
   
   if (is.null(df))
-    df <- data.frame(matrix(rep(metacell.def(level)['quanti'], 
+    df <- data.frame(matrix(rep('quanti', 
                                 nrow(qdata)*ncol(qdata)), 
                             nrow=nrow(qdata),
                             ncol=ncol(qdata)),
@@ -499,10 +503,10 @@ Metacell_maxquant <- function(qdata, conds, df, level=NULL){
   qdata[qdata == 0] <-  NA
   
   # Rule 2
-  df[df=='By MS/MS'] <- metacell.def(level)['quanti_identified']
+  df[df=='By MS/MS'] <- 'identified'
   
   # Rule 3
-  df[df=='By matching'] <- metacell.def(level)['quanti_recovered']
+  df[df=='By matching'] <- 'recovered'
   
   
   # Add details for NA values
@@ -540,7 +544,7 @@ Metacell_maxquant <- function(qdata, conds, df, level=NULL){
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:10,]
 #' metadata <- Biobase::fData(obj)[, obj@experimentData@other$names_metacell]
-#' m <- match.metacell(metadata, pattern="missing_MEC", level = 'peptide')
+#' m <- match.metacell(metadata, pattern="missing MEC", level = 'peptide')
 #'
 #' @export
 #'
@@ -553,11 +557,11 @@ match.metacell <- function(metadata, pattern, level){
     stop("'level' is required.")
   
   
-  if (!(pattern %in% metacell.def(level)))
+  if (!(pattern %in% GetMetacellDef(level)))
     stop(paste0("'pattern' is not correct. Availablevalues are: ", 
-                paste0(metacell.def(level), collapse = ' ')))
+                paste0(GetMetacellDef(level), collapse = ' ')))
   
-  ll.res <- lapply(unname(search.metacell.tags(pattern = pattern, level)), 
+  ll.res <- lapply(search.metacell.tags(pattern = pattern, level), 
                    function(x){metadata==x})
   
   res <- NULL
@@ -642,73 +646,27 @@ UpdateMetacell <- function(obj, method='', na.type){
 #' 
 #' @param level The available levels are : names()
 #' 
+#' @param depth xxx
+#' 
 #' @author Samuel Wieczorek
 #' 
 #' @examples
-#' search.metacell.tags('POV', 'peptide')
-#' search.metacell.tags('missing_POV', 'peptide')
+#' search.metacell.tags('missing POV', 'peptide')
 #' search.metacell.tags('quanti', 'peptide')
 #' 
 #' @export
 #' 
-# search.metacell.tags <- function(pattern, level){
-#   if(missing(pattern))
-#     stop("'pattern' is required.")
-#   if(missing(level))
-#     stop("'level' is required.")
-#   
-#   lastchar <- unlist(strsplit(pattern, split=''))[nchar(pattern)]
-#   
-#   unlist(metacell.def(level)[unlist(lapply(metacell.def(level), 
-#                                            function(x){length(grep(pattern, x))==1}))])
-# }
 
-
-
-search.metacell.tags <- function(pattern, level, depth = 'self_neighbors'){
+search.metacell.tags <- function(pattern, level, depth = '1'){
   if(missing(pattern))
     stop("'pattern' is required.")
+  else if (!(pattern %in% GetMetacellDef(level)))
+    stop(paste0("'pattern' must be one of the following: ", paste0(GetMetacellDef(level), collapse=' ')))
+  
   if(missing(level))
     stop("'level' is required.")
-  if(!(depth %in% c('node', 'self_neighbors', 'all')))
-    stop("'depth' must be one of the following: node, self_neighbors or all")
-
-
-  is.neighbor <- function(tag, query){
-    prefix.tag <- unlist(strsplit(tag, split='_'))[1:(length(unlist(strsplit(tag, split='_')))-1)]
-    prefix.query <- unlist(strsplit(query, split='_'))[1:(length(unlist(strsplit(query, split='_')))-1)]
-    split.tag <- unlist(strsplit(tag, split='_'))
-    split.query <- unlist(strsplit(query, split='_'))
-    value <- length(split.query) == length(split.tag) + 1 && all(split.tag == split.query[1:length(split.tag)])
-    return(value)
-  }
-  tags <- NULL
-  tags <- switch(depth,
-                 node = unlist(metacell.def(level)[unlist(lapply(metacell.def(level),
-                                                                 function(x){pattern == x}))]),
-                 self_neighbors = unlist(metacell.def(level)[unlist(lapply(names(metacell.def(level)),
-                                                                           function(x){
-                                                                             names(metacell.def(level))[which(pattern== metacell.def(level))] == x ||
-                                                                               is.neighbor(names(metacell.def(level))[which(pattern== metacell.def(level))], x)}
-                 ))]
-                 ),
-                 all = unlist(metacell.def(level)[unlist(lapply(metacell.def(level),
-                                                                function(x){length(grep(pattern, x))==1}))])
-  )
-
-  return(tags)
-
-}
-
-
-
-search.metacell.tags <- function(pattern, level, depth = 'self_neighbors'){
-  if(missing(pattern))
-    stop("'pattern' is required.")
-  if(missing(level))
-    stop("'level' is required.")
-  if(!(depth %in% c('node', 'self_neighbors', 'all')))
-    stop("'depth' must be one of the following: node, self_neighbors or all")
+  if(!(depth %in% c('0', '1', '*')))
+    stop("'depth' must be one of the following: 0, 1 or *")
   
   
   is.neighbor <- function(tag, query){
@@ -721,14 +679,14 @@ search.metacell.tags <- function(pattern, level, depth = 'self_neighbors'){
   }
   tags <- NULL
   tags <- switch(depth,
-                 node = pattern,
-                 self_neighbors = c(pattern, rownames(metacell.def(level))[which(metacell.def(level)$parent == pattern)]),
-                 all = {
-                   if (length(rownames(metacell.def(level))[which(metacell.def(level)$parent == pattern)])==0) 
-                     search.metacell.tags(pattern, level, 'node')
+                 '0' = pattern,
+                 '1' = c(pattern, GetMetacellDef(level)[which(metacell.def(level)$parent == pattern)]),
+                 '*' = {
+                   if (length(GetMetacellDef(level)[which(metacell.def(level)$parent == pattern)])==0) 
+                     search.metacell.tags(pattern, level, '0')
                                
                    else
-                     c(pattern, unlist(lapply(rownames(metacell.def(level))[which(metacell.def(level)$parent == pattern)],
+                     c(pattern, unlist(lapply(GetMetacellDef(level)[which(metacell.def(level)$parent == pattern)],
                               function(x) {
                                 search.metacell.tags(x, level, depth)
                                 }

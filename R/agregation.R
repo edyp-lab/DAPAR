@@ -946,7 +946,7 @@ finalizeAggregation <- function(obj.pep, pepData, protData, X){
 #' 
 #' @description 
 #' Agregation rules for the cells metadata of peptides. 
-#' Please refer to the metacell vocabulary in `metacell.def()`
+#' Please refer to the metacell vocabulary in `GetMetacellDef()`
 #' 
 #' # Basic agreagtion
 #' Agregation of non imputed values (2.X) with quantitative values 
@@ -987,7 +987,7 @@ finalizeAggregation <- function(obj.pep, pepData, protData, X){
 #' 
 #' @examples
 #' \dontrun{
-#' ll <- unname(metacell.def('peptide'))
+#' ll <- GetMetacellDef('peptide')
 #' for (i in 1:length(ll))
 #' test <- lapply(combn(ll, i, simplify = FALSE), 
 #' function(x) tag <- metacombine(x, 'peptide'))
@@ -1000,12 +1000,15 @@ metacombine <- function(met, level) {
   
   u_met <- unique(met)
   
-  nb.tags <- lapply(metacell.def(level), function(x) as.numeric(x %in% u_met))
-  n.imputed <- length(grep('imputed', u_met))
-  n.missing <- length(grep('missing', u_met))
-  n.quanti <- length(grep('quanti', u_met))
-  n.combined <- length(grep('combined', u_met))
+  ComputeNbTags <- function(tag)
+    sum(unlist(lapply( search.metacell.tags(tag, level), function(x) length(grep(x, u_met)))))
   
+  
+  nb.tags <- lapply(GetMetacellDef(level), function(x) as.numeric(x %in% u_met))
+  n.imputed <- ComputeNbTags('imputed')
+  n.missing <- ComputeNbTags('missing')
+  n.quanti <- ComputeNbTags('quanti')
+ 
   
   if(n.missing > 0 && (n.imputed > 0 || n.quanti > 0)) tag <- 'STOP'
    # stop("You try to combine missing values (2.X) with quantitative values (1.X or 3.X).")
@@ -1029,26 +1032,25 @@ metacombine <- function(met, level) {
   # if the type of all the peptides to agregate is 1.0, 1.1 or 1.2, then the final
   # metadata is set the this tag
   if (length(u_met)==1 && u_met == 'quanti') tag <- 'quanti'
-  if (length(u_met)==1 && u_met == 'quanti_identified') tag <- 'quanti_identified'
-  if (length(u_met)==1 && u_met == 'quanti_recovered') tag <- 'quanti_recovered'
+  if (length(u_met)==1 && u_met == 'identified') tag <- 'identified'
+  if (length(u_met)==1 && u_met == 'recovered') tag <- 'recovered'
   
   
   # if the set of metacell to agregate is a mix of 1.0, 1.1 or 1.2, then the final
   # metadata is set to 1.0
-  if (n.quanti > 1 && n.imputed == 0 && n.missing==0 && n.combined ==0) tag <- 'quanti'
+  if (n.quanti > 1 && n.imputed == 0 && n.missing==0) tag <- 'quanti'
    
 
   # If the set of metacell to agregate is a mix of 3.X and 3.0, then the final
   # metadata is set to 3.0
-  if (n.quanti == 0 && n.imputed > 0 && n.missing == 0 && n.combined == 0) tag <- 'imputed'
+  if (n.quanti == 0 && n.imputed > 0 && n.missing == 0) tag <- 'imputed'
 
   # If the set of metacell to agregate is a mix of 3.X and 3.0 and other (X.X), 
   # then the final metadata is set to 4.0
   if (n.quanti > 0 && n.imputed > 0 && n.missing == 0)
     tag <- 'combined'
   
-  #print(paste0(paste0(met, collapse=' '), ' **** ', paste0(u_met, collapse=' '), ' ---> ', tag))
-  #print(paste0(paste0(u_met, collapse=' '), ' ---> ', tag))
+  print(paste0(paste0(u_met, collapse=' '), ' ---> ', tag))
   return(tag)
 }
 
@@ -1084,7 +1086,7 @@ AggregateMetacell <- function(mat, obj.pep){
   colnames(df) <- obj.pep@experimentData@other$names_metacell
   
   
-  # Post processing of metacell to discover imputed_POV, imputed_MEC
+  # Post processing of metacell to discover 'imputed POV', 'imputed MEC'
   conds <- Biobase::pData(obj.pep)$Condition
   df <- Set_POV_MEC_tags(conds, df, level)
   

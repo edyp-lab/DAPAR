@@ -78,9 +78,6 @@ saveParameters <- function(obj,name.dataset=NULL,name=NULL,l.params=NULL){
 #' 
 #' @param proteinId xxxx
 #' 
-#' @param versions A list of the following items: Prostar_Version, DAPAR_Version
-#' peptides or proteins.
-#' 
 #' @param software xxx
 #' 
 #' @return An instance of class \code{MSnSet}.
@@ -96,7 +93,7 @@ saveParameters <- function(obj,name.dataset=NULL,name=NULL,l.params=NULL){
 #' indExpData <- c(56:61)
 #' indFData <- c(1:55,62:71)
 #' indiceID <- 64
-#' createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, 
+#' obj <- createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, 
 #' indexForMetacell = c(43:48), pep_prot_data = "peptide", software = 'maxquant')
 #' 
 #' @export
@@ -114,7 +111,6 @@ createMSnset <- function(file,
                          replaceZeros=FALSE,
                          pep_prot_data=NULL,
                          proteinId = NULL,
-                         versions=NULL,
                          software = NULL){
   
   if (!is.data.frame(file)){ #the variable is a path to a text file
@@ -175,12 +171,25 @@ createMSnset <- function(file,
     obj@experimentData@other$typeOfData <- pep_prot_data
   }
   
-  obj@experimentData@other$Prostar_Version <- versions$Prostar_Version
-  obj@experimentData@other$DAPAR_Version <- versions$DAPAR_Version
+  obj@experimentData@other$Prostar_Version <- NA
+  tryCatch({
+    find.package("Prostar")
+    obj@experimentData@other$Prostar_Version <- Biobase::package.version('Prostar')
+  },
+  error = function(e) obj.prot@experimentData@other$Prostar_Version <- NA
+  )
+  
+  obj@experimentData@other$DAPAR_Version <- NA
+  tryCatch({
+    find.package("DAPAR")
+    obj@experimentData@other$Prostar_Version <- Biobase::package.version('DAPAR')
+  },
+  error = function(e) obj@experimentData@other$DAPAR_Version <- NA
+  )
+  
   obj@experimentData@other$proteinId <- proteinId
   
-  
-  obj@experimentData@other$RawPValues <- FALSE
+    obj@experimentData@other$RawPValues <- FALSE
   
   metacell <- NULL
   if (!is.null(indexForMetacell))
@@ -249,8 +258,8 @@ writeMSnsetToExcel <- function(obj, filename)
   } else {
     mat <- Biobase::fData(obj)[,obj@experimentData@other$names_metacell]
     level <- obj@experimentData@other$typeOfData
-    listPOV <- which(match.metacell(mat, 'missing_POV', level), arr.ind=TRUE)
-    listMEC <- which(match.metacell(mat, 'missing_MEC', level), arr.ind=TRUE)
+    listPOV <- which(match.metacell(mat, 'missing POV', level), arr.ind=TRUE)
+    listMEC <- which(match.metacell(mat, 'missing MEC', level), arr.ind=TRUE)
   }
   
   openxlsx::addStyle(wb, sheet=n, cols = listPOV[,"col"]+1, rows = listPOV[,"row"]+1, style = POV_Style)

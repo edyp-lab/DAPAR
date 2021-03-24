@@ -90,7 +90,7 @@ reIntroduceMEC <- function(obj, MECIndex){
 #' @param K the number of neighbors.
 #' 
 #' @param na.type A string which indicates the type of missing values to impute. 
-#' Available values are: `missing_POV`.
+#' Available values are: `missing POV`.
 #' 
 #' @return The object \code{obj} which has been imputed
 #' 
@@ -99,7 +99,7 @@ reIntroduceMEC <- function(obj, MECIndex){
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj.imp.pov <- wrapper.impute.KNN(obj = Exp1_R25_pept[1:10], K=3, 
-#' na.type = 'missing_POV')
+#' na.type = 'missing POV')
 #' 
 #' @export
 #' 
@@ -112,9 +112,9 @@ wrapper.impute.KNN <- function(obj=NULL, K, na.type){
     else if (is.null(obj))
         stop("'obj' is NULL")
     if (missing(na.type))
-        stop("'na.type' is required. Available values are: 'missing_POV'.")
-    else if (na.type != 'missing_POV')
-        stop("Available value for na.type is: 'missing_POV'")
+        stop("'na.type' is required. Available values are: 'missing POV'.")
+    else if (na.type != 'missing POV')
+        stop("Available value for na.type is: 'missing POV'")
 
     data <- Biobase::exprs(obj)
     
@@ -154,8 +154,8 @@ wrapper.impute.KNN <- function(obj=NULL, K, na.type){
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:10,]
-#' obj.imp.pov <- wrapper.impute.fixedValue(obj, 0.001, na.type = 'missing_POV')
-#' obj.imp.mec <- wrapper.impute.fixedValue(obj, 0.001, na.type = 'missing_MEC')
+#' obj.imp.pov <- wrapper.impute.fixedValue(obj, 0.001, na.type = 'missing POV')
+#' obj.imp.mec <- wrapper.impute.fixedValue(obj, 0.001, na.type = 'missing MEC')
 #' obj.imp.na <- wrapper.impute.fixedValue(obj, 0.001, na.type = 'missing')
 #' 
 #' @export
@@ -169,9 +169,9 @@ wrapper.impute.fixedValue <- function(obj, fixVal=0, na.type){
         warning('Be aware that fixVal = 0. No imputation will be realize.')
     level <- obj@experimentData@other$typeOfData
     if (missing(na.type))
-        stop(paste0("'na.type' is required. Available values are: ", paste0(metacell.def(level), collapse=' ')))
+        stop(paste0("'na.type' is required. Available values are: ", paste0(GetMetacellDef(level), collapse=' ')))
     else if (!(na.type %in% metacell.def(level)))
-        stop(paste0("Available values for na.type are: ", paste0(metacell.def(level), collapse=' ')))
+        stop(paste0("Available values for na.type are: ", paste0(GetMetacellDef(level), collapse=' ')))
     
     ind.na.type <- match.metacell(Biobase::fData(obj)[, obj@experimentData@other$names_metacell], 
                                   na.type,
@@ -207,7 +207,7 @@ wrapper.impute.fixedValue <- function(obj, fixVal=0, na.type){
 #' level <- obj@experimentData@other$typeOfData
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
-#' obj.imp.pov <- wrapper.impute.pa(obj, na.type = 'missing_POV')
+#' obj.imp.pov <- wrapper.impute.pa(obj, na.type = 'missing POV')
 #' 
 #' @export
 #' 
@@ -219,9 +219,9 @@ wrapper.impute.pa <- function(obj = NULL, q.min = 0.025, na.type){
         stop("'obj' is required.")
     level <- obj@experimentData@other$typeOfData
     if (missing(na.type))
-        stop(paste0("'na.type' is required. Available values are: ", paste0(metacell.def(level), collapse=' ')))
-    else if (!(na.type %in% metacell.def(level)))
-        stop(paste0("Available values for na.type are: ", paste0(metacell.def(level), collapse=' ')))
+        stop(paste0("'na.type' is required. Available values are: ", paste0(GetMetacellDef(level), collapse=' ')))
+    else if (!(na.type %in% GetMetacellDef(level)))
+        stop(paste0("Available values for na.type are: ", paste0(GetMetacellDef(level), collapse=' ')))
     
     cond <- as.factor(Biobase::pData(obj)$Condition)
     res <- impute.pa(Biobase::exprs(obj), conditions=cond, q.min = q.min, q.norm=3,  eps=0)
@@ -258,8 +258,8 @@ wrapper.impute.pa <- function(obj = NULL, q.min = 0.025, na.type){
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:10]
-#' obj.imp.pov <- wrapper.impute.detQuant(obj, na.type='missing_POV')
-#' obj.imp.mec <- wrapper.impute.detQuant(obj, na.type='missing_MEC')
+#' obj.imp.pov <- wrapper.impute.detQuant(obj, na.type='missing POV')
+#' obj.imp.mec <- wrapper.impute.detQuant(obj, na.type='missing MEC')
 #' obj.imp.na <- wrapper.impute.detQuant(obj, na.type='missing')
 #' 
 #' @export
@@ -366,8 +366,8 @@ getQuantile4Imp <- function(qdata, qval=0.025, factor=1){
 #' #' qdata <- Biobase::exprs(Exp1_R25_pept)
 #' #' meta <- 
 #' #' values <- getQuantile4Imp(qdata)$shiftedImpVal
-#' #' obj.imp.mec <- impute.detQuant(qdata, values, na.type = 'missing_POV') 
-#' #' obj.imp.mec <- impute.detQuant(qdata, values, na.type = 'missing_MEC')
+#' #' obj.imp.mec <- impute.detQuant(qdata, values, na.type = 'missing POV') 
+#' #' obj.imp.mec <- impute.detQuant(qdata, values, na.type = 'missing MEC')
 #' #' obj.imp.na <- impute.detQuant(qdata, values, na.type = 'missing') 
 #' #' 
 #' #' @export
@@ -421,7 +421,7 @@ getQuantile4Imp <- function(qdata, qval=0.025, factor=1){
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:10]
-#' obj.slsa.pov <- wrapper.impute.slsa(obj, na.type = 'missing_POV')
+#' obj.slsa.pov <- wrapper.impute.slsa(obj, na.type = 'missing POV')
 #' 
 #' @export
 #' 
@@ -431,9 +431,9 @@ wrapper.impute.slsa <- function(obj = NULL, na.type = NULL){
     if (is.null(obj))
         stop("'obj' is required.")
     if (is.null(na.type))
-        stop("'na.type' is required. Available values are: 'missing_POV'.")
-    else if (!(na.type %in% c('missing_POV')))
-        stop("Available values for na.type are: 'missing_POV'.")
+        stop("'na.type' is required. Available values are: 'missing POV'.")
+    else if (!(na.type %in% c('missing POV')))
+        stop("Available values for na.type are: 'missing POV'.")
     
     
     MECIndex <- findMECBlock(obj)

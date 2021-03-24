@@ -218,7 +218,7 @@ wrapper.dapar.impute.mi <- function (obj,
     obj@processingData@processing <- c(obj@processingData@processing,msg)
     
     obj@experimentData@other$imputation.method <- "imp4p"
-    na.type <- 'missing_POV'
+    na.type <- 'missing POV'
     if(isTRUE(lapala))
       na.type <- 'missing'
     

@@ -39,8 +39,8 @@ values.
 #' qdata <- Biobase::exprs(Exp1_R25_pept)
 #' meta <- 
 #' values <- getQuantile4Imp(qdata)$shiftedImpVal
-#' obj.imp.mec <- impute.detQuant(qdata, values, na.type = 'missing_POV') 
-#' obj.imp.mec <- impute.detQuant(qdata, values, na.type = 'missing_MEC')
+#' obj.imp.mec <- impute.detQuant(qdata, values, na.type = 'missing POV') 
+#' obj.imp.mec <- impute.detQuant(qdata, values, na.type = 'missing MEC')
 #' obj.imp.na <- impute.detQuant(qdata, values, na.type = 'missing') 
 #' 
 #' @export
@@ -82,7 +82,7 @@ This method is a wrapper to the function \code{impute.slsa} of the package
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept[1:10]
-obj.slsa.pov <- wrapper.impute.slsa(obj, na.type = 'missing_POV')
+obj.slsa.pov <- wrapper.impute.slsa(obj, na.type = 'missing POV')
 
 }
 \author{

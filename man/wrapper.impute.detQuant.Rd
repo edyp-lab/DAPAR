@@ -28,8 +28,8 @@ of class \code{MSnSet}
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept[1:10]
-obj.imp.pov <- wrapper.impute.detQuant(obj, na.type='missing_POV')
-obj.imp.mec <- wrapper.impute.detQuant(obj, na.type='missing_MEC')
+obj.imp.pov <- wrapper.impute.detQuant(obj, na.type='missing POV')
+obj.imp.mec <- wrapper.impute.detQuant(obj, na.type='missing MEC')
 obj.imp.na <- wrapper.impute.detQuant(obj, na.type='missing')
 
 }

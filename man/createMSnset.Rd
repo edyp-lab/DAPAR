@@ -15,7 +15,6 @@ createMSnset(
   replaceZeros = FALSE,
   pep_prot_data = NULL,
   proteinId = NULL,
-  versions = NULL,
   software = NULL
 )
 }
@@ -46,9 +45,6 @@ intensity have to be replaced by NA (Default is FALSE)}
 
 \item{proteinId}{xxxx}
 
-\item{versions}{A list of the following items: Prostar_Version, DAPAR_Version
-peptides or proteins.}
-
 \item{software}{xxx}
 }
 \value{
@@ -71,7 +67,7 @@ metadata = read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
 indExpData <- c(56:61)
 indFData <- c(1:55,62:71)
 indiceID <- 64
-createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, 
+obj <- createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, 
 indexForMetacell = c(43:48), pep_prot_data = "peptide", software = 'maxquant')
 
 }

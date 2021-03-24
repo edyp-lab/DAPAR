@@ -4,20 +4,21 @@
 \alias{search.metacell.tags}
 \title{Search pattern in metacell vocabulary}
 \usage{
-search.metacell.tags(pattern, level)
+search.metacell.tags(pattern, level, depth = "1")
 }
 \arguments{
 \item{pattern}{The string to search.}
 
 \item{level}{The available levels are : names()}
+
+\item{depth}{xxx}
 }
 \description{
 Gives all the tags of the metadata vocabulary containing the pattern 
 (parent and all its children).
 }
 \examples{
-search.metacell.tags('POV', 'peptide')
-search.metacell.tags('missing_POV', 'peptide')
+search.metacell.tags('missing POV', 'peptide')
 search.metacell.tags('quanti', 'peptide')
 
 }

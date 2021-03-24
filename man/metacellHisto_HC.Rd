@@ -34,7 +34,7 @@ This method plots a histogram of missing values. Same as the function
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept
-pattern <- 'missing_POV'
+pattern <- 'missing POV'
 pal <- ExtendPalette(2, 'Dark2')
 metacellHisto_HC(obj, pattern,  showValues=TRUE, pal=pal)
 

@@ -5,8 +5,7 @@
 #' @title Bar plot of missing values per lines using highcharter
 #' @param obj xxx.
 #' @param pattern xxx
-#' @param value 'value' or 'percent'
-#' @param stacked TRUE of FALSE
+#' @param detailed 'value' or 'percent'
 #' @param indLegend The indice of the column name's in \code{pData()} tab 
 #' @param showValues A logical that indicates whether numeric values should be
 #' drawn above the bars.
@@ -21,6 +20,7 @@
 #'
 metacellPerLinesHisto_HC <- function(obj,
                                      pattern,
+                                     detailed = FALSE,
                                      indLegend="auto",
                                      showValues=FALSE){
   
@@ -222,7 +222,7 @@ metacellPerLinesHistoPerCondition_HC <- function(obj,
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept
-#' pattern <- 'missing_POV'
+#' pattern <- 'missing POV'
 #' pal <- ExtendPalette(2, 'Dark2')
 #' metacellHisto_HC(obj, pattern,  showValues=TRUE, pal=pal)
 #' 
@@ -304,6 +304,9 @@ metacellHisto_HC <- function(obj,
 #' 
 #' @title Heatmap of missing values from a \code{MSnSet} object
 #' @param obj An object of class \code{MSnSet}.
+#' 
+#' @param pattern xxx
+#' 
 #' @return A heatmap
 #' @author Alexia Dorffer
 #' @examples
@@ -322,7 +325,7 @@ metacellHisto_HC <- function(obj,
 #'
 #' @importFrom Biobase pData exprs fData
 #' 
-wrapper.mvImage <- function(obj, pattern = 'missing_MEC'){
+wrapper.mvImage <- function(obj, pattern = 'missing MEC'){
   if(missing(obj))
     stop("'obj' is required.")
   else if (is.null(obj)){
@@ -431,6 +434,8 @@ mvImage <- function(qData, conds){
 #' 
 #' @param pal The different colors for conditions
 #' 
+#' @param pattern xxx
+#' 
 #' @param typeofMV xxx
 #' 
 #' @param title The title of the plot
@@ -444,10 +449,10 @@ mvImage <- function(qData, conds){
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:100]
-#' hc_mvTypePlot2(obj, title="POV distribution")
+#' hc_mvTypePlot2(obj, pattern = 'missing MEC', title="POV distribution")
 #' conds <- Biobase::pData(obj)$Condition
 #' pal <- ExtendPalette(length(unique(conds)), 'Dark2')
-#' hc_mvTypePlot2(obj, title="POV distribution", pal=pal)
+#' hc_mvTypePlot2(obj, pattern = 'missing MEC', title="POV distribution", pal=pal)
 #' 
 #' @import highcharter
 #' 
@@ -537,7 +542,7 @@ hc_mvTypePlot2 <- function(obj,
    hc_tooltip(headerFormat= '',
                pointFormat = "<b> {series.name} </b>: {point.y} ",
                valueDecimals = 2) %>%
-    my_hc_ExportMenu(filename = paste0(pattenr, "_distribution")) %>%
+    my_hc_ExportMenu(filename = paste0(pattern, "_distribution")) %>%
     hc_plotOptions(
       series=list(
         showInLegend = TRUE,

@@ -29,7 +29,7 @@ obj <- Exp1_R25_pept[1:10]
 level <- obj@experimentData@other$typeOfData
 metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
-obj.imp.pov <- wrapper.impute.pa(obj, na.type = 'missing_POV')
+obj.imp.pov <- wrapper.impute.pa(obj, na.type = 'missing POV')
 
 }
 \author{

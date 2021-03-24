@@ -24,8 +24,8 @@ objects of class \code{MSnSet} and imputes missing values with a fixed value.
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept[1:10,]
-obj.imp.pov <- wrapper.impute.fixedValue(obj, 0.001, na.type = 'missing_POV')
-obj.imp.mec <- wrapper.impute.fixedValue(obj, 0.001, na.type = 'missing_MEC')
+obj.imp.pov <- wrapper.impute.fixedValue(obj, 0.001, na.type = 'missing POV')
+obj.imp.mec <- wrapper.impute.fixedValue(obj, 0.001, na.type = 'missing MEC')
 obj.imp.na <- wrapper.impute.fixedValue(obj, 0.001, na.type = 'missing')
 
 }
