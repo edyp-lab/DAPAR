@@ -168,9 +168,10 @@ wrapper.impute.fixedValue <- function(obj, fixVal=0, na.type){
     if(fixVal == 0)
         warning('Be aware that fixVal = 0. No imputation will be realize.')
     level <- obj@experimentData@other$typeOfData
+    
     if (missing(na.type))
         stop(paste0("'na.type' is required. Available values are: ", paste0(GetMetacellDef(level), collapse=' ')))
-    else if (!(na.type %in% metacell.def(level)))
+    else if (!(na.type %in% GetMetacellDef(level)))
         stop(paste0("Available values for na.type are: ", paste0(GetMetacellDef(level), collapse=' ')))
     
     ind.na.type <- match.metacell(Biobase::fData(obj)[, obj@experimentData@other$names_metacell], 
