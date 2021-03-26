@@ -170,9 +170,9 @@ wrapper.impute.fixedValue <- function(obj, fixVal=0, na.type){
     level <- obj@experimentData@other$typeOfData
     
     if (missing(na.type))
-        stop(paste0("'na.type' is required. Available values are: ", paste0(GetMetacellDef(level), collapse=' ')))
-    else if (!(na.type %in% GetMetacellDef(level)))
-        stop(paste0("Available values for na.type are: ", paste0(GetMetacellDef(level), collapse=' ')))
+        stop(paste0("'na.type' is required. Available values are: ", paste0(metacell.def(level)$node, collapse=' ')))
+    else if (!(na.type %in% metacell.def(level)$node))
+        stop(paste0("Available values for na.type are: ", paste0(metacell.def(level)$node, collapse=' ')))
     
     ind.na.type <- match.metacell(Biobase::fData(obj)[, obj@experimentData@other$names_metacell], 
                                   na.type,
@@ -220,9 +220,9 @@ wrapper.impute.pa <- function(obj = NULL, q.min = 0.025, na.type){
         stop("'obj' is required.")
     level <- obj@experimentData@other$typeOfData
     if (missing(na.type))
-        stop(paste0("'na.type' is required. Available values are: ", paste0(GetMetacellDef(level), collapse=' ')))
-    else if (!(na.type %in% GetMetacellDef(level)))
-        stop(paste0("Available values for na.type are: ", paste0(GetMetacellDef(level), collapse=' ')))
+        stop(paste0("'na.type' is required. Available values are: ", paste0(metacell.def(level)$node, collapse=' ')))
+    else if (!(na.type %in% metacell.def(level)$node))
+        stop(paste0("Available values for na.type are: ", paste0(metacell.def(level)$node, collapse=' ')))
     
     cond <- as.factor(Biobase::pData(obj)$Condition)
     res <- impute.pa(Biobase::exprs(obj), conditions=cond, q.min = q.min, q.norm=3,  eps=0)

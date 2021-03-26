@@ -946,7 +946,7 @@ finalizeAggregation <- function(obj.pep, pepData, protData, X){
 #' 
 #' @description 
 #' Agregation rules for the cells metadata of peptides. 
-#' Please refer to the metacell vocabulary in `GetMetacellDef()`
+#' Please refer to the metacell vocabulary in `metacell.def()`
 #' 
 #' # Basic agreagtion
 #' Agregation of non imputed values (2.X) with quantitative values 
@@ -987,7 +987,7 @@ finalizeAggregation <- function(obj.pep, pepData, protData, X){
 #' 
 #' @examples
 #' \dontrun{
-#' ll <- GetMetacellDef('peptide')
+#' ll <- metacell.def('peptide')$node
 #' for (i in 1:length(ll))
 #' test <- lapply(combn(ll, i, simplify = FALSE), 
 #' function(x) tag <- metacombine(x, 'peptide'))
@@ -1004,7 +1004,7 @@ metacombine <- function(met, level) {
     sum(unlist(lapply( search.metacell.tags(tag, level), function(x) length(grep(x, u_met)))))
   
   
-  nb.tags <- lapply(GetMetacellDef(level), function(x) as.numeric(x %in% u_met))
+  nb.tags <- lapply(metacell.def(level)$node, function(x) as.numeric(x %in% u_met))
   n.imputed <- ComputeNbTags('imputed')
   n.missing <- ComputeNbTags('missing')
   n.quanti <- ComputeNbTags('quanti')
@@ -1050,7 +1050,7 @@ metacombine <- function(met, level) {
   if (n.quanti > 0 && n.imputed > 0 && n.missing == 0)
     tag <- 'combined'
   
-  print(paste0(paste0(u_met, collapse=' '), ' ---> ', tag))
+  #print(paste0(paste0(u_met, collapse=' '), ' ---> ', tag))
   return(tag)
 }
 

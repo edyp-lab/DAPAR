@@ -54,65 +54,15 @@
 #' 
 #' @author Thomas Burger, Samuel Wieczorek
 #'
+#'@export
 #' 
 metacell.def <- function(level){
   if(missing(level))
     stop("'level' is required.")
   
-  # switch(level,
-  #        peptide = setNames(nm = c('quanti',
-  #                                  'quanti_identified',
-  #                                  'quanti_recovered',
-  #                                  'missing',
-  #                                  'missing POV',
-  #                                  'missing MEC',
-  #                                  'imputed',
-  #                                  'imputed_POV',
-  #                                  'imputed_MEC')) ,
-  #        
-  #        protein = setNames(nm = c('quanti',
-  #                                  'quanti_identified',
-  #                                  'quanti_recovered',
-  #                                  'missing',
-  #                                  'missing_POV',
-  #                                  'missing_MEC',
-  #                                  'imputed',
-  #                                  'imputed_POV',
-  #                                  'imputed_MEC',
-  #                                  'combined')
-  #        )
-  #        
-  # )
-  
-  # switch(level,
-  #        peptide = c('root' = 'root',
-  #                    'root_quanti' = 'quanti',
-  #                    'root_quanti_identified' = 'quanti_identified',
-  #                    'root_quanti_recovered' = 'quanti_recovered',
-  #                    'root_missing' = 'missing',
-  #                    'root_missing_POV' = 'missing_POV',
-  #                    'root_missing_MEC' = 'missing_MEC',
-  #                    'root_imputed' = 'imputed',
-  #                    'root_imputed_POV' = 'imputed_POV',
-  #                    'root_imputed_MEC' = 'imputed_MEC') ,
-  #        
-  #        protein = c('root' = 'root',
-  #                    'root_quanti' = 'quanti',
-  #                    'root_quanti_identified' = 'quanti_identified',
-  #                    'root_quanti_recovered' = 'quanti_recovered',
-  #                    'root_missing' = 'missing',
-  #                    'root_missing_POV' = 'missing_POV',
-  #                    'root_missing_MEC' = 'missing_MEC',
-  #                    'root_imputed' = 'imputed',
-  #                    'root_imputed_POV' = 'imputed_POV',
-  #                    'root_imputed_MEC' = 'imputed_MEC',
-  #                    'root_combined' = 'combined')
-  #        
-  # )
-  
   switch(level,
          peptide = {
-           names <- c('root', 
+           node <- c('root', 
                       'quanti', 
                       'identified', 
                       'recovered', 
@@ -132,12 +82,13 @@ metacell.def <- function(level){
                        'root',
                        'imputed',
                        'imputed')
-         data.frame(parent = parent, row.names = names)
+         data.frame(node = node,
+                    parent = parent)
          },
          
          
          protein = {
-           names <- c('root',
+           node <- c('root',
                       'quanti',
                       'identified',
                       'recovered',
@@ -160,7 +111,8 @@ metacell.def <- function(level){
                        'imputed',
                        'root')
          
-         data.frame(parent = parent, row.names = names)
+         data.frame(node = node,
+                    parent = parent)
          }
          
   )
@@ -168,18 +120,6 @@ metacell.def <- function(level){
   
 }
 
-
-#' @title 
-#' xxxxx
-#' 
-#' @description xxx
-#' 
-#' @param level xxx
-#' 
-#' @export
-#' 
-GetMetacellDef <- function(level)
-  rownames(metacell.def(level))
 
 
 #' @title Sets the MEC tag in the metacell
@@ -557,9 +497,9 @@ match.metacell <- function(metadata, pattern, level){
     stop("'level' is required.")
   
   
-  if (!(pattern %in% GetMetacellDef(level)))
+  if (!(pattern %in% metacell.def(level)$node))
     stop(paste0("'pattern' is not correct. Availablevalues are: ", 
-                paste0(GetMetacellDef(level), collapse = ' ')))
+                paste0(metacell.def(level)$node, collapse = ' ')))
   
   ll.res <- lapply(search.metacell.tags(pattern = pattern, level), 
                    function(x){metadata==x})
@@ -660,33 +600,33 @@ UpdateMetacell <- function(obj, method='', na.type){
 search.metacell.tags <- function(pattern, level, depth = '1'){
   if(missing(pattern))
     stop("'pattern' is required.")
-  else if (!(pattern %in% GetMetacellDef(level)))
-    stop(paste0("'pattern' must be one of the following: ", paste0(GetMetacellDef(level), collapse=' ')))
+  else if (!(pattern %in% metacell.def(level)$node))
+    stop(paste0("'pattern' must be one of the following: ", paste0(metacell.def(level)$node, collapse=' ')))
   
   if(missing(level))
     stop("'level' is required.")
   if(!(depth %in% c('0', '1', '*')))
     stop("'depth' must be one of the following: 0, 1 or *")
   
-  
-  is.neighbor <- function(tag, query){
-    prefix.tag <- unlist(strsplit(tag, split='_'))[1:(length(unlist(strsplit(tag, split='_')))-1)]
-    prefix.query <- unlist(strsplit(query, split='_'))[1:(length(unlist(strsplit(query, split='_')))-1)]
-    split.tag <- unlist(strsplit(tag, split='_'))
-    split.query <- unlist(strsplit(query, split='_'))
-    value <- length(split.query) == length(split.tag) + 1 && all(split.tag == split.query[1:length(split.tag)])
-    return(value)
-  }
+  # 
+  # is.neighbor <- function(tag, query){
+  #   prefix.tag <- unlist(strsplit(tag, split='_'))[1:(length(unlist(strsplit(tag, split='_')))-1)]
+  #   prefix.query <- unlist(strsplit(query, split='_'))[1:(length(unlist(strsplit(query, split='_')))-1)]
+  #   split.tag <- unlist(strsplit(tag, split='_'))
+  #   split.query <- unlist(strsplit(query, split='_'))
+  #   value <- length(split.query) == length(split.tag) + 1 && all(split.tag == split.query[1:length(split.tag)])
+  #   return(value)
+  # }
   tags <- NULL
   tags <- switch(depth,
                  '0' = pattern,
-                 '1' = c(pattern, GetMetacellDef(level)[which(metacell.def(level)$parent == pattern)]),
+                 '1' = c(pattern, metacell.def(level)$node[which(metacell.def(level)$parent == pattern)]),
                  '*' = {
-                   if (length(GetMetacellDef(level)[which(metacell.def(level)$parent == pattern)])==0) 
+                   if (length(metacell.def(level)$node[which(metacell.def(level)$parent == pattern)])==0) 
                      search.metacell.tags(pattern, level, '0')
                                
                    else
-                     c(pattern, unlist(lapply(GetMetacellDef(level)[which(metacell.def(level)$parent == pattern)],
+                     c(pattern, unlist(lapply(metacell.def(level)$node[which(metacell.def(level)$parent == pattern)],
                               function(x) {
                                 search.metacell.tags(x, level, depth)
                                 }

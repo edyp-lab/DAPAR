@@ -13,7 +13,7 @@ metacombine(met, level)
 }
 \description{
 Agregation rules for the cells metadata of peptides. 
-Please refer to the metacell vocabulary in `GetMetacellDef()`
+Please refer to the metacell vocabulary in `metacell.def()`
 
 # Basic agreagtion
 Agregation of non imputed values (2.X) with quantitative values 
@@ -50,7 +50,7 @@ TODO
 }
 \examples{
 \dontrun{
-ll <- GetMetacellDef('peptide')
+ll <- metacell.def('peptide')$node
 for (i in 1:length(ll))
 test <- lapply(combn(ll, i, simplify = FALSE), 
 function(x) tag <- metacombine(x, 'peptide'))
