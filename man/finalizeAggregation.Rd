@@ -4,7 +4,7 @@
 \alias{finalizeAggregation}
 \title{Finalizes the aggregation process}
 \usage{
-finalizeAggregation(obj.pep, pepData, protData, X)
+finalizeAggregation(obj.pep, pepData, protData, protMetacell, X)
 }
 \arguments{
 \item{obj.pep}{A peptide object of class \code{MSnset}}
@@ -12,6 +12,8 @@ finalizeAggregation(obj.pep, pepData, protData, X)
 \item{pepData}{xxxx}
 
 \item{protData}{xxxxx}
+
+\item{protMetacell}{xxx}
 
 \item{X}{An adjacency matrix in which lines and columns correspond 
 respectively to peptides and proteins.}

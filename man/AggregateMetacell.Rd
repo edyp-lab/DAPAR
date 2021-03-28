@@ -4,10 +4,10 @@
 \alias{AggregateMetacell}
 \title{Symbolic product of matrices}
 \usage{
-AggregateMetacell(mat, obj.pep)
+AggregateMetacell(X, obj.pep)
 }
 \arguments{
-\item{mat}{An adjacency matrix between peptides and proteins}
+\item{X}{An adjacency matrix between peptides and proteins}
 
 \item{obj.pep}{A dataframe of the cell metadata for peptides}
 }
@@ -17,6 +17,14 @@ xxxx
 \description{
 Execute a product two matrices: the first is an adjacency one  while the
 second if a simple dataframe
+}
+\examples{
+utils::data(Exp1_R25_pept, package='DAPARdata')
+obj.pep <- Exp1_R25_pept[1:100]
+protID <- "Protein_group_IDs"
+X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+metac <- AggregateMetacell(X, obj.pep)
+
 }
 \author{
 Samuel Wieczorek
