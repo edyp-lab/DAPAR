@@ -89,8 +89,7 @@ wrapper.compareNormalizationD_HC <- function(objBefore,
 #' pal <- ExtendPalette(2)
 #' objAfter <- wrapper.normalizeD(obj, method = "QuantileCentering", 
 #' conds =conds, type = "within conditions")
-#' compareNormalizationD_HC(qDataBefore=qDataBefore, 
-#' qDataAfter=Biobase::exprs(objAfter), keyId = id, conds=conds, n=100)
+#' compareNormalizationD_HC(qDataBefore=qDataBefore, qDataAfter=Biobase::exprs(objAfter), keyId = id, conds=conds, n=1000)
 #' 
 #' compareNormalizationD_HC(qDataBefore=qDataBefore, 
 #' qDataAfter=Biobase::exprs(objAfter), keyId = id, pal=pal, subset.view=1:4, 
@@ -124,11 +123,11 @@ compareNormalizationD_HC <- function(qDataBefore,
     keyId <- keyId[subset.view]
     if (nrow(qDataBefore) > 1)
       if (length(subset.view)==1){
-        qDataBefore <- as_tibble(cbind(t(qDataBefore[subset.view,])))
-        qDataAfter <- as_tibble(cbind(t(qDataAfter[subset.view,])))
+        qDataBefore <- t(qDataBefore[subset.view,])
+        qDataAfter <- t(qDataAfter[subset.view,])
       } else {
-        qDataBefore <- as_tibble(cbind(qDataBefore[subset.view,]))
-        qDataAfter <- as_tibble(cbind(qDataAfter[subset.view,]))
+        qDataBefore <- qDataBefore[subset.view,]
+        qDataAfter <- qDataAfter[subset.view,]
       }
   } 
   # else {
@@ -156,11 +155,15 @@ compareNormalizationD_HC <- function(qDataBefore,
     keyId <- keyId[ind]
     if (nrow(qDataBefore) > 1)
       if (length(ind) == 1){
-        qDataBefore <- as_tibble(cbind(t(qDataBefore[ind,])))
-        qDataAfter <- as_tibble(cbind(t(qDataAfter[ind,])))
+       # qDataBefore <- as_tibble(cbind(t(qDataBefore[ind,])))
+       # qDataAfter <- as_tibble(cbind(t(qDataAfter[ind,])))
+        qDataBefore <- t(qDataBefore[ind,])
+        qDataAfter <- t(qDataAfter[ind,])
       } else {
-        qDataBefore <- as_tibble(cbind(qDataBefore[ind,]))
-        qDataAfter <- as_tibble(cbind(qDataAfter[ind,]))
+        #qDataBefore <- as_tibble(cbind(qDataBefore[ind,]))
+       # qDataAfter <- as_tibble(cbind(qDataAfter[ind,]))
+        qDataBefore <- qDataBefore[ind,]
+         qDataAfter <- qDataAfter[ind,]
       }
   }
   
@@ -186,13 +189,12 @@ compareNormalizationD_HC <- function(qDataBefore,
   
   series <- list()
   for (i in 1:length(conds)){
-    tmp <- list(name=colnames(x)[i],
-                data =list_parse(data.frame(x = x[,i],
-                                            y = y[,i],
-                                            name=keyId)
-                )
+    series[[i]] <- list(name=colnames(x)[i],
+                        data =list_parse(data.frame(x = x[,i],
+                                                    y = y[,i],
+                                                    name=keyId)
+                        )
     )
-    series[[i]] <- tmp
   }
   
   h1 <-  highchart() %>% 
