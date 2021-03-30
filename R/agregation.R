@@ -354,32 +354,21 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' protID <- "Protein_group_IDs"
-#' obj.pep <- Exp1_R25_pept[1:100]
+#' obj.pep <- Exp1_R25_pept[1:10]
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-#' obj.prot <- DAPAR::aggregateSum(obj.pep, X)
+#' DAPAR::aggregateSum(obj.pep, X)
 #' 
 #' @export
 #' 
 #' @importFrom Biobase pData exprs fData
 #' 
 aggregateSum <- function(obj.pep, X){
-  obj.prot <- NULL
+  pepData <- 2^(Biobase::exprs(obj.pep))
+  protData <- inner.sum(pepData, X)
   
-  # Agregation of metacell data
-  metacell <- AggregateMetacell(X = X, obj.pep = obj.pep)
-  if (!is.null(metacell$issues))
-    return(list(obj.prot = NULL,
-                issues = metacell$issues)
-    )
-  else {
-    # Agregation of quanti data
-    pepData <- 2^(Biobase::exprs(obj.pep))
-    protData <- inner.sum(pepData, X)
-    # Build protein dataset
-    obj.prot <- finalizeAggregation(obj.pep, pepData, protData, metacell$df, X)
-    return(list(obj.prot = obj.prot,
-           issues = NULL))
-  }
+  
+  obj.prot <- finalizeAggregation(obj.pep, pepData, protData, X)
+  return(obj.prot)
 }
 
 
@@ -407,7 +396,7 @@ aggregateSum <- function(obj.pep, X){
 #' protID <- "Protein_group_IDs"
 #' obj.pep <- Exp1_R25_pept[1:10]
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-#' obj.prot <- aggregateIterParallel(obj.pep, X)
+#' aggregateIterParallel(obj.pep, X)
 #' 
 #' @export
 #' 
@@ -418,33 +407,23 @@ aggregateSum <- function(obj.pep, X){
 aggregateIterParallel <- function(obj.pep, X, init.method='Sum', method='Mean', n=NULL){
   
   registerDoParallel()
-  obj.prot <- NULL
   
-  # Step 1: Agregation of metacell data
-  metacell <- AggregateMetacell(X = X, obj.pep = obj.pep)
-  if (!is.null(metacell$issues))
-    return(list(obj.prot = NULL,
-                issues = metacell$issues)
-    )
-  else {
-    # Step 2 : Agregation of quantitative data
-    qData.pep <- 2^(Biobase::exprs(obj.pep))
-    protData <- matrix(rep(0,ncol(X)*nrow(X)), nrow=ncol(X))
+  qData.pep <- 2^(Biobase::exprs(obj.pep))
+  protData <- matrix(rep(0,ncol(X)*nrow(X)), nrow=ncol(X))
   
-    protData <- foreach(cond=1:length(unique(Biobase::pData(obj.pep)$Condition)), 
-                        .combine=cbind, 
-                        .packages = "MSnbase") %dopar% {
-                          condsIndices <- which(Biobase::pData(obj.pep)$Condition == unique(Biobase::pData(obj.pep)$Condition)[cond])
-                          qData <- qData.pep[,condsIndices]
-                          DAPAR::inner.aggregate.iter(qData, X, init.method, method, n)
-                        }
-    protData <- protData[,colnames(Biobase::exprs(obj.pep))]
+  protData <- foreach(cond=1:length(unique(Biobase::pData(obj.pep)$Condition)), 
+                      .combine=cbind, 
+                      .packages = "MSnbase") %dopar% {
     
-    # Step 3 : Build the protein dataset
-    obj.prot <- DAPAR::finalizeAggregation(obj.pep, qData.pep, protData, metacell, X)
-    return(list(obj.prot = obj.prot,
-                issues = NULL))
+    condsIndices <- which(Biobase::pData(obj.pep)$Condition == unique(Biobase::pData(obj.pep)$Condition)[cond])
+    qData <- qData.pep[,condsIndices]
+    DAPAR::inner.aggregate.iter(qData, X, init.method, method, n)
   }
+  
+  protData <- protData[,colnames(Biobase::exprs(obj.pep))]
+  obj.prot <- DAPAR::finalizeAggregation(obj.pep, qData.pep, protData, X)
+  
+  return(obj.prot)
   
 }
 
@@ -552,7 +531,7 @@ inner.aggregate.iter <- function(pepData,
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' protID <- "Protein_group_IDs"
 #' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:10], protID, FALSE)
-#' obj.prot <- aggregateIter(Exp1_R25_pept[1:10],X=X)
+#' aggregateIter(Exp1_R25_pept[1:10],X=X)
 #' 
 #' @export
 #' 
@@ -564,39 +543,27 @@ aggregateIter <- function(obj.pep,
                           method='Mean', 
                           n=NULL){
   
-  obj.prot <- NULL
+  ### a reproduire iterativement pour chaque condition
+  # Initialisation: presque aucune d?pendance ? l'initialisation prendre 
+  # "sum overall" et  matAdj = X par simplicit?
+  #X <- as.matrix(X)
+  qData.pep <- 2^(Biobase::exprs(obj.pep))
   
-  # Step 1 : Agregation of metacell data
-  metacell <- AggregateMetacell(X = X, obj.pep = obj.pep)
+  protData <- matrix(rep(0,ncol(X)*ncol(obj.pep)), nrow=ncol(X))
   
-  if(!is.null(metacell$issues))
-    return(list(obj.prot = NULL,
-                issues = metacell$issues))
-  else {
-    # Step 2: Agregation of quantitative data
-    # For each condition, reproduce iteratively
-    # Initialisation: At initialization step, take "sum overall" and  matAdj = X
-    # for simplicity. 
-    # Note : X <- as.matrix(X)
-    qData.pep <- 2^(Biobase::exprs(obj.pep))
-  
-    protData <- matrix(rep(0,ncol(X)*ncol(obj.pep)), nrow=ncol(X))
-  
-    for (cond in unique(Biobase::pData(obj.pep)$Condition)){
-      condsIndices <- which(Biobase::pData(obj.pep)$Condition == cond)
-      qData <- qData.pep[,condsIndices]
-      protData[,condsIndices]  <- inner.aggregate.iter(qData, 
-                                                       X, 
-                                                       init.method, 
-                                                       method, 
-                                                       n)
-      }
-    
-    # Step 3: Build the protein dataset
-    obj.prot <- finalizeAggregation(obj.pep, qData.pep, protData, metacell, X)
-    return(list(obj.prot = obj.prot,
-                issues = NULL))
+  for (cond in unique(Biobase::pData(obj.pep)$Condition)){
+    condsIndices <- which(Biobase::pData(obj.pep)$Condition == cond)
+    qData <- qData.pep[,condsIndices]
+    protData[,condsIndices]  <- inner.aggregate.iter(qData, 
+                                                     X, 
+                                                     init.method, 
+                                                     method, 
+                                                     n)
   }
+  obj.prot <- finalizeAggregation(obj.pep, qData.pep, protData, X)
+  return(obj.prot)
+  
+  #return(yprot)
 }
 
 
@@ -652,24 +619,10 @@ GetNbPeptidesUsed <- function(X, pepData){
 #' @importFrom Biobase pData exprs fData
 #' 
 aggregateMean <- function(obj.pep, X){
-  
-  obj.prot <- NULL
-  # Agregation of metacell data
-  metacell <- AggregateMetacell(X = X, obj.pep = obj.pep)
-  if (!is.null(metacell$issues))
-    return(list(obj.prot = NULL,
-                issues = metacell$issues))
-  else {
-    # Step 2: Agregation of quantitative data
-    pepData <- 2^(Biobase::exprs(obj.pep))
-    protData <- inner.mean(pepData, as.matrix(X))
-  
-    # Step 3: Build protein dataset
-    obj.prot <- finalizeAggregation(obj.pep, pepData, protData, metacell, X)
-  
-    return(list(obj.prot = obj.prot,
-                issues = NULL))
-  }
+  pepData <- 2^(Biobase::exprs(obj.pep))
+  protData <- inner.mean(pepData, as.matrix(X))
+  obj.prot <- finalizeAggregation(obj.pep, pepData, protData, X)
+  return(obj.prot)
 }
 
 
@@ -768,6 +721,7 @@ GetDetailedNbPeptidesUsed <- function(X, pepData){
 GetDetailedNbPeptides <- function(X){
   
   mat <- splitAdjacencyMat(as.matrix(X))
+  
   
   return(list(nTotal = rowSums(t(as.matrix(X))),
               nShared=rowSums(t(mat$Xshared)), 
@@ -879,36 +833,23 @@ inner.aggregate.topn <-function(pepData, X, method='Mean', n=10){
 #' @examples
 #' \dontrun{
 #' utils::data(Exp1_R25_pept, package='DAPARdata') 
-#' obj.pep <- Exp1_R25_pept[1:100]
+#' obj.pep <- Exp1_R25_pept[1:10]
 #' protID <- "Protein_group_IDs"
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-#' obj.prot <- DAPAR::aggregateTopn(obj.pep, X, n=3)
+#' DAPAR::aggregateTopn(obj.pep, X, n=3)
 #' }
 #' 
 #' @export
 #' 
 #' @importFrom Biobase pData exprs fData
 #' 
-aggregateTopn <- function(obj.pep, X,  method='Mean', n=10){
-  obj.prot <- NULL
+aggregateTopn <- function(obj.pep,X,  method='Mean', n=10){
+  pepData <- 2^(Biobase::exprs(obj.pep))
   
-  # Agregation of metacell data
-  metacell <- AggregateMetacell(X = X, obj.pep = obj.pep)
+  protData <- inner.aggregate.topn(pepData, X, method=method, n)
   
-  if(!is.null(metacell$issues))
-    return(list(obj.prot = NULL,
-           issues = metacell$issues))
-  else {
-    # Step 2 : Agregation of quantitative data
-    pepData <- 2^(Biobase::exprs(obj.pep))
-    protData <- inner.aggregate.topn(pepData, X, method=method, n)
-  
-    # Step 3: Build the protein dataset
-    obj.prot <- finalizeAggregation(obj.pep, pepData, protData, metacell, X)
-  
-    return(list(obj.prot = obj.prot,
-           issues = NULL))
-  }
+  obj.prot <- finalizeAggregation(obj.pep, pepData, protData, X)
+  return(obj.prot)
 }
 
 
@@ -927,8 +868,6 @@ aggregateTopn <- function(obj.pep, X,  method='Mean', n=10){
 #' 
 #' @param protData xxxxx
 #' 
-#' @param protMetacell xxx
-#' 
 #' @return A protein object of class \code{MSnset}
 #' 
 #' @author Samuel Wieczorek
@@ -937,7 +876,7 @@ aggregateTopn <- function(obj.pep, X,  method='Mean', n=10){
 #' 
 #' @importFrom utils installed.packages
 #' 
-finalizeAggregation <- function(obj.pep, pepData, protData, protMetacell, X){
+finalizeAggregation <- function(obj.pep, pepData, protData, X){
   
   protData <- as.matrix(protData)
   X <- as.matrix(X)
@@ -960,7 +899,8 @@ finalizeAggregation <- function(obj.pep, pepData, protData, protMetacell, X){
   rownames(pepTotalUsed) <- colnames(X)
   
   n <- GetDetailedNbPeptides(X)
-  #browser()
+
+  metacell <- AggregateMetacell(mat = t(X), obj = obj.pep)
   
   
   
@@ -971,7 +911,7 @@ finalizeAggregation <- function(obj.pep, pepData, protData, protMetacell, X){
                    pepSpecUsed, 
                    pepSharedUsed, 
                    pepTotalUsed, 
-                   protMetacell)
+                   metacell)
   
   obj.prot <- MSnSet(exprs = log2(protData), 
                      fData = fd, 
@@ -982,20 +922,21 @@ finalizeAggregation <- function(obj.pep, pepData, protData, protMetacell, X){
   
   
   obj.prot@experimentData@other$Prostar_Version <- NA
-  obj.prot@experimentData@other$DAPAR_Version <- NA
   tryCatch({
     find.package("Prostar")
-    find.package("DAPAR")
-    
     obj.prot@experimentData@other$Prostar_Version <- Biobase::package.version('Prostar')
-    obj.prot@experimentData@other$DAPAR_Version <- Biobase::package.version('DAPAR')
   },
-  error = function(e) {
-    obj.prot@experimentData@other$Prostar_Version <- NA
-    obj.prot@experimentData@other$DAPAR_Version <- NA
-  }
+  error = function(e) obj.prot@experimentData@other$Prostar_Version <- NA
   )
   
+  
+  tryCatch({
+    find.package("DAPAR")
+    obj.prot@experimentData@other$Prostar_Version <- Biobase::package.version('DAPAR')
+  },
+  error = function(e) obj.prot@experimentData@other$Prostar_Version <- NA
+  )
+
   return (obj.prot)
 }
 
@@ -1123,7 +1064,7 @@ metacombine <- function(met, level) {
 #' Execute a product two matrices: the first is an adjacency one  while the
 #' second if a simple dataframe
 #' 
-#' @param X An adjacency matrix between peptides and proteins
+#' @param mat An adjacency matrix between peptides and proteins
 #' 
 #' @param obj.pep A dataframe of the cell metadata for peptides
 #' 
@@ -1136,45 +1077,28 @@ metacombine <- function(met, level) {
 #' obj.pep <- Exp1_R25_pept[1:100]
 #' protID <- "Protein_group_IDs"
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-#' metac <- AggregateMetacell(X, obj.pep)
+#' agg.meta <- AggregateMetacell(X, obj.pep)
 #' 
-#' @export
-#' 
-AggregateMetacell <- function(X, obj.pep){
+AggregateMetacell <- function(mat, obj.pep){
   
-  issues <- NULL
   meta = Biobase::fData(obj.pep)[, obj.pep@experimentData@other$names_metacell]
   level = obj.pep@experimentData@other$typeOfData
   rowcol <- function(row, col) col[row>0]
   
-  df <- as.data.frame(sapply(1:ncol(meta),
-               function(j)
-                 sapply(1:ncol(X),
-                        function(i)
-                          metacombine(rowcol(row = X[,i], col = meta[,j]), level)
-                        )
-               ), stringsAsFactor = TRUE)
-  df[df=='NULL'] <- NA
+  df <- sapply(1:ncol(meta), 
+         function(j)
+           sapply(1:nrow(mat), 
+                  function(i) 
+                    metacombine(rowcol(mat[i,], meta[,j]), level)
+                  )
+         )
   colnames(df) <- obj.pep@experimentData@other$names_metacell
-  rownames(df) <- colnames(X)
+  
   
   # Post processing of metacell to discover 'imputed POV', 'imputed MEC'
   conds <- Biobase::pData(obj.pep)$Condition
   df <- Set_POV_MEC_tags(conds, df, level)
   
-  
-  # Search for issues
-  prot.ind <- unique(rownames(which(is.na(df), arr.ind = TRUE)))
-  issues <- setNames(
-    lapply(prot.ind, 
-           function(x) 
-             rownames(X)[which(X[, which(colnames(X)==x)]==1)]
-           ),
-    prot.ind
-  )
-  
-  list(metacell = df,
-       issues = issues
-  )
+  df
   
 } 
