@@ -5,12 +5,12 @@
 \title{Computes the detailed number of peptides used for aggregating 
 each protein}
 \usage{
-GetDetailedNbPeptidesUsed(X, pepData)
+GetDetailedNbPeptidesUsed(X, qdata.pep)
 }
 \arguments{
 \item{X}{An adjacency matrix}
 
-\item{pepData}{A data.frame of quantitative data}
+\item{qdata.pep}{A data.frame of quantitative data}
 }
 \value{
 A list of two items
@@ -26,5 +26,5 @@ utils::data(Exp1_R25_pept, package='DAPARdata')
 obj.pep <- Exp1_R25_pept[1:10]
 protID <- "Protein_group_IDs"
 X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-GetDetailedNbPeptidesUsed(X, obj.pep)
+ll.n <- GetDetailedNbPeptidesUsed(X, Biobase::exprs(obj.pep))
 }

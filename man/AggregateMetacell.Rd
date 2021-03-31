@@ -23,7 +23,7 @@ utils::data(Exp1_R25_pept, package='DAPARdata')
 obj.pep <- Exp1_R25_pept[1:100]
 protID <- "Protein_group_IDs"
 X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-metac <- AggregateMetacell(X, obj.pep)
+agg.meta <- AggregateMetacell(X, obj.pep)
 
 }
 \author{

@@ -54,8 +54,7 @@ id <- Biobase::fData(obj)[,obj@experimentData@other$proteinId]
 pal <- ExtendPalette(2)
 objAfter <- wrapper.normalizeD(obj, method = "QuantileCentering", 
 conds =conds, type = "within conditions")
-compareNormalizationD_HC(qDataBefore=qDataBefore, 
-qDataAfter=Biobase::exprs(objAfter), keyId = id, conds=conds, n=100)
+compareNormalizationD_HC(qDataBefore=qDataBefore, qDataAfter=Biobase::exprs(objAfter), keyId = id, conds=conds, n=1000)
 
 compareNormalizationD_HC(qDataBefore=qDataBefore, 
 qDataAfter=Biobase::exprs(objAfter), keyId = id, pal=pal, subset.view=1:4, 

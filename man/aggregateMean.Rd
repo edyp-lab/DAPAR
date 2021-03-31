@@ -26,7 +26,7 @@ obj.pep <- Exp1_R25_pept[1:10]
 obj.pep.imp <- wrapper.impute.detQuant(obj.pep, na.type='missing')
 protID <- "Protein_group_IDs"
 X <- BuildAdjacencyMatrix(obj.pep.imp, protID, FALSE)
-obj.prot <- aggregateMean(obj.pep.imp, X)
+ll.agg <- aggregateMean(obj.pep.imp, X)
 
 }
 \author{

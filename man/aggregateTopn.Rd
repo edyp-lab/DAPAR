@@ -27,10 +27,10 @@ intensities of their n best peptides.
 \examples{
 \dontrun{
 utils::data(Exp1_R25_pept, package='DAPARdata') 
-obj.pep <- Exp1_R25_pept[1:100]
+obj.pep <- Exp1_R25_pept[1:10]
 protID <- "Protein_group_IDs"
 X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-obj.prot <- DAPAR::aggregateTopn(obj.pep, X, n=3)
+ll.agg <- DAPAR::aggregateTopn(obj.pep, X, n=3)
 }
 
 }
