@@ -589,7 +589,7 @@ MetacellFilteringScope <- function()
 #' @export
 #' 
 SymFilteringOperators <- function()
-  c('<=','<', '>=', '>', '=', '!=')
+  c('<=','<', '>=', '>', '==', '!=')
 
 
 #' @title 

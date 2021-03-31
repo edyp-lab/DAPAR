@@ -350,7 +350,7 @@ aggregateSum <- function(obj.pep, X){
   
   # Agregation of metacell data
   metacell <- AggregateMetacell(X = X, obj.pep = obj.pep)
-  if (length(metacell$issues) > 0)
+  if (!is.null(metacell$issues))
     return(list(obj.prot = NULL,
                 issues = metacell$issues)
     )
@@ -359,7 +359,7 @@ aggregateSum <- function(obj.pep, X){
     pepData <- 2^(Biobase::exprs(obj.pep))
     protData <- inner.sum(pepData, X)
     # Build protein dataset
-    obj.prot <- finalizeAggregation(obj.pep, pepData, protData, metacell$df, X)
+    obj.prot <- finalizeAggregation(obj.pep, pepData, protData, metacell$metacell, X)
     return(list(obj.prot = obj.prot,
                 issues = NULL))
   }
@@ -405,7 +405,7 @@ aggregateIterParallel <- function(obj.pep, X, init.method='Sum', method='Mean', 
   
   # Step 1: Agregation of metacell data
   metacell <- AggregateMetacell(X = X, obj.pep = obj.pep)
-  if (length(metacell$issues) > 0)
+  if (!is.null(metacell$issues))
     return(list(obj.prot = NULL,
                 issues = metacell$issues)
     )
@@ -425,7 +425,7 @@ aggregateIterParallel <- function(obj.pep, X, init.method='Sum', method='Mean', 
     protData <- protData[,colnames(Biobase::exprs(obj.pep))]
   
     # Step 3 : Build the protein dataset
-    obj.prot <- DAPAR::finalizeAggregation(obj.pep, qData.pep, protData, metacell$df, X)
+    obj.prot <- DAPAR::finalizeAggregation(obj.pep, qData.pep, protData, metacell$metacell, X)
     return(list(obj.prot = obj.prot,
                 issues = NULL))
     }
@@ -553,7 +553,7 @@ aggregateIter <- function(obj.pep,
   # Step 1 : Agregation of metacell data
   metacell <- AggregateMetacell(X = X, obj.pep = obj.pep)
   
-  if (length(metacell$issues) > 0)
+  if (!is.null(metacell$issues))
     return(list(obj.prot = NULL,
                 issues = metacell$issues))
   else {
@@ -577,7 +577,7 @@ aggregateIter <- function(obj.pep,
     }
     
     # Step 3: Build the protein dataset
-    obj.prot <- finalizeAggregation(obj.pep, qData.pep, protData, metacell$df, X)
+    obj.prot <- finalizeAggregation(obj.pep, qData.pep, protData, metacell$metacell, X)
     return(list(obj.prot = obj.prot,
                 issues = NULL))
   }
@@ -639,7 +639,7 @@ aggregateMean <- function(obj.pep, X){
   obj.prot <- NULL
   # Agregation of metacell data
   metacell <- AggregateMetacell(X = X, obj.pep = obj.pep)
-  if (length(metacell$issues) > 0)
+  if (!is.null(metacell$issues))
     return(list(obj.prot = NULL,
                 issues = metacell$issues))
   else {
@@ -648,7 +648,7 @@ aggregateMean <- function(obj.pep, X){
     protData <- inner.mean(pepData, as.matrix(X))
     
     # Step 3: Build protein dataset
-    obj.prot <- finalizeAggregation(obj.pep, pepData, protData, metacell$df, X)
+    obj.prot <- finalizeAggregation(obj.pep, pepData, protData, metacell$metacell, X)
     
     return(list(obj.prot = obj.prot,
                 issues = NULL))
@@ -880,7 +880,7 @@ aggregateTopn <- function(obj.pep,X,  method='Mean', n=10){
   # Agregation of metacell data
   metacell <- AggregateMetacell(X = X, obj.pep = obj.pep)
   
-  if (length(metacell$issues) > 0)
+  if (!is.null(metacell$issues))
     return(list(obj.prot = NULL,
                 issues = metacell$issues))
   else {
@@ -889,7 +889,7 @@ aggregateTopn <- function(obj.pep,X,  method='Mean', n=10){
     protData <- inner.aggregate.topn(pepData, X, method=method, n)
     
     # Step 3: Build the protein dataset
-    obj.prot <- finalizeAggregation(obj.pep, pepData, protData, metacell$df, X)
+    obj.prot <- finalizeAggregation(obj.pep, pepData, protData, metacell$metacell, X)
     
     return(list(obj.prot = obj.prot,
                 issues = NULL))
@@ -935,10 +935,8 @@ finalizeAggregation <- function(obj.pep, pepData, protData, protMetacell, X){
     stop("'protMetacell' is missing")
   if(missing(X))
     stop("'X' is missing")
-  
-  
-  
-  
+ 
+  #(obj.pep, pepData, protData, metacell, X)
   
   protData <- as.matrix(protData)
   X <- as.matrix(X)
@@ -961,19 +959,16 @@ finalizeAggregation <- function(obj.pep, pepData, protData, protMetacell, X){
   rownames(pepTotalUsed) <- colnames(X)
   
   n <- GetDetailedNbPeptides(X)
-  #browser()
   
   
-  
-  fd <- data.frame(colnames(X), 
-                   nPepTotal = n$nTotal,
+  fd <- data.frame(nPepTotal = n$nTotal,
                    nPepShared = n$nShared, 
                    nPepSpec = n$nSpec, 
                    pepSpecUsed, 
                    pepSharedUsed, 
                    pepTotalUsed, 
                    protMetacell)
-  
+  rownames(fd) <- colnames(X)
   obj.prot <- MSnSet(exprs = log2(protData), 
                      fData = fd, 
                      pData = Biobase::pData(obj.pep))
@@ -1072,7 +1067,7 @@ metacombine <- function(met, level) {
   n.quanti <- ComputeNbTags('quanti')
  
   
-  if(n.missing > 0 && (n.imputed > 0 || n.quanti > 0)) tag <- NULL
+  if(n.missing > 0 && (n.imputed > 0 || n.quanti > 0)) tag <- 'NA'
    # stop("You try to combine missing values (2.X) with quantitative values (1.X or 3.X).")
   
   # sw : Agregation of a mix of 2.X gives a missing value non imputed (2.0)
@@ -1146,14 +1141,12 @@ AggregateMetacell <- function(X, obj.pep){
   level = obj.pep@experimentData@other$typeOfData
   rowcol <- function(row, col) col[row>0]
   
-  df <- as.data.frame(sapply(1:ncol(meta),
-                             function(j)
-                               sapply(1:ncol(X),
-                                      function(i)
-                                        metacombine(rowcol(row = X[,i], col = meta[,j]), level)
-                               )
-  ), stringsAsFactor = TRUE)
-  df[df=='NULL'] <- NA
+  df <- data.frame(stringsAsFactors = TRUE)
+  for (j in 1:ncol(meta))
+    for(i in 1:ncol(X))
+     df[i, j] <- metacombine((meta[,j])[X[,i] > 0], level)
+
+  df[df=='NA'] <- NA
   colnames(df) <- obj.pep@experimentData@other$names_metacell
   rownames(df) <- colnames(X)
   
@@ -1164,13 +1157,14 @@ AggregateMetacell <- function(X, obj.pep){
   
   # Search for issues
   prot.ind <- unique(rownames(which(is.na(df), arr.ind = TRUE)))
-  issues <- setNames(
-    lapply(prot.ind, 
-           function(x) 
-             rownames(X)[which(X[, which(colnames(X)==x)]==1)]
-    ),
-    prot.ind
-  )
+  if (!is.null(prot.ind))
+    issues <- setNames(
+      lapply(prot.ind, 
+             function(x) 
+               rownames(X)[which(X[, which(colnames(X)==x)]==1)]
+             ),
+      prot.ind
+      )
   
   list(metacell = df,
        issues = issues
