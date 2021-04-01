@@ -10,7 +10,7 @@
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata') 
-#' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:20], "Protein_group_IDs", FALSE)
+#' X <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein_group_IDs", FALSE)
 #' ll <- get.pep.prot.cc(X)
 #' 
 #' @importFrom Matrix crossprod %&%
@@ -32,9 +32,9 @@ get.pep.prot.cc <- function(X){
   A <- B <- g <- NULL
   ### Adjacency matrix construction
   # boolean matrix product
-  #A <- as.matrix(t(X) %&% X) 
   print("Start computing boolean matrix product")
   A <- Matrix::crossprod(X, boolArith =  TRUE)
+ # A <- as.matrix(t(X) %*% X) 
   print("End of computing boolean matrix product")
   # remove self-connecting edges
   diag(A) <- rep(0,p)

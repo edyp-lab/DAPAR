@@ -102,8 +102,8 @@ getProteinsStats <- function(matShared){
 #' data <- Biobase::fData(obj.pep)
 #' protData <- DAPAR::aggregateMean(obj.pep, M)
 #' name <- "Protein_group_IDs"
-#' proteinNames <- rownames(Biobase::fData(protData))
-#' BuildColumnToProteinDataset(data, M, name,proteinNames )
+#' proteinNames <- rownames(Biobase::fData(protData$obj.prot))
+#' BuildColumnToProteinDataset(data, M, name, proteinNames )
 #' 
 #' @export
 #' 
@@ -218,6 +218,96 @@ CountPep <- function (M) {
   z <- M
   z[z!=0] <- 1
   return(z)
+}
+
+
+#' Method to compute the number of quantified peptides used for aggregating 
+#' each protein
+#' 
+#' @title Computes the number of peptides used for aggregating each protein 
+#' 
+#' @param X An adjacency matrix
+#' 
+#' @param pepData A data.frame of quantitative data
+#' 
+#' @return A data.frame
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @export
+#' 
+GetNbPeptidesUsed <- function(X, pepData){
+  pepData[!is.na(pepData)] <- 1
+  pepData[is.na(pepData)] <- 0
+  pep <- t(X) %*% pepData
+  
+  return(pep)
+}
+
+
+#' Method to compute the detailed number of quantified peptides used for 
+#' aggregating each protein
+#' 
+#' @title Computes the detailed number of peptides used for aggregating 
+#' each protein 
+#' 
+#' @param X An adjacency matrix
+#' 
+#' @param qdata.pep A data.frame of quantitative data
+#' 
+#' @return A list of two items
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj.pep <- Exp1_R25_pept[1:10]
+#' protID <- "Protein_group_IDs"
+#' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+#' ll.n <- GetDetailedNbPeptidesUsed(X, Biobase::exprs(obj.pep))
+#' 
+#' @export
+#' 
+GetDetailedNbPeptidesUsed <- function(X, qdata.pep){
+  X <- as.matrix(X)
+  qdata.pep[!is.na(qdata.pep)] <- 1
+  qdata.pep[is.na(qdata.pep)] <- 0
+  
+  mat <- splitAdjacencyMat(X)
+  return(list(nShared=t(mat$Xshared) %*% qdata.pep, 
+              nSpec=t(mat$Xspec) %*% qdata.pep))
+  
+}
+
+
+#' Method to compute the detailed number of quantified peptides for each protein
+#' 
+#' @title Computes the detailed number of peptides for each protein 
+#' 
+#' @param X An adjacency matrix
+#' 
+#' @return A data.frame
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj.pep <- Exp1_R25_pept[1:10]
+#' protID <- "Protein_group_IDs"
+#' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+#' n <- GetDetailedNbPeptides(X)
+#' 
+#' @export
+#' 
+GetDetailedNbPeptides <- function(X){
+  
+  mat <- splitAdjacencyMat(as.matrix(X))
+  
+  
+  return(list(nTotal = rowSums(t(as.matrix(X))),
+              nShared=rowSums(t(mat$Xshared)), 
+              nSpec=rowSums(t(mat$Xspec)))
+  )
+  
 }
 
 
@@ -585,28 +675,6 @@ aggregateIter <- function(obj.pep,
 
 
 
-#' Method to compute the number of quantified peptides used for aggregating 
-#' each protein
-#' 
-#' @title Computes the number of peptides used for aggregating each protein 
-#' 
-#' @param X An adjacency matrix
-#' 
-#' @param pepData A data.frame of quantitative data
-#' 
-#' @return A data.frame
-#' 
-#' @author Samuel Wieczorek
-#' 
-#' @export
-#' 
-GetNbPeptidesUsed <- function(X, pepData){
-  pepData[!is.na(pepData)] <- 1
-  pepData[is.na(pepData)] <- 0
-  pep <- t(X) %*% pepData
-  
-  return(pep)
-}
 
 #' This function computes the intensity of proteins as the mean of the 
 #' intensities of their peptides.
@@ -627,7 +695,7 @@ GetNbPeptidesUsed <- function(X, pepData){
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj.pep <- Exp1_R25_pept[1:10]
 #' obj.pep.imp <- wrapper.impute.detQuant(obj.pep, na.type='missing')
-#' protID <- "Protein_group_IDs"
+#' protID <- obj.pep@experimentData@other$proteinId
 #' X <- BuildAdjacencyMatrix(obj.pep.imp, protID, FALSE)
 #' ll.agg <- aggregateMean(obj.pep.imp, X)
 #' 
@@ -638,16 +706,19 @@ GetNbPeptidesUsed <- function(X, pepData){
 aggregateMean <- function(obj.pep, X){
   obj.prot <- NULL
   # Agregation of metacell data
+  cat("Aggregate metacell data...\n")
   metacell <- AggregateMetacell(X = X, obj.pep = obj.pep)
   if (!is.null(metacell$issues))
     return(list(obj.prot = NULL,
                 issues = metacell$issues))
   else {
     # Step 2: Agregation of quantitative data
+    cat("Computing quantitative data for proteins ...\n")
     pepData <- 2^(Biobase::exprs(obj.pep))
     protData <- inner.mean(pepData, as.matrix(X))
     
     # Step 3: Build protein dataset
+    cat("Building the protein dataset...\n")
     obj.prot <- finalizeAggregation(obj.pep, pepData, protData, metacell$metacell, X)
     
     return(list(obj.prot = obj.prot,
@@ -694,71 +765,6 @@ splitAdjacencyMat <- function(X){
   }
 
   return (list(Xshared = tmpShared, Xspec = tmpSpec))
-}
-
-#' Method to compute the detailed number of quantified peptides used for 
-#' aggregating each protein
-#' 
-#' @title Computes the detailed number of peptides used for aggregating 
-#' each protein 
-#' 
-#' @param X An adjacency matrix
-#' 
-#' @param qdata.pep A data.frame of quantitative data
-#' 
-#' @return A list of two items
-#' 
-#' @author Samuel Wieczorek
-#' 
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj.pep <- Exp1_R25_pept[1:10]
-#' protID <- "Protein_group_IDs"
-#' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-#' ll.n <- GetDetailedNbPeptidesUsed(X, Biobase::exprs(obj.pep))
-#' 
-#' @export
-#' 
-GetDetailedNbPeptidesUsed <- function(X, qdata.pep){
-  X <- as.matrix(X)
-  qdata.pep[!is.na(qdata.pep)] <- 1
-  qdata.pep[is.na(qdata.pep)] <- 0
-  
-  mat <- splitAdjacencyMat(X)
-  return(list(nShared=t(mat$Xshared) %*% qdata.pep, 
-              nSpec=t(mat$Xspec) %*% qdata.pep))
-  
-}
-
-
-#' Method to compute the detailed number of quantified peptides for each protein
-#' 
-#' @title Computes the detailed number of peptides for each protein 
-#' 
-#' @param X An adjacency matrix
-#' 
-#' @return A data.frame
-#' 
-#' @author Samuel Wieczorek
-#' 
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj.pep <- Exp1_R25_pept[1:10]
-#' protID <- "Protein_group_IDs"
-#' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-#' n <- GetDetailedNbPeptides(X)
-#' 
-#' @export
-#' 
-GetDetailedNbPeptides <- function(X){
-  
-  mat <- splitAdjacencyMat(as.matrix(X))
-  
-  
-  return(list(nTotal = rowSums(t(as.matrix(X))),
-              nShared=rowSums(t(mat$Xshared)), 
-              nSpec=rowSums(t(mat$Xspec)))
-  )
-  
 }
 
 
@@ -1133,6 +1139,8 @@ metacombine <- function(met, level) {
 #' protID <- "Protein_group_IDs"
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 #' agg.meta <- AggregateMetacell(X, obj.pep)
+#' 
+#' @export
 #' 
 AggregateMetacell <- function(X, obj.pep){
   
