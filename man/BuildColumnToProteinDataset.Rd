@@ -34,8 +34,8 @@ M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 data <- Biobase::fData(obj.pep)
 protData <- DAPAR::aggregateMean(obj.pep, M)
 name <- "Protein_group_IDs"
-proteinNames <- rownames(Biobase::fData(protData))
-BuildColumnToProteinDataset(data, M, name,proteinNames )
+proteinNames <- rownames(Biobase::fData(protData$obj.prot))
+BuildColumnToProteinDataset(data, M, name, proteinNames )
 
 }
 \author{

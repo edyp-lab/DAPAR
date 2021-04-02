@@ -154,7 +154,7 @@ BuildColumnToProteinDataset <- function(peptideData,
 #' data <- Biobase::fData(obj.pep)
 #' protData <- DAPAR::aggregateSum(obj.pep, M)
 #' name <- "Protein_group_IDs"
-#' proteinNames <- rownames(Biobase::fData(protData))
+#' proteinNames <- rownames(Biobase::fData(protData$obj.prot))
 #' BuildColumnToProteinDataset_par(data, M, name,proteinNames )
 #' 
 #' @export
@@ -1060,6 +1060,8 @@ finalizeAggregation <- function(obj.pep, pepData, protData, protMetacell, X){
 metacombine <- function(met, level) {
   #browser()
   tag <- NULL
+  if (length(met)==0)
+    return('missing')
   
   u_met <- unique(met)
   
@@ -1073,7 +1075,7 @@ metacombine <- function(met, level) {
   n.quanti <- ComputeNbTags('quanti')
  
   
-  if(n.missing > 0 && (n.imputed > 0 || n.quanti > 0)) tag <- 'NA'
+  if(n.missing > 0 && (n.imputed > 0 || n.quanti > 0)) tag <- 'STOP'
    # stop("You try to combine missing values (2.X) with quantitative values (1.X or 3.X).")
   
   # sw : Agregation of a mix of 2.X gives a missing value non imputed (2.0)
@@ -1147,16 +1149,22 @@ AggregateMetacell <- function(X, obj.pep){
   issues <- NULL
   meta = Biobase::fData(obj.pep)[, obj.pep@experimentData@other$names_metacell]
   level = obj.pep@experimentData@other$typeOfData
-  rowcol <- function(row, col) col[row>0]
+  rowcol <- function(meta.col, X.col) (meta.col)[X.col > 0]
   
   df <- data.frame(stringsAsFactors = TRUE)
   for (j in 1:ncol(meta))
-    for(i in 1:ncol(X))
-     df[i, j] <- metacombine((meta[,j])[X[,i] > 0], level)
+    for(i in 1:ncol(X)){
+      #print(paste0(i, '  ', j, ' __', metacombine( rowcol(meta[,j], X[,i]), level), '__'))
+      df[i, j] <- metacombine( rowcol(meta[,j], X[,i]), level)
+    }
 
   df[df=='NA'] <- NA
   colnames(df) <- obj.pep@experimentData@other$names_metacell
   rownames(df) <- colnames(X)
+  
+  # Delete protein with only NA
+  
+  
   
   # Post processing of metacell to discover 'imputed POV', 'imputed MEC'
   conds <- Biobase::pData(obj.pep)$Condition
@@ -1164,7 +1172,7 @@ AggregateMetacell <- function(X, obj.pep){
   
   
   # Search for issues
-  prot.ind <- unique(rownames(which(is.na(df), arr.ind = TRUE)))
+  prot.ind <- unique(rownames(which(df == 'STOP', arr.ind = TRUE)))
   if (!is.null(prot.ind))
     issues <- setNames(
       lapply(prot.ind, 
