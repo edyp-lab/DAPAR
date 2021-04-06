@@ -44,6 +44,8 @@ return (n)
 }
 
 
+GetTypeofData <- function(obj)
+  obj@experimentData@other$typeOfData
 
 
 #' Returns the possible number of values in lines in a matrix.

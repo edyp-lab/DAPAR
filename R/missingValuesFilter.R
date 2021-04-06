@@ -526,13 +526,21 @@ MetaCellFiltering <- function(obj,
     return()
   }
   
-  if (cmd == 'delete') obj <- obj[-indices]
-  else if (cmd == 'keep') obj <- obj[indices]
+
+  if (cmd == 'delete') {
+    deleted <- obj[indices]
+    new <- obj[-indices]
+  } else if (cmd == 'keep') { 
+    deleted <- obj[-indices]
+    new <- obj[indices]
+  }
   
-  obj@processingData@processing <-
-    c(obj@processingData@processing, processText)
+  new@processingData@processing <-
+    c(new@processingData@processing, processText)
   
-  return(obj)
+  return(list(new = new,
+              deleted = deleted)
+  )
 }
 
 
@@ -570,6 +578,92 @@ deleteLinesFromIndices <- function(obj,deleteThat=NULL, processText="" )
   if (grepl("contaminants", processText)){obj@experimentData@other$contaminantsRemoved <- TRUE}
   if (grepl("reverse", processText)){obj@experimentData@other$reverseRemoved <- TRUE }
   return(obj)
+}
+
+
+
+#' @title Delete the lines in the matrix of intensities and the metadata table
+#' given their indice.
+#' 
+#' @param obj An object of class \code{MSnSet} containing
+#' quantitative data.
+#' 
+#' @param level A vector of integers which are the indices of lines to 
+#' delete.
+#' 
+#' @param pattern A string to be included in the \code{MSnSet}
+#' object for log. 
+#' 
+#' @param type xxx
+#' 
+#' @param percent xxx
+#' 
+#' @param op xxx
+#' 
+#' @param th xxx
+#' 
+#' @return An instance of class \code{MSnSet} that have been filtered.
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' obj <- Exp1_R25_pept[1:10,]
+#' level <- GetTypeofData(obj)
+#' pattern <- 'missing'
+#' type <- 'AllCond'
+#' percent <- FALSE
+#' op <- '=='
+#' th <- 2
+#' indices <- GetIndices_MetacellFiltering(obj, level, pattern, type, percent, op, th )
+#' 
+#' @export
+#' 
+GetIndices_MetacellFiltering <- function(obj, level, pattern, type, percent, op, th ){
+  
+  if(missing(obj))
+    stop ("'obj' is required.")
+  if(missing(level))
+    stop ("'level' is required.")
+  if(missing(pattern))
+    stop ("'pattern' is required.")
+  if(missing(type))
+    tsop ("'type' is required.")
+  if(missing(percent))
+    stop ("'percent' is required.")
+  if(missing(op))
+    stop ("'op' is required.")
+  if(missing(th))
+    stop ("'th' is required.")
+  
+  
+  indices <- NULL
+  
+  mask <- match.metacell(metadata = GetMetacell(obj), 
+                         pattern  =pattern, 
+                         level = level)
+  
+  indices <- switch(type,
+                    WholeLine = GetIndices_WholeLine(metacell.mask = mask),
+                    WholeMatrix = GetIndices_WholeMatrix(metacell.mask = mask,
+                                                         op = op, 
+                                                         percent = percent, 
+                                                         th = th),
+                    AllCond = GetIndices_BasedOnConditions(metacell.mask = mask, 
+                                                           type = type, 
+                                                           conds = Biobase::pData(obj)$Condition, 
+                                                           percent = percent, 
+                                                           op = op, 
+                                                           th = th),
+                    AtLeastOneCond = GetIndices_BasedOnConditions(metacell.mask = mask, 
+                                                                  type = type,
+                                                                  conds =  Biobase::pData(obj)$Condition, 
+                                                                  percent = percent,
+                                                                  op = op, 
+                                                                  th = th)
+  )
+  
+  return(indices)
 }
 
 
