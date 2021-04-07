@@ -44,6 +44,15 @@ return (n)
 }
 
 
+#' @title xxxx
+#' 
+#' @description
+#' xxxx
+#' 
+#' @param obj
+#' 
+#' @export
+#' 
 GetTypeofData <- function(obj)
   obj@experimentData@other$typeOfData
 

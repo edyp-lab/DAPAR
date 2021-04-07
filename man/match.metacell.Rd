@@ -24,7 +24,7 @@ the paramter 'type'.
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept[1:10,]
-metadata <- Biobase::fData(obj)[, obj@experimentData@other$names_metacell]
+metadata <- GetMetacell(obj)
 m <- match.metacell(metadata, pattern="missing MEC", level = 'peptide')
 
 }
