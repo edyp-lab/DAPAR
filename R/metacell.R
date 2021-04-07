@@ -443,11 +443,10 @@ Metacell_maxquant <- function(qdata, conds, df, level=NULL){
   qdata[qdata == 0] <-  NA
   
   # Rule 2
-  df[df=='By MS/MS'] <- 'identified'
+  df[df=='byms/ms'] <- 'identified'
   
   # Rule 3
-  df[df=='By matching'] <- 'recovered'
-  
+  df[df=='bymatching'] <- 'recovered'
   
   # Add details for NA values
   df[is.na(qdata)] <-  'missing'
@@ -483,7 +482,7 @@ Metacell_maxquant <- function(qdata, conds, df, level=NULL){
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:10,]
-#' metadata <- Biobase::fData(obj)[, obj@experimentData@other$names_metacell]
+#' metadata <- GetMetacell(obj)
 #' m <- match.metacell(metadata, pattern="missing MEC", level = 'peptide')
 #'
 #' @export

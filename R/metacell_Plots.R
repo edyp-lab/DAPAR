@@ -26,6 +26,8 @@ metacellPerLinesHisto_HC <- function(obj,
   
   if(missing(obj))
     stop("'obj' is missing.")
+  else if (is.null(obj))
+    stop("'obj' is NULL. Abort...")
   if (missing(pattern))
     stop("'pattern' is missing.")
   else if (pattern %in% c('', 'None')){
@@ -124,6 +126,8 @@ metacellPerLinesHistoPerCondition_HC <- function(obj,
                                                  pal=NULL){
   if(missing(obj))
     stop("'obj' is missing.")
+  else if (is.null(obj))
+    stop("'obj' is NULL. Abort...")
   if (missing(pattern))
     stop("'pattern' is missing.")
   else if (pattern %in% c('', 'None')){
@@ -236,6 +240,8 @@ metacellHisto_HC <- function(obj,
   
   if(missing(obj))
     stop("'obj' is missing.")
+  else if (is.null(obj))
+    stop("'obj' is NULL. Abort...")
   if (missing(pattern))
     stop("'pattern' is missing.")
   else if (pattern %in% c('', 'None')){

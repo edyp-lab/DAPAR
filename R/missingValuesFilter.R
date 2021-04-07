@@ -523,11 +523,9 @@ MetaCellFiltering <- function(obj,
   
   if (is.null(indices)) {
     warning("'indices' is NULL. No filtering will be process.")
-    return()
-  }
-  
-
-  if (cmd == 'delete') {
+    deleted <- obj[-c(1:nrow(obj))]
+    new <- obj
+  } else if (cmd == 'delete') {
     deleted <- obj[indices]
     new <- obj[-indices]
   } else if (cmd == 'keep') { 

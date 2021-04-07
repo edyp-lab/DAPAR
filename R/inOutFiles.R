@@ -125,12 +125,25 @@ createMSnset <- function(file,
   colnames(Intensity) <- gsub(".", "_", colnames(data)[indExpData], fixed=TRUE)
   rownames(Intensity) <- rownames(data)
  
+  
+  # Get teh metacell info
+  metacell <- NULL
+  if (!is.null(indexForMetacell)){
+    metacell <- data[, indexForMetacell]
+    metacell <- apply(metacell,2,tolower)
+    metacell <- as.data.frame(apply(metacell,2,trimws),
+                              stringsAsFactors = FALSE)
+  }
+  
+  
   ##building fData of MSnSet file
   fd <- data.frame( data[,indFData], stringsAsFactors = FALSE)
   
   if (is.null(indiceID)) {
     rownames(fd) <- rep(paste(pep_prot_data, "_", 1:nrow(fd), sep=""))
-    rownames(Intensity) <- rep(paste(pep_prot_data, "_", 1:nrow(Intensity), sep=""))
+    rownames(Intensity) <- rep(paste(pep_prot_data, "_", 
+                                     1:nrow(Intensity), sep="")
+                               )
   }else{
     rownames(fd) <- data[,indiceID]
     rownames(Intensity) <- data[,indiceID]
@@ -191,17 +204,16 @@ createMSnset <- function(file,
   
     obj@experimentData@other$RawPValues <- FALSE
   
-  metacell <- NULL
-  if (!is.null(indexForMetacell))
-    metacell <- Biobase::fData(obj)[, indexForMetacell]
-
+ 
   metacell <- BuildMetaCell(from = software,
                             level = pep_prot_data,
                             qdata = Biobase::exprs(obj), 
                             conds = Biobase::pData(obj)$Condition, 
                             df = metacell)
   
-  Biobase::fData(obj) <- cbind(Biobase::fData(obj), metacell, deparse.level = 0)
+  Biobase::fData(obj) <- cbind(Biobase::fData(obj), 
+                               metacell, 
+                               deparse.level = 0)
   obj@experimentData@other$names_metacell <- colnames(metacell)
   
   
