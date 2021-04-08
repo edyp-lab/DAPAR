@@ -35,7 +35,7 @@ level <- obj@experimentData@other$typeOfData
 metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 obj <- MetaCellFiltering(obj, indices, cmd='delete')
-ttest <- compute_t_tests(obj)
+ttest <- compute_t_tests(obj$new)
 
 }
 \author{

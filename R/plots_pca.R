@@ -20,7 +20,7 @@
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' res.pca <- wrapper.pca(obj)
+#' res.pca <- wrapper.pca(obj$new)
 #' 
 #' @importFrom Biobase exprs pData
 #' @importFrom FactoMineR PCA

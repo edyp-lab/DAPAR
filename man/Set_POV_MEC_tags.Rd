@@ -27,7 +27,7 @@ obj <- Exp1_R25_pept[1:10]
 cols.for.ident <- obj@experimentData@other$names_metacell
 conds <- Biobase::pData(obj)$Condition
 df <- Biobase::fData(obj)[, cols.for.ident]
-Set_POV_MEC_tags(conds, df, level = 'peptide')
+df <- Set_POV_MEC_tags(conds, df, level = 'peptide')
 
 }
 \author{

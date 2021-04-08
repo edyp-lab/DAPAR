@@ -36,8 +36,8 @@
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' qData <- Biobase::exprs(obj)
-#' sTab <- Biobase::pData(obj)
+#' qData <- Biobase::exprs(obj$new)
+#' sTab <- Biobase::pData(obj$new)
 #' limma <- limmaCompleteTest(qData,sTab)
 #' diffAnaComputeFDR(limma$logFC[,1],limma$P_Value[,1])
 #' 
@@ -80,16 +80,16 @@ diffAnaComputeFDR <- function(logFC,
 #' @examples
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
 #' obj <- Exp1_R25_prot[1:1000]
-#' level <- obj@experimentData@other$typeOfData
+#' level <- GetTypeofData(obj)
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' qData <- Biobase::exprs(obj)
-#' sTab <- Biobase::pData(obj)
+#' qData <- Biobase::exprs(obj$new)
+#' sTab <- Biobase::pData(obj$new)
 #' allComp <- limmaCompleteTest(qData,sTab)
 #' data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
-#' obj <- diffAnaSave(obj, allComp, data)
-#' ll <- Get_AllComparisons(obj)
+#' obj$new <- diffAnaSave(obj$new, allComp, data)
+#' ll <- Get_AllComparisons(obj$new)
 #' 
 #' @export
 #' 
@@ -143,11 +143,11 @@ Get_AllComparisons <- function(obj){
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' qData <- Biobase::exprs(obj)
-#' sTab <- Biobase::pData(obj)
+#' qData <- Biobase::exprs(obj$new)
+#' sTab <- Biobase::pData(obj$new)
 #' allComp <- limmaCompleteTest(qData,sTab)
 #' data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
-#' diffAnaSave(obj, allComp, data)
+#' diffAnaSave(obj$new, allComp, data)
 #' 
 #' @export
 #' 
@@ -236,12 +236,12 @@ diffAnaSave <- function (obj,
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' qData <- Biobase::exprs(obj)
-#' sTab <- Biobase::pData(obj)
+#' qData <- Biobase::exprs(obj$new)
+#' sTab <- Biobase::pData(obj$new)
 #' allComp <- limmaCompleteTest(qData,sTab)
 #' data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
-#' obj <- diffAnaSave(obj, allComp, data)
-#' signif <- diffAnaGetSignificant(obj)
+#' obj$new <- diffAnaSave(obj$new, allComp, data)
+#' signif <- diffAnaGetSignificant(obj$new)
 #' 
 #' @export
 #' 
@@ -284,8 +284,8 @@ diffAnaGetSignificant <- function (obj){
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' qData <- Biobase::exprs(obj)
-#' sTab <- Biobase::pData(obj)
+#' qData <- Biobase::exprs(obj$new)
+#' sTab <- Biobase::pData(obj$new)
 #' limma <- limmaCompleteTest(qData,sTab)
 #' wrapperCalibrationPlot(limma$P_Value[,1])
 #' 
@@ -323,8 +323,8 @@ return(p)
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' qData <- Biobase::exprs(obj)
-#' sTab <- Biobase::pData(obj)
+#' qData <- Biobase::exprs(obj$new)
+#' sTab <- Biobase::pData(obj$new)
 #' allComp <- limmaCompleteTest(qData,sTab)
 #' histPValue_HC(allComp$P_Value[1])
 #' 

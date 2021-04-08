@@ -52,7 +52,7 @@ level <- obj@experimentData@other$typeOfData
 metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 indices <- GetIndices_WholeLine(metacell.mask)
 obj <- MetaCellFiltering(obj, indices, cmd='delete')
-qData <- Biobase::exprs(obj)
+qData <- Biobase::exprs(obj$new)
 heatmapForMissingValues(qData)
 
 }

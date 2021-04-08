@@ -29,7 +29,7 @@ level <- obj@experimentData@other$typeOfData
 metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 obj <- MetaCellFiltering(obj, indices, cmd='delete')
-averageIntensities(obj)
+averageIntensities(obj$new)
 
 }
 \author{

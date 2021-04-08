@@ -92,8 +92,8 @@ level <- obj@experimentData@other$typeOfData
 metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 obj <- MetaCellFiltering(obj, indices, cmd='delete')
-expR25_ttest <- compute_t_tests(obj)
-wrapperRunClustering(obj = obj, 
+expR25_ttest <- compute_t_tests(obj$new)
+wrapperRunClustering(obj = obj$new, 
 adjusted_pvals = expR25_ttest$P_Value$`25fmol_vs_10fmol_pval`)
 
 }

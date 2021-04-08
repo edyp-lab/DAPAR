@@ -22,7 +22,7 @@
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' averageIntensities(obj)
+#' averageIntensities(obj$new)
 #' 
 #' @export
 #' 
@@ -82,7 +82,7 @@ averageIntensities <- function(ESet_obj){
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' averaged_means <- averageIntensities(obj)
+#' averaged_means <- averageIntensities(obj$new)
 #' only_means <- dplyr::select_if(averaged_means, is.numeric)
 #' only_features <- dplyr::select_if(averaged_means, is.character)
 #' means <- purrr::map(purrr::array_branch(as.matrix(only_means), 1),mean)
@@ -152,8 +152,8 @@ checkClusterability <- function(standards, b = 500){
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' expR25_ttest <- compute_t_tests(obj)
-#' averaged_means <- averageIntensities(obj)
+#' expR25_ttest <- compute_t_tests(obj$new)
+#' averaged_means <- averageIntensities(obj$new)
 #' only_means <- dplyr::select_if(averaged_means, is.numeric)
 #' only_features <- dplyr::select_if(averaged_means, is.character)
 #' means <- purrr::map(purrr::array_branch(as.matrix(only_means), 1),mean)
@@ -339,8 +339,8 @@ visualizeClusters <- function(dat,
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' expR25_ttest <- compute_t_tests(obj)
-#' wrapperRunClustering(obj = obj, 
+#' expR25_ttest <- compute_t_tests(obj$new)
+#' wrapperRunClustering(obj = obj$new, 
 #' adjusted_pvals = expR25_ttest$P_Value$`25fmol_vs_10fmol_pval`)
 #' 
 #' @export

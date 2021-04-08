@@ -147,6 +147,7 @@ BuildColumnToProteinDataset <- function(peptideData,
 #' @author Samuel Wieczorek
 #' 
 #' @examples
+#' \dontrun{
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' protID <- "Protein_group_IDs"
 #' obj.pep <- Exp1_R25_pept[1:10]
@@ -156,6 +157,7 @@ BuildColumnToProteinDataset <- function(peptideData,
 #' name <- "Protein_group_IDs"
 #' proteinNames <- rownames(Biobase::fData(protData$obj.prot))
 #' BuildColumnToProteinDataset_par(data, M, name,proteinNames )
+#' }
 #' 
 #' @export
 #' 

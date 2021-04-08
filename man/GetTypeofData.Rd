@@ -7,7 +7,7 @@
 GetTypeofData(obj)
 }
 \arguments{
-\item{obj}{}
+\item{obj}{xxx}
 }
 \description{
 xxxx

@@ -24,12 +24,12 @@ level <- obj@experimentData@other$typeOfData
 metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 obj <- MetaCellFiltering(obj, indices, cmd='delete')
-qData <- Biobase::exprs(obj)
-sTab <- Biobase::pData(obj)
+qData <- Biobase::exprs(obj$new)
+sTab <- Biobase::pData(obj$new)
 allComp <- limmaCompleteTest(qData,sTab)
 data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
-obj <- diffAnaSave(obj, allComp, data)
-signif <- diffAnaGetSignificant(obj)
+obj$new <- diffAnaSave(obj$new, allComp, data)
+signif <- diffAnaGetSignificant(obj$new)
 
 }
 \author{

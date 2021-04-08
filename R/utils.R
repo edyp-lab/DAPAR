@@ -49,7 +49,7 @@ return (n)
 #' @description
 #' xxxx
 #' 
-#' @param obj
+#' @param obj xxx
 #' 
 #' @export
 #' 

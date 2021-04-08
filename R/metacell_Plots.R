@@ -322,7 +322,7 @@ metacellHisto_HC <- function(obj,
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' wrapper.mvImage(obj)
+#' wrapper.mvImage(obj$new)
 #' 
 #' @importFrom Biobase exprs pData fData
 #' 
