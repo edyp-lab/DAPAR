@@ -9,7 +9,7 @@ createMSnset(
   metadata = NULL,
   indExpData,
   indFData,
-  indiceID = NULL,
+  colnameForID = NULL,
   indexForMetacell = NULL,
   logData = FALSE,
   replaceZeros = FALSE,
@@ -30,7 +30,7 @@ the \code{fData()} table of the \code{MSnSet} object.}
 \item{indFData}{The name of column in \code{file} that will be the name of
 rows for the \code{exprs()} and \code{fData()} tables}
 
-\item{indiceID}{The indice of the column containing the ID of entities 
+\item{colnameForID}{The name of the column containing the ID of entities 
 (peptides or proteins)}
 
 \item{indexForMetacell}{xxxxxxxxxxx}
@@ -66,9 +66,20 @@ package="DAPARdata")
 metadata = read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
 indExpData <- c(56:61)
 indFData <- c(1:55,62:71)
-indiceID <- 64
-obj <- createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, 
+colnameForID <- 'id'
+obj <- createMSnset(exprsFile, metadata,indExpData,  indFData, colnameForID, 
 indexForMetacell = c(43:48), pep_prot_data = "peptide", software = 'maxquant')
+
+
+exprsFile <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
+metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
+metadata = read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
+indExpData <- c(56:61)
+indFData <- c(1:55,62:71)
+colnameForID <- 'AutoID'
+obj <- createMSnset(exprsFile, metadata, indExpData,  indFData, colnameForID, 
+indexForMetacell = c(43:48), pep_prot_data = "peptide", software = 'maxquant')
+
 
 }
 \author{
