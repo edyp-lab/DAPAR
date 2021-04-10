@@ -159,7 +159,7 @@ addOriginOfValue <- function(obj,
 #' @param indFData The name of column in \code{file} that will be the name of
 #' rows for the \code{exprs()} and \code{fData()} tables
 #' 
-#' @param indiceID The indice of the column containing the ID of entities 
+#' @param colnameForID The name of the column containing the ID of entities 
 #' (peptides or proteins)
 #' 
 #' @param indexForOriginOfValue xxxxxxxxxxx
@@ -188,8 +188,11 @@ addOriginOfValue <- function(obj,
 #' metadata = read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
 #' indExpData <- c(56:61)
 #' indFData <- c(1:55,62:71)
-#' indiceID <- 64
-#' createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, indexForOriginOfValue = NULL, pep_prot_data = "peptide")
+#' colnameForID <- 'id'
+#' createMSnset(exprsFile, metadata,indExpData,  indFData, colnameForID, indexForOriginOfValue = NULL, pep_prot_data = "peptide")
+#' 
+#' colnameForID <- 'AutoID'
+#' createMSnset(exprsFile, metadata,indExpData,  indFData, colnameForID, indexForOriginOfValue = NULL, pep_prot_data = "peptide")
 #' 
 #' @export
 #' 
@@ -200,7 +203,7 @@ createMSnset <- function(file,
                          metadata=NULL,
                          indExpData,
                          indFData,
-                         indiceID=NULL,
+                         colnameForID=NULL,
                          indexForOriginOfValue = NULL,
                          logData=FALSE, 
                          replaceZeros=FALSE,
@@ -234,17 +237,21 @@ createMSnset <- function(file,
   # }else{rownames(Intensity) <- data[,indiceID]}
   
   ##building fData of MSnSet file
-  fd <- data.frame( data[,indFData], stringsAsFactors = FALSE)
-  
-  if (is.null(indiceID)) {
-    rownames(fd) <- rep(paste(pep_prot_data, "_", 1:nrow(fd), sep=""))
-    rownames(Intensity) <- rep(paste(pep_prot_data, "_", 1:nrow(Intensity), sep=""))
+  if (colnameForID == 'AutoID') {
+    fd <- data.frame( data, 
+                      AutoID = rep(paste(pep_prot_data, "_", 1:nrow(data), sep="")) , 
+                      stringsAsFactors = FALSE)
+    rownames(fd) <- paste(pep_prot_data, "_", 1:nrow(fd), sep="")
+    rownames(Intensity) <- paste(pep_prot_data, "_",  1:nrow(Intensity), sep="")
+    
   }else{
-    rownames(fd) <- data[,indiceID]
-    rownames(Intensity) <- data[,indiceID]
+    fd <- data
+    
+    rownames(fd) <- data[ ,colnameForID]
+    rownames(Intensity) <- data[ ,colnameForID]
   }
   
-  colnames(fd) <- gsub(".", "_", colnames(data)[indFData], fixed=TRUE)
+  colnames(fd) <- gsub(".", "_", colnames(fd), fixed=TRUE)
   
   pd <- as.data.frame(metadata, stringsAsFactors = FALSE)
   rownames(pd) <- gsub(".", "_", pd$Sample.name, fixed=TRUE)
@@ -282,6 +289,7 @@ createMSnset <- function(file,
   obj@experimentData@other$Prostar_Version <- versions$Prostar_Version
   obj@experimentData@other$DAPAR_Version <- versions$DAPAR_Version
   obj@experimentData@other$proteinId <- proteinId
+  obj@experimentData@other$keyId <- colnameForID
   
   
   obj@experimentData@other$RawPValues <- FALSE

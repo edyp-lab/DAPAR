@@ -141,6 +141,105 @@ wrapper.compareNormalizationD_HC <- function(objBefore, objAfter,
 #' 
 #' @export
 #' 
+# compareNormalizationD_HC <- function(qDataBefore,
+#                                      qDataAfter,
+#                                      keyId = NULL,
+#                                      conds =NULL,
+#                                      palette = NULL,
+#                                      subset.view = NULL,
+#                                      n = 100,
+#                                      type = 'scatter'){
+#   
+#   if (is.null(conds)){
+#     warning("'conds' is null.")
+#     return(NULL)
+#   }
+#  if (is.null(keyId))
+#    keyId <- 1:length(qDataBefore)
+# 
+#   if (!is.null(subset.view) && length(subset.view) > 0)
+#   {
+#     keyId <- keyId[subset.view]
+#     if (nrow(qDataBefore) > 1)
+#       if (length(subset.view)==1){
+#         qDataBefore <- as_tibble(cbind(t(qDataBefore[subset.view,])))
+#         qDataAfter <- as_tibble(cbind(t(qDataAfter[subset.view,])))
+#       } else {
+#         qDataBefore <- as_tibble(cbind(qDataBefore[subset.view,]))
+#         qDataAfter <- as_tibble(cbind(qDataAfter[subset.view,]))
+#       }
+#   } 
+#   # else {
+#   #       qDataBefore <- as_tibble(cbind(t(qDataBefore)))
+#   #       qDataAfter <- as_tibble(cbind(t(qDataAfter)))
+#   # }
+#   
+#   
+#   if (!match(type, c('scatter', 'line') )){
+#     warning("'type' must be equal to 'scatter' or 'line'.")
+#     return(NULL)
+#   }
+#   
+#  # browser()
+#   if (is.null(n)){
+#     n <- seq_len(nrow(qDataBefore))
+#   } else {
+#     if (n > nrow(qDataBefore)){
+#       warning("'n' is higher than the number of rows of datasets. Set to number 
+#               of rows.")
+#       n <- nrow(qDataBefore)
+#     }
+#     
+#     ind <- sample(seq_len(nrow(qDataBefore)),n)
+#     keyId <- keyId[ind]
+#     if (nrow(qDataBefore) > 1)
+#       if (length(ind) == 1){
+#         qDataBefore <- as_tibble(cbind(t(qDataBefore[ind,])))
+#         qDataAfter <- as_tibble(cbind(t(qDataAfter[ind,])))
+#       } else {
+#         qDataBefore <- as_tibble(cbind(qDataBefore[ind,]))
+#         qDataAfter <- as_tibble(cbind(qDataAfter[ind,]))
+#       }
+#   }
+#   
+#   palette <- BuildPalette(conds, palette)
+#   # if (is.null(palette)){palette <- rep("#FFFFFF", ncol(qDataBefore))
+#   # } else {
+#   #   if (length(palette) != ncol(qDataBefore)){
+#   #     warning("The color palette has not the same dimension as the number of samples")
+#   #     return(NULL)
+#   #   }
+#   # }
+#   
+#   x <- qDataBefore
+#   y <- qDataAfter/qDataBefore
+#   
+#   ##Colors definition
+#   legendColor <- unique(palette)
+#   txtLegend <- unique(conds)
+#   
+#   
+#   series <- list()
+#   for (i in 1:length(conds)){
+#     tmp <- list(name=colnames(x)[i],
+#                 data =list_parse(data.frame(x = x[,i],
+#                                             y = y[,i],
+#                                             name=keyId)
+#     )
+#     )
+#     series[[i]] <- tmp
+#   }
+#   
+#   h1 <-  highchart() %>% 
+#     dapar_hc_chart( chartType = type) %>%
+#     hc_add_series_list(series) %>%
+#     hc_colors(palette) %>%
+#     hc_tooltip(headerFormat= '',pointFormat = "Id: {point.name}") %>%
+#     dapar_hc_ExportMenu(filename = "compareNormalization")
+#   h1
+#   
+# }
+
 compareNormalizationD_HC <- function(qDataBefore,
                                      qDataAfter,
                                      keyId = NULL,
@@ -154,19 +253,19 @@ compareNormalizationD_HC <- function(qDataBefore,
     warning("'conds' is null.")
     return(NULL)
   }
- if (is.null(keyId))
-   keyId <- 1:length(qDataBefore)
-
+  if (is.null(keyId))
+    keyId <- 1:length(qDataBefore)
+  
   if (!is.null(subset.view) && length(subset.view) > 0)
   {
     keyId <- keyId[subset.view]
     if (nrow(qDataBefore) > 1)
       if (length(subset.view)==1){
-        qDataBefore <- as_tibble(cbind(t(qDataBefore[subset.view,])))
-        qDataAfter <- as_tibble(cbind(t(qDataAfter[subset.view,])))
+        qDataBefore <- t(qDataBefore[subset.view,])
+        qDataAfter <- t(qDataAfter[subset.view,])
       } else {
-        qDataBefore <- as_tibble(cbind(qDataBefore[subset.view,]))
-        qDataAfter <- as_tibble(cbind(qDataAfter[subset.view,]))
+        qDataBefore <- qDataBefore[subset.view,]
+        qDataAfter <- qDataAfter[subset.view,]
       }
   } 
   # else {
@@ -180,7 +279,7 @@ compareNormalizationD_HC <- function(qDataBefore,
     return(NULL)
   }
   
- # browser()
+  # browser()
   if (is.null(n)){
     n <- seq_len(nrow(qDataBefore))
   } else {
@@ -194,46 +293,42 @@ compareNormalizationD_HC <- function(qDataBefore,
     keyId <- keyId[ind]
     if (nrow(qDataBefore) > 1)
       if (length(ind) == 1){
-        qDataBefore <- as_tibble(cbind(t(qDataBefore[ind,])))
-        qDataAfter <- as_tibble(cbind(t(qDataAfter[ind,])))
+        # qDataBefore <- as_tibble(cbind(t(qDataBefore[ind,])))
+        # qDataAfter <- as_tibble(cbind(t(qDataAfter[ind,])))
+        qDataBefore <- t(qDataBefore[ind,])
+        qDataAfter <- t(qDataAfter[ind,])
       } else {
-        qDataBefore <- as_tibble(cbind(qDataBefore[ind,]))
-        qDataAfter <- as_tibble(cbind(qDataAfter[ind,]))
+        #qDataBefore <- as_tibble(cbind(qDataBefore[ind,]))
+        # qDataAfter <- as_tibble(cbind(qDataAfter[ind,]))
+        qDataBefore <- qDataBefore[ind,]
+        qDataAfter <- qDataAfter[ind,]
       }
   }
   
-  palette <- BuildPalette(conds, palette)
-  # if (is.null(palette)){palette <- rep("#FFFFFF", ncol(qDataBefore))
-  # } else {
-  #   if (length(palette) != ncol(qDataBefore)){
-  #     warning("The color palette has not the same dimension as the number of samples")
-  #     return(NULL)
-  #   }
-  # }
+  myColors <- BuildPalette(conds, palette)
   
   x <- qDataBefore
   y <- qDataAfter/qDataBefore
   
   ##Colors definition
-  legendColor <- unique(palette)
+  legendColor <- unique(myColors)
   txtLegend <- unique(conds)
   
   
   series <- list()
   for (i in 1:length(conds)){
-    tmp <- list(name=colnames(x)[i],
-                data =list_parse(data.frame(x = x[,i],
-                                            y = y[,i],
-                                            name=keyId)
+    series[[i]] <- list(name=colnames(x)[i],
+                        data =list_parse(data.frame(x = x[,i],
+                                                    y = y[,i],
+                                                    name=keyId)
+                        )
     )
-    )
-    series[[i]] <- tmp
   }
   
   h1 <-  highchart() %>% 
     dapar_hc_chart( chartType = type) %>%
     hc_add_series_list(series) %>%
-    hc_colors(palette) %>%
+    hc_colors(myColors) %>%
     hc_tooltip(headerFormat= '',pointFormat = "Id: {point.name}") %>%
     dapar_hc_ExportMenu(filename = "compareNormalization")
   h1

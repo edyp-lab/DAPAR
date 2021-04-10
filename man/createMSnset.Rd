@@ -9,7 +9,7 @@ createMSnset(
   metadata = NULL,
   indExpData,
   indFData,
-  indiceID = NULL,
+  colnameForID = NULL,
   indexForOriginOfValue = NULL,
   logData = FALSE,
   replaceZeros = FALSE,
@@ -30,7 +30,7 @@ the \code{fData()} table of the \code{MSnSet} object.}
 \item{indFData}{The name of column in \code{file} that will be the name of
 rows for the \code{exprs()} and \code{fData()} tables}
 
-\item{indiceID}{The indice of the column containing the ID of entities 
+\item{colnameForID}{The name of the column containing the ID of entities 
 (peptides or proteins)}
 
 \item{indexForOriginOfValue}{xxxxxxxxxxx}
@@ -66,8 +66,11 @@ metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdat
 metadata = read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
 indExpData <- c(56:61)
 indFData <- c(1:55,62:71)
-indiceID <- 64
-createMSnset(exprsFile, metadata,indExpData,  indFData, indiceID, indexForOriginOfValue = NULL, pep_prot_data = "peptide")
+colnameForID <- 'id'
+createMSnset(exprsFile, metadata,indExpData,  indFData, colnameForID, indexForOriginOfValue = NULL, pep_prot_data = "peptide")
+
+colnameForID <- 'AutoID'
+createMSnset(exprsFile, metadata,indExpData,  indFData, colnameForID, indexForOriginOfValue = NULL, pep_prot_data = "peptide")
 
 }
 \author{
