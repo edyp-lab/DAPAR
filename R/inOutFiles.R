@@ -148,6 +148,8 @@ createMSnset <- function(file,
   #browser()
   
   ##building fData of MSnSet file
+  if(is.null(colnameForID))
+    colnameForID <- 'AutoID'
   
   if (colnameForID == 'AutoID') {
     fd <- data.frame( data, 
