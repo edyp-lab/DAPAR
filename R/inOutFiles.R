@@ -295,8 +295,11 @@ createMSnset <- function(file,
   obj@experimentData@other$RawPValues <- FALSE
   
   colnamesForOriginOfValue <- NULL
-  if (!is.null(indexForOriginOfValue))
+  if (!is.null(indexForOriginOfValue)){
     colnamesForOriginOfValue <- colnames(data)[indexForOriginOfValue]
+    colnamesForOriginOfValue <- gsub(".", "_", colnamesForOriginOfValue, fixed=TRUE)
+  }
+  
   
   obj <- addOriginOfValue(obj, colnamesForOriginOfValue)
   
