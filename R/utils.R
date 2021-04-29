@@ -53,8 +53,12 @@ return (n)
 #' 
 #' @export
 #' 
-GetTypeofData <- function(obj)
-  obj@experimentData@other$typeOfData
+GetTypeofData <- function(obj){
+  if (!is.null(obj))
+    obj@experimentData@other$typeOfData
+else
+  NULL
+}
 
 
 #' Returns the possible number of values in lines in a matrix.
