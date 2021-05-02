@@ -333,7 +333,8 @@ Metacell_generic <- function(qdata, conds, level){
 #' 
 #' @author Samuel Wieczorek
 #' 
-#' @examples 
+#' @examples
+#' \dontrun{ 
 #' file <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
 #' data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
 #' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", 
@@ -344,6 +345,7 @@ Metacell_generic <- function(qdata, conds, level){
 #' qdata <- data[1:100,56:61]
 #' df <- data[1:100 , 43:48]
 #' df <- Metacell_proline(qdata, conds, df, level = 'peptide')
+#' }
 #' 
 #' @export
 #' 
@@ -369,10 +371,10 @@ Metacell_proline <- function(qdata, conds, df, level=NULL){
   df <- Set_POV_MEC_tags(conds, df, level)
   
   # Rule 2
-  df[df > 0 && qdata > 0] <- 'identified'
+  df[df > 0 & qdata > 0] <- 'identified'
   
   # Rule 3
-  df[df == 0 && qdata > 0] <- 'recovered'
+  df[df == 0 & qdata > 0] <- 'recovered'
   
   colnames(df) <- paste0("metacell_", colnames(qdata))
   colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
