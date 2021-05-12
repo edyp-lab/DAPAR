@@ -478,11 +478,13 @@ aggregateSum <- function(obj.pep, X){
 #' @author Samuel Wieczorek
 #' 
 #' @examples
+#' \dontrun{
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' protID <- "Protein_group_IDs"
 #' obj.pep <- Exp1_R25_pept[1:10]
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 #' aggregateIterParallel(obj.pep, X)
+#' }
 #' 
 #' @export
 #' 
@@ -1156,7 +1158,6 @@ AggregateMetacell <- function(X, obj.pep){
   df <- data.frame(stringsAsFactors = TRUE)
   for (j in 1:ncol(meta))
     for(i in 1:ncol(X)){
-      #print(paste0(i, '  ', j, ' __', metacombine( rowcol(meta[,j], X[,i]), level), '__'))
       df[i, j] <- metacombine( rowcol(meta[,j], X[,i]), level)
     }
 

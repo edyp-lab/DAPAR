@@ -25,7 +25,7 @@ the paramter 'type'.
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept[1:10,]
 metadata <- GetMetacell(obj)
-m <- match.metacell(metadata, pattern="missing MEC", level = 'peptide')
+m <- match.metacell(metadata, pattern="missing", level = 'peptide')
 
 }
 \author{

@@ -55,7 +55,7 @@ customizable tooltip appears when the user put the mouse's pointer over
 a point of the scatter plot.
 }
 \examples{
-\donttest{
+\dontrun{
 library(highcharter) 
 utils::data(Exp1_R25_prot, package='DAPARdata')
 obj <- Exp1_R25_prot[1:1000]
@@ -70,7 +70,7 @@ df <- data.frame(x=data$logFC, y = -log10(data$P_Value),
 index = as.character(rownames(obj$new)))
 colnames(df) <- c("x", "y", "index")
 tooltipSlot <- c("Sequence", "Score")
-df <- cbind(df,Biobase::fData(obj)[tooltipSlot])
+df <- cbind(df,Biobase::fData(obj)[, tooltipSlot])
 colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
 if (ncol(df) > 3){
     colnames(df)[4:ncol(df)] <- 

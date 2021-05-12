@@ -33,6 +33,7 @@ Initial conversion rules for maxquant
 |--------------|-----------------|-----|
 }
 \examples{
+\dontrun{ 
 file <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
 data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
 metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", 
@@ -43,6 +44,7 @@ conds <- metadata$Condition
 qdata <- data[1:100,56:61]
 df <- data[1:100 , 43:48]
 df <- Metacell_proline(qdata, conds, df, level = 'peptide')
+}
 
 }
 \author{

@@ -142,7 +142,7 @@ createMSnset <- function(file,
   if (!is.null(indexForMetacell)){
     metacell <- data[, indexForMetacell]
     metacell <- apply(metacell,2,tolower)
-    metacell <- as.data.frame(apply(metacell,2,trimws),
+    metacell <- as.data.frame(apply(metacell,2, function(x) gsub(" ", '', x)),
                               stringsAsFactors = FALSE)
   }
   #browser()
@@ -160,7 +160,6 @@ createMSnset <- function(file,
                                
   }else{
     fd <- data
-    
     rownames(fd) <- data[ ,colnameForID]
     rownames(Intensity) <- data[ ,colnameForID]
   }

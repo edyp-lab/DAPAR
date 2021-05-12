@@ -127,7 +127,7 @@ return(p)
 #' @return An interactive volcanoplot
 #' @author Samuel Wieczorek
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' library(highcharter) 
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
 #' obj <- Exp1_R25_prot[1:1000]
@@ -142,7 +142,7 @@ return(p)
 #' index = as.character(rownames(obj$new)))
 #' colnames(df) <- c("x", "y", "index")
 #' tooltipSlot <- c("Sequence", "Score")
-#' df <- cbind(df,Biobase::fData(obj)[tooltipSlot])
+#' df <- cbind(df,Biobase::fData(obj)[, tooltipSlot])
 #' colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
 #' if (ncol(df) > 3){
 #'     colnames(df)[4:ncol(df)] <- 
