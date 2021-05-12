@@ -182,11 +182,7 @@ createMSnset <- function(file,
   
   obj <- MSnSet(exprs = Intensity, fData = fd, pData = pd)
   
-  if (logData) {
-    Biobase::exprs(obj) <- log2(Biobase::exprs(obj))
-    obj@processingData@processing <- 
-      c(obj@processingData@processing, "Data has been Log2 tranformed")
-  }
+  
   
   if (replaceZeros) {
     Biobase::exprs(obj)[Biobase::exprs(obj) == 0] <- NA
@@ -194,7 +190,11 @@ createMSnset <- function(file,
     Biobase::exprs(obj)[is.infinite(Biobase::exprs(obj))] <-NA
     obj@processingData@processing <- c(obj@processingData@processing, "All zeros were replaced by NA")
   }
-  
+  if (logData) {
+    Biobase::exprs(obj) <- log2(Biobase::exprs(obj))
+    obj@processingData@processing <- 
+      c(obj@processingData@processing, "Data has been Log2 tranformed")
+  }
   
   if (!is.null(pep_prot_data)) {
     obj@experimentData@other$typeOfData <- pep_prot_data
