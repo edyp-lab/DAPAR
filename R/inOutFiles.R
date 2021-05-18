@@ -258,7 +258,7 @@ createMSnset <- function(file,
 #' \donttest{
 #' Sys.setenv("R_ZIPCMD"= Sys.which("zip"))
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj <- Exp1_R2_pept[1:1000]
+#' obj <- Exp1_R25_pept[1:100]
 #' writeMSnsetToExcel(obj, "foo")
 #' }
 #' 
@@ -271,6 +271,9 @@ writeMSnsetToExcel <- function(obj, filename)
   #require(Matrix)
   POV_Style <- openxlsx::createStyle(fgFill = "lightblue")
   MEC_Style <- openxlsx::createStyle(fgFill = "orange")
+  recovered_Style <- openxlsx::createStyle(fgFill = "lightgrey")
+  identified_Style <- openxlsx::createStyle(fgFill = 'white')
+  combined_Style <- openxlsx::createStyle(fgFill = 'red')
   
   #require(openxlsx)
   name <- paste(filename, ".xlsx", sep="")
@@ -281,17 +284,25 @@ writeMSnsetToExcel <- function(obj, filename)
                                          Biobase::exprs(obj)), rowNames = FALSE)
   
   
-  if (is.null(obj@experimentData@other$names_metacell)){
-    listPOV <-  which(is.na(Biobase::exprs(obj)), arr.ind=TRUE)
-  } else {
-    mat <- Biobase::fData(obj)[,obj@experimentData@other$names_metacell]
+  
+    mat <- Biobase::fData(obj)[ ,obj@experimentData@other$names_metacell]
     level <- obj@experimentData@other$typeOfData
     listPOV <- which(match.metacell(mat, 'missing POV', level), arr.ind=TRUE)
     listMEC <- which(match.metacell(mat, 'missing MEC', level), arr.ind=TRUE)
-  }
+    listIdentified <- which(match.metacell(mat, 'identified', level), arr.ind=TRUE)
+    listRecovered <- which(match.metacell(mat, 'recovered', level), arr.ind=TRUE)
+    if (level == 'protein')
+      listCombined <- which(match.metacell(mat, 'combined', level), arr.ind=TRUE)
+  
   
   openxlsx::addStyle(wb, sheet=n, cols = listPOV[,"col"]+1, rows = listPOV[,"row"]+1, style = POV_Style)
   openxlsx::addStyle(wb, sheet=n, cols = listMEC[,"col"]+1, rows = listMEC[,"row"]+1, style = MEC_Style)
+  openxlsx::addStyle(wb, sheet=n, cols = listIdentified[,"col"]+1, rows = listIdentified[,"row"]+1, style = identified_Style)
+  openxlsx::addStyle(wb, sheet=n, cols = listRecovered[,"col"]+1, rows = listRecovered[,"row"]+1, style = recovered_Style)
+  
+  if (level == 'protein')
+    openxlsx::addStyle(wb, sheet=n, cols = listCombined[,"col"]+1, rows = listCombined[,"row"]+1, style = combined_Style)
+  
   
   #bodyStyleNumber <- createStyle(numFmt = "NUMBER")
   #addStyle(wb, sheet=1, bodyStyleNumber, rows = 2:nrow(Biobase::exprs(obj)), 
