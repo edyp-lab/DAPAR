@@ -58,16 +58,14 @@ metacellPerLinesHisto_HC <- function(obj,
   nb.col <- dim(qData)[2] 
   nb.na <- NbNAPerRow
   temp <- table(NbNAPerRow)
-  nb.na2barplot <- c(temp, rep(0,1+ncol(qData)-length(temp)))
+  nb.na2barplot <- rep(0, 1+ncol(qData))
+  for (i in 1:length(temp)) 
+    nb.na2barplot[as.integer(names(temp)[i])] <- temp[i]
   
-  if (sum(NbNAPerRow) == 0){
-    nb.na2barplot <- rep(0,1+ncol(qData))
-  }
   
-  df <- data.frame(y=nb.na2barplot[-1],
-                   y_percent = round(100 * nb.na2barplot[-1] / dim(qData)[1], digits = 2))
+  df <- data.frame(y=nb.na2barplot,
+                   y_percent = round(100 * nb.na2barplot / dim(qData)[1], digits = 2))
   myColors = rep("lightgrey", nrow(df))
-  #myColors[nrow(df)] <- "red"
   
   h1 <-  highchart() %>% 
     hc_title(text = paste0("Nb of lines with x '", pattern, "' tags")) %>% 
