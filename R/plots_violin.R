@@ -23,9 +23,7 @@
 #' library(vioplot)
 #' legend <- conds <- Biobase::pData(obj)$Condition
 #' key <- "Protein_IDs"
-#' violinPlotD(obj, conds, key, legend, NULL, 1:10)
-#' pal <- ExtendPalette(length(unique(conds)))
-#' violinPlotD(obj, conds, key, legend, pal, 1:10)
+#' violinPlotD(obj, conds, key, legend, subset.view=1:10)
 #' 
 #' @importFrom vioplot vioplot
 #' 

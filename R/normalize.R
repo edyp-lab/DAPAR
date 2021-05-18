@@ -152,7 +152,7 @@ SumByColumns <- function(qData,
   
   e <- 2^qData
   
-  if(is.null(subset.norm) | length(subset.norm)<1){
+  if(is.null(subset.norm) || length(subset.norm)<1){
     subset.norm=1:nrow(qData)
   }
   
@@ -239,7 +239,7 @@ QuantileCentering <- function(qData,
   
   qData <- as.matrix(qData)
   
-  if(is.null(subset.norm) | length(subset.norm)<1){
+  if(is.null(subset.norm) || length(subset.norm)<1){
     subset.norm=1:nrow(qData)
   }
   
@@ -310,11 +310,14 @@ MeanCentering <- function(qData,
   
   qData <- as.matrix(qData)
   
-  if(length(subset.norm)==1){
-    meanOverSamples=qData[subset.norm,]
-  } else{
-    meanOverSamples <- apply(qData[subset.norm,], 2, mean, na.rm = TRUE)
+  if(is.null(subset.norm) || length(subset.norm)<1){
+    subset.norm=1:nrow(qData)
   }
+  
+  if(length(subset.norm)==1)
+      meanOverSamples=qData[subset.norm,]
+    else
+    meanOverSamples <- apply(qData[subset.norm,], 2, mean, na.rm = TRUE)
   
   if (type == "overall"){
     cOverall <- mean(meanOverSamples)
