@@ -1151,7 +1151,7 @@ metacombine <- function(met, level) {
 AggregateMetacell <- function(X, obj.pep){
   
   issues <- NULL
-  meta = Biobase::fData(obj.pep)[, obj.pep@experimentData@other$names_metacell]
+  meta = GetMetacell(obj.pep)
   level = obj.pep@experimentData@other$typeOfData
   rowcol <- function(meta.col, X.col) (meta.col)[X.col > 0]
   
