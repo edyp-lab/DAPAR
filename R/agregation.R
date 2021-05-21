@@ -103,7 +103,7 @@ getProteinsStats <- function(matShared){
 #' protData <- DAPAR::aggregateMean(obj.pep, M)
 #' name <- "Protein_group_IDs"
 #' proteinNames <- rownames(Biobase::fData(protData$obj.prot))
-#' BuildColumnToProteinDataset(data, M, name, proteinNames )
+#' new.col <- BuildColumnToProteinDataset(data, M, name, proteinNames )
 #' 
 #' @export
 #' 

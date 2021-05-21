@@ -119,9 +119,9 @@ metacellPerLinesHisto_HC <- function(obj,
 #'
 metacellPerLinesHistoPerCondition_HC <- function(obj,
                                                  pattern,
-                                                 indLegend="auto", 
-                                                 showValues=FALSE,
-                                                 pal=NULL){
+                                                 indLegend = "auto", 
+                                                 showValues = FALSE,
+                                                 pal = NULL){
   if(missing(obj))
     stop("'obj' is missing.")
   else if (is.null(obj))
@@ -166,9 +166,9 @@ metacellPerLinesHistoPerCondition_HC <- function(obj,
   ll.df <- list()
   for (i in u_conds)
   {
-    df <- as.data.frame(matrix(rep(0, nbConditions*(1+ncolMatrix)), 
-                               ncol = nbConditions, 
-                               dimnames=list(seq(0:(ncolMatrix)),
+    df <- as.data.frame(matrix(rep(0, 2 * (1 + nbConditions)), 
+                               nrow = 1 + nbConditions, 
+                               dimnames=list(seq(0:(nbConditions)),
                                              c('y', 'y_percent')))
     )
     rownames(df) <- 0:(nrow(df)-1)
