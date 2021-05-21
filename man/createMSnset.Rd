@@ -8,7 +8,6 @@ createMSnset(
   file,
   metadata = NULL,
   indExpData,
-  indFData,
   colnameForID = NULL,
   indexForMetacell = NULL,
   logData = FALSE,
@@ -26,9 +25,6 @@ createMSnset(
 \item{indExpData}{A vector of string where each element is the name
 of a column in designTable that have to be integrated in
 the \code{fData()} table of the \code{MSnSet} object.}
-
-\item{indFData}{The name of column in \code{file} that will be the name of
-rows for the \code{exprs()} and \code{fData()} tables}
 
 \item{colnameForID}{The name of the column containing the ID of entities 
 (peptides or proteins)}
@@ -65,9 +61,8 @@ metadataFile <- system.file("extdata", "samples_Exp1_R25.txt",
 package="DAPARdata")
 metadata = read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
 indExpData <- c(56:61)
-indFData <- c(1:55,62:71)
 colnameForID <- 'id'
-obj <- createMSnset(exprsFile, metadata,indExpData,  indFData, colnameForID, 
+obj <- createMSnset(exprsFile, metadata,indExpData,  colnameForID, 
 indexForMetacell = c(43:48), pep_prot_data = "peptide", software = 'maxquant')
 
 
@@ -75,9 +70,8 @@ exprsFile <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
 metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
 metadata = read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
 indExpData <- c(56:61)
-indFData <- c(1:55,62:71)
 colnameForID <- 'AutoID'
-obj <- createMSnset(exprsFile, metadata, indExpData,  indFData, colnameForID, 
+obj <- createMSnset(exprsFile, metadata, indExpData,  colnameForID, 
 indexForMetacell = c(43:48), pep_prot_data = "peptide", software = 'maxquant')
 
 
