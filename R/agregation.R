@@ -483,7 +483,7 @@ aggregateSum <- function(obj.pep, X){
 #' protID <- "Protein_group_IDs"
 #' obj.pep <- Exp1_R25_pept[1:10]
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-#' aggregateIterParallel(obj.pep, X)
+#' obj.agg <- aggregateIterParallel(obj.pep, X)
 #' }
 #' 
 #' @export

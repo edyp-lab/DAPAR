@@ -41,7 +41,7 @@ Imports: Biobase, MSnbase, tibble, RColorBrewer,stats,preprocessCore, Cairo,png,
         limma,knitr,tmvtnorm,norm,impute, stringr,
         grDevices, graphics, openxlsx, utils, cp4p
         (>= 0.3.5), scales, Matrix, vioplot, imp4p (>= 1.1), forcats, methods, 
-        DAPARdata (>= 1.21.3), siggenes, graph, lme4, readxl, highcharter,
+        DAPARdata (>= 1.22.0), siggenes, graph, lme4, readxl, highcharter,
         clusterProfiler, dplyr, tidyr,AnnotationDbi, tidyverse, vsn, FactoMineR, factoextra, multcomp, purrr,
         visNetwork, foreach, parallel, doParallel, igraph, dendextend, Mfuzz, apcluster, diptest, cluster
 biocViews: Proteomics, Normalization, Preprocessing, MassSpectrometry,
