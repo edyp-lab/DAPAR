@@ -62,7 +62,7 @@ metacell.def <- function(level){
   
   switch(level,
          peptide = {
-           node <- c('root', 
+           node <- c('all', 
                       'quanti', 
                       'identified', 
                       'recovered', 
@@ -73,13 +73,13 @@ metacell.def <- function(level){
                       'imputed POV', 
                       'imputed MEC')
            parent <- c('', 
-                       'root', 
+                       'all', 
                        'quanti', 
                        'quanti', 
-                       'root', 
+                       'all', 
                        'missing', 
                        'missing',
-                       'root',
+                       'all',
                        'imputed',
                        'imputed')
          data.frame(node = node,
@@ -88,7 +88,7 @@ metacell.def <- function(level){
          
          
          protein = {
-           node <- c('root',
+           node <- c('all',
                       'quanti',
                       'identified',
                       'recovered',
@@ -100,16 +100,16 @@ metacell.def <- function(level){
                       'imputed MEC',
                       'combined')
            parent <- c('',
-                       'root',
+                       'all',
                        'quanti',
                        'quanti',
-                       'root',
+                       'all',
                        'missing',
                        'missing',
-                       'root',
+                       'all',
                        'imputed',
                        'imputed',
-                       'root')
+                       'all')
          
          data.frame(node = node,
                     parent = parent)
