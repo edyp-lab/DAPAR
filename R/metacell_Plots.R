@@ -66,8 +66,7 @@ metacellPerLinesHisto_HC <- function(obj,
   
   df <- data.frame(y=nb.na2barplot,
                    y_percent = round(100 * nb.na2barplot / dim(qData)[1], digits = 2))
-  rownames(df) <- 0:ncol(qData)
-  
+   
   myColors = rep("lightgrey", nrow(df))
   
   h1 <-  highchart() %>% 
