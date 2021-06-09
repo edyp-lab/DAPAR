@@ -637,6 +637,11 @@ GetIndices_MetacellFiltering <- function(obj, level, pattern, type, percent, op,
   
   indices <- NULL
   
+  if (!(pattern %in% DAPAR::metacell.def(level)$node && type !='None' && !is.null(type))){
+    warning("Either 'pattern' nor 'type' are equal to 'None'")
+    return(NULL)
+  }
+  
   mask <- match.metacell(metadata = GetMetacell(obj), 
                          pattern  =pattern, 
                          level = level)

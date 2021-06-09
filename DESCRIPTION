@@ -1,26 +1,8 @@
 Package: DAPAR
 Type: Package
 Title: Tools for the Differential Analysis of Proteins Abundance with R
-Version: 1.24.3
-Date: 2021-05-25
-Authors@R: c(person(given = "Samuel", family = "Wieczorek",
-            email = "samuel.wieczorek@cea.fr",
-    role = c("aut","cre")),
-            person(given = "Florence", family ="Combes",
-            email = "florence.combes@cea.fr",
-    role = "aut"),
-            person(given = "Thomas", family ="Burger",
-            email = "thomas.burger@cea.fr",
-    role = "aut"),
-            person(given = "Vasile-Cosmin", family ="Lazar",
-            email = "vcosminlazar@gmail.com",
-    role = "ctb"),
-		person(given = "Enora", family ="Fremy",
-            email = "enora.fremy@cea.fr",
-    role = "ctb"),
-    	person(given = "Helene", family ="Borges",
-            email = "helene.borges@cea.fr",
-    role = "ctb"))
+Version: 1.24.4
+Date: 2021-06-09
 Author: Samuel Wieczorek [cre,aut],
     Florence Combes [aut],
     Thomas Burger [aut],

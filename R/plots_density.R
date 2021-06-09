@@ -31,6 +31,14 @@ densityPlotD_HC <- function(obj,
                             legend=NULL, 
                             pal = NULL){
   
+  if (is.null(obj)) {
+    warning('The dataset is NULL and cannot be shown')
+    return(NULL)
+  } else if (nrow(obj) == 0) {
+    warning('The dataset is empty and cannot be shown')
+    return(NULL)
+  }
+  
   qData <- Biobase::exprs(obj)
   conds <- Biobase::pData(obj)$Condition
   

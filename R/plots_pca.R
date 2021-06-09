@@ -31,8 +31,11 @@ wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
   # require(FactoMineR)
   if (missing(obj))
     stop("'obj' is required")
+  else if (nrow(obj)==0)
+    return(NULL)
 
-  if (is.null(var.scaling)) {var.scaling <- TRUE}
+  if (is.null(var.scaling)) 
+    var.scaling <- TRUE
   
   res.pca <- NULL
   if (length(which(is.na(Biobase::exprs(obj)))) > 0){
@@ -120,7 +123,9 @@ plotPCA_Var <- function(res.pca, chosen.axes=c(1,2)){
 #' 
 plotPCA_Ind <- function(res.pca, chosen.axes=c(1,2)){
   #plot.PCA(res.pca, choix="ind", axes = chosen.axes, select = 0:-1, title="Protein factor map (PCA)")
-  if (is.null(res.pca)){  return(NULL)}
+  if (is.null(res.pca))
+    return(NULL)
+  
   #require(factoextra)
   plot <- factoextra::fviz_pca_ind(res.pca,  axes = chosen.axes, geom="point")
   plot
