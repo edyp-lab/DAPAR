@@ -27,7 +27,7 @@ Method to xxxxx
 utils::data(Exp1_R25_pept, package='DAPARdata')
 protID <- "Protein_group_IDs"
 X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:10], protID, FALSE)
-ll.agg <- aggregateIter(Exp1_R25_pept[1:10],X=X)
+ll.agg <- aggregateIter(Exp1_R25_pept[1:10], X=X)
 
 }
 \author{

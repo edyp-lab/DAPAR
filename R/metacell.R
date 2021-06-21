@@ -285,7 +285,7 @@ Metacell_generic <- function(qdata, conds, level){
   if (missing(level))
     stop("'level' is required.")
 
-  df <- data.frame(matrix(rep('quanti', nrow(qdata)*ncol(qdata)),
+  df <- data.frame(matrix(rep('quanti', nrow(qdata) * ncol(qdata)),
                           nrow = nrow(qdata),
                           ncol = ncol(qdata)),
                    stringsAsFactors = FALSE) 

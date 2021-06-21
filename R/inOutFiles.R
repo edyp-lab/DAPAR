@@ -108,20 +108,29 @@ saveParameters <- function(obj,name.dataset=NULL,name=NULL,l.params=NULL){
 #' @importFrom utils read.table
 #' 
 createMSnset <- function(file,
-                         metadata=NULL,
+                         metadata = NULL,
                          indExpData,
-                         colnameForID=NULL,
+                         colnameForID = NULL,
                          indexForMetacell = NULL,
-                         logData=FALSE, 
-                         replaceZeros=FALSE,
-                         pep_prot_data=NULL,
+                         logData = FALSE, 
+                         replaceZeros = FALSE,
+                         pep_prot_data = NULL,
                          proteinId = NULL,
                          software = NULL){
   
   if (!is.data.frame(file)){ #the variable is a path to a text file
     data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
-  } else {data <- file}
+  } else {
+    data <- file
+    }
   
+  colnames(data) <- gsub(".", "_", colnames(data), fixed=TRUE)
+  colnameForID <- gsub(".", "_", colnameForID, fixed=TRUE)
+  proteinId <- gsub(".", "_", proteinId, fixed=TRUE)
+  colnames(data) <- gsub(" ", "_", colnames(data), fixed=TRUE)
+  colnameForID <-  gsub(" ", "_", colnameForID, fixed=TRUE)
+  proteinId <-  gsub(" ", "_", proteinId, fixed=TRUE)
+   
   ##building exprs Data of MSnSet file
   Intensity <- matrix(as.numeric(gsub(",", ".",as.matrix(data[,indExpData] )))
                       , ncol=length(indExpData)
@@ -139,7 +148,7 @@ createMSnset <- function(file,
     metacell <- as.data.frame(apply(metacell,2, function(x) gsub(" ", '', x)),
                               stringsAsFactors = FALSE)
   }
-  #browser()
+
   
   ##building fData of MSnSet file
   if(is.null(colnameForID))
@@ -151,7 +160,6 @@ createMSnset <- function(file,
                       stringsAsFactors = FALSE)
     rownames(fd) <- paste(pep_prot_data, "_", 1:nrow(fd), sep="")
     rownames(Intensity) <- paste(pep_prot_data, "_",  1:nrow(Intensity), sep="")
-                               
   }else{
     fd <- data
     rownames(fd) <- data[ ,colnameForID]
@@ -228,6 +236,85 @@ createMSnset <- function(file,
   
   
   return(obj)
+}
+
+
+
+
+#' @title This function exports a data.frame to a Excel file.
+#' 
+#' @param df An data.frame
+#' 
+#' @param tags xxx
+#' 
+#' @param colors xxx
+#' 
+#' @param tabname xxx
+#' 
+#' @param filename A character string for the name of the Excel file.
+#' 
+#' @return A Excel file (.xlsx)
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @export
+#' 
+#' @import openxlsx
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' df <- exprs(Exp1_R25_pept[1:100])
+#' tags <- GetMetacell(Exp1_R25_pept[1:100])
+#' colors <- list('missing POV' = "lightblue",
+#'                'missing MEC' = "orange",
+#'                'recovered' = "lightgrey",
+#'                'identified' = "white",
+#'                'combined' = "red")
+#' write.excel(df, tags, colors, filename = 'toto')
+write.excel <- function(df,
+                        tags=NULL,
+                        colors=NULL,
+                        tabname='foo',
+                        filename=NULL){
+  
+  if (is.null(filename))
+    filename <- paste('data-', Sys.Date(), '.xlxs', sep='')
+  else if(tools::file_ext(filename) != ""){
+    if (tools::file_ext(filename) != "xlsx")
+      stop("Filename extension must be equal to 'xlsx'. Abort...")
+    else
+      fname <- filename
+  } else
+    fname <- paste(filename, ".xlsx", sep="")
+  
+  unique.tags <- NULL
+  if (!is.null(tags) && !is.null(colors)){
+    unique.tags <- unique(as.vector(as.matrix(tags)))
+    if (!isTRUE(sum(unique.tags %in% names(colors)) == length(unique.tags)))
+      warning("The length of colors vector must be equal to the number of different tags. 
+              As is it not the case, colors are ignored")
+  }
+  
+  wb <- openxlsx::createWorkbook(fname)
+  openxlsx::addWorksheet(wb, tabname)
+  openxlsx::writeData(wb, sheet = 1, df, rowNames = FALSE)
+  
+  
+  # Add colors w.r.t. tags
+  if (!is.null(tags) && !is.null(colors))
+    if (isTRUE(sum(unique.tags %in% names(colors)) == length(unique.tags))){
+      lapply(1:length(colors), function(x){
+        list.tags <- which(names(colors)[x]==tags, arr.ind=TRUE)
+        openxlsx::addStyle(wb,
+                           sheet = 1,
+                           cols = list.tags[,"col"],
+                           rows = list.tags[,"row"] + 1, 
+                           style = openxlsx::createStyle(fgFill = colors[x])
+        )
+      })
+    }
+  
+  openxlsx::saveWorkbook(wb, fname, overwrite=TRUE)
 }
 
 
@@ -345,6 +432,9 @@ writeMSnsetToExcel <- function(obj, filename)
   
   
 }
+
+
+
 
 
 #' @title This function reads a sheet of an Excel file and put the data 

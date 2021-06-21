@@ -492,7 +492,7 @@ aggregateSum <- function(obj.pep, X){
 #' @importFrom doParallel registerDoParallel 
 #' @importFrom foreach foreach
 #' 
-aggregateIterParallel <- function(obj.pep, X, init.method='Sum', method='Mean', n=NULL){
+aggregateIterParallel <- function(obj.pep, X, init.method='Sum', method='Mean', n = NULL){
   
   registerDoParallel()
   obj.prot <- NULL
@@ -505,7 +505,9 @@ aggregateIterParallel <- function(obj.pep, X, init.method='Sum', method='Mean', 
     )
   else { # Step 2 : Agregation of quantitative data
     qData.pep <- 2^(Biobase::exprs(obj.pep))
-    protData <- matrix(rep(0,ncol(X)*nrow(X)), nrow=ncol(X))
+    protData <- matrix(rep(0, ncol(X) * ncol(obj.pep)), 
+                       nrow = ncol(X),
+                       dimnames=list(colnames(X), rep("cond", ncol(obj.pep))))
   
     protData <- foreach(cond=1:length(unique(Biobase::pData(obj.pep)$Condition)), 
                         .combine=cbind, 
@@ -517,6 +519,7 @@ aggregateIterParallel <- function(obj.pep, X, init.method='Sum', method='Mean', 
     }
   
     protData <- protData[,colnames(Biobase::exprs(obj.pep))]
+  colnames(protData) <-colnames(Biobase::exprs(obj.pep))
   
     # Step 3 : Build the protein dataset
     obj.prot <- DAPAR::finalizeAggregation(obj.pep, qData.pep, protData, metacell$metacell, X)
@@ -578,8 +581,8 @@ inner.aggregate.iter <- function(pepData,
   
   yprot <- NULL
   switch(init.method,
-         Sum= yprot <- inner.sum(pepData, X),
-         Mean= yprot <- inner.mean(pepData, X)
+         Sum = yprot <- inner.sum(pepData, X),
+         Mean = yprot <- inner.mean(pepData, X)
   )
   conv <- 1
   
@@ -630,7 +633,7 @@ inner.aggregate.iter <- function(pepData,
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' protID <- "Protein_group_IDs"
 #' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:10], protID, FALSE)
-#' ll.agg <- aggregateIter(Exp1_R25_pept[1:10],X=X)
+#' ll.agg <- aggregateIter(Exp1_R25_pept[1:10], X=X)
 #' 
 #' @export
 #' 
@@ -638,9 +641,9 @@ inner.aggregate.iter <- function(pepData,
 #' 
 aggregateIter <- function(obj.pep, 
                           X, 
-                          init.method='Sum', 
-                          method='Mean', 
-                          n=NULL){
+                          init.method = 'Sum', 
+                          method = 'Mean', 
+                          n = NULL){
   
   obj.prot <- NULL
   
@@ -658,16 +661,19 @@ aggregateIter <- function(obj.pep,
     # Note : X <- as.matrix(X)
     qData.pep <- 2^(Biobase::exprs(obj.pep))
     
-    protData <- matrix(rep(0,ncol(X)*ncol(obj.pep)), nrow=ncol(X))
+    protData <- matrix(rep(0,ncol(X)*ncol(obj.pep)), 
+                       nrow=ncol(X),
+                       dimnames=list(colnames(X), rep("cond", ncol(obj.pep))))
     
     for (cond in unique(Biobase::pData(obj.pep)$Condition)){
       condsIndices <- which(Biobase::pData(obj.pep)$Condition == cond)
       qData <- qData.pep[,condsIndices]
-      protData[,condsIndices]  <- inner.aggregate.iter(qData, 
+      protData[ ,condsIndices]  <- inner.aggregate.iter(qData, 
                                                        X, 
                                                        init.method, 
                                                        method, 
                                                        n)
+      colnames(protData)[condsIndices] <- colnames(Biobase::exprs(obj.pep))[condsIndices]
     }
     
     # Step 3: Build the protein dataset
@@ -971,7 +977,8 @@ finalizeAggregation <- function(obj.pep, pepData, protData, protMetacell, X){
   n <- GetDetailedNbPeptides(X)
   
   
-  fd <- data.frame(nPepTotal = n$nTotal,
+  fd <- data.frame(keyId = rownames(protData),
+                   nPepTotal = n$nTotal,
                    nPepShared = n$nShared, 
                    nPepSpec = n$nSpec, 
                    pepSpecUsed, 
@@ -985,10 +992,12 @@ finalizeAggregation <- function(obj.pep, pepData, protData, protMetacell, X){
   
   obj.prot@experimentData@other <- obj.pep@experimentData@other
   obj.prot@experimentData@other$typeOfData <- "protein"
+  obj.prot@experimentData@other$keyId <- 'keyId'
   
   
   obj.prot@experimentData@other$Prostar_Version <- NA
   obj.prot@experimentData@other$DAPAR_Version <- NA
+  
   tryCatch({
     find.package("Prostar")
     find.package("DAPAR")

@@ -61,6 +61,24 @@ else
 }
 
 
+#' @title xxxx
+#' 
+#' @description
+#' xxxx
+#' 
+#' @param obj xxx
+#' 
+#' @export
+#' 
+GetKeyId <- function(obj)
+{
+  if (!is.null(obj))
+    obj@experimentData@other$keyId
+  else
+    NULL
+}
+  
+
 #' Returns the possible number of values in lines in a matrix.
 #' 
 #' @title Returns the possible number of values in lines in the data
