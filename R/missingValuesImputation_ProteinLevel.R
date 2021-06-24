@@ -421,7 +421,7 @@ getQuantile4Imp <- function(qdata, qval=0.025, factor=1){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj <- Exp1_R25_pept[1:10]
+#' obj <- Exp1_R25_pept[1:100]
 #' obj.slsa.pov <- wrapper.impute.slsa(obj, na.type = 'missing POV')
 #' 
 #' @export
@@ -447,11 +447,11 @@ wrapper.impute.slsa <- function(obj = NULL, na.type = NULL){
     qdata <- Biobase::exprs(obj)[,new.order]
     
     res <- imp4p::impute.slsa(qdata, 
-                              conditions=conds, 
-                              nknn=15, 
-                              selec="all", 
-                              weight=1,
-                              ind.comp=1)
+                              conditions = conds, 
+                              nknn = 15, 
+                              selec = "all", 
+                              weight = 1,
+                              ind.comp = 1)
     
     #restore old order
     res <- res[,sample.names.old]
