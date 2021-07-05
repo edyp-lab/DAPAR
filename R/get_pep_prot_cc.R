@@ -10,7 +10,7 @@
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata') 
-#' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:100,], "Protein_group_IDs", FALSE)
+#' X <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein_group_IDs", FALSE)
 #' ll <- get.pep.prot.cc(X)
 #' 
 #' @importFrom Matrix crossprod %&%
@@ -23,7 +23,7 @@ get.pep.prot.cc <- function(X){
     warning("The adjacency matrix is empty")
     return()}
   
-  X <- as.matrix(X)
+  #X <- as.matrix(X)
   p <- dim(X)[2] # Nb proteins
   q <- dim(X)[1] # Nb peptides
   
@@ -33,8 +33,9 @@ get.pep.prot.cc <- function(X){
   ### Adjacency matrix construction
   # boolean matrix product
   print("Start computing boolean matrix product")
-  A <- Matrix::crossprod(X, boolArith =  TRUE)
- # A <- as.matrix(t(X) %*% X) 
+  A <- Matrix::crossprod(X, boolArith = TRUE)
+  # A <- as.matrix(t(X) %*% X) 
+  # A <- as.matrix(t(X) %&% X)
   print("End of computing boolean matrix product")
   # remove self-connecting edges
   diag(A) <- rep(0,p)
@@ -86,7 +87,7 @@ get.pep.prot.cc <- function(X){
   }
   
   ### Clean memory and return result
-  rm(A,B,g,multprot.cc,singprot.cc,multprot.cc.pep,singprot.cc.pep,prot.cc,pep.cc)
+  rm(A, B, g, multprot.cc, singprot.cc, multprot.cc.pep, singprot.cc.pep, prot.cc,pep.cc)
   gc()
   return(global.cc)
 }
