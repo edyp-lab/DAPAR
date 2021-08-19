@@ -377,20 +377,24 @@ GraphPepProt <- function(mat){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' BuildAdjacencyMatrix(Exp1_R25_pept[1:10], "Protein_group_IDs", TRUE)
+#' protId <- Exp1_R25_pept@experimentData@other$proteinId
+#' BuildAdjacencyMatrix(Exp1_R25_pept[1:10], protId, TRUE)
 #' 
 #' @export
 #' 
 #' @importFrom Biobase pData exprs fData
 #' 
 BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
-  
+  require(stringr)
   data <- Biobase::exprs(obj.pep)
   PG <- Biobase::fData(obj.pep)[,protID]
-  PG.l <- strsplit(as.character(PG), split=";", fixed=TRUE)
   
-  t <- table(data.frame(A=rep(seq_along(PG.l), lengths(PG.l)),
-                        B=unlist(PG.l)
+  #PG.l <- strsplit(as.character(PG), split=";", fixed=TRUE)
+  #PG.l <- strsplit(as.character(PG), "[,;]+", fixed = FALSE)
+  PG.l <- lapply(strsplit(as.character(PG), "[,;]+"), function(x) str_trim(x))
+  
+  t <- table(data.frame(A = rep(seq_along(PG.l), lengths(PG.l)),
+                        B = unlist(PG.l)
                         )
              )
   
@@ -428,10 +432,11 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' protID <- "Protein_group_IDs"
-#' obj.pep <- Exp1_R25_pept[1:10]
+#' obj.pep <- Exp1_R25_pept[1:20]
+#' obj.pep.imp <- wrapper.impute.detQuant(obj.pep, na.type='missing')
+#' protID <- obj.pep@experimentData@other$proteinId
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-#' ll.agg <- DAPAR::aggregateSum(obj.pep, X)
+#' ll.agg <- DAPAR::aggregateSum(obj.pep.imp, X)
 #' 
 #' @export
 #' 
@@ -890,7 +895,10 @@ inner.aggregate.topn <-function(pepData, X, method='Mean', n=10){
 #' 
 #' @importFrom Biobase pData exprs fData
 #' 
-aggregateTopn <- function(obj.pep,X,  method='Mean', n=10){
+aggregateTopn <- function(obj.pep, 
+                          X,  
+                          method = 'Mean', 
+                          n = 10){
   obj.prot <- NULL
   
   # Agregation of metacell data
