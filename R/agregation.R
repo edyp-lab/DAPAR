@@ -383,15 +383,15 @@ GraphPepProt <- function(mat){
 #' @export
 #' 
 #' @importFrom Biobase pData exprs fData
+#' @importFrom stringr str_trim
 #' 
 BuildAdjacencyMatrix <- function(obj.pep, protID, unique=TRUE){
-  require(stringr)
   data <- Biobase::exprs(obj.pep)
   PG <- Biobase::fData(obj.pep)[,protID]
   
   #PG.l <- strsplit(as.character(PG), split=";", fixed=TRUE)
   #PG.l <- strsplit(as.character(PG), "[,;]+", fixed = FALSE)
-  PG.l <- lapply(strsplit(as.character(PG), "[,;]+"), function(x) str_trim(x))
+  PG.l <- lapply(strsplit(as.character(PG), "[,;]+"), function(x) stringr::str_trim(x))
   
   t <- table(data.frame(A = rep(seq_along(PG.l), lengths(PG.l)),
                         B = unlist(PG.l)
