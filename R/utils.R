@@ -16,8 +16,123 @@
 #' @export
 #'
 getProcessingInfo <- function(obj){
-return(obj@processingData@processing)
+  return(obj@processingData@processing)
 }
+
+
+#' @title Returns the contains of the slot processing  of an object of 
+#' class \code{MSnSet}
+#' 
+#' @param  obj An object (peptides) of class \code{MSnSet}.
+#' 
+#' @return The slot processing of obj@processingData
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' Xshared <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
+#' Xunique <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
+#' ll.X <- list(matWithSharedPeptides = Xshared, matWithUniquePeptides = Xunique)
+#' Exp1_R25_pept <- SetMatAdj(Exp1_R25_pept, ll.X)
+#' ll.X <- GetMatAdj(Exp1_R25_pept)
+#' 
+#' @export
+#'
+GetMatAdj <- function(obj){
+  if (GetTypeofData(obj) != 'peptide')
+    warning("This function is only available for a peptide dataset.")
+  return(obj@experimentData@other$matAdj)
+}
+
+
+#' @title Record the adjacency matrices in a slot of the 
+#' dataset  of class \code{MSnSet}
+#' 
+#' @param  obj An object (peptides) of class \code{MSnSet}.
+#' 
+#' @param X A list of two adjacency matrices
+#' 
+#' @return NA
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' Xshared <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
+#' Xunique <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
+#' ll.X <- list(matWithSharedPeptides = Xshared, matWithUniquePeptides = Xunique)
+#' Exp1_R25_pept <- SetMatAdj(Exp1_R25_pept, ll.X)
+#' 
+#' @export
+#'
+SetMatAdj <- function(obj, X){
+  if (GetTypeofData(obj) != 'peptide')
+    stop("This function is only available for a peptide dataset. Abort.")
+  obj@experimentData@other$matAdj <- X
+  return(obj)
+}
+
+
+#' @title Returns the contains of the slot processing  of an object of 
+#' class \code{MSnSet}
+#' 
+#' @param  obj An object (peptides) of class \code{MSnSet}.
+#' 
+#' @return A list of connected components
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' Xshared <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
+#' Xunique <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
+#' ll.X <- list(matWithSharedPeptides = Xshared, matWithUniquePeptides = Xunique)
+#' Exp1_R25_pept <- SetMatAdj(Exp1_R25_pept, ll.X)
+#' ll1 <- get.pep.prot.cc(GetMatAdj(Exp1_R25_pept)$matWithSharedPeptides)
+#' ll2 <- DAPAR::get.pep.prot.cc(GetMatAdj(Exp1_R25_pept)$matWithUniquePeptides)
+#' cc <- list(allPep = ll1, onlyUniquePep = ll2)
+#' Exp1_R25_pept <- SetCC(Exp1_R25_pept, cc)
+#' ll.cc <- GetCC(Exp1_R25_pept)
+#' 
+#' @export
+#'
+GetCC <- function(obj){
+  if (GetTypeofData(obj) != 'peptide')
+    warning("This function is only available for a peptide dataset.")
+  return(obj@experimentData@other$CC)
+}
+
+
+#' @title Returns the connected components
+#' 
+#' @param  obj An object (peptides) of class \code{MSnSet}.
+#' 
+#' @param cc The connected components list
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' Xshared <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
+#' Xunique <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
+#' ll.X <- list(matWithSharedPeptides = Xshared, matWithUniquePeptides = Xunique)
+#' Exp1_R25_pept <- SetMatAdj(Exp1_R25_pept, ll.X)
+#' ll1 <- get.pep.prot.cc(GetMatAdj(Exp1_R25_pept)$matWithSharedPeptides)
+#' ll2 <- DAPAR::get.pep.prot.cc(GetMatAdj(Exp1_R25_pept)$matWithUniquePeptides)
+#' cc <- list(allPep = ll1, onlyUniquePep = ll2)
+#' Exp1_R25_pept <- SetCC(Exp1_R25_pept, cc)
+#' 
+#' @export
+#'
+SetCC <- function(obj, cc){
+  if (GetTypeofData(obj) != 'peptide')
+    stop("This function is only available for a peptide dataset. Abort.")
+  obj@experimentData@other$CC <- cc
+  return(obj)
+}
+
+
 
 #' Returns the number of empty lines in a matrix.
 #' 
@@ -39,8 +154,8 @@ return(obj@processingData@processing)
 #' @importFrom Biobase pData exprs fData
 #'
 getNumberOfEmptyLines <- function(qData){
-n <- sum(apply(is.na(as.matrix(qData)), 1, all))
-return (n)
+  n <- sum(apply(is.na(as.matrix(qData)), 1, all))
+  return (n)
 }
 
 
@@ -56,8 +171,26 @@ return (n)
 GetTypeofData <- function(obj){
   if (!is.null(obj))
     obj@experimentData@other$typeOfData
-else
-  NULL
+  else
+    NULL
+}
+
+
+#' @title xxxx
+#' 
+#' @description
+#' xxxx
+#' 
+#' @param obj xxx
+#' 
+#' @export
+#' 
+GetKeyId <- function(obj)
+{
+  if (!is.null(obj))
+    obj@experimentData@other$keyId
+  else
+    NULL
 }
 
 
@@ -100,7 +233,7 @@ getListNbValuesInLines <- function(obj, type){
                WholeMatrix= seq(0, ncol(data)),
                AllCond = seq(0, min(unlist(lapply(unique(conds), function(x) length(which(conds == x)))))),
                AtLeastOneCond = seq(0, min(unlist(lapply(unique(conds), function(x) length(which(conds == x))))))
-         )
+  )
   
   return (ll)
 }
@@ -135,18 +268,18 @@ getListNbValuesInLines <- function(obj, type){
 #' @export
 #' 
 getIndicesConditions <- function(conds, cond1, cond2){
-indCondition1 <- indCondition2 <- NULL
-
-for(i in 1:length(cond1)){
+  indCondition1 <- indCondition2 <- NULL
+  
+  for(i in 1:length(cond1)){
     indCondition1 <- c(indCondition1,
-                        which(conds == cond1[i]))
-}
-for(i in 1:length(cond2)){
+                       which(conds == cond1[i]))
+  }
+  for(i in 1:length(cond2)){
     indCondition2 <- c(indCondition2,
-                        which(conds == cond2[i]))
-}
-
-return(list(iCond1 = indCondition1, iCond2 = indCondition2))
+                       which(conds == cond2[i]))
+  }
+  
+  return(list(iCond1 = indCondition1, iCond2 = indCondition2))
 }
 
 
@@ -211,13 +344,13 @@ my_hc_ExportMenu <- function(hc, filename){
 my_hc_chart <- function(hc,  chartType,zoomType="None"){
   hc %>% 
     hc_chart(type = chartType, 
-           zoomType=zoomType,
-           showAxes = TRUE,
-           resetZoomButton= list(
-             position = list(
-               align= 'left',
-               verticalAlign = 'top')
-           ))
+             zoomType=zoomType,
+             showAxes = TRUE,
+             resetZoomButton= list(
+               position = list(
+                 align= 'left',
+                 verticalAlign = 'top')
+             ))
 }
 
 
@@ -246,17 +379,17 @@ my_hc_chart <- function(hc,  chartType,zoomType="None"){
 #' @export
 #' 
 nonzero <- function(x){
-    ## function to get a two-column matrix containing the indices of the
-    ### non-zero elements in a "dgCMatrix" class matrix
-    
-    stopifnot(inherits(x, "dgCMatrix"))
-    if (all(x@p == 0))
-        return(matrix(0, nrow=0, ncol=2,
-                      dimnames=list(character(0), c("row","col"))))
-    res <- cbind(x@i+1, rep(seq(dim(x)[2]), diff(x@p)))
-    colnames(res) <- c("row", "col")
-    res <- res[x@x != 0, , drop = FALSE]
-    return(res)
+  ## function to get a two-column matrix containing the indices of the
+  ### non-zero elements in a "dgCMatrix" class matrix
+  
+  stopifnot(inherits(x, "dgCMatrix"))
+  if (all(x@p == 0))
+    return(matrix(0, nrow=0, ncol=2,
+                  dimnames=list(character(0), c("row","col"))))
+  res <- cbind(x@i+1, rep(seq(dim(x)[2]), diff(x@p)))
+  colnames(res) <- c("row", "col")
+  res <- res[x@x != 0, , drop = FALSE]
+  return(res)
 }
 
 
@@ -337,5 +470,5 @@ dapar_hc_chart <- function(hc,  chartType, zoomType="None", width=0, height=0){
                  align= 'left',
                  verticalAlign = 'top')
              ))
-
+  
 }

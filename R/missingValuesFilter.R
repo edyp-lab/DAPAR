@@ -637,6 +637,11 @@ GetIndices_MetacellFiltering <- function(obj, level, pattern, type, percent, op,
   
   indices <- NULL
   
+  if (!(pattern %in% DAPAR::metacell.def(level)$node && type !='None' && !is.null(type))){
+    warning("Either 'pattern' nor 'type' are equal to 'None'")
+    return(NULL)
+  }
+  
   mask <- match.metacell(metadata = GetMetacell(obj), 
                          pattern  =pattern, 
                          level = level)
@@ -714,25 +719,34 @@ SymFilteringOperators <- function()
 #' 
 #' @export
 #' 
-GetIndices_WholeMatrix <- function( metacell.mask, op='==', percent=FALSE, th=0){
-  
+GetIndices_WholeMatrix <- function( metacell.mask, 
+                                    op = '==', 
+                                    percent = FALSE, 
+                                    th = 0){
+
   #Check parameters
   if (missing(metacell.mask))
     stop("'metacell.mask' is required.")
   if(isTRUE(percent)){
-    if (th < 0 || th > 1)
-      stop("With percent=TRUE, the threshold 'th' must be in the interval [0, 1].")
+    if (th < 0 || th > 1){
+      warning("With percent=TRUE, the threshold 'th' must be in the interval [0, 1].")
+      return(NULL)
+    }
   } else {
     th.upbound <- ncol(metacell.mask)
-    if (th > th.upbound)
-      stop(paste0("Param `th` is not correct. It must be an integer greater than or equal to 0 and less or equal than ",
+    if (th > th.upbound){
+      warning(paste0("Param `th` is not correct. It must be an integer greater than or equal to 0 and less or equal than ",
                   th.upbound))
+      return(NULL)
+    }
   }
   
-  if (!(op %in% SymFilteringOperators()))
-      stop(paste0("'op' must be one of the followinf values: ",
+  if (!(op %in% SymFilteringOperators())){
+      warning(paste0("'op' must be one of the following values: ",
                   paste0(SymFilteringOperators(), collapse=' '))
       )
+    return(NULL)
+  }
  
   indices <- NULL
   if (isTRUE(percent)) {
@@ -836,7 +850,7 @@ GetIndices_BasedOnConditions <- function(metacell.mask,
   if(missing(th))
     stop("'th' is missing.")
   else if (!(op %in% SymFilteringOperators()))
-    stop(paste0("'op' must be one of the followinf values: ",
+    stop(paste0("'op' must be one of the following values: ",
                 paste0(SymFilteringOperators(), collapse=' '))
     )
   
@@ -846,12 +860,15 @@ GetIndices_BasedOnConditions <- function(metacell.mask,
   
   if(isTRUE(percent)){
     if (th < 0 || th > 1)
-      stop("With percent=TRUE, the threshold 'th' must be in the interval [0, 1].")
+      warning("With percent=TRUE, the threshold 'th' must be in the interval [0, 1].")
+    return(NULL)
   } else {
     th.upbound <- min(unlist(lapply(u_conds, function(x) length(which(conds==x)))))
-    if (th > th.upbound)
-      stop(paste0("Param `th` is not correct. It must be an integer greater than or equal to 0 and less or equal than ",
+    if (th > th.upbound){
+      warning(paste0("Param `th` is not correct. It must be an integer greater than or equal to 0 and less or equal than ",
                   th.upbound))
+      return(NULL)
+    }
   }
   
   

@@ -13,8 +13,8 @@
 #' @author Florence Combes, Samuel Wieczorek
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj <- Exp1_R25_pept
-#' metacellPerLinesHisto_HC(obj, 'missing')
+#' obj <- Exp1_R25_pept[1:10,]
+#' metacellPerLinesHisto_HC(obj, pattern = 'missing')
 #' 
 #' @export
 #'
@@ -58,13 +58,15 @@ metacellPerLinesHisto_HC <- function(obj,
   nb.col <- dim(qData)[2] 
   nb.na <- NbNAPerRow
   temp <- table(NbNAPerRow)
-  nb.na2barplot <- rep(0, 1+ncol(qData))
+  nb.na2barplot <- rep(0, ncol(qData))
+  
   for (i in 1:length(temp)) 
     nb.na2barplot[as.integer(names(temp)[i])] <- temp[i]
   
   
   df <- data.frame(y=nb.na2barplot,
                    y_percent = round(100 * nb.na2barplot / dim(qData)[1], digits = 2))
+   
   myColors = rep("lightgrey", nrow(df))
   
   h1 <-  highchart() %>% 

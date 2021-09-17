@@ -47,7 +47,10 @@ boxPlotD_HC <- function(obj,
                         subset.view=NULL){
   
   if (is.null(obj)){
-    warning('The dataset in NULL and cannot be shown')
+    warning('The dataset is NULL and cannot be shown')
+    return(NULL)
+  } else if (nrow(obj) == 0) {
+    warning('The dataset is empty and cannot be shown')
     return(NULL)
   } else {
     qData <- Biobase::exprs(obj)

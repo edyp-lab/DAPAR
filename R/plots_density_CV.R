@@ -24,6 +24,9 @@
 #' @export
 #' 
 wrapper.CVDistD_HC <- function(obj, ...){
+  if (nrow(obj) == 0)
+    return(NULL)
+  
   qData <- Biobase::exprs(obj)
   conds <- Biobase::pData(obj)[,"Condition"]
   CVDistD_HC(qData, conds, ...)

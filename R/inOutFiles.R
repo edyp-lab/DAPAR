@@ -88,9 +88,8 @@ saveParameters <- function(obj,name.dataset=NULL,name=NULL,l.params=NULL){
 #' package="DAPARdata")
 #' metadata = read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
 #' indExpData <- c(56:61)
-#' indFData <- c(1:55,62:71)
 #' colnameForID <- 'id'
-#' obj <- createMSnset(exprsFile, metadata,indExpData,  indFData, colnameForID, 
+#' obj <- createMSnset(exprsFile, metadata,indExpData,  colnameForID, 
 #' indexForMetacell = c(43:48), pep_prot_data = "peptide", software = 'maxquant')
 #' 
 #' 
@@ -109,20 +108,29 @@ saveParameters <- function(obj,name.dataset=NULL,name=NULL,l.params=NULL){
 #' @importFrom utils read.table
 #' 
 createMSnset <- function(file,
-                         metadata=NULL,
+                         metadata = NULL,
                          indExpData,
-                         colnameForID=NULL,
+                         colnameForID = NULL,
                          indexForMetacell = NULL,
-                         logData=FALSE, 
-                         replaceZeros=FALSE,
-                         pep_prot_data=NULL,
+                         logData = FALSE, 
+                         replaceZeros = FALSE,
+                         pep_prot_data = NULL,
                          proteinId = NULL,
                          software = NULL){
   
   if (!is.data.frame(file)){ #the variable is a path to a text file
     data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
-  } else {data <- file}
+  } else {
+    data <- file
+    }
   
+  colnames(data) <- gsub(".", "_", colnames(data), fixed=TRUE)
+  colnameForID <- gsub(".", "_", colnameForID, fixed=TRUE)
+  proteinId <- gsub(".", "_", proteinId, fixed=TRUE)
+  colnames(data) <- gsub(" ", "_", colnames(data), fixed=TRUE)
+  colnameForID <-  gsub(" ", "_", colnameForID, fixed=TRUE)
+  proteinId <-  gsub(" ", "_", proteinId, fixed=TRUE)
+   
   ##building exprs Data of MSnSet file
   Intensity <- matrix(as.numeric(gsub(",", ".",as.matrix(data[,indExpData] )))
                       , ncol=length(indExpData)
@@ -140,7 +148,7 @@ createMSnset <- function(file,
     metacell <- as.data.frame(apply(metacell,2, function(x) gsub(" ", '', x)),
                               stringsAsFactors = FALSE)
   }
-  #browser()
+
   
   ##building fData of MSnSet file
   if(is.null(colnameForID))
@@ -152,7 +160,6 @@ createMSnset <- function(file,
                       stringsAsFactors = FALSE)
     rownames(fd) <- paste(pep_prot_data, "_", 1:nrow(fd), sep="")
     rownames(Intensity) <- paste(pep_prot_data, "_",  1:nrow(Intensity), sep="")
-                               
   }else{
     fd <- data
     rownames(fd) <- data[ ,colnameForID]
@@ -232,6 +239,85 @@ createMSnset <- function(file,
 }
 
 
+
+
+#' @title This function exports a data.frame to a Excel file.
+#' 
+#' @param df An data.frame
+#' 
+#' @param tags xxx
+#' 
+#' @param colors xxx
+#' 
+#' @param tabname xxx
+#' 
+#' @param filename A character string for the name of the Excel file.
+#' 
+#' @return A Excel file (.xlsx)
+#' 
+#' @author Samuel Wieczorek
+#' 
+#' @export
+#' 
+#' @import openxlsx
+#' 
+#' @examples
+#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' df <- Biobase::exprs(Exp1_R25_pept[1:100])
+#' tags <- GetMetacell(Exp1_R25_pept[1:100])
+#' colors <- list('missing POV' = "lightblue",
+#'                'missing MEC' = "orange",
+#'                'recovered' = "lightgrey",
+#'                'identified' = "white",
+#'                'combined' = "red")
+#' write.excel(df, tags, colors, filename = 'toto')
+write.excel <- function(df,
+                        tags=NULL,
+                        colors=NULL,
+                        tabname='foo',
+                        filename=NULL){
+  
+  if (is.null(filename))
+    filename <- paste('data-', Sys.Date(), '.xlxs', sep='')
+  else if(tools::file_ext(filename) != ""){
+    if (tools::file_ext(filename) != "xlsx")
+      stop("Filename extension must be equal to 'xlsx'. Abort...")
+    else
+      fname <- filename
+  } else
+    fname <- paste(filename, ".xlsx", sep="")
+  
+  unique.tags <- NULL
+  if (!is.null(tags) && !is.null(colors)){
+    unique.tags <- unique(as.vector(as.matrix(tags)))
+    if (!isTRUE(sum(unique.tags %in% names(colors)) == length(unique.tags)))
+      warning("The length of colors vector must be equal to the number of different tags. 
+              As is it not the case, colors are ignored")
+  }
+  
+  wb <- openxlsx::createWorkbook(fname)
+  openxlsx::addWorksheet(wb, tabname)
+  openxlsx::writeData(wb, sheet = 1, df, rowNames = FALSE)
+  
+  
+  # Add colors w.r.t. tags
+  if (!is.null(tags) && !is.null(colors))
+    if (isTRUE(sum(unique.tags %in% names(colors)) == length(unique.tags))){
+      lapply(1:length(colors), function(x){
+        list.tags <- which(names(colors)[x]==tags, arr.ind=TRUE)
+        openxlsx::addStyle(wb,
+                           sheet = 1,
+                           cols = list.tags[,"col"],
+                           rows = list.tags[,"row"] + 1, 
+                           style = openxlsx::createStyle(fgFill = colors[x])
+        )
+      })
+    }
+  
+  openxlsx::saveWorkbook(wb, fname, overwrite=TRUE)
+}
+
+
 #' This function exports a \code{MSnSet} data object to a Excel file.
 #' Each of the three data.frames in the \code{MSnSet} object (ie experimental 
 #' data, phenoData and metaData are respectively integrated into separate sheets 
@@ -263,14 +349,6 @@ createMSnset <- function(file,
 #' 
 writeMSnsetToExcel <- function(obj, filename)
 {
-  #require(Matrix)
-  POV_Style <- openxlsx::createStyle(fgFill = "lightblue")
-  MEC_Style <- openxlsx::createStyle(fgFill = "orange")
-  recovered_Style <- openxlsx::createStyle(fgFill = "lightgrey")
-  identified_Style <- openxlsx::createStyle(fgFill = 'white')
-  combined_Style <- openxlsx::createStyle(fgFill = 'red')
-  
-  #require(openxlsx)
   name <- paste(filename, ".xlsx", sep="")
   wb <- openxlsx::createWorkbook(name)
   n <- 1
@@ -279,47 +357,83 @@ writeMSnsetToExcel <- function(obj, filename)
                                          Biobase::exprs(obj)), rowNames = FALSE)
   
   
+  # Add colors to quantitative table
+  mc <- metacell.def(GetTypeofData(obj))
+  colors <- as.list(setNames(mc$color, mc$node))
+  tags <- cbind(keyId = rep('identified', nrow(obj)),
+                GetMetacell(obj)
+                )
   
-    mat <- Biobase::fData(obj)[ ,obj@experimentData@other$names_metacell]
-    level <- obj@experimentData@other$typeOfData
-    listPOV <- which(match.metacell(mat, 'missing POV', level), arr.ind=TRUE)
-    listMEC <- which(match.metacell(mat, 'missing MEC', level), arr.ind=TRUE)
-    listIdentified <- which(match.metacell(mat, 'identified', level), arr.ind=TRUE)
-    listRecovered <- which(match.metacell(mat, 'recovered', level), arr.ind=TRUE)
-    if (level == 'protein')
-      listCombined <- which(match.metacell(mat, 'combined', level), arr.ind=TRUE)
+
+  unique.tags <- NULL
+  if (!is.null(tags) && !is.null(colors)){
+    unique.tags <- unique(as.vector(as.matrix(tags)))
+    if (!isTRUE(sum(unique.tags %in% names(colors)) == length(unique.tags)))
+      warning("The length of colors vector must be equal to the number of different tags. 
+              As is it not the case, colors are ignored")
+  }
+  if (!is.null(tags) && !is.null(colors))
+    if (isTRUE(sum(unique.tags %in% names(colors)) == length(unique.tags))){
+      lapply(1:length(colors), function(x){
+        list.tags <- which(names(colors)[x]==tags, arr.ind=TRUE)
+        openxlsx::addStyle(wb,
+                           sheet = 1,
+                           cols = list.tags[ ,"col"],
+                           rows = list.tags[ ,"row"] + 1, 
+                           style = openxlsx::createStyle(fgFill = colors[x])
+        )
+      })
+    }
   
-  
-  openxlsx::addStyle(wb, sheet=n, cols = listPOV[,"col"]+1, rows = listPOV[,"row"]+1, style = POV_Style)
-  openxlsx::addStyle(wb, sheet=n, cols = listMEC[,"col"]+1, rows = listMEC[,"row"]+1, style = MEC_Style)
-  openxlsx::addStyle(wb, sheet=n, cols = listIdentified[,"col"]+1, rows = listIdentified[,"row"]+1, style = identified_Style)
-  openxlsx::addStyle(wb, sheet=n, cols = listRecovered[,"col"]+1, rows = listRecovered[,"row"]+1, style = recovered_Style)
-  
-  if (level == 'protein')
-    openxlsx::addStyle(wb, sheet=n, cols = listCombined[,"col"]+1, rows = listCombined[,"row"]+1, style = combined_Style)
-  
-  
-  #bodyStyleNumber <- createStyle(numFmt = "NUMBER")
-  #addStyle(wb, sheet=1, bodyStyleNumber, rows = 2:nrow(Biobase::exprs(obj)), 
-  #cols=2:ncol(Biobase::exprs(obj)),gridExpand = TRUE)
   
   openxlsx::addWorksheet(wb, "Samples Meta Data")
   n <- n +1
   openxlsx::writeData(wb, sheet=n, Biobase::pData(obj), rowNames = FALSE)
+  
+  
+  # Add colors for sample data sheet
+  u_conds <- unique(Biobase::pData(obj)$Condition)
+  colors <- setNames(DAPAR::ExtendPalette(length(u_conds)),
+                     u_conds)
+  colors[['blank']] <- 'white'
+   
+  tags <- Biobase::pData(obj)
+  tags[,] <- 'blank'
+  tags$Sample.name <- Biobase::pData(obj)$Condition
+  tags$Condition <- Biobase::pData(obj)$Condition
+  
+  unique.tags <- NULL
+  if (!is.null(tags) && !is.null(colors)){
+    unique.tags <- unique(as.vector(as.matrix(tags)))
+    if (!isTRUE(sum(unique.tags %in% names(colors)) == length(unique.tags)))
+      warning("The length of colors vector must be equal to the number of different tags. 
+              As is it not the case, colors are ignored")
+  }
+  if (!is.null(tags) && !is.null(colors))
+    if (isTRUE(sum(unique.tags %in% names(colors)) == length(unique.tags))){
+      lapply(1:length(colors), function(x){
+        list.tags <- which(names(colors)[x]==tags, arr.ind=TRUE)
+        openxlsx::addStyle(wb,
+                           sheet = n,
+                           cols = list.tags[ ,"col"],
+                           rows = list.tags[ ,"row"] + 1, 
+                           style = openxlsx::createStyle(fgFill = colors[x])
+        )
+      })
+    }
+  
+  
+  
+  ## Add feature Data sheet
+  
+  
+  
+  
   n <- n +1
   if (dim(Biobase::fData(obj))[2] != 0){
     openxlsx::addWorksheet(wb, "Feature Meta Data")
-    #numericCols <- which(sapply(Biobase::fData(obj), is.numeric))
-    #Biobase::fData(obj)[,numericCols] <- 
-    #format(Biobase::fData(obj)[,numericCols])
-    
     openxlsx::writeData(wb, sheet=n, cbind(ID = rownames(Biobase::fData(obj)),
                                            Biobase::fData(obj)), rowNames = FALSE)
-    #bodyStyleNumber <- createStyle(numFmt = "NUMBER")
-    #addStyle(wb, sheet=3, bodyStyleNumber, 
-    #rows = 2:nrow(Biobase::exprs(obj)), cols=numericCols, 
-    #gridExpand = TRUE, stack=TRUE)
-    
   }
   
   if (!is.null(obj@experimentData@other$GGO_analysis))
@@ -346,6 +460,9 @@ writeMSnsetToExcel <- function(obj, filename)
   
   
 }
+
+
+
 
 
 #' @title This function reads a sheet of an Excel file and put the data 

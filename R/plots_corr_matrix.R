@@ -52,6 +52,14 @@
 #' @export
 #' 
 wrapper.corrMatrixD_HC <- function(obj, rate=0.5, showValues=TRUE){
+  if (is.null(obj)) {
+    warning('The dataset is NULL and cannot be shown')
+    return(NULL)
+  } else if (nrow(obj) == 0) {
+    warning('The dataset is empty and cannot be shown')
+    return(NULL)
+  }
+  
   qData <- Biobase::exprs(obj)
   samplesData <- Biobase::pData(obj)
   data <- cor(qData,use = 'pairwise.complete.obs')

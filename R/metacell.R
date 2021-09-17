@@ -60,9 +60,9 @@ metacell.def <- function(level){
   if(missing(level))
     stop("'level' is required.")
   
-  switch(level,
+  def <- switch(level,
          peptide = {
-           node <- c('root', 
+           node <- c('all', 
                       'quanti', 
                       'identified', 
                       'recovered', 
@@ -73,13 +73,13 @@ metacell.def <- function(level){
                       'imputed POV', 
                       'imputed MEC')
            parent <- c('', 
-                       'root', 
+                       'all', 
                        'quanti', 
                        'quanti', 
-                       'root', 
+                       'all', 
                        'missing', 
                        'missing',
-                       'root',
+                       'all',
                        'imputed',
                        'imputed')
          data.frame(node = node,
@@ -88,7 +88,7 @@ metacell.def <- function(level){
          
          
          protein = {
-           node <- c('root',
+           node <- c('all',
                       'quanti',
                       'identified',
                       'recovered',
@@ -100,22 +100,42 @@ metacell.def <- function(level){
                       'imputed MEC',
                       'combined')
            parent <- c('',
-                       'root',
+                       'all',
                        'quanti',
                        'quanti',
-                       'root',
+                       'all',
                        'missing',
                        'missing',
-                       'root',
+                       'all',
                        'imputed',
                        'imputed',
-                       'root')
+                       'all')
          
          data.frame(node = node,
                     parent = parent)
          }
          
   )
+  
+  
+  colors <- list('all' = 'white',
+                 'missing' = 'white',
+                 'missing POV' = "lightblue",
+                 'missing MEC' = "orange",
+                 'quanti' = "white",
+                 'recovered' = "lightgrey",
+                 'identified' = "white",
+                 'combined' = "red",
+                 'imputed' = "white",
+                 'imputed POV' = "#0040FF",
+                 'imputed MEC' = "#DF7401")
+  
+  def <- cbind(def, color = rep('white', nrow(def)))
+  
+  for(n in 1:nrow(def))
+    def[n, 'color'] <- colors[[def[n, 'node']]]
+
+  return(def)
   
   
 }
@@ -285,7 +305,7 @@ Metacell_generic <- function(qdata, conds, level){
   if (missing(level))
     stop("'level' is required.")
 
-  df <- data.frame(matrix(rep('quanti', nrow(qdata)*ncol(qdata)),
+  df <- data.frame(matrix(rep('quanti', nrow(qdata) * ncol(qdata)),
                           nrow = nrow(qdata),
                           ncol = ncol(qdata)),
                    stringsAsFactors = FALSE) 
