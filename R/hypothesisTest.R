@@ -37,10 +37,35 @@
 hc_logFC_DensityPlot <-function(df_logFC, 
                                 threshold_LogFC = 0, 
                                 pal = NULL){
-  if (is.null(df_logFC) || threshold_LogFC < 0){
-    hc <- NULL
+  if (threshold_LogFC < 0){
+    warning("The parameter 'threshold_LogFC' must be positive or equal to zero.")
     return(NULL)
   }
+  
+
+    hc <-  highcharter::highchart() %>% 
+      hc_title(text = "log(FC) repartition") %>% 
+      my_hc_chart(chartType = "spline", zoomType="x") %>%
+      hc_legend(enabled = TRUE) %>%
+      hc_xAxis(title = list(text = "log(FC)"),
+               plotBands = list(list(from= -threshold_LogFC, to = threshold_LogFC, color = "lightgrey")),
+               plotLines=list(list(color= "grey" , width = 2, value = 0, zIndex = 5))
+      ) %>%
+      hc_yAxis(title = list(text="Density")) %>%
+      hc_tooltip(headerFormat= '',
+                 pointFormat = "<b> {series.name} </b>: {point.y} ",
+                 valueDecimals = 2) %>%
+      my_hc_ExportMenu(filename = "densityplot") %>%
+      hc_plotOptions(
+        series=list(
+          animation=list(duration = 100),
+          connectNulls= TRUE,
+          marker=list(enabled = FALSE)
+        )
+      )
+  
+ if (is.null(df_logFC) || ncol(df_logFC) == 0)
+   return(hc)
   
   myColors <- NULL
   if (is.null(pal)){
@@ -58,28 +83,8 @@ hc_logFC_DensityPlot <-function(df_logFC,
   nInf <- length(which(df_logFC <= -threshold_LogFC))
   nSup <- length(which(df_logFC >= threshold_LogFC))
   nInside <- length(which(abs(df_logFC) < threshold_LogFC))
-  hc <- NULL
-  hc <-  highcharter::highchart() %>% 
-    hc_title(text = "log(FC) repartition") %>% 
-    my_hc_chart(chartType = "spline", zoomType="x") %>%
-    hc_legend(enabled = TRUE) %>%
-    hc_colors(myColors) %>%
-    hc_xAxis(title = list(text = "log(FC)"),
-             plotBands = list(list(from= -threshold_LogFC, to = threshold_LogFC, color = "lightgrey")),
-             plotLines=list(list(color= "grey" , width = 2, value = 0, zIndex = 5))
-    )%>%
-    hc_yAxis(title = list(text="Density")) %>%
-    hc_tooltip(headerFormat= '',
-               pointFormat = "<b> {series.name} </b>: {point.y} ",
-               valueDecimals = 2) %>%
-    my_hc_ExportMenu(filename = "densityplot") %>%
-    hc_plotOptions(
-      series=list(
-        animation=list(duration = 100),
-        connectNulls= TRUE,
-        marker=list(enabled = FALSE)
-      )
-    )
+  hc <-  hc %>%
+    hc_colors(myColors)
   
   maxY.inf <- NULL
   maxY.inside <- NULL

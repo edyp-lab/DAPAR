@@ -155,9 +155,9 @@ Get_AllComparisons <- function(obj){
 #' 
 diffAnaSave <- function (obj, 
                          allComp, 
-                         data=NULL,
-                         th_pval=0
-                         ,th_logFC=0){
+                         data = NULL,
+                         th_pval = 0
+                         ,th_logFC = 0){
     if (is.null(allComp)){
         warning("The analysis has not been completed. Maybe there 
             are some missing values in the dataset. If so, please impute before
@@ -171,9 +171,9 @@ diffAnaSave <- function (obj,
   .pval <- as.data.frame(allComp$P_Value)
   cnames <- c(colnames(allComp$logFC), colnames(allComp$P_Value))
   ind <- which(colnames(Biobase::fData(obj)) %in% cnames)
-  if (length(ind) > 0) {
+  if (length(ind) > 0) 
       Biobase::fData(obj) <- Biobase::fData(obj)[,-ind]
-  }
+  
   for (i in 1:ncol(.fc)){
     Biobase::fData(obj) <- cbind(Biobase::fData(obj), .fc[,i], .pval[,i])
     coln <- colnames(Biobase::fData(obj))
@@ -200,17 +200,7 @@ diffAnaSave <- function (obj,
         ipval <- which(y >= th_pval)
         ilogfc <- which(abs(x) >= th_logFC)
         Biobase::fData(obj)[intersect(ipval, ilogfc),]$Significant <- 1
-   
-
-        
-        # text <- paste("Differential analysis : Selection with the following 
-        #                 threshold values :logFC =",threshold_logFC,
-        #                 ", -log10(p-value) = ", threshold_pVal,
-        #                 ", FDR = ", fdr, sep=" ")
-        # 
-        # obj@processingData@processing <- c(obj@processingData@processing, text)
-        # 
-    }
+   }
   
   
   return(obj)

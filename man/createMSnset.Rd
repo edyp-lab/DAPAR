@@ -61,9 +61,8 @@ metadataFile <- system.file("extdata", "samples_Exp1_R25.txt",
 package="DAPARdata")
 metadata = read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
 indExpData <- c(56:61)
-indFData <- c(1:55,62:71)
 colnameForID <- 'id'
-obj <- createMSnset(exprsFile, metadata,indExpData,  indFData, colnameForID, 
+obj <- createMSnset(exprsFile, metadata,indExpData,  colnameForID, 
 indexForMetacell = c(43:48), pep_prot_data = "peptide", software = 'maxquant')
 
 

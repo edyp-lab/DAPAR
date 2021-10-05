@@ -37,11 +37,12 @@
 #' @importFrom Biobase pData exprs fData
 #' @import graphics
 #' 
-diffAnaVolcanoplot <- function(logFC=NULL, 
-                                pVal=NULL, 
-                                threshold_pVal=1e-60, 
-                                threshold_logFC=0, 
-                                conditions=NULL, colors=NULL){
+diffAnaVolcanoplot <- function(logFC = NULL, 
+                                pVal= NULL, 
+                                threshold_pVal = 1e-60, 
+                                threshold_logFC = 0, 
+                                conditions = NULL, 
+                               colors = NULL){
 
 xtitle <- paste("log2 ( mean(",conditions[2],") / mean(",conditions[1],") )",
                 sep="")
@@ -159,12 +160,11 @@ return(p)
 #' @importFrom Biobase pData exprs fData
 #'
 diffAnaVolcanoplot_rCharts <- function(df,
-                                       threshold_pVal=1e-60,
-                                       threshold_logFC=0,
-                                       conditions=NULL,
-                                       clickFunction=NULL,
-                                       pal=NULL,
-                                       swap = FALSE){
+                                       threshold_pVal = 1e-60,
+                                       threshold_logFC = 0,
+                                       conditions = NULL,
+                                       clickFunction = NULL,
+                                       pal = NULL){
     
   
     xtitle <- paste("log2 ( mean(",conditions[2],") / mean(",conditions[1],") )",sep="")
@@ -204,12 +204,7 @@ diffAnaVolcanoplot_rCharts <- function(df,
                              y = c(threshold_pVal,threshold_pVal,max(df$y)))
     
     title <- NULL
-    #title <- paste0(cond[1], '_vs_', cond[2])
-    if (swap == TRUE){
-      title <- paste0(conditions[2], '_vs_', conditions[1])
-    } else {
-      title <- paste0(conditions[1], '_vs_', conditions[2])
-    }
+    title <- paste0(conditions[1], '_vs_', conditions[2])
     
     h1 <-  highchart() %>%
         hc_add_series(data = df, type = "scatter", hcaes(x,y,group=g)) %>%

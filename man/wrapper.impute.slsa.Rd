@@ -81,7 +81,7 @@ This method is a wrapper to the function \code{impute.slsa} of the package
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-obj <- Exp1_R25_pept[1:10]
+obj <- Exp1_R25_pept[1:100]
 obj.slsa.pov <- wrapper.impute.slsa(obj, na.type = 'missing POV')
 
 }

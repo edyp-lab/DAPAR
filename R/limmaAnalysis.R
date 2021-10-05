@@ -646,18 +646,18 @@ formatLimmaResult <- function(fit, conds, contrast){
   for (i in 1:Compa.Nb){
 
     #not the same syntax to pars if Contast=1 or Contrast=2
-    if(contrast==1){
+    if(contrast == 1){
       compa <- stringr::str_match_all(colnames(fit$p.value)[i],"[[:space:]]Condition([[:digit:]]+)")[[1]]
       cn[i] <- paste(unique(conds)[as.numeric(compa[1,2])], "_vs_",unique(conds)[as.numeric(compa[2,2])], sep="")
     }
-    if(contrast==2){
+    if(contrast == 2){
       #hierarchic only
       #compa <- stringr::str_match_all(colnames(fit$p.value)[i], "[[:space:]]Condition([[:digit:]]+)[[:space:]]")[[1]]
       #cn[i]<-paste(levels(Conditions)[as.numeric(compa[1,2])], "vs(all-",levels(Conditions)[as.numeric(compa[1,2])], ")", sep="")
 
       #hier and non hier
       compa <- stringr::str_match_all(colnames(fit$p.value)[i], "[[:space:]]Condition([[:digit:]]+)")[[1]]
-      cn[i]<-paste(unique(conds)[as.numeric(compa[1,2])], "_vs_(all-",unique(conds)[as.numeric(compa[1,2])], ")", sep="")
+      cn[i] <- paste(unique(conds)[as.numeric(compa[1,2])], "_vs_(all-",unique(conds)[as.numeric(compa[1,2])], ")", sep="")
     }
   }
 
@@ -667,8 +667,8 @@ formatLimmaResult <- function(fit, conds, contrast){
     P_Value = as.data.frame(res[,-(1:Compa.Nb)] )
   )
 
-  colnames(res.l$logFC) <- paste(cn, "logFC",sep="_")
-  colnames(res.l$P_Value) <- paste(cn, "pval",sep="_")
+  colnames(res.l$logFC) <- gsub('[ ]', '', paste(cn, "logFC", sep="_"))
+  colnames(res.l$P_Value) <- gsub('[ ]', '', paste(cn, "pval", sep="_"))
   ## end colnames
 
   return(res.l)

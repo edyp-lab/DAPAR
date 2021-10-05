@@ -10,8 +10,7 @@ diffAnaVolcanoplot_rCharts(
   threshold_logFC = 0,
   conditions = NULL,
   clickFunction = NULL,
-  pal = NULL,
-  swap = FALSE
+  pal = NULL
 )
 }
 \arguments{
