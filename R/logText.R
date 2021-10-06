@@ -344,7 +344,6 @@ getTextForAnaDiff <- function(l.params){
   # Condition1
   # Condition2
   # Comparison
-  # swapVolcano
   # filterType
   # filter_th_NA
   # calibMethod
@@ -363,11 +362,7 @@ getTextForAnaDiff <- function(l.params){
                  "with min nb values / lines: ", l.params$filter_th_NA,"</li>")
   }
   
-  if (!is.null(l.params$swapVolcano) ){
-    txt <- paste(txt, "<li>Swap volcano: ",l.params$swapVolcano , "</li>")
-  }
-  
-  
+
 if (!is.null(l.params$calibMethod) ){
   if (!is.null(l.params$numValCalibMethod)){
     txt <- paste(txt, "<li>The calibration method is ", l.params$calibMethod, ", with num value = ", l.params$numValCalibMethod, "</li>")

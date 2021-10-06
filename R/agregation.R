@@ -985,7 +985,7 @@ finalizeAggregation <- function(obj.pep, pepData, protData, protMetacell, X){
   n <- GetDetailedNbPeptides(X)
   
   
-  fd <- data.frame(keyId = rownames(protData),
+  fd <- data.frame(proteinId = rownames(protData),
                    nPepTotal = n$nTotal,
                    nPepShared = n$nShared, 
                    nPepSpec = n$nSpec, 
@@ -1000,7 +1000,8 @@ finalizeAggregation <- function(obj.pep, pepData, protData, protMetacell, X){
   
   obj.prot@experimentData@other <- obj.pep@experimentData@other
   obj.prot@experimentData@other$typeOfData <- "protein"
-  obj.prot@experimentData@other$keyId <- 'keyId'
+  obj.prot@experimentData@other$keyId <- 'proteinId'
+  obj.prot@experimentData@other$proteinId <- 'proteinId'
   
   
   obj.prot@experimentData@other$Prostar_Version <- NA

@@ -37,8 +37,6 @@ show info from slots in df. The variable this.index refers to the slot
 named index and allows to retrieve the right row to show in the tooltip.}
 
 \item{pal}{xxx}
-
-\item{swap}{A boolean that indicates if the conditions have been swaped}
 }
 \value{
 An interactive volcanoplot
