@@ -643,7 +643,7 @@ GetIndices_MetacellFiltering <- function(obj, level, pattern, type, percent, op,
   }
   
   mask <- match.metacell(metadata = GetMetacell(obj), 
-                         pattern  =pattern, 
+                         pattern = pattern, 
                          level = level)
   
   indices <- switch(type,
@@ -815,14 +815,14 @@ GetIndices_WholeLine <- function(metacell.mask){
 #' #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:10]
-#' level <- obj@experimentData@other$typeOfData
+#' level <- GetTypeofData(obj)
 #' pattern <- 'missing'
 #' metacell.mask <- match.metacell(metadata=GetMetacell(obj), pattern=pattern, level=level)
 #' type <- 'AllCond'
 #' conds <- Biobase::pData(obj)$Condition
 #' op <- '>='
-#' th <- 2
-#' percent <- F
+#' th <- 0.5
+#' percent <- TRUE
 #' ind <- GetIndices_BasedOnConditions(metacell.mask, type, conds, percent, op, th)
 #'
 #'@export
@@ -856,12 +856,12 @@ GetIndices_BasedOnConditions <- function(metacell.mask,
   
   u_conds <- unique(conds)
   nbCond <- length(u_conds)
-  
-  
+
   if(isTRUE(percent)){
-    if (th < 0 || th > 1)
+    if (th < 0 || th > 1){
       warning("With percent=TRUE, the threshold 'th' must be in the interval [0, 1].")
-    return(NULL)
+      return(NULL)
+    }
   } else {
     th.upbound <- min(unlist(lapply(u_conds, function(x) length(which(conds==x)))))
     if (th > th.upbound){
@@ -871,20 +871,18 @@ GetIndices_BasedOnConditions <- function(metacell.mask,
     }
   }
   
-  
-  
-  
-  indices <- NULL
+indices <- NULL
   s <- matrix(rep(0, nrow(metacell.mask)*nbCond),
-              nrow=nrow(metacell.mask),
-              ncol=nbCond)
+              nrow = nrow(metacell.mask),
+              ncol = nbCond)
   
   for (c in 1:nbCond) {
     ind.cond <- which(conds == u_conds[c])
     inter <- rowSums(metacell.mask[, ind.cond])
     if (isTRUE(percent))
       inter <- inter/length(ind.cond)
-      s[,c] <- eval(parse(text=paste0("inter", op, th)))
+
+    s[,c] <- eval(parse(text = paste0("inter", op, th)))
     }
 
   indices <- switch(type,
