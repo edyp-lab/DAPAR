@@ -272,10 +272,10 @@ createMSnset <- function(file,
 #'                'combined' = "red")
 #' write.excel(df, tags, colors, filename = 'toto')
 write.excel <- function(df,
-                        tags=NULL,
-                        colors=NULL,
-                        tabname='foo',
-                        filename=NULL){
+                        tags = NULL,
+                        colors = NULL,
+                        tabname = 'foo',
+                        filename = NULL){
   
   if (is.null(filename))
     filename <- paste('data-', Sys.Date(), '.xlxs', sep='')
@@ -339,7 +339,7 @@ write.excel <- function(df,
 #' \donttest{
 #' Sys.setenv("R_ZIPCMD"= Sys.which("zip"))
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj <- Exp1_R25_pept[1:100]
+#' obj <- Exp1_R25_pept[1:10]
 #' writeMSnsetToExcel(obj, "foo")
 #' }
 #' 
@@ -362,17 +362,15 @@ writeMSnsetToExcel <- function(obj, filename)
   colors <- as.list(setNames(mc$color, mc$node))
   tags <- cbind(keyId = rep('identified', nrow(obj)),
                 GetMetacell(obj)
-                )
+  )
   
-
+  
   unique.tags <- NULL
   if (!is.null(tags) && !is.null(colors)){
     unique.tags <- unique(as.vector(as.matrix(tags)))
     if (!isTRUE(sum(unique.tags %in% names(colors)) == length(unique.tags)))
       warning("The length of colors vector must be equal to the number of different tags. 
               As is it not the case, colors are ignored")
-  }
-  if (!is.null(tags) && !is.null(colors))
     if (isTRUE(sum(unique.tags %in% names(colors)) == length(unique.tags))){
       lapply(1:length(colors), function(x){
         list.tags <- which(names(colors)[x]==tags, arr.ind=TRUE)
@@ -384,11 +382,12 @@ writeMSnsetToExcel <- function(obj, filename)
         )
       })
     }
+  }
+
   
-  
+  n <- 2
   openxlsx::addWorksheet(wb, "Samples Meta Data")
-  n <- n +1
-  openxlsx::writeData(wb, sheet=n, Biobase::pData(obj), rowNames = FALSE)
+  openxlsx::writeData(wb, sheet = n, Biobase::pData(obj), rowNames = FALSE)
   
   
   # Add colors for sample data sheet
@@ -396,7 +395,7 @@ writeMSnsetToExcel <- function(obj, filename)
   colors <- setNames(DAPAR::ExtendPalette(length(u_conds)),
                      u_conds)
   colors[['blank']] <- 'white'
-   
+  
   tags <- Biobase::pData(obj)
   tags[,] <- 'blank'
   tags$Sample.name <- Biobase::pData(obj)$Condition
@@ -408,8 +407,6 @@ writeMSnsetToExcel <- function(obj, filename)
     if (!isTRUE(sum(unique.tags %in% names(colors)) == length(unique.tags)))
       warning("The length of colors vector must be equal to the number of different tags. 
               As is it not the case, colors are ignored")
-  }
-  if (!is.null(tags) && !is.null(colors))
     if (isTRUE(sum(unique.tags %in% names(colors)) == length(unique.tags))){
       lapply(1:length(colors), function(x){
         list.tags <- which(names(colors)[x]==tags, arr.ind=TRUE)
@@ -421,21 +418,48 @@ writeMSnsetToExcel <- function(obj, filename)
         )
       })
     }
-  
-  
+  }
+
   
   ## Add feature Data sheet
-  
-  
-  
-  
-  n <- n +1
+   
+  n <- 3
   if (dim(Biobase::fData(obj))[2] != 0){
     openxlsx::addWorksheet(wb, "Feature Meta Data")
-    openxlsx::writeData(wb, sheet=n, cbind(ID = rownames(Biobase::fData(obj)),
+    openxlsx::writeData(wb, 
+                        sheet = n, 
+                        cbind(ID = rownames(Biobase::fData(obj)),
                                            Biobase::fData(obj)), rowNames = FALSE)
   }
   
+  colors <- as.list(setNames(mc$color, mc$node))
+  tags <- cbind(keyId = rep('identified', nrow(obj)),
+                Biobase::fData(obj)
+                )
+  
+  tags[,] <- 'identified'
+  tags[, 1 + which(colnames(fData(obj)) %in% obj@experimentData@other$names_metacell)] <- GetMetacell(obj)
+  
+  unique.tags <- NULL
+  if (!is.null(tags) && !is.null(colors)){
+    unique.tags <- unique(as.vector(as.matrix(tags)))
+    if (!isTRUE(sum(unique.tags %in% names(colors)) == length(unique.tags)))
+      warning("The length of colors vector must be equal to the number of different tags. 
+              As is it not the case, colors are ignored")
+    if (isTRUE(sum(unique.tags %in% names(colors)) == length(unique.tags))){
+      lapply(1:length(colors), function(x){
+        list.tags <- which(names(colors)[x]==tags, arr.ind=TRUE)
+        openxlsx::addStyle(wb,
+                           sheet = n,
+                           cols = list.tags[ ,"col"],
+                           rows = list.tags[ ,"row"] + 1, 
+                           style = openxlsx::createStyle(fgFill = colors[x])
+        )
+      })
+    }
+  }
+  
+  # Add GO tab
   if (!is.null(obj@experimentData@other$GGO_analysis))
   {
     l <- length(obj@experimentData@other$GGO_analysis$ggo_res)
@@ -446,6 +470,8 @@ writeMSnsetToExcel <- function(obj, filename)
       openxlsx::writeData(wb, sheet=n, obj@experimentData@other$GGO_analysis$ggo_res[[i]]$ggo_res@result)
     }
   }
+  
+  
   
   if (!is.null(obj@experimentData@other$EGO_analysis))
   {
@@ -460,7 +486,6 @@ writeMSnsetToExcel <- function(obj, filename)
   
   
 }
-
 
 
 

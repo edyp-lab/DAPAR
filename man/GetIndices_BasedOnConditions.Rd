@@ -24,14 +24,14 @@ GetIndices_BasedOnConditions(metacell.mask, type, conds, percent, op, th)
 #' @examples
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept[1:10]
-level <- obj@experimentData@other$typeOfData
+level <- GetTypeofData(obj)
 pattern <- 'missing'
 metacell.mask <- match.metacell(metadata=GetMetacell(obj), pattern=pattern, level=level)
 type <- 'AllCond'
 conds <- Biobase::pData(obj)$Condition
 op <- '>='
-th <- 2
-percent <- F
+th <- 0.5
+percent <- TRUE
 ind <- GetIndices_BasedOnConditions(metacell.mask, type, conds, percent, op, th)}
 }
 \description{

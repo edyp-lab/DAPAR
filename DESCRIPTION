@@ -1,7 +1,7 @@
 Package: DAPAR
 Type: Package
 Title: Tools for the Differential Analysis of Proteins Abundance with R
-Version: 1.25.4
+Version: 1.25.5
 Date: 2021-10-18
 Authors@R: c(person(given = "Samuel", family = "Wieczorek",
             email = "samuel.wieczorek@cea.fr",
@@ -28,18 +28,18 @@ License: Artistic-2.0
 VignetteBuilder: knitr
 Depends: R (>= 4.1.0)
 Suggests: BiocGenerics, testthat, BiocStyle
-Imports: Biobase, MSnbase, tibble, RColorBrewer, stats, preprocessCore, Cairo, png,
+Imports: MSnbase, tibble, RColorBrewer, stats, preprocessCore, Cairo, png,
         lattice, reshape2, gplots, pcaMethods, ggplot2,
         limma, knitr, tmvtnorm, norm, impute, stringr,
         grDevices, graphics, openxlsx, utils, cp4p
         (>= 0.3.5), scales, Matrix, vioplot, imp4p (>= 1.1), forcats, methods, 
-        DAPARdata (>= 1.21.3), siggenes, graph, lme4, readxl, highcharter,
+        DAPARdata (>= 1.23.4), siggenes, graph, lme4, readxl, highcharter,
         clusterProfiler, dplyr, tidyr, AnnotationDbi, tidyverse, vsn, FactoMineR, factoextra, multcomp, purrr,
         visNetwork, foreach, parallel, doParallel, igraph, dendextend, Mfuzz, apcluster, diptest, cluster
 biocViews: Proteomics, Normalization, Preprocessing, MassSpectrometry,
         QualityControl, GO, DataImport
 NeedsCompilation: no
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Packaged: 2017-10-13 11:13:04 UTC; sw175264
 Encoding: UTF-8
 URL: http://www.prostar-proteomics.org/
