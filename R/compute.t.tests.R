@@ -27,7 +27,7 @@
 #' 
 #' @examples
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
-#' obj <- Exp1_R25_prot[1:1000]
+#' obj <- Exp1_R25_prot[1:10]
 #' level <- obj@experimentData@other$typeOfData
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
@@ -38,8 +38,9 @@
 #' 
 #' @export
 #'
-compute_t_tests <- function(obj, contrast="OnevsOne", type="Student"){
-
+compute_t_tests <- function(obj, 
+                            contrast="OnevsOne", 
+                            type="Student"){
     switch(type,
            Student=.type <- TRUE,
            Welch=.type <- FALSE)
@@ -47,23 +48,19 @@ compute_t_tests <- function(obj, contrast="OnevsOne", type="Student"){
     
     qData <- Biobase::exprs(obj)
     sTab <- Biobase::pData(obj)
-res<-list()
-logFC <- list()
-P_Value <- list()
+    res<-list()
+    logFC <- list()
+    P_Value <- list()
 
-nbComp <- NULL
+    nbComp <- NULL
 
-sTab.old <- sTab
-Conditions.f <- factor(sTab$Condition, levels=unique(sTab$Condition))
-sTab <- sTab[unlist(lapply(split(sTab, Conditions.f), function(x) {x['Sample.name']})),]
-qData <- qData[,unlist(lapply(split(sTab.old, Conditions.f), function(x) {x['Sample.name']}))]
-Conditions <- sTab$Condition
+    sTab.old <- sTab
+    Conditions.f <- factor(sTab$Condition, levels=unique(sTab$Condition))
+    sTab <- sTab[unlist(lapply(split(sTab, Conditions.f), function(x) {x['Sample.name']})),]
+    qData <- qData[,unlist(lapply(split(sTab.old, Conditions.f), function(x) {x['Sample.name']}))]
+    Conditions <- sTab$Condition
 
-
-#Cond<-levels(Conditions.f)
-Cond.Nb<-length(levels(Conditions.f))
-
-
+    Cond.Nb<-length(levels(Conditions.f))
     if(contrast=="OnevsOne"){
         nbComp <- Cond.Nb*(Cond.Nb-1)/2
 
@@ -73,23 +70,29 @@ Cond.Nb<-length(levels(Conditions.f))
                 c1Indice <- which(Conditions==levels(Conditions.f)[i])
                 c2Indice <- which(Conditions==levels(Conditions.f)[j])
     
-                res.tmp <- apply(qData[,c(c1Indice,c2Indice)], 1, 
+                res.tmp <- apply(qData[,c(c1Indice, c2Indice)], 1, 
                                  function(x) {
-                   t.test(x~Conditions[c(c1Indice,c2Indice)],var.equal=.type)
-                })
-                p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))
-                m1.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[1])))
-                m2.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[2])))
-                m1.name <- names(unlist(lapply(res.tmp,function(x)x$estimate[1])))[1]
-                m2.name <- names(unlist(lapply(res.tmp,function(x)x$estimate[2])))[1]
-                logFC.tmp <- m1.tmp - m2.tmp
+                                     t.test(x~Conditions[c(c1Indice, c2Indice)],
+                                            var.equal=.type)
+                                     })
+                #p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))
                 
-                if (grepl(levels(Conditions.f)[i], m2.name)){logFC.tmp <- -logFC.tmp}
+                # Estimation for condition 2
+                estim.Cond2.value <- unlist(lapply(res.tmp,function(x) as.numeric(x$estimate[1])))
+                #estim.Cond2.name <- names(unlist(lapply(res.tmp,function(x) x$estimate[1])))[1]
+                
+                # Estimation for condition 1
+                estim.Cond1.value <- unlist(lapply(res.tmp,function(x) as.numeric(x$estimate[2])))
+                #estim.Cond1.name <- names(unlist(lapply(res.tmp,function(x) x$estimate[2])))[1]
+                
+                #logFC.tmp <- estim.Cond1.value - estim.Cond2.value
+                
+                #if (grepl(levels(Conditions.f)[i], m2.name)){logFC.tmp <- -logFC.tmp}
                 
                 txt <- paste(levels(Conditions.f)[i],"_vs_",levels(Conditions.f)[j], sep="")
 
-                logFC[[paste(txt, "logFC", sep="_")]] <- logFC.tmp
-                P_Value[[paste(txt, "pval", sep="_")]] <- p.tmp
+                logFC[[paste(txt, "logFC", sep="_")]] <- estim.Cond2.value - estim.Cond1.value
+                P_Value[[paste(txt, "pval", sep="_")]] <- unlist(lapply(res.tmp,function(x)x$p.value))
             }
         }
     } ##end Contrast==1
@@ -110,18 +113,26 @@ Cond.Nb<-length(levels(Conditions.f))
                                  t.test(x~Cond.t.all, var.equal=.type)
                              })
             
-            p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))
-            m1.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[1])))
-            m2.tmp <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[2])))
-            m1.name <- names(unlist(lapply(res.tmp,function(x)x$estimate[1])))[1]
-            m2.name <- names(unlist(lapply(res.tmp,function(x)x$estimate[2])))[1]
-            logFC.tmp <- m1.tmp - m2.tmp
-            if (grepl(levels(Conditions.f)[i], m2.name)){logFC.tmp <- -logFC.tmp}
+            #p.tmp <- unlist(lapply(res.tmp,function(x)x$p.value))
             
-            txt <- paste(levels(Conditions.f)[i],"_vs_(all-",levels(Conditions.f)[i],")", sep="")
+            # Estimation for condition 2
+            estim.Cond2.value <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[1])))
+            #estim.Cond1.name <- names(unlist(lapply(res.tmp,function(x)x$estimate[1])))[1]
             
-            logFC[[paste(txt, "logFC", sep="_")]] <- logFC.tmp
-            P_Value[[paste(txt, "pval", sep="_")]] <- p.tmp
+            # Estimation for condition 1
+            estim.Cond1.value <- unlist(lapply(res.tmp,function(x)as.numeric(x$estimate[2])))
+            #estim.Cond2.name <- names(unlist(lapply(res.tmp,function(x)x$estimate[2])))[1]
+            
+            logFC.tmp <- estim.Cond1.value - estim.Cond2.value
+            
+            #if (grepl(levels(Conditions.f)[i], m2.name)){logFC.tmp <- -logFC.tmp}
+            
+            txt <- paste(levels(Conditions.f)[i],"_vs_(all-",
+                         levels(Conditions.f)[i],")", 
+                         sep="")
+            
+            logFC[[paste(txt, "logFC", sep="_")]] <- estim.Cond2.value - estim.Cond1.value
+            P_Value[[paste(txt, "pval", sep="_")]] <- unlist(lapply(res.tmp,function(x)x$p.value))
         }
     } # End Contrast=2
     
