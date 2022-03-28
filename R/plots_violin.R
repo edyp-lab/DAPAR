@@ -54,6 +54,9 @@ violinPlotD <- function(obj,
   if(missing(conds))
     stop("'conds' is missing.")
   
+  if (length(subset.view) > 0)
+    subset.view <- NULL
+  
   if (is.null(legend)) {
     legend <- conds
     for (i in unique(conds))
