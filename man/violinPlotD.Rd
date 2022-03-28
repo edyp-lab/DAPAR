@@ -29,7 +29,7 @@ Builds a violinplot from a dataframe
 utils::data(Exp1_R25_prot, package='DAPARdata')
 obj <- Exp1_R25_prot
 library(vioplot)
-legend <- conds <- Biobase::pData(obj)$Condition
+legend <- conds <- pData(obj)$Condition
 key <- "Protein_IDs"
 violinPlotD(obj, conds, key, legend, subset.view=1:10)
 

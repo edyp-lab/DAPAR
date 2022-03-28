@@ -33,10 +33,11 @@ data before and after normalization.
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept
-conds <- Biobase::pData(obj)[,"Condition"]
+conds <- pData(obj)[,"Condition"]
 objAfter <- wrapper.normalizeD(obj = obj, method = "QuantileCentering",  
 conds=conds, type = "within conditions")
 wrapper.compareNormalizationD_HC(obj, objAfter, conds)
+
 
 }
 \author{

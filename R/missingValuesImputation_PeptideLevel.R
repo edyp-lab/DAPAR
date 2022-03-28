@@ -25,7 +25,6 @@
 #' 
 #' @export
 #' 
-#' @importFrom Biobase pData exprs fData
 #' 
 wrapper.impute.mle <- function(obj, na.type){
   if (missing(obj))
@@ -36,10 +35,10 @@ wrapper.impute.mle <- function(obj, na.type){
     stop("Available value for na.type ais: 'missing'.")
   
   
-  cond <- factor(Biobase::pData(obj)$Condition, levels=unique(Biobase::pData(obj)$Condition))
-  res <- imp4p::impute.mle(Biobase::exprs(obj), conditions=cond)
+  cond <- factor(pData(obj)$Condition, levels=unique(pData(obj)$Condition))
+  res <- imp4p::impute.mle(exprs(obj), conditions=cond)
   
-  Biobase::exprs(obj) <-res
+  exprs(obj) <-res
   obj <- UpdateMetacell(obj, 'mle', na.type) 
   
   return (obj)
@@ -120,7 +119,6 @@ wrapper.impute.mle <- function(obj, na.type){
 #' 
 #' @export
 #' 
-#' @importFrom Biobase pData exprs fData
 #' @importFrom imp4p estim.mix impute.rand estim.bound prob.mcar.tab mi.mix
 #' 
 wrapper.dapar.impute.mi <- function (obj, 
@@ -149,13 +147,13 @@ wrapper.dapar.impute.mi <- function (obj,
  
   
     ## order exp and pData table before using imp4p functions
-   conds <- factor(Biobase::pData(obj)$Condition, levels=unique(Biobase::pData(obj)$Condition))
-   sample.names.old <- Biobase::pData(obj)$Sample.name
-   sTab <- Biobase::pData(obj)
-   qData <- Biobase::exprs(obj)
+   conds <- factor(pData(obj)$Condition, levels=unique(pData(obj)$Condition))
+   sample.names.old <- pData(obj)$Sample.name
+   sTab <- pData(obj)
+   qData <- exprs(obj)
    new.order <- unlist(lapply(split(sTab, conds), function(x) {x['Sample.name']}))
-   qData <- Biobase::exprs(obj)[,new.order]
-   sTab <- Biobase::pData(obj)[new.order,]
+   qData <- exprs(obj)[,new.order]
+   sTab <- pData(obj)[new.order,]
 
    conditions <- as.factor(sTab$Condition)
    repbio <- sTab$Bio.Rep
@@ -212,7 +210,7 @@ wrapper.dapar.impute.mi <- function (obj,
     colnames(data.final) <- new.order
     data.final <- data.final[,sample.names.old]
     
-     Biobase::exprs(obj) <- data.final
+     exprs(obj) <- data.final
     
     msg <- paste("Missing values imputation using imp4p")
     obj@processingData@processing <- c(obj@processingData@processing,msg)
@@ -298,7 +296,6 @@ translatedRandomBeta <- function(n, min, max, param1=3, param2=1){
 #' 
 #' @export
 #' 
-#' @importFrom Biobase pData exprs fData
 #' 
 wrapper.impute.pa2 <- function (obj,
                                 q.min = 0,
@@ -309,12 +306,12 @@ wrapper.impute.pa2 <- function (obj,
     stop("'obj' is required.")
  
   ## order exp and pData table before using imp4p functions
-  conds <- factor(Biobase::pData(obj)$Condition, levels=unique(Biobase::pData(obj)$Condition))
-  sample.names.old <- Biobase::pData(obj)$Sample.name
-  sTab <- Biobase::pData(obj)
+  conds <- factor(pData(obj)$Condition, levels=unique(pData(obj)$Condition))
+  sample.names.old <- pData(obj)$Sample.name
+  sTab <- pData(obj)
   new.order <- unlist(lapply(split(sTab, conds), function(x) {x['Sample.name']}))
-  qData <- Biobase::exprs(obj)[,new.order]
-  sTab <- Biobase::pData(obj)[new.order,]
+  qData <- exprs(obj)[,new.order]
+  sTab <- pData(obj)[new.order,]
   
 
   tab <- qData
@@ -325,7 +322,7 @@ wrapper.impute.pa2 <- function (obj,
   colnames(tab_imp) <- new.order
   tab_imp <- tab_imp[,sample.names.old]
     
-  Biobase::exprs(obj) <- tab_imp
+  exprs(obj) <- tab_imp
   obj <- UpdateMetacell(obj, 'pa2', 'missing') 
     
   return(obj)

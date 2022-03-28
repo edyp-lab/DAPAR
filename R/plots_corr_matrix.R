@@ -17,13 +17,12 @@
 #' #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' #' wrapper.corrMatrixD(Exp1_R25_pept)
 #' #' 
-#' #' @importFrom Biobase exprs pData
 #' #' 
 #' #' @export
 #' #' 
 #' wrapper.corrMatrixD <- function(obj, rate=5){
-#'   qData <- Biobase::exprs(obj)
-#'   samplesData <- Biobase::pData(obj)
+#'   qData <- exprs(obj)
+#'   samplesData <- pData(obj)
 #'   corrMatrixD(qData, samplesData, rate)
 #' }
 
@@ -46,7 +45,6 @@
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' wrapper.corrMatrixD_HC(Exp1_R25_pept)
 #'  
-#' @importFrom Biobase exprs pData
 #' @importFrom stats cor
 #' 
 #' @export
@@ -60,8 +58,8 @@ wrapper.corrMatrixD_HC <- function(obj, rate=0.5, showValues=TRUE){
     return(NULL)
   }
   
-  qData <- Biobase::exprs(obj)
-  samplesData <- Biobase::pData(obj)
+  qData <- exprs(obj)
+  samplesData <- pData(obj)
   data <- cor(qData,use = 'pairwise.complete.obs')
   corrMatrixD_HC(data,samplesData, rate, showValues)
 }
@@ -90,8 +88,8 @@ wrapper.corrMatrixD_HC <- function(obj, rate=0.5, showValues=TRUE){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' qData <- Biobase::exprs(Exp1_R25_pept)
-#' samplesData <- Biobase::pData(Exp1_R25_pept)
+#' qData <- exprs(Exp1_R25_pept)
+#' samplesData <- pData(Exp1_R25_pept)
 #' res <- cor(qData,use = 'pairwise.complete.obs')
 #' corrMatrixD_HC(res, samplesData)
 #' 

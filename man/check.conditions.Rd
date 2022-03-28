@@ -17,7 +17,7 @@ This function check the validity of the conditions
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-check.conditions(Biobase::pData(Exp1_R25_pept)$Condition)
+check.conditions(pData(Exp1_R25_pept)$Condition)
 
 }
 \author{

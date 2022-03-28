@@ -17,8 +17,8 @@
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' anova_tests <- t(apply(Biobase::exprs(obj$new), 1, classic1wayAnova, 
-#' conditions=as.factor(Biobase::pData(obj$new)$Condition)))
+#' anova_tests <- t(apply(exprs(obj$new), 1, classic1wayAnova, 
+#' conditions=as.factor(pData(obj$new)$Condition)))
 #' 
 #' @importFrom stats aov
 #' 
@@ -73,8 +73,8 @@ classic1wayAnova <- function(current_line, conditions){
 #' @importFrom dplyr select
 #' 
 wrapperClassic1wayAnova <- function(obj, with_post_hoc = "No", post_hoc_test = "No"){
-    qData <- Biobase::exprs(obj)
-    sTab <- Biobase::pData(obj)
+    qData <- exprs(obj)
+    sTab <- pData(obj)
     if(with_post_hoc == "No"){
         anova_tests <- as.data.frame(t(apply(qData,1,function(x) unlist(summary(classic1wayAnova(x,conditions=as.factor(sTab$Condition)))))))
         results <- dplyr::select(anova_tests, `Pr(>F)1`)
@@ -118,9 +118,9 @@ wrapperClassic1wayAnova <- function(obj, with_post_hoc = "No", post_hoc_test = "
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' anova_tests <- t(apply(Biobase::exprs(obj$new),1, classic1wayAnova, 
-#' conditions=as.factor(Biobase::pData(obj$new)$Condition)))
-#' names(anova_tests) <- rownames(Biobase::exprs(obj$new))
+#' anova_tests <- t(apply(exprs(obj$new),1, classic1wayAnova, 
+#' conditions=as.factor(pData(obj$new)$Condition)))
+#' names(anova_tests) <- rownames(exprs(obj$new))
 #' tms <- lapply(anova_tests,
 #'              function(x) summary(multcomp::glht(x, 
 #'              linfct = multcomp::mcp(conditions = "Tukey")),
@@ -198,9 +198,9 @@ formatPHResults <- function(post_hoc_models_summaries){
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' anova_tests <- t(apply(Biobase::exprs(obj$new),1, classic1wayAnova, 
-#' conditions=as.factor(Biobase::pData(obj$new)$Condition)))
-#' names(anova_tests) <- rownames(Biobase::exprs(obj$new))
+#' anova_tests <- t(apply(exprs(obj$new),1, classic1wayAnova, 
+#' conditions=as.factor(pData(obj$new)$Condition)))
+#' names(anova_tests) <- rownames(exprs(obj$new))
 #' pht <- postHocTest(aov_fits = anova_tests)
 #' 
 #' @export

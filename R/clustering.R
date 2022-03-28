@@ -27,13 +27,12 @@
 #' @export
 #' 
 #' @importFrom dplyr bind_cols as_tibble group_by summarise
-#' @importFrom Biobase exprs pData fData ExpressionSet
 #' @importFrom tidyr pivot_wider
 #' @importFrom Mfuzz standardise
 #' 
 averageIntensities <- function(ESet_obj){
-    intensities <- Biobase::exprs(ESet_obj)
-    sTab <- Biobase::pData(ESet_obj)
+    intensities <- exprs(ESet_obj)
+    sTab <- pData(ESet_obj)
     sTab$Condition <- as.factor(sTab$Condition)
     intensities_t <- as.data.frame(t(intensities))
     intensities_t <- dplyr::bind_cols(intensities_t, condition = sTab$Condition, sample = rownames(intensities_t))
@@ -374,7 +373,7 @@ wrapperRunClustering <- function(obj, clustering_method, conditions_order = NULL
     averaged_means <- averageIntensities(obj)
     averaged_means <- na.omit(averaged_means)
     
-    sTab <- Biobase::pData(obj)
+    sTab <- pData(obj)
     only_means <- dplyr::select_if(averaged_means, is.numeric)
     only_features <- dplyr::select_if(averaged_means, is.character)
     if(length(levels(as.factor(sTab$Condition))) == 2){
@@ -397,7 +396,7 @@ wrapperRunClustering <- function(obj, clustering_method, conditions_order = NULL
                                         subttl = subttl
         )
     }else if(length(levels(as.factor(sTab$Condition))) > 2){
-        eset <- Biobase::ExpressionSet(assayData = as.matrix(only_means))
+        eset <- ExpressionSet(assayData = as.matrix(only_means))
         eset_s <- Mfuzz::standardise(eset)
         standards <- eset_s@assayData$exprs
         

@@ -40,7 +40,7 @@ obj <- Exp1_R25_pept[1:10,]
 level <- obj@experimentData@other$typeOfData
 metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 indices <- GetIndices_WholeLine(metacell.mask)
-qData <- Biobase::exprs(obj)
+qData <- exprs(obj)
 conds <- pData(obj)[['Condition']]
 heatmapD(qData, conds)
 }

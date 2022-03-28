@@ -35,13 +35,12 @@ A colored correlation matrix
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' wrapper.corrMatrixD(Exp1_R25_pept)
 #' 
-#' @importFrom Biobase exprs pData
 #' 
 #' @export
 #' 
 wrapper.corrMatrixD <- function(obj, rate=5){
-  qData <- Biobase::exprs(obj)
-  samplesData <- Biobase::pData(obj)
+  qData <- exprs(obj)
+  samplesData <- pData(obj)
   corrMatrixD(qData, samplesData, rate)
 }
 Builds a correlation matrix based on a \code{MSnSet} object.

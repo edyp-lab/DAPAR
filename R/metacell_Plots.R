@@ -35,8 +35,8 @@ metacellPerLinesHisto_HC <- function(obj,
     return(NULL)
   }
   
-  qData <- Biobase::exprs(obj)
-  samplesData <- Biobase::pData(obj)
+  qData <- exprs(obj)
+  samplesData <- pData(obj)
   
   if (identical(indLegend,"auto"))
     indLegend <- c(2:length(colnames(samplesData)))
@@ -113,7 +113,7 @@ metacellPerLinesHisto_HC <- function(obj,
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept
-#' pal <- ExtendPalette(length(unique( Biobase::pData(obj)$Condition)), 'Dark2')
+#' pal <- ExtendPalette(length(unique( pData(obj)$Condition)), 'Dark2')
 #' metacellPerLinesHistoPerCondition_HC(obj, 'missing', pal=pal)
 #' metacellPerLinesHistoPerCondition_HC(obj, 'quanti')
 #' 
@@ -135,8 +135,8 @@ metacellPerLinesHistoPerCondition_HC <- function(obj,
     return(NULL)
   }
   
-  qData <- Biobase::exprs(obj)
-  samplesData <- Biobase::pData(obj)
+  qData <- exprs(obj)
+  samplesData <- pData(obj)
   conds <- samplesData$Condition
   u_conds <- unique(conds)
   nbConditions <- length(u_conds)
@@ -249,8 +249,8 @@ metacellHisto_HC <- function(obj,
     return(NULL)
   }
   
-  qData <- Biobase::exprs(obj)
-  samplesData <- Biobase::pData(obj)
+  qData <- exprs(obj)
+  samplesData <- pData(obj)
   conds <- samplesData[,"Condition"]
   
   myColors <- NULL
@@ -324,12 +324,10 @@ metacellHisto_HC <- function(obj,
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
 #' wrapper.mvImage(obj$new)
 #' 
-#' @importFrom Biobase exprs pData fData
 #' 
 #' 
 #' @export
 #'
-#' @importFrom Biobase pData exprs fData
 #' 
 wrapper.mvImage <- function(obj, pattern = 'missing MEC'){
   if(missing(obj))
@@ -338,9 +336,9 @@ wrapper.mvImage <- function(obj, pattern = 'missing MEC'){
     warning("'obj' is NULL. Return NULL.")
     return(NULL)
   }
-  qData <- Biobase::exprs(obj)
-  conds <- Biobase::pData(obj)[ , "Condition"]
-  metac <- Biobase::fData(obj)[ , obj@experimentData@other$names_metacell]
+  qData <- exprs(obj)
+  conds <- pData(obj)[ , "Condition"]
+  metac <- fData(obj)[ , obj@experimentData@other$names_metacell]
   level <- obj@experimentData@other$typeOfData
   indices <- which(apply(match.metacell(metac, pattern, level), 1, sum) >0)
   
@@ -373,8 +371,8 @@ wrapper.mvImage <- function(obj, pattern = 'missing MEC'){
 #' @author Samuel Wieczorek, Thomas Burger
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' qData <- Biobase::exprs(Exp1_R25_pept)
-#' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+#' qData <- exprs(Exp1_R25_pept)
+#' conds <- pData(Exp1_R25_pept)[,"Condition"]
 #' mvImage(qData, conds)
 #' 
 #' @export
@@ -456,7 +454,7 @@ mvImage <- function(qData, conds){
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:100]
 #' hc_mvTypePlot2(obj, pattern = 'missing MEC', title="POV distribution")
-#' conds <- Biobase::pData(obj)$Condition
+#' conds <- pData(obj)$Condition
 #' pal <- ExtendPalette(length(unique(conds)), 'Dark2')
 #' hc_mvTypePlot2(obj, pattern = 'missing MEC', title="POV distribution", pal=pal)
 #' 
@@ -470,8 +468,8 @@ hc_mvTypePlot2 <- function(obj,
                            typeofMV=NULL, 
                            title=NULL){
   
-  conds <- Biobase::pData(obj)[,"Condition"]
-  qData <- Biobase::exprs(obj)
+  conds <- pData(obj)[,"Condition"]
+  qData <- exprs(obj)
   myColors <- NULL
   if (is.null(pal)){
     warning("Color palette set to default.")

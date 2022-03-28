@@ -60,14 +60,14 @@ level <- obj@experimentData@other$typeOfData
 metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 obj <- MetaCellFiltering(obj, indices, cmd='delete')
-qData <- Biobase::exprs(obj$new)
-sTab <- Biobase::pData(obj$new)
+qData <- exprs(obj$new)
+sTab <- pData(obj$new)
 data <- limmaCompleteTest(qData,sTab)
 df <- data.frame(x=data$logFC, y = -log10(data$P_Value),
 index = as.character(rownames(obj$new)))
 colnames(df) <- c("x", "y", "index")
 tooltipSlot <- c("Sequence", "Score")
-df <- cbind(df,Biobase::fData(obj)[, tooltipSlot])
+df <- cbind(df,fData(obj)[, tooltipSlot])
 colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
 if (ncol(df) > 3){
     colnames(df)[4:ncol(df)] <- 

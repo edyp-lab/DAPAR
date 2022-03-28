@@ -25,7 +25,7 @@ This function exports a data.frame to a Excel file.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-df <- Biobase::exprs(Exp1_R25_pept[1:100])
+df <- exprs(Exp1_R25_pept[1:100])
 tags <- GetMetacell(Exp1_R25_pept[1:100])
 colors <- list('missing POV' = "lightblue",
                'missing MEC' = "orange",

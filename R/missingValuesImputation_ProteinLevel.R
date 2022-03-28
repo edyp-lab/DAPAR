@@ -18,21 +18,20 @@
 #' 
 #' @export
 #' 
-#' @importFrom Biobase pData exprs fData
 #'  
 findMECBlock <- function(obj){
     
-    conditions <- unique(Biobase::pData(obj)$Condition)
+    conditions <- unique(pData(obj)$Condition)
     nbCond <- length(conditions)
     
     s <- data.frame()
     
     for (cond in 1:nbCond){
-        ind <- which(Biobase::pData(obj)$Condition == conditions[cond])
-        lNA <- which(apply(is.na(Biobase::exprs(obj)[,ind]), 1, sum)==length(ind))
+        ind <- which(pData(obj)$Condition == conditions[cond])
+        lNA <- which(apply(is.na(exprs(obj)[,ind]), 1, sum)==length(ind))
         if (length(lNA) > 0)
         {
-            tmp <- data.frame(cond,which(apply(is.na(Biobase::exprs(obj)[,ind]), 1, sum)==length(ind)))
+            tmp <- data.frame(cond,which(apply(is.na(exprs(obj)[,ind]), 1, sum)==length(ind)))
             names(tmp) <- c("Condition", "Line")
             s <- rbind(s,tmp)
             
@@ -61,15 +60,14 @@ findMECBlock <- function(obj){
 #' 
 #' @export
 #' 
-#' @importFrom Biobase pData exprs fData
 #' 
 reIntroduceMEC <- function(obj, MECIndex){
     
     for (i in 1:nrow(MECIndex))
     {
-        conditions <- unique(Biobase::pData(obj)$Condition)
-        replicates <- which(Biobase::pData(obj)$Condition == conditions[MECIndex[i,"Condition"]])
-        Biobase::exprs(obj)[MECIndex[i,"Line"], as.vector(replicates)] <- NA
+        conditions <- unique(pData(obj)$Condition)
+        replicates <- which(pData(obj)$Condition == conditions[MECIndex[i,"Condition"]])
+        exprs(obj)[MECIndex[i,"Line"], as.vector(replicates)] <- NA
     }
     return(obj)
 }
@@ -103,7 +101,6 @@ reIntroduceMEC <- function(obj, MECIndex){
 #' 
 #' @export
 #' 
-#' @importFrom Biobase pData exprs fData
 #' 
 wrapper.impute.KNN <- function(obj=NULL, K, na.type){
     #require(impute)
@@ -116,18 +113,18 @@ wrapper.impute.KNN <- function(obj=NULL, K, na.type){
     else if (na.type != 'missing POV')
         stop("Available value for na.type is: 'missing POV'")
 
-    data <- Biobase::exprs(obj)
+    data <- exprs(obj)
     
-    conditions <- unique(Biobase::pData(obj)$Condition)
+    conditions <- unique(pData(obj)$Condition)
     nbCond <- length(conditions)
 
     for (cond in 1:nbCond){
-        ind <- which(Biobase::pData(obj)$Condition == conditions[cond])
-        resKNN <- impute::impute.knn(Biobase::exprs(obj)[,ind] ,k = K, rowmax = 0.99, colmax = 0.99, maxp = 1500, rng.seed = sample(1:1000,1))
-        Biobase::exprs(obj)[,ind] <- resKNN[[1]]
+        ind <- which(pData(obj)$Condition == conditions[cond])
+        resKNN <- impute::impute.knn(exprs(obj)[,ind] ,k = K, rowmax = 0.99, colmax = 0.99, maxp = 1500, rng.seed = sample(1:1000,1))
+        exprs(obj)[,ind] <- resKNN[[1]]
     }
 
-    Biobase::exprs(obj)[Biobase::exprs(obj) == 0] <-NA
+    exprs(obj)[exprs(obj) == 0] <-NA
     obj <- UpdateMetacell(obj, 'knn', na.type) 
     
     return(obj)
@@ -160,7 +157,6 @@ wrapper.impute.KNN <- function(obj=NULL, K, na.type){
 #' 
 #' @export
 #' 
-#' @importFrom Biobase pData exprs fData
 #' 
 wrapper.impute.fixedValue <- function(obj, fixVal=0, na.type){
     if (missing(obj))
@@ -174,10 +170,10 @@ wrapper.impute.fixedValue <- function(obj, fixVal=0, na.type){
     else if (!(na.type %in% metacell.def(level)$node))
         stop(paste0("Available values for na.type are: ", paste0(metacell.def(level)$node, collapse=' ')))
     
-    ind.na.type <- match.metacell(Biobase::fData(obj)[, obj@experimentData@other$names_metacell], 
+    ind.na.type <- match.metacell(fData(obj)[, obj@experimentData@other$names_metacell], 
                                   na.type,
                                   level = obj@experimentData@other$typeOfData)
-    Biobase::exprs(obj)[is.na(Biobase::exprs(obj)) & ind.na.type] <- fixVal
+    exprs(obj)[is.na(exprs(obj)) & ind.na.type] <- fixVal
     obj <- UpdateMetacell(obj, 'fixedValue', na.type) 
     return (obj)
 }
@@ -212,7 +208,6 @@ wrapper.impute.fixedValue <- function(obj, fixVal=0, na.type){
 #' 
 #' @export
 #' 
-#' @importFrom Biobase pData exprs fData
 #' @importFrom imp4p impute.pa
 #' 
 wrapper.impute.pa <- function(obj = NULL, q.min = 0.025, na.type){
@@ -224,9 +219,9 @@ wrapper.impute.pa <- function(obj = NULL, q.min = 0.025, na.type){
     else if (!(na.type %in% metacell.def(level)$node))
         stop(paste0("Available values for na.type are: ", paste0(metacell.def(level)$node, collapse=' ')))
     
-    cond <- as.factor(Biobase::pData(obj)$Condition)
-    res <- impute.pa(Biobase::exprs(obj), conditions=cond, q.min = q.min, q.norm=3,  eps=0)
-    Biobase::exprs(obj) <- res[["tab.imp"]]
+    cond <- as.factor(pData(obj)$Condition)
+    res <- impute.pa(exprs(obj), conditions=cond, q.min = q.min, q.norm=3,  eps=0)
+    exprs(obj) <- res[["tab.imp"]]
     
     obj <- UpdateMetacell(obj, 'impute_pa', na.type) 
     
@@ -265,7 +260,6 @@ wrapper.impute.pa <- function(obj = NULL, q.min = 0.025, na.type){
 #' 
 #' @export
 #' 
-#' @importFrom Biobase pData exprs fData
 #' 
 wrapper.impute.detQuant <- function(obj, qval=0.025, factor=1, na.type){
     if (missing(obj))
@@ -283,14 +277,14 @@ wrapper.impute.detQuant <- function(obj, qval=0.025, factor=1, na.type){
         )
     
     
-    qdata <- Biobase::exprs(obj)
+    qdata <- exprs(obj)
     values <- getQuantile4Imp(qdata, qval, factor)
     
-   # Biobase::exprs(obj) <- impute.detQuant(qdata, values$shiftedImpVal, na.type)
+   # exprs(obj) <- impute.detQuant(qdata, values$shiftedImpVal, na.type)
     
     for(i in 1:ncol(qdata)){
         col <- qdata[,i]
-        ind.na.type <- match.metacell(Biobase::fData(obj)[, obj@experimentData@other$names_metacell[i]], 
+        ind.na.type <- match.metacell(fData(obj)[, obj@experimentData@other$names_metacell[i]], 
                                       pattern = na.type,
                                       level = obj@experimentData@other$typeOfData)
         
@@ -298,7 +292,7 @@ wrapper.impute.detQuant <- function(obj, qval=0.025, factor=1, na.type){
         qdata[,i] <- col
     }
     
-    Biobase::exprs(obj) <- qdata
+    exprs(obj) <- qdata
     msg <- "Missing values imputation using deterministic quantile"
     obj@processingData@processing <- c(obj@processingData@processing,msg)
     
@@ -331,7 +325,7 @@ wrapper.impute.detQuant <- function(obj, qval=0.025, factor=1, na.type){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' qdata <- Biobase::exprs(Exp1_R25_pept)
+#' qdata <- exprs(Exp1_R25_pept)
 #' quant <- getQuantile4Imp(qdata) 
 #' 
 #' @export
@@ -364,7 +358,7 @@ getQuantile4Imp <- function(qdata, qval=0.025, factor=1){
 #' #' 
 #' #' @examples
 #' #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' #' qdata <- Biobase::exprs(Exp1_R25_pept)
+#' #' qdata <- exprs(Exp1_R25_pept)
 #' #' meta <- 
 #' #' values <- getQuantile4Imp(qdata)$shiftedImpVal
 #' #' obj.imp.mec <- impute.detQuant(qdata, values, na.type = 'missing POV') 
@@ -393,7 +387,7 @@ getQuantile4Imp <- function(qdata, qval=0.025, factor=1){
 #'     #browser()
 #'     for(i in 1:ncol(qdata)){
 #'         col <- qdata[,i]
-#'         ind.na.type <- match.metacell(Biobase::fData(obj)[, obj@experimentData@other$names_metacell[i]], 
+#'         ind.na.type <- match.metacell(fData(obj)[, obj@experimentData@other$names_metacell[i]], 
 #'                                       pattern = na.type,
 #'                                       level = obj@experimentData@other$typeOfData)
 #'         
@@ -426,7 +420,6 @@ getQuantile4Imp <- function(qdata, qval=0.025, factor=1){
 #' 
 #' @export
 #' 
-#' @importFrom Biobase pData exprs fData
 #' 
 wrapper.impute.slsa <- function(obj = NULL, na.type = NULL){
     if (is.null(obj))
@@ -440,11 +433,11 @@ wrapper.impute.slsa <- function(obj = NULL, na.type = NULL){
     MECIndex <- findMECBlock(obj)
     
     # sort conditions to be compliant with impute.slsa
-    conds <- factor(Biobase::pData(obj)$Condition, levels=unique(Biobase::pData(obj)$Condition))
-    sample.names.old <- Biobase::pData(obj)$Sample.name
-    sTab <- Biobase::pData(obj)
+    conds <- factor(pData(obj)$Condition, levels=unique(pData(obj)$Condition))
+    sample.names.old <- pData(obj)$Sample.name
+    sTab <- pData(obj)
     new.order <- unlist(lapply(split(sTab, conds), function(x) {x['Sample.name']}))
-    qdata <- Biobase::exprs(obj)[,new.order]
+    qdata <- exprs(obj)[,new.order]
     
     res <- imp4p::impute.slsa(qdata, 
                               conditions = conds, 
@@ -456,7 +449,7 @@ wrapper.impute.slsa <- function(obj = NULL, na.type = NULL){
     #restore old order
     res <- res[,sample.names.old]
     
-    Biobase::exprs(obj) <- res
+    exprs(obj) <- res
     obj <- reIntroduceMEC(obj, MECIndex)
     
     obj <- UpdateMetacell(obj, 'slsa', na.type)

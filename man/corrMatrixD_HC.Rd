@@ -26,8 +26,8 @@ Correlation matrix based on a \code{MSnSet} object.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-qData <- Biobase::exprs(Exp1_R25_pept)
-samplesData <- Biobase::pData(Exp1_R25_pept)
+qData <- exprs(Exp1_R25_pept)
+samplesData <- pData(Exp1_R25_pept)
 res <- cor(qData,use = 'pairwise.complete.obs')
 corrMatrixD_HC(res, samplesData)
 

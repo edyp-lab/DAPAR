@@ -27,7 +27,7 @@ indices for the samples.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+conds <- pData(Exp1_R25_pept)[,"Condition"]
 getIndicesConditions(conds, "25fmol", "10fmol")
 
 }

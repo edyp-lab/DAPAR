@@ -25,8 +25,8 @@ post processing protein metacell after aggregation)
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept[1:10]
 cols.for.ident <- obj@experimentData@other$names_metacell
-conds <- Biobase::pData(obj)$Condition
-df <- Biobase::fData(obj)[, cols.for.ident]
+conds <- pData(obj)$Condition
+df <- fData(obj)[, cols.for.ident]
 df <- Set_POV_MEC_tags(conds, df, level = 'peptide')
 
 }

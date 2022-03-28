@@ -24,6 +24,7 @@ in the dataset (see the slot \code{'Condition'} in the \code{pData()} table).
 utils::data(Exp1_R25_pept, package='DAPARdata')
 wrapper.CVDistD_HC(Exp1_R25_pept)
 
+
 }
 \author{
 Samuel Wieczorek

@@ -45,11 +45,10 @@ else
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' conds <- Biobase::pData(Exp1_R25_pept)$Condition
+#' conds <- pData(Exp1_R25_pept)$Condition
 #' obj <- wrapper.normalizeD(obj = Exp1_R25_pept, method = "QuantileCentering", 
 #' conds=conds, type = "within conditions")
 #'  
-#' @importFrom Biobase pData exprs fData
 #'  
 #' @export
 #'
@@ -60,17 +59,17 @@ wrapper.normalizeD <- function(obj, method, withTracking=FALSE, ...){
     stop("'method' is not correct")
   }
   
-  conds <- Biobase::pData(obj)[,"Condition"]
-  qData <- Biobase::exprs(obj)
+  conds <- pData(obj)[,"Condition"]
+  qData <- exprs(obj)
   
   switch(method,
-         GlobalQuantileAlignment = Biobase::exprs(obj) <- GlobalQuantileAlignment(qData),
-         SumByColumns = Biobase::exprs(obj) <- SumByColumns(qData, ...),
-         QuantileCentering = Biobase::exprs(obj) <- QuantileCentering(qData, ...),
-         MeanCentering = Biobase::exprs(obj) <- MeanCentering(qData, ...),
-         vsn = Biobase::exprs(obj) <- vsn(qData, ...),
+         GlobalQuantileAlignment = exprs(obj) <- GlobalQuantileAlignment(qData),
+         SumByColumns = exprs(obj) <- SumByColumns(qData, ...),
+         QuantileCentering = exprs(obj) <- QuantileCentering(qData, ...),
+         MeanCentering = exprs(obj) <- MeanCentering(qData, ...),
+         vsn = exprs(obj) <- vsn(qData, ...),
          # data must be log-expressed.
-         LOESS = Biobase::exprs(obj) <- LOESS(qData, ...)
+         LOESS = exprs(obj) <- LOESS(qData, ...)
          )
 
   return(obj)
@@ -91,7 +90,7 @@ wrapper.normalizeD <- function(obj, method, withTracking=FALSE, ...){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' qData <- Biobase::exprs(Exp1_R25_pept)
+#' qData <- exprs(Exp1_R25_pept)
 #' normalized <- GlobalQuantileAlignment(qData)
 #' 
 #' @export
@@ -124,8 +123,8 @@ GlobalQuantileAlignment <- function(qData) {
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' qData <- Biobase::exprs(Exp1_R25_pept)
-#' conds <- Biobase::pData(Exp1_R25_pept)$Condition
+#' qData <- exprs(Exp1_R25_pept)
+#' conds <- pData(Exp1_R25_pept)$Condition
 #' normalized <- SumByColumns(qData, conds, type="within conditions", 
 #' subset.norm=1:10)
 #' 
@@ -213,8 +212,8 @@ SumByColumns <- function(qData,
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept
-#' conds <- Biobase::pData(Exp1_R25_pept)$Condition
-#' normalized <- QuantileCentering(Biobase::exprs(obj), conds, 
+#' conds <- pData(Exp1_R25_pept)$Condition
+#' normalized <- QuantileCentering(exprs(obj), conds, 
 #' type="within conditions", subset.norm=1:10)
 #' 
 #' @export
@@ -293,8 +292,8 @@ QuantileCentering <- function(qData,
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' qData <- Biobase::exprs(Exp1_R25_pept)
-#' conds <- Biobase::pData(Exp1_R25_pept)$Condition
+#' qData <- exprs(Exp1_R25_pept)
+#' conds <- pData(Exp1_R25_pept)$Condition
 #' normalized <- MeanCentering(qData, conds, type="overall")
 #' 
 #' @export
@@ -361,8 +360,8 @@ MeanCentering <- function(qData,
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' qData <- Biobase::exprs(Exp1_R25_pept)
-#' conds <- Biobase::pData(Exp1_R25_pept)$Condition
+#' qData <- exprs(Exp1_R25_pept)
+#' conds <- pData(Exp1_R25_pept)$Condition
 #' normalized <- vsn(qData, conds, type="overall")
 #' 
 #' @export
@@ -405,8 +404,8 @@ vsn = function(qData, conds, type=NULL) {
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' qData <- Biobase::exprs(Exp1_R25_pept)
-#' conds <- Biobase::pData(Exp1_R25_pept)$Condition
+#' qData <- exprs(Exp1_R25_pept)
+#' conds <- pData(Exp1_R25_pept)$Condition
 #' normalized <- LOESS(qData, conds, type="overall")
 #' 
 #' @importFrom limma normalizeCyclicLoess

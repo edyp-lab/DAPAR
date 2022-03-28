@@ -22,7 +22,6 @@
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
 #' res.pca <- wrapper.pca(obj$new)
 #' 
-#' @importFrom Biobase exprs pData
 #' @importFrom FactoMineR PCA
 #' 
 #' @export
@@ -38,18 +37,18 @@ wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
     var.scaling <- TRUE
   
   res.pca <- NULL
-  if (length(which(is.na(Biobase::exprs(obj)))) > 0){
+  if (length(which(is.na(exprs(obj)))) > 0){
     warning("The dataset contains NA. This function can not be run")
     return(NULL)}
   
   if (is.null(ncp)){
     nmax <- 12
-    y <- Biobase::exprs(obj)
+    y <- exprs(obj)
     nprot <- dim(y)[1]
     n <- dim(y)[2] # If too big, take the number of conditions.
     
     if (n > nmax){
-      n <- length(unique(Biobase::pData(obj)$Condition))
+      n <- length(unique(pData(obj)$Condition))
     }
     
     
@@ -58,7 +57,7 @@ wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
   # parameters available to the user
   variance.scaling <- TRUE
   
-  res.pca <- FactoMineR::PCA(Biobase::exprs(obj), scale.unit = var.scaling, ncp=ncp, graph=FALSE)
+  res.pca <- FactoMineR::PCA(exprs(obj), scale.unit = var.scaling, ncp=ncp, graph=FALSE)
   # si warning pour les missing values, le reproduire dans l'interface graphique
   
   return(res.pca)

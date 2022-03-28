@@ -48,17 +48,17 @@ normalization using the library \code{highcharter}
 \examples{
 utils::data(Exp1_R25_prot, package='DAPARdata')
 obj <- Exp1_R25_prot
-qDataBefore <- Biobase::exprs(obj)
-conds <- Biobase::pData(obj)[,"Condition"]
-id <- Biobase::fData(obj)[,obj@experimentData@other$proteinId]
+qDataBefore <- exprs(obj)
+conds <- pData(obj)[,"Condition"]
+id <- fData(obj)[,obj@experimentData@other$proteinId]
 pal <- ExtendPalette(2)
 objAfter <- wrapper.normalizeD(obj, method = "QuantileCentering", 
 conds =conds, type = "within conditions")
 compareNormalizationD_HC(qDataBefore=qDataBefore, 
-qDataAfter=Biobase::exprs(objAfter), keyId = id, conds=conds, n=1000)
+qDataAfter=exprs(objAfter), keyId = id, conds=conds, n=1000)
 
 compareNormalizationD_HC(qDataBefore=qDataBefore, 
-qDataAfter=Biobase::exprs(objAfter), keyId = id, pal=pal, subset.view=1:4, 
+qDataAfter=exprs(objAfter), keyId = id, pal=pal, subset.view=1:4, 
 conds=conds, n=100)
 
 }

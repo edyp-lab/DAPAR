@@ -186,13 +186,13 @@ createMSnset <- function(file,
   
   
   if (replaceZeros) {
-    Biobase::exprs(obj)[Biobase::exprs(obj) == 0] <- NA
-    Biobase::exprs(obj)[is.nan(Biobase::exprs(obj))] <- NA
-    Biobase::exprs(obj)[is.infinite(Biobase::exprs(obj))] <-NA
+    exprs(obj)[exprs(obj) == 0] <- NA
+    exprs(obj)[is.nan(exprs(obj))] <- NA
+    exprs(obj)[is.infinite(exprs(obj))] <-NA
     obj@processingData@processing <- c(obj@processingData@processing, "All zeros were replaced by NA")
   }
   if (logData) {
-    Biobase::exprs(obj) <- log2(Biobase::exprs(obj))
+    exprs(obj) <- log2(exprs(obj))
     obj@processingData@processing <- 
       c(obj@processingData@processing, "Data has been Log2 tranformed")
   }
@@ -204,7 +204,7 @@ createMSnset <- function(file,
   obj@experimentData@other$Prostar_Version <- NA
   tryCatch({
     find.package("Prostar")
-    obj@experimentData@other$Prostar_Version <- Biobase::package.version('Prostar')
+    obj@experimentData@other$Prostar_Version <- package.version('Prostar')
   },
   error = function(e) obj.prot@experimentData@other$Prostar_Version <- NA
   )
@@ -212,7 +212,7 @@ createMSnset <- function(file,
   obj@experimentData@other$DAPAR_Version <- NA
   tryCatch({
     find.package("DAPAR")
-    obj@experimentData@other$Prostar_Version <- Biobase::package.version('DAPAR')
+    obj@experimentData@other$Prostar_Version <- package.version('DAPAR')
   },
   error = function(e) obj@experimentData@other$DAPAR_Version <- NA
   )
@@ -225,11 +225,11 @@ createMSnset <- function(file,
  
   metacell <- BuildMetaCell(from = software,
                             level = pep_prot_data,
-                            qdata = Biobase::exprs(obj), 
-                            conds = Biobase::pData(obj)$Condition, 
+                            qdata = exprs(obj), 
+                            conds = pData(obj)$Condition, 
                             df = metacell)
   
-  Biobase::fData(obj) <- cbind(Biobase::fData(obj), 
+  fData(obj) <- cbind(fData(obj), 
                                metacell, 
                                deparse.level = 0)
   obj@experimentData@other$names_metacell <- colnames(metacell)
@@ -263,7 +263,7 @@ createMSnset <- function(file,
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' df <- Biobase::exprs(Exp1_R25_pept[1:100])
+#' df <- exprs(Exp1_R25_pept[1:100])
 #' tags <- GetMetacell(Exp1_R25_pept[1:100])
 #' colors <- list('missing POV' = "lightblue",
 #'                'missing MEC' = "orange",
@@ -353,8 +353,8 @@ writeMSnsetToExcel <- function(obj, filename)
   wb <- openxlsx::createWorkbook(name)
   n <- 1
   openxlsx::addWorksheet(wb, "Quantitative Data")
-  openxlsx::writeData(wb, sheet=n, cbind(ID = rownames(Biobase::exprs(obj)),
-                                         Biobase::exprs(obj)), rowNames = FALSE)
+  openxlsx::writeData(wb, sheet=n, cbind(ID = rownames(exprs(obj)),
+                                         exprs(obj)), rowNames = FALSE)
   
   
   # Add colors to quantitative table
@@ -387,19 +387,19 @@ writeMSnsetToExcel <- function(obj, filename)
   
   n <- 2
   openxlsx::addWorksheet(wb, "Samples Meta Data")
-  openxlsx::writeData(wb, sheet = n, Biobase::pData(obj), rowNames = FALSE)
+  openxlsx::writeData(wb, sheet = n, pData(obj), rowNames = FALSE)
   
   
   # Add colors for sample data sheet
-  u_conds <- unique(Biobase::pData(obj)$Condition)
+  u_conds <- unique(pData(obj)$Condition)
   colors <- setNames(DAPAR::ExtendPalette(length(u_conds)),
                      u_conds)
   colors[['blank']] <- 'white'
   
-  tags <- Biobase::pData(obj)
+  tags <- pData(obj)
   tags[,] <- 'blank'
-  tags$Sample.name <- Biobase::pData(obj)$Condition
-  tags$Condition <- Biobase::pData(obj)$Condition
+  tags$Sample.name <- pData(obj)$Condition
+  tags$Condition <- pData(obj)$Condition
   
   unique.tags <- NULL
   if (!is.null(tags) && !is.null(colors)){
@@ -424,17 +424,17 @@ writeMSnsetToExcel <- function(obj, filename)
   ## Add feature Data sheet
    
   n <- 3
-  if (dim(Biobase::fData(obj))[2] != 0){
+  if (dim(fData(obj))[2] != 0){
     openxlsx::addWorksheet(wb, "Feature Meta Data")
     openxlsx::writeData(wb, 
                         sheet = n, 
-                        cbind(ID = rownames(Biobase::fData(obj)),
-                                           Biobase::fData(obj)), rowNames = FALSE)
+                        cbind(ID = rownames(fData(obj)),
+                                           fData(obj)), rowNames = FALSE)
   }
   
   colors <- as.list(setNames(mc$color, mc$node))
   tags <- cbind(keyId = rep('identified', nrow(obj)),
-                Biobase::fData(obj)
+                fData(obj)
                 )
   
   tags[,] <- 'identified'
@@ -567,15 +567,14 @@ listSheets <- function(file){
 #' 
 #' @export
 #' 
-#' @importFrom Biobase exprs fData pData
 #' @importFrom utils write.csv zip
 #'
 writeMSnsetToCSV <- function(obj, fname){
   
   #fname <- paste(tempdir(),fname,  sep="/")
-  write.csv(Biobase::exprs(obj), paste(tempdir(), "exprs.csv", sep='/'))
-  write.csv(Biobase::fData(obj), paste(tempdir(), "fData.csv", sep='/'))
-  write.csv(Biobase::pData(obj), paste(tempdir(), "pData.csv", sep='/'))
+  write.csv(exprs(obj), paste(tempdir(), "exprs.csv", sep='/'))
+  write.csv(fData(obj), paste(tempdir(), "fData.csv", sep='/'))
+  write.csv(pData(obj), paste(tempdir(), "pData.csv", sep='/'))
   files <- c(paste(tempdir(), "exprs.csv", sep='/'),
              paste(tempdir(), "fData.csv", sep='/'),
              paste(tempdir(), "pData.csv", sep='/'))
@@ -606,7 +605,6 @@ writeMSnsetToCSV <- function(obj, fname){
 #' @export
 #' 
 #' @importFrom MSnbase MSnSet
-#' @importFrom Biobase pData fData exprs
 #' 
 rbindMSnset <- function(df1=NULL, df2){
   
@@ -616,9 +614,9 @@ rbindMSnset <- function(df1=NULL, df2){
   }
   if (is.null(df1) && is.null(df2)){return(NULL)}
   
-  tmp.exprs <- rbind(Biobase::exprs(df1), Biobase::exprs(df2))
-  tmp.fData <- rbind(Biobase::fData(df1), Biobase::fData(df2))
-  tmp.pData <- Biobase::pData(df1)
+  tmp.exprs <- rbind(exprs(df1), exprs(df2))
+  tmp.fData <- rbind(fData(df1), fData(df2))
+  tmp.pData <- pData(df1)
   
   obj <-  MSnSet(exprs = tmp.exprs, fData = tmp.fData, pData = tmp.pData)
   obj@protocolData <- df1@protocolData

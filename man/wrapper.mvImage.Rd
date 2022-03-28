@@ -31,6 +31,8 @@ indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 obj <- MetaCellFiltering(obj, indices, cmd='delete')
 wrapper.mvImage(obj$new)
 
+
+
 }
 \author{
 Alexia Dorffer

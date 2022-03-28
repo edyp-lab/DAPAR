@@ -32,7 +32,6 @@
 #' wrapper.heatmapD(obj)
 #' }
 #' 
-#' @importFrom Biobase exprs pData
 #' 
 #' @export
 #'  
@@ -46,10 +45,10 @@ wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete",
     return(NULL)
   }
   
-  qData <- Biobase::exprs(obj)
-  conds <- Biobase::pData(obj)[['Condition']]
+  qData <- exprs(obj)
+  conds <- pData(obj)[['Condition']]
   for (j in 1:length(colnames(qData))){
-    colnames(qData)[j] <- paste(as.character(Biobase::pData(obj)[j,2:ncol(Biobase::pData(obj))]), 
+    colnames(qData)[j] <- paste(as.character(pData(obj)[j,2:ncol(pData(obj))]), 
                                 collapse =" ")
   }
   heatmapD(qData, conds, distance, cluster, dendro)
@@ -87,7 +86,7 @@ wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete",
 #' level <- obj@experimentData@other$typeOfData
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeLine(metacell.mask)
-#' qData <- Biobase::exprs(obj)
+#' qData <- exprs(obj)
 #' conds <- pData(obj)[['Condition']]
 #' heatmapD(qData, conds)
 #' }
@@ -221,7 +220,7 @@ heatmapD <- function(qData,
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeLine(metacell.mask)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' qData <- Biobase::exprs(obj$new)
+#' qData <- exprs(obj$new)
 #' heatmapForMissingValues(qData)
 #' 
 #' @export

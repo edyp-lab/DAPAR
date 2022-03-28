@@ -17,7 +17,7 @@ This function builds the design matrix
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-make.design(Biobase::pData(Exp1_R25_pept))
+make.design(pData(Exp1_R25_pept))
 
 }
 \author{

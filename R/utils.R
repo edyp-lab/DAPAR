@@ -146,12 +146,11 @@ SetCC <- function(obj, cc){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' qData <- Biobase::exprs(Exp1_R25_pept)
+#' qData <- exprs(Exp1_R25_pept)
 #' getNumberOfEmptyLines(qData)
 #' 
 #' @export
 #'
-#' @importFrom Biobase pData exprs fData
 #'
 getNumberOfEmptyLines <- function(qData){
   n <- sum(apply(is.na(as.matrix(qData)), 1, all))
@@ -212,7 +211,6 @@ GetKeyId <- function(obj)
 #' 
 #' @export
 #'
-#' @importFrom Biobase pData exprs fData
 #' 
 getListNbValuesInLines <- function(obj, type){
   if(missing(obj))
@@ -226,7 +224,7 @@ getListNbValuesInLines <- function(obj, type){
     stop(paste0("'type' must be one of the following values: ", paste0(MetacellFilteringScope(), collapse= ' ')))
   
   data <- GetMetacell(obj)
-  conds <- Biobase::pData(obj)$Condition
+  conds <- pData(obj)$Condition
   
   ll <- switch(type,
                WholeLine = NULL,
@@ -262,7 +260,7 @@ getListNbValuesInLines <- function(obj, type){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+#' conds <- pData(Exp1_R25_pept)[,"Condition"]
 #' getIndicesConditions(conds, "25fmol", "10fmol")
 #' 
 #' @export

@@ -18,8 +18,6 @@
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' wrapper.CVDistD_HC(Exp1_R25_pept)
 #' 
-#' @importFrom Biobase exprs pData
-#' 
 #' 
 #' @export
 #' 
@@ -27,8 +25,8 @@ wrapper.CVDistD_HC <- function(obj, ...){
   if (nrow(obj) == 0)
     return(NULL)
   
-  qData <- Biobase::exprs(obj)
-  conds <- Biobase::pData(obj)[,"Condition"]
+  qData <- exprs(obj)
+  conds <- pData(obj)[,"Condition"]
   CVDistD_HC(qData, conds, ...)
 }
 
@@ -52,10 +50,10 @@ wrapper.CVDistD_HC <- function(obj, ...){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
-#' CVDistD_HC(Biobase::exprs(Exp1_R25_pept), conds)
+#' conds <- pData(Exp1_R25_pept)[,"Condition"]
+#' CVDistD_HC(exprs(Exp1_R25_pept), conds)
 #' pal <- ExtendPalette(2, 'Dark2')
-#' CVDistD_HC(Biobase::exprs(Exp1_R25_pept), conds, pal)
+#' CVDistD_HC(exprs(Exp1_R25_pept), conds, pal)
 #' 
 #' @import highcharter
 #' @importFrom stats density var
