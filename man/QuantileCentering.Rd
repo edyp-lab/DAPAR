@@ -36,8 +36,8 @@ Normalisation QuantileCentering
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept
-conds <- pData(Exp1_R25_pept)$Condition
-normalized <- QuantileCentering(exprs(obj), conds, 
+conds <- Biobase::pData(Exp1_R25_pept)$Condition
+normalized <- QuantileCentering(Biobase::exprs(obj), conds, 
 type="within conditions", subset.norm=1:10)
 
 }

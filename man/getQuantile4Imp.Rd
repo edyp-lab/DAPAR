@@ -24,7 +24,7 @@ This method returns the q-th quantile of each column of an expression set,
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-qdata <- exprs(Exp1_R25_pept)
+qdata <- Biobase::exprs(Exp1_R25_pept)
 quant <- getQuantile4Imp(qdata) 
 
 }

@@ -24,7 +24,7 @@ createMSnset(
 
 \item{indExpData}{A vector of string where each element is the name
 of a column in designTable that have to be integrated in
-the \code{fData()} table of the \code{MSnSet} object.}
+the \code{Biobase::fData()} table of the \code{MSnSet} object.}
 
 \item{colnameForID}{The name of the column containing the ID of entities 
 (peptides or proteins)}

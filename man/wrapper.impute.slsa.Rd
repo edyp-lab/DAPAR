@@ -13,7 +13,7 @@ wrapper.impute.slsa(obj = NULL, na.type = NULL)
 Available values are: `NA` (for both POV and MEC), `POV`, `MEC`.}
 }
 \value{
-The \code{exprs(obj)} matrix with imputed values instead of missing 
+The \code{Biobase::exprs(obj)} matrix with imputed values instead of missing 
 values.
 }
 \description{
@@ -36,7 +36,7 @@ values.
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' qdata <- exprs(Exp1_R25_pept)
+#' qdata <- Biobase::exprs(Exp1_R25_pept)
 #' meta <- 
 #' values <- getQuantile4Imp(qdata)$shiftedImpVal
 #' obj.imp.mec <- impute.detQuant(qdata, values, na.type = 'missing POV') 
@@ -65,7 +65,7 @@ impute.detQuant <- function(qdata, metadata, values, na.type=NULL){
     #browser()
     for(i in 1:ncol(qdata)){
         col <- qdata[,i]
-        ind.na.type <- match.metacell(fData(obj)[, obj@experimentData@other$names_metacell[i]], 
+        ind.na.type <- match.metacell(Biobase::fData(obj)[, obj@experimentData@other$names_metacell[i]], 
                                       pattern = na.type,
                                       level = obj@experimentData@other$typeOfData)
         

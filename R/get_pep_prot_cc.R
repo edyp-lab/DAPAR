@@ -208,14 +208,16 @@ buildGraph <- function(The.CC, X){
 #' 
 #' @export
 #' 
-#' @import visNetwork
 #' 
 #' 
-display.CC.visNet <- function(g, layout = layout_nicely, 
-                       obj=NULL,
-                       prot.tooltip=NULL, 
-                       pept.tooltip=NULL){
-  #require(visNetwork)
+display.CC.visNet <- function(g, 
+                              layout = layout_nicely, 
+                              obj = NULL,
+                              prot.tooltip = NULL, 
+                              pept.tooltip=  NULL){
+  if (! requireNamespace("visNetwork", quietly = TRUE)) {
+    stop("Please install visNetwork: BiocManager::install('visNetwork')")
+  }
   
   col.prot <- "#ECB57C"
   col.spec <- "#5CA3F7"
@@ -255,8 +257,6 @@ display.CC.visNet <- function(g, layout = layout_nicely,
 #' 
 plotJitter_rCharts <- function(df, clickFunction=NULL){
   
-  #df <- GetDataForPlotJitter(list.of.cc)
-  print("In DAPAR::diffAnaVolcanoplot_rCharts")
   xtitle <- "TO DO"
   
   if (is.null(clickFunction)){

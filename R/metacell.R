@@ -163,8 +163,8 @@ metacell.def <- function(level){
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept[1:10]
 #' cols.for.ident <- obj@experimentData@other$names_metacell
-#' conds <- pData(obj)$Condition
-#' df <- fData(obj)[, cols.for.ident]
+#' conds <- Biobase::pData(obj)$Condition
+#' df <- Biobase::fData(obj)[, cols.for.ident]
 #' df <- Set_POV_MEC_tags(conds, df, level = 'peptide')
 #' 
 #' @export
@@ -543,7 +543,7 @@ match.metacell <- function(metadata, pattern, level){
 #'
 GetMetacell <- function(obj){
 
-  value <- fData(obj)[, obj@experimentData@other$names_metacell]
+  value <- Biobase::fData(obj)[, obj@experimentData@other$names_metacell]
   if(is.null(value)){
     warning(" The metacell dataframe does not exist. Returns NULL.")
     return(NULL)
@@ -579,13 +579,13 @@ UpdateMetacell <- function(obj, method='', na.type){
   }
   
   level <- obj@experimentData@other$typeOfData
-  ind <- match.metacell(metadata = fData(obj)[, obj@experimentData@other$names_metacell], 
+  ind <- match.metacell(metadata = Biobase::fData(obj)[, obj@experimentData@other$names_metacell], 
                         pattern = na.type, 
-                        level = level) & !is.na(exprs(obj))
+                        level = level) & !is.na(Biobase::exprs(obj))
   
-  fData(obj)[, obj@experimentData@other$names_metacell][ind] <- gsub("missing", 
+  Biobase::fData(obj)[, obj@experimentData@other$names_metacell][ind] <- gsub("missing", 
                                                                               "imputed", 
-                                                                              fData(obj)[, obj@experimentData@other$names_metacell][ind],
+                                                                              Biobase::fData(obj)[, obj@experimentData@other$names_metacell][ind],
                                                                               fixed = TRUE)
   return(obj)
 }

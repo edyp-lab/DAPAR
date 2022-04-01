@@ -45,8 +45,8 @@ compute_t_tests <- function(obj, contrast="OnevsOne", type="Student"){
            Welch=.type <- FALSE)
     
     
-    qData <- exprs(obj)
-    sTab <- pData(obj)
+    qData <- Biobase::exprs(obj)
+    sTab <- Biobase::pData(obj)
 res<-list()
 logFC <- list()
 P_Value <- list()

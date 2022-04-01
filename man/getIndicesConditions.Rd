@@ -8,17 +8,17 @@ getIndicesConditions(conds, cond1, cond2)
 }
 \arguments{
 \item{conds}{A vector of strings containing the column "Condition" of 
-the \code{pData()}.}
+the \code{Biobase::pData()}.}
 
-\item{cond1}{A vector of Conditions (a slot in the \code{pData()} table) for
+\item{cond1}{A vector of Conditions (a slot in the \code{Biobase::pData()} table) for
 the condition 1.}
 
-\item{cond2}{A vector of Conditions (a slot in the \code{pData()} table) for
+\item{cond2}{A vector of Conditions (a slot in the \code{Biobase::pData()} table) for
 the condition 2.}
 }
 \value{
 A list with two slots \code{iCond1} and \code{iCond2} containing
-respectively the indices of samples in the \code{pData()} table of the
+respectively the indices of samples in the \code{Biobase::pData()} table of the
 dataset.
 }
 \description{
@@ -27,7 +27,7 @@ indices for the samples.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-conds <- pData(Exp1_R25_pept)[,"Condition"]
+conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 getIndicesConditions(conds, "25fmol", "10fmol")
 
 }

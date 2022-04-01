@@ -3,7 +3,7 @@
 \name{heatmapForMissingValues}
 \alias{heatmapForMissingValues}
 \title{This function is inspired from the function \code{\link{heatmap.2}} 
-that displays quantitative data in the \code{exprs()} table of an object of
+that displays quantitative data in the \code{Biobase::exprs()} table of an object of
 class \code{MSnSet}. For more information, please refer to the help 
 of the heatmap.2 function.}
 \usage{
@@ -52,7 +52,7 @@ level <- obj@experimentData@other$typeOfData
 metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 indices <- GetIndices_WholeLine(metacell.mask)
 obj <- MetaCellFiltering(obj, indices, cmd='delete')
-qData <- exprs(obj$new)
+qData <- Biobase::exprs(obj$new)
 heatmapForMissingValues(qData)
 
 }

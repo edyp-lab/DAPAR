@@ -31,6 +31,7 @@ Method to xxxxx
 }
 \examples{
 \dontrun{
+library(MSnbase)
 utils::data(Exp1_R25_pept, package='DAPARdata')
 protID <- "Protein_group_IDs"
 obj.pep <- Exp1_R25_pept[1:10]

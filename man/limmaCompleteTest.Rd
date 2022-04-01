@@ -9,7 +9,7 @@ limmaCompleteTest(qData, sTab, comp.type = "OnevsOne")
 \arguments{
 \item{qData}{A matrix of quantitative data, without any missing values.}
 
-\item{sTab}{A dataframe of experimental design (pData()).}
+\item{sTab}{A dataframe of experimental design (Biobase::pData()).}
 
 \item{comp.type}{A string that corresponds to the type of comparison. 
 Values are: 'anova1way', 'OnevsOne' and 'OnevsAll'; default is 'OnevsOne'.}
@@ -27,8 +27,8 @@ This function is a limmaCompleteTest
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept
-qData <- exprs(obj)
-sTab <- pData(obj)
+qData <- Biobase::exprs(obj)
+sTab <- Biobase::pData(obj)
 limma <- limmaCompleteTest(qData, sTab, comp.type='anova1way')
 
 }

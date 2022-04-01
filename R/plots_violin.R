@@ -20,12 +20,10 @@
 #' @examples
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
 #' obj <- Exp1_R25_prot
-#' library(vioplot)
-#' legend <- conds <- pData(obj)$Condition
+#' legend <- conds <- Biobase::pData(obj)$Condition
 #' key <- "Protein_IDs"
 #' violinPlotD(obj, conds, key, legend, subset.view=1:10)
 #' 
-#' @importFrom vioplot vioplot
 #' 
 #' @importFrom graphics plot.window axis mtext legend points segments plot.new
 #' 
@@ -40,6 +38,10 @@ violinPlotD <- function(obj,
                         pal = NULL, 
                         subset.view=NULL){
   
+  if (! requireNamespace("vioplot", quietly = TRUE)) {
+    stop("Please install vioplot: BiocManager::install('vioplot')")
+  }
+  
   graphics::plot.new()
  
   if (is.null(obj)) {
@@ -49,7 +51,7 @@ violinPlotD <- function(obj,
     warning('The dataset is empty and cannot be shown')
     return(NULL)
   } else
-    qData <- exprs(obj)
+    qData <- Biobase::exprs(obj)
   
   if(missing(conds))
     stop("'conds' is missing.")
@@ -67,7 +69,7 @@ violinPlotD <- function(obj,
     if (is.null(keyId)|| missing(keyId))
       stop("'keyId' is missing.")
     else {
-      if (!grep(keyId, colnames(fData(obj))))
+      if (!grep(keyId, colnames(Biobase::fData(obj))))
         stop("'keyId' does not belong to metadata")
     }
   }
@@ -130,7 +132,7 @@ violinPlotD <- function(obj,
       graphics::points(y=qData[i,ncol(qData)],x=ncol(qData),pch=16,col=pal[n])
     }
     graphics::legend("topleft",
-                     legend=fData(obj)[subset.view, keyId],
+                     legend=Biobase::fData(obj)[subset.view, keyId],
                      lty=1,
                      lwd=2,
                      col=pal,

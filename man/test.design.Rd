@@ -17,7 +17,7 @@ This function check xxxxx
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-test.design(pData(Exp1_R25_pept)[,1:3])
+test.design(Biobase::pData(Exp1_R25_pept)[,1:3])
 
 }
 \author{

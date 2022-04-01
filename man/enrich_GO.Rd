@@ -21,7 +21,7 @@ ENTREZID, GENENAME, REFSEQ, UNIGENE, UNIPROT)}
 \item{readable}{TRUE or FALSE (default FALSE)}
 
 \item{pval}{The qvalue cutoff (same parameter as in the function 
-\code{enrichGO} of the package \code{\link{clusterProfiler}})}
+\code{enrichGO} of the package `clusterProfiler`)}
 
 \item{universe}{a list of ID to be considered as the background for 
 enrichment calculation}
@@ -31,7 +31,7 @@ A groupGOResult instance.
 }
 \description{
 This function is a wrappper to the function enrichGO from the
-package \code{\link{clusterProfiler}}. Given a vector of genes/proteins, 
+package `clusterProfiler`. Given a vector of genes/proteins, 
 it returns an enrichResult instance.
 }
 \examples{
@@ -39,7 +39,7 @@ it returns an enrichResult instance.
 utils::data(Exp1_R25_prot, package='DAPARdata')
 obj <- Exp1_R25_prot
 univ<-univ_AnnotDbPkg("org.Sc.sgd.db") #univ is the background
-ego<-enrich_GO(data=fData(obj)$Protein.IDs, idFrom="UNIPROT", 
+ego<-enrich_GO(data=Biobase::fData(obj)$Protein.IDs, idFrom="UNIPROT", 
 orgdb="org.Sc.sgd.db",ont="MF", pval=0.05, universe = univ)
 }
 

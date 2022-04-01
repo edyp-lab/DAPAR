@@ -22,7 +22,7 @@
 #' @examples
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
 #' obj <- Exp1_R25_prot
-#' conds <- legend <- pData(obj)$Condition
+#' conds <- legend <- Biobase::pData(obj)$Condition
 #' key <- "Protein_IDs"
 #' boxPlotD_HC(obj, conds, key, legend, NULL, 1:10)
 #' pal <- ExtendPalette(length(unique(conds)))
@@ -53,7 +53,7 @@ boxPlotD_HC <- function(obj,
     warning('The dataset is empty and cannot be shown')
     return(NULL)
   } else {
-    qData <- exprs(obj)
+    qData <- Biobase::exprs(obj)
   }
   
   if(missing(conds))
@@ -85,7 +85,7 @@ boxPlotD_HC <- function(obj,
     if (is.null(keyId)|| missing(keyId))
       stop("'keyId' is missing.")
     else {
-      if (!grep(keyId, colnames(fData(obj))))
+      if (!grep(keyId, colnames(Biobase::fData(obj))))
         stop("'keyId' does not belong to metadata")
     }
   }
@@ -237,7 +237,7 @@ boxPlotD_HC <- function(obj,
                                    data=dfSubset,
                                    color=pal[n], 
                                    dashStyle = "shortdot",
-                                   name=fData(obj)[i,keyId],
+                                   name=Biobase::fData(obj)[i,keyId],
                                    tooltip=list(enabled=T,headerFormat ="",pointFormat="{point.series.name} : {point.y: .2f} ") )
       
     }

@@ -28,6 +28,7 @@ indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 obj <- MetaCellFiltering(obj, indices, cmd='delete')
 res.pca <- wrapper.pca(obj$new)
 
+
 }
 \author{
 Samuel Wieczorek

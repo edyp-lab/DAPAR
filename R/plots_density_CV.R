@@ -1,8 +1,8 @@
 
-#' Builds a densityplot of the CV of entities in the exprs() table. 
+#' Builds a densityplot of the CV of entities in the Biobase::exprs() table. 
 #' of an object \code{MSnSet}. The variance is calculated for each 
 #' condition present
-#' in the dataset (see the slot \code{'Condition'} in the \code{pData()} table).
+#' in the dataset (see the slot \code{'Condition'} in the \code{Biobase::pData()} table).
 #' 
 #' @title Distribution of CV of entities
 #' 
@@ -25,16 +25,16 @@ wrapper.CVDistD_HC <- function(obj, ...){
   if (nrow(obj) == 0)
     return(NULL)
   
-  qData <- exprs(obj)
-  conds <- pData(obj)[,"Condition"]
+  qData <- Biobase::exprs(obj)
+  conds <- Biobase::pData(obj)[,"Condition"]
   CVDistD_HC(qData, conds, ...)
 }
 
 
 
-#' Builds a densityplot of the CV of entities in the exprs() table
+#' Builds a densityplot of the CV of entities in the Biobase::exprs() table
 #' of a object. The CV is calculated for each condition present
-#' in the dataset (see the slot \code{'Condition'} in the \code{pData()} table)
+#' in the dataset (see the slot \code{'Condition'} in the \code{Biobase::pData()} table)
 #' 
 #' @title Distribution of CV of entities
 #' 
@@ -50,10 +50,10 @@ wrapper.CVDistD_HC <- function(obj, ...){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' conds <- pData(Exp1_R25_pept)[,"Condition"]
-#' CVDistD_HC(exprs(Exp1_R25_pept), conds)
+#' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+#' CVDistD_HC(Biobase::exprs(Exp1_R25_pept), conds)
 #' pal <- ExtendPalette(2, 'Dark2')
-#' CVDistD_HC(exprs(Exp1_R25_pept), conds, pal)
+#' CVDistD_HC(Biobase::exprs(Exp1_R25_pept), conds, pal)
 #' 
 #' @import highcharter
 #' @importFrom stats density var

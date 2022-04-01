@@ -3,7 +3,7 @@
 #' #' Builds a correlation matrix based on a \code{MSnSet} object.
 #' #' 
 #' #' @title Displays a correlation matrix of the quantitative data of the
-#' #' \code{exprs()} table
+#' #' \code{Biobase::exprs()} table
 #' #' 
 #' #' @param obj An object of class \code{MSnSet}.
 #' #' 
@@ -21,15 +21,15 @@
 #' #' @export
 #' #' 
 #' wrapper.corrMatrixD <- function(obj, rate=5){
-#'   qData <- exprs(obj)
-#'   samplesData <- pData(obj)
+#'   qData <- Biobase::exprs(obj)
+#'   samplesData <- Biobase::pData(obj)
 #'   corrMatrixD(qData, samplesData, rate)
 #' }
 
 #' Builds a correlation matrix based on a \code{MSnSet} object. 
 #' 
 #' @title Displays a correlation matrix of the quantitative data of the
-#' \code{exprs()} table
+#' \code{Biobase::exprs()} table
 #' 
 #' @param obj An object of class \code{MSnSet}.
 #' 
@@ -58,8 +58,8 @@ wrapper.corrMatrixD_HC <- function(obj, rate=0.5, showValues=TRUE){
     return(NULL)
   }
   
-  qData <- exprs(obj)
-  samplesData <- pData(obj)
+  qData <- Biobase::exprs(obj)
+  samplesData <- Biobase::pData(obj)
   data <- cor(qData,use = 'pairwise.complete.obs')
   corrMatrixD_HC(data,samplesData, rate, showValues)
 }
@@ -70,7 +70,7 @@ wrapper.corrMatrixD_HC <- function(obj, rate=0.5, showValues=TRUE){
 #' Correlation matrix based on a \code{MSnSet} object.
 #' 
 #' @title Displays a correlation matrix of the quantitative data of the
-#' \code{exprs()} table.
+#' \code{Biobase::exprs()} table.
 #' 
 #' @param object The result of the \code{cor} function.
 #' 
@@ -88,8 +88,8 @@ wrapper.corrMatrixD_HC <- function(obj, rate=0.5, showValues=TRUE){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' qData <- exprs(Exp1_R25_pept)
-#' samplesData <- pData(Exp1_R25_pept)
+#' qData <- Biobase::exprs(Exp1_R25_pept)
+#' samplesData <- Biobase::pData(Exp1_R25_pept)
 #' res <- cor(qData,use = 'pairwise.complete.obs')
 #' corrMatrixD_HC(res, samplesData)
 #' 

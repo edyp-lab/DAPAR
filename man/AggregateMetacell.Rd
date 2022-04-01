@@ -19,6 +19,7 @@ Execute a product two matrices: the first is an adjacency one  while the
 second if a simple dataframe
 }
 \examples{
+library(MSnbase)
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj.pep <- Exp1_R25_pept[1:100]
 protID <- "Protein_group_IDs"

@@ -5,7 +5,7 @@
 #' \code{MSnSet} object.
 #' 
 #' @title This function is a wrapper to \code{\link{heatmap.2}} that displays 
-#' quantitative data in the \code{exprs()} table of an object of
+#' quantitative data in the \code{Biobase::exprs()} table of an object of
 #' class \code{MSnSet}
 #' 
 #' @param obj An object of class \code{MSnSet}.
@@ -45,10 +45,10 @@ wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete",
     return(NULL)
   }
   
-  qData <- exprs(obj)
-  conds <- pData(obj)[['Condition']]
+  qData <- Biobase::exprs(obj)
+  conds <- Biobase::pData(obj)[['Condition']]
   for (j in 1:length(colnames(qData))){
-    colnames(qData)[j] <- paste(as.character(pData(obj)[j,2:ncol(pData(obj))]), 
+    colnames(qData)[j] <- paste(as.character(Biobase::pData(obj)[j,2:ncol(Biobase::pData(obj))]), 
                                 collapse =" ")
   }
   heatmapD(qData, conds, distance, cluster, dendro)
@@ -60,7 +60,7 @@ wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete",
 #' Heatmap of the quantitative proteomic data of a \code{MSnSet} object
 #' 
 #' @title This function is a wrapper to \code{\link{heatmap.2}} that displays 
-#' quantitative data in the \code{exprs()} table of an object of
+#' quantitative data in the \code{Biobase::exprs()} table of an object of
 #' class \code{MSnSet}
 #' 
 #' @param qData A dataframe that contains quantitative data.
@@ -86,14 +86,13 @@ wrapper.heatmapD  <- function(obj, distance="euclidean", cluster="complete",
 #' level <- obj@experimentData@other$typeOfData
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeLine(metacell.mask)
-#' qData <- exprs(obj)
-#' conds <- pData(obj)[['Condition']]
+#' qData <- Biobase::exprs(obj)
+#' conds <- Biobase::pData(obj)[['Condition']]
 #' heatmapD(qData, conds)
 #' }
 #' 
 #' @importFrom gplots heatmap.2
 #' @importFrom RColorBrewer brewer.pal
-#' @importFrom dendextend color_branches get_leaves_branches_col
 #' @importFrom stats as.dendrogram hclust
 #' 
 #' @export
@@ -103,6 +102,11 @@ heatmapD <- function(qData,
                      distance="euclidean", 
                      cluster="complete", 
                      dendro = FALSE){
+  
+  
+  if (! requireNamespace("dendextend", quietly = TRUE)) {
+    stop("Please install dendextend: BiocManager::install('dendextend')")
+  }
   ##Check parameters
   # paramdist <- c("euclidean", "manhattan") 
   # if (!(distance %in% paramdist)){
@@ -186,7 +190,7 @@ heatmapD <- function(qData,
 #' Heatmap inspired by the heatmap.2 function.
 #' 
 #' @title This function is inspired from the function \code{\link{heatmap.2}} 
-#' that displays quantitative data in the \code{exprs()} table of an object of
+#' that displays quantitative data in the \code{Biobase::exprs()} table of an object of
 #' class \code{MSnSet}. For more information, please refer to the help 
 #' of the heatmap.2 function.
 #' 
@@ -220,7 +224,7 @@ heatmapD <- function(qData,
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeLine(metacell.mask)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' qData <- exprs(obj$new)
+#' qData <- Biobase::exprs(obj$new)
 #' heatmapForMissingValues(qData)
 #' 
 #' @export

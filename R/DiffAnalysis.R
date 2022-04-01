@@ -36,8 +36,8 @@
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' qData <- exprs(obj$new)
-#' sTab <- pData(obj$new)
+#' qData <- Biobase::exprs(obj$new)
+#' sTab <- Biobase::pData(obj$new)
 #' limma <- limmaCompleteTest(qData,sTab)
 #' diffAnaComputeFDR(limma$logFC[,1],limma$P_Value[,1])
 #' 
@@ -84,8 +84,8 @@ diffAnaComputeFDR <- function(logFC,
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' qData <- exprs(obj$new)
-#' sTab <- pData(obj$new)
+#' qData <- Biobase::exprs(obj$new)
+#' sTab <- Biobase::pData(obj$new)
 #' allComp <- limmaCompleteTest(qData,sTab)
 #' data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
 #' obj$new <- diffAnaSave(obj$new, allComp, data)
@@ -102,9 +102,9 @@ Get_AllComparisons <- function(obj){
   res_AllPairwiseComparisons <- NULL
   
   #If there are already pVal values, then do no compute them 
-  if (length(grep(logFC_KEY, names(fData(obj) ))) > 0){
-    res_AllPairwiseComparisons <- list(logFC = dplyr::select(fData(obj),grep(logFC_KEY,names(fData(obj) ))),
-                                      P_Value = dplyr::select(fData(obj),grep(pvalue_KEY,names(fData(obj) ))))
+  if (length(grep(logFC_KEY, names(Biobase::fData(obj) ))) > 0){
+    res_AllPairwiseComparisons <- list(logFC = dplyr::select(Biobase::fData(obj),grep(logFC_KEY,names(Biobase::fData(obj) ))),
+                                      P_Value = dplyr::select(Biobase::fData(obj),grep(pvalue_KEY,names(Biobase::fData(obj) ))))
 
   }
   
@@ -143,8 +143,8 @@ Get_AllComparisons <- function(obj){
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' qData <- exprs(obj$new)
-#' sTab <- pData(obj$new)
+#' qData <- Biobase::exprs(obj$new)
+#' sTab <- Biobase::pData(obj$new)
 #' allComp <- limmaCompleteTest(qData,sTab)
 #' data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
 #' diffAnaSave(obj$new, allComp, data)
@@ -169,14 +169,14 @@ diffAnaSave <- function (obj,
   .fc <- as.data.frame(allComp$logFC)
   .pval <- as.data.frame(allComp$P_Value)
   cnames <- c(colnames(allComp$logFC), colnames(allComp$P_Value))
-  ind <- which(colnames(fData(obj)) %in% cnames)
+  ind <- which(colnames(Biobase::fData(obj)) %in% cnames)
   if (length(ind) > 0) 
-      fData(obj) <- fData(obj)[,-ind]
+      Biobase::fData(obj) <- Biobase::fData(obj)[,-ind]
   
   for (i in 1:ncol(.fc)){
-    fData(obj) <- cbind(fData(obj), .fc[,i], .pval[,i])
-    coln <- colnames(fData(obj))
-    colnames(fData(obj))[(length(coln)-1):length(coln)] <- c(colnames(allComp$logFC)[i],colnames(allComp$P_Value)[i])
+    Biobase::fData(obj) <- cbind(Biobase::fData(obj), .fc[,i], .pval[,i])
+    coln <- colnames(Biobase::fData(obj))
+    colnames(Biobase::fData(obj))[(length(coln)-1):length(coln)] <- c(colnames(allComp$logFC)[i],colnames(allComp$P_Value)[i])
   }
   
   text <- paste("Null hypothesis test")
@@ -188,9 +188,9 @@ diffAnaSave <- function (obj,
   #### SAVE A COMPARISON ANALYSIS IF EXISTS
   if (!(is.null(data$logFC) && is.null(data$P_Value))){
   
-        fData(obj)$P_Value <- data$P_Value
-        fData(obj)$logFC <- data$logFC
-        fData(obj)$Significant <- 0
+        Biobase::fData(obj)$P_Value <- data$P_Value
+        Biobase::fData(obj)$logFC <- data$logFC
+        Biobase::fData(obj)$Significant <- 0
 
         ##setSignificant info
         x <- data$logFC
@@ -198,7 +198,7 @@ diffAnaSave <- function (obj,
     
         ipval <- which(y >= th_pval)
         ilogfc <- which(abs(x) >= th_logFC)
-        fData(obj)[intersect(ipval, ilogfc),]$Significant <- 1
+        Biobase::fData(obj)[intersect(ipval, ilogfc),]$Significant <- 1
    }
   
   
@@ -225,8 +225,8 @@ diffAnaSave <- function (obj,
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' qData <- exprs(obj$new)
-#' sTab <- pData(obj$new)
+#' qData <- Biobase::exprs(obj$new)
+#' sTab <- Biobase::pData(obj$new)
 #' allComp <- limmaCompleteTest(qData,sTab)
 #' data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
 #' obj$new <- diffAnaSave(obj$new, allComp, data)
@@ -240,12 +240,12 @@ diffAnaGetSignificant <- function (obj){
         warning("The dataset contains no data")
         return(NULL)
     }
-    if (!("Significant" %in% colnames(fData(obj)))) {
+    if (!("Significant" %in% colnames(Biobase::fData(obj)))) {
         warning ("Please Set Significant data before")
         return(NULL)
     }
     temp <- obj
-    signif <- which(fData(temp)$Significant == TRUE)
+    signif <- which(Biobase::fData(temp)$Significant == TRUE)
     return (temp[signif,])
 }
 
@@ -272,8 +272,8 @@ diffAnaGetSignificant <- function (obj){
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' qData <- exprs(obj$new)
-#' sTab <- pData(obj$new)
+#' qData <- Biobase::exprs(obj$new)
+#' sTab <- Biobase::pData(obj$new)
 #' limma <- limmaCompleteTest(qData,sTab)
 #' wrapperCalibrationPlot(limma$P_Value[,1])
 #' 
@@ -311,8 +311,8 @@ return(p)
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' qData <- exprs(obj$new)
-#' sTab <- pData(obj$new)
+#' qData <- Biobase::exprs(obj$new)
+#' sTab <- Biobase::pData(obj$new)
 #' allComp <- limmaCompleteTest(qData,sTab)
 #' histPValue_HC(allComp$P_Value[1])
 #' 

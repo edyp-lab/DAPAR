@@ -21,7 +21,7 @@ object for log.}
 An instance of class \code{MSnSet} that have been filtered.
 }
 \description{
-Delete the lines of \code{exprs()} table identified by their indice.
+Delete the lines of \code{Biobase::exprs()} table identified by their indice.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')

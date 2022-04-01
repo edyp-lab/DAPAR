@@ -10,7 +10,7 @@ barplotGroupGO_HC(ggo, maxRes = 5, title = "")
 \arguments{
 \item{ggo}{The result of the GO classification, provides either by the 
 function \code{group_GO} in the package \code{DAPAR} or the function 
-\code{groupGO} in the package \code{\link{clusterProfiler}}}
+\code{groupGO} in the package `clusterProfiler`}
 
 \item{maxRes}{An integer which is the maximum number of classes to display 
 in the plot}

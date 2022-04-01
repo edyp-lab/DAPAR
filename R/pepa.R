@@ -464,7 +464,7 @@ pepa.test <- function(X, y, n1, n2, global=FALSE, use.lm=FALSE){
         mse.h0 <- lik0$ss/(q*n)
         llr <- mse.h1 <- rep(NA, p)
         for(jj in 1:p){
-            print(sprintf('[pepa.test] Computing H1 likelihood for protein %d', jj))
+            print(paste0('[pepa.test] Computing H1 likelihood for protein ', jj))
             lik1 <- LH1(X, y1, y2, jj)            
             mse.h1[jj] <- lik1$ss/(q*n)    
             llr[jj] <- (q*n) * (log(lik0$ss) - log(lik1$ss))
@@ -492,7 +492,7 @@ pepa.test <- function(X, y, n1, n2, global=FALSE, use.lm=FALSE){
         ii <- 0
         for(ee in cc){
             ii <- ii + 1
-            print(sprintf('[pepa.test] Computing H0 likelihood for connected component %d/%d', ii, length(cc)))                
+            print(paste0('[pepa.test] Computing H0 likelihood for connected component ', ii, '/', length(cc)))                
             ee <- as.numeric(ee)
             local.prot <- ee[ee <= p]
             if(length(local.prot) == 0){next()}
@@ -511,7 +511,7 @@ pepa.test <- function(X, y, n1, n2, global=FALSE, use.lm=FALSE){
             }
             
             for(jj in local.prot){
-                print(sprintf('[pepa.test] Computing H1 likelihood for protein %d', jj))
+                print(paste0('[pepa.test] Computing H1 likelihood for protein ', jj))
                 prot.equiv.idx <- match(names(prot.barcode[!bc.dup])[prot.barcode[!bc.dup] == prot.barcode[colnames(X)[jj]]], colnames(equiv.X))
                 
                 if(use.lm){

@@ -28,7 +28,7 @@ level <- GetTypeofData(obj)
 pattern <- 'missing'
 metacell.mask <- match.metacell(metadata=GetMetacell(obj), pattern=pattern, level=level)
 type <- 'AllCond'
-conds <- pData(obj)$Condition
+conds <- Biobase::pData(obj)$Condition
 op <- '>='
 th <- 0.5
 percent <- TRUE

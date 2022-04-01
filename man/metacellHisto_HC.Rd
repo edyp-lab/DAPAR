@@ -17,7 +17,7 @@ metacellHisto_HC(
 
 \item{pattern}{xxx}
 
-\item{indLegend}{The indices of the column name's in \code{pData()} tab}
+\item{indLegend}{The indices of the column name's in \code{Biobase::pData()} tab}
 
 \item{showValues}{A logical that indicates wether numeric values should be
 drawn above the bars.}

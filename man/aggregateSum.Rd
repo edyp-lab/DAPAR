@@ -21,6 +21,7 @@ This function computes the intensity of proteins based on the sum of the
 intensities of their peptides.
 }
 \examples{
+library(MSnbase)
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj.pep <- Exp1_R25_pept[1:20]
 obj.pep.imp <- wrapper.impute.detQuant(obj.pep, na.type='missing')

@@ -22,11 +22,15 @@
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
 #' res.pca <- wrapper.pca(obj$new)
 #' 
-#' @importFrom FactoMineR PCA
 #' 
 #' @export
 #' 
 wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
+  
+  if (! requireNamespace("FactoMineR", quietly = TRUE)) {
+    stop("Please install FactoMineR: BiocManager::install('FactoMineR')")
+  }
+  
   # require(FactoMineR)
   if (missing(obj))
     stop("'obj' is required")
@@ -37,18 +41,18 @@ wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
     var.scaling <- TRUE
   
   res.pca <- NULL
-  if (length(which(is.na(exprs(obj)))) > 0){
+  if (length(which(is.na(Biobase::exprs(obj)))) > 0){
     warning("The dataset contains NA. This function can not be run")
     return(NULL)}
   
   if (is.null(ncp)){
     nmax <- 12
-    y <- exprs(obj)
+    y <- Biobase::exprs(obj)
     nprot <- dim(y)[1]
     n <- dim(y)[2] # If too big, take the number of conditions.
     
     if (n > nmax){
-      n <- length(unique(pData(obj)$Condition))
+      n <- length(unique(Biobase::pData(obj)$Condition))
     }
     
     
@@ -57,7 +61,7 @@ wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
   # parameters available to the user
   variance.scaling <- TRUE
   
-  res.pca <- FactoMineR::PCA(exprs(obj), scale.unit = var.scaling, ncp=ncp, graph=FALSE)
+  res.pca <- FactoMineR::PCA(Biobase::exprs(obj), scale.unit = var.scaling, ncp=ncp, graph=FALSE)
   # si warning pour les missing values, le reproduire dans l'interface graphique
   
   return(res.pca)
@@ -83,11 +87,14 @@ wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
 #' res.pca <- wrapper.pca(Exp1_R25_pept)
 #' plotPCA_Var(res.pca)
 #' 
-#' @importFrom factoextra fviz_pca_var
 #' 
 #' @export
 #' 
 plotPCA_Var <- function(res.pca, chosen.axes=c(1,2)){
+  
+  if (! requireNamespace("factoextra", quietly = TRUE)) {
+    stop("Please install factoextra: BiocManager::install('factoextra')")
+  }
   #plot.PCA(res.pca, choix="var", axes = chosen.axes, title="Sample factor map (PCA)")
   #require(factoextra)
   # Colorer en fonction du cos2: qualit? de repr?sentation
@@ -116,11 +123,16 @@ plotPCA_Var <- function(res.pca, chosen.axes=c(1,2)){
 #' res.pca <- wrapper.pca(Exp1_R25_pept)
 #' plotPCA_Ind(res.pca)
 #' 
-#' @importFrom factoextra fviz_pca_ind
 #' 
 #' @export
 #' 
 plotPCA_Ind <- function(res.pca, chosen.axes=c(1,2)){
+  
+  if (! requireNamespace("factoextra", quietly = TRUE)) {
+    stop("Please install factoextra: BiocManager::install('factoextra')")
+  }
+  
+  
   #plot.PCA(res.pca, choix="ind", axes = chosen.axes, select = 0:-1, title="Protein factor map (PCA)")
   if (is.null(res.pca))
     return(NULL)

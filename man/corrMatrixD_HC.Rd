@@ -3,7 +3,7 @@
 \name{corrMatrixD_HC}
 \alias{corrMatrixD_HC}
 \title{Displays a correlation matrix of the quantitative data of the
-\code{exprs()} table.}
+\code{Biobase::exprs()} table.}
 \usage{
 corrMatrixD_HC(object, samplesData = NULL, rate = 0.5, showValues = TRUE)
 }
@@ -26,8 +26,8 @@ Correlation matrix based on a \code{MSnSet} object.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-qData <- exprs(Exp1_R25_pept)
-samplesData <- pData(Exp1_R25_pept)
+qData <- Biobase::exprs(Exp1_R25_pept)
+samplesData <- Biobase::pData(Exp1_R25_pept)
 res <- cor(qData,use = 'pairwise.complete.obs')
 corrMatrixD_HC(res, samplesData)
 

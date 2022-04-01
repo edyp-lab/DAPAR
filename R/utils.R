@@ -146,7 +146,7 @@ SetCC <- function(obj, cc){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' qData <- exprs(Exp1_R25_pept)
+#' qData <- Biobase::exprs(Exp1_R25_pept)
 #' getNumberOfEmptyLines(qData)
 #' 
 #' @export
@@ -224,7 +224,7 @@ getListNbValuesInLines <- function(obj, type){
     stop(paste0("'type' must be one of the following values: ", paste0(MetacellFilteringScope(), collapse= ' ')))
   
   data <- GetMetacell(obj)
-  conds <- pData(obj)$Condition
+  conds <- Biobase::pData(obj)$Condition
   
   ll <- switch(type,
                WholeLine = NULL,
@@ -244,23 +244,23 @@ getListNbValuesInLines <- function(obj, type){
 #' @title Gets the conditions indices.
 #' 
 #' @param conds A vector of strings containing the column "Condition" of 
-#' the \code{pData()}.
+#' the \code{Biobase::pData()}.
 #' 
-#' @param cond1 A vector of Conditions (a slot in the \code{pData()} table) for
+#' @param cond1 A vector of Conditions (a slot in the \code{Biobase::pData()} table) for
 #' the condition 1.
 #' 
-#' @param cond2 A vector of Conditions (a slot in the \code{pData()} table) for
+#' @param cond2 A vector of Conditions (a slot in the \code{Biobase::pData()} table) for
 #' the condition 2.
 #' 
 #' @return A list with two slots \code{iCond1} and \code{iCond2} containing
-#' respectively the indices of samples in the \code{pData()} table of the
+#' respectively the indices of samples in the \code{Biobase::pData()} table of the
 #' dataset. 
 #' 
 #' @author Florence Combes, Samuel Wieczorek
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' conds <- pData(Exp1_R25_pept)[,"Condition"]
+#' conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
 #' getIndicesConditions(conds, "25fmol", "10fmol")
 #' 
 #' @export

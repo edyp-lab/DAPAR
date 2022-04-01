@@ -16,7 +16,7 @@ wrapper.impute.pa(obj = NULL, q.min = 0.025, na.type)
 Available values are: `NA` (for both POV and MEC).}
 }
 \value{
-The \code{exprs(obj)} matrix with imputed values instead of 
+The \code{Biobase::exprs(obj)} matrix with imputed values instead of 
 missing values.
 }
 \description{

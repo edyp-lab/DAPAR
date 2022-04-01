@@ -3,7 +3,7 @@
 \name{wrapper.corrMatrixD_HC}
 \alias{wrapper.corrMatrixD_HC}
 \title{Displays a correlation matrix of the quantitative data of the
-\code{exprs()} table}
+\code{Biobase::exprs()} table}
 \usage{
 wrapper.corrMatrixD_HC(obj, rate = 0.5, showValues = TRUE)
 }
@@ -21,7 +21,7 @@ A colored correlation matrix
 #' Builds a correlation matrix based on a \code{MSnSet} object.
 #' 
 #' @title Displays a correlation matrix of the quantitative data of the
-#' \code{exprs()} table
+#' \code{Biobase::exprs()} table
 #' 
 #' @param obj An object of class \code{MSnSet}.
 #' 
@@ -39,8 +39,8 @@ A colored correlation matrix
 #' @export
 #' 
 wrapper.corrMatrixD <- function(obj, rate=5){
-  qData <- exprs(obj)
-  samplesData <- pData(obj)
+  qData <- Biobase::exprs(obj)
+  samplesData <- Biobase::pData(obj)
   corrMatrixD(qData, samplesData, rate)
 }
 Builds a correlation matrix based on a \code{MSnSet} object.

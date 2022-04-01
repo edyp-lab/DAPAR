@@ -3,7 +3,7 @@
 \name{heatmapD}
 \alias{heatmapD}
 \title{This function is a wrapper to \code{\link{heatmap.2}} that displays 
-quantitative data in the \code{exprs()} table of an object of
+quantitative data in the \code{Biobase::exprs()} table of an object of
 class \code{MSnSet}}
 \usage{
 heatmapD(
@@ -40,8 +40,8 @@ obj <- Exp1_R25_pept[1:10,]
 level <- obj@experimentData@other$typeOfData
 metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 indices <- GetIndices_WholeLine(metacell.mask)
-qData <- exprs(obj)
-conds <- pData(obj)[['Condition']]
+qData <- Biobase::exprs(obj)
+conds <- Biobase::pData(obj)[['Condition']]
 heatmapD(qData, conds)
 }
 

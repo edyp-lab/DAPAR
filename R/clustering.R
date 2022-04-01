@@ -28,11 +28,14 @@
 #' 
 #' @importFrom dplyr bind_cols as_tibble group_by summarise
 #' @importFrom tidyr pivot_wider
-#' @importFrom Mfuzz standardise
 #' 
 averageIntensities <- function(ESet_obj){
-    intensities <- exprs(ESet_obj)
-    sTab <- pData(ESet_obj)
+  
+  if (! requireNamespace("Mfuzz", quietly = TRUE)) {
+    stop("Please install Mfuzz: BiocManager::install('Mfuzz')")
+  }
+    intensities <- Biobase::exprs(ESet_obj)
+    sTab <- Biobase::pData(ESet_obj)
     sTab$Condition <- as.factor(sTab$Condition)
     intensities_t <- as.data.frame(t(intensities))
     intensities_t <- dplyr::bind_cols(intensities_t, condition = sTab$Condition, sample = rownames(intensities_t))
@@ -92,10 +95,16 @@ averageIntensities <- function(ESet_obj){
 #' 
 #' @export
 #' 
-#' @importFrom cluster clusGap
-#' @importFrom diptest dip.test
 #' 
 checkClusterability <- function(standards, b = 500){
+    if (! requireNamespace("diptest", quietly = TRUE)) {
+        stop("Please install diptest: BiocManager::install('diptest')")
+    }
+    
+    if (! requireNamespace("cluster", quietly = TRUE)) {
+        stop("Please install cluster: BiocManager::install('cluster')")
+    }
+    
     
     if(methods::is(standards, "data.frame")){
         # if there are columns with something other than numeric values
@@ -344,12 +353,22 @@ visualizeClusters <- function(dat,
 #' 
 #' @export
 #' 
-#' @importFrom apcluster apcluster
-#' @importFrom forcats as_factor fct_relevel
 #' @importFrom stats kmeans
 #' 
 wrapperRunClustering <- function(obj, clustering_method, conditions_order = NULL, k_clusters = NULL, adjusted_pvals, ttl = "", subttl = "", FDR_thresholds = NULL){
-    res <- list("model" = NULL, "ggplot" = NULL)
+  if (! requireNamespace("apcluster", quietly = TRUE)) {
+    stop("Please install apcluster: BiocManager::install('apcluster')")
+  }
+  
+  if (! requireNamespace("forcats", quietly = TRUE)) {
+    stop("Please install forcats: BiocManager::install('forcats')")
+  }
+  
+  if (! requireNamespace("Mfuzz", quietly = TRUE)) {
+    stop("Please install Mfuzz: BiocManager::install('Mfuzz')")
+  }
+  
+  res <- list("model" = NULL, "ggplot" = NULL)
     # reorder conditions if requested
     if(!is.null(conditions_order)){
         # check that given levels are correct in number...
@@ -373,7 +392,7 @@ wrapperRunClustering <- function(obj, clustering_method, conditions_order = NULL
     averaged_means <- averageIntensities(obj)
     averaged_means <- na.omit(averaged_means)
     
-    sTab <- pData(obj)
+    sTab <- Biobase::pData(obj)
     only_means <- dplyr::select_if(averaged_means, is.numeric)
     only_features <- dplyr::select_if(averaged_means, is.character)
     if(length(levels(as.factor(sTab$Condition))) == 2){

@@ -13,7 +13,7 @@ of the MSnset object.}
 
 \item{matAdj}{The adjacency matrix used to agregate the peptides data.}
 
-\item{columnName}{The name of the column in fData(peptides_MSnset) that 
+\item{columnName}{The name of the column in Biobase::fData(peptides_MSnset) that 
 the user wants to keep in the new protein data.frame.}
 
 \item{proteinNames}{The names of the protein in the new dataset 
@@ -33,10 +33,10 @@ utils::data(Exp1_R25_pept, package='DAPARdata')
 protID <- "Protein_group_IDs"
 obj.pep <- Exp1_R25_pept[1:10]
 M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-data <- fData(obj.pep)
+data <- Biobase::Biobase::fData(obj.pep)
 protData <- DAPAR::aggregateSum(obj.pep, M)
 name <- "Protein_group_IDs"
-proteinNames <- rownames(fData(protData$obj.prot))
+proteinNames <- rownames(Biobase::fData(protData$obj.prot))
 BuildColumnToProteinDataset_par(data, M, name,proteinNames )
 }
 

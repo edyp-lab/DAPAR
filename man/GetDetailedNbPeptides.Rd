@@ -16,6 +16,7 @@ A data.frame
 Method to compute the detailed number of quantified peptides for each protein
 }
 \examples{
+library(MSnbase)
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj.pep <- Exp1_R25_pept[1:10]
 protID <- "Protein_group_IDs"

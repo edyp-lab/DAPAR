@@ -22,7 +22,7 @@ object for log.}
 An instance of class \code{MSnSet} that have been filtered.
 }
 \description{
-Filters the lines of \code{exprs()} table with conditions on the number
+Filters the lines of \code{Biobase::exprs()} table with conditions on the number
 of missing values.
 The user chooses the minimum amount of intensities that is acceptable and
 the filter delete lines that do not respect this condition.

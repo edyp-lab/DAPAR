@@ -17,8 +17,8 @@
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' anova_tests <- t(apply(exprs(obj$new), 1, classic1wayAnova, 
-#' conditions=as.factor(pData(obj$new)$Condition)))
+#' anova_tests <- t(apply(Biobase::exprs(obj$new), 1, classic1wayAnova, 
+#' conditions=as.factor(Biobase::pData(obj$new)$Condition)))
 #' 
 #' @importFrom stats aov
 #' 
@@ -73,8 +73,8 @@ classic1wayAnova <- function(current_line, conditions){
 #' @importFrom dplyr select
 #' 
 wrapperClassic1wayAnova <- function(obj, with_post_hoc = "No", post_hoc_test = "No"){
-    qData <- exprs(obj)
-    sTab <- pData(obj)
+    qData <- Biobase::exprs(obj)
+    sTab <- Biobase::pData(obj)
     if(with_post_hoc == "No"){
         anova_tests <- as.data.frame(t(apply(qData,1,function(x) unlist(summary(classic1wayAnova(x,conditions=as.factor(sTab$Condition)))))))
         results <- dplyr::select(anova_tests, `Pr(>F)1`)
@@ -118,9 +118,9 @@ wrapperClassic1wayAnova <- function(obj, with_post_hoc = "No", post_hoc_test = "
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' anova_tests <- t(apply(exprs(obj$new),1, classic1wayAnova, 
-#' conditions=as.factor(pData(obj$new)$Condition)))
-#' names(anova_tests) <- rownames(exprs(obj$new))
+#' anova_tests <- t(apply(Biobase::exprs(obj$new),1, classic1wayAnova, 
+#' conditions=as.factor(Biobase::pData(obj$new)$Condition)))
+#' names(anova_tests) <- rownames(Biobase::exprs(obj$new))
 #' tms <- lapply(anova_tests,
 #'              function(x) summary(multcomp::glht(x, 
 #'              linfct = multcomp::mcp(conditions = "Tukey")),
@@ -129,8 +129,12 @@ wrapperClassic1wayAnova <- function(obj, with_post_hoc = "No", post_hoc_test = "
 #' 
 #' @export
 #' 
-#' @importFrom purrr map_dfr
 formatPHResults <- function(post_hoc_models_summaries){
+  
+  if (! requireNamespace("purrr", quietly = TRUE)) {
+    stop("Please install purrr: BiocManager::install('purrr')")
+  }
+  
     # récupérer les différences entre les moyennes
     res_coeffs <- lapply(post_hoc_models_summaries, function(x) x$test$coefficients)
     logFC <- data.frame(purrr::map_dfr(res_coeffs, cbind),
@@ -198,16 +202,19 @@ formatPHResults <- function(post_hoc_models_summaries){
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' anova_tests <- t(apply(exprs(obj$new),1, classic1wayAnova, 
-#' conditions=as.factor(pData(obj$new)$Condition)))
-#' names(anova_tests) <- rownames(exprs(obj$new))
+#' anova_tests <- t(apply(Biobase::exprs(obj$new),1, classic1wayAnova, 
+#' conditions=as.factor(Biobase::pData(obj$new)$Condition)))
+#' names(anova_tests) <- rownames(Biobase::exprs(obj$new))
 #' pht <- postHocTest(aov_fits = anova_tests)
 #' 
 #' @export
 #' 
-#' @importFrom multcomp glht adjusted mcp
 #' 
 postHocTest <- function(aov_fits, post_hoc_test = "TukeyHSD"){
+  
+  if (! requireNamespace("multcomp", quietly = TRUE)) {
+    stop("Please install multcomp: BiocManager::install('multcomp')")
+  }
 
     if(post_hoc_test == "TukeyHSD"){
         # use of adjusted("none") to obtain raw p-values (and not adjusted ones)

@@ -13,7 +13,7 @@
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' test.design(pData(Exp1_R25_pept)[,1:3])
+#' test.design(Biobase::pData(Exp1_R25_pept)[,1:3])
 #' 
 #' @export
 #' 
@@ -80,7 +80,7 @@ test.design <- function(tab){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' check.conditions(pData(Exp1_R25_pept)$Condition)
+#' check.conditions(Biobase::pData(Exp1_R25_pept)$Condition)
 #' 
 #' @export
 #' 
@@ -123,7 +123,7 @@ check.conditions <- function(conds){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' check.design(pData(Exp1_R25_pept)[,1:3])
+#' check.design(Biobase::pData(Exp1_R25_pept)[,1:3])
 #' 
 #' @export
 #' 
@@ -198,7 +198,7 @@ check.design <- function(sTab){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' make.design(pData(Exp1_R25_pept))
+#' make.design(Biobase::pData(Exp1_R25_pept))
 #' 
 #' @export
 make.design <- function(sTab){
@@ -233,7 +233,7 @@ make.design <- function(sTab){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' make.design.1(pData(Exp1_R25_pept))
+#' make.design.1(Biobase::pData(Exp1_R25_pept))
 #' 
 #' @export
 #' 
@@ -304,7 +304,7 @@ return(design)
 #' @examples
 #' \donttest{
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' make.design.2(pData(Exp1_R25_pept))
+#' make.design.2(Biobase::pData(Exp1_R25_pept))
 #' }
 #' 
 #' @importFrom stats model.matrix rnorm
@@ -358,7 +358,7 @@ make.design.2=function(sTab){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' sTab <-cbind(pData(Exp1_R25_pept), Tech.Rep=1:6)
+#' sTab <-cbind(Biobase::pData(Exp1_R25_pept), Tech.Rep=1:6)
 #' make.design.3(sTab)
 #' 
 #' @importFrom stats model.matrix rnorm
@@ -427,8 +427,8 @@ make.design.3 <- function(sTab){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' design <- make.design(pData(Exp1_R25_pept))
-#' conds <- pData(Exp1_R25_pept)$Condition
+#' design <- make.design(Biobase::pData(Exp1_R25_pept))
+#' conds <- Biobase::pData(Exp1_R25_pept)$Condition
 #' make.contrast(design, conds)
 #' 
 #' @export
@@ -530,7 +530,7 @@ make.contrast <- function(design, condition, contrast=1){
 #' 
 #' @param qData A matrix of quantitative data, without any missing values.
 #' 
-#' @param sTab A dataframe of experimental design (pData()). 
+#' @param sTab A dataframe of experimental design (Biobase::pData()). 
 #' 
 #' @param comp.type A string that corresponds to the type of comparison. 
 #' Values are: 'anova1way', 'OnevsOne' and 'OnevsAll'; default is 'OnevsOne'.
@@ -546,8 +546,8 @@ make.contrast <- function(design, condition, contrast=1){
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept
-#' qData <- exprs(obj)
-#' sTab <- pData(obj)
+#' qData <- Biobase::exprs(obj)
+#' sTab <- Biobase::pData(obj)
 #' limma <- limmaCompleteTest(qData, sTab, comp.type='anova1way')
 #' 
 #' @export
@@ -627,8 +627,8 @@ limmaCompleteTest <- function(qData, sTab, comp.type="OnevsOne"){
 #' metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 #' obj <- MetaCellFiltering(obj, indices, cmd='delete')
-#' qData <- exprs(obj$new)
-#' sTab <- pData(obj$new)
+#' qData <- Biobase::exprs(obj$new)
+#' sTab <- Biobase::pData(obj$new)
 #' limma <- limmaCompleteTest(qData, sTab)
 #' 
 

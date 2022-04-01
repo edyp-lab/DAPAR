@@ -1,7 +1,7 @@
 
 
 #' This function is a wrappper to the function groupGO from the
-#' package \code{\link{clusterProfiler}}. Given a vector of genes/proteins, 
+#' package `clusterProfiler`. Given a vector of genes/proteins, 
 #' it returns the GO profile at a specific level. It returns a groupGOResult 
 #' instance. 
 #' 
@@ -30,7 +30,7 @@
 #' \donttest{
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
 #' obj <- Exp1_R25_prot
-#' ggo<-group_GO(data=fData(obj)$Protein.IDs, idFrom="UNIPROT", 
+#' ggo<-group_GO(data=Biobase::fData(obj)$Protein.IDs, idFrom="UNIPROT", 
 #' orgdb="org.Sc.sgd.db", ont="MF", level=2)
 #' }
 #' 
@@ -38,7 +38,9 @@
 #' 
 group_GO <- function(data, idFrom,  orgdb, ont, level, readable=FALSE){
     
-    
+  if (! requireNamespace("clusterProfiler", quietly = TRUE)) {
+    stop("Please install clusterProfiler: BiocManager::install('clusterProfiler')")
+  }
     require(as.character(orgdb),character.only = TRUE)
     
     if (idFrom == "UNIPROT"){
@@ -50,7 +52,7 @@ group_GO <- function(data, idFrom,  orgdb, ont, level, readable=FALSE){
         gene.id = data
     }
     
-    ggo <- groupGO(gene = gene.id, 
+    ggo <- clusterProfiler::groupGO(gene = gene.id, 
                    OrgDb = orgdb, 
                    ont = ont, 
                    level = level, 
@@ -60,7 +62,7 @@ group_GO <- function(data, idFrom,  orgdb, ont, level, readable=FALSE){
 }
 
 #' This function is a wrappper to the function enrichGO from the
-#' package \code{\link{clusterProfiler}}. Given a vector of genes/proteins, 
+#' package `clusterProfiler`. Given a vector of genes/proteins, 
 #' it returns an enrichResult instance.  
 #' 
 #' @title Calculates GO enrichment classes for a given list of 
@@ -79,7 +81,7 @@ group_GO <- function(data, idFrom,  orgdb, ont, level, readable=FALSE){
 #' @param readable TRUE or FALSE (default FALSE)
 #' 
 #' @param pval The qvalue cutoff (same parameter as in the function 
-#' \code{enrichGO} of the package \code{\link{clusterProfiler}})
+#' \code{enrichGO} of the package `clusterProfiler`)
 #' 
 #' @param universe a list of ID to be considered as the background for 
 #' enrichment calculation 
@@ -93,7 +95,7 @@ group_GO <- function(data, idFrom,  orgdb, ont, level, readable=FALSE){
 #' utils::data(Exp1_R25_prot, package='DAPARdata')
 #' obj <- Exp1_R25_prot
 #' univ<-univ_AnnotDbPkg("org.Sc.sgd.db") #univ is the background
-#' ego<-enrich_GO(data=fData(obj)$Protein.IDs, idFrom="UNIPROT", 
+#' ego<-enrich_GO(data=Biobase::fData(obj)$Protein.IDs, idFrom="UNIPROT", 
 #' orgdb="org.Sc.sgd.db",ont="MF", pval=0.05, universe = univ)
 #' }
 #' 
@@ -101,6 +103,12 @@ group_GO <- function(data, idFrom,  orgdb, ont, level, readable=FALSE){
 #' 
 enrich_GO <- function(data, idFrom, orgdb, ont, readable=FALSE, pval, universe)
 {
+  
+  if (! requireNamespace("clusterProfiler", quietly = TRUE)) {
+    stop("Please install clusterProfiler: BiocManager::install('clusterProfiler')")
+  }
+  
+  
     tmp <- which(is.na(data))
     if (length(tmp) > 0){
         data <- data[-which(is.na(data))]
@@ -145,6 +153,10 @@ enrich_GO <- function(data, idFrom, orgdb, ont, readable=FALSE, pval, universe)
 #' 
 univ_AnnotDbPkg <- function(orgdb){
     
+  if (! requireNamespace("AnnotationDbi", quietly = TRUE)) {
+    stop("Please install AnnotationDbi: BiocManager::install('AnnotationDbi')")
+  }
+  
     require(as.character(orgdb),character.only = TRUE)
     univ <- AnnotationDbi::keys(get(orgdb), keytype="ENTREZID")
     #different syntax for 'org.Pf.plasmo.db' package
@@ -158,27 +170,27 @@ univ_AnnotDbPkg <- function(orgdb){
 #' 
 #' @title Returns an \code{MSnSet} object with the results of
 #' the GO analysis performed with the functions \code{enrichGO} and/or 
-#' \code{groupGO} of the \code{\link{clusterProfiler}} package. 
+#' \code{groupGO} of the `clusterProfiler` package. 
 #' 
 #' @param obj An object of the class \code{MSnSet}
 #' 
 #' @param ggo_res The object returned by the function \code{group_GO} of the 
 #' package \code{DAPAR} or the function \code{groupGO} of the package
-#'  \code{\link{clusterProfiler}}
+#'  `clusterProfiler`
 #' 
 #' @param ego_res The object returned by the function \code{enrich_GO} of the 
 #' package \code{DAPAR} or the function \code{enrichGO} of the package 
-#' \code{\link{clusterProfiler}}
+#' `clusterProfiler`
 #' 
-#' @param organism The parameter OrgDb of the functions \code{\link{bitr}}, 
-#' \code{\link{groupGO}} and \code{\link{enrichGO}}
+#' @param organism The parameter OrgDb of the functions \code{bitr}, 
+#' \code{groupGO} and \code{enrichGO}
 #' 
 #' @param ontology One of "MF", "BP", and "CC" subontologies
 #' 
 #' @param levels A vector of the different GO grouping levels to save
 #' 
 #' @param pvalueCutoff The qvalue cutoff (same parameter as in the function 
-#' \code{enrichGO} of the package \code{\link{clusterProfiler}})
+#' \code{enrichGO} of the package `clusterProfiler`)
 #' 
 #' @param typeUniverse  The type of background to be used. Values are 
 #' 'Entire Organism', 'Entire dataset' or 'Custom'. In the latter case, a file 
@@ -190,7 +202,14 @@ univ_AnnotDbPkg <- function(orgdb){
 #' 
 #' @export
 #' 
-GOAnalysisSave <- function (obj, ggo_res=NULL, ego_res=NULL, organism, ontology, levels, pvalueCutoff, typeUniverse){
+GOAnalysisSave <- function (obj, 
+                            ggo_res=NULL, 
+                            ego_res=NULL, 
+                            organism, 
+                            ontology, 
+                            levels, 
+                            pvalueCutoff, 
+                            typeUniverse){
     if (is.null(ggo_res) && is.null(ego_res)){
         warning("Neither ggo or ego analysis has  been completed.")
         return(NULL)}
@@ -230,7 +249,7 @@ GOAnalysisSave <- function (obj, ggo_res=NULL, ego_res=NULL, organism, ontology,
 #' 
 #' @param ggo The result of the GO classification, provides either by the 
 #' function \code{group_GO} in the package \code{DAPAR} or the function 
-#' \code{groupGO} in the package \code{\link{clusterProfiler}}
+#' \code{groupGO} in the package `clusterProfiler`
 #' 
 #' @param maxRes An integer which is the maximum number of classes to display 
 #' in the plot 
@@ -277,7 +296,7 @@ barplotGroupGO_HC <- function(ggo, maxRes=5, title=""){
 #' 
 #' @param ego The result of the GO enrichment, provides either by the function
 #' \code{enrichGO} in the package \code{DAPAR} or the function \code{enrichGO} 
-#' of the package \code{\link{clusterProfiler}}
+#' of the package `clusterProfiler`
 #' 
 #' @param maxRes The maximum number of categories to display in the plot 
 #' 
@@ -348,7 +367,7 @@ barplotEnrichGO_HC <- function(ego, maxRes = 5, title=NULL){
 #' 
 #' @param ego The result of the GO enrichment, provides either by the function
 #' enrichGO in \code{DAPAR} or the function \code{enrichGO} of the packaage 
-#' \code{\link{clusterProfiler}}
+#' `clusterProfiler`
 #' 
 #' @param maxRes The maximum number of categories to display in the plot
 #' 

@@ -3,7 +3,7 @@
 \name{wrapper.heatmapD}
 \alias{wrapper.heatmapD}
 \title{This function is a wrapper to \code{\link{heatmap.2}} that displays 
-quantitative data in the \code{exprs()} table of an object of
+quantitative data in the \code{Biobase::exprs()} table of an object of
 class \code{MSnSet}}
 \usage{
 wrapper.heatmapD(

@@ -17,7 +17,7 @@ This function builds the design matrix for design of level 3
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-sTab <-cbind(pData(Exp1_R25_pept), Tech.Rep=1:6)
+sTab <-cbind(Biobase::pData(Exp1_R25_pept), Tech.Rep=1:6)
 make.design.3(sTab)
 
 }

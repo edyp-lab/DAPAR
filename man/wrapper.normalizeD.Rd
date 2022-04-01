@@ -27,12 +27,12 @@ For the five other families, two type categories are available :
 "Overall" which means that the value for each protein
 (ie line in the expression data tab) is computed over all the samples ;
 "within conditions" which means that the value for each protein
-(ie line in the \code{exprs()} data tab) is computed condition
+(ie line in the \code{Biobase::exprs()} data tab) is computed condition
 by condition.
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-conds <- pData(Exp1_R25_pept)$Condition
+conds <- Biobase::pData(Exp1_R25_pept)$Condition
 obj <- wrapper.normalizeD(obj = Exp1_R25_pept, method = "QuantileCentering", 
 conds=conds, type = "within conditions")
  

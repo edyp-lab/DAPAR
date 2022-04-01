@@ -19,7 +19,7 @@ metacellPerLinesHisto_HC(
 
 \item{detailed}{'value' or 'percent'}
 
-\item{indLegend}{The indice of the column name's in \code{pData()} tab}
+\item{indLegend}{The indice of the column name's in \code{Biobase::pData()} tab}
 
 \item{showValues}{A logical that indicates whether numeric values should be
 drawn above the bars.}

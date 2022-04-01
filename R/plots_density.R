@@ -18,7 +18,7 @@
 #' @examples 
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
 #' densityPlotD_HC(Exp1_R25_pept)
-#' conds <- pData(Exp1_R25_pept)$Condition
+#' conds <- Biobase::pData(Exp1_R25_pept)$Condition
 #' pal <- ExtendPalette(2, 'Dark2')
 #' densityPlotD_HC(Exp1_R25_pept, pal=pal)
 #' 
@@ -38,10 +38,10 @@ densityPlotD_HC <- function(obj,
     return(NULL)
   }
   
-  qData <- exprs(obj)
-  conds <- pData(obj)$Condition
+  qData <- Biobase::exprs(obj)
+  conds <- Biobase::pData(obj)$Condition
   
-  if (is.null(legend) ) { legend<- pData(obj)[,"Condition"]}
+  if (is.null(legend) ) { legend<- Biobase::pData(obj)[,"Condition"]}
 
   myColors <- NULL
   if (is.null(pal)){

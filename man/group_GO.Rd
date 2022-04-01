@@ -27,7 +27,7 @@ GO profile at a specific level
 }
 \description{
 This function is a wrappper to the function groupGO from the
-package \code{\link{clusterProfiler}}. Given a vector of genes/proteins, 
+package `clusterProfiler`. Given a vector of genes/proteins, 
 it returns the GO profile at a specific level. It returns a groupGOResult 
 instance.
 }
@@ -35,7 +35,7 @@ instance.
 \donttest{
 utils::data(Exp1_R25_prot, package='DAPARdata')
 obj <- Exp1_R25_prot
-ggo<-group_GO(data=fData(obj)$Protein.IDs, idFrom="UNIPROT", 
+ggo<-group_GO(data=Biobase::fData(obj)$Protein.IDs, idFrom="UNIPROT", 
 orgdb="org.Sc.sgd.db", ont="MF", level=2)
 }
 

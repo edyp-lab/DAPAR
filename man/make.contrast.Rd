@@ -26,8 +26,8 @@ This function builds the contrast matrix
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-design <- make.design(pData(Exp1_R25_pept))
-conds <- pData(Exp1_R25_pept)$Condition
+design <- make.design(Biobase::pData(Exp1_R25_pept))
+conds <- Biobase::pData(Exp1_R25_pept)$Condition
 make.contrast(design, conds)
 
 }

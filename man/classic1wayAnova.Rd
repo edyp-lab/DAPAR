@@ -26,8 +26,8 @@ level <- obj@experimentData@other$typeOfData
 metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
 indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
 obj <- MetaCellFiltering(obj, indices, cmd='delete')
-anova_tests <- t(apply(exprs(obj$new), 1, classic1wayAnova, 
-conditions=as.factor(pData(obj$new)$Condition)))
+anova_tests <- t(apply(Biobase::exprs(obj$new), 1, classic1wayAnova, 
+conditions=as.factor(Biobase::pData(obj$new)$Condition)))
 
 }
 \author{

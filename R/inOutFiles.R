@@ -58,7 +58,7 @@ saveParameters <- function(obj,name.dataset=NULL,name=NULL,l.params=NULL){
 #' 
 #' @param indExpData A vector of string where each element is the name
 #' of a column in designTable that have to be integrated in
-#' the \code{fData()} table of the \code{MSnSet} object.
+#' the \code{Biobase::fData()} table of the \code{MSnSet} object.
 #' 
 #' @param colnameForID The name of the column containing the ID of entities 
 #' (peptides or proteins)
@@ -186,13 +186,13 @@ createMSnset <- function(file,
   
   
   if (replaceZeros) {
-    exprs(obj)[exprs(obj) == 0] <- NA
-    exprs(obj)[is.nan(exprs(obj))] <- NA
-    exprs(obj)[is.infinite(exprs(obj))] <-NA
+    Biobase::exprs(obj)[Biobase::exprs(obj) == 0] <- NA
+    Biobase::exprs(obj)[is.nan(Biobase::exprs(obj))] <- NA
+    Biobase::exprs(obj)[is.infinite(Biobase::exprs(obj))] <-NA
     obj@processingData@processing <- c(obj@processingData@processing, "All zeros were replaced by NA")
   }
   if (logData) {
-    exprs(obj) <- log2(exprs(obj))
+    Biobase::exprs(obj) <- log2(Biobase::exprs(obj))
     obj@processingData@processing <- 
       c(obj@processingData@processing, "Data has been Log2 tranformed")
   }
@@ -206,7 +206,7 @@ createMSnset <- function(file,
     find.package("Prostar")
     obj@experimentData@other$Prostar_Version <- package.version('Prostar')
   },
-  error = function(e) obj.prot@experimentData@other$Prostar_Version <- NA
+  error = function(e) obj@experimentData@other$Prostar_Version <- NA
   )
   
   obj@experimentData@other$DAPAR_Version <- NA
@@ -225,11 +225,11 @@ createMSnset <- function(file,
  
   metacell <- BuildMetaCell(from = software,
                             level = pep_prot_data,
-                            qdata = exprs(obj), 
-                            conds = pData(obj)$Condition, 
+                            qdata = Biobase::exprs(obj), 
+                            conds = Biobase::pData(obj)$Condition, 
                             df = metacell)
   
-  fData(obj) <- cbind(fData(obj), 
+  Biobase::fData(obj) <- cbind(Biobase::fData(obj), 
                                metacell, 
                                deparse.level = 0)
   obj@experimentData@other$names_metacell <- colnames(metacell)
@@ -259,11 +259,10 @@ createMSnset <- function(file,
 #' 
 #' @export
 #' 
-#' @import openxlsx
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' df <- exprs(Exp1_R25_pept[1:100])
+#' df <- Biobase::exprs(Exp1_R25_pept[1:100])
 #' tags <- GetMetacell(Exp1_R25_pept[1:100])
 #' colors <- list('missing POV' = "lightblue",
 #'                'missing MEC' = "orange",
@@ -276,6 +275,10 @@ write.excel <- function(df,
                         colors = NULL,
                         tabname = 'foo',
                         filename = NULL){
+  
+  if (! requireNamespace("openxlsx", quietly = TRUE)) {
+    stop("Please install openxlsx: BiocManager::install('openxlsx')")
+  }
   
   if (is.null(filename))
     filename <- paste('data-', Sys.Date(), '.xlxs', sep='')
@@ -345,16 +348,20 @@ write.excel <- function(df,
 #' 
 #' @export
 #' 
-#' @import openxlsx
 #' 
 writeMSnsetToExcel <- function(obj, filename)
 {
+  
+  if (! requireNamespace("openxlsx", quietly = TRUE)) {
+    stop("Please install openxlsx: BiocManager::install('openxlsx')")
+  }
+  
   name <- paste(filename, ".xlsx", sep="")
   wb <- openxlsx::createWorkbook(name)
   n <- 1
   openxlsx::addWorksheet(wb, "Quantitative Data")
-  openxlsx::writeData(wb, sheet=n, cbind(ID = rownames(exprs(obj)),
-                                         exprs(obj)), rowNames = FALSE)
+  openxlsx::writeData(wb, sheet=n, cbind(ID = rownames(Biobase::exprs(obj)),
+                                         Biobase::exprs(obj)), rowNames = FALSE)
   
   
   # Add colors to quantitative table
@@ -387,19 +394,19 @@ writeMSnsetToExcel <- function(obj, filename)
   
   n <- 2
   openxlsx::addWorksheet(wb, "Samples Meta Data")
-  openxlsx::writeData(wb, sheet = n, pData(obj), rowNames = FALSE)
+  openxlsx::writeData(wb, sheet = n, Biobase::pData(obj), rowNames = FALSE)
   
   
   # Add colors for sample data sheet
-  u_conds <- unique(pData(obj)$Condition)
+  u_conds <- unique(Biobase::pData(obj)$Condition)
   colors <- setNames(DAPAR::ExtendPalette(length(u_conds)),
                      u_conds)
   colors[['blank']] <- 'white'
   
-  tags <- pData(obj)
+  tags <- Biobase::pData(obj)
   tags[,] <- 'blank'
-  tags$Sample.name <- pData(obj)$Condition
-  tags$Condition <- pData(obj)$Condition
+  tags$Sample.name <- Biobase::pData(obj)$Condition
+  tags$Condition <- Biobase::pData(obj)$Condition
   
   unique.tags <- NULL
   if (!is.null(tags) && !is.null(colors)){
@@ -424,21 +431,21 @@ writeMSnsetToExcel <- function(obj, filename)
   ## Add feature Data sheet
    
   n <- 3
-  if (dim(fData(obj))[2] != 0){
+  if (dim(Biobase::fData(obj))[2] != 0){
     openxlsx::addWorksheet(wb, "Feature Meta Data")
     openxlsx::writeData(wb, 
                         sheet = n, 
-                        cbind(ID = rownames(fData(obj)),
-                                           fData(obj)), rowNames = FALSE)
+                        cbind(ID = rownames(Biobase::fData(obj)),
+                                           Biobase::fData(obj)), rowNames = FALSE)
   }
   
   colors <- as.list(setNames(mc$color, mc$node))
   tags <- cbind(keyId = rep('identified', nrow(obj)),
-                fData(obj)
+                Biobase::fData(obj)
                 )
   
   tags[,] <- 'identified'
-  tags[, 1 + which(colnames(fData(obj)) %in% obj@experimentData@other$names_metacell)] <- GetMetacell(obj)
+  tags[, 1 + which(colnames(Biobase::fData(obj)) %in% obj@experimentData@other$names_metacell)] <- GetMetacell(obj)
   
   unique.tags <- NULL
   if (!is.null(tags) && !is.null(colors)){
@@ -505,9 +512,12 @@ writeMSnsetToExcel <- function(obj, filename)
 #' 
 #' @export
 #' 
-#' @importFrom readxl read_excel
 #' 
 readExcel <- function(file, extension, sheet){
+  
+  if (! requireNamespace("readxl", quietly = TRUE)) {
+    stop("Please install readxl: BiocManager::install('readxl')")
+  }
   # data <- NULL
   # if (extension=="xls") {
   #     data <- readxl::read_xls(file, sheet)
@@ -538,9 +548,11 @@ readExcel <- function(file, extension, sheet){
 #' 
 #' @export
 #' 
-#' @importFrom openxlsx getSheetNames
 #' 
 listSheets <- function(file){
+  if (! requireNamespace("openxlsx", quietly = TRUE)) {
+    stop("Please install openxlsx: BiocManager::install('openxlsx')")
+  }
   #require(openxlsx)
   return(openxlsx::getSheetNames(file))
   
@@ -572,9 +584,9 @@ listSheets <- function(file){
 writeMSnsetToCSV <- function(obj, fname){
   
   #fname <- paste(tempdir(),fname,  sep="/")
-  write.csv(exprs(obj), paste(tempdir(), "exprs.csv", sep='/'))
-  write.csv(fData(obj), paste(tempdir(), "fData.csv", sep='/'))
-  write.csv(pData(obj), paste(tempdir(), "pData.csv", sep='/'))
+  write.csv(Biobase::exprs(obj), paste(tempdir(), "exprs.csv", sep='/'))
+  write.csv(Biobase::fData(obj), paste(tempdir(), "fData.csv", sep='/'))
+  write.csv(Biobase::pData(obj), paste(tempdir(), "pData.csv", sep='/'))
   files <- c(paste(tempdir(), "exprs.csv", sep='/'),
              paste(tempdir(), "fData.csv", sep='/'),
              paste(tempdir(), "pData.csv", sep='/'))
@@ -614,9 +626,9 @@ rbindMSnset <- function(df1=NULL, df2){
   }
   if (is.null(df1) && is.null(df2)){return(NULL)}
   
-  tmp.exprs <- rbind(exprs(df1), exprs(df2))
-  tmp.fData <- rbind(fData(df1), fData(df2))
-  tmp.pData <- pData(df1)
+  tmp.exprs <- rbind(Biobase::exprs(df1), Biobase::exprs(df2))
+  tmp.fData <- rbind(Biobase::fData(df1), Biobase::fData(df2))
+  tmp.pData <- Biobase::pData(df1)
   
   obj <-  MSnSet(exprs = tmp.exprs, fData = tmp.fData, pData = tmp.pData)
   obj@protocolData <- df1@protocolData

@@ -36,7 +36,7 @@ Boxplot for quantitative proteomics data using the library \code{highcharter}
 \examples{
 utils::data(Exp1_R25_prot, package='DAPARdata')
 obj <- Exp1_R25_prot
-conds <- legend <- pData(obj)$Condition
+conds <- legend <- Biobase::pData(obj)$Condition
 key <- "Protein_IDs"
 boxPlotD_HC(obj, conds, key, legend, NULL, 1:10)
 pal <- ExtendPalette(length(unique(conds)))

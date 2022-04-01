@@ -2,7 +2,7 @@
 #' 
 #' @description 
 #' Returns the percentage of missing values in the quantitative
-#' data (\code{exprs()} table of the dataset).
+#' data (\code{Biobase::exprs()} table of the dataset).
 #' 
 #' @param obj An object of class \code{MSnSet}.
 #' 
@@ -19,7 +19,7 @@
 #' 
 getPourcentageOfMV <- function(obj){
   
-  df <- data.frame(exprs(obj))
+  df <- data.frame(Biobase::exprs(obj))
   
   NA.count<-apply(df, 2,
                   function(x) length(which(is.na(data.frame(x))==TRUE)) )
@@ -60,7 +60,7 @@ getNumberOf <- function(obj, name=NULL, prefix=NULL){
       && (is.null(prefix) || (prefix==""))){return(0)}
   
   if(nchar(prefix) > 0){
-    count <- length(which(substr(fData(obj)[,name], 0, 1) == prefix))
+    count <- length(which(substr(Biobase::fData(obj)[,name], 0, 1) == prefix))
   } else { count <- 0}
   
   return(count)
@@ -148,7 +148,7 @@ NumericalgetIndicesOfLinesToRemove <- function(obj, name=NULL, value=NULL, opera
     # warning ("No change was made")
     return (NULL)}
   
-  data <- fData(obj)[,name]
+  data <- Biobase::fData(obj)[,name]
   ind <- which(eval(parse(text=paste0("data", operator, value))))
   
   return(ind)
@@ -242,7 +242,7 @@ removeLines <- function(obj, idLine2Delete=NULL, prefix=NULL){
   if ((prefix == "") || is.null(prefix)) {
     #warning ("No change was made")
     return (obj)}
-  t <- (prefix == substring(fData(obj)[,idLine2Delete],1,nchar(prefix)))
+  t <- (prefix == substring(Biobase::fData(obj)[,idLine2Delete],1,nchar(prefix)))
   ind <- which( t== TRUE)
   obj <- obj[-ind ]
   
@@ -452,7 +452,7 @@ getIndicesOfLinesToRemove <- function(obj, idLine2Delete=NULL, prefix=NULL)
   if ((prefix == "") || is.null(prefix)) {
     # warning ("No change was made")
     return (NULL)}
-  t <- (prefix == substring(fData(obj)[,idLine2Delete],1,nchar(prefix)))
+  t <- (prefix == substring(Biobase::fData(obj)[,idLine2Delete],1,nchar(prefix)))
   ind <- which( t== TRUE)
   return(ind)
 }
@@ -460,7 +460,7 @@ getIndicesOfLinesToRemove <- function(obj, idLine2Delete=NULL, prefix=NULL)
 
 
 
-#' Filters the lines of \code{exprs()} table with conditions on the number
+#' Filters the lines of \code{Biobase::exprs()} table with conditions on the number
 #' of missing values.
 #' The user chooses the minimum amount of intensities that is acceptable and
 #' the filter delete lines that do not respect this condition.
@@ -538,7 +538,7 @@ MetaCellFiltering <- function(obj,
 }
 
 
-#' Delete the lines of \code{exprs()} table identified by their indice.
+#' Delete the lines of \code{Biobase::exprs()} table identified by their indice.
 #' 
 #' @title Delete the lines in the matrix of intensities and the metadata table
 #' given their indice.
@@ -650,13 +650,13 @@ GetIndices_MetacellFiltering <- function(obj, level, pattern, type, percent, op,
                                                          th = th),
                     AllCond = GetIndices_BasedOnConditions(metacell.mask = mask, 
                                                            type = type, 
-                                                           conds = pData(obj)$Condition, 
+                                                           conds = Biobase::pData(obj)$Condition, 
                                                            percent = percent, 
                                                            op = op, 
                                                            th = th),
                     AtLeastOneCond = GetIndices_BasedOnConditions(metacell.mask = mask, 
                                                                   type = type,
-                                                                  conds =  pData(obj)$Condition, 
+                                                                  conds =  Biobase::pData(obj)$Condition, 
                                                                   percent = percent,
                                                                   op = op, 
                                                                   th = th)
@@ -815,7 +815,7 @@ GetIndices_WholeLine <- function(metacell.mask){
 #' pattern <- 'missing'
 #' metacell.mask <- match.metacell(metadata=GetMetacell(obj), pattern=pattern, level=level)
 #' type <- 'AllCond'
-#' conds <- pData(obj)$Condition
+#' conds <- Biobase::pData(obj)$Condition
 #' op <- '>='
 #' th <- 0.5
 #' percent <- TRUE

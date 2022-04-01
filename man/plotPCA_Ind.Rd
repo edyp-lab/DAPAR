@@ -22,6 +22,7 @@ utils::data(Exp1_R25_pept, package='DAPARdata')
 res.pca <- wrapper.pca(Exp1_R25_pept)
 plotPCA_Ind(res.pca)
 
+
 }
 \author{
 Samuel Wieczorek

@@ -23,8 +23,8 @@ Normalisation vsn
 }
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
-qData <- exprs(Exp1_R25_pept)
-conds <- pData(Exp1_R25_pept)$Condition
+qData <- Biobase::exprs(Exp1_R25_pept)
+conds <- Biobase::pData(Exp1_R25_pept)$Condition
 normalized <- vsn(qData, conds, type="overall")
 
 }

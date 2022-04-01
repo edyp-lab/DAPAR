@@ -26,6 +26,7 @@
 #' 
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom grDevices colorRampPalette
+#' @importFrom utils combn
 #' 
 ExtendPalette <- function(n = NULL, base = "Set1"){
   pal <- NULL
@@ -40,7 +41,7 @@ ExtendPalette <- function(n = NULL, base = "Set1"){
   
   if(n > nMaxColors){
     pal <- RColorBrewer::brewer.pal(nMaxColors, base)
-    allComb <- combn(pal, 2)
+    allComb <- utils::combn(pal, 2)
     
     for (i in 1:(n-nMaxColors)){
       pal <- c(pal, grDevices::colorRampPalette(allComb[,i])(3)[2])
@@ -72,7 +73,7 @@ ExtendPalette <- function(n = NULL, base = "Set1"){
 #' 
 #' @examples
 #' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' conditions <- pData(Exp1_R25_pept)$Condition
+#' conditions <- Biobase::pData(Exp1_R25_pept)$Condition
 #' GetColorsForConditions(conditions, ExtendPalette(2))
 #' 
 #' @export

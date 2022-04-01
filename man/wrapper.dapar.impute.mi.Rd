@@ -79,7 +79,7 @@ wrapper.dapar.impute.mi(
 (default) or \code{beta}.}
 }
 \value{
-The \code{exprs(obj)} matrix with imputed values instead of missing 
+The \code{Biobase::exprs(obj)} matrix with imputed values instead of missing 
 values.
 }
 \description{

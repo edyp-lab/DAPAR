@@ -17,7 +17,7 @@ metacellPerLinesHistoPerCondition_HC(
 
 \item{pattern}{xxx}
 
-\item{indLegend}{The indice of the column name's in \code{pData()} tab}
+\item{indLegend}{The indice of the column name's in \code{Biobase::pData()} tab}
 
 \item{showValues}{A logical that indicates wether numeric values should be
 drawn above the bars.}
@@ -34,7 +34,7 @@ number of missing values (NA) per lines (ie proteins) and per conditions.
 \examples{
 utils::data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept
-pal <- ExtendPalette(length(unique( pData(obj)$Condition)), 'Dark2')
+pal <- ExtendPalette(length(unique( Biobase::pData(obj)$Condition)), 'Dark2')
 metacellPerLinesHistoPerCondition_HC(obj, 'missing', pal=pal)
 metacellPerLinesHistoPerCondition_HC(obj, 'quanti')
 

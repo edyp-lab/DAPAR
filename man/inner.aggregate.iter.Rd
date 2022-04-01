@@ -31,10 +31,9 @@ Method to xxxxx
 }
 \author{
 Samuel Wieczorek
-
+library(MSnbase)
 utils::data(Exp1_R25_pept, package='DAPARdata')
 protID <- "Protein_group_IDs"
-obj.pep <- Exp1_R25_pept[1:10]
-X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-qdata.agg <- DAPAR::inner.aggregate.iter(exprs(obj.pep), X)
+X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:10], protID, FALSE)
+qdata.agg <- DAPAR::inner.aggregate.iter(Biobase::exprs(Exp1_R25_pept[1:10]), X)
 }
