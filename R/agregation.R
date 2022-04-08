@@ -524,7 +524,7 @@ aggregateIterParallel <- function(obj.pep, X, init.method='Sum', method='Mean', 
   if (! requireNamespace("Biobase", quietly = TRUE)) {
     stop("Please install Biobase: BiocManager::install('Biobase')")
   }
-  registerDoParallel()
+  doParallel::registerDoParallel()
   obj.prot <- NULL
   
   # Step 1: Agregation of metacell data
