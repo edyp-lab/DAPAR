@@ -139,15 +139,16 @@ createMSnset <- function(file,
   colnames(Intensity) <- gsub(".", "_", colnames(data)[indExpData], fixed=TRUE)
   rownames(Intensity) <- rownames(data)
  
-  
-  # Get teh metacell info
+  # Get the metacell info
   metacell <- NULL
   if (!is.null(indexForMetacell)){
     metacell <- data[, indexForMetacell]
     metacell <- apply(metacell,2,tolower)
     metacell <- as.data.frame(apply(metacell,2, function(x) gsub(" ", '', x)),
                               stringsAsFactors = FALSE)
-  }
+    colnames(metacell) <- gsub(".", "_", colnames(metacell), fixed=TRUE)
+    
+  } 
 
   
   ##building fData of MSnSet file
@@ -228,6 +229,7 @@ createMSnset <- function(file,
                             qdata = Biobase::exprs(obj), 
                             conds = Biobase::pData(obj)$Condition, 
                             df = metacell)
+  colnames(metacell) <- gsub(".", "_", colnames(metacell), fixed=TRUE)
   
   Biobase::fData(obj) <- cbind(Biobase::fData(obj), 
                                metacell, 

@@ -232,7 +232,11 @@ Set_POV_MEC_tags <- function(conds, df, level){
 #' @export
 #' 
 #' 
-BuildMetaCell <- function(from, level, qdata = NULL, conds = NULL, df = NULL){
+BuildMetaCell <- function(from, 
+                          level, 
+                          qdata = NULL, 
+                          conds = NULL, 
+                          df = NULL){
   if (missing(from))
     stop("'from' is required.")
   if (missing(level))

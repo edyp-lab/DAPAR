@@ -520,7 +520,8 @@ aggregateIterParallel <- function(obj.pep, X, init.method='Sum', method='Mean', 
   if (! requireNamespace("foreach", quietly = TRUE)) {
     stop("Please install foreach: BiocManager::install('foreach')")
   }
-  
+  require(foreach)
+  require(doParallel)
   if (! requireNamespace("Biobase", quietly = TRUE)) {
     stop("Please install Biobase: BiocManager::install('Biobase')")
   }
@@ -1017,15 +1018,18 @@ finalizeAggregation <- function(obj.pep, pepData, protData, protMetacell, X){
   
   n <- GetDetailedNbPeptides(X)
   
-  
+  #browser()
   fd <- data.frame(proteinId = rownames(protData),
                    nPepTotal = n$nTotal,
                    nPepShared = n$nShared, 
-                   nPepSpec = n$nSpec, 
-                   pepSpecUsed, 
-                   pepSharedUsed, 
-                   pepTotalUsed, 
-                   protMetacell)
+                   nPepSpec = n$nSpec)
+  fd <- cbind(fd, 
+              pepSpecUsed, 
+              pepSharedUsed, 
+              pepTotalUsed,
+              protMetacell,
+              stringsAsFactors = FALSE)
+
   rownames(fd) <- colnames(X)
   obj.prot <- MSnSet(exprs = log2(protData), 
                      fData = fd, 
@@ -1216,7 +1220,6 @@ AggregateMetacell <- function(X, obj.pep){
   df[df=='NA'] <- NA
   colnames(df) <- obj.pep@experimentData@other$names_metacell
   rownames(df) <- colnames(X)
-  
   # Delete protein with only NA
   
   
