@@ -1018,7 +1018,6 @@ finalizeAggregation <- function(obj.pep, pepData, protData, protMetacell, X){
   
   n <- GetDetailedNbPeptides(X)
   
-  #browser()
   fd <- data.frame(proteinId = rownames(protData),
                    nPepTotal = n$nTotal,
                    nPepShared = n$nShared, 

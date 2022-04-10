@@ -1,5 +1,3 @@
-()
-
 #' @title Returns the contains of the slot processing  of an object of 
 #' class \code{MSnSet}
 #' 
