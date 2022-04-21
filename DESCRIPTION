@@ -1,8 +1,8 @@
 Package: DAPAR
 Type: Package
 Title: Tools for the Differential Analysis of Proteins Abundance with R
-Version: 1.27.7
-Date: 2022-04-08
+Version: 1.27.8
+Date: 2022-04-21
 Authors@R: c(person(given = "Samuel", family = "Wieczorek",
             email = "samuel.wieczorek@cea.fr",
     role = c("aut","cre")),
@@ -28,7 +28,7 @@ License: Artistic-2.0
 VignetteBuilder: knitr
 Depends: R (>= 4.1.0)
 Suggests: BiocGenerics, testthat, BiocStyle, AnnotationDbi, clusterProfiler,
-          diptest, cluster, vioplot, visNetwork, vsn,
+          diptest, cluster, vioplot, visNetwork, vsn, igraph,
           FactoMineR, factoextra, dendextend, foreach, parallel, doParallel, 
           Mfuzz, apcluster, forcats, readxl, openxlsx, multcomp, purrr
 Imports: Biobase, MSnbase, tibble, RColorBrewer, stats, preprocessCore, Cairo, png,

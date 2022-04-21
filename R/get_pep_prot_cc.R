@@ -14,11 +14,15 @@
 #' ll <- get.pep.prot.cc(X)
 #' 
 #' @importFrom Matrix crossprod %&%
-#' @importFrom graph graphAM connComp 
+# #' @importFrom graph graphAM connComp 
 #' 
 #' @export
 #' 
 get.pep.prot.cc <- function(X){
+  
+  if (! requireNamespace("igraph", quietly = TRUE)) {
+    stop("Please install igraph: BiocManager::install('igraph')")
+  }
   if (is.null(X)){
     warning("The adjacency matrix is empty")
     return()}
@@ -43,31 +47,53 @@ get.pep.prot.cc <- function(X){
   colnames(A) <- rownames(A) <- colnames(X) # reset pep and prot names
   
   # proteins with no shared peptides
+  # ie CC with only one protein
   SingleProt.CC.id <- which(rowSums(A)==0) 
+  
   if (length(SingleProt.CC.id) > 0){
     ### Peptides from single prot CCs
     singprot.cc <- as.list(names(SingleProt.CC.id))
     singprot.cc.pep <- list()
     for(i in 1:length(singprot.cc)){
-      peplist <- which(X[,singprot.cc[[i]]]!=0)
+      peplist <- which(X[ ,singprot.cc[[i]]]!=0)
       singprot.cc.pep[[i]] <- names(peplist)
     }
   }
   
   
-  if (length(SingleProt.CC.id) < nrow(A)){
-    B <- A[-SingleProt.CC.id,-SingleProt.CC.id] # matrix with no 1-prot CC
-  
-    ### Protein CCs
-    multprot.cc <- NULL
-    g <- graph::graphAM(B, edgemode='undirected', values=NA)
-    multprot.cc <- graph::connComp(as(g, 'graphNEL'))
+  # Test if there exist other CC than the single-prot ones
+  otherCC.exists <- length(SingleProt.CC.id) < nrow(A)
+  if (otherCC.exists){
+    # Remove all single-prot CC
+    B <- A[-SingleProt.CC.id, -SingleProt.CC.id] 
 
-    ### Peptides from multiple prot CCs
+    ### Protein CCs
+    # multprot.cc <- NULL
+    # g <- graph::graphAM(B, edgemode='undirected', values=NA)
+    # multprot.cc <- graph::connComp(as(g, 'graphNEL'))
+    # 
+    # ### Peptides from multiple prot CCs
+    # multprot.cc.pep <- list()
+    # for(i in seq_len(length(multprot.cc))){
+    #   protlist <- multprot.cc[[i]]
+    #   subX <- as.matrix(X[,protlist])
+    #   peplist <- which(rowSums(subX)!=0)
+    #   multprot.cc.pep[[i]] <- names(peplist)
+    # }
+    
+    multprot.cc <- NULL
+    g2 <- igraph::graph.adjacency(B, mode = 'undirected')
+    cc.igraph <- igraph::components(g2)
+    cc.id <- unique(cc.igraph$membership)
+    multprot.cc <- lapply(cc.id, 
+                          function(x) names(which(cc.igraph$membership == x))
+    )
+    
     multprot.cc.pep <- list()
-    for(i in 1:length(multprot.cc)){
-      protlist <- multprot.cc[[i]]
-      subX <- as.matrix(X[,protlist])
+    
+    for(i in seq_len(length(multprot.cc))){
+      protlist <-multprot.cc[[i]]
+      subX <- as.matrix(X[ ,protlist])
       peplist <- which(rowSums(subX)!=0)
       multprot.cc.pep[[i]] <- names(peplist)
     }
@@ -87,7 +113,14 @@ get.pep.prot.cc <- function(X){
   }
   
   ### Clean memory and return result
-  rm(A, B, g, multprot.cc, singprot.cc, multprot.cc.pep, singprot.cc.pep, prot.cc,pep.cc)
+  rm(A, 
+     B, 
+     g, 
+     multprot.cc, 
+     singprot.cc, 
+     multprot.cc.pep,
+     singprot.cc.pep, 
+     prot.cc,pep.cc)
   gc()
   return(global.cc)
 }
