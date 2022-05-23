@@ -41,10 +41,8 @@ wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
     var.scaling <- TRUE
   
   res.pca <- NULL
-  if (length(which(is.na(Biobase::exprs(obj)))) > 0){
-    warning("The dataset contains NA. This function can not be run")
-    return(NULL)}
-  
+  if (length(which(is.na(Biobase::exprs(obj)))) == 0){
+    
   if (is.null(ncp)){
     nmax <- 12
     y <- Biobase::exprs(obj)
@@ -63,7 +61,7 @@ wrapper.pca <- function(obj, var.scaling=TRUE, ncp=NULL){
   
   res.pca <- FactoMineR::PCA(Biobase::exprs(obj), scale.unit = var.scaling, ncp=ncp, graph=FALSE)
   # si warning pour les missing values, le reproduire dans l'interface graphique
-  
+  }
   return(res.pca)
 }
 

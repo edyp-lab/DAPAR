@@ -518,7 +518,7 @@ match.metacell <- function(metadata, pattern, level){
   
   
   if (!(pattern %in% metacell.def(level)$node))
-    stop(paste0("'pattern' is not correct. Availablevalues are: ", 
+    stop(paste0("'pattern' is not correct. Available values are: ", 
                 paste0(metacell.def(level)$node, collapse = ' ')))
   
   ll.res <- lapply(search.metacell.tags(pattern = pattern, level), 

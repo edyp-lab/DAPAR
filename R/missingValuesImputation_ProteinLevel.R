@@ -441,7 +441,7 @@ wrapper.impute.slsa <- function(obj = NULL, na.type = NULL){
     
     res <- imp4p::impute.slsa(qdata, 
                               conditions = conds, 
-                              nknn = 15, 
+                              nknn = 10, 
                               selec = "all", 
                               weight = 1,
                               ind.comp = 1)

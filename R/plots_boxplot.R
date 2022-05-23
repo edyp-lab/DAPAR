@@ -56,6 +56,12 @@ boxPlotD_HC <- function(obj,
     qData <- Biobase::exprs(obj)
   }
   
+  
+  if (! requireNamespace("highcharter", quietly = TRUE)) {
+    stop("Please install highcharter: BiocManager::install('highcharter')")
+  }
+  
+  
   if(missing(conds))
     stop("'conds' is missing.")
   
@@ -123,13 +129,14 @@ boxPlotD_HC <- function(obj,
   
   
   gen_boxplot_series_from_df <- function(value, by,...){
-    value<- base::as.numeric(value)
-    by<- base::as.factor(by)
-    box_names<- levels(by)
-    z=lapply(box_names, function(x) {
+    value <- base::as.numeric(value)
+    by <- factor(by, levels = unique(by))
+    box_names <- levels(by)
+    
+    z = lapply(box_names, function(x) {
       boxplot.stats(value[by==x])$stats
     })
-    tmp<- lapply(seq_along(z), function(x){
+    tmp <- lapply(seq_along(z), function(x){
       var_name_list<- list(box_names[x])
       #tmp0<- list(names(df)[x])
       names(var_name_list)<- "name"
@@ -151,15 +158,19 @@ boxPlotD_HC <- function(obj,
   
   
   ## Boxplot function:
-  make_highchart_boxplot_with_colored_factors <- function(value, by, 
-                                                          chart_title="Boxplots",
-                                                          chart_x_axis_label="Values", 
-                                                          show_outliers=FALSE,
-                                                          boxcolors=NULL, 
-                                                          box_line_colors=NULL){
-    by <- as.factor(by)
+  make_highchart_boxplot_with_colored_factors <- function(value, 
+                                                          by, 
+                                                          chart_title = "Boxplots",
+                                                          chart_x_axis_label = "Values", 
+                                                          show_outliers = FALSE,
+                                                          boxcolors = NULL, 
+                                                          box_line_colors = NULL){
+    # by <- as.factor(by)
+    # box_names_to_use <- levels(by)
+    by <- factor(by, levels = unique(by))
     box_names_to_use <- levels(by)
-    series <- gen_boxplot_series_from_df(value = value, by=by)
+    series <- gen_boxplot_series_from_df(value = value, 
+                                         by = by)
     
     if(is.null(boxcolors)){
       cols <- rep("#FFFFFF", ncol(qData))
@@ -217,7 +228,7 @@ boxPlotD_HC <- function(obj,
                          value = as.vector(apply(qData, 1, function(x) as.vector(x)))))
   df$value<- base::as.numeric(df$value)
   hc <- make_highchart_boxplot_with_colored_factors(value = df$value, 
-                                                    by=df$categ, 
+                                                    by = df$categ, 
                                                     chart_title = "",
                                                     chart_x_axis_label = "Samples",
                                                     show_outliers = TRUE, 
