@@ -21,12 +21,11 @@ Authors@R: c(person(given = "Samuel", family = "Wieczorek",
     	person(given = "Helene", family ="Borges",
             email = "helene.borges@cea.fr",
     role = "ctb"))
-Maintainer: Samuel Wieczorek <samuel.wieczorek@cea.fr>
 Description: This package contains a collection of functions for the
     visualisation and the statistical analysis of proteomic data.
 License: Artistic-2.0
 VignetteBuilder: knitr
-Depends: R (>= 4.1.0)
+Depends: R (>= 4.2.0)
 Suggests: BiocGenerics, testthat, BiocStyle, AnnotationDbi, clusterProfiler,
           diptest, cluster, vioplot, visNetwork, vsn, igraph,
           FactoMineR, factoextra, dendextend, foreach, parallel, doParallel, 
@@ -45,34 +44,34 @@ RoxygenNote: 7.1.2
 Packaged: 2017-10-13 11:13:04 UTC; sw175264
 Encoding: UTF-8
 URL: http://www.prostar-proteomics.org/
-BugReports: https://github.com/samWieczorek/DAPAR/issues
+BugReports: https://github.com/prostarproteomics/DAPAR/issues
 Collate:
     agregation.R
     anova_analysis.R
-    bioAnalysis.R                         
+    bioAnalysis.R
     clustering.R
     compute.t.tests.R
-    DiffAnalysis.R                        
+    DiffAnalysis.R
     get_pep_prot_cc.R
     metacell.R
     inOutFiles.R
-    limmaAnalysis.R                       
+    limmaAnalysis.R
     logText.R
     missingValuesFilter.R
     missingValuesImputation_PeptideLevel.R
     missingValuesImputation_ProteinLevel.R
-    normalize.R                           
+    normalize.R
     pepa.R
     plots_boxplot.R
-    plots_compare_Norm.R                  
+    plots_compare_Norm.R
     plots_corr_matrix.R
     plots_density.R
-    plots_density_CV.R                    
+    plots_density_CV.R
     plots_heatmaps.R
     plots_pca.R
-    plots_violin.R                        
+    plots_violin.R
     utils.R
-    volcanoPlot.R   
+    volcanoPlot.R
     palette.R
     hypothesisTest.R
     metacell_Plots.R
