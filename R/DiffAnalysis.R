@@ -155,8 +155,8 @@ Get_AllComparisons <- function(obj){
 diffAnaSave <- function (obj, 
                          allComp, 
                          data = NULL,
-                         th_pval = 0
-                         ,th_logFC = 0){
+                         th_pval = 0,
+                         th_logFC = 0){
     if (is.null(allComp)){
         warning("The analysis has not been completed. Maybe there 
             are some missing values in the dataset. If so, please impute before
@@ -164,7 +164,7 @@ diffAnaSave <- function (obj,
         return(NULL)}
   
   
-  ####### SAVE ALL THEPAIRWISE COMPARISON RESULTS
+  ####### SAVE ALL THE PAIRWISE COMPARISON RESULTS
   
   .fc <- as.data.frame(allComp$logFC)
   .pval <- as.data.frame(allComp$P_Value)
