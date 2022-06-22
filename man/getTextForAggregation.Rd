@@ -13,7 +13,11 @@ getTextForAggregation(l.params)
 A string
 }
 \description{
-Builds the text information for the Aggregation process
+* includeSharedPeptides,
+* operator,
+* considerPeptides,
+* proteinId,
+* topN
 }
 \examples{
 params <- list()

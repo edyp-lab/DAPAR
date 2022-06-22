@@ -9,15 +9,19 @@ GetIndices_WholeLine(metacell.mask)
 \arguments{
 \item{metacell.mask}{xxx}
 }
+\value{
+xxx
+}
 \description{
 This function looks for the lines where each element respect the query.
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-obj <- Exp1_R25_pept[20:30]
-level <- obj@experimentData@other$typeOfData
-pattern <- 'missing POV'
-metacell.mask <- match.metacell(metadata=GetMetacell(obj), pattern=pattern, level=level)
+data(Exp1_R25_pept)
+obj <- Exp1_R25_pept[seq.int(from=20, to=30)]
+level <- 'peptide'
+pattern <- "missing POV"
+metacell.mask <- match.metacell(metadata = GetMetacell(obj), 
+pattern = pattern, level = level)
 ind <- GetIndices_WholeLine(metacell.mask)
 
 }

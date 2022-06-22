@@ -10,21 +10,21 @@ aggregateMean(obj.pep, X)
 \arguments{
 \item{obj.pep}{A peptide object of class \code{MSnset}}
 
-\item{X}{An adjacency matrix in which lines and columns correspond 
+\item{X}{An adjacency matrix in which lines and columns correspond
 respectively to peptides and proteins.}
 }
 \value{
 A matrix of intensities of proteins
 }
 \description{
-This function computes the intensity of proteins as the mean of the 
+#' This function computes the intensity of proteins as the mean of the
 intensities of their peptides.
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-obj.pep <- Exp1_R25_pept[1:10]
-obj.pep.imp <- wrapper.impute.detQuant(obj.pep, na.type='missing')
-protID <- obj.pep@experimentData@other$proteinId
+data(Exp1_R25_pept)
+obj.pep <- Exp1_R25_pept[seq_len(10)]
+obj.pep.imp <- wrapper.impute.detQuant(obj.pep, na.type = "missing")
+protID <- "Protein_group_IDs"
 X <- BuildAdjacencyMatrix(obj.pep.imp, protID, FALSE)
 ll.agg <- aggregateMean(obj.pep.imp, X)
 

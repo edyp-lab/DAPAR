@@ -51,6 +51,10 @@ the variance estimator. This is straightforward when using a fixed
 effect model (cases 'numeric' and 'lm') but requires some more care
 when using a mixed model.
 }
+\examples{
+NULL
+
+}
 \author{
 Thomas Burger, Laurent Jacob
 }

@@ -2,28 +2,28 @@
 % Please edit documentation in R/agregation.R
 \name{getProteinsStats}
 \alias{getProteinsStats}
-\title{Computes the number of proteins that are only defined by 
+\title{Computes the number of proteins that are only defined by
 specific peptides, shared peptides or a mixture of two.}
 \usage{
 getProteinsStats(matShared)
 }
 \arguments{
-\item{matShared}{The adjacency matrix with both specific and 
+\item{matShared}{The adjacency matrix with both specific and
 shared peptides.}
 }
 \value{
 A list
 }
 \description{
-This function computes the number of proteins that are only defined by 
+This function computes the number of proteins that are only defined by
 specific peptides, shared peptides or a mixture of two.
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
+data(Exp1_R25_pept)
 protID <- "Protein_group_IDs"
-obj <- Exp1_R25_pept[1:20]
+obj <- Exp1_R25_pept[seq_len(20)]
 MShared <- BuildAdjacencyMatrix(obj, protID, FALSE)
-getProteinsStats(matShared=MShared)
+getProteinsStats(matShared = MShared)
 
 }
 \author{

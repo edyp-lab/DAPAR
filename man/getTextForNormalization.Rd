@@ -13,10 +13,14 @@ getTextForNormalization(l.params)
 A string
 }
 \description{
-Build the text information for the Normalization process
+The items of the parameter list for the normalisation is:
+* method,
+* type,
+* varReduction,
+* quantile,
 }
 \examples{
-getTextForNormalization(list(method="SumByColumns"))
+getTextForNormalization(list(method = "SumByColumns"))
 
 }
 \author{

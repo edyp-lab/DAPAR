@@ -7,8 +7,11 @@
 metacell.def(level)
 }
 \arguments{
-\item{level}{A string designing the type of entity/pipeline. 
+\item{level}{A string designing the type of entity/pipeline.
 Available values are: `peptide`, `protein`}
+}
+\value{
+xxx
 }
 \description{
 This function gives the vocabulary used for the metadata of each entity in
@@ -32,9 +35,9 @@ Peptide-level vocabulary
 |    |-- 3.1 Imputed POV (color 1)
 |    |
 |    |-- 3.2 Imputed MEC (color 2)
-       
- 
- 
+
+
+
 Protein-level vocabulary:
 
 |-- 1.0 Quantitative Value
@@ -56,6 +59,12 @@ Protein-level vocabulary:
 |    |-- 3.2 Imputed MEC (color 2)
 |
 |-- 4.0 Combined value (color 3bis, light-lightgrey)
+}
+\examples{
+metacell.def('protein')
+metacell.def('peptide')
+
+
 }
 \author{
 Thomas Burger, Samuel Wieczorek

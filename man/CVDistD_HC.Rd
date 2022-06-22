@@ -19,13 +19,14 @@ A density plot
 \description{
 Builds a densityplot of the CV of entities in the Biobase::exprs() table
 of a object. The CV is calculated for each condition present
-in the dataset (see the slot \code{'Condition'} in the \code{Biobase::pData()} table)
+in the dataset (see the slot \code{'Condition'} in the 
+\code{Biobase::pData()} table)
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-conds <- Biobase::pData(Exp1_R25_pept)[,"Condition"]
+data(Exp1_R25_pept)
+conds <- Biobase::pData(Exp1_R25_pept)[, "Condition"]
 CVDistD_HC(Biobase::exprs(Exp1_R25_pept), conds)
-pal <- ExtendPalette(2, 'Dark2')
+pal <- ExtendPalette(2, "Dark2")
 CVDistD_HC(Biobase::exprs(Exp1_R25_pept), conds, pal)
 
 }

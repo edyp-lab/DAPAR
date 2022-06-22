@@ -13,8 +13,15 @@ UpdateMetacell(obj, method = "", na.type)
 
 \item{na.type}{xxx}
 }
+\value{
+xxx
+}
 \description{
 Update the metacell information of missing values that were imputed
+}
+\examples{
+NULL
+
 }
 \author{
 Samuel Wieczorek

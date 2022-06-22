@@ -18,23 +18,23 @@ distinguish between differential and non-differential data}
 A highcharts density plot
 }
 \description{
-This function show the density plots of Fold Change (the same as calculated 
-by limma) for a list of the comparisons of conditions in a differential 
+This function show the density plots of Fold Change (the same as calculated
+by limma) for a list of the comparisons of conditions in a differential
 analysis.
 }
 \examples{
-utils::data(Exp1_R25_prot, package='DAPARdata')
-obj <- Exp1_R25_prot[1:1000]
-level <- obj@experimentData@other$typeOfData
-metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
-indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
-obj <- MetaCellFiltering(obj, indices, cmd='delete')
+data(Exp1_R25_prot)
+obj <- Exp1_R25_prot[seq_len(100)]
+level <- 'protein'
+metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
+obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 qData <- Biobase::exprs(obj$new)
 sTab <- Biobase::pData(obj$new)
 res <- limmaCompleteTest(qData, sTab, comp.type = "OnevsAll")
-hc_logFC_DensityPlot(res$logFC, threshold_LogFC=1)
-pal <- ExtendPalette(2, 'Dark2')
-hc_logFC_DensityPlot(res$logFC, threshold_LogFC=1, pal=pal)
+hc_logFC_DensityPlot(res$logFC, threshold_LogFC = 1)
+pal <- ExtendPalette(2, "Dark2")
+hc_logFC_DensityPlot(res$logFC, threshold_LogFC = 1, pal = pal)
 
 }
 \author{

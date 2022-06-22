@@ -15,23 +15,21 @@ wrapper.mvImage(obj, pattern = "missing MEC")
 A heatmap
 }
 \description{
-Plots a heatmap of the quantitative data. Each column represent one of
-the conditions in the object of class \code{MSnSet} and 
+#' Plots a heatmap of the quantitative data. Each column represent one of
+the conditions in the object of class \code{MSnSet} and
 the color is proportional to the mean of intensity for each line of
 the dataset.
 The lines have been sorted in order to vizualize easily the different
 number of missing values. A white square is plotted for missing values.
 }
 \examples{
-utils::data(Exp1_R25_prot, package='DAPARdata')
-obj <- Exp1_R25_prot[1:1000]
-level <- obj@experimentData@other$typeOfData
-metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
-indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
-obj <- MetaCellFiltering(obj, indices, cmd='delete')
+data(Exp1_R25_pept)
+obj <- Exp1_R25_prot[seq_len(1000)]
+level <- 'protein'
+metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
+obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 wrapper.mvImage(obj$new)
-
-
 
 }
 \author{

@@ -63,7 +63,7 @@ msg: a character string summarizing the most important information
           about the fudge factor.
 }
 \description{
-fudge2LRT: heuristic to choose the value of the hyperparameter
+#' fudge2LRT: heuristic to choose the value of the hyperparameter
 (fudge factor) used to regularize the variance estimator in the
 likelihood ratio statistic (as implemented in samLRT). We follow
 the heuristic described in [1] and adapt the code of the fudge2
@@ -71,6 +71,10 @@ function in the siggene R package.
 [1] Tusher, Tibshirani and Chu, Significance analysis of
 microarrays applied to the ionizing radiation response, PNAS 2001
 98: 5116-5121, (Apr 24).
+}
+\examples{
+NULL
+
 }
 \author{
 Thomas Burger, Laurent Jacob

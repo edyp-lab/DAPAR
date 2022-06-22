@@ -2,14 +2,11 @@
 % Please edit documentation in R/plots_heatmaps.R
 \name{heatmapForMissingValues}
 \alias{heatmapForMissingValues}
-\title{This function is inspired from the function \code{\link{heatmap.2}} 
-that displays quantitative data in the \code{Biobase::exprs()} table of an object of
-class \code{MSnSet}. For more information, please refer to the help 
-of the heatmap.2 function.}
+\title{xxx}
 \usage{
 heatmapForMissingValues(
   x,
-  col = heat.colors(100),
+  col = NULL,
   srtCol = NULL,
   labCol = NULL,
   labRow = NULL,
@@ -32,7 +29,7 @@ heatmapForMissingValues(
 
 \item{key}{logical indicating whether a color-key should be shown.}
 
-\item{key.title}{main title of the color key. If set to NA no title will 
+\item{key.title}{main title of the color key. If set to NA no title will
 be plotted.}
 
 \item{main}{main title; default to none.}
@@ -43,15 +40,19 @@ be plotted.}
 A heatmap
 }
 \description{
-Heatmap inspired by the heatmap.2 function.
+This function is inspired from the function \code{heatmap.2}
+that displays quantitative data in the \code{Biobase::exprs()} table of an 
+object of
+class \code{MSnSet}. For more information, please refer to the help
+of the heatmap.2 function.
 }
 \examples{
-utils::data(Exp1_R25_prot, package='DAPARdata')
-obj <- Exp1_R25_prot[1:1000]
-level <- obj@experimentData@other$typeOfData
-metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
+data(Exp1_R25_prot)
+obj <- Exp1_R25_prot[seq_len(100)]
+level <- 'protein'
+metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 indices <- GetIndices_WholeLine(metacell.mask)
-obj <- MetaCellFiltering(obj, indices, cmd='delete')
+obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 qData <- Biobase::exprs(obj$new)
 heatmapForMissingValues(qData)
 

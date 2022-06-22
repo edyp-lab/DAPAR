@@ -9,33 +9,34 @@ wrapper.impute.pa2(obj, q.min = 0, q.norm = 3, eps = 0, distribution = "unif")
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
 
-\item{q.min}{A quantile value of the observed values allowing defining the 
+\item{q.min}{A quantile value of the observed values allowing defining the
 maximal value which can be generated. This maximal value is defined by the
-quantile q.min of the observed values distribution minus eps. 
+quantile q.min of the observed values distribution minus eps.
 Default is 0 (the maximal value is the minimum of observed values minus eps).}
 
-\item{q.norm}{A quantile value of a normal distribution allowing defining 
-the minimal value which can be generated. Default is 3 (the minimal value 
-is the maximal value minus qn*median(sd(observed values)) where sd is the 
+\item{q.norm}{A quantile value of a normal distribution allowing defining
+the minimal value which can be generated. Default is 3 (the minimal value
+is the maximal value minus qn*median(sd(observed values)) where sd is the
 standard deviation of a row in a condition).}
 
-\item{eps}{A value allowing defining the maximal value which can be 
-generated. This maximal value is defined by the quantile q.min of the 
+\item{eps}{A value allowing defining the maximal value which can be
+generated. This maximal value is defined by the quantile q.min of the
 observed values distribution minus eps. Default is 0.}
 
-\item{distribution}{The type of distribution used. Values are \code{unif} 
+\item{distribution}{The type of distribution used. Values are \code{unif}
 (default) or \code{beta}.}
 }
 \value{
 The object \code{obj} which has been imputed
 }
 \description{
-This method is a wrapper to the function \code{impute.pa2} adapted to 
+This method is a wrapper to the function \code{impute.pa2()} adapted to
 objects of class \code{MSnSet}.
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-obj.imp.pa2 <- wrapper.impute.pa2(Exp1_R25_pept[1:100], distribution="beta")
+utils::data(Exp1_R25_pept, package = "DAPARdata")
+obj.imp.pa2 <- wrapper.impute.pa2(Exp1_R25_pept[seq_len(100)], 
+distribution = "beta")
 
 }
 \author{

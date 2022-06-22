@@ -13,10 +13,16 @@ getTextForHypothesisTest(l.params)
 A string
 }
 \description{
-Builds the text information for the hypothesis test process
+* design,
+* method,
+* ttest_options,
+* th_logFC,
+* AllPairwiseCompNames = list(
+*    logFC,
+*    P_Value)
 }
 \examples{
-params <- list(design='OnevsOne', method='limma')
+params <- list(design = "OnevsOne", method = "limma")
 getTextForHypothesisTest(params)
 
 }

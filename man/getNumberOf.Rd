@@ -17,12 +17,12 @@ getNumberOf(obj, name = NULL, prefix = NULL)
 An integer
 }
 \description{
-Returns the number of lines, in a given column, where content matches 
+Returns the number of lines, in a given column, where content matches
 the prefix.
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-getNumberOf(Exp1_R25_pept[1:100], "Potential_contaminant", "+")
+data(Exp1_R25_pept)
+getNumberOf(Exp1_R25_pept[seq_len(100)], "Potential_contaminant", "+")
 
 }
 \author{

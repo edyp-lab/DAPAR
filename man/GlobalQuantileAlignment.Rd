@@ -16,12 +16,12 @@ A normalized numeric matrix
 Normalisation GlobalQuantileAlignement
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
+data(Exp1_R25_pept)
 qData <- Biobase::exprs(Exp1_R25_pept)
 normalized <- GlobalQuantileAlignment(qData)
 
 }
 \author{
-Samuel Wieczorek, Thomas Burger, Helene Borges, Anais Courtier, 
+Samuel Wieczorek, Thomas Burger, Helene Borges, Anais Courtier,
 Enora Fremy
 }

@@ -15,11 +15,11 @@ getListNbValuesInLines(obj, type)
 An integer
 }
 \description{
-Returns the possible number of values in lines in a matrix.
+Returns the possible number of values in lines in the data
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-getListNbValuesInLines(Exp1_R25_pept, 'WholeMatrix')
+data(Exp1_R25_pept)
+getListNbValuesInLines(Exp1_R25_pept, "WholeMatrix")
 
 }
 \author{

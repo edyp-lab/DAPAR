@@ -2,7 +2,7 @@
 % Please edit documentation in R/agregation.R
 \name{aggregateTopn}
 \alias{aggregateTopn}
-\title{Compute the intensity of proteins as the sum of the 
+\title{Compute the intensity of proteins as the sum of the
 intensities of their n best peptides.}
 \usage{
 aggregateTopn(obj.pep, X, method = "Mean", n = 10)
@@ -10,7 +10,7 @@ aggregateTopn(obj.pep, X, method = "Mean", n = 10)
 \arguments{
 \item{obj.pep}{A matrix of intensities of peptides}
 
-\item{X}{An adjacency matrix in which lines and columns correspond 
+\item{X}{An adjacency matrix in which lines and columns correspond
 respectively to peptides and proteins.}
 
 \item{method}{xxx}
@@ -21,18 +21,15 @@ respectively to peptides and proteins.}
 A matrix of intensities of proteins
 }
 \description{
-This function computes the intensity of proteins as the sum of the 
+This function computes the intensity of proteins as the sum of the
 intensities of their n best peptides.
 }
 \examples{
-\dontrun{
-library(MSnbase)
-utils::data(Exp1_R25_pept, package='DAPARdata') 
-obj.pep <- Exp1_R25_pept[1:10]
+data(Exp1_R25_pept)
+obj.pep <- Exp1_R25_pept[seq_len(10)]
 protID <- "Protein_group_IDs"
 X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-ll.agg <- DAPAR::aggregateTopn(obj.pep, X, n=3)
-}
+ll.agg <- DAPAR::aggregateTopn(obj.pep, X, n = 3)
 
 }
 \author{

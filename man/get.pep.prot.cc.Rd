@@ -13,11 +13,12 @@ get.pep.prot.cc(X)
 A list of CC
 }
 \description{
-Method to build the list of connex composant of the adjacency matrix
+Build the list of connex composant of the adjacency matrix
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata') 
-X <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein_group_IDs", FALSE)
+data(Exp1_R25_pept)
+obj <- Exp1_R25_pept[seq_len(10)]
+X <- BuildAdjacencyMatrix(obj, "Protein_group_IDs", FALSE)
 ll <- get.pep.prot.cc(X)
 
 }

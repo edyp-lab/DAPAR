@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{getProcessingInfo}
 \alias{getProcessingInfo}
-\title{Returns the contains of the slot processing  of an object of 
+\title{Returns the contains of the slot processing  of an object of
 class \code{MSnSet}}
 \usage{
 getProcessingInfo(obj)
@@ -14,11 +14,11 @@ getProcessingInfo(obj)
 The slot processing of obj@processingData
 }
 \description{
-Returns the contains of the slot processing  of an object of 
+Returns the contains of the slot processing  of an object of
 class \code{MSnSet}
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
+data(Exp1_R25_pept)
 getProcessingInfo(Exp1_R25_pept)
 
 }

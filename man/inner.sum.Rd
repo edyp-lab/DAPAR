@@ -17,6 +17,13 @@ A matrix
 \description{
 xxxx
 }
+\examples{
+data(Exp1_R25_pept)
+obj <- Exp1_R25_pept[seq_len(10)]
+protID <- "Protein_group_IDs"
+X <- BuildAdjacencyMatrix(obj, protID, FALSE)
+inner.sum(Biobase::exprs(obj), X)
+}
 \author{
 Samuel Wieczorek
 }

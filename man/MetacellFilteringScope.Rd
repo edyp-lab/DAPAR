@@ -6,6 +6,13 @@
 \usage{
 MetacellFilteringScope()
 }
+\value{
+xxx
+}
 \description{
 Lists the metacell scopes for filtering
+}
+\examples{
+MetacellFilteringScope()
+
 }

@@ -17,7 +17,8 @@ metacellPerLinesHistoPerCondition_HC(
 
 \item{pattern}{xxx}
 
-\item{indLegend}{The indice of the column name's in \code{Biobase::pData()} tab}
+\item{indLegend}{The indice of the column name's in \code{Biobase::pData()} 
+tab}
 
 \item{showValues}{A logical that indicates wether numeric values should be
 drawn above the bars.}
@@ -28,15 +29,15 @@ drawn above the bars.}
 A bar plot
 }
 \description{
-This method plots a bar plot which represents the distribution of the 
+This method plots a bar plot which represents the distribution of the
 number of missing values (NA) per lines (ie proteins) and per conditions.
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
+data(Exp1_R25_pept)
 obj <- Exp1_R25_pept
-pal <- ExtendPalette(length(unique( Biobase::pData(obj)$Condition)), 'Dark2')
-metacellPerLinesHistoPerCondition_HC(obj, 'missing', pal=pal)
-metacellPerLinesHistoPerCondition_HC(obj, 'quanti')
+pal <- ExtendPalette(length(unique(Biobase::pData(obj)$Condition)), "Dark2")
+metacellPerLinesHistoPerCondition_HC(obj, "missing", pal = pal)
+metacellPerLinesHistoPerCondition_HC(obj, "quanti")
 
 }
 \author{

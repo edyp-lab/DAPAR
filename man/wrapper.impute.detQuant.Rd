@@ -2,7 +2,7 @@
 % Please edit documentation in R/missingValuesImputation_ProteinLevel.R
 \name{wrapper.impute.detQuant}
 \alias{wrapper.impute.detQuant}
-\title{Wrapper of the function `impute.detQuant` for objects
+\title{Wrapper of the function `impute.detQuant()` for objects
 of class \code{MSnSet}}
 \usage{
 wrapper.impute.detQuant(obj, qval = 0.025, factor = 1, na.type)
@@ -10,27 +10,27 @@ wrapper.impute.detQuant(obj, qval = 0.025, factor = 1, na.type)
 \arguments{
 \item{obj}{An instance of class \code{MSnSet}}
 
-\item{qval}{An expression set containing quantitative values of various 
+\item{qval}{An expression set containing quantitative values of various
 replicates}
 
 \item{factor}{A scaling factor to multiply the imputation value with}
 
-\item{na.type}{A string which indicates the type of missing values to impute. 
+\item{na.type}{A string which indicates the type of missing values to impute.
 Available values are: `NA` (for both POV and MEC), `POV`, `MEC`.}
 }
 \value{
 An imputed instance of class \code{MSnSet}
 }
 \description{
-This method is a wrapper of the function `impute.detQuant` for objects
+This method is a wrapper of the function `impute.detQuant()` for objects
 of class \code{MSnSet}
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-obj <- Exp1_R25_pept[1:10]
-obj.imp.pov <- wrapper.impute.detQuant(obj, na.type='missing POV')
-obj.imp.mec <- wrapper.impute.detQuant(obj, na.type='missing MEC')
-obj.imp.na <- wrapper.impute.detQuant(obj, na.type='missing')
+data(Exp1_R25_pept)
+obj <- Exp1_R25_pept[seq_len(10)]
+obj.imp.pov <- wrapper.impute.detQuant(obj, na.type = "missing POV")
+obj.imp.mec <- wrapper.impute.detQuant(obj, na.type = "missing MEC")
+obj.imp.na <- wrapper.impute.detQuant(obj, na.type = "missing")
 
 }
 \author{

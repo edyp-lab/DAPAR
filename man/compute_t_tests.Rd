@@ -9,33 +9,34 @@ compute_t_tests(obj, contrast = "OnevsOne", type = "Student")
 \arguments{
 \item{obj}{A matrix of quantitative data, without any missing values.}
 
-\item{contrast}{Indicates if the test consists of the comparison of each 
-biological condition versus 
-each of the other ones (contrast=1; 
-for example H0:"C1=C2" vs H1:"C1!=C2", etc.) 
+\item{contrast}{Indicates if the test consists of the comparison of each
+biological condition versus
+each of the other ones (contrast=1;
+for example H0:"C1=C2" vs H1:"C1!=C2", etc.)
 or each condition versus all others (contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
 H1:"C1!=(C2+C3)/2", etc. if there are three conditions).}
 
 \item{type}{xxxxx}
 }
 \value{
-A list of two items : logFC and P_Value; both are dataframe. The 
-first one contains the logFC values of all the comparisons (one column for 
-one comparison), the second one contains the pvalue of all the comparisons 
-(one column for one comparison). The names of the columns for those two 
+A list of two items : logFC and P_Value; both are dataframe. The
+first one contains the logFC values of all the comparisons (one column for
+one comparison), the second one contains the pvalue of all the comparisons
+(one column for one comparison). The names of the columns for those two
 dataframes are identical and correspond to the description of the comparison.
 }
 \description{
-This function is xxxxxx
+xxxxxx
 }
 \examples{
-utils::data(Exp1_R25_prot, package='DAPARdata')
-obj <- Exp1_R25_prot[1:1000]
-level <- obj@experimentData@other$typeOfData
-metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
-indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
-obj <- MetaCellFiltering(obj, indices, cmd='delete')
+data(Exp1_R25_prot)
+obj <- Exp1_R25_prot[seq_len(1000)]
+level <- 'protein'
+metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
+obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 ttest <- compute_t_tests(obj$new)
+
 
 }
 \author{

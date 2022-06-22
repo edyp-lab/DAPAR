@@ -11,7 +11,7 @@ deleteLinesFromIndices(obj, deleteThat = NULL, processText = "")
 \item{obj}{An object of class \code{MSnSet} containing
 quantitative data.}
 
-\item{deleteThat}{A vector of integers which are the indices of lines to 
+\item{deleteThat}{A vector of integers which are the indices of lines to
 delete.}
 
 \item{processText}{A string to be included in the \code{MSnSet}
@@ -21,11 +21,12 @@ object for log.}
 An instance of class \code{MSnSet} that have been filtered.
 }
 \description{
-Delete the lines of \code{Biobase::exprs()} table identified by their indice.
+Delete the lines in the matrix of intensities and the metadata table
+given their indice.
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-obj <- deleteLinesFromIndices(Exp1_R25_pept[1:100], c(1:10))
+data(Exp1_R25_pept)
+obj <- deleteLinesFromIndices(Exp1_R25_pept[seq_len(100)], c(seq_len(10)))
 
 }
 \author{

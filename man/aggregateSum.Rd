@@ -10,22 +10,21 @@ aggregateSum(obj.pep, X)
 \arguments{
 \item{obj.pep}{A matrix of intensities of peptides}
 
-\item{X}{An adjacency matrix in which lines and columns correspond 
+\item{X}{An adjacency matrix in which lines and columns correspond
 respectively to peptides and proteins.}
 }
 \value{
 A matrix of intensities of proteins
 }
 \description{
-This function computes the intensity of proteins based on the sum of the 
+This function computes the intensity of proteins based on the sum of the
 intensities of their peptides.
 }
 \examples{
-library(MSnbase)
-utils::data(Exp1_R25_pept, package='DAPARdata')
-obj.pep <- Exp1_R25_pept[1:20]
-obj.pep.imp <- wrapper.impute.detQuant(obj.pep, na.type='missing')
-protID <- obj.pep@experimentData@other$proteinId
+data(Exp1_R25_pept)
+obj.pep <- Exp1_R25_pept[seq_len(20)]
+obj.pep.imp <- wrapper.impute.detQuant(obj.pep, na.type = "missing")
+protID <- "Protein_group_IDs"
 X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 ll.agg <- DAPAR::aggregateSum(obj.pep.imp, X)
 

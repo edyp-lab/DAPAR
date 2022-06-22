@@ -17,24 +17,32 @@ GetIndices_BasedOnConditions(metacell.mask, type, conds, percent, op, th)
 
 \item{percent}{xxx}
 
-\item{op}{String for operator to use. List of operators is available with SymFilteringOperators().}
+\item{op}{String for operator to use. List of operators is available 
+with SymFilteringOperators().}
 
-\item{th}{The theshold to apply
-
-#' @examples
-utils::data(Exp1_R25_pept, package='DAPARdata')
-obj <- Exp1_R25_pept[1:10]
+\item{th}{The theshold to apply}
+}
+\value{
+xxx
+}
+\description{
+This function looks for the lines that respect the request in either 
+all conditions
+or at least one condition.
+}
+\examples{
+data(Exp1_R25_pept)
+obj <- Exp1_R25_pept[seq_len(10)]
 level <- GetTypeofData(obj)
 pattern <- 'missing'
-metacell.mask <- match.metacell(metadata=GetMetacell(obj), pattern=pattern, level=level)
+metacell.mask <- match.metacell(metadata=GetMetacell(obj), 
+pattern=pattern, level=level)
 type <- 'AllCond'
 conds <- Biobase::pData(obj)$Condition
 op <- '>='
 th <- 0.5
 percent <- TRUE
-ind <- GetIndices_BasedOnConditions(metacell.mask, type, conds, percent, op, th)}
-}
-\description{
-This function looks for the lines that respect the request in either all conditions
-or at least one condition.
+ind <- GetIndices_BasedOnConditions(metacell.mask, type, conds, 
+percent, op, th)
+
 }

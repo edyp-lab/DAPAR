@@ -19,7 +19,11 @@ LH1.lm(X, y1, y2, j)
 xxxxxxxxxx..
 }
 \description{
-This function is xxxxxxx
+xxxxxx
+}
+\examples{
+NULL
+
 }
 \author{
 Thomas Burger, Laurent Jacob

@@ -6,6 +6,13 @@
 \usage{
 SymFilteringOperators()
 }
+\value{
+A `character()`
+}
 \description{
 xxx
+}
+\examples{
+SymFilteringOperators()
+
 }

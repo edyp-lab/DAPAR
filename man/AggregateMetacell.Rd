@@ -19,9 +19,8 @@ Execute a product two matrices: the first is an adjacency one  while the
 second if a simple dataframe
 }
 \examples{
-library(MSnbase)
-utils::data(Exp1_R25_pept, package='DAPARdata')
-obj.pep <- Exp1_R25_pept[1:100]
+data(Exp1_R25_pept)
+obj.pep <- Exp1_R25_pept[seq_len(10)]
 protID <- "Protein_group_IDs"
 X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 agg.meta <- AggregateMetacell(X, obj.pep)

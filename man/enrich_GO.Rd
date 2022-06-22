@@ -2,16 +2,16 @@
 % Please edit documentation in R/bioAnalysis.R
 \name{enrich_GO}
 \alias{enrich_GO}
-\title{Calculates GO enrichment classes for a given list of 
-proteins/genes ID. It results an enrichResult instance.}
+\title{Calculates GO enrichment classes for a given list of proteins/genes 
+ID. It results an enrichResult instance.}
 \usage{
 enrich_GO(data, idFrom, orgdb, ont, readable = FALSE, pval, universe)
 }
 \arguments{
-\item{data}{A vector of ID (among ENSEMBL, ENTREZID, GENENAME, REFSEQ, 
+\item{data}{A vector of ID (among ENSEMBL, ENTREZID, GENENAME, REFSEQ,
 UNIGENE, UNIPROT -can be different according to organisms)}
 
-\item{idFrom}{character indicating the input ID format (among ENSEMBL, 
+\item{idFrom}{character indicating the input ID format (among ENSEMBL,
 ENTREZID, GENENAME, REFSEQ, UNIGENE, UNIPROT)}
 
 \item{orgdb}{annotation Bioconductor package to use (character format)}
@@ -20,28 +20,28 @@ ENTREZID, GENENAME, REFSEQ, UNIGENE, UNIPROT)}
 
 \item{readable}{TRUE or FALSE (default FALSE)}
 
-\item{pval}{The qvalue cutoff (same parameter as in the function 
+\item{pval}{The qvalue cutoff (same parameter as in the function
 \code{enrichGO} of the package `clusterProfiler`)}
 
-\item{universe}{a list of ID to be considered as the background for 
+\item{universe}{a list of ID to be considered as the background for
 enrichment calculation}
 }
 \value{
 A groupGOResult instance.
 }
 \description{
-This function is a wrappper to the function enrichGO from the
-package `clusterProfiler`. Given a vector of genes/proteins, 
-it returns an enrichResult instance.
+This function is a wrappper to the function enrichGO from the package 
+`clusterProfiler`. Given a vector of genes/proteins, it returns an 
+enrichResult instance.
 }
 \examples{
-\donttest{
-utils::data(Exp1_R25_prot, package='DAPARdata')
-obj <- Exp1_R25_prot
-univ<-univ_AnnotDbPkg("org.Sc.sgd.db") #univ is the background
-ego<-enrich_GO(data=Biobase::fData(obj)$Protein.IDs, idFrom="UNIPROT", 
-orgdb="org.Sc.sgd.db",ont="MF", pval=0.05, universe = univ)
-}
+data(Exp1_R25_prot)
+obj <- Exp1_R25_prot[seq_len(10)]
+univ <- univ_AnnotDbPkg("org.Sc.sgd.db") # univ is the background
+ego <- enrich_GO(
+    data = Biobase::fData(obj)$Protein.IDs, idFrom = "UNIPROT",
+    orgdb = "org.Sc.sgd.db", ont = "MF", pval = 0.05, universe = univ
+)
 
 }
 \author{

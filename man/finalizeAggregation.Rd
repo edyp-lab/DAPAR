@@ -15,7 +15,7 @@ finalizeAggregation(obj.pep, pepData, protData, protMetacell, X)
 
 \item{protMetacell}{xxx}
 
-\item{X}{An adjacency matrix in which lines and columns correspond 
+\item{X}{An adjacency matrix in which lines and columns correspond
 respectively to peptides and proteins.}
 }
 \value{
@@ -23,6 +23,11 @@ A protein object of class \code{MSnset}
 }
 \description{
 Method to finalize the aggregation process
+}
+\examples{
+NULL
+
+
 }
 \author{
 Samuel Wieczorek

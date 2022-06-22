@@ -13,10 +13,19 @@ getTextForAnaDiff(l.params)
 A string
 }
 \description{
-Build the text information for the differential Analysis process
+* Condition1
+* Condition2
+* Comparison
+* filterType
+* filter_th_NA
+* calibMethod
+* numValCalibMethod
+* th_pval
+* FDR
+* NbSelected
 }
 \examples{
-getTextForAnaDiff(list(design="OnevsOne",method="Limma"))
+getTextForAnaDiff(list(design = "OnevsOne", method = "Limma"))
 
 }
 \author{

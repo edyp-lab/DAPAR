@@ -17,7 +17,10 @@ LH0(X, y1, y2)
 xxxxxxxxxx..
 }
 \description{
-This function is xxxxxxx
+xxxxxx
+}
+\examples{
+NULL
 }
 \author{
 Thomas Burger, Laurent Jacob

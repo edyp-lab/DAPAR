@@ -9,7 +9,7 @@ getIndicesOfLinesToRemove(obj, idLine2Delete = NULL, prefix = NULL)
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
 
-\item{idLine2Delete}{The name of the column that correspond to the data 
+\item{idLine2Delete}{The name of the column that correspond to the data
 to filter}
 
 \item{prefix}{A character string that is the prefix to find in the data}
@@ -18,13 +18,14 @@ to filter}
 A vector of integers.
 }
 \description{
-This function returns the indice of the lines to delete, based on a 
-prefix string
+Get the indices of the lines to delete, based on a prefix string
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-ind <- getIndicesOfLinesToRemove(Exp1_R25_pept[1:100], "Potential_contaminant", 
-prefix="+")
+data(Exp1_R25_pept)
+ind <- getIndicesOfLinesToRemove(Exp1_R25_pept[seq_len(100)], 
+"Potential_contaminant",
+    prefix = "+"
+)
 
 }
 \author{

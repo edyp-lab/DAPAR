@@ -16,19 +16,19 @@ A Excel file (.xlsx)
 }
 \description{
 This function exports a \code{MSnSet} data object to a Excel file.
-Each of the three data.frames in the \code{MSnSet} object (ie experimental 
-data, phenoData and metaData are respectively integrated into separate sheets 
-in the Excel file).
-The colored cells in the experimental data correspond to the original 
+Each of the three data.frames in the \code{MSnSet} object (ie experimental
+data, phenoData and metaData are respectively integrated into separate sheets
+in the Excel file). 
+
+The colored cells in the experimental data correspond to the original
 missing values which have been imputed.
 }
 \examples{
-\donttest{
-Sys.setenv("R_ZIPCMD"= Sys.which("zip"))
-utils::data(Exp1_R25_pept, package='DAPARdata')
-obj <- Exp1_R25_pept[1:10]
+Sys.setenv("R_ZIPCMD" = Sys.which("zip"))
+data(Exp1_R25_pept)
+obj <- Exp1_R25_pept[seq_len(10)]
 writeMSnsetToExcel(obj, "foo")
-}
+
 
 }
 \author{

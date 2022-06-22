@@ -2,7 +2,7 @@
 % Please edit documentation in R/missingValuesFilter.R
 \name{StringBasedFiltering}
 \alias{StringBasedFiltering}
-\title{Removes lines in the dataset based on a prefix strings (contaminants, 
+\title{Removes lines in the dataset based on a prefix strings (contaminants,
 reverse or both).}
 \usage{
 StringBasedFiltering(
@@ -16,36 +16,36 @@ StringBasedFiltering(
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
 
-\item{idCont2Delete}{The name of the column that correspond to the 
+\item{idCont2Delete}{The name of the column that correspond to the
 contaminants to filter}
 
-\item{prefix_Cont}{A character string that is the prefix for the 
+\item{prefix_Cont}{A character string that is the prefix for the
 contaminants to find in the data}
 
-\item{idRev2Delete}{The name of the column that correspond to the 
+\item{idRev2Delete}{The name of the column that correspond to the
 reverse data to filter}
 
-\item{prefix_Rev}{A character string that is the prefix for the reverse to 
+\item{prefix_Rev}{A character string that is the prefix for the reverse to
 find in the data}
 }
 \value{
 An list of 4 items :
-obj : an object of class \code{MSnSet} in which the lines have been deleted
-deleted.both : an object of class \code{MSnSet} which contains the deleted 
-lines corresponding to both contaminants and reverse, 
-deleted.contaminants : n object of class \code{MSnSet} which contains the 
-deleted lines corresponding to contaminants, 
-deleted.reverse : an object of class \code{MSnSet} which contains the 
+* obj : an object of class \code{MSnSet} in which the lines have been deleted
+* deleted.both : an object of class \code{MSnSet} which contains the deleted
+lines corresponding to both contaminants and reverse,
+* deleted.contaminants : n object of class \code{MSnSet} which contains the
+deleted lines corresponding to contaminants,
+* deleted.reverse : an object of class \code{MSnSet} which contains the
 deleted lines corresponding to reverse,
 }
 \description{
-This function removes lines in the dataset based on prefix strings 
-(contaminants, reverse or both).
+Removes lines in the dataset based on a prefix strings (contaminants,
+reverse or both).
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-StringBasedFiltering(Exp1_R25_pept[1:100], 'Potential_contaminant', '+', 
-'Reverse', '+')
+data(Exp1_R25_pept)
+StringBasedFiltering(
+Exp1_R25_pept[seq_len(100)], "Potential_contaminant", "+", "Reverse", "+")
 
 }
 \author{

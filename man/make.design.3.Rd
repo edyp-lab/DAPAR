@@ -7,18 +7,20 @@
 make.design.3(sTab)
 }
 \arguments{
-\item{sTab}{The data.frame which correspond to the pData function of MSnbase}
+\item{sTab}{The data.frame which correspond to the `pData()` function 
+of package `MSnbase`.}
 }
 \value{
 A design matrix
 }
 \description{
-This function builds the design matrix for design of level 3
+Builds the design matrix for designs of level 3
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-sTab <-cbind(Biobase::pData(Exp1_R25_pept), Tech.Rep=1:6)
+data(Exp1_R25_pept)
+sTab <- cbind(Biobase::pData(Exp1_R25_pept), Tech.Rep = 1:6)
 make.design.3(sTab)
+
 
 }
 \author{

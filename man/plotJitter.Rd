@@ -4,7 +4,7 @@
 \alias{plotJitter}
 \title{Jitter plot of CC}
 \usage{
-plotJitter(list.of.cc)
+plotJitter(list.of.cc = NULL)
 }
 \arguments{
 \item{list.of.cc}{List of cc such as returned by the function get.pep.prot.cc}
@@ -16,8 +16,9 @@ A plot
 Jitter plot of CC
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
+data(Exp1_R25_pept)
+obj <- Exp1_R25_pept[seq_len(100)]
+X <- BuildAdjacencyMatrix(obj, "Protein_group_IDs", TRUE)
 ll <- get.pep.prot.cc(X)
 plotJitter(ll)
 

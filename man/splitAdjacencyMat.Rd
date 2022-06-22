@@ -15,6 +15,14 @@ A list of two adjacency matrices
 \description{
 Method to split an adjacency matrix into specific and shared
 }
+\examples{
+data(Exp1_R25_pept)
+obj.pep <- Exp1_R25_pept[seq_len(10)]
+protID <- "Protein_group_IDs"
+X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+ll <- splitAdjacencyMat(X)
+
+}
 \author{
 Samuel Wieczorek
 }

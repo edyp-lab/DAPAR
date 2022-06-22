@@ -2,7 +2,7 @@
 % Please edit documentation in R/clustering.R
 \name{wrapperRunClustering}
 \alias{wrapperRunClustering}
-\title{Run a clustering pipeline of protein/peptide abundance profiles.}
+\title{clustering pipeline of protein/peptide abundance profiles.}
 \usage{
 wrapperRunClustering(
   obj,
@@ -18,12 +18,12 @@ wrapperRunClustering(
 \arguments{
 \item{obj}{ExpressionSet or MSnSet object.}
 
-\item{clustering_method}{character string. Three possible values are 
-"kmeans", "affinityProp" and "affinityPropReduced. See the details section 
+\item{clustering_method}{character string. Three possible values are
+"kmeans", "affinityProp" and "affinityPropReduced. See the details section
 for more explanation.}
 
 \item{conditions_order}{vector specifying the order of the Condition factor
-levels in the phenotype data. Default value is NULL, which means that it is 
+levels in the phenotype data. Default value is NULL, which means that it is
 the order of the condition present in the phenotype data of "obj" which is
 taken to create the profiles.}
 
@@ -33,7 +33,7 @@ set to NULL, then a kmeans model will be realized with an optimal number of
 clusters `k` estimated by the Gap statistic method. Ignored for the Affinity
  propagation model.}
 
-\item{adjusted_pvals}{vector of adjusted pvalues returned by the 
+\item{adjusted_pvals}{vector of adjusted pvalues returned by the
 [wrapperClassic1wayAnova()]}
 
 \item{ttl}{the title for the final plot}
@@ -50,7 +50,7 @@ The default value (NULL) generates 4 thresholds: [0.001, 0.005, 0.01, 0.05].
  threshold value will then be colored in gray.}
 }
 \value{
-a list of 2 elements: "model" is the clustering model, "ggplot" is 
+a list of 2 elements: "model" is the clustering model, "ggplot" is
 the ggplot of profiles clustering.
 }
 \description{
@@ -62,16 +62,16 @@ clustering model and its graph from average abundances of proteins/peptides.
 \details{
 The first step consists in averaging the abundances of
 proteins/peptides according to the different conditions defined in the
-phenotype data of the expressionSet / MSnSet. Then we standardize the data 
-if there are more than 2 conditions. If the user asks to realize a kmeans 
+phenotype data of the expressionSet / MSnSet. Then we standardize the data
+if there are more than 2 conditions. If the user asks to realize a kmeans
 model without specifying the desired number of
-clusters (`clustering_method =" kmeans "` and `k_clusters = NULL`), the 
-function checks data's clusterability and estimates a number of clusters k 
-using the gap statistic method. It is advise however to specify a k for the 
-kmeans, because the gap stat gives the smallest possible k, whereas in 
-biology a small number of clusters can turn out to be uninformative. 
-If you want to run a kmeans but you don't know what number of clusters to 
-give, you can let the pipeline run the first time without specifying 
+clusters (`clustering_method =" kmeans "` and `k_clusters = NULL`), the
+function checks data's clusterability and estimates a number of clusters k
+using the gap statistic method. It is advise however to specify a k for the
+kmeans, because the gap stat gives the smallest possible k, whereas in
+biology a small number of clusters can turn out to be uninformative.
+If you want to run a kmeans but you don't know what number of clusters to
+give, you can let the pipeline run the first time without specifying
 `k_clusters`, in order to view the profiles the first time and choose by the
 following is a more appropriate value of k.
 If it is assumed that the data can be structured with a large number of
@@ -86,25 +86,28 @@ preferences are set to the sample quantile with threshold 0 of non-Inf
 values. This should lead to a smaller number of final clusters.
 }
 \examples{
-utils::data(Exp1_R25_prot, package='DAPARdata')
-obj <- Exp1_R25_prot[1:1000]
-level <- obj@experimentData@other$typeOfData
-metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
-indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
-obj <- MetaCellFiltering(obj, indices, cmd='delete')
+data(Exp1_R25_prot)
+obj <- Exp1_R25_prot[seq_len(1000)]
+level <- 'protein'
+metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
+obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 expR25_ttest <- compute_t_tests(obj$new)
-wrapperRunClustering(obj = obj$new, 
-adjusted_pvals = expR25_ttest$P_Value$`25fmol_vs_10fmol_pval`)
+wrapperRunClustering(
+    obj = obj$new,
+    adjusted_pvals = expR25_ttest$P_Value$`25fmol_vs_10fmol_pval`
+)
 
 }
 \references{
-Tibshirani, R., Walther, G. and Hastie, T. (2001). Estimating the number of 
-data clusters via the Gap statistic. 
+Tibshirani, R., Walther, G. and Hastie, T. (2001). Estimating the number of
+data clusters via the Gap statistic.
 *Journal of the Royal Statistical Society* B, 63, 411–423.
 
-Frey, B. J. and Dueck, D. (2007) Clustering by passing messages between 
-data points. *Science* 315, 972-976. 
-DOI: \href{https://science.sciencemag.org/content/315/5814/972}{10.1126/science.1136800}
+Frey, B. J. and Dueck, D. (2007) Clustering by passing messages between
+data points. *Science* 315, 972-976.
+DOI: \href{https://science.sciencemag.org/content/315/5814/972}{
+10.1126/science.1136800}
 }
 \author{
 Helene Borges

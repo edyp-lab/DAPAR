@@ -18,10 +18,9 @@ A plot
 Plots individuals of PCA
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
+data(Exp1_R25_pept)
 res.pca <- wrapper.pca(Exp1_R25_pept)
 plotPCA_Ind(res.pca)
-
 
 }
 \author{

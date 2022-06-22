@@ -7,7 +7,7 @@
 getQuantile4Imp(qdata, qval = 0.025, factor = 1)
 }
 \arguments{
-\item{qdata}{An expression set containing quantitative values of various 
+\item{qdata}{An expression set containing quantitative values of various
 replicates}
 
 \item{qval}{The quantile used to define the imputation value}
@@ -15,7 +15,7 @@ replicates}
 \item{factor}{A scaling factor to multiply the imputation value with}
 }
 \value{
-A list of two vectors, respectively containing the imputation values 
+A list of two vectors, respectively containing the imputation values
 and the rescaled imputation values
 }
 \description{
@@ -23,9 +23,9 @@ This method returns the q-th quantile of each column of an expression set,
  up to a scaling factor
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-qdata <- Biobase::exprs(Exp1_R25_pept)
-quant <- getQuantile4Imp(qdata) 
+data(Exp1_R25_prot)
+qdata <- Biobase::exprs(Exp1_R25_prot)
+quant <- getQuantile4Imp(qdata)
 
 }
 \author{

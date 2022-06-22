@@ -9,26 +9,32 @@ GetIndices_WholeMatrix(metacell.mask, op = "==", percent = FALSE, th = 0)
 \arguments{
 \item{metacell.mask}{xxx}
 
-\item{op}{String for operator to use. List of operators is available with SymFilteringOperators().}
+\item{op}{String for operator to use. List of operators is available with 
+SymFilteringOperators().}
 
-\item{percent}{A boolean to indicate whether the threshold represent an absolute value (percent = FALSE) or
+\item{percent}{A boolean to indicate whether the threshold represent an 
+absolute value (percent = FALSE) or
 a percentage (percent=TRUE).}
 
 \item{th}{A floating number which is in the interval [0, 1]}
 }
+\value{
+xxx
+}
 \description{
-This function looks for the lines that respect the request in either all conditions
-or at least one condition.
+This function looks for the lines that respect the request in either all 
+conditions or at least one condition.
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-obj <- Exp1_R25_pept[1:10]
-level <- obj@experimentData@other$typeOfData
-pattern <- 'missing'
-metacell.mask <- match.metacell(metadata=GetMetacell(obj), pattern=pattern, level=level)
+data(Exp1_R25_pept)
+obj <- Exp1_R25_pept[seq_len(10)]
+level <- 'peptide'
+pattern <- "missing"
+metacell.mask <- match.metacell(metadata = GetMetacell(obj), 
+pattern = pattern, level = level)
 percent <- FALSE
 th <- 3
-op <- '>='
+op <- ">="
 ind <- GetIndices_WholeMatrix(metacell.mask, op, percent, th)
 
 }

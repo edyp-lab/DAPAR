@@ -9,7 +9,7 @@ densityPlotD_HC(obj, legend = NULL, pal = NULL)
 \arguments{
 \item{obj}{xxx}
 
-\item{legend}{A vector of the conditions (one condition 
+\item{legend}{A vector of the conditions (one condition
 per sample).}
 
 \item{pal}{xxx}
@@ -21,11 +21,11 @@ A density plot
 Densityplot of quantitative proteomics data over samples.
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
+data(Exp1_R25_pept)
 densityPlotD_HC(Exp1_R25_pept)
 conds <- Biobase::pData(Exp1_R25_pept)$Condition
-pal <- ExtendPalette(2, 'Dark2')
-densityPlotD_HC(Exp1_R25_pept, pal=pal)
+pal <- ExtendPalette(2, "Dark2")
+densityPlotD_HC(Exp1_R25_pept, pal = pal)
 
 }
 \author{

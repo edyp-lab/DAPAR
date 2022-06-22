@@ -13,7 +13,14 @@ getTextForproteinImputation(l.params)
 A string
 }
 \description{
-Build the text information for the Protein Imputation process
+* POV_algorithm,
+* POV_detQuant_quantile,
+* POV_detQuant_factor,
+* POV_KNN_n,
+* MEC_algorithm,
+* MEC_detQuant_quantile,
+* MEC_detQuant_factor,
+* MEC_fixedValue
 }
 \examples{
 params <- list()

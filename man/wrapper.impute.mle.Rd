@@ -9,24 +9,25 @@ wrapper.impute.mle(obj, na.type)
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
 
-\item{na.type}{A string which indicates the type of missing values to impute. 
+\item{na.type}{A string which indicates the type of missing values to impute.
 Available values are: `NA` (for both POV and MEC).}
 }
 \value{
-The \code{Biobase::exprs(obj)} matrix with imputed values instead of missing 
+The \code{Biobase::exprs(obj)} matrix with imputed values instead 
+of missing
 values.
 }
 \description{
-This method is a wrapper to the function \code{impute.mle} of the package
-\code{imp4p} adapted to an object of class \code{MSnSet}.
+#' This method is a wrapper to the function \code{impute.mle()} of the 
+package \code{imp4p} adapted to an object of class \code{MSnSet}.
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-obj <- Exp1_R25_pept[1:10,]
-level <- obj@experimentData@other$typeOfData
-metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
-indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
-obj.imp.na <- wrapper.impute.mle(obj, na.type = 'missing')
+utils::data(Exp1_R25_pept, package = "DAPARdata")
+obj <- Exp1_R25_pept[seq_len(10), ]
+level <- 'peptide'
+metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
+obj.imp.na <- wrapper.impute.mle(obj, na.type = "missing")
 
 }
 \author{

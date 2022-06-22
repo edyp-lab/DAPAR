@@ -2,7 +2,7 @@
 % Please edit documentation in R/DiffAnalysis.R
 \name{diffAnaComputeFDR}
 \alias{diffAnaComputeFDR}
-\title{Computes the FDR corresponding to the p-values of the 
+\title{Computes the FDR corresponding to the p-values of the
 differential analysis using}
 \usage{
 diffAnaComputeFDR(
@@ -14,41 +14,40 @@ diffAnaComputeFDR(
 )
 }
 \arguments{
-\item{logFC}{The result (logFC values) of the differential analysis processed 
+\item{logFC}{The result (logFC values) of the differential analysis processed
 by \code{\link{limmaCompleteTest}}}
 
-\item{pval}{The result (p-values) of the differential analysis processed 
+\item{pval}{The result (p-values) of the differential analysis processed
 by \code{\link{limmaCompleteTest}}}
 
-\item{threshold_PVal}{The threshold on p-pvalue to
-distinguish between differential and non-differential data}
+\item{threshold_PVal}{The threshold on p-pvalue to distinguish between 
+differential and non-differential data}
 
-\item{threshold_LogFC}{The threshold on log(Fold Change) to
-distinguish between differential and non-differential data}
+\item{threshold_LogFC}{The threshold on log(Fold Change) to distinguish 
+between differential and non-differential data}
 
-\item{pi0Method}{The parameter pi0.method of the method adjust.p 
-in the package \code{cp4p}}
+\item{pi0Method}{The parameter pi0.method of the method adjust.p in the 
+package \code{cp4p}}
 }
 \value{
 The computed FDR value (floating number)
 }
 \description{
-This function is a wrappper to the function adjust.p from the
-cp4p package. It returns the FDR corresponding to the p-values of the 
-differential analysis.
-The FDR is computed with the function \code{p.adjust}\{stats\}..
+This function is a wrapper to the function adjust.p from the `cp4p` package.
+ It returns the FDR corresponding to the p-values of the differential 
+analysis. The FDR is computed with the function \code{p.adjust}\{stats\}.
 }
 \examples{
-utils::data(Exp1_R25_prot, package='DAPARdata')
-obj <- Exp1_R25_prot[1:1000]
-level <- obj@experimentData@other$typeOfData
-metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
-indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
-obj <- MetaCellFiltering(obj, indices, cmd='delete')
+data(Exp1_R25_prot)
+obj <- Exp1_R25_prot[seq_len(1000)]
+level <- 'protein'
+metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
+obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 qData <- Biobase::exprs(obj$new)
 sTab <- Biobase::pData(obj$new)
-limma <- limmaCompleteTest(qData,sTab)
-diffAnaComputeFDR(limma$logFC[,1],limma$P_Value[,1])
+limma <- limmaCompleteTest(qData, sTab)
+diffAnaComputeFDR(limma$logFC[, 1], limma$P_Value[, 1])
 
 }
 \author{

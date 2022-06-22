@@ -15,13 +15,12 @@ plotPCA_Var(res.pca, chosen.axes = c(1, 2))
 A plot
 }
 \description{
-Plots the variables of PCA
+Plots variables of PCA
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
+data(Exp1_R25_pept)
 res.pca <- wrapper.pca(Exp1_R25_pept)
 plotPCA_Var(res.pca)
-
 
 }
 \author{

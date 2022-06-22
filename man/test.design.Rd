@@ -13,11 +13,11 @@ test.design(tab)
 A list of two items
 }
 \description{
-This function check xxxxx
+Check if xxxxxx
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-test.design(Biobase::pData(Exp1_R25_pept)[,1:3])
+data(Exp1_R25_pept)
+test.design(Biobase::pData(Exp1_R25_pept)[, seq_len(3)])
 
 }
 \author{
