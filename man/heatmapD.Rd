@@ -2,7 +2,7 @@
 % Please edit documentation in R/plots_heatmaps.R
 \name{heatmapD}
 \alias{heatmapD}
-\title{This function is a wrapper to \code{\link{heatmap.2}} that displays 
+\title{This function is a wrapper to \code{heatmap.2} that displays
 quantitative data in the \code{Biobase::exprs()} table of an object of
 class \code{MSnSet}}
 \usage{
@@ -19,7 +19,7 @@ heatmapD(
 
 \item{conds}{A vector containing the conditions}
 
-\item{distance}{The distance used by the clustering algorithm to compute 
+\item{distance}{The distance used by the clustering algorithm to compute
 the dendrogram. See \code{help(heatmap.2)}}
 
 \item{cluster}{the clustering algorithm used to build the dendrogram.
@@ -31,19 +31,20 @@ See \code{help(heatmap.2)}}
 A heatmap
 }
 \description{
-Heatmap of the quantitative proteomic data of a \code{MSnSet} object
+This function is a wrapper to \code{heatmap.2} that displays
+quantitative data in the \code{Biobase::exprs()} table of an object of
+class \code{MSnSet}
 }
 \examples{
-\dontrun{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-obj <- Exp1_R25_pept[1:10,]
-level <- obj@experimentData@other$typeOfData
-metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
+data(Exp1_R25_pept)
+obj <- Exp1_R25_pept[seq_len(10), ]
+level <- 'peptide'
+metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 indices <- GetIndices_WholeLine(metacell.mask)
 qData <- Biobase::exprs(obj)
-conds <- Biobase::pData(obj)[['Condition']]
+conds <- Biobase::pData(obj)[["Condition"]]
 heatmapD(qData, conds)
-}
+
 
 }
 \author{

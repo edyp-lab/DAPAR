@@ -24,13 +24,13 @@ NumericalgetIndicesOfLinesToRemove(
 A vector of integers.
 }
 \description{
-This function returns the indice of the lines to delete, based on a 
+This function returns the indices of the lines to delete, based on a
 prefix string
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-NumericalgetIndicesOfLinesToRemove(Exp1_R25_pept[1:100], "A_Count", value="6", 
-operator='==')
+data(Exp1_R25_pept)
+NumericalgetIndicesOfLinesToRemove(Exp1_R25_pept[seq_len(100)], "A_Count",
+value = "6", operator = "==")
 
 }
 \author{

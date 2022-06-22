@@ -2,17 +2,17 @@
 % Please edit documentation in R/bioAnalysis.R
 \name{barplotGroupGO_HC}
 \alias{barplotGroupGO_HC}
-\title{A barplot which shows the result of a GO classification, using the 
+\title{A barplot which shows the result of a GO classification, using the
 package \code{highcharter}}
 \usage{
 barplotGroupGO_HC(ggo, maxRes = 5, title = "")
 }
 \arguments{
-\item{ggo}{The result of the GO classification, provides either by the 
-function \code{group_GO} in the package \code{DAPAR} or the function 
+\item{ggo}{The result of the GO classification, provides either by the
+function \code{group_GO} in the package \code{DAPAR} or the function
 \code{groupGO} in the package `clusterProfiler`}
 
-\item{maxRes}{An integer which is the maximum number of classes to display 
+\item{maxRes}{An integer which is the maximum number of classes to display
 in the plot}
 
 \item{title}{The title of the plot}
@@ -21,7 +21,19 @@ in the plot}
 A barplot
 }
 \description{
-A barplot of GO classification analysis
+A barplot which shows the result of a GO classification, using the
+package \code{highcharter}
+}
+\examples{
+data(Exp1_R25_prot)
+obj <- Exp1_R25_prot[seq_len(10)]
+univ <- univ_AnnotDbPkg("org.Sc.sgd.db")
+ggo <- group_GO(
+    data = Biobase::fData(obj)$Protein.IDs, idFrom = "UNIPROT",
+    orgdb = "org.Sc.sgd.db", ont = "MF", level = 2
+)
+barplotGroupGO_HC(ego)
+
 }
 \author{
 Samuel Wieczorek

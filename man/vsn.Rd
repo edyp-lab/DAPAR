@@ -12,7 +12,7 @@ vsn(qData, conds, type = NULL)
 \item{conds}{xxx}
 
 \item{type}{"overall" (shift all the sample distributions at once) or
-"within conditions" (shift the sample distributions within each condition 
+"within conditions" (shift the sample distributions within each condition
 at a time).}
 }
 \value{
@@ -22,10 +22,10 @@ A normalized numeric matrix
 Normalisation vsn
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
+data(Exp1_R25_pept)
 qData <- Biobase::exprs(Exp1_R25_pept)
 conds <- Biobase::pData(Exp1_R25_pept)$Condition
-normalized <- vsn(qData, conds, type="overall")
+normalized <- vsn(qData, conds, type = "overall")
 
 }
 \author{

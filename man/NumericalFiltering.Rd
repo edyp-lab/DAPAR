@@ -17,15 +17,16 @@ NumericalFiltering(obj, name = NULL, value = NULL, operator = NULL)
 }
 \value{
 An list of 2 items :
-obj : an object of class \code{MSnSet} in which the lines have been deleted
-deleted : an object of class \code{MSnSet} which contains the deleted lines
+* obj : an object of class \code{MSnSet} in which the lines have been 
+deleted,
+* deleted : an object of class \code{MSnSet} which contains the deleted lines
 }
 \description{
 This function removes lines in the dataset based on numerical conditions.
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-NumericalFiltering(Exp1_R25_pept[1:100], 'A_Count', '6', '==')
+data(Exp1_R25_pept)
+NumericalFiltering(Exp1_R25_pept[seq_len(100)], "A_Count", "6", "==")
 
 }
 \author{

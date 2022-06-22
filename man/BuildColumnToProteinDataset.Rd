@@ -8,35 +8,34 @@
 BuildColumnToProteinDataset(peptideData, matAdj, columnName, proteinNames)
 }
 \arguments{
-\item{peptideData}{A data.frame of meta data of peptides. It is the fData 
+\item{peptideData}{A data.frame of meta data of peptides. It is the fData
 of the MSnset object.}
 
 \item{matAdj}{The adjacency matrix used to agregate the peptides data.}
 
-\item{columnName}{The name of the column in Biobase::fData(peptides_MSnset) that 
-the user wants to keep in the new protein data.frame.}
+\item{columnName}{The name of the column in Biobase::fData(peptides_MSnset)
+that the user wants to keep in the new protein data.frame.}
 
-\item{proteinNames}{The names of the protein in the new dataset 
+\item{proteinNames}{The names of the protein in the new dataset
 (i.e. rownames)}
 }
 \value{
 A vector
 }
 \description{
-This function creates a column for the protein dataset after aggregation 
+This function creates a column for the protein dataset after aggregation
 by using the previous peptide dataset.
 }
 \examples{
-library(MSnbase)
-utils::data(Exp1_R25_pept, package='DAPARdata')
+data(Exp1_R25_pept)
 protID <- "Protein_group_IDs"
-obj.pep <- Exp1_R25_pept[1:10]
+obj.pep <- Exp1_R25_pept[seq_len(10)]
 M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 data <- Biobase::fData(obj.pep)
-protData <- DAPAR::aggregateMean(obj.pep, M)
+protData <- aggregateMean(obj.pep, M)
 name <- "Protein_group_IDs"
 proteinNames <- rownames(Biobase::fData(protData$obj.prot))
-new.col <- BuildColumnToProteinDataset(data, M, name, proteinNames )
+new.col <- BuildColumnToProteinDataset(data, M, name, proteinNames)
 
 }
 \author{

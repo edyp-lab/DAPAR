@@ -18,18 +18,18 @@ impute.pa2(
 
 \item{conditions}{A vector of conditions in the dataset}
 
-\item{q.min}{A quantile value of the observed values allowing defining the 
+\item{q.min}{A quantile value of the observed values allowing defining the
 maximal value which can be generated. This maximal value is defined by the
-quantile q.min of the observed values distribution minus eps. 
+quantile q.min of the observed values distribution minus eps.
 Default is 0 (the maximal value is the minimum of observed values minus eps).}
 
-\item{q.norm}{A quantile value of a normal distribution allowing defining 
-the minimal value which can be generated. Default is 3 (the minimal value 
-is the maximal value minus qn*median(sd(observed values)) where sd is the 
+\item{q.norm}{A quantile value of a normal distribution allowing defining
+the minimal value which can be generated. Default is 3 (the minimal value
+is the maximal value minus qn*median(sd(observed values)) where sd is the
 standard deviation of a row in a condition).}
 
-\item{eps}{A value allowing defining the maximal value which can be 
-generated. This maximal value is defined by the quantile q.min of the 
+\item{eps}{A value allowing defining the maximal value which can be
+generated. This maximal value is defined by the quantile q.min of the
 observed values distribution minus eps. Default is 0.}
 
 \item{distribution}{The type of distribution used. Values are unif or beta.}
@@ -38,12 +38,13 @@ observed values distribution minus eps. Default is 0.}
 The object \code{obj} which has been imputed
 }
 \description{
-This method is a variation to the function \code{impute.pa} from the package 
-\code{imp4p}.
+This method is a variation to the function \code{impute.pa()} from the 
+package \code{imp4p}.
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-obj.imp <- wrapper.impute.pa2(Exp1_R25_pept[1:100], distribution="beta")
+utils::data(Exp1_R25_pept, package = "DAPARdata")
+obj.imp <- wrapper.impute.pa2(Exp1_R25_pept[seq_len(100)], 
+distribution = "beta")
 
 }
 \author{

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plots_boxplot.R
 \name{boxPlotD_HC}
 \alias{boxPlotD_HC}
-\title{Builds a boxplot from a dataframe using the library \code{highcharter}}
+\title{Builds a boxplot from a dataframe using the package \code{highcharter}}
 \usage{
 boxPlotD_HC(
   obj,
@@ -31,17 +31,16 @@ to the number of unique conditions in the dataset.}
 A boxplot
 }
 \description{
-Boxplot for quantitative proteomics data using the library \code{highcharter}
+Builds a boxplot from a dataframe using the package \code{highcharter}
 }
 \examples{
-utils::data(Exp1_R25_prot, package='DAPARdata')
+data(Exp1_R25_prot)
 obj <- Exp1_R25_prot
 conds <- legend <- Biobase::pData(obj)$Condition
 key <- "Protein_IDs"
-boxPlotD_HC(obj, conds, key, legend, NULL, 1:10)
+boxPlotD_HC(obj, conds, key, legend, NULL, seq_len(10))
 pal <- ExtendPalette(length(unique(conds)))
-boxPlotD_HC(obj, conds, key, legend, pal, 1:10)
-
+boxPlotD_HC(obj, conds, key, legend, pal, seq_len(10))
 }
 \author{
 Samuel Wieczorek, Anais Courtier, Enora Fremy

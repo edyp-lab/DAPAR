@@ -19,10 +19,10 @@ Customised contextual menu of highcharts plots
 }
 \examples{
 library("highcharter")
-hc <- highchart() 
-hc_chart(hc,type = "line") 
-hc_add_series(hc,data = c(29, 71, 40))
-dapar_hc_ExportMenu(hc,filename='foo')
+hc <- highchart()
+hc_chart(hc, type = "line")
+hc_add_series(hc, data = c(29, 71, 40))
+dapar_hc_ExportMenu(hc, filename = "foo")
 
 }
 \author{

@@ -17,14 +17,14 @@ my_hc_chart(hc, chartType, zoomType = "None")
 A highchart plot
 }
 \description{
-Customise the resetZoomButton of highcharts plots.
+Customised resetZoomButton of highcharts plots
 }
 \examples{
 library("highcharter")
-hc <- highchart() 
-hc_chart(hc,type = "line") 
-hc_add_series(hc,data = c(29, 71, 40))
-my_hc_ExportMenu(hc,filename='foo')
+hc <- highchart()
+hc_chart(hc, type = "line")
+hc_add_series(hc, data = c(29, 71, 40))
+my_hc_ExportMenu(hc, filename = "foo")
 
 }
 \author{

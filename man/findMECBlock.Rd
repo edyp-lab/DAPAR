@@ -13,11 +13,11 @@ findMECBlock(obj)
 A data.frame that contains the indexes of LAPALA
 }
 \description{
-This method finds the LAPALA in a dataset.
+Finds the LAPALA into a \code{MSnSet} object
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-obj <- Exp1_R25_pept[1:100]
+data(Exp1_R25_pept)
+obj <- Exp1_R25_pept[seq_len(100)]
 lapala <- findMECBlock(obj)
 
 }

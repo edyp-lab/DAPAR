@@ -21,19 +21,24 @@
 #' @author Florence Combes, Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_prot, package = "DAPARdata")
-#' obj <- Exp1_R25_prot[1:1000]
-#' level <- obj@experimentData@other$typeOfData
+#' data(Exp1_R25_prot)
+#' obj <- Exp1_R25_prot[seq_len(1000)]
+#' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 #' ttest <- compute_t_tests(obj$new)
 #'
-#' @importFrom stats t.test
 #'
 #' @export
 #'
 compute_t_tests <- function(obj, contrast = "OnevsOne", type = "Student") {
+    
+    if (!requireNamespace("stats", quietly = TRUE)) {
+        stop("Please install stats: BiocManager::install('stats')")
+    }
+    
+    
     switch(type,
         Student = .type <- TRUE,
         Welch = .type <- FALSE
@@ -66,15 +71,15 @@ compute_t_tests <- function(obj, contrast = "OnevsOne", type = "Student") {
     if (contrast == "OnevsOne") {
         nbComp <- Cond.Nb * (Cond.Nb - 1) / 2
 
-        for (i in 1:(Cond.Nb - 1)) {
-            for (j in (i + 1):Cond.Nb) {
+        for (i in seq_len(Cond.Nb - 1)) {
+            for (j in seq.int(from = (i + 1), to = Cond.Nb)) {
                 c1Indice <- which(Conditions == levels(Conditions.f)[i])
                 c2Indice <- which(Conditions == levels(Conditions.f)[j])
 
                 res.tmp <- apply(
                     qData[, c(c1Indice, c2Indice)], 1,
                     function(x) {
-                        t.test(x ~ Conditions[c(c1Indice, c2Indice)], 
+                        stats::t.test(x ~ Conditions[c(c1Indice, c2Indice)], 
                             var.equal = .type)
                     }
                 )
@@ -106,17 +111,17 @@ compute_t_tests <- function(obj, contrast = "OnevsOne", type = "Student") {
     if (contrast == "OnevsAll") {
         nbComp <- Cond.Nb
 
-        for (i in 1:nbComp) {
+        for (i in seq_len(nbComp)) {
             c1 <- which(Conditions == levels(Conditions.f)[i])
 
-            Cond.t.all <- c(1:length(Conditions))
+            Cond.t.all <- seq_len(length(Conditions))
             Cond.t.all[c1] <- levels(Conditions.f)[i]
             Cond.t.all[-c1] <- "all"
 
             res.tmp <- apply(
                 qData, 1,
                 function(x) {
-                    t.test(x ~ Cond.t.all, var.equal = .type)
+                    stats::t.test(x ~ Cond.t.all, var.equal = .type)
                 }
             )
 

@@ -9,6 +9,14 @@ GetKeyId(obj)
 \arguments{
 \item{obj}{xxx}
 }
+\value{
+xxx
+}
 \description{
 xxxx
+}
+\examples{
+data(Exp1_R25_pept)
+GetKeyId(Exp1_R25_pept)
+
 }

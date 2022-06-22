@@ -12,13 +12,13 @@ wrapper.compareNormalizationD_HC(
 )
 }
 \arguments{
-\item{objBefore}{A dataframe that contains quantitative data before 
+\item{objBefore}{A dataframe that contains quantitative data before
 normalization.}
 
-\item{objAfter}{A dataframe that contains quantitative data after 
+\item{objAfter}{A dataframe that contains quantitative data after
 normalization.}
 
-\item{condsForLegend}{A vector of the conditions (one condition 
+\item{condsForLegend}{A vector of the conditions (one condition
 per sample).}
 
 \item{...}{arguments for palette}
@@ -27,17 +27,18 @@ per sample).}
 A plot
 }
 \description{
-Wrapper to the function that plot to compare the quantitative proteomics 
-data before and after normalization.
+Wrapper to the function that plot to compare the quantitative 
+proteomics data before and after normalization.
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
+data(Exp1_R25_pept)
 obj <- Exp1_R25_pept
-conds <- Biobase::pData(obj)[,"Condition"]
-objAfter <- wrapper.normalizeD(obj = obj, method = "QuantileCentering",  
-conds=conds, type = "within conditions")
+conds <- Biobase::pData(obj)[, "Condition"]
+objAfter <- wrapper.normalizeD(
+obj = obj, method = "QuantileCentering",
+conds = conds, type = "within conditions"
+)
 wrapper.compareNormalizationD_HC(obj, objAfter, conds)
-
 
 }
 \author{

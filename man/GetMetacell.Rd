@@ -9,6 +9,13 @@ GetMetacell(obj)
 \arguments{
 \item{obj}{xxxx}
 }
+\value{
+xxx
+}
 \description{
 xxxx
+}
+\examples{
+NULL
+
 }

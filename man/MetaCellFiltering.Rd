@@ -10,7 +10,7 @@ MetaCellFiltering(obj, indices, cmd, processText = "")
 \item{obj}{An object of class \code{MSnSet} containing
 quantitative data.}
 
-\item{indices}{A vector of integers which are the indices of lines to 
+\item{indices}{A vector of integers which are the indices of lines to
 keep.}
 
 \item{cmd}{xxxx. Available values are: 'delete', 'keep'.}
@@ -22,13 +22,12 @@ object for log.}
 An instance of class \code{MSnSet} that have been filtered.
 }
 \description{
-Filters the lines of \code{Biobase::exprs()} table with conditions on the number
-of missing values.
+#' Filters the lines of \code{Biobase::exprs()} table with conditions on the 
+number of missing values.
 The user chooses the minimum amount of intensities that is acceptable and
 the filter delete lines that do not respect this condition.
 The condition may be on the whole line or condition by condition.
-}
-\details{
+
 The different methods are :
 "WholeMatrix": given a threshold \code{th}, only the lines that contain
 at least \code{th} values are kept.
@@ -38,12 +37,12 @@ at least \code{th} values for each of the conditions are kept.
 at least \code{th} values, and for at least one condition, are kept.
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-obj <- Exp1_R25_pept[1:1000]
-level <- obj@experimentData@other$typeOfData
-metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
+data(Exp1_R25_pept)
+obj <- Exp1_R25_pept[seq_len(100)]
+level <- 'peptide'
+metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 indices <- GetIndices_WholeLine(metacell.mask)
-obj.filter <- MetaCellFiltering(obj, indices, 'delete')
+obj.filter <- MetaCellFiltering(obj, indices, "delete")
 
 }
 \author{

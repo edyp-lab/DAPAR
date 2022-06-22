@@ -7,7 +7,7 @@
 proportionConRev_HC(nBoth = 0, nCont = 0, nRev = 0, lDataset = 0)
 }
 \arguments{
-\item{nBoth}{The number of both contaminants and reverse identified in 
+\item{nBoth}{The number of both contaminants and reverse identified in
 the dataset.}
 
 \item{nCont}{The number of contaminants identified in the dataset.}
@@ -20,7 +20,7 @@ the dataset.}
 A barplot
 }
 \description{
-Plots a barplot of proportion of contaminants and reverse. Same as the 
+Plots a barplot of proportion of contaminants and reverse. Same as the
 function \code{proportionConRev} but uses the package \code{highcharter}
 }
 \examples{

@@ -1,4 +1,8 @@
 
+
+#' @title Volcanoplot of the differential analysis
+#' 
+#' @description 
 #' Plots a volcanoplot after the differential analysis.
 #' Typically, the log of Fold Change is represented on the X-axis and the
 #' log10 of the p-value is drawn on the Y-axis. When the \code{threshold_pVal}
@@ -6,7 +10,6 @@
 #' the y-axis and the X-axis to visually distinguish between differential and
 #' non differential data.
 #'
-#' @title Volcanoplot of the differential analysis
 #' @param logFC A vector of the log(fold change) values of the differential
 #' analysis.
 #' @param pVal A vector of the p-value values returned by the differential
@@ -21,9 +24,9 @@
 #' @return A volcanoplot
 #' @author Florence Combes, Samuel Wieczorek
 #' @examples
-#' utils::data(Exp1_R25_prot, package = "DAPARdata")
-#' obj <- Exp1_R25_prot[1:1000]
-#' level <- obj@experimentData@other$typeOfData
+#' data(Exp1_R25_prot)
+#' obj <- Exp1_R25_prot[seq_len(100)]
+#' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
@@ -34,15 +37,21 @@
 #'
 #' @export
 #'
-#' @import graphics
 #'
 diffAnaVolcanoplot <- function(logFC = NULL,
-                               pVal = NULL,
-                               threshold_pVal = 1e-60,
-                               threshold_logFC = 0,
-                               conditions = NULL,
-                               colors = NULL) {
-    xtitle <- paste("log2 ( mean(", conditions[2], ") / mean(", conditions[1], ") )",
+    pVal = NULL,
+    threshold_pVal = 1e-60,
+    threshold_logFC = 0,
+    conditions = NULL,
+    colors = NULL) {
+    
+    if (!requireNamespace("graphics", quietly = TRUE)) {
+        stop("Please install graphics: BiocManager::install('graphics')")
+    }
+    
+    
+    xtitle <- paste("log2 ( mean(", conditions[2], ") / mean(", 
+        conditions[1], ") )",
         sep = ""
     )
 
@@ -67,7 +76,7 @@ diffAnaVolcanoplot <- function(logFC = NULL,
     colorCode <- c(colors$Out, colors$In)
     color <- rep(colorCode[1], length(y))
 
-    for (i in 1:length(y)) {
+    for (i in seq_len(length(y))) {
         if ((y[i] >= threshold_pVal) && (abs(x[i]) >= threshold_logFC)) {
             color[i] <- colorCode[2]
         }
@@ -88,15 +97,19 @@ diffAnaVolcanoplot <- function(logFC = NULL,
         cex.main = 3
     )
 
-    abline(h = threshold_pVal, col = "gray")
-    abline(v = threshold_logFC, col = "gray")
-    abline(v = -threshold_logFC, col = "gray")
+    graphics::abline(h = threshold_pVal, col = "gray")
+    graphics::abline(v = threshold_logFC, col = "gray")
+    graphics::abline(v = -threshold_logFC, col = "gray")
 
     return(p)
 }
 
 
-#' Plots an interactive volcanoplot after the differential analysis.
+
+#' @title Volcanoplot of the differential analysis
+#' 
+#' @description 
+#' #' Plots an interactive volcanoplot after the differential analysis.
 #' Typically, the log of Fold Change is represented on the X-axis and the
 #' log10 of the p-value is drawn on the Y-axis. When the \code{threshold_pVal}
 #' and the \code{threshold_logFC} are set, two lines are drawn respectively on
@@ -105,7 +118,7 @@ diffAnaVolcanoplot <- function(logFC = NULL,
 #' customizable tooltip appears when the user put the mouse's pointer over
 #' a point of the scatter plot.
 #'
-#' @title Volcanoplot of the differential analysis
+#'
 #' @param df A dataframe which contains the following slots :
 #' x : a vector of the log(fold change) values of the differential analysis,
 #' y : a vector of the p-value values returned by the differential analysis.
@@ -127,11 +140,10 @@ diffAnaVolcanoplot <- function(logFC = NULL,
 #' @return An interactive volcanoplot
 #' @author Samuel Wieczorek
 #' @examples
-#' \dontrun{
 #' library(highcharter)
-#' utils::data(Exp1_R25_prot, package = "DAPARdata")
-#' obj <- Exp1_R25_prot[1:1000]
-#' level <- obj@experimentData@other$typeOfData
+#' data(Exp1_R25_prot)
+#' obj <- Exp1_R25_prot[seq_len(100)]
+#' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
@@ -147,43 +159,50 @@ diffAnaVolcanoplot <- function(logFC = NULL,
 #' df <- cbind(df, Biobase::fData(obj)[, tooltipSlot])
 #' colnames(df) <- gsub(".", "_", colnames(df), fixed = TRUE)
 #' if (ncol(df) > 3) {
-#'     colnames(df)[4:ncol(df)] <-
-#'         paste("tooltip_", colnames(df)[4:ncol(df)], sep = "")
+#'     colnames(df)[seq.int(from = 4, to = ncol(df))] <-
+#'         paste("tooltip_", colnames(df)[seq.int(from = 4, to = ncol(df))],
+#'          sep = "")
 #' }
 #' hc_clickFunction <- JS("function(event) {
 #' Shiny.onInputChange('eventPointClicked',
 #' [this.index]+'_'+ [this.series.name]);}")
 #' cond <- c("25fmol", "10fmol")
 #' diffAnaVolcanoplot_rCharts(df, 2.5, 1, cond, hc_clickFunction)
-#' }
 #'
 #' @export
 #'
 #'
 diffAnaVolcanoplot_rCharts <- function(df,
-                                       threshold_pVal = 1e-60,
-                                       threshold_logFC = 0,
-                                       conditions = NULL,
-                                       clickFunction = NULL,
-                                       pal = NULL) {
-    xtitle <- paste("log2 ( mean(", conditions[2], ") / mean(", conditions[1], ") )", sep = "")
+    threshold_pVal = 1e-60,
+    threshold_logFC = 0,
+    conditions = NULL,
+    clickFunction = NULL,
+    pal = NULL) {
+    xtitle <- paste("log2 ( mean(", conditions[2], ") / mean(", 
+        conditions[1], ") )", sep = "")
 
     if (is.null(clickFunction)) {
         clickFunction <-
-            JS("function(event) {Shiny.onInputChange('eventPointClicked', [this.index]+'_'+ [this.series.name]);}")
+            JS("function(event) {
+                Shiny.onInputChange(
+                'eventPointClicked', 
+                [this.index]+'_'+ [this.series.name]);
+                }")
     }
 
     if (is.null(pal)) {
         pal <- list(In = "orange", Out = "gray")
     } else {
         if (length(pal) != 2) {
-            warning("The palette must be a list of two items: In and Out. Set to default.")
+            warning("The palette must be a list of two items: In and Out. 
+                Set to default.")
             pal <- list(In = "orange", Out = "gray")
         }
     }
 
     df <- cbind(df,
-        g = ifelse(df$y >= threshold_pVal & abs(df$x) >= threshold_logFC, "g1", "g2")
+        g = ifelse(df$y >= threshold_pVal & 
+                abs(df$x) >= threshold_logFC, "g1", "g2")
     )
 
 
@@ -224,7 +243,14 @@ diffAnaVolcanoplot_rCharts <- function(df,
         hc_yAxis(title = list(text = "-log10(pValue)")) %>%
         hc_xAxis(
             title = list(text = "logFC"),
-            plotLines = list(list(color = "grey", width = 1, value = 0, zIndex = 5))
+            plotLines = list(
+                list(
+                    color = "grey", 
+                    width = 1, 
+                    value = 0, 
+                    zIndex = 5
+                    )
+                )
         ) %>%
         hc_tooltip(headerFormat = "", pointFormat = txt_tooltip) %>%
         hc_plotOptions(

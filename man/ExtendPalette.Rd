@@ -9,7 +9,7 @@ ExtendPalette(n = NULL, base = "Set1")
 \arguments{
 \item{n}{The number of desired colors in the palette}
 
-\item{base}{The name of the palette of the package RColorBrewer from which 
+\item{base}{The name of the palette of the package RColorBrewer from which
 the extended palette is built. Default value is 'Set1'.}
 }
 \value{
@@ -21,12 +21,12 @@ The colors in the returned palette are always in the same order
 \examples{
 ExtendPalette(12)
 nPalette <- 10
-par(mfrow=c(nPalette,1))
-par(mar=c(0.5, 4.5, 0.5, 0.5))
-for (i in 1:nPalette){
-  pal <- ExtendPalette(n=i, base = 'Dark2')
-  barplot(1:length(pal), col=pal)
-  print(pal)
+par(mfrow = c(nPalette, 1))
+par(mar = c(0.5, 4.5, 0.5, 0.5))
+for (i in seq_len(nPalette)) {
+    pal <- ExtendPalette(n = i, base = "Dark2")
+    barplot(seq_len(length(pal)), col = pal)
+    print(pal)
 }
 
 }

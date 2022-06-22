@@ -15,7 +15,15 @@ plotJitter_rCharts(df, clickFunction = NULL)
 A plot
 }
 \description{
-Display a jitter plot for CC
+Display a a jitter plot for CC
+}
+\examples{
+data(Exp1_R25_pept)
+obj <- Exp1_R25_pept[seq_len(100)]
+X <- BuildAdjacencyMatrix(obj, "Protein_group_IDs", TRUE)
+ll <- get.pep.prot.cc(X)
+plotJitter_rCharts(ll)
+
 }
 \author{
 Thomas Burger, Samuel Wieczorek

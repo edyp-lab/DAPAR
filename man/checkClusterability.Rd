@@ -2,12 +2,12 @@
 % Please edit documentation in R/clustering.R
 \name{checkClusterability}
 \alias{checkClusterability}
-\title{Prepare the data for subsequent clustering}
+\title{xxx}
 \usage{
 checkClusterability(standards, b = 500)
 }
 \arguments{
-\item{standards}{a matrix or dataframe containing only the standardized 
+\item{standards}{a matrix or dataframe containing only the standardized
 mean intensities returned by the function [standardiseMeanIntensities()]}
 
 \item{b}{Parameter B of the function [gap_cluster()]}
@@ -15,31 +15,32 @@ mean intensities returned by the function [standardiseMeanIntensities()]}
 \value{
 a list of 2 elements:
 * dip_test: the result of the clusterability of the data
-* gap_cluster: the gap statistic obtained with the function 
+* gap_cluster: the gap statistic obtained with the function
 [cluster::clusGap()].
 }
 \description{
 The first step is to standardize the data (with the \code{Mfuzz}
 package). Then the function checks that these data are clusterizable or not
- (use of [diptest::dip.test()] to determine whether the distribution is 
- unimodal or #'  multimodal). Finally, it determines the "optimal" k by 
- the Gap statistic approach.
+(use of [diptest::dip.test()] to determine whether the distribution is
+unimodal or multimodal). Finally, it determines the "optimal" k by
+the Gap statistic approach.
 }
 \examples{
-utils::data(Exp1_R25_prot, package='DAPARdata')
-obj <- Exp1_R25_prot[1:100]
-level <- obj@experimentData@other$typeOfData
-metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
-indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
-obj <- MetaCellFiltering(obj, indices, cmd='delete')
+data(Exp1_R25_prot)
+obj <- Exp1_R25_prot[seq_len(100)]
+level <- 'protein'
+metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
+obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 averaged_means <- averageIntensities(obj$new)
 only_means <- dplyr::select_if(averaged_means, is.numeric)
 only_features <- dplyr::select_if(averaged_means, is.character)
-means <- purrr::map(purrr::array_branch(as.matrix(only_means), 1),mean)
+means <- purrr::map(purrr::array_branch(as.matrix(only_means), 1), mean)
 centered <- only_means - unlist(means)
-centered_means <- dplyr::bind_cols(feature = dplyr::as_tibble(only_features), 
+centered_means <- dplyr::bind_cols(
+feature = dplyr::as_tibble(only_features),
 dplyr::as_tibble(centered))
-checkClust <- checkClusterability(centered_means, b=100)
+checkClust <- checkClusterability(centered_means, b = 100)
 
 }
 \author{

@@ -16,19 +16,27 @@
 #' nPalette <- 10
 #' par(mfrow = c(nPalette, 1))
 #' par(mar = c(0.5, 4.5, 0.5, 0.5))
-#' for (i in 1:nPalette) {
+#' for (i in seq_len(nPalette)) {
 #'     pal <- ExtendPalette(n = i, base = "Dark2")
-#'     barplot(1:length(pal), col = pal)
+#'     barplot(seq_len(length(pal)), col = pal)
 #'     print(pal)
 #' }
 #'
 #' @export
 #'
-#' @importFrom RColorBrewer brewer.pal
-#' @importFrom grDevices colorRampPalette
-#' @importFrom utils combn
-#'
 ExtendPalette <- function(n = NULL, base = "Set1") {
+    
+    if (!requireNamespace("grDevices", quietly = TRUE)) {
+        stop("Please install grDevices: BiocManager::install('grDevices')")
+    }
+    if (!requireNamespace("RColorBrewer", quietly = TRUE)) {
+        stop("Please install RColorBrewer: 
+            BiocManager::install('RColorBrewer')")
+    }
+    if (!requireNamespace("utils", quietly = TRUE)) {
+        stop("Please install utils: BiocManager::install('utils')")
+    }
+    
     pal <- NULL
     nMaxColors <- RColorBrewer::brewer.pal.info[base, "maxcolors"]
     if (is.null(n)) {
@@ -44,11 +52,11 @@ ExtendPalette <- function(n = NULL, base = "Set1") {
         pal <- RColorBrewer::brewer.pal(nMaxColors, base)
         allComb <- utils::combn(pal, 2)
 
-        for (i in 1:(n - nMaxColors)) {
+        for (i in seq_len(n - nMaxColors)) {
             pal <- c(pal, grDevices::colorRampPalette(allComb[, i])(3)[2])
         }
     } else {
-        pal <- RColorBrewer::brewer.pal(nMaxColors, base)[1:n]
+        pal <- RColorBrewer::brewer.pal(nMaxColors, base)[seq_len(n)]
     }
     pal
 }
@@ -72,16 +80,21 @@ ExtendPalette <- function(n = NULL, base = "Set1") {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
+#' data(Exp1_R25_pept)
 #' conditions <- Biobase::pData(Exp1_R25_pept)$Condition
 #' GetColorsForConditions(conditions, ExtendPalette(2))
 #'
 #' @export
 #'
-#' @importFrom RColorBrewer brewer.pal
-#'
 #'
 GetColorsForConditions <- function(conds, pal = NULL) {
+    
+    if (!requireNamespace("RColorBrewer", quietly = TRUE)) {
+        stop("Please install RColorBrewer: 
+            BiocManager::install('RColorBrewer')")
+    }
+    
+    
     if (missing(conds)) {
         stop("'conds' is required")
     }
@@ -96,7 +109,7 @@ GetColorsForConditions <- function(conds, pal = NULL) {
     }
 
     myColors <- NULL
-    for (i in 1:length(conds)) {
+    for (i in seq_len(length(conds))) {
         myColors[i] <- pal[which(conds[i] == unique(conds))]
     }
     return(myColors)

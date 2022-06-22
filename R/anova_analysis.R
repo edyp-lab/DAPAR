@@ -12,9 +12,9 @@
 #' @return A named vector containing all the different values of the aov model
 #'
 #' @examples
-#' utils::data(Exp1_R25_prot, package = "DAPARdata")
-#' obj <- Exp1_R25_prot[1:1000]
-#' level <- obj@experimentData@other$typeOfData
+#' data(Exp1_R25_prot)
+#' obj <- Exp1_R25_prot[seq_len(1000)]
+#' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
@@ -22,15 +22,19 @@
 #'     conditions = as.factor(Biobase::pData(obj$new)$Condition)
 #' ))
 #'
-#' @importFrom stats aov
-#'
 #' @export
 #'
 classic1wayAnova <- function(current_line, conditions) {
+    
+    if (!requireNamespace("stats", quietly = TRUE)) {
+        stop("Please install stats: BiocManager::install('stats')")
+    }
+    
+    
     # vector containing the protein/peptide intensities
     intensities <- unname(unlist(current_line))
     # anova sur ces deux vecteurs
-    aov_test <- aov(formula = intensities ~ conditions, data = NULL)
+    aov_test <- stats::aov(formula = intensities ~ conditions, data = NULL)
     return(aov_test)
 }
 
@@ -60,9 +64,9 @@ classic1wayAnova <- function(current_line, conditions) {
 #' corresponding p-values.
 #'
 #' @examples
-#' utils::data(Exp1_R25_prot, package = "DAPARdata")
-#' obj <- Exp1_R25_prot[1:1000]
-#' level <- obj@experimentData@other$typeOfData
+#' data(Exp1_R25_prot)
+#' obj <- Exp1_R25_prot[seq_len(1000)]
+#' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
@@ -71,12 +75,17 @@ classic1wayAnova <- function(current_line, conditions) {
 #' @seealso [postHocTest()]
 #'
 #' @export
-#' @importFrom dplyr select
 #'
 wrapperClassic1wayAnova <- function(
     obj, 
     with_post_hoc = "No", 
     post_hoc_test = "No") {
+    
+    if (!requireNamespace("dplyr", quietly = TRUE)) {
+        stop("Please install dplyr: BiocManager::install('dplyr')")
+    }
+    
+    
     qData <- Biobase::exprs(obj)
     sTab <- Biobase::pData(obj)
     if (with_post_hoc == "No") {
@@ -102,7 +111,7 @@ wrapperClassic1wayAnova <- function(
                 row.names = rownames(results)
                 ),
             "P_Value" = data.frame(
-                "anova_1way_pval" = results$`Pr(>F)1`, 
+                "anova_1way_pval" = results['Pr(>F)1'], 
                 row.names = rownames(results)
                 )
         )
@@ -120,7 +129,7 @@ wrapperClassic1wayAnova <- function(
                 aov_fits = anova_tests, 
                 post_hoc_test = post_hoc_test
                 )
-        } else if (post_hoc == "Dunnett") {
+        } else if (post_hoc_test == "Dunnett") {
             anova_tests <- t(
                 apply(qData, 1, classic1wayAnova, 
                     conditions = as.factor(sTab$Condition))
@@ -150,9 +159,9 @@ wrapperClassic1wayAnova <- function(
 #' @author Hélène Borges
 #'
 #' @examples
-#' utils::data(Exp1_R25_prot, package = "DAPARdata")
-#' obj <- Exp1_R25_prot[1:1000]
-#' level <- obj@experimentData@other$typeOfData
+#' data(Exp1_R25_prot)
+#' obj <- Exp1_R25_prot[seq_len(1000)]
+#' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
@@ -249,9 +258,9 @@ formatPHResults <- function(post_hoc_models_summaries) {
 #' @author Hélène Borges
 #'
 #' @examples
-#' utils::data(Exp1_R25_prot, package = "DAPARdata")
-#' obj <- Exp1_R25_prot[1:1000]
-#' level <- obj@experimentData@other$typeOfData
+#' data(Exp1_R25_prot)
+#' obj <- Exp1_R25_prot[seq_len(1000)]
+#' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
@@ -294,7 +303,7 @@ postHocTest <- function(aov_fits, post_hoc_test = "TukeyHSD") {
         res <- formatPHResults(dunnett_models_summaries)
     } else {
         stop("Wrong post_hoc_test parameter. Please choose between TukeyHSD or
-             Dunnett.")
+            Dunnett.")
     }
     return(res)
 }

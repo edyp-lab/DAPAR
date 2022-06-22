@@ -2,7 +2,7 @@
 % Please edit documentation in R/metacell.R
 \name{match.metacell}
 \alias{match.metacell}
-\title{Similar to the function \code{is.na} but focused on the equality 
+\title{Similar to the function \code{is.na} but focused on the equality
 with the paramter 'type'.}
 \usage{
 match.metacell(metadata, pattern, level)
@@ -18,14 +18,14 @@ match.metacell(metadata, pattern, level)
 A boolean dataframe
 }
 \description{
-Similar to the function \code{is.na} but focused on the equality with 
-the paramter 'type'.
+Similar to the function \code{is.na} but focused on the equality
+with the paramter 'type'.
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-obj <- Exp1_R25_pept[1:10,]
+data(Exp1_R25_pept)
+obj <- Exp1_R25_pept[seq_len(10), ]
 metadata <- GetMetacell(obj)
-m <- match.metacell(metadata, pattern="missing", level = 'peptide')
+m <- match.metacell(metadata, pattern = "missing", level = "peptide")
 
 }
 \author{

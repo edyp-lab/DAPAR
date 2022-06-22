@@ -5,6 +5,11 @@
 #' @name normalizeMethods.dapar
 #'
 #' @export
+#' 
+#' @return xxx
+#' 
+#' @examples 
+#' normalizeMethods.dapar()
 #'
 normalizeMethods.dapar <- function(withTracking = FALSE) {
     if (withTracking) {
@@ -23,6 +28,10 @@ normalizeMethods.dapar <- function(withTracking = FALSE) {
 
 
 
+
+#' @title Normalisation
+#' 
+#' @description 
 #' Provides several methods to normalize quantitative data from
 #' a \code{MSnSet} object.
 #' They are organized in six main families : GlobalQuantileAlignement,
@@ -35,7 +44,7 @@ normalizeMethods.dapar <- function(withTracking = FALSE) {
 #' (ie line in the \code{Biobase::exprs()} data tab) is computed condition
 #' by condition.
 #'
-#' @title Normalisation
+#'
 #' @param obj An object of class \code{MSnSet}.
 #' @param method One of the following : "GlobalQuantileAlignment" (for
 #' normalizations of important magnitude), "SumByColumns", "QuantileCentering",
@@ -47,7 +56,7 @@ normalizeMethods.dapar <- function(withTracking = FALSE) {
 #' @author Samuel Wieczorek, Thomas Burger, Helene Borges
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
+#' data(Exp1_R25_pept)
 #' conds <- Biobase::pData(Exp1_R25_pept)$Condition
 #' obj <- wrapper.normalizeD(
 #'     obj = Exp1_R25_pept, method = "QuantileCentering",
@@ -55,6 +64,8 @@ normalizeMethods.dapar <- function(withTracking = FALSE) {
 #' )
 #'
 #' @export
+#' 
+#' @return xxx
 #'
 wrapper.normalizeD <- function(obj, method, withTracking = FALSE, ...) {
     if (!(method %in% normalizeMethods.dapar(withTracking))) {
@@ -65,13 +76,25 @@ wrapper.normalizeD <- function(obj, method, withTracking = FALSE, ...) {
     qData <- Biobase::exprs(obj)
 
     switch(method,
-        GlobalQuantileAlignment = Biobase::exprs(obj) <- GlobalQuantileAlignment(qData),
-        SumByColumns = Biobase::exprs(obj) <- SumByColumns(qData, ...),
-        QuantileCentering = Biobase::exprs(obj) <- QuantileCentering(qData, ...),
-        MeanCentering = Biobase::exprs(obj) <- MeanCentering(qData, ...),
-        vsn = Biobase::exprs(obj) <- vsn(qData, ...),
+        GlobalQuantileAlignment = {
+            Biobase::exprs(obj) <- GlobalQuantileAlignment(qData)
+            },
+        SumByColumns = {
+            Biobase::exprs(obj) <- SumByColumns(qData, ...)
+            },
+        QuantileCentering = {
+            Biobase::exprs(obj) <- QuantileCentering(qData, ...)
+            },
+        MeanCentering = {
+            Biobase::exprs(obj) <- MeanCentering(qData, ...)
+            },
+        vsn = {
+            Biobase::exprs(obj) <- vsn(qData, ...)
+            },
         # data must be log-expressed.
-        LOESS = Biobase::exprs(obj) <- LOESS(qData, ...)
+        LOESS = {
+            Biobase::exprs(obj) <- LOESS(qData, ...)
+        }
     )
 
     return(obj)
@@ -91,15 +114,19 @@ wrapper.normalizeD <- function(obj, method, withTracking = FALSE, ...) {
 #' Enora Fremy
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
+#' data(Exp1_R25_pept)
 #' qData <- Biobase::exprs(Exp1_R25_pept)
 #' normalized <- GlobalQuantileAlignment(qData)
 #'
 #' @export
 #'
-#' @importFrom preprocessCore normalize.quantiles
 #'
 GlobalQuantileAlignment <- function(qData) {
+    
+    if (!requireNamespace("preprocessCore", quietly = TRUE)) {
+        stop("Please install preprocessCore: 
+            BiocManager::install('preprocessCore')")
+    }
     e <- preprocessCore::normalize.quantiles(as.matrix(qData))
     return(e)
 }
@@ -124,22 +151,26 @@ GlobalQuantileAlignment <- function(qData) {
 #' Enora Fremy
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
+#' data(Exp1_R25_pept)
 #' qData <- Biobase::exprs(Exp1_R25_pept)
 #' conds <- Biobase::pData(Exp1_R25_pept)$Condition
 #' normalized <- SumByColumns(qData, conds,
 #'     type = "within conditions",
-#'     subset.norm = 1:10
+#'     subset.norm = seq_len(10)
 #' )
 #'
 #' @export
 #'
-#' @importFrom stats median
-#'
 SumByColumns <- function(qData,
-                         conds = NULL,
-                         type = NULL,
-                         subset.norm = NULL) {
+    conds = NULL,
+    type = NULL,
+    subset.norm = NULL) {
+    
+    if (!requireNamespace("stats", quietly = TRUE)) {
+        stop("Please install stats: BiocManager::install('stats')")
+    }
+    
+    
     if (missing(conds)) {
         stop("'conds' is required")
     }
@@ -159,7 +190,7 @@ SumByColumns <- function(qData,
     e <- 2^qData
 
     if (is.null(subset.norm) || length(subset.norm) < 1) {
-        subset.norm <- 1:nrow(qData)
+        subset.norm <- seq_len(nrow(qData))
     }
 
     if (type == "overall") {
@@ -169,7 +200,7 @@ SumByColumns <- function(qData,
             sum_cols <- colSums(e[subset.norm, ], na.rm = TRUE)
         }
 
-        for (i in 1:nrow(e)) {
+        for (i in seq_len(nrow(e))) {
             e[i, ] <- (e[i, ] / sum_cols) * (stats::median(sum_cols))
         }
     } else if (type == "within conditions") {
@@ -182,8 +213,9 @@ SumByColumns <- function(qData,
                 sum_cols <- colSums(e[subset.norm, indices], na.rm = TRUE)
             }
 
-            for (i in 1:nrow(e)) {
-                e[i, indices] <- (e[i, indices] / sum_cols) * stats::median(sum_cols)
+            for (i in seq_len(nrow(e))) {
+                e[i, indices] <- (e[i, indices] / sum_cols) * 
+                    stats::median(sum_cols)
             }
         }
     }
@@ -214,22 +246,24 @@ SumByColumns <- function(qData,
 #' Enora Fremy
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
+#' data(Exp1_R25_pept)
 #' obj <- Exp1_R25_pept
 #' conds <- Biobase::pData(Exp1_R25_pept)$Condition
 #' normalized <- QuantileCentering(Biobase::exprs(obj), conds,
-#'     type = "within conditions", subset.norm = 1:10
+#' type = "within conditions", subset.norm = seq_len(10)
 #' )
 #'
 #' @export
 #'
-#' @importFrom stats quantile
-#'
 QuantileCentering <- function(qData,
-                              conds = NULL,
-                              type = "overall",
-                              subset.norm = NULL,
-                              quantile = 0.15) {
+    conds = NULL,
+    type = "overall",
+    subset.norm = NULL,
+    quantile = 0.15) {
+    
+    if (!requireNamespace("stats", quietly = TRUE)) {
+        stop("Please install stats: BiocManager::install('stats')")
+    }
     if (missing(conds)) {
         stop("'conds' is required")
     }
@@ -247,7 +281,7 @@ QuantileCentering <- function(qData,
     qData <- as.matrix(qData)
 
     if (is.null(subset.norm) || length(subset.norm) < 1) {
-        subset.norm <- 1:nrow(qData)
+        subset.norm <- seq_len(nrow(qData))
     }
 
     q <- function(x) {
@@ -301,7 +335,7 @@ QuantileCentering <- function(qData,
 #' Enora Fremy
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
+#' data(Exp1_R25_pept)
 #' qData <- Biobase::exprs(Exp1_R25_pept)
 #' conds <- Biobase::pData(Exp1_R25_pept)$Condition
 #' normalized <- MeanCentering(qData, conds, type = "overall")
@@ -309,10 +343,10 @@ QuantileCentering <- function(qData,
 #' @export
 #'
 MeanCentering <- function(qData,
-                          conds,
-                          type = "overall",
-                          subset.norm = NULL,
-                          scaling = FALSE) {
+    conds,
+    type = "overall",
+    subset.norm = NULL,
+    scaling = FALSE) {
     if (missing(conds)) {
         stop("'conds' is required")
     }
@@ -320,7 +354,7 @@ MeanCentering <- function(qData,
     qData <- as.matrix(qData)
 
     if (is.null(subset.norm) || length(subset.norm) < 1) {
-        subset.norm <- 1:nrow(qData)
+        subset.norm <- seq_len(nrow(qData))
     }
 
     if (length(subset.norm) == 1) {
@@ -369,7 +403,7 @@ MeanCentering <- function(qData,
 #' @author Thomas Burger, Helene Borges, Anais Courtier, Enora Fremy
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
+#' data(Exp1_R25_pept)
 #' qData <- Biobase::exprs(Exp1_R25_pept)
 #' conds <- Biobase::pData(Exp1_R25_pept)$Condition
 #' normalized <- vsn(qData, conds, type = "overall")
@@ -417,16 +451,19 @@ vsn <- function(qData, conds, type = NULL) {
 #' @author Thomas Burger, Helene Borges, Anais Courtier, Enora Fremy
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
+#' data(Exp1_R25_pept)
 #' qData <- Biobase::exprs(Exp1_R25_pept)
 #' conds <- Biobase::pData(Exp1_R25_pept)$Condition
 #' normalized <- LOESS(qData, conds, type = "overall")
 #'
-#' @importFrom limma normalizeCyclicLoess
-#'
 #' @export
 #'
 LOESS <- function(qData, conds, type = "overall", span = 0.7) {
+    
+    if (!requireNamespace("limma", quietly = TRUE)) {
+        stop("Please install limma: BiocManager::install('limma')")
+    }
+    
     if (missing(conds)) {
         stop("'conds' is required")
     }

@@ -26,17 +26,18 @@ Partial Observed Values for each replicate in the dataset.
 The colors correspond to the different conditions (slot Condition in in the
 dataset of class \code{MSnSet}).
 The x-axis represent the mean of intensity for one condition and one
-entity in the dataset (i. e. a protein) 
+entity in the dataset (i. e. a protein)
 whereas the y-axis count the number of observed values for this entity
 and the considered condition.
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-obj <- Exp1_R25_pept[1:100]
-hc_mvTypePlot2(obj, pattern = 'missing MEC', title="POV distribution")
+data(Exp1_R25_pept)
+obj <- Exp1_R25_pept[seq_len(100)]
+hc_mvTypePlot2(obj, pattern = "missing MEC", title = "POV distribution")
 conds <- Biobase::pData(obj)$Condition
-pal <- ExtendPalette(length(unique(conds)), 'Dark2')
-hc_mvTypePlot2(obj, pattern = 'missing MEC', title="POV distribution", pal=pal)
+pal <- ExtendPalette(length(unique(conds)), "Dark2")
+hc_mvTypePlot2(obj, pattern = "missing MEC", title = "POV distribution", 
+pal = pal)
 
 }
 \author{

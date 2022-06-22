@@ -18,37 +18,13 @@ wrapper.corrMatrixD_HC(obj, rate = 0.5, showValues = TRUE)
 A colored correlation matrix
 }
 \description{
-#' Builds a correlation matrix based on a \code{MSnSet} object.
-#' 
-#' @title Displays a correlation matrix of the quantitative data of the
-#' \code{Biobase::exprs()} table
-#' 
-#' @param obj An object of class \code{MSnSet}.
-#' 
-#' @param rate A float that defines the gradient of colors.
-#' 
-#' @return A colored correlation matrix
-#' 
-#' @author Alexia Dorffer
-#' 
-#' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' wrapper.corrMatrixD(Exp1_R25_pept)
-#' 
-#' 
-#' @export
-#' 
-wrapper.corrMatrixD <- function(obj, rate=5){
-  qData <- Biobase::exprs(obj)
-  samplesData <- Biobase::pData(obj)
-  corrMatrixD(qData, samplesData, rate)
-}
 Builds a correlation matrix based on a \code{MSnSet} object.
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
+data(Exp1_R25_pept)
 wrapper.corrMatrixD_HC(Exp1_R25_pept)
- 
+
+
 }
 \author{
 Samuel Wieczorek

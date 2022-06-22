@@ -11,21 +11,20 @@ BuildAdjacencyMatrix(obj.pep, protID, unique = TRUE)
 
 \item{protID}{The name of proteins ID column}
 
-\item{unique}{A boolean to indicate whether only the unique peptides must 
-be considered (TRUE) or if the shared peptides have to 
-be integrated (FALSE).}
+\item{unique}{A boolean to indicate whether only the unique peptides must
+be considered (TRUE) or if the shared peptides have to be integrated (FALSE).}
 }
 \value{
 A binary matrix
 }
 \description{
-Method to create a binary matrix with proteins in columns and peptides 
+Method to create a binary matrix with proteins in columns and peptides
 in lines on a \code{MSnSet} object (peptides)
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-protId <- Exp1_R25_pept@experimentData@other$proteinId
-BuildAdjacencyMatrix(Exp1_R25_pept[1:10], protId, TRUE)
+data(Exp1_R25_pept)
+protId <- "Protein_group_IDs"
+BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(10)], protId, TRUE)
 
 }
 \author{

@@ -10,10 +10,10 @@ corrMatrixD_HC(object, samplesData = NULL, rate = 0.5, showValues = TRUE)
 \arguments{
 \item{object}{The result of the \code{cor} function.}
 
-\item{samplesData}{A dataframe in which lines correspond to samples and 
+\item{samplesData}{A dataframe in which lines correspond to samples and
 columns to the meta-data for those samples.}
 
-\item{rate}{The rate parameter to control the exponential law for 
+\item{rate}{The rate parameter to control the exponential law for
 the gradient of colors}
 
 \item{showValues}{xxx}
@@ -22,13 +22,14 @@ the gradient of colors}
 A colored correlation matrix
 }
 \description{
-Correlation matrix based on a \code{MSnSet} object.
+Displays a correlation matrix of the quantitative data of the
+\code{Biobase::exprs()} table.
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
+data(Exp1_R25_pept)
 qData <- Biobase::exprs(Exp1_R25_pept)
 samplesData <- Biobase::pData(Exp1_R25_pept)
-res <- cor(qData,use = 'pairwise.complete.obs')
+res <- cor(qData, use = "pairwise.complete.obs")
 corrMatrixD_HC(res, samplesData)
 
 }

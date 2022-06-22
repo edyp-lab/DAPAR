@@ -7,8 +7,8 @@
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' obj <- Exp1_R25_pept[1:100]
+#' data(Exp1_R25_pept)
+#' obj <- Exp1_R25_pept[seq_len(100)]
 #' lapala <- findMECBlock(obj)
 #'
 #' @export
@@ -20,7 +20,7 @@ findMECBlock <- function(obj) {
 
     s <- data.frame()
 
-    for (cond in 1:nbCond) {
+    for (cond in seq_len(nbCond)) {
         ind <- which(Biobase::pData(obj)$Condition == conditions[cond])
         lNA <- which(
             apply(is.na(Biobase::exprs(obj)[, ind]), 1, sum) == length(ind))
@@ -50,8 +50,8 @@ findMECBlock <- function(obj) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' obj <- Exp1_R25_pept[1:100]
+#' data(Exp1_R25_pept)
+#' obj <- Exp1_R25_pept[seq_len(100)]
 #' lapala <- findMECBlock(obj)
 #' obj <- wrapper.impute.detQuant(obj, na.type = "missing")
 #' obj <- reIntroduceMEC(obj, lapala)
@@ -60,7 +60,7 @@ findMECBlock <- function(obj) {
 #'
 #'
 reIntroduceMEC <- function(obj, MECIndex) {
-    for (i in 1:nrow(MECIndex))
+    for (i in seq_len(nrow(MECIndex)))
     {
         .cond <- Biobase::pData(obj)$Condition
         conditions <- unique(.cond)
@@ -72,14 +72,13 @@ reIntroduceMEC <- function(obj, MECIndex) {
 
 
 
-#' This method is a wrapper for
-#' objects of class \code{MSnSet} and imputes missing values with a fixed value.
-#' This function imputes the missing values condition by condition.
-#'
+
 #' @title KNN missing values imputation from a \code{MSnSet} object
 #'
 #' @description
-#' Can impute only POV missing values
+#' Can impute only POV missing values. This method is a wrapper for
+#' objects of class \code{MSnSet} and imputes missing values with a fixed value.
+#' This function imputes the missing values condition by condition.
 #'
 #' @param obj An object of class \code{MSnSet}.
 #'
@@ -93,9 +92,9 @@ reIntroduceMEC <- function(obj, MECIndex) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
+#' data(Exp1_R25_pept)
 #' obj.imp.pov <- wrapper.impute.KNN(
-#'     obj = Exp1_R25_pept[1:10], K = 3,
+#'     obj = Exp1_R25_pept[seq_len(10)], K = 3,
 #'     na.type = "missing POV"
 #' )
 #'
@@ -103,7 +102,11 @@ reIntroduceMEC <- function(obj, MECIndex) {
 #'
 #'
 wrapper.impute.KNN <- function(obj = NULL, K, na.type) {
-    # require(impute)
+
+    if (!requireNamespace("impute", quietly = TRUE)) {
+        stop("Please install impute: BiocManager::install('impute')")
+    }
+    
     if (missing(obj)) {
         stop("'obj' is required.")
     } else if (is.null(obj)) {
@@ -120,7 +123,7 @@ wrapper.impute.KNN <- function(obj = NULL, K, na.type) {
     conditions <- unique(Biobase::pData(obj)$Condition)
     nbCond <- length(conditions)
 
-    for (cond in 1:nbCond) {
+    for (cond in seq_len(nbCond)) {
         ind <- which(Biobase::pData(obj)$Condition == conditions[cond])
         resKNN <- impute::impute.knn(
             Biobase::exprs(obj)[, ind], 
@@ -128,7 +131,7 @@ wrapper.impute.KNN <- function(obj = NULL, K, na.type) {
             rowmax = 0.99, 
             colmax = 0.99, 
             maxp = 1500, 
-            rng.seed = sample(1:1000, 1)
+            rng.seed = sample(seq_len(1000), 1)
             )
         Biobase::exprs(obj)[, ind] <- resKNN[[1]]
     }
@@ -141,10 +144,13 @@ wrapper.impute.KNN <- function(obj = NULL, K, na.type) {
 
 
 
-#' This method is a wrapper to
-#' objects of class \code{MSnSet} and imputes missing values with a fixed value.
-#'
+
 #' @title Missing values imputation from a \code{MSnSet} object
+#' 
+#' @description 
+#' This method is a wrapper to objects of class \code{MSnSet} and imputes 
+#' missing values with a fixed value.
+#'
 #'
 #' @param obj An object of class \code{MSnSet}.
 #'
@@ -158,8 +164,8 @@ wrapper.impute.KNN <- function(obj = NULL, K, na.type) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' obj <- Exp1_R25_pept[1:10, ]
+#' data(Exp1_R25_pept)
+#' obj <- Exp1_R25_pept[seq_len(10), ]
 #' obj.imp.pov <- wrapper.impute.fixedValue(obj, 0.001, na.type = "missing POV")
 #' obj.imp.mec <- wrapper.impute.fixedValue(obj, 0.001, na.type = "missing MEC")
 #' obj.imp.na <- wrapper.impute.fixedValue(obj, 0.001, na.type = "missing")
@@ -196,14 +202,17 @@ wrapper.impute.fixedValue <- function(obj, fixVal = 0, na.type) {
 
 
 
+
+#' @title Imputation of peptides having no values in a biological condition.
+#' 
+#' @description 
 #' This method is a wrapper to the function \code{impute.pa} of the package
 #' \code{imp4p} adapted to an object of class \code{MSnSet}.
 #'
-#' @title Imputation of peptides having no values in a biological condition.
 #'
 #' @param obj An object of class \code{MSnSet}.
 #'
-#' @param q.min Same as the function \code{impute.pa} in the package
+#' @param q.min Same as the function \code{impute.pa()} in the package
 #' \code{imp4p}
 #'
 #' @param na.type A string which indicates the type of missing values to impute.
@@ -215,18 +224,23 @@ wrapper.impute.fixedValue <- function(obj, fixVal = 0, na.type) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' obj <- Exp1_R25_pept[1:10]
-#' level <- obj@experimentData@other$typeOfData
+#' data(Exp1_R25_prot)
+#' obj <- Exp1_R25_prot[seq_len(10)]
+#' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj.imp.pov <- wrapper.impute.pa(obj, na.type = "missing POV")
 #'
 #' @export
 #'
-#' @importFrom imp4p impute.pa
 #'
 wrapper.impute.pa <- function(obj = NULL, q.min = 0.025, na.type) {
+    
+    if (!requireNamespace("imp4p", quietly = TRUE)) {
+        stop("Please install imp4p: BiocManager::install('imp4p')")
+    }
+    
+    
     if (is.null(obj)) {
         stop("'obj' is required.")
     }
@@ -240,7 +254,7 @@ wrapper.impute.pa <- function(obj = NULL, q.min = 0.025, na.type) {
     }
 
     cond <- as.factor(Biobase::pData(obj)$Condition)
-    res <- impute.pa(
+    res <- imp4p::impute.pa(
         Biobase::exprs(obj), 
         conditions = cond, 
         q.min = q.min, 
@@ -257,10 +271,13 @@ wrapper.impute.pa <- function(obj = NULL, q.min = 0.025, na.type) {
 
 
 
-#' This method is a wrapper of the function `impute.detQuant` for objects
-#' of class \code{MSnSet}
+
 #'
-#' @title Wrapper of the function `impute.detQuant` for objects
+#' @title Wrapper of the function `impute.detQuant()` for objects
+#' of class \code{MSnSet}
+#' 
+#' @description
+#' This method is a wrapper of the function `impute.detQuant()` for objects
 #' of class \code{MSnSet}
 #'
 #' @param obj An instance of class \code{MSnSet}
@@ -278,8 +295,8 @@ wrapper.impute.pa <- function(obj = NULL, q.min = 0.025, na.type) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' obj <- Exp1_R25_pept[1:10]
+#' data(Exp1_R25_pept)
+#' obj <- Exp1_R25_pept[seq_len(10)]
 #' obj.imp.pov <- wrapper.impute.detQuant(obj, na.type = "missing POV")
 #' obj.imp.mec <- wrapper.impute.detQuant(obj, na.type = "missing MEC")
 #' obj.imp.na <- wrapper.impute.detQuant(obj, na.type = "missing")
@@ -313,7 +330,7 @@ wrapper.impute.detQuant <- function(obj, qval = 0.025, factor = 1, na.type) {
 
     qdata <- Biobase::exprs(obj)
     values <- getQuantile4Imp(qdata, qval, factor)
-    for (i in 1:ncol(qdata)) {
+    for (i in seq_len(ncol(qdata))) {
         col <- qdata[, i]
         .names <- obj@experimentData@other$names_metacell
         ind.na.type <- match.metacell(Biobase::fData(obj)[, .names[i]],
@@ -357,8 +374,8 @@ wrapper.impute.detQuant <- function(obj, qval = 0.025, factor = 1, na.type) {
 #' @author Thomas Burger
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' qdata <- Biobase::exprs(Exp1_R25_pept)
+#' data(Exp1_R25_prot)
+#' qdata <- Biobase::exprs(Exp1_R25_prot)
 #' quant <- getQuantile4Imp(qdata)
 #'
 #' @export
@@ -371,10 +388,13 @@ getQuantile4Imp <- function(qdata, qval = 0.025, factor = 1) {
 
 
 
-#' This method is a wrapper to the function \code{impute.slsa} of the package
+
+#' @title Imputation of peptides having no values in a biological condition.
+#' 
+#' @description 
+#' This method is a wrapper to the function \code{impute.slsa()} of the package
 #' \code{imp4p} adapted to an object of class \code{MSnSet}.
 #'
-#' @title Imputation of peptides having no values in a biological condition.
 #'
 #' @param obj An object of class \code{MSnSet}.
 #'
@@ -387,14 +407,20 @@ getQuantile4Imp <- function(qdata, qval = 0.025, factor = 1) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' obj <- Exp1_R25_pept[1:100]
+#' data(Exp1_R25_pept)
+#' obj <- Exp1_R25_pept[seq_len(100)]
 #' obj.slsa.pov <- wrapper.impute.slsa(obj, na.type = "missing POV")
 #'
 #' @export
 #'
 #'
 wrapper.impute.slsa <- function(obj = NULL, na.type = NULL) {
+    
+    if (!requireNamespace("imp4p", quietly = TRUE)) {
+        stop("Please install imp4p: BiocManager::install('imp4p')")
+    }
+    
+    
     if (is.null(obj)) {
         stop("'obj' is required.")
     }

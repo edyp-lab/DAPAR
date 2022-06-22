@@ -2,7 +2,8 @@
 % Please edit documentation in R/anova_analysis.R
 \name{classic1wayAnova}
 \alias{classic1wayAnova}
-\title{Function to perform a One-way Anova statistical test on a MsnBase dataset}
+\title{Function to perform a One-way Anova statistical test on a MsnBase 
+dataset}
 \usage{
 classic1wayAnova(current_line, conditions)
 }
@@ -17,17 +18,19 @@ studied factor}
 A named vector containing all the different values of the aov model
 }
 \description{
-Function to perform a One-way Anova statistical test on a MsnBase dataset
+Function to perform a One-way Anova statistical test on a MsnBase 
+dataset
 }
 \examples{
-utils::data(Exp1_R25_prot, package='DAPARdata')
-obj <- Exp1_R25_prot[1:1000]
-level <- obj@experimentData@other$typeOfData
-metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
-indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
-obj <- MetaCellFiltering(obj, indices, cmd='delete')
-anova_tests <- t(apply(Biobase::exprs(obj$new), 1, classic1wayAnova, 
-conditions=as.factor(Biobase::pData(obj$new)$Condition)))
+data(Exp1_R25_prot)
+obj <- Exp1_R25_prot[seq_len(1000)]
+level <- 'protein'
+metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
+obj <- MetaCellFiltering(obj, indices, cmd = "delete")
+anova_tests <- t(apply(Biobase::exprs(obj$new), 1, classic1wayAnova,
+    conditions = as.factor(Biobase::pData(obj$new)$Condition)
+))
 
 }
 \author{

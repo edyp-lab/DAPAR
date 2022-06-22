@@ -7,21 +7,20 @@
 CountPep(M)
 }
 \arguments{
-\item{M}{A "valued" adjacency matrix in which lines and columns correspond 
+\item{M}{A "valued" adjacency matrix in which lines and columns correspond
 respectively to peptides and proteins.}
 }
 \value{
-A vector of boolean which is the adjacency matrix 
+A vector of boolean which is the adjacency matrix
 but with NA values if they exist in the intensity matrix.
 }
 \description{
 This function computes the number of peptides used to aggregate proteins.
 }
 \examples{
-library(DAPARdata)
-utils::data(Exp1_R25_pept)
+data(Exp1_R25_pept)
 protID <- "Protein_group_IDs"
-M <- BuildAdjacencyMatrix(Exp1_R25_pept[1:10], protID, FALSE)
+M <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(10)], protID, FALSE)
 CountPep(M)
 
 }

@@ -15,6 +15,10 @@ A string
 \description{
 Build the text information for the filtering process
 }
+\examples{
+getTextForFiltering(list(filename = "foo.msnset"))
+
+}
 \author{
 Samuel Wieczorek
 }

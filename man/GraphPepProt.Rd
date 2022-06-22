@@ -18,8 +18,8 @@ Method to create a plot with proteins and peptides on
 a MSnSet object (peptides)
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-mat <- BuildAdjacencyMatrix(Exp1_R25_pept[1:10], "Protein_group_IDs")
+data(Exp1_R25_pept)
+mat <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(10)], "Protein_group_IDs")
 GraphPepProt(mat)
 
 }

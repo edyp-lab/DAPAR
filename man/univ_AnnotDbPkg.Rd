@@ -2,7 +2,7 @@
 % Please edit documentation in R/bioAnalysis.R
 \name{univ_AnnotDbPkg}
 \alias{univ_AnnotDbPkg}
-\title{Returns the totality of ENTREZ ID (gene id) of an OrgDb annotation 
+\title{Returns the totality of ENTREZ ID (gene id) of an OrgDb annotation
 package. Careful : org.Pf.plasmo.db : no ENTREZID but ORF}
 \usage{
 univ_AnnotDbPkg(orgdb)
@@ -14,10 +14,15 @@ univ_AnnotDbPkg(orgdb)
 A vector of ENTREZ ID
 }
 \description{
-Function to compute the "universe" argument for the \code{enrich_GO} 
-function, in case this latter should be the entire organism. 
-Returns all the ID of the OrgDb annotation package for the corresponding 
+Function to compute the `universe` argument for the \code{enrich_GO}
+function, in case this latter should be the entire organism.
+Returns all the ID of the OrgDb annotation package for the corresponding
 organism.
+}
+\examples{
+orgdb <- "org.Sc.sgd.db"
+univ_AnnotDbPkg(orgdb)
+
 }
 \author{
 Florence Combes

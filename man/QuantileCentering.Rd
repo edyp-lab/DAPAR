@@ -18,13 +18,13 @@ QuantileCentering(
 \item{conds}{xxx}
 
 \item{type}{"overall" (shift all the sample distributions at once) or
-"within conditions" (shift the sample distributions within each 
+"within conditions" (shift the sample distributions within each
 condition at a time).}
 
-\item{subset.norm}{A vector of index indicating rows to be used for 
+\item{subset.norm}{A vector of index indicating rows to be used for
 normalization}
 
-\item{quantile}{A float that corresponds to the quantile used to 
+\item{quantile}{A float that corresponds to the quantile used to
 align the data.}
 }
 \value{
@@ -34,14 +34,15 @@ A normalized numeric matrix
 Normalisation QuantileCentering
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
+data(Exp1_R25_pept)
 obj <- Exp1_R25_pept
 conds <- Biobase::pData(Exp1_R25_pept)$Condition
-normalized <- QuantileCentering(Biobase::exprs(obj), conds, 
-type="within conditions", subset.norm=1:10)
+normalized <- QuantileCentering(Biobase::exprs(obj), conds,
+type = "within conditions", subset.norm = seq_len(10)
+)
 
 }
 \author{
-Samuel Wieczorek, Thomas Burger, Helene Borges, Anais Courtier, 
+Samuel Wieczorek, Thomas Burger, Helene Borges, Anais Courtier,
 Enora Fremy
 }

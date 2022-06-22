@@ -1,7 +1,13 @@
 Package: DAPAR
 Type: Package
 Title: Tools for the Differential Analysis of Proteins Abundance with R
-Version: 1.28.1
+Description: The package DAPAR is a Bioconductor distributed R package which 
+    provides all the necessary functions to analyze quantitative data from 
+    label-free proteomics experiments. 
+    Contrarily to most other similar R packages, it is endowed with rich and 
+    user-friendly graphical interfaces, so that no programming skill is 
+    required (see `Prostar` package).
+Version: 1.28.2
 Date: 2022-06-17
 Authors@R: c(person(given = "Samuel", family = "Wieczorek",
             email = "samuel.wieczorek@cea.fr",
@@ -21,26 +27,22 @@ Authors@R: c(person(given = "Samuel", family = "Wieczorek",
     	person(given = "Helene", family ="Borges",
             email = "helene.borges@cea.fr",
     role = "ctb"))
-Description: This package contains a collection of functions for the
-    visualisation and the statistical analysis of proteomic data.
 License: Artistic-2.0
 VignetteBuilder: knitr
 Depends: R (>= 4.2.0)
-Suggests: BiocGenerics, testthat, BiocStyle, AnnotationDbi, clusterProfiler,
-          diptest, cluster, vioplot, visNetwork, vsn, igraph,
+Suggests: testthat, BiocStyle, AnnotationDbi, clusterProfiler,
+          diptest, cluster, vioplot, visNetwork, vsn, igraph,  
           FactoMineR, factoextra, dendextend, foreach, parallel, doParallel, 
-          Mfuzz, apcluster, forcats, readxl, openxlsx, multcomp, purrr
-Imports: Biobase, MSnbase, tibble, RColorBrewer, stats, preprocessCore, Cairo, png,
-        lattice, reshape2, gplots, pcaMethods, ggplot2,
-        limma, knitr, tmvtnorm, norm, impute, stringr,
-        grDevices, graphics, utils, cp4p
-        (>= 0.3.5), scales, Matrix, imp4p (>= 1.1), methods, 
-        DAPARdata (>= 1.23.4), siggenes, graph, lme4, highcharter,
-        dplyr, tidyr, tidyverse, igraph
+          Mfuzz, apcluster, forcats, readxl, openxlsx, multcomp, purrr, tibble,
+           knitr, norm, scales, tidyverse, cp4p, imp4p (>= 1.1),lme4,
+           dplyr, limma, preprocessCore, stringr, tidyr, impute, gplots,
+           grDevices, reshape2, graphics, stats, methods, ggplot2, 
+           RColorBrewer, Matrix, DAPARdata
+Imports: Biobase, MSnbase, utils, highcharter 
 biocViews: Proteomics, Normalization, Preprocessing, MassSpectrometry,
         QualityControl, GO, DataImport
 NeedsCompilation: no
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 Packaged: 2017-10-13 11:13:04 UTC; sw175264
 Encoding: UTF-8
 URL: http://www.prostar-proteomics.org/

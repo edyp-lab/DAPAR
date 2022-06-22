@@ -55,6 +55,13 @@
 #' @author Thomas Burger, Samuel Wieczorek
 #'
 #' @export
+#' 
+#' @return xxx
+#' 
+#' @examples 
+#' metacell.def('protein')
+#' metacell.def('peptide')
+#' 
 #'
 metacell.def <- function(level) {
     if (missing(level)) {
@@ -144,7 +151,7 @@ metacell.def <- function(level) {
 
     def <- cbind(def, color = rep("white", nrow(def)))
 
-    for (n in 1:nrow(def)) {
+    for (n in seq_len(nrow(def))) {
         def[n, "color"] <- colors[[def[n, "node"]]]
     }
 
@@ -171,9 +178,11 @@ metacell.def <- function(level) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' obj <- Exp1_R25_pept[1:10]
-#' cols.for.ident <- obj@experimentData@other$names_metacell
+#' data(Exp1_R25_pept)
+#' obj <- Exp1_R25_pept[seq_len(10)]
+#' cols.for.ident <- c("metacell_Intensity_C_R1", "metacell_Intensity_C_R2",
+#' "metacell_Intensity_C_R3", "metacell_Intensity_D_R1",
+#' "metacell_Intensity_D_R2", "metacell_Intensity_D_R3")
 #' conds <- Biobase::pData(obj)$Condition
 #' df <- Biobase::fData(obj)[, cols.for.ident]
 #' df <- Set_POV_MEC_tags(conds, df, level = "peptide")
@@ -184,7 +193,7 @@ metacell.def <- function(level) {
 Set_POV_MEC_tags <- function(conds, df, level) {
     u_conds <- unique(conds)
 
-    for (i in 1:length(u_conds)) {
+    for (i in seq_len(length(u_conds))) {
         ind.samples <- which(conds == u_conds[i])
 
         ind.imputed <- match.metacell(df[, ind.samples], "imputed", level)
@@ -240,8 +249,8 @@ Set_POV_MEC_tags <- function(conds, df, level) {
 #'     stringsAsFactors = FALSE
 #' )
 #' conds <- metadata$Condition
-#' qdata <- data[, 56:61]
-#' df <- data[, 43:48]
+#' qdata <- data[, seq.int(from = 56, to = 61)]
+#' df <- data[, seq.int(from = 43, to = 48)]
 #' df <- BuildMetaCell(
 #'     from = "maxquant", level = "peptide", qdata = qdata,
 #'     conds = conds, df = df
@@ -255,10 +264,10 @@ Set_POV_MEC_tags <- function(conds, df, level) {
 #'
 #'
 BuildMetaCell <- function(from,
-                          level,
-                          qdata = NULL,
-                          conds = NULL,
-                          df = NULL) {
+    level,
+    qdata = NULL,
+    conds = NULL,
+    df = NULL) {
     if (missing(from)) {
         stop("'from' is required.")
     }
@@ -295,8 +304,8 @@ BuildMetaCell <- function(from,
 #' In the quantitative columns, a missing value is identified by no value rather
 #' than a value equal to 0.
 #' Conversion rules
-#' Quanti			Tag
-#' NA or 0		NA
+#' QuantiTag
+#' NA or 0 NA
 #'
 #'
 #' @param qdata An object of class \code{MSnSet}
@@ -320,8 +329,8 @@ BuildMetaCell <- function(from,
 #'     stringsAsFactors = FALSE
 #' )
 #' conds <- metadata$Condition
-#' qdata <- data[1:100, 56:61]
-#' df <- data[1:100, 43:48]
+#' qdata <- data[seq_len(100), seq.int(from = 56, to = 61)]
+#' df <- data[seq_len(100), seq.int(from = 43, to = 48)]
 #' df <- Metacell_generic(qdata, conds, level = "peptide")
 #'
 #' @export
@@ -370,10 +379,10 @@ Metacell_generic <- function(qdata, conds, level) {
 #' |--------------|-----------------|-----|
 #' | Quanti       |    PSM count    | Tag |
 #' |--------------|-----------------|-----|
-#' |  == 0 | N.A.	|   whatever 			| 2.0 |
-#' |  > 0		  		|    > 0		     	| 1.1 |
-#' |  > 0		  		|    == 0	      	| 1.2 |
-#' |  > 0		  		|   unknown col   | 1.0 |
+#' |  == 0 | N.A. |   whatever      | 2.0 |
+#' |  > 0         |    > 0          | 1.1 |
+#' |  > 0         |    == 0         | 1.2 |
+#' |  > 0         |   unknown col   | 1.0 |
 #' |--------------|-----------------|-----|
 #'
 #' @param qdata An object of class \code{MSnSet}
@@ -389,7 +398,6 @@ Metacell_generic <- function(qdata, conds, level) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' \dontrun{
 #' file <- system.file("extdata", "Exp1_R25_pept.txt", package = "DAPARdata")
 #' data <- read.table(file, header = TRUE, sep = "\t", stringsAsFactors = FALSE)
 #' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt",
@@ -400,10 +408,10 @@ Metacell_generic <- function(qdata, conds, level) {
 #'     stringsAsFactors = FALSE
 #' )
 #' conds <- metadata$Condition
-#' qdata <- data[1:100, 56:61]
-#' df <- data[1:100, 43:48]
+#' qdata <- data[seq_len(100), seq.int(from = 56, to = 61)]
+#' df <- data[seq_len(100), seq.int(from = 43, to = 48)]
 #' df <- Metacell_proline(qdata, conds, df, level = "peptide")
-#' }
+#' 
 #'
 #' @export
 #'
@@ -452,10 +460,10 @@ Metacell_proline <- function(qdata, conds, df, level = NULL) {
 #' |------------|-----------------------|--------|
 #' | Quanti     |     Identification    |    Tag |
 #' |------------|-----------------------|--------|
-#' |  == 0			|       whatever 				|    2.0 |
-#' |  > 0				|       'By MS/MS'			|    1.1 |
-#' |  > 0				|      'By matching'		|    1.2 |
-#' |  > 0				|       unknown col			|    1.0 |
+#' |  == 0      |       whatever        |    2.0 |
+#' |  > 0       |       'By MS/MS'      |    1.1 |
+#' |  > 0       |      'By matching'    |    1.2 |
+#' |  > 0       |       unknown col     |    1.0 |
 #' |------------|-----------------------|--------|
 #'
 #' @param qdata An object of class \code{MSnSet}
@@ -481,8 +489,8 @@ Metacell_proline <- function(qdata, conds, df, level = NULL) {
 #'     stringsAsFactors = FALSE
 #' )
 #' conds <- metadata$Condition
-#' qdata <- data[1:10, 56:61]
-#' df <- data[1:10, 43:48]
+#' qdata <- data[seq_len(10), seq.int(from = 56, to = 61)]
+#' df <- data[seq_len(10), seq.int(from = 43, to = 48)]
 #' df2 <- Metacell_maxquant(qdata, conds, df, level = "peptide")
 #'
 #' @export
@@ -533,13 +541,6 @@ Metacell_maxquant <- function(qdata, conds, df, level = NULL) {
 }
 
 
-
-
-
-
-#' Similar to the function \code{is.na} but focused on the equality with
-#' the paramter 'type'.
-#'
 #' @title Similar to the function \code{is.na} but focused on the equality
 #' with the paramter 'type'.
 #'
@@ -554,8 +555,8 @@ Metacell_maxquant <- function(qdata, conds, df, level = NULL) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' obj <- Exp1_R25_pept[1:10, ]
+#' data(Exp1_R25_pept)
+#' obj <- Exp1_R25_pept[seq_len(10), ]
 #' metadata <- GetMetacell(obj)
 #' m <- match.metacell(metadata, pattern = "missing", level = "peptide")
 #'
@@ -588,7 +589,7 @@ match.metacell <- function(metadata, pattern, level) {
     )
 
     res <- NULL
-    for (i in 1:length(ll.res)) {
+    for (i in seq_len(length(ll.res))) {
         if (i == 1) {
             res <- ll.res[[1]]
         } else {
@@ -608,6 +609,11 @@ match.metacell <- function(metadata, pattern, level) {
 #' @param obj xxxx
 #'
 #' @export
+#' 
+#' @return xxx
+#' 
+#' @examples 
+#' NULL
 #'
 GetMetacell <- function(obj) {
     value <- Biobase::fData(obj)[, obj@experimentData@other$names_metacell]
@@ -634,6 +640,11 @@ GetMetacell <- function(obj) {
 #' @author Samuel Wieczorek
 #'
 #' @export
+#' 
+#' @return xxx
+#' 
+#' @examples 
+#' NULL
 #'
 UpdateMetacell <- function(obj, method = "", na.type) {
     if (missing(obj)) {
@@ -651,16 +662,17 @@ UpdateMetacell <- function(obj, method = "", na.type) {
     }
 
     level <- obj@experimentData@other$typeOfData
+    .meta <- obj@experimentData@other$names_metacell
     ind <- match.metacell(
-        metadata = Biobase::fData(obj)[, obj@experimentData@other$names_metacell],
+        metadata = Biobase::fData(obj)[, .meta],
         pattern = na.type,
         level = level
     ) & !is.na(Biobase::exprs(obj))
 
-    Biobase::fData(obj)[, obj@experimentData@other$names_metacell][ind] <- 
+    Biobase::fData(obj)[, .meta][ind] <- 
         gsub("missing",
         "imputed",
-        Biobase::fData(obj)[, obj@experimentData@other$names_metacell][ind],
+        Biobase::fData(obj)[, .meta][ind],
         fixed = TRUE
     )
     return(obj)
@@ -687,6 +699,8 @@ UpdateMetacell <- function(obj, method = "", na.type) {
 #' search.metacell.tags("quanti", "peptide")
 #'
 #' @export
+#' 
+#' @return xxx
 #'
 
 search.metacell.tags <- function(pattern, level, depth = "1") {

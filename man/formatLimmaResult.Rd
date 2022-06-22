@@ -15,21 +15,21 @@ formatLimmaResult(fit, conds, contrast)
 }
 \value{
 A list of two dataframes : logFC and P_Value. The first one contains
-the logFC values of all the comparisons (one column for one comparison), 
-the second one contains the pvalue of all the comparisons (one column for 
-one comparison). The names of the columns for those two dataframes are 
+the logFC values of all the comparisons (one column for one comparison),
+the second one contains the pvalue of all the comparisons (one column for
+one comparison). The names of the columns for those two dataframes are
 identical and correspond to the description of the comparison.
 }
 \description{
 xxxx
 }
 \examples{
-utils::data(Exp1_R25_prot, package='DAPARdata')
-obj <- Exp1_R25_prot[1:1000]
-level <- obj@experimentData@other$typeOfData
-metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
-indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
-obj <- MetaCellFiltering(obj, indices, cmd='delete')
+data(Exp1_R25_prot)
+obj <- Exp1_R25_prot[seq_len(100)]
+level <- 'protein'
+metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
+obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 qData <- Biobase::exprs(obj$new)
 sTab <- Biobase::pData(obj$new)
 limma <- limmaCompleteTest(qData, sTab)

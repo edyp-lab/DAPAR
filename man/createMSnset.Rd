@@ -26,7 +26,7 @@ createMSnset(
 of a column in designTable that have to be integrated in
 the \code{Biobase::fData()} table of the \code{MSnSet} object.}
 
-\item{colnameForID}{The name of the column containing the ID of entities 
+\item{colnameForID}{The name of the column containing the ID of entities
 (peptides or proteins)}
 
 \item{indexForMetacell}{xxxxxxxxxxx}
@@ -47,33 +47,41 @@ intensity have to be replaced by NA (Default is FALSE)}
 An instance of class \code{MSnSet}.
 }
 \description{
-Builds an object of class \code{MSnSet} from a 
-single tabulated-like file for quantitative and meta-data and a dataframe 
-for the samples description. It differs from
-the original \code{MSnSet} builder which requires three separated files 
-tabulated-like quantitative proteomic data into a \code{MSnSet} object,
-including metadata.
+Builds an object of class \code{MSnSet} from a single tabulated-like file 
+for quantitative and meta-data and a dataframe for the samples description. 
+It differs from the original \code{MSnSet} builder which requires three 
+separated files tabulated-like quantitative proteomic data into a 
+\code{MSnSet} object, including metadata.
 }
 \examples{
 require(Matrix)
-exprsFile <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
+exprsFile <- system.file("extdata", "Exp1_R25_pept.txt", 
+package = "DAPARdata")
+metadataFile <- system.file("extdata", "samples_Exp1_R25.txt",
+    package = "DAPARdata"
+)
+metadata <- read.table(metadataFile, header = TRUE, sep = "\t", 
+as.is = TRUE)
+indExpData <- seq.int(from=56, to=61)
+colnameForID <- "id"
+obj <- createMSnset(exprsFile, metadata, indExpData, colnameForID,
+    indexForMetacell = seq.int(from=43, to=48), pep_prot_data = "peptide", 
+    software = "maxquant"
+)
+
+
+exprsFile <- system.file("extdata", "Exp1_R25_pept.txt", 
+package = "DAPARdata")
 metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", 
-package="DAPARdata")
-metadata = read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
-indExpData <- c(56:61)
-colnameForID <- 'id'
-obj <- createMSnset(exprsFile, metadata,indExpData,  colnameForID, 
-indexForMetacell = c(43:48), pep_prot_data = "peptide", software = 'maxquant')
-
-
-exprsFile <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
-metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", package="DAPARdata")
-metadata = read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE)
-indExpData <- c(56:61)
-colnameForID <- 'AutoID'
-obj <- createMSnset(exprsFile, metadata, indExpData,  colnameForID, 
-indexForMetacell = c(43:48), pep_prot_data = "peptide", software = 'maxquant')
-
+package = "DAPARdata")
+metadata <- read.table(metadataFile, header = TRUE, sep = "\t", 
+as.is = TRUE)
+indExpData <- seq.int(from = 56, to = 61)
+colnameForID <- "AutoID"
+obj <- createMSnset(exprsFile, metadata, indExpData, colnameForID,
+indexForMetacell = seq.int(from = 43, to = 48), 
+pep_prot_data = "peptide", software = "maxquant"
+)
 
 }
 \author{

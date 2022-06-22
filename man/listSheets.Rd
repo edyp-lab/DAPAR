@@ -13,7 +13,12 @@ listSheets(file)
 A vector
 }
 \description{
-This function lists all the sheets of an Excel file.
+This function returns the list of the sheets names in a Excel file.
+}
+\examples{
+NULL
+
+
 }
 \author{
 Samuel Wieczorek

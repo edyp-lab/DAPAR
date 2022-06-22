@@ -26,11 +26,11 @@ A violinplot
 Builds a violinplot from a dataframe
 }
 \examples{
-utils::data(Exp1_R25_prot, package='DAPARdata')
+data(Exp1_R25_prot)
 obj <- Exp1_R25_prot
 legend <- conds <- Biobase::pData(obj)$Condition
 key <- "Protein_IDs"
-violinPlotD(obj, conds, key, legend, subset.view=1:10)
+violinPlotD(obj, conds, key, legend, subset.view = seq_len(10))
 
 
 }

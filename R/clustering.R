@@ -16,9 +16,9 @@
 #' @author Helene Borges
 #'
 #' @examples
-#' utils::data(Exp1_R25_prot, package = "DAPARdata")
-#' obj <- Exp1_R25_prot[1:1000]
-#' level <- obj@experimentData@other$typeOfData
+#' data(Exp1_R25_prot)
+#' obj <- Exp1_R25_prot[seq_len(1000)]
+#' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
@@ -26,26 +26,36 @@
 #'
 #' @export
 #'
-#' @importFrom dplyr bind_cols as_tibble group_by summarise
-#' @importFrom tidyr pivot_wider
 #'
 averageIntensities <- function(ESet_obj) {
     if (!requireNamespace("Mfuzz", quietly = TRUE)) {
         stop("Please install Mfuzz: BiocManager::install('Mfuzz')")
     }
+    
+    if (!requireNamespace("tidyr", quietly = TRUE)) {
+        stop("Please install tidyr: BiocManager::install('tidyr')")
+    }
+    
+    if (!requireNamespace("dplyr", quietly = TRUE)) {
+        stop("Please install dplyr: BiocManager::install('dplyr')")
+    }
+    
     intensities <- Biobase::exprs(ESet_obj)
     sTab <- Biobase::pData(ESet_obj)
     sTab$Condition <- as.factor(sTab$Condition)
     intensities_t <- as.data.frame(t(intensities))
-    intensities_t <- dplyr::bind_cols(intensities_t, 
-        condition = sTab$Condition, sample = rownames(intensities_t))
+    intensities_t <- dplyr::bind_cols(
+        intensities_t, 
+        condition = sTab$Condition, 
+        sample = rownames(intensities_t)
+        )
     tbl_intensities <- dplyr::as_tibble(intensities_t, rownames = NA)
     longer_intensities <- tbl_intensities %>%
         tidyr::pivot_longer(-c(condition, sample), names_to = "feature", 
             values_to = "intensity")
     mean_intensities <- longer_intensities %>%
         dplyr::group_by(condition, feature) %>%
-        dplyr::summarise(mean = mean(intensity))
+        dplyr::summarise(mean = mean(intensities))
     mean_intensities_wide <- tidyr::pivot_wider(mean_intensities,
         names_from = condition,
         values_from = mean
@@ -57,14 +67,13 @@ averageIntensities <- function(ESet_obj) {
 }
 
 
-
-#' Prepare the data for subsequent clustering
-#'
+#' @title xxx
+#' 
 #' @description The first step is to standardize the data (with the \code{Mfuzz}
 #' package). Then the function checks that these data are clusterizable or not
-#'  (use of [diptest::dip.test()] to determine whether the distribution is
-#'  unimodal or #'  multimodal). Finally, it determines the "optimal" k by
-#'  the Gap statistic approach.
+#' (use of [diptest::dip.test()] to determine whether the distribution is
+#' unimodal or multimodal). Finally, it determines the "optimal" k by
+#' the Gap statistic approach.
 #'
 #' @param standards a matrix or dataframe containing only the standardized
 #' mean intensities returned by the function [standardiseMeanIntensities()]
@@ -79,9 +88,9 @@ averageIntensities <- function(ESet_obj) {
 #' @author Helene Borges
 #'
 #' @examples
-#' utils::data(Exp1_R25_prot, package = "DAPARdata")
-#' obj <- Exp1_R25_prot[1:100]
-#' level <- obj@experimentData@other$typeOfData
+#' data(Exp1_R25_prot)
+#' obj <- Exp1_R25_prot[seq_len(100)]
+#' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
@@ -91,9 +100,8 @@ averageIntensities <- function(ESet_obj) {
 #' means <- purrr::map(purrr::array_branch(as.matrix(only_means), 1), mean)
 #' centered <- only_means - unlist(means)
 #' centered_means <- dplyr::bind_cols(
-#'     feature = dplyr::as_tibble(only_features),
-#'     dplyr::as_tibble(centered)
-#' )
+#' feature = dplyr::as_tibble(only_features),
+#' dplyr::as_tibble(centered))
 #' checkClust <- checkClusterability(centered_means, b = 100)
 #'
 #' @export
@@ -107,7 +115,9 @@ checkClusterability <- function(standards, b = 500) {
     if (!requireNamespace("cluster", quietly = TRUE)) {
         stop("Please install cluster: BiocManager::install('cluster')")
     }
-
+    if (!requireNamespace("methods", quietly = TRUE)) {
+        stop("Please install methods: BiocManager::install('methods')")
+    }
 
     if (methods::is(standards, "data.frame")) {
         # if there are columns with something other than numeric values
@@ -123,11 +133,15 @@ checkClusterability <- function(standards, b = 500) {
     }
     # check the clusterability of the data
     dip_res <- diptest::dip.test(x = standards)
-    print("dip test done")
+    #print("dip test done")
     # d.power = 2 corresponds to the Tibshirani criteria. B = 500 is to have
     # stable results from one simulation to another.
-    gap_cluster <- cluster::clusGap(standards, FUNcluster = kmeans, 
-        nstart = 20, K.max = 10, d.power = 2, B = b)
+    gap_cluster <- cluster::clusGap(standards, 
+        FUNcluster = stats::kmeans, 
+        nstart = 20, 
+        K.max = 10, 
+        d.power = 2, 
+        B = b)
 
     return(list(
         "dip_test" = dip_res,
@@ -135,7 +149,7 @@ checkClusterability <- function(standards, b = 500) {
     ))
 }
 
-#' Visualize the clusters according to pvalue thresholds
+#' @title Visualize the clusters according to pvalue thresholds
 #'
 #' @param dat the standardize data returned by the function 
 #' [checkClusterability()]
@@ -160,9 +174,9 @@ checkClusterability <- function(standards, b = 500) {
 #'
 #' @examples
 #' library(dplyr)
-#' utils::data(Exp1_R25_prot, package = "DAPARdata")
-#' obj <- Exp1_R25_prot[1:1000]
-#' level <- obj@experimentData@other$typeOfData
+#' data(Exp1_R25_prot)
+#' obj <- Exp1_R25_prot[seq_len(1000)]
+#' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
@@ -173,33 +187,46 @@ checkClusterability <- function(standards, b = 500) {
 #' means <- purrr::map(purrr::array_branch(as.matrix(only_means), 1), mean)
 #' centered <- only_means - unlist(means)
 #' centered_means <- dplyr::bind_cols(
-#'     feature = dplyr::as_tibble(only_features),
-#'     dplyr::as_tibble(centered)
-#' )
+#' feature = dplyr::as_tibble(only_features),
+#' dplyr::as_tibble(centered))
 #' difference <- only_means[, 1] - only_means[, 2]
 #' clusters <- as.data.frame(difference) %>%
-#'     dplyr::mutate(cluster = dplyr::if_else(difference > 0, 1, 2))
+#' dplyr::mutate(cluster = dplyr::if_else(difference > 0, 1, 2))
 #' vizu <- visualizeClusters(
-#'     dat = centered_means,
-#'     clust_model = as.factor(clusters$cluster),
-#'     adjusted_pValues = expR25_ttest$P_Value$`25fmol_vs_10fmol_pval`,
-#'     FDR_th = c(0.001, 0.005, 0.01, 0.05),
-#'     ttl = "Clustering of protein profiles"
-#' )
+#' dat = centered_means,
+#' clust_model = as.factor(clusters$cluster),
+#' adjusted_pValues = expR25_ttest$P_Value$`25fmol_vs_10fmol_pval`,
+#' FDR_th = c(0.001, 0.005, 0.01, 0.05),
+#' ttl = "Clustering of protein profiles")
 #'
 #' @export
 #'
-#' @importFrom stringr str_glue
-#' @importFrom reshape2 melt
-#' @import ggplot2
-#' @importFrom methods is
-#'
 visualizeClusters <- function(dat,
-                              clust_model,
-                              adjusted_pValues,
-                              FDR_th = NULL,
-                              ttl = "",
-                              subttl = "") {
+    clust_model,
+    adjusted_pValues,
+    FDR_th = NULL,
+    ttl = "",
+    subttl = "") {
+
+    if (!requireNamespace("ggplot2", quietly = TRUE)) {
+        stop("Please install ggplot2: BiocManager::install('ggplot2')")
+    }
+    if (!requireNamespace("stringr", quietly = TRUE)) {
+        stop("Please install stringr: BiocManager::install('stringr')")
+    }
+
+    if (!requireNamespace("methods", quietly = TRUE)) {
+        stop("Please install methods: BiocManager::install('methods')")
+    }
+
+    if (!requireNamespace("dplyr", quietly = TRUE)) {
+        stop("Please install dplyr: BiocManager::install('dplyr')")
+    }
+
+    if (!requireNamespace("reshape2", quietly = TRUE)) {
+        stop("Please install reshape2: BiocManager::install('reshape2')")
+    }
+
     if (is.null(FDR_th)) {
         FDR_th <- c(0.001, 0.005, 0.01, 0.05)
     } else if (length(FDR_th) > 4) {
@@ -211,8 +238,10 @@ visualizeClusters <- function(dat,
     str_try <- stringr::str_glue("<{FDR_th}")
     str_max <- stringr::str_glue(">{max(FDR_th)}")
 
-    dat$FDR_threshold <- cut(adjusted_pValues, breaks = c(-Inf, FDR_th, Inf), 
-        labels = c(str_try, str_max))
+    dat$FDR_threshold <- cut(adjusted_pValues, 
+        breaks = c(-Inf, FDR_th, Inf), 
+        labels = c(str_try, str_max)
+        )
     desc_th <- FDR_th[order(FDR_th, decreasing = TRUE)]
     str_desc <- stringr::str_glue("<{desc_th}")
 
@@ -238,7 +267,7 @@ visualizeClusters <- function(dat,
 
     melted <- reshape2::melt(dat,
         id.vars = c("feature", "cluster", "adjusted_pvalues", "FDR_threshold"),
-        value.name = "intensity",
+        value.name = "Intensity",
         variable.name = "Condition"
     )
 
@@ -251,11 +280,12 @@ visualizeClusters <- function(dat,
     )
 
 
-    melted <- dplyr::arrange(melted, desc(adjusted_pvalues))
+    melted <- dplyr::arrange(melted, dplyr::desc(adjusted_pvalues))
     return(ggplot2::ggplot(
         data = melted,
-        ggplot2::aes(x = Condition, y = intensity, col = FDR_threshold)
-    ) +
+        ggplot2::aes(x = Condition, 
+            y = Intensity, 
+            col = FDR_threshold)) +
         ggplot2::geom_line(ggplot2::aes(group = feature)) +
         ggplot2::facet_wrap(~cluster) +
         colScale +
@@ -278,7 +308,7 @@ visualizeClusters <- function(dat,
 
 
 
-#' Run a clustering pipeline of protein/peptide abundance profiles.
+#' @title clustering pipeline of protein/peptide abundance profiles.
 #'
 #' @description This function does all of the steps necessary to obtain a
 #' clustering model and its graph from average abundances of proteins/peptides.
@@ -355,13 +385,13 @@ visualizeClusters <- function(dat,
 #'
 #' Frey, B. J. and Dueck, D. (2007) Clustering by passing messages between
 #' data points. *Science* 315, 972-976.
-#' DOI: \href{https://science.sciencemag.org/content/315/5814/972}
-#' {10.1126/science.1136800}
+#' DOI: \href{https://science.sciencemag.org/content/315/5814/972}{
+#' 10.1126/science.1136800}
 #'
 #' @examples
-#' utils::data(Exp1_R25_prot, package = "DAPARdata")
-#' obj <- Exp1_R25_prot[1:1000]
-#' level <- obj@experimentData@other$typeOfData
+#' data(Exp1_R25_prot)
+#' obj <- Exp1_R25_prot[seq_len(1000)]
+#' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
@@ -373,18 +403,30 @@ visualizeClusters <- function(dat,
 #'
 #' @export
 #'
-#' @importFrom stats kmeans
 #'
 wrapperRunClustering <- function(
-        obj, 
-    clustering_method, 
-    conditions_order = NULL, 
-    k_clusters = NULL, 
-    adjusted_pvals, 
-    ttl = "", 
-    subttl = "", 
+    obj,
+    clustering_method,
+    conditions_order = NULL,
+    k_clusters = NULL,
+    adjusted_pvals,
+    ttl = "",
+    subttl = "",
     FDR_thresholds = NULL
     ) {
+
+    if (!requireNamespace("stats", quietly = TRUE)) {
+        stop("Please install stats: BiocManager::install('stats')")
+    }
+
+    if (!requireNamespace("cluster", quietly = TRUE)) {
+        stop("Please install cluster: BiocManager::install('cluster')")
+    }
+
+    if (!requireNamespace("purrr", quietly = TRUE)) {
+        stop("Please install purrr: BiocManager::install('purrr')")
+    }
+
     if (!requireNamespace("apcluster", quietly = TRUE)) {
         stop("Please install apcluster: BiocManager::install('apcluster')")
     }
@@ -397,12 +439,20 @@ wrapperRunClustering <- function(
         stop("Please install Mfuzz: BiocManager::install('Mfuzz')")
     }
 
+    if (!requireNamespace("dplyr", quietly = TRUE)) {
+        stop("Please install dplyr: BiocManager::install('dplyr')")
+    }
+
+    if (!requireNamespace("stringr", quietly = TRUE)) {
+        stop("Please install stringr: BiocManager::install('stringr')")
+    }
+
     res <- list("model" = NULL, "ggplot" = NULL)
     # reorder conditions if requested
     if (!is.null(conditions_order)) {
         .cond <- obj@phenoData@data$Condition
         .levels <- levels(forcats::as_factor(.cond))
-        
+
         # check that given levels are correct in number...
         if (length(conditions_order) == length(.levels)) {
             # ...and have same labels
@@ -425,13 +475,13 @@ wrapperRunClustering <- function(
     }
 
     averaged_means <- averageIntensities(obj)
-    averaged_means <- na.omit(averaged_means)
+    averaged_means <- stats::na.omit(averaged_means)
 
     sTab <- Biobase::pData(obj)
     only_means <- dplyr::select_if(averaged_means, is.numeric)
     only_features <- dplyr::select_if(averaged_means, is.character)
     if (length(levels(as.factor(sTab$Condition))) == 2) {
-        print("there are only two conditions")
+        #print("there are only two conditions")
         means <- purrr::map(purrr::array_branch(as.matrix(only_means), 1), mean)
         centered <- only_means - unlist(means)
         centered_means <- dplyr::bind_cols(
@@ -454,7 +504,7 @@ wrapperRunClustering <- function(
             subttl = subttl
         )
     } else if (length(levels(as.factor(sTab$Condition))) > 2) {
-        eset <- ExpressionSet(assayData = as.matrix(only_means))
+        eset <- Biobase::ExpressionSet(assayData = as.matrix(only_means))
         eset_s <- Mfuzz::standardise(eset)
         standards <- eset_s@assayData$exprs
 
@@ -468,7 +518,7 @@ wrapperRunClustering <- function(
             res$model <- apcluster::apcluster(apcluster::negDistMat(r = 2), 
                 standards)
         } else if (clustering_method == "affinityPropReduced") {
-            print("running affinity propagation reduced algorithm")
+            #print("running affinity propagation reduced algorithm")
             res$model <- apcluster::apcluster(apcluster::negDistMat(r = 2), 
                 standards, q = 0)
         } else if (clustering_method == "kmeans") {
@@ -480,10 +530,14 @@ wrapperRunClustering <- function(
                     checked_means$gap_cluster$Tab[, "SE.sim"],
                     method = "Tibs2001SEmax"
                 )
-                res$model <- kmeans(standards, centers = best_k, nstart = 25)
+                res$model <- stats::kmeans(standards, 
+                    centers = best_k, 
+                    nstart = 25)
             } else if (k_clusters > 1) {
                 best_k <- k_clusters
-                res$model <- kmeans(standards, centers = best_k, nstart = 25)
+                res$model <- stats::kmeans(standards, 
+                    centers = best_k, 
+                    nstart = 25)
             } else { # corresponds to the case k = 1 so no need for clustering
                 one_cluster <- as.factor(rep_len(1, nrow(standardized_means)))
                 res$ggplot <- visualizeClusters(
@@ -501,7 +555,7 @@ wrapperRunClustering <- function(
                 affinityPropReduced and kmeans.")
             return(NULL)
         }
-        print("generating gglot...")
+        #print("generating gglot...")
         res$ggplot <- visualizeClusters(
             dat = standardized_means,
             clust_model = res$model,

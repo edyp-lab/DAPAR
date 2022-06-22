@@ -8,7 +8,7 @@
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
+#' data(Exp1_R25_pept)
 #' getProcessingInfo(Exp1_R25_pept)
 #'
 #' @export
@@ -28,10 +28,13 @@ getProcessingInfo <- function(obj) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' Xshared <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
-#' Xunique <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
-#' ll.X <- list(matWithSharedPeptides = Xshared, matWithUniquePeptides = Xunique)
+#' data(Exp1_R25_pept)
+#' Xshared <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(100)], 
+#' "Protein_group_IDs", FALSE)
+#' Xunique <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(100)], 
+#' "Protein_group_IDs", TRUE)
+#' ll.X <- list(matWithSharedPeptides = Xshared, 
+#' matWithUniquePeptides = Xunique)
 #' Exp1_R25_pept <- SetMatAdj(Exp1_R25_pept, ll.X)
 #' ll.X <- GetMatAdj(Exp1_R25_pept)
 #'
@@ -57,10 +60,13 @@ GetMatAdj <- function(obj) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' Xshared <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
-#' Xunique <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
-#' ll.X <- list(matWithSharedPeptides = Xshared, matWithUniquePeptides = Xunique)
+#' data(Exp1_R25_pept)
+#' Xshared <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(100)], 
+#' "Protein_group_IDs", FALSE)
+#' Xunique <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(100)], 
+#' "Protein_group_IDs", TRUE)
+#' ll.X <- list(matWithSharedPeptides = Xshared, 
+#' matWithUniquePeptides = Xunique)
 #' Exp1_R25_pept <- SetMatAdj(Exp1_R25_pept, ll.X)
 #'
 #' @export
@@ -84,13 +90,17 @@ SetMatAdj <- function(obj, X) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' Xshared <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
-#' Xunique <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
-#' ll.X <- list(matWithSharedPeptides = Xshared, matWithUniquePeptides = Xunique)
+#' data(Exp1_R25_pept)
+#' Xshared <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(100)], 
+#' "Protein_group_IDs",  FALSE)
+#' Xunique <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(100)], 
+#' "Protein_group_IDs", TRUE)
+#' ll.X <- list(matWithSharedPeptides = Xshared, 
+#' matWithUniquePeptides = Xunique)
 #' Exp1_R25_pept <- SetMatAdj(Exp1_R25_pept, ll.X)
 #' ll1 <- get.pep.prot.cc(GetMatAdj(Exp1_R25_pept)$matWithSharedPeptides)
-#' ll2 <- DAPAR::get.pep.prot.cc(GetMatAdj(Exp1_R25_pept)$matWithUniquePeptides)
+#' ll2 <- DAPAR::get.pep.prot.cc(
+#' GetMatAdj(Exp1_R25_pept)$matWithUniquePeptides)
 #' cc <- list(allPep = ll1, onlyUniquePep = ll2)
 #' Exp1_R25_pept <- SetCC(Exp1_R25_pept, cc)
 #' ll.cc <- GetCC(Exp1_R25_pept)
@@ -114,17 +124,23 @@ GetCC <- function(obj) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' Xshared <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
-#' Xunique <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
-#' ll.X <- list(matWithSharedPeptides = Xshared, matWithUniquePeptides = Xunique)
+#' data(Exp1_R25_pept)
+#' Xshared <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(100)], 
+#' "Protein_group_IDs", FALSE)
+#' Xunique <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(100)], 
+#' "Protein_group_IDs", TRUE)
+#' ll.X <- list(matWithSharedPeptides = Xshared, 
+#' matWithUniquePeptides = Xunique)
 #' Exp1_R25_pept <- SetMatAdj(Exp1_R25_pept, ll.X)
 #' ll1 <- get.pep.prot.cc(GetMatAdj(Exp1_R25_pept)$matWithSharedPeptides)
-#' ll2 <- DAPAR::get.pep.prot.cc(GetMatAdj(Exp1_R25_pept)$matWithUniquePeptides)
+#' ll2 <- DAPAR::get.pep.prot.cc(
+#' GetMatAdj(Exp1_R25_pept)$matWithUniquePeptides)
 #' cc <- list(allPep = ll1, onlyUniquePep = ll2)
 #' Exp1_R25_pept <- SetCC(Exp1_R25_pept, cc)
 #'
 #' @export
+#' 
+#' @return xxx
 #'
 SetCC <- function(obj, cc) {
     if (GetTypeofData(obj) != "peptide") {
@@ -147,7 +163,7 @@ SetCC <- function(obj, cc) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
+#' data(Exp1_R25_pept)
 #' qData <- Biobase::exprs(Exp1_R25_pept)
 #' getNumberOfEmptyLines(qData)
 #'
@@ -168,6 +184,12 @@ getNumberOfEmptyLines <- function(qData) {
 #' @param obj xxx
 #'
 #' @export
+#' 
+#' @examples 
+#' data(Exp1_R25_pept)
+#' GetTypeofData(Exp1_R25_pept)
+#' 
+#' @return xxx
 #'
 GetTypeofData <- function(obj) {
     if (!is.null(obj)) {
@@ -186,6 +208,12 @@ GetTypeofData <- function(obj) {
 #' @param obj xxx
 #'
 #' @export
+#' 
+#' @examples 
+#' data(Exp1_R25_pept)
+#' GetKeyId(Exp1_R25_pept)
+#' 
+#' @return xxx
 #'
 GetKeyId <- function(obj) {
     if (!is.null(obj)) {
@@ -196,8 +224,6 @@ GetKeyId <- function(obj) {
 }
 
 
-#' Returns the possible number of values in lines in a matrix.
-#'
 #' @title Returns the possible number of values in lines in the data
 #'
 #' @param obj An object of class \code{MSnSet}
@@ -209,7 +235,7 @@ GetKeyId <- function(obj) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
+#' data(Exp1_R25_pept)
 #' getListNbValuesInLines(Exp1_R25_pept, "WholeMatrix")
 #'
 #' @export
@@ -225,7 +251,8 @@ getListNbValuesInLines <- function(obj, type) {
     if (missing(type)) {
         stop("'type' is required")
     } else if (!(type %in% MetacellFilteringScope())) {
-        stop(paste0("'type' must be one of the following values: ", paste0(MetacellFilteringScope(), collapse = " ")))
+        stop(paste0("'type' must be one of the following values: ", 
+            paste0(MetacellFilteringScope(), collapse = " ")))
     }
 
     data <- GetMetacell(obj)
@@ -234,8 +261,10 @@ getListNbValuesInLines <- function(obj, type) {
     ll <- switch(type,
         WholeLine = NULL,
         WholeMatrix = seq(0, ncol(data)),
-        AllCond = seq(0, min(unlist(lapply(unique(conds), function(x) length(which(conds == x)))))),
-        AtLeastOneCond = seq(0, min(unlist(lapply(unique(conds), function(x) length(which(conds == x))))))
+        AllCond = seq(0, min(unlist(lapply(unique(conds), 
+            function(x) length(which(conds == x)))))),
+        AtLeastOneCond = seq(0, min(unlist(lapply(unique(conds), 
+            function(x) length(which(conds == x))))))
     )
 
     return(ll)
@@ -243,28 +272,31 @@ getListNbValuesInLines <- function(obj, type) {
 
 
 
+
+#' @title Gets the conditions indices.
+#' 
+#' @description 
 #' Returns a list for the two conditions where each slot is a vector of
 #' indices for the samples.
 #'
-#' @title Gets the conditions indices.
 #'
 #' @param conds A vector of strings containing the column "Condition" of
 #' the \code{Biobase::pData()}.
 #'
-#' @param cond1 A vector of Conditions (a slot in the \code{Biobase::pData()} table) for
-#' the condition 1.
+#' @param cond1 A vector of Conditions (a slot in the \code{Biobase::pData()} 
+#' table) for the condition 1.
 #'
-#' @param cond2 A vector of Conditions (a slot in the \code{Biobase::pData()} table) for
-#' the condition 2.
+#' @param cond2 A vector of Conditions (a slot in the \code{Biobase::pData()} 
+#' table) for the condition 2.
 #'
 #' @return A list with two slots \code{iCond1} and \code{iCond2} containing
-#' respectively the indices of samples in the \code{Biobase::pData()} table of the
-#' dataset.
+#' respectively the indices of samples in the \code{Biobase::pData()} table 
+#' of the dataset.
 #'
 #' @author Florence Combes, Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
+#' data(Exp1_R25_pept)
 #' conds <- Biobase::pData(Exp1_R25_pept)[, "Condition"]
 #' getIndicesConditions(conds, "25fmol", "10fmol")
 #'
@@ -273,13 +305,13 @@ getListNbValuesInLines <- function(obj, type) {
 getIndicesConditions <- function(conds, cond1, cond2) {
     indCondition1 <- indCondition2 <- NULL
 
-    for (i in 1:length(cond1)) {
+    for (i in seq_len(length(cond1))) {
         indCondition1 <- c(
             indCondition1,
             which(conds == cond1[i])
         )
     }
-    for (i in 1:length(cond2)) {
+    for (i in seq_len(length(cond2))) {
         indCondition2 <- c(
             indCondition2,
             which(conds == cond2[i])
@@ -290,9 +322,6 @@ getIndicesConditions <- function(conds, cond1, cond2) {
 }
 
 
-
-#' Customise the contextual menu of highcharts plots.
-#'
 #' @title Customised contextual menu of highcharts plots
 #'
 #' @param hc A highcharter object
@@ -326,8 +355,7 @@ my_hc_ExportMenu <- function(hc, filename) {
 
 
 
-#' Customise the resetZoomButton of highcharts plots.
-#'
+
 #' @title Customised resetZoomButton of highcharts plots
 #'
 #' @param hc A highcharter object
@@ -367,7 +395,7 @@ my_hc_chart <- function(hc, chartType, zoomType = "None") {
 
 
 
-#'
+
 #' @title Retrieve the indices of non-zero elements in sparse matrices
 #'
 #' @description
@@ -475,7 +503,12 @@ dapar_hc_ExportMenu <- function(hc, filename) {
 #'
 #' @import highcharter
 #'
-dapar_hc_chart <- function(hc, chartType, zoomType = "None", width = 0, height = 0) {
+dapar_hc_chart <- function(hc, 
+    chartType, 
+    zoomType = "None", 
+    width = 0, 
+    height = 0
+    ) {
     hc %>%
         hc_chart(
             type = chartType,

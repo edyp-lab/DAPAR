@@ -1,10 +1,6 @@
 
 
-
-#' Builds a heatmap of the quantitative proteomic data of a
-#' \code{MSnSet} object.
-#'
-#' @title This function is a wrapper to \code{\link{heatmap.2}} that displays
+#' @title This function is a wrapper to \code{heatmap.2} that displays
 #' quantitative data in the \code{Biobase::exprs()} table of an object of
 #' class \code{MSnSet}
 #'
@@ -23,19 +19,20 @@
 #' @author Alexia Dorffer
 #'
 #' @examples
-#' \dontrun{
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' obj <- Exp1_R25_pept[1:10]
-#' level <- obj@experimentData@other$typeOfData
+#' data(Exp1_R25_pept)
+#' obj <- Exp1_R25_pept[seq_len(10)]
+#' level <- 'peptide'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 #' indices <- GetIndices_WholeLine(metacell.mask)
 #' wrapper.heatmapD(obj)
-#' }
 #'
 #' @export
 #'
-wrapper.heatmapD <- function(obj, distance = "euclidean", cluster = "complete",
-                             dendro = FALSE) {
+wrapper.heatmapD <- function(obj,
+    distance = "euclidean",
+    cluster = "complete",
+    dendro = FALSE
+    ) {
     if (is.null(obj)) {
         warning("The dataset is NULL and cannot be shown")
         return(NULL)
@@ -46,8 +43,11 @@ wrapper.heatmapD <- function(obj, distance = "euclidean", cluster = "complete",
 
     qData <- Biobase::exprs(obj)
     conds <- Biobase::pData(obj)[["Condition"]]
-    for (j in 1:length(colnames(qData))) {
-        colnames(qData)[j] <- paste(as.character(Biobase::pData(obj)[j, 2:ncol(Biobase::pData(obj))]),
+    for (j in seq_len(length(colnames(qData)))) {
+        .ncol <- ncol(Biobase::pData(obj))
+        colnames(qData)[j] <- paste(
+            as.character(
+                Biobase::pData(obj)[j, seq.int(from = 2, to = .ncol)]),
             collapse = " "
         )
     }
@@ -57,9 +57,7 @@ wrapper.heatmapD <- function(obj, distance = "euclidean", cluster = "complete",
 
 
 
-#' Heatmap of the quantitative proteomic data of a \code{MSnSet} object
-#'
-#' @title This function is a wrapper to \code{\link{heatmap.2}} that displays
+#' @title This function is a wrapper to \code{heatmap.2} that displays
 #' quantitative data in the \code{Biobase::exprs()} table of an object of
 #' class \code{MSnSet}
 #'
@@ -80,52 +78,48 @@ wrapper.heatmapD <- function(obj, distance = "euclidean", cluster = "complete",
 #' @author Florence Combes, Samuel Wieczorek, Enor Fremy
 #'
 #' @examples
-#' \dontrun{
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' obj <- Exp1_R25_pept[1:10, ]
-#' level <- obj@experimentData@other$typeOfData
+#' data(Exp1_R25_pept)
+#' obj <- Exp1_R25_pept[seq_len(10), ]
+#' level <- 'peptide'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 #' indices <- GetIndices_WholeLine(metacell.mask)
 #' qData <- Biobase::exprs(obj)
 #' conds <- Biobase::pData(obj)[["Condition"]]
 #' heatmapD(qData, conds)
-#' }
 #'
-#' @importFrom gplots heatmap.2
-#' @importFrom RColorBrewer brewer.pal
-#' @importFrom stats as.dendrogram hclust
 #'
 #' @export
 #'
 heatmapD <- function(qData,
-                     conds,
-                     distance = "euclidean",
-                     cluster = "complete",
-                     dendro = FALSE) {
+    conds,
+    distance = "euclidean",
+    cluster = "complete",
+    dendro = FALSE) {
+    
+    if (!requireNamespace("stats", quietly = TRUE)) {
+        stop("Please install stats: BiocManager::install('stats')")
+    }
+    
+    
     if (!requireNamespace("dendextend", quietly = TRUE)) {
         stop("Please install dendextend: BiocManager::install('dendextend')")
     }
-    ## Check parameters
-    # paramdist <- c("euclidean", "manhattan")
-    # if (!(distance %in% paramdist)){
-    #     stop("Param distance is not correct.")
-    #     return (NULL)
-    # }
-    #
-    # paramcluster <- c("ward.D", "average")
-    # if (!(cluster %in%  paramcluster)){
-    #     stop("Param clustering is not correct.")
-    #     return (NULL)
-    # }
 
-
-    # if (isTRUE(dendro) && getNumberOfEmptyLines(qData) != 0)  {
-    #     stop("Your dataset contains empty lines: the dendrogram cannot
-    # be computed.
-    #         Please filter or impute missing values before.")
-    #     return (NULL)
-    # }
-    # else {
+    if (!requireNamespace("gplots", quietly = TRUE)) {
+        stop("Please install gplots: BiocManager::install('gplots')")
+    }
+    
+    if (!requireNamespace("grDevices", quietly = TRUE)) {
+        stop("Please install grDevices: BiocManager::install('grDevices')")
+    }
+    
+    
+    
+    if (!requireNamespace("RColorBrewer", quietly = TRUE)) {
+        stop("Please install RColorBrewer: 
+            BiocManager::install('RColorBrewer')")
+    }
+    
     .data <- matrix(qData,
         ncol = ncol(qData),
         byrow = FALSE,
@@ -136,22 +130,22 @@ heatmapD <- function(qData,
         seq(-2, 0.5, length = 100),
         seq(0.5, 6, length = 100)
     )
-    heatmap.color <- colorRampPalette(c("green", "red"))(n = 1000)
+    heatmap.color <- grDevices::colorRampPalette(c("green", "red"))(n = 1000)
 
     # samples label color
     x <- t(.data)
     x[is.na(x)] <- -1e5
     dist <- dist(x, method = distance)
-    hcluster <- hclust(dist, method = cluster)
+    hcluster <- stats::hclust(dist, method = cluster)
     pal <- GetColorsForConditions(conds)
-    # palette.init <- RColorBrewer::brewer.pal(8,"Dark2")[1:length(unique(conds))]
-    # palette.init <- grDevices::colorRampPalette(brewer.pal(8, "Dark2"))(length(unique(conds)))
-    # for (i in 1:length(conds)){
-    #  palette[i] <- palette.init[which(conds[i] == unique(conds))]
-    # }
+    
     cols_branches <- pal
-    dend1 <- as.dendrogram(hcluster)
-    dend1 <- dendextend::color_branches(dend1, k = length(conds), col = cols_branches)
+    dend1 <- stats::as.dendrogram(hcluster)
+    dend1 <- dendextend::color_branches(
+        dend1, 
+        k = length(conds), 
+        col = cols_branches
+        )
     col_labels <- dendextend::get_leaves_branches_col(dend1)
 
     if (dendro) {
@@ -167,7 +161,7 @@ heatmapD <- function(qData,
         },
         hclustfun = function(x) {
             x[is.na(x)] <- -1e5
-            hclust(x, method = cluster)
+            stats::hclust(x, method = cluster)
         },
         dendrogram = .dendro,
         Rowv = TRUE,
@@ -186,14 +180,15 @@ heatmapD <- function(qData,
         lmat = rbind(4:3, 2:1),
         colRow = col_labels
     )
-    #    }
 }
 
 
-#' Heatmap inspired by the heatmap.2 function.
-#'
-#' @title This function is inspired from the function \code{\link{heatmap.2}}
-#' that displays quantitative data in the \code{Biobase::exprs()} table of an object of
+#' @title  xxx
+#' 
+#' @description 
+#' This function is inspired from the function \code{heatmap.2}
+#' that displays quantitative data in the \code{Biobase::exprs()} table of an 
+#' object of
 #' class \code{MSnSet}. For more information, please refer to the help
 #' of the heatmap.2 function.
 #'
@@ -221,9 +216,9 @@ heatmapD <- function(qData,
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_prot, package = "DAPARdata")
-#' obj <- Exp1_R25_prot[1:1000]
-#' level <- obj@experimentData@other$typeOfData
+#' data(Exp1_R25_prot)
+#' obj <- Exp1_R25_prot[seq_len(100)]
+#' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 #' indices <- GetIndices_WholeLine(metacell.mask)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
@@ -232,19 +227,27 @@ heatmapD <- function(qData,
 #'
 #' @export
 #'
-#' @importFrom grDevices heat.colors
-#' @importFrom graphics image
-#'
-heatmapForMissingValues <-
-    function(x,
-             col = heat.colors(100),
-             srtCol = NULL,
-             labCol = NULL,
-             labRow = NULL,
-             key = TRUE,
-             key.title = NULL,
-             main = NULL,
-             ylab = NULL) {
+heatmapForMissingValues <- function(x,
+    col = NULL,
+    srtCol = NULL,
+    labCol = NULL,
+    labRow = NULL,
+    key = TRUE,
+    key.title = NULL,
+    main = NULL,
+    ylab = NULL) {
+        
+        if (!requireNamespace("grDevices", quietly = TRUE)) {
+            stop("Please install grDevices: BiocManager::install('grDevices')")
+        }
+        if (!requireNamespace("graphics", quietly = TRUE)) {
+            stop("Please install graphics: BiocManager::install('graphics')")
+        }
+        
+        
+        if (is.null(col))
+            col <- grDevices::heat.colors(100)
+        
         scale01 <- function(x, low = min(x), high = max(x)) {
             x <- (x - low) / (high - low)
             x
@@ -276,7 +279,7 @@ heatmapForMissingValues <-
         cellnote <- matrix("", ncol = ncol(x), nrow = nrow(x))
         cexCol <- 0.2 + 1 / log10(nc)
         cexRow <- 0.2 + 1 / log10(nr)
-        iy <- 1:nr
+        iy <- seq_len(nr)
         breaks <- length(col) + 1
         breaks <- seq(min(x, na.rm = na.rm), max(x, na.rm = na.rm),
             length = breaks
@@ -294,15 +297,15 @@ heatmapForMissingValues <-
         lmat <- rbind(4:3, 2:1)
         lmat[is.na(lmat)] <- 0
 
-        op <- par(no.readonly = TRUE)
-        on.exit(par(op))
-        layout(lmat, widths = lwid, heights = lhei, respect = FALSE)
+        op <- graphics::par(no.readonly = TRUE)
+        on.exit(graphics::par(op))
+        graphics::layout(lmat, widths = lwid, heights = lhei, respect = FALSE)
 
-        par(mar = c(margins[1], 0, 0, margins[2]))
+        graphics::par(mar = c(margins[1], 0, 0, margins[2]))
         x <- t(x)
 
 
-        graphics::image(1:nc, 1:nr, x,
+        graphics::image(seq_len(nc), seq_len(nr), x,
             xlim = 0.5 + c(0, nc), ylim = 0.5 +
                 c(0, nr), axes = FALSE, xlab = "", ylab = "", col = col,
             breaks = breaks
@@ -310,61 +313,70 @@ heatmapForMissingValues <-
 
 
         if (!is.null(labCol)) {
-            axis(1, 1:nc,
-                label = labCol, las = 2, line = -0.5 +
-                    offsetCol, tick = 0, cex.axis = cexCol, hadj = NA,
+            graphics::axis(1, 
+                seq_len(nc),
+                label = labCol, 
+                las = 2, 
+                line = -0.5 + offsetCol, 
+                tick = 0, 
+                cex.axis = cexCol, 
+                hadj = NA,
                 padj = 0
             )
         } else {
             adjCol <- c(1, NA)
-            xpd.orig <- par("xpd")
-            par(xpd = NA)
-            xpos <- axis(1, 1:nc,
-                label = rep("", nc), las = 2,
+            xpd.orig <- graphics::par("xpd")
+            graphics::par(xpd = NA)
+            xpos <- graphics::axis(1, 
+                seq_len(nc),
+                label = rep("", nc), 
+                las = 2,
                 tick = 0
             )
-            text(
+            graphics::text(
                 x = xpos, y = par("usr")[3] - (1 + offsetCol) *
-                    strheight("M"), label = labCol, adj = adjCol,
+                    graphics::strheight("M"), label = labCol, adj = adjCol,
                 cex = cexCol, srt = srtCol, col = colCol
             )
-            par(xpd = xpd.orig)
+            graphics::par(xpd = xpd.orig)
         }
 
 
         if (!is.null(labRow)) {
-            axis(4, iy,
+            graphics::axis(4, iy,
                 label = labRow, las = 5, line = -0.5 + offsetRow,
                 tick = 0, cex.axis = cexRow, hadj = 0, padj = NA
             )
         } else {
-            xpd.orig <- par("xpd")
-            par(xpd = NA)
-            ypos <- axis(4, iy,
+            xpd.orig <- graphics::par("xpd")
+            graphics::par(xpd = NA)
+            ypos <- graphics::axis(4, iy,
                 label = rep("", nr), las = 2,
                 line = -0.5, tick = 0
             )
-            text(
-                x = par("usr")[2] + (1 + offsetRow) * strwidth("M"),
+            
+            .strw <- graphics::strwidth("M")
+            graphics::text(
+                x = graphics::par("usr")[2] + (1 + offsetRow) * .strw,
                 y = ypos, label = labRow, adj = c(0, NA), cex = cexRow,
                 srt = srtRow, col = colRow
             )
-            par(xpd = xpd.orig)
+            graphics::par(xpd = xpd.orig)
         }
 
         par(mar = c(margins[1], 0, 0, 0))
-        plot.new()
-        par(mar = c(0, 0, if (!is.null(main)) 5 else 0, margins[2]))
+        graphics::plot.new()
+        graphics::par(mar = c(0, 0, if (!is.null(main)) 5 else 0, margins[2]))
 
-        plot.new()
+        graphics::plot.new()
         if (!is.null(main)) {
-            title(main, cex.main = 1.5 * op[["cex.main"]])
+            graphics::title(main, cex.main = 1.5 * op[["cex.main"]])
         }
 
 
         if (key) {
             mar <- c(5, 4, 2, 1)
-            par(mar = mar, cex = 0.75, mgp = c(2, 1, 0))
+            graphics::par(mar = mar, cex = 0.75, mgp = c(2, 1, 0))
             if (length(key.par) > 0) {
                 do.call(par, key.par)
             }
@@ -378,67 +390,23 @@ heatmapForMissingValues <-
                 z = matrix(z, ncol = 1), col = col, breaks = tmpbreaks,
                 xaxt = "n", yaxt = "n"
             )
-            par(usr = c(0, 1, 0, 1))
+            graphics::par(usr = c(0, 1, 0, 1))
             lv <- pretty(breaks)
             xv <- scale01(as.numeric(lv), min.raw, max.raw)
             xargs <- list(at = xv, label = lv)
 
             xargs$side <- 1
-            do.call(axis, xargs)
+            do.call(graphics::axis, xargs)
             key.xlab <- "Intensity value"
 
-            mtext(
+            graphics::mtext(
                 side = 1, key.xlab, line = par("mgp")[1], padj = 0.5,
-                cex = par("cex") * par("cex.lab")
+                cex = graphics::par("cex") * graphics::par("cex.lab")
             )
 
             if (is.null(key.title)) {
-                title("Color Key")
+                graphics::title("Color Key")
             }
         }
     }
 
-
-
-#
-# rep.row <-function(x,n){
-#   matrix(rep(x,each=n),nrow=n)
-# }
-#
-# rep.col<-function(x,n){
-#   matrix(rep(x,each=n), ncol=n, byrow=TRUE)
-# }
-
-### --------------------------------------------------------------------
-# heatmap_HC <- function(qData, col=heat.colors(100),labCol)
-# {
-#   conds_v <- c(rep.row(colnames(qData), nrow(qData)))
-#   lines_v <- c(rep.col(1:nrow(qData), ncol(qData)))
-#   data <- tibble(id=lines_v, condition=conds_v, value=round(c(qData), digits=2 ))
-#
-# #   fntltp <- JS("function(){
-# #                return this.point.x + ' ' +  this.series.yAxis.categories[this.point.y] + ':<br>' +
-# #                Highcharts.numberFormat(this.point.value, 2);
-# # }")
-#
-#   # plotline <- list(
-#   #   color = "#fde725", value = 3, width = 2, zIndex = 5,
-#   #   label = list(
-#   #     text = "", verticalAlign = "top",
-#   #     style = list(color = "black"), textAlign = "left",
-#   #     rotation = 0, y = -5)
-#   # )
-#
-#  # highchart2() %>%
-#     hchart(data, "heatmap", hcaes(x = condition, y = id, value = value)) %>%
-#     hc_colorAxis(stops = color_stops(100, col),type = "linear") %>%
-#     # hc_yAxis(reversed = FALSE, offset = -20, tickLength = 0,
-#     #          gridLineWidth = 0, minorGridLineWidth = 0,
-#     #          labels = list(style = list(fontSize = "8px"))) %>%
-#     hc_tooltip(enabled = FALSE) %>%
-#     #hc_xAxis(plotLines = list(plotline)) %>%
-#     hc_title(text = "MEC repartition") %>%
-#     hc_legend(layout = "vertical", verticalAlign = "top",
-#               align = "left", valueDecimals = 0)
-#
-# }

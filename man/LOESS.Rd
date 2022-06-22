@@ -12,7 +12,7 @@ LOESS(qData, conds, type = "overall", span = 0.7)
 \item{conds}{xxx}
 
 \item{type}{"overall" (shift all the sample distributions at once) or
-"within conditions" (shift the sample distributions within each 
+"within conditions" (shift the sample distributions within each
 condition at a time).}
 
 \item{span}{xxx}
@@ -24,10 +24,10 @@ A normalized numeric matrix
 Normalisation LOESS
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
+data(Exp1_R25_pept)
 qData <- Biobase::exprs(Exp1_R25_pept)
 conds <- Biobase::pData(Exp1_R25_pept)$Condition
-normalized <- LOESS(qData, conds, type="overall")
+normalized <- LOESS(qData, conds, type = "overall")
 
 }
 \author{

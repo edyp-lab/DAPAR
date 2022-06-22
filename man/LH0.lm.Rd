@@ -19,7 +19,11 @@ each peptide in each sample from the condition 2}
 xxxxxxxxxx..
 }
 \description{
-This function is xxxxxxx
+xxxxxx
+}
+\examples{
+NULL
+
 }
 \author{
 Thomas Burger, Laurent Jacob

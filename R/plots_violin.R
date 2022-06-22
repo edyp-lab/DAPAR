@@ -18,15 +18,12 @@
 #' @author Samuel Wieczorek, Anais Courtier
 #'
 #' @examples
-#' utils::data(Exp1_R25_prot, package = "DAPARdata")
+#' data(Exp1_R25_prot)
 #' obj <- Exp1_R25_prot
 #' legend <- conds <- Biobase::pData(obj)$Condition
 #' key <- "Protein_IDs"
-#' violinPlotD(obj, conds, key, legend, subset.view = 1:10)
+#' violinPlotD(obj, conds, key, legend, subset.view = seq_len(10))
 #'
-#' @importFrom graphics plot.window axis mtext legend points segments plot.new
-#'
-#' @importFrom stats na.omit
 #'
 #' @export
 #'
@@ -36,10 +33,17 @@ violinPlotD <- function(obj,
                         legend = NULL,
                         pal = NULL,
                         subset.view = NULL) {
+    if (!requireNamespace("stats", quietly = TRUE)) {
+        stop("Please install stats: BiocManager::install('stats')")
+    }
+    
     if (!requireNamespace("vioplot", quietly = TRUE)) {
         stop("Please install vioplot: BiocManager::install('vioplot')")
     }
 
+    if (!requireNamespace("graphics", quietly = TRUE)) {
+        stop("Please install graphics: BiocManager::install('graphics')")
+    }
     graphics::plot.new()
 
     if (is.null(obj)) {
@@ -63,7 +67,8 @@ violinPlotD <- function(obj,
     if (is.null(legend)) {
         legend <- conds
         for (i in unique(conds)) {
-            legend[which(conds == i)] <- paste0(i, "_", 1:length(which(conds == i)))
+            legend[which(conds == i)] <- paste0(i, "_", 
+                seq_len(length(which(conds == i))))
         }
     }
 
@@ -79,10 +84,12 @@ violinPlotD <- function(obj,
 
     myColors <- NULL
     if (is.null(pal)) {
-        myColors <- GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
+        myColors <- GetColorsForConditions(conds, 
+            ExtendPalette(length(unique(conds))))
     } else {
         if (length(pal) != length(unique(conds))) {
-            warning("The color palette has not the same dimension as the number of samples")
+            warning("The color palette has not the same dimension as the 
+                number of samples")
             return(NULL)
         } else {
             myColors <- GetColorsForConditions(conds, pal)
@@ -91,21 +98,29 @@ violinPlotD <- function(obj,
 
     graphics::plot.window(
         xlim = c(0, ncol(qData) + 1),
-        ylim = c(min(na.omit(qData)), max(na.omit(qData)))
+        ylim = c(
+            min(stats::na.omit(qData)), 
+            max(stats::na.omit(qData))
+            )
     )
-    title(
+    graphics::title(
         ylab = "Log (intensity)",
         xlab = "Samples"
     )
 
-    for (i in 1:ncol(qData)) {
-        vioplot::vioplot(na.omit(qData[, i]), col = myColors[i], add = TRUE, at = i)
+    for (i in seq_len(ncol(qData))) {
+        vioplot::vioplot(
+            stats::na.omit(
+                qData[, i]), 
+                col = myColors[i], 
+                add = TRUE, 
+                at = i)
     }
 
 
     graphics::axis(2, yaxp = c(
-        floor(min(na.omit(qData))),
-        floor(max(na.omit(qData))), 5
+        floor(min(stats::na.omit(qData))),
+        floor(max(stats::na.omit(qData))), 5
     ), las = 1)
 
     if (!is.null(legend)) {
@@ -115,10 +130,10 @@ violinPlotD <- function(obj,
             N <- ncol(legend)
         }
 
-        for (i in 1:N) {
+        for (i in seq_len(N)) {
             graphics::axis(
                 side = 1,
-                at = 1:ncol(qData),
+                at = seq_len(ncol(qData)),
                 labels = if (is.vector(legend)) {
                     legend
                 } else {
@@ -127,8 +142,6 @@ violinPlotD <- function(obj,
                 line = 2 * i - 1
             )
         }
-
-        # graphics::mtext("Samples",side=1,line=6+length(colnames(legend)), cex.lab=1, las=1)
     }
 
     # Display of rows to highlight (index of row in subset.view)
@@ -139,11 +152,26 @@ violinPlotD <- function(obj,
         n <- 0
         for (i in subset.view) {
             n <- n + 1
-            for (c in 1:(ncol(qData) - 1)) {
-                graphics::segments(y0 = qData[i, c], y1 = qData[i, c + 1], x0 = c, x1 = c + 1, pch = 16, col = pal[n], lwd = 2)
-                graphics::points(y = qData[i, c], x = c, pch = 16, col = pal[n])
+            for (c in seq_len(ncol(qData) - 1)) {
+                graphics::segments(
+                    y0 = qData[i, c], 
+                    y1 = qData[i, c + 1], 
+                    x0 = c, 
+                    x1 = c + 1, 
+                    pch = 16, 
+                    col = pal[n], 
+                    lwd = 2)
+                graphics::points(
+                    y = qData[i, c], 
+                    x = c, 
+                    pch = 16, 
+                    col = pal[n])
             }
-            graphics::points(y = qData[i, ncol(qData)], x = ncol(qData), pch = 16, col = pal[n])
+            graphics::points(
+                y = qData[i, ncol(qData)], 
+                x = ncol(qData), 
+                pch = 16, 
+                col = pal[n])
         }
         graphics::legend("topleft",
             legend = Biobase::fData(obj)[subset.view, keyId],

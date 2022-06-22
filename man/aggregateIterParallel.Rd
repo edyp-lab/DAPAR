@@ -27,17 +27,14 @@ aggregateIterParallel(
 xxxxx
 }
 \description{
-Method to xxxxx
+xxxx
 }
 \examples{
-\dontrun{
-library(MSnbase)
-utils::data(Exp1_R25_pept, package='DAPARdata')
+data(Exp1_R25_pept)
 protID <- "Protein_group_IDs"
-obj.pep <- Exp1_R25_pept[1:10]
+obj.pep <- Exp1_R25_pept[seq_len(10)]
 X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 obj.agg <- aggregateIterParallel(obj.pep, X)
-}
 
 }
 \author{

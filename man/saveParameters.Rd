@@ -11,7 +11,7 @@ saveParameters(obj, name.dataset = NULL, name = NULL, l.params = NULL)
 
 \item{name.dataset}{The name of the dataset}
 
-\item{name}{The name of the tool. Available values are: "Norm, Imputation, 
+\item{name}{The name of the tool. Available values are: "Norm, Imputation,
 anaDiff, GOAnalysis,Aggregation"}
 
 \item{l.params}{A list that contains the parameters}
@@ -23,9 +23,9 @@ An instance of class \code{MSnSet}.
 Saves the parameters of a tool in the pipeline of Prostar
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-l.params=list(method="Global quantile alignment", type="overall")
-saveParameters(Exp1_R25_pept, "Filtered.peptide", "Imputation",l.params)
+data(Exp1_R25_pept)
+l.params <- list(method = "Global quantile alignment", type = "overall")
+saveParameters(Exp1_R25_pept, "Filtered.peptide", "Imputation", l.params)
 
 }
 \author{

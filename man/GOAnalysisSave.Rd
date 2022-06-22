@@ -2,9 +2,9 @@
 % Please edit documentation in R/bioAnalysis.R
 \name{GOAnalysisSave}
 \alias{GOAnalysisSave}
-\title{Returns an \code{MSnSet} object with the results of
-the GO analysis performed with the functions \code{enrichGO} and/or 
-\code{groupGO} of the `clusterProfiler` package.}
+\title{Returns an \code{MSnSet} object with the results of the GO analysis 
+performed with the functions \code{enrichGO} and/or \code{groupGO} of the 
+`clusterProfiler` package.}
 \usage{
 GOAnalysisSave(
   obj,
@@ -20,34 +20,38 @@ GOAnalysisSave(
 \arguments{
 \item{obj}{An object of the class \code{MSnSet}}
 
-\item{ggo_res}{The object returned by the function \code{group_GO} of the 
+\item{ggo_res}{The object returned by the function \code{group_GO} of the
 package \code{DAPAR} or the function \code{groupGO} of the package
  `clusterProfiler`}
 
-\item{ego_res}{The object returned by the function \code{enrich_GO} of the 
-package \code{DAPAR} or the function \code{enrichGO} of the package 
+\item{ego_res}{The object returned by the function \code{enrich_GO} of the
+package \code{DAPAR} or the function \code{enrichGO} of the package
 `clusterProfiler`}
 
-\item{organism}{The parameter OrgDb of the functions \code{bitr}, 
+\item{organism}{The parameter OrgDb of the functions \code{bitr},
 \code{groupGO} and \code{enrichGO}}
 
 \item{ontology}{One of "MF", "BP", and "CC" subontologies}
 
 \item{levels}{A vector of the different GO grouping levels to save}
 
-\item{pvalueCutoff}{The qvalue cutoff (same parameter as in the function 
+\item{pvalueCutoff}{The qvalue cutoff (same parameter as in the function
 \code{enrichGO} of the package `clusterProfiler`)}
 
-\item{typeUniverse}{The type of background to be used. Values are 
-'Entire Organism', 'Entire dataset' or 'Custom'. In the latter case, a file 
+\item{typeUniverse}{The type of background to be used. Values are
+'Entire Organism', 'Entire dataset' or 'Custom'. In the latter case, a file
 should be uploaded by the user}
 }
 \value{
 An object of the class \code{MSnSet}
 }
 \description{
-This method returns an \code{MSnSet} object with the results
-of the Gene Ontology analysis.
+This method returns an \code{MSnSet} object with the results of the Gene 
+Ontology analysis.
+}
+\examples{
+NULL
+
 }
 \author{
 Samuel Wieczorek

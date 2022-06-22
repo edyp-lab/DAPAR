@@ -22,12 +22,14 @@ values (used to update an initial dataset) or imputed values (used when
 post processing protein metacell after aggregation)
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-obj <- Exp1_R25_pept[1:10]
-cols.for.ident <- obj@experimentData@other$names_metacell
+data(Exp1_R25_pept)
+obj <- Exp1_R25_pept[seq_len(10)]
+cols.for.ident <- c("metacell_Intensity_C_R1", "metacell_Intensity_C_R2",
+"metacell_Intensity_C_R3", "metacell_Intensity_D_R1",
+"metacell_Intensity_D_R2", "metacell_Intensity_D_R3")
 conds <- Biobase::pData(obj)$Condition
 df <- Biobase::fData(obj)[, cols.for.ident]
-df <- Set_POV_MEC_tags(conds, df, level = 'peptide')
+df <- Set_POV_MEC_tags(conds, df, level = "peptide")
 
 }
 \author{

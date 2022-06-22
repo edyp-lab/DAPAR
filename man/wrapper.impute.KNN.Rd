@@ -11,24 +11,23 @@ wrapper.impute.KNN(obj = NULL, K, na.type)
 
 \item{K}{the number of neighbors.}
 
-\item{na.type}{A string which indicates the type of missing values to impute. 
+\item{na.type}{A string which indicates the type of missing values to impute.
 Available values are: `missing POV`.}
 }
 \value{
 The object \code{obj} which has been imputed
 }
 \description{
-Can impute only POV missing values
-}
-\details{
-This method is a wrapper for
+Can impute only POV missing values. This method is a wrapper for
 objects of class \code{MSnSet} and imputes missing values with a fixed value.
 This function imputes the missing values condition by condition.
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-obj.imp.pov <- wrapper.impute.KNN(obj = Exp1_R25_pept[1:10], K=3, 
-na.type = 'missing POV')
+data(Exp1_R25_pept)
+obj.imp.pov <- wrapper.impute.KNN(
+    obj = Exp1_R25_pept[seq_len(10)], K = 3,
+    na.type = "missing POV"
+)
 
 }
 \author{

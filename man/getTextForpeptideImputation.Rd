@@ -13,7 +13,14 @@ getTextForpeptideImputation(l.params)
 A string
 }
 \description{
-Build the text information for the peptide Imputation process
+* pepLevel_algorithm,
+* pepLevel_basicAlgorithm,
+* pepLevel_detQuantile,
+* pepLevel_detQuant_factor,
+* pepLevel_imp4p_nbiter,
+* pepLevel_imp4p_withLapala,
+* pepLevel_imp4p_qmin,
+* pepLevel_imp4pLAPALA_distrib
 }
 \examples{
 params <- list()

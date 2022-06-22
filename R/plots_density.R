@@ -1,8 +1,11 @@
 
 
+
+#' @title Builds a densityplot from a dataframe
+#' 
+#' @description 
 #' Densityplot of quantitative proteomics data over samples.
 #'
-#' @title Builds a densityplot from a dataframe
 #'
 #' @param obj xxx
 #'
@@ -16,7 +19,7 @@
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
+#' data(Exp1_R25_pept)
 #' densityPlotD_HC(Exp1_R25_pept)
 #' conds <- Biobase::pData(Exp1_R25_pept)$Condition
 #' pal <- ExtendPalette(2, "Dark2")
@@ -29,6 +32,12 @@
 densityPlotD_HC <- function(obj,
                             legend = NULL,
                             pal = NULL) {
+    
+    if (!requireNamespace("stats", quietly = TRUE)) {
+        stop("Please install stats: BiocManager::install('stats')")
+    }
+    
+    
     if (is.null(obj)) {
         warning("The dataset is NULL and cannot be shown")
         return(NULL)
@@ -46,11 +55,14 @@ densityPlotD_HC <- function(obj,
 
     myColors <- NULL
     if (is.null(pal)) {
-        myColors <- GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
+        myColors <- GetColorsForConditions(conds, 
+            ExtendPalette(length(unique(conds))))
     } else {
         if (length(pal) != length(unique(conds))) {
-            warning("The color palette has not the same dimension as the number of samples. Set to default.")
-            myColors <- GetColorsForConditions(conds, ExtendPalette(length(unique(conds))))
+            warning("The color palette has not the same dimension as the 
+                number of samples. Set to default.")
+            myColors <- GetColorsForConditions(conds, 
+                ExtendPalette(length(unique(conds))))
         } else {
             myColors <- GetColorsForConditions(conds, pal)
         }
@@ -82,13 +94,13 @@ densityPlotD_HC <- function(obj,
         )
 
     if (is.null(legend)) {
-        legend <- paste0("series", 1:ncol(qData))
+        legend <- paste0("series", seq_len(ncol(qData)))
     }
 
-    for (i in 1:ncol(qData)) {
+    for (i in seq_len(ncol(qData))) {
         tmp <- data.frame(
-            x = density(qData[, i], na.rm = TRUE)$x,
-            y = density(qData[, i], na.rm = TRUE)$y
+            x = stats::density(qData[, i], na.rm = TRUE)$x,
+            y = stats::density(qData[, i], na.rm = TRUE)$y
         )
 
         h1 <- h1 %>% hc_add_series(data = list_parse(tmp), name = legend[i])

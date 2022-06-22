@@ -2,18 +2,18 @@
 % Please edit documentation in R/DiffAnalysis.R
 \name{diffAnaSave}
 \alias{diffAnaSave}
-\title{Returns a \code{MSnSet} object with the results of
-the differential analysis performed with \code{\link{limma}} package.}
+\title{Returns a \code{MSnSet} object with the results of the differential 
+analysis performed with \code{limma} package.}
 \usage{
 diffAnaSave(obj, allComp, data = NULL, th_pval = 0, th_logFC = 0)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
 
-\item{allComp}{A list of two items which is the result of the function 
+\item{allComp}{A list of two items which is the result of the function
 wrapper.limmaCompleteTest or xxxx}
 
-\item{data}{The result of the differential analysis processed 
+\item{data}{The result of the differential analysis processed
 by \code{\link{limmaCompleteTest}}}
 
 \item{th_pval}{xxx}
@@ -24,20 +24,20 @@ by \code{\link{limmaCompleteTest}}}
 A MSnSet
 }
 \description{
-This method returns a class \code{MSnSet} object with the results
-of differential analysis.
+This method returns a class \code{MSnSet} object with the results of 
+differential analysis.
 }
 \examples{
-utils::data(Exp1_R25_prot, package='DAPARdata')
-obj <- Exp1_R25_prot[1:1000]
-level <- obj@experimentData@other$typeOfData
-metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
-indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
-obj <- MetaCellFiltering(obj, indices, cmd='delete')
+data(Exp1_R25_prot)
+obj <- Exp1_R25_prot[seq_len(100)]
+level <- 'protein'
+metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
+obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 qData <- Biobase::exprs(obj$new)
 sTab <- Biobase::pData(obj$new)
-allComp <- limmaCompleteTest(qData,sTab)
-data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
+allComp <- limmaCompleteTest(qData, sTab)
+data <- list(logFC = allComp$logFC[1], P_Value = allComp$P_Value[1])
 diffAnaSave(obj$new, allComp, data)
 
 }

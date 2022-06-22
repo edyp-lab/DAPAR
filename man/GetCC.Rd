@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{GetCC}
 \alias{GetCC}
-\title{Returns the contains of the slot processing  of an object of 
+\title{Returns the contains of the slot processing  of an object of
 class \code{MSnSet}}
 \usage{
 GetCC(obj)
@@ -14,17 +14,21 @@ GetCC(obj)
 A list of connected components
 }
 \description{
-Returns the contains of the slot processing  of an object of 
+Returns the contains of the slot processing  of an object of
 class \code{MSnSet}
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-Xshared <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
-Xunique <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
-ll.X <- list(matWithSharedPeptides = Xshared, matWithUniquePeptides = Xunique)
+data(Exp1_R25_pept)
+Xshared <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(100)], 
+"Protein_group_IDs",  FALSE)
+Xunique <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(100)], 
+"Protein_group_IDs", TRUE)
+ll.X <- list(matWithSharedPeptides = Xshared, 
+matWithUniquePeptides = Xunique)
 Exp1_R25_pept <- SetMatAdj(Exp1_R25_pept, ll.X)
 ll1 <- get.pep.prot.cc(GetMatAdj(Exp1_R25_pept)$matWithSharedPeptides)
-ll2 <- DAPAR::get.pep.prot.cc(GetMatAdj(Exp1_R25_pept)$matWithUniquePeptides)
+ll2 <- DAPAR::get.pep.prot.cc(
+GetMatAdj(Exp1_R25_pept)$matWithUniquePeptides)
 cc <- list(allPep = ll1, onlyUniquePep = ll2)
 Exp1_R25_pept <- SetCC(Exp1_R25_pept, cc)
 ll.cc <- GetCC(Exp1_R25_pept)

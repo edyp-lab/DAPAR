@@ -2,14 +2,14 @@
 % Please edit documentation in R/bioAnalysis.R
 \name{scatterplotEnrichGO_HC}
 \alias{scatterplotEnrichGO_HC}
-\title{A dotplot that shows the result of a GO enrichment, using the 
+\title{A dotplot that shows the result of a GO enrichment, using the
 package \code{highcharter}}
 \usage{
 scatterplotEnrichGO_HC(ego, maxRes = 10, title = NULL)
 }
 \arguments{
 \item{ego}{The result of the GO enrichment, provides either by the function
-enrichGO in \code{DAPAR} or the function \code{enrichGO} of the packaage 
+enrichGO in \code{DAPAR} or the function \code{enrichGO} of the packaage
 `clusterProfiler`}
 
 \item{maxRes}{The maximum number of categories to display in the plot}
@@ -21,6 +21,16 @@ A dotplot
 }
 \description{
 A scatter plot of GO enrichment analysis
+}
+\examples{
+data(Exp1_R25_prot)
+obj <- Exp1_R25_prot[seq_len(10)]
+univ <- univ_AnnotDbPkg("org.Sc.sgd.db")
+ego <- enrich_GO(
+    data = Biobase::fData(obj)$Protein.IDs, idFrom = "UNIPROT",
+    orgdb = "org.Sc.sgd.db", ont = "MF", pval = 0.05, universe = univ
+)
+scatterplotEnrichGO_HC(ego)
 }
 \author{
 Samuel Wieczorek

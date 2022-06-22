@@ -2,7 +2,7 @@
 % Please edit documentation in R/agregation.R
 \name{GetDetailedNbPeptidesUsed}
 \alias{GetDetailedNbPeptidesUsed}
-\title{Computes the detailed number of peptides used for aggregating 
+\title{Computes the detailed number of peptides used for aggregating
 each protein}
 \usage{
 GetDetailedNbPeptidesUsed(X, qdata.pep)
@@ -16,14 +16,19 @@ GetDetailedNbPeptidesUsed(X, qdata.pep)
 A list of two items
 }
 \description{
-Method to compute the detailed number of quantified peptides used for 
+Method to compute the detailed number of quantified peptides used for
 aggregating each protein
+}
+\examples{
+NULL
+
 }
 \author{
 Samuel Wieczorek
 library(MSnbase)
-utils::data(Exp1_R25_pept, package='DAPARdata')
+data(Exp1_R25_pept)
 protID <- "Protein_group_IDs"
-X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:10], protID, FALSE)
-ll.n <- GetDetailedNbPeptidesUsed(X, Biobase::exprs(Exp1_R25_pept[1:10]))
+X <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(10)], protID, FALSE)
+ll.n <- GetDetailedNbPeptidesUsed(X, 
+Biobase::exprs(Exp1_R25_pept[seq_len(10)]))
 }

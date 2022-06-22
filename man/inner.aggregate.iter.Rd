@@ -29,11 +29,11 @@ xxxxx
 \description{
 Method to xxxxx
 }
-\author{
-Samuel Wieczorek
-library(MSnbase)
-utils::data(Exp1_R25_pept, package='DAPARdata')
+\examples{
+data(Exp1_R25_pept)
+obj <- Exp1_R25_pept
 protID <- "Protein_group_IDs"
-X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:10], protID, FALSE)
-qdata.agg <- DAPAR::inner.aggregate.iter(Biobase::exprs(Exp1_R25_pept[1:10]), X)
+X <- BuildAdjacencyMatrix(obj[seq_len(10)], protID, FALSE)
+qdata.agg <- DAPAR::inner.aggregate.iter(Biobase::exprs(obj[seq_len(10)]), X)
+
 }

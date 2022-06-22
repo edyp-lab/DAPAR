@@ -9,6 +9,13 @@ normalizeMethods.dapar(withTracking = FALSE)
 \arguments{
 \item{withTracking}{xxx}
 }
+\value{
+xxx
+}
 \description{
 List normalization methods with tracking option
+}
+\examples{
+normalizeMethods.dapar()
+
 }

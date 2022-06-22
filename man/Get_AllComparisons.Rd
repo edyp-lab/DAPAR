@@ -2,7 +2,7 @@
 % Please edit documentation in R/DiffAnalysis.R
 \name{Get_AllComparisons}
 \alias{Get_AllComparisons}
-\title{Returns list that contains a list of the statistical tests performed 
+\title{Returns list that contains a list of the statistical tests performed
 with DAPAR and recorded in an object of class \code{MSnSet}.}
 \usage{
 Get_AllComparisons(obj)
@@ -14,20 +14,20 @@ Get_AllComparisons(obj)
 A list of two slots: logFC and P_Value
 }
 \description{
-This method returns a list of the statistical tests performed with DAPAR and 
+This method returns a list of the statistical tests performed with DAPAR and
 recorded in an object of class \code{MSnSet}.
 }
 \examples{
-utils::data(Exp1_R25_prot, package='DAPARdata')
-obj <- Exp1_R25_prot[1:1000]
+data(Exp1_R25_prot)
+obj <- Exp1_R25_prot[seq_len(1000)]
 level <- GetTypeofData(obj)
-metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
-indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
-obj <- MetaCellFiltering(obj, indices, cmd='delete')
+metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
+obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 qData <- Biobase::exprs(obj$new)
 sTab <- Biobase::pData(obj$new)
-allComp <- limmaCompleteTest(qData,sTab)
-data <- list(logFC=allComp$logFC[1], P_Value = allComp$P_Value[1])
+allComp <- limmaCompleteTest(qData, sTab)
+data <- list(logFC = allComp$logFC[1], P_Value = allComp$P_Value[1])
 obj$new <- diffAnaSave(obj$new, allComp, data)
 ll <- Get_AllComparisons(obj$new)
 

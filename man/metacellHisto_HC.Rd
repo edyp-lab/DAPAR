@@ -17,7 +17,8 @@ metacellHisto_HC(
 
 \item{pattern}{xxx}
 
-\item{indLegend}{The indices of the column name's in \code{Biobase::pData()} tab}
+\item{indLegend}{The indices of the column name's in \code{Biobase::pData()}
+tab}
 
 \item{showValues}{A logical that indicates wether numeric values should be
 drawn above the bars.}
@@ -28,15 +29,15 @@ drawn above the bars.}
 A histogram
 }
 \description{
-This method plots a histogram of missing values. Same as the function 
+#' This method plots a histogram of missing values. Same as the function
 \code{mvHisto} but uses the package \code{highcharter}
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
+data(Exp1_R25_pept)
 obj <- Exp1_R25_pept
-pattern <- 'missing POV'
-pal <- ExtendPalette(2, 'Dark2')
-metacellHisto_HC(obj, pattern,  showValues=TRUE, pal=pal)
+pattern <- "missing POV"
+pal <- ExtendPalette(2, "Dark2")
+metacellHisto_HC(obj, pattern, showValues = TRUE, pal = pal)
 
 }
 \author{

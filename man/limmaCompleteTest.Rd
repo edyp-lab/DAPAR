@@ -11,25 +11,25 @@ limmaCompleteTest(qData, sTab, comp.type = "OnevsOne")
 
 \item{sTab}{A dataframe of experimental design (Biobase::pData()).}
 
-\item{comp.type}{A string that corresponds to the type of comparison. 
+\item{comp.type}{A string that corresponds to the type of comparison.
 Values are: 'anova1way', 'OnevsOne' and 'OnevsAll'; default is 'OnevsOne'.}
 }
 \value{
 A list of two dataframes : logFC and P_Value. The first one contains
-the logFC values of all the comparisons (one column for one comparison), 
-the second one contains the pvalue of all the comparisons (one column for 
+the logFC values of all the comparisons (one column for one comparison),
+the second one contains the pvalue of all the comparisons (one column for
 one comparison). The names of the columns for those two dataframes
 are identical and correspond to the description of the comparison.
 }
 \description{
-This function is a limmaCompleteTest
+Computes a hierarchical differential analysis
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
+data(Exp1_R25_pept)
 obj <- Exp1_R25_pept
 qData <- Biobase::exprs(obj)
 sTab <- Biobase::pData(obj)
-limma <- limmaCompleteTest(qData, sTab, comp.type='anova1way')
+limma <- limmaCompleteTest(qData, sTab, comp.type = "anova1way")
 
 }
 \author{

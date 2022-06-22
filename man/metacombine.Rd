@@ -11,12 +11,15 @@ metacombine(met, level)
 
 \item{level}{xxx}
 }
+\value{
+xxx
+}
 \description{
-Agregation rules for the cells metadata of peptides. 
+Agregation rules for the cells metadata of peptides.
 Please refer to the metacell vocabulary in `metacell.def()`
 
-# Basic agreagtion
-Agregation of non imputed values (2.X) with quantitative values 
+# Basic agregation
+Agregation of non imputed values (2.X) with quantitative values
 (1.0, 1.X, 3.0, 3.X)
 |----------------------------
 Not possible
@@ -24,37 +27,36 @@ Not possible
 
 Agregation of different types of missing values (among 2.1, 2.2)
 |----------------------------
-* Agregation of 2.1 peptides between each other gives a missing value 
-  non imputed (2.0)
-* Agreagtion of 2.2 peptides between each other givesa missing value 
-  non imputed (2.0)
+* Agregation of 2.1 peptides between each other gives a missing value
+non imputed (2.0)
+* Agreagtion of 2.2 peptides between each other givesa missing value
+non imputed (2.0)
 * Agregation of a mix of 2.1 and 2.2 gives a missing value non imputed (2.0)
 |----------------------------
 
 
 Agregation of a mix of quantitative values (among 1.0, 1.1, 1.2, 3.0, 3.X)
 |----------------------------
-* if the type of all the peptides to agregate is 1.0, 1.1 or 1.2, 
-  then the final metadata is set the this tag
-* if the set of metacell to agregate is a mix of 1.0, 1.1 or 1.2, 
-  then the final metadata is set to 1.0
-* if the set of metacell to agregate is a mix of 3.X and 3.0, 
-  then the final metadata is set to 3.0
+* if the type of all the peptides to agregate is 1.0, 1.1 or 1.2,
+then the final metadata is set the this tag
+* if the set of metacell to agregate is a mix of 1.0, 1.1 or 1.2,
+then the final metadata is set to 1.0
+* if the set of metacell to agregate is a mix of 3.X and 3.0,
+then the final metadata is set to 3.0
 * if the set of metacell to agregate is a mix of 3.X and 3.0 and other (X.X),
-  then the final metadata is set to 4.0
-|----------------------------
+then the final metadata is set to 4.0
 
 # Post processing
 Update metacell with POV/MEC status for the categories 2.0 and 3.0
 TODO
 }
 \examples{
-\dontrun{
-ll <- metacell.def('peptide')$node
-for (i in 1:length(ll))
-test <- lapply(combn(ll, i, simplify = FALSE), 
-function(x) tag <- metacombine(x, 'peptide'))
+ll <- metacell.def("peptide")$node
+for (i in seq_len(length(ll))) {
+test <- lapply(
+combn(ll, i, simplify = FALSE),
+function(x) tag <- metacombine(x, "peptide")
+)
 }
-
 
 }

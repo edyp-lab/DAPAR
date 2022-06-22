@@ -1,14 +1,13 @@
 
 
 
-
-#' This function is a wrappper to the function adjust.p from the
-#' cp4p package. It returns the FDR corresponding to the p-values of the
-#' differential analysis.
-#' The FDR is computed with the function \code{p.adjust}\{stats\}..
-#'
 #' @title Computes the FDR corresponding to the p-values of the
 #' differential analysis using
+#' 
+#' @description 
+#' This function is a wrapper to the function adjust.p from the `cp4p` package.
+#'  It returns the FDR corresponding to the p-values of the differential 
+#' analysis. The FDR is computed with the function \code{p.adjust}\{stats\}.
 #'
 #' @param logFC The result (logFC values) of the differential analysis processed
 #' by \code{\link{limmaCompleteTest}}
@@ -16,23 +15,23 @@
 #' @param pval The result (p-values) of the differential analysis processed
 #' by \code{\link{limmaCompleteTest}}
 #'
-#' @param threshold_PVal The threshold on p-pvalue to
-#' distinguish between differential and non-differential data
+#' @param threshold_PVal The threshold on p-pvalue to distinguish between 
+#' differential and non-differential data
 #'
-#' @param threshold_LogFC The threshold on log(Fold Change) to
-#' distinguish between differential and non-differential data
+#' @param threshold_LogFC The threshold on log(Fold Change) to distinguish 
+#' between differential and non-differential data
 #'
-#' @param pi0Method The parameter pi0.method of the method adjust.p
-#' in the package \code{cp4p}
+#' @param pi0Method The parameter pi0.method of the method adjust.p in the 
+#' package \code{cp4p}
 #'
 #' @return The computed FDR value (floating number)
 #'
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_prot, package = "DAPARdata")
-#' obj <- Exp1_R25_prot[1:1000]
-#' level <- obj@experimentData@other$typeOfData
+#' data(Exp1_R25_prot)
+#' obj <- Exp1_R25_prot[seq_len(1000)]
+#' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
@@ -44,35 +43,35 @@
 #' @export
 #'
 diffAnaComputeFDR <- function(logFC,
-                              pval, threshold_PVal = 0,
-                              threshold_LogFC = 0,
-                              pi0Method = 1) {
-    # require(cp4p)
+    pval, threshold_PVal = 0,
+    threshold_LogFC = 0,
+    pi0Method = 1) {
+    if (!requireNamespace("cp4p", quietly = TRUE)) {
+        stop("Please install cp4p: BiocManager::install('cp4p')")
+    }
     if (is.null(logFC) || is.null(pval)) {
         return()
     }
 
     upItems <- which(abs(logFC) >= threshold_LogFC)
-
     selectedItems <- pval[upItems]
-
     padj <- cp4p::adjust.p(selectedItems, pi0Method)
-
     items <- which(-log10(padj$adjp[, 1]) >= threshold_PVal)
-
     BH.fdr <- max(padj$adjp[items, 2])
-
     return(BH.fdr)
 }
 
 
 
-#' This method returns a list of the statistical tests performed with DAPAR and
-#' recorded in an object of class \code{MSnSet}.
+
 #'
 #' @title Returns list that contains a list of the statistical tests performed
 #' with DAPAR and recorded in an object of class \code{MSnSet}.
 #'
+#' @description 
+#' This method returns a list of the statistical tests performed with DAPAR and
+#' recorded in an object of class \code{MSnSet}.
+#' 
 #' @param obj An object of class \code{MSnSet}.
 #'
 #' @return A list of two slots: logFC and P_Value
@@ -80,8 +79,8 @@ diffAnaComputeFDR <- function(logFC,
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_prot, package = "DAPARdata")
-#' obj <- Exp1_R25_prot[1:1000]
+#' data(Exp1_R25_prot)
+#' obj <- Exp1_R25_prot[seq_len(1000)]
 #' level <- GetTypeofData(obj)
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
@@ -96,6 +95,12 @@ diffAnaComputeFDR <- function(logFC,
 #' @export
 #'
 Get_AllComparisons <- function(obj) {
+    
+    if (!requireNamespace("dplyr", quietly = TRUE)) {
+        stop("Please install dplyr: BiocManager::install('dplyr')")
+    }
+    
+    
     logFC_KEY <- "_logFC"
     pvalue_KEY <- "_pval"
 
@@ -118,12 +123,14 @@ Get_AllComparisons <- function(obj) {
 
 
 
-#' This method returns a class \code{MSnSet} object with the results
-#' of differential analysis.
+
+#' @title Returns a \code{MSnSet} object with the results of the differential 
+#' analysis performed with \code{limma} package.
 #'
-#' @title Returns a \code{MSnSet} object with the results of
-#' the differential analysis performed with \code{\link{limma}} package.
-#'
+#' @description
+#' This method returns a class \code{MSnSet} object with the results of 
+#' differential analysis.
+#' 
 #' @param obj An object of class \code{MSnSet}.
 #'
 #' @param allComp A list of two items which is the result of the function
@@ -141,9 +148,9 @@ Get_AllComparisons <- function(obj) {
 #' @author Alexia Dorffer, Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_prot, package = "DAPARdata")
-#' obj <- Exp1_R25_prot[1:1000]
-#' level <- obj@experimentData@other$typeOfData
+#' data(Exp1_R25_prot)
+#' obj <- Exp1_R25_prot[seq_len(100)]
+#' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
@@ -179,10 +186,11 @@ diffAnaSave <- function(obj,
         Biobase::fData(obj) <- Biobase::fData(obj)[, -ind]
     }
 
-    for (i in 1:ncol(.fc)) {
+    for (i in seq_len(ncol(.fc))) {
         Biobase::fData(obj) <- cbind(Biobase::fData(obj), .fc[, i], .pval[, i])
         coln <- colnames(Biobase::fData(obj))
-        colnames(Biobase::fData(obj))[(length(coln) - 1):length(coln)] <- 
+        colnames(Biobase::fData(obj))[seq.int(from = (length(coln) - 1), 
+            to = length(coln))] <- 
             c(colnames(allComp$logFC)[i], colnames(allComp$P_Value)[i])
     }
 
@@ -212,11 +220,14 @@ diffAnaSave <- function(obj,
 }
 
 
-#' Returns a MSnSet object with only proteins significant after
-#' differential analysis.
+
 #'
 #' @title Returns a MSnSet object with only proteins significant after
 #' differential analysis.
+#' 
+#' @description 
+#' Returns a MSnSet object with only proteins significant after differential 
+#' analysis.
 #'
 #' @param obj An object of class \code{MSnSet}.
 #'
@@ -225,9 +236,9 @@ diffAnaSave <- function(obj,
 #' @author Alexia Dorffer
 #'
 #' @examples
-#' utils::data(Exp1_R25_prot, package = "DAPARdata")
-#' obj <- Exp1_R25_prot[1:1000]
-#' level <- obj@experimentData@other$typeOfData
+#' data(Exp1_R25_prot)
+#' obj <- Exp1_R25_prot[seq_len(100)]
+#' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
@@ -257,11 +268,13 @@ diffAnaGetSignificant <- function(obj) {
 
 
 
-#' This function is a wrapper to the calibration.plot method of the
-#' \code{cp4p} package for use with \code{MSnSet} objects.
-#'
+
 #' @title Performs a calibration plot on an \code{MSnSet} object,
 #' calling the \code{cp4p} package functions.
+#' 
+#' @description 
+#' This function is a wrapper to the calibration.plot method of the
+#' \code{cp4p} package for use with \code{MSnSet} objects.
 #'
 #' @param vPVal A dataframe that contains quantitative data.
 #'
@@ -272,9 +285,9 @@ diffAnaGetSignificant <- function(obj) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_prot, package = "DAPARdata")
-#' obj <- Exp1_R25_prot[1:1000]
-#' level <- obj@experimentData@other$typeOfData
+#' data(Exp1_R25_prot)
+#' obj <- Exp1_R25_prot[seq_len(100)]
+#' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
@@ -286,11 +299,13 @@ diffAnaGetSignificant <- function(obj) {
 #' @export
 #'
 wrapperCalibrationPlot <- function(vPVal, pi0Method = "pounds") {
-    # require(cp4p)
     if (is.null(vPVal)) {
         return(NULL)
     }
-
+    if (!requireNamespace("cp4p", quietly = TRUE)) {
+        stop("Please install cp4p: BiocManager::install('cp4p')")
+    }
+    
     p <- cp4p::calibration.plot(vPVal, pi0.method = pi0Method)
 
     return(p)
@@ -298,8 +313,7 @@ wrapperCalibrationPlot <- function(vPVal, pi0Method = "pounds") {
 
 
 
-#' This function plots a histogram ov p-values
-#'
+
 #' @title Plots a histogram ov p-values
 #'
 #' @param pval_ll xxx
@@ -313,9 +327,9 @@ wrapperCalibrationPlot <- function(vPVal, pi0Method = "pounds") {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_prot, package = "DAPARdata")
-#' obj <- Exp1_R25_prot[1:1000]
-#' level <- obj@experimentData@other$typeOfData
+#' data(Exp1_R25_prot)
+#' obj <- Exp1_R25_prot[seq_len(100)]
+#' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
@@ -325,12 +339,19 @@ wrapperCalibrationPlot <- function(vPVal, pi0Method = "pounds") {
 #' histPValue_HC(allComp$P_Value[1])
 #'
 #' @export
+#' @import highcharter
 #'
 histPValue_HC <- function(pval_ll, bins = 80, pi0 = 1) {
-    h <- hist(sort(unlist(pval_ll)), freq = F, breaks = bins)
+    if (!requireNamespace("graphics", quietly = TRUE)) {
+        stop("Please install graphics: BiocManager::install('graphics')")
+    }
+    h <- graphics::hist(sort(unlist(pval_ll)), freq = FALSE, breaks = bins)
 
-    serieInf <- sapply(h$density, function(x) min(pi0, x))
-    serieSup <- sapply(h$density, function(x) max(0, x - pi0))
+    # serieInf <- sapply(h$density, function(x) min(pi0, x))
+    # serieSup <- sapply(h$density, function(x) max(0, x - pi0))
+
+    serieInf <- vapply(h$density, function(x) min(pi0, x), numeric(1))
+    serieSup <- vapply(h$density, function(x) max(0, x - pi0), numeric(1))
 
     hc <- highchart() %>%
         hc_chart(type = "column") %>%

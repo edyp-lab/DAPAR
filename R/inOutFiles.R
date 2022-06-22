@@ -1,6 +1,4 @@
 
-#' Saves the parameters of a tool in the pipeline of Prostar
-#'
 #' @title Saves the parameters of a tool in the pipeline of Prostar
 #'
 #' @param obj An object of class \code{MSnSet}
@@ -17,7 +15,7 @@
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
+#' data(Exp1_R25_pept)
 #' l.params <- list(method = "Global quantile alignment", type = "overall")
 #' saveParameters(Exp1_R25_pept, "Filtered.peptide", "Imputation", l.params)
 #'
@@ -46,14 +44,14 @@ saveParameters <- function(
 
 
 
-#' Builds an object of class \code{MSnSet} from a
-#' single tabulated-like file for quantitative and meta-data and a dataframe
-#' for the samples description. It differs from
-#' the original \code{MSnSet} builder which requires three separated files
-#' tabulated-like quantitative proteomic data into a \code{MSnSet} object,
-#' including metadata.
-#'
 #' @title Creates an object of class \code{MSnSet} from text file
+#' 
+#' @description 
+#' Builds an object of class \code{MSnSet} from a single tabulated-like file 
+#' for quantitative and meta-data and a dataframe for the samples description. 
+#' It differs from the original \code{MSnSet} builder which requires three 
+#' separated files tabulated-like quantitative proteomic data into a 
+#' \code{MSnSet} object, including metadata.
 #'
 #' @param file The name of a tab-separated file that contains the data.
 #'
@@ -93,10 +91,10 @@ saveParameters <- function(
 #' )
 #' metadata <- read.table(metadataFile, header = TRUE, sep = "\t", 
 #' as.is = TRUE)
-#' indExpData <- c(56:61)
+#' indExpData <- seq.int(from=56, to=61)
 #' colnameForID <- "id"
 #' obj <- createMSnset(exprsFile, metadata, indExpData, colnameForID,
-#'     indexForMetacell = c(43:48), pep_prot_data = "peptide", 
+#'     indexForMetacell = seq.int(from=43, to=48), pep_prot_data = "peptide", 
 #'     software = "maxquant"
 #' )
 #'
@@ -107,11 +105,11 @@ saveParameters <- function(
 #' package = "DAPARdata")
 #' metadata <- read.table(metadataFile, header = TRUE, sep = "\t", 
 #' as.is = TRUE)
-#' indExpData <- c(56:61)
+#' indExpData <- seq.int(from = 56, to = 61)
 #' colnameForID <- "AutoID"
 #' obj <- createMSnset(exprsFile, metadata, indExpData, colnameForID,
-#'     indexForMetacell = c(43:48), pep_prot_data = "peptide", 
-#'     software = "maxquant"
+#' indexForMetacell = seq.int(from = 43, to = 48), 
+#' pep_prot_data = "peptide", software = "maxquant"
 #' )
 #'
 #' @export
@@ -120,15 +118,15 @@ saveParameters <- function(
 #' @importFrom utils read.table
 #'
 createMSnset <- function(file,
-                         metadata = NULL,
-                         indExpData,
-                         colnameForID = NULL,
-                         indexForMetacell = NULL,
-                         logData = FALSE,
-                         replaceZeros = FALSE,
-                         pep_prot_data = NULL,
-                         proteinId = NULL,
-                         software = NULL) {
+    metadata = NULL,
+    indExpData,
+    colnameForID = NULL,
+    indexForMetacell = NULL,
+    logData = FALSE,
+    replaceZeros = FALSE,
+    pep_prot_data = NULL,
+    proteinId = NULL,
+    software = NULL) {
     if (!is.data.frame(file)) { # the variable is a path to a text file
         data <- read.table(
             file, 
@@ -178,10 +176,11 @@ createMSnset <- function(file,
 
     if (colnameForID == "AutoID") {
         fd <- data.frame(data,
-            AutoID = rep(paste(pep_prot_data, "_", 1:nrow(data), sep = "")),
+            AutoID = rep(
+                paste(pep_prot_data, "_", seq_len(nrow(data)), sep = "")),
             stringsAsFactors = FALSE
         )
-        rownames(fd) <- paste(pep_prot_data, "_", 1:nrow(fd), sep = "")
+        rownames(fd) <- paste(pep_prot_data, "_", seq_len(nrow(fd)), sep = "")
         rownames(Intensity) <- paste(pep_prot_data, "_",
             seq_len(nrow(Intensity)), sep = "")
     } else {
@@ -198,13 +197,13 @@ createMSnset <- function(file,
 
     ## Integrity tests
     if (identical(rownames(Intensity), rownames(fd)) == FALSE) {
-        stop("Problem consistency between
-             row names expression data and featureData")
+        stop("Problem consistency betweenrow names expression data and 
+            featureData")
     }
 
     if (identical(colnames(Intensity), rownames(pd)) == FALSE) {
         stop("Problem consistency between column names
-             in expression data and row names in phenoData")
+            in expression data and row names in phenoData")
     }
 
     obj <- MSnSet(exprs = Intensity, fData = fd, pData = pd)
@@ -232,7 +231,7 @@ createMSnset <- function(file,
     tryCatch(
         {
             find.package("Prostar")
-            .version <- package.version("Prostar")
+            .version <- Biobase::package.version("Prostar")
             obj@experimentData@other$Prostar_Version <- .version
         },
         error = function(e) obj@experimentData@other$Prostar_Version <- NA
@@ -242,7 +241,7 @@ createMSnset <- function(file,
     tryCatch(
         {
             find.package("DAPAR")
-            .version <- package.version("DAPAR")
+            .version <- Biobase::package.version("DAPAR")
             obj@experimentData@other$Prostar_Version <- .version
         },
         error = function(e) obj@experimentData@other$DAPAR_Version <- NA
@@ -296,9 +295,9 @@ createMSnset <- function(file,
 #'
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' df <- Biobase::exprs(Exp1_R25_pept[1:100])
-#' tags <- GetMetacell(Exp1_R25_pept[1:100])
+#' data(Exp1_R25_pept)
+#' df <- Biobase::exprs(Exp1_R25_pept[seq_len(100)])
+#' tags <- GetMetacell(Exp1_R25_pept[seq_len(100)])
 #' colors <- list(
 #'     "missing POV" = "lightblue",
 #'     "missing MEC" = "orange",
@@ -307,13 +306,18 @@ createMSnset <- function(file,
 #'     "combined" = "red"
 #' )
 #' write.excel(df, tags, colors, filename = "toto")
+#' 
 write.excel <- function(df,
-                        tags = NULL,
-                        colors = NULL,
-                        tabname = "foo",
-                        filename = NULL) {
+    tags = NULL,
+    colors = NULL,
+    tabname = "foo",
+    filename = NULL) {
     if (!requireNamespace("openxlsx", quietly = TRUE)) {
         stop("Please install openxlsx: BiocManager::install('openxlsx')")
+    }
+    
+    if (!requireNamespace("tools", quietly = TRUE)) {
+        stop("Please install tools: BiocManager::install('tools')")
     }
 
     if (is.null(filename)) {
@@ -334,8 +338,7 @@ write.excel <- function(df,
         if (!isTRUE(
             sum(unique.tags %in% names(colors)) == length(unique.tags))) {
             warning("The length of colors vector must be equal to the number 
-            of different tags.
-              As is it not the case, colors are ignored")
+            of different tags. As is it not the case, colors are ignored")
         }
     }
 
@@ -351,7 +354,7 @@ write.excel <- function(df,
                 unique.tags %in% names(colors)) == length(unique.tags)
             )
             ) {
-            lapply(1:length(colors), function(x) {
+            lapply(seq_len(length(colors)), function(x) {
                 list.tags <- which(names(colors)[x] == tags, arr.ind = TRUE)
                 openxlsx::addStyle(wb,
                     sheet = 1,
@@ -367,14 +370,18 @@ write.excel <- function(df,
 }
 
 
+
+#'
+#' @title This function exports a \code{MSnSet} object to a Excel file.
+#' 
+#' @description 
 #' This function exports a \code{MSnSet} data object to a Excel file.
 #' Each of the three data.frames in the \code{MSnSet} object (ie experimental
 #' data, phenoData and metaData are respectively integrated into separate sheets
-#' in the Excel file).
+#' in the Excel file). 
+#' 
 #' The colored cells in the experimental data correspond to the original
 #' missing values which have been imputed.
-#'
-#' @title This function exports a \code{MSnSet} object to a Excel file.
 #'
 #' @param obj An object of class \code{MSnSet}.
 #'
@@ -385,12 +392,11 @@ write.excel <- function(df,
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' \donttest{
 #' Sys.setenv("R_ZIPCMD" = Sys.which("zip"))
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' obj <- Exp1_R25_pept[1:10]
+#' data(Exp1_R25_pept)
+#' obj <- Exp1_R25_pept[seq_len(10)]
 #' writeMSnsetToExcel(obj, "foo")
-#' }
+#' 
 #'
 #' @export
 #'
@@ -398,6 +404,10 @@ write.excel <- function(df,
 writeMSnsetToExcel <- function(obj, filename) {
     if (!requireNamespace("openxlsx", quietly = TRUE)) {
         stop("Please install openxlsx: BiocManager::install('openxlsx')")
+    }
+    
+    if (!requireNamespace("stats", quietly = TRUE)) {
+        stop("Please install stats: BiocManager::install('stats')")
     }
 
     name <- paste(filename, ".xlsx", sep = "")
@@ -412,7 +422,7 @@ writeMSnsetToExcel <- function(obj, filename) {
 
     # Add colors to quantitative table
     mc <- metacell.def(GetTypeofData(obj))
-    colors <- as.list(setNames(mc$color, mc$node))
+    colors <- as.list(stats::setNames(mc$color, mc$node))
     tags <- cbind(
         keyId = rep("identified", nrow(obj)),
         GetMetacell(obj)
@@ -425,12 +435,11 @@ writeMSnsetToExcel <- function(obj, filename) {
         if (!isTRUE(
             sum(unique.tags %in% names(colors)) == length(unique.tags))) {
             warning("The length of colors vector must be equal to the number 
-            of different tags.
-              As is it not the case, colors are ignored")
-        }
+            of different tags. As is it not the case, colors are ignored")
+            }
         if (isTRUE(
             sum(unique.tags %in% names(colors)) == length(unique.tags))) {
-            lapply(1:length(colors), function(x) {
+            lapply(seq_len(length(colors)), function(x) {
                 list.tags <- which(names(colors)[x] == tags, arr.ind = TRUE)
                 openxlsx::addStyle(wb,
                     sheet = 1,
@@ -450,7 +459,7 @@ writeMSnsetToExcel <- function(obj, filename) {
 
     # Add colors for sample data sheet
     u_conds <- unique(Biobase::pData(obj)$Condition)
-    colors <- setNames(
+    colors <- stats::setNames(
         DAPAR::ExtendPalette(length(u_conds)),
         u_conds
     )
@@ -467,12 +476,11 @@ writeMSnsetToExcel <- function(obj, filename) {
         if (!isTRUE(
             sum(unique.tags %in% names(colors)) == length(unique.tags))) {
             warning("The length of colors vector must be equal to the number 
-            of different tags.
-              As is it not the case, colors are ignored")
+            of different tags. As is it not the case, colors are ignored")
         }
         if (isTRUE(
             sum(unique.tags %in% names(colors)) == length(unique.tags))) {
-            lapply(1:length(colors), function(x) {
+            lapply(seq_len(length(colors)), function(x) {
                 list.tags <- which(names(colors)[x] == tags, arr.ind = TRUE)
                 openxlsx::addStyle(wb,
                     sheet = n,
@@ -499,7 +507,7 @@ writeMSnsetToExcel <- function(obj, filename) {
         )
     }
 
-    colors <- as.list(setNames(mc$color, mc$node))
+    colors <- as.list(stats::setNames(mc$color, mc$node))
     tags <- cbind(
         keyId = rep("identified", nrow(obj)),
         Biobase::fData(obj)
@@ -516,12 +524,11 @@ writeMSnsetToExcel <- function(obj, filename) {
         if (!isTRUE(
             sum(unique.tags %in% names(colors)) == length(unique.tags))) {
             warning("The length of colors vector must be equal to the number 
-            of different tags.
-              As is it not the case, colors are ignored")
+            of different tags. As is it not the case, colors are ignored")
         }
         if (isTRUE(
             sum(unique.tags %in% names(colors)) == length(unique.tags))) {
-            lapply(1:length(colors), function(x) {
+            lapply(seq_len(length(colors)), function(x) {
                 list.tags <- which(names(colors)[x] == tags, arr.ind = TRUE)
                 openxlsx::addStyle(wb,
                     sheet = n,
@@ -536,16 +543,15 @@ writeMSnsetToExcel <- function(obj, filename) {
     # Add GO tab
     if (!is.null(obj@experimentData@other$GGO_analysis)) {
         l <- length(obj@experimentData@other$GGO_analysis$ggo_res)
-        for (i in 1:l) {
+        for (i in seq_len(l)) {
             n <- n + 1
             level <- as.numeric(
                 obj@experimentData@other$GGO_analysis$levels[i])
             openxlsx::addWorksheet(wb, 
                 paste("Group GO - level ", level, sep = ""))
-            openxlsx::writeData(
-                wb, 
-                sheet = n, 
-                obj@experimentData@other$GGO_analysis$ggo_res[[i]]$ggo_res@result)
+            .other <- obj@experimentData@other
+            .dat <- .other$GGO_analysis$ggo_res[[i]]$ggo_res@result
+            openxlsx::writeData(wb, sheet = n, .dat)
         }
     }
 
@@ -581,31 +587,30 @@ writeMSnsetToExcel <- function(obj, filename) {
 #' @author Samuel Wieczorek
 #'
 #' @export
+#' 
+#' @examples 
+#' NULL
 #'
 #'
 readExcel <- function(file, extension, sheet) {
     if (!requireNamespace("readxl", quietly = TRUE)) {
         stop("Please install readxl: BiocManager::install('readxl')")
     }
-    # data <- NULL
-    # if (extension=="xls") {
-    #     data <- readxl::read_xls(file, sheet)
-    # }
-    # else if (extension=="xlsx") {
-    #     data <- readxl::read_xlsx(file, sheet)
-    # }
-    # return(as.data.frame(data,asIs=T))
 
-    # options(digits=10)
     data <- NULL
     data <- readxl::read_excel(file, sheet)
 
-    return(as.data.frame(data, asIs = T, stringsAsFactors = F))
+    return(
+        as.data.frame(
+            data, 
+            asIs = TRUE, 
+            stringsAsFactors = FALSE
+            )
+        )
 }
 
 
-#' This function lists all the sheets of an Excel file.
-#'
+
 #' @title This function returns the list of the sheets names in a Excel file.
 #'
 #' @param file The name of the Excel file.
@@ -615,13 +620,15 @@ readExcel <- function(file, extension, sheet) {
 #' @author Samuel Wieczorek
 #'
 #' @export
+#' 
+#' @examples 
+#' NULL
 #'
 #'
 listSheets <- function(file) {
     if (!requireNamespace("openxlsx", quietly = TRUE)) {
         stop("Please install openxlsx: BiocManager::install('openxlsx')")
     }
-    # require(openxlsx)
     return(openxlsx::getSheetNames(file))
 }
 
@@ -638,11 +645,9 @@ listSheets <- function(file) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' \donttest{
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' obj <- Exp1_R2_pept[1:1000]
+#' data(Exp1_R25_pept)
+#' obj <- Exp1_R2_pept[seq_len(10)]
 #' writeMSnsetToCSV(obj, "foo")
-#' }
 #'
 #' @export
 #'
@@ -650,7 +655,7 @@ listSheets <- function(file) {
 #'
 writeMSnsetToCSV <- function(obj, fname) {
 
-    # fname <- paste(tempdir(),fname,  sep="/")
+
     write.csv(Biobase::exprs(obj), paste(tempdir(), "exprs.csv", sep = "/"))
     write.csv(Biobase::fData(obj), paste(tempdir(), "fData.csv", sep = "/"))
     write.csv(Biobase::pData(obj), paste(tempdir(), "pData.csv", sep = "/"))
@@ -678,20 +683,19 @@ writeMSnsetToCSV <- function(obj, fname) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' df1 <- Exp1_R25_pept[1:100]
-#' df2 <- Exp1_R25_pept[200:250]
+#' data(Exp1_R25_pept)
+#' df1 <- Exp1_R25_pept[seq_len(100)]
+#' df2 <- Exp1_R25_pept[seq.int(from = 200, to = 250)]
 #' rbindMSnset(df1, df2)
 #'
 #' @export
-#'
-#' @importFrom MSnbase MSnSet
 #'
 rbindMSnset <- function(df1 = NULL, df2) {
     if (is.null(df1)) {
         obj <- df2
         return(obj)
     }
+    
     if (is.null(df1) && is.null(df2)) {
         return(NULL)
     }
@@ -700,7 +704,11 @@ rbindMSnset <- function(df1 = NULL, df2) {
     tmp.fData <- rbind(Biobase::fData(df1), Biobase::fData(df2))
     tmp.pData <- Biobase::pData(df1)
 
-    obj <- MSnSet(exprs = tmp.exprs, fData = tmp.fData, pData = tmp.pData)
+    obj <- MSnbase::MSnSet(
+        exprs = tmp.exprs, 
+        fData = tmp.fData, 
+        pData = tmp.pData
+        )
     obj@protocolData <- df1@protocolData
     obj@experimentData <- df1@experimentData
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/DiffAnalysis.R
 \name{wrapperCalibrationPlot}
 \alias{wrapperCalibrationPlot}
-\title{Performs a calibration plot on an \code{MSnSet} object, 
+\title{Performs a calibration plot on an \code{MSnSet} object,
 calling the \code{cp4p} package functions.}
 \usage{
 wrapperCalibrationPlot(vPVal, pi0Method = "pounds")
@@ -16,20 +16,20 @@ wrapperCalibrationPlot(vPVal, pi0Method = "pounds")
 A plot
 }
 \description{
-This function is a wrapper to the calibration.plot method of the 
+This function is a wrapper to the calibration.plot method of the
 \code{cp4p} package for use with \code{MSnSet} objects.
 }
 \examples{
-utils::data(Exp1_R25_prot, package='DAPARdata')
-obj <- Exp1_R25_prot[1:1000]
-level <- obj@experimentData@other$typeOfData
-metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
-indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
-obj <- MetaCellFiltering(obj, indices, cmd='delete')
+data(Exp1_R25_prot)
+obj <- Exp1_R25_prot[seq_len(100)]
+level <- 'protein'
+metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
+obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 qData <- Biobase::exprs(obj$new)
 sTab <- Biobase::pData(obj$new)
-limma <- limmaCompleteTest(qData,sTab)
-wrapperCalibrationPlot(limma$P_Value[,1])
+limma <- limmaCompleteTest(qData, sTab)
+wrapperCalibrationPlot(limma$P_Value[, 1])
 
 }
 \author{

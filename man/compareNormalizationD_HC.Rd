@@ -2,7 +2,7 @@
 % Please edit documentation in R/plots_compare_Norm.R
 \name{compareNormalizationD_HC}
 \alias{compareNormalizationD_HC}
-\title{Builds a plot from a dataframe. Same as compareNormalizationD but 
+\title{Builds a plot from a dataframe. Same as compareNormalizationD but
 uses the library \code{highcharter}}
 \usage{
 compareNormalizationD_HC(
@@ -17,23 +17,23 @@ compareNormalizationD_HC(
 )
 }
 \arguments{
-\item{qDataBefore}{A dataframe that contains quantitative data before 
+\item{qDataBefore}{A dataframe that contains quantitative data before
 normalization.}
 
-\item{qDataAfter}{A dataframe that contains quantitative data after 
+\item{qDataAfter}{A dataframe that contains quantitative data after
 normalization.}
 
 \item{keyId}{xxx}
 
-\item{conds}{A vector of the conditions (one condition 
+\item{conds}{A vector of the conditions (one condition
 per sample).}
 
 \item{pal}{xxx}
 
 \item{subset.view}{xxx}
 
-\item{n}{An integer that is equal to the maximum number of displayed points. 
-This number must be less or equal to the size 
+\item{n}{An integer that is equal to the maximum number of displayed points.
+This number must be less or equal to the size
 of the dataset. If it is less than it, it is a random selection}
 
 \item{type}{scatter or line}
@@ -42,24 +42,32 @@ of the dataset. If it is less than it, it is a random selection}
 A plot
 }
 \description{
-Plot to compare the quantitative proteomics data before and after 
-normalization using the library \code{highcharter}
+Plot to compare the quantitative proteomics data before and after
+normalization using the package \code{highcharter}
 }
 \examples{
-utils::data(Exp1_R25_prot, package='DAPARdata')
+data(Exp1_R25_prot)
 obj <- Exp1_R25_prot
 qDataBefore <- Biobase::exprs(obj)
-conds <- Biobase::pData(obj)[,"Condition"]
-id <- Biobase::fData(obj)[,obj@experimentData@other$proteinId]
+conds <- Biobase::pData(obj)[, "Condition"]
+id <- Biobase::fData(obj)[, 'protein']
 pal <- ExtendPalette(2)
-objAfter <- wrapper.normalizeD(obj, method = "QuantileCentering", 
-conds =conds, type = "within conditions")
-compareNormalizationD_HC(qDataBefore=qDataBefore, 
-qDataAfter=Biobase::exprs(objAfter), keyId = id, conds=conds, n=1000)
+objAfter <- wrapper.normalizeD(obj,
+method = "QuantileCentering",
+conds = conds, type = "within conditions"
+)
+compareNormalizationD_HC(
+qDataBefore = qDataBefore,
+qDataAfter = Biobase::exprs(objAfter), keyId = id, 
+conds = conds, n = 1000
+)
 
-compareNormalizationD_HC(qDataBefore=qDataBefore, 
-qDataAfter=Biobase::exprs(objAfter), keyId = id, pal=pal, subset.view=1:4, 
-conds=conds, n=100)
+compareNormalizationD_HC(
+qDataBefore = qDataBefore,
+qDataAfter = Biobase::exprs(objAfter), keyId = id, pal = pal, 
+subset.view = seq_len(4),
+conds = conds, n = 100
+)
 
 }
 \author{

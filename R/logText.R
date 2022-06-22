@@ -1,6 +1,4 @@
 
-#' Build the text information for a new dataset
-#'
 #' @title  Build the text information for a new dataset
 #'
 #' @param l.params A list of parameters related to the process of the dataset
@@ -25,8 +23,7 @@ getTextForNewDataset <- function(l.params) {
 }
 
 
-#' Build the text information for the filtering process
-#'
+
 #' @title  Build the text information for the filtering process
 #'
 #' @param l.params A list of parameters related to the process of the dataset
@@ -36,14 +33,13 @@ getTextForNewDataset <- function(l.params) {
 #' @author Samuel Wieczorek
 #'
 #'
+#' @examples 
+#' getTextForFiltering(list(filename = "foo.msnset"))
+#' 
 #' @export
 #' @importFrom utils str
 #'
 getTextForFiltering <- function(l.params) {
-    # str(l.params) = list(metacellFilter.df ,
-    #                 stringFilter.df,
-    #                 numericFilter.df)
-
     if (is.null(l.params) || length(l.params) == 0) {
         return(NULL)
     }
@@ -78,9 +74,17 @@ getTextForFiltering <- function(l.params) {
 
 
 
-#' Build the text information for the Normalization process
-#'
+
 #' @title  Build the text information for the Normalization process
+#' 
+#' @description 
+#' The items of the parameter list for the normalisation is:
+#' * method,
+#' * type,
+#' * varReduction,
+#' * quantile,
+#  * spanLOESS
+
 #'
 #' @param l.params A list of parameters related to the process of the dataset
 #'
@@ -95,11 +99,6 @@ getTextForFiltering <- function(l.params) {
 #'
 getTextForNormalization <- function(l.params) {
 
-    # l.params <- list(method = input$normalization.method,
-    #                  type = input$normalization.type,
-    #                  varReduction = input$normalization.variance.reduction,
-    #                  quantile = input$normalization.quantile,
-    #                  spanLOESS = input$spanLOESS)
 
     if (is.null(l.params) || length(l.params) == 0) {
         return(NULL)
@@ -134,9 +133,18 @@ getTextForNormalization <- function(l.params) {
 
 
 
-#' Build the text information for the peptide Imputation process
-#'
+
 #' @title  Build the text information for the peptide Imputation process
+#' 
+#' @description 
+#' * pepLevel_algorithm,
+#' * pepLevel_basicAlgorithm,
+#' * pepLevel_detQuantile,
+#' * pepLevel_detQuant_factor,
+#' * pepLevel_imp4p_nbiter,
+#' * pepLevel_imp4p_withLapala,
+#' * pepLevel_imp4p_qmin,
+#' * pepLevel_imp4pLAPALA_distrib
 #'
 #' @param l.params A list of parameters related to the process of the dataset
 #'
@@ -151,14 +159,7 @@ getTextForNormalization <- function(l.params) {
 #' @export
 #'
 getTextForpeptideImputation <- function(l.params) {
-    # l.params <- list(pepLevel_algorithm = input$peptideLevel_missing.value.algorithm,
-    #                  pepLevel_basicAlgorithm = input$peptideLevel_missing.value.basic.algorithm,
-    #                  pepLevel_detQuantile = input$peptideLevel_detQuant_quantile,
-    #                  pepLevel_detQuant_factor = input$peptideLevel_detQuant_factor,
-    #                  pepLevel_imp4p_nbiter = input$peptideLevel_imp4p_nbiter,
-    #                  pepLevel_imp4p_withLapala = input$peptideLevel_imp4p_withLapala,
-    #                  pepLevel_imp4p_qmin = input$peptideLevel_imp4p_qmin,
-    #                  pepLevel_imp4pLAPALA_distrib = input$peptideLevel_imp4pLAPALA_distrib)
+
 
     if (is.null(l.params) || length(l.params) == 0) {
         return(NULL)
@@ -200,9 +201,18 @@ getTextForpeptideImputation <- function(l.params) {
     return(txt)
 }
 
-#' Build the text information for the Protein Imputation process
-#'
+
 #' @title  Build the text information for the protein Imputation process
+#' 
+#' @description 
+#' * POV_algorithm,
+#' * POV_detQuant_quantile,
+#' * POV_detQuant_factor,
+#' * POV_KNN_n,
+#' * MEC_algorithm,
+#' * MEC_detQuant_quantile,
+#' * MEC_detQuant_factor,
+#' * MEC_fixedValue
 #'
 #' @param l.params A list of parameters related to the process of the dataset
 #'
@@ -221,20 +231,7 @@ getTextForproteinImputation <- function(l.params) {
         return(NULL)
     }
 
-    ##############################################################
-
-    # l.params <- list(POV_algorithm = input$POV_missing.value.algorithm,
-    #                  POV_detQuant_quantile = input$POV_detQuant_quantile,
-    #                  POV_detQuant_factor = input$POV_detQuant_factor,
-    #                  POV_KNN_n = input$KNN_nbNeighbors,
-    #                  MEC_algorithm = input$MEC_missing.value.algorithm,
-    #                  MEC_detQuant_quantile = input$MEC_detQuant_quantile,
-    #                  MEC_detQuant_factor = input$MEC_detQuant_factor,
-    #                  MEC_fixedValue= input$MEC_fixedValue)
-
     txt <- "<ul>"
-
-
     txt <- paste(txt, "<li>POV imputation: ", 
         l.params$POV_algorithm, "</li>")
     if (l.params$POV_algorithm == "detQuantile") {
@@ -264,9 +261,15 @@ getTextForproteinImputation <- function(l.params) {
 }
 
 
-#' Builds the text information for the Aggregation process
-#'
+
 #' @title  Build the text information for the Aggregation process
+#' 
+#' @description 
+#' * includeSharedPeptides,
+#' * operator,
+#' * considerPeptides,
+#' * proteinId,
+#' * topN
 #'
 #' @param l.params A list of parameters related to the process of the dataset
 #'
@@ -281,13 +284,6 @@ getTextForproteinImputation <- function(l.params) {
 #' @export
 #'
 getTextForAggregation <- function(l.params) {
-
-    # l.params <- list(includeSharedPeptides = input$radioBtn_includeShared,
-    #                  operator = input$AggregationOperator,
-    #                  considerPeptides = input$AggregationConsider,
-    #                  proteinId = input$proteinId,
-    #                  topN = input$nTopn
-
     if (is.null(l.params) || length(l.params) == 0) {
         return(NULL)
     }
@@ -312,9 +308,17 @@ getTextForAggregation <- function(l.params) {
 
 
 
-#' Builds the text information for the hypothesis test process
-#'
+
 #' @title  Build the text information for the hypothesis test process
+#' 
+#' @description 
+#' * design,
+#' * method,
+#' * ttest_options,
+#' * th_logFC,
+#' * AllPairwiseCompNames = list(
+#' *    logFC,
+#' *    P_Value)
 #'
 #' @param l.params A list of parameters related to the process of the dataset
 #'
@@ -330,14 +334,7 @@ getTextForAggregation <- function(l.params) {
 #'
 getTextForHypothesisTest <- function(l.params) {
 
-    # l.params <- list(design = input$anaDiff_Design,
-    #                  method = input$diffAnaMethod,
-    #                  ttest_options = input$ttest_options,
-    #                  th_logFC = input$seuilLogFC,
-    #                  AllPairwiseCompNames = list(
-    #                  logFC = colnames(rv$res_AllPairwiseComparisons$logFC),
-    #                  P_Value=colnames(rv$res_AllPairwiseComparisons$P_Value))
-    # )
+
     if (is.null(l.params) || length(l.params) == 0) {
         return(NULL)
     }
@@ -358,10 +355,19 @@ getTextForHypothesisTest <- function(l.params) {
 
 
 
-
-#' Build the text information for the differential Analysis process
-#'
 #' @title  Build the text information for the Aggregation process
+#' 
+#' @description 
+#' * Condition1
+#' * Condition2
+#' * Comparison
+#' * filterType
+#' * filter_th_NA
+#' * calibMethod
+#' * numValCalibMethod
+#' * th_pval
+#' * FDR
+#' * NbSelected
 #'
 #' @param l.params A list of parameters related to the process of the dataset
 #'
@@ -376,17 +382,6 @@ getTextForHypothesisTest <- function(l.params) {
 #'
 getTextForAnaDiff <- function(l.params) {
 
-    # param
-    # Condition1
-    # Condition2
-    # Comparison
-    # filterType
-    # filter_th_NA
-    # calibMethod
-    # numValCalibMethod
-    # th_pval
-    # FDR
-    # NbSelected
 
     if (is.null(l.params) || length(l.params) == 0) {
         return(NULL)
@@ -432,8 +427,7 @@ getTextForAnaDiff <- function(l.params) {
 }
 
 
-#' Build the text information for the Aggregation process
-#'
+
 #' @title  Build the text information for the Aggregation process
 #'
 #' @param l.params A list of parameters related to the process of the dataset
@@ -451,8 +445,6 @@ getTextForGOAnalysis <- function(l.params) {
     if (is.null(l.params) || length(l.params) == 0) {
         return(NULL)
     }
-
-
 
     if (is.null(l.params$whichGO2Save)) {
         return(NULL)

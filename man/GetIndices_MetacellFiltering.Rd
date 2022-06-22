@@ -11,7 +11,7 @@ GetIndices_MetacellFiltering(obj, level, pattern, type, percent, op, th)
 \item{obj}{An object of class \code{MSnSet} containing
 quantitative data.}
 
-\item{level}{A vector of integers which are the indices of lines to 
+\item{level}{A vector of integers which are the indices of lines to
 delete.}
 
 \item{pattern}{A string to be included in the \code{MSnSet}
@@ -33,15 +33,16 @@ Delete the lines in the matrix of intensities and the metadata table
 given their indice.
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-obj <- Exp1_R25_pept[1:10,]
+data(Exp1_R25_pept)
+obj <- Exp1_R25_pept[seq_len(10), ]
 level <- GetTypeofData(obj)
-pattern <- 'missing'
-type <- 'AllCond'
+pattern <- "missing"
+type <- "AllCond"
 percent <- FALSE
-op <- '=='
+op <- "=="
 th <- 2
-indices <- GetIndices_MetacellFiltering(obj, level, pattern, type, percent, op, th )
+indices <- GetIndices_MetacellFiltering(obj, level, pattern, type, 
+percent, op, th)
 
 }
 \author{

@@ -1,4 +1,10 @@
-#' fudge2LRT: heuristic to choose the value of the hyperparameter
+
+#' @title Heuristic to choose the value of the hyperparameter
+#' (fudge factor) used to regularize the variance estimator in the
+#' likelihood ratio statistic
+#' 
+#' @description 
+#' #' fudge2LRT: heuristic to choose the value of the hyperparameter
 #' (fudge factor) used to regularize the variance estimator in the
 #' likelihood ratio statistic (as implemented in samLRT). We follow
 #' the heuristic described in [1] and adapt the code of the fudge2
@@ -8,9 +14,8 @@
 #' microarrays applied to the ionizing radiation response, PNAS 2001
 #' 98: 5116-5121, (Apr 24).
 #'
-#' @title Heuristic to choose the value of the hyperparameter
-#' (fudge factor) used to regularize the variance estimator in the
-#' likelihood ratio statistic
+#'
+#'
 #' @param lmm.res.h0 a vector of object containing the estimates (used to
 #' compute the statistic) under H0 for each connected component. If
 #' the fast version of the estimator was used (as implemented in this
@@ -49,10 +54,18 @@
 #'
 #' @export
 #'
-#' @importFrom stats mad sd
+#' 
+#' @examples 
+#' NULL
 #'
 fudge2LRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s, 
     alpha = seq(0, 1, 0.05), include.zero = TRUE) {
+    
+    if (!requireNamespace("stats", quietly = TRUE)) {
+        stop("Please install stats: BiocManager::install('stats')")
+    }
+    
+    
     if (max(alpha) > 1 || min(alpha) < 0) {
         stop("alpha has to be between 0 and 1")
     }
@@ -66,7 +79,7 @@ fudge2LRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s,
     }
 
     if (length(alpha) == 1) {
-        s.zero <- quantile(s, alpha)
+        s.zero <- stats::quantile(s, alpha)
         msg <- paste("s0 =", round(s.zero, 4), " (The", 100 *
             alpha, "% quantile of the s values.) \n \n")
 
@@ -76,7 +89,7 @@ fudge2LRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s,
         )))
     }
 
-    fudge.quan <- quantile(s, alpha)
+    fudge.quan <- stats::quantile(s, alpha)
     fudge.quan <- sort(c(fudge.quan, 2 * fudge.quan), decreasing = FALSE)
     if (include.zero) {
         fudge.quan <- c(0, fudge.quan)
@@ -110,19 +123,19 @@ fudge2LRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s,
     }
 
     n.int <- ifelse(n.uni.s > 500, 101, floor(n.uni.s / 5))
-    quan <- quantile(s, seq(0, 1, le = n.int))
+    quan <- stats::quantile(s, seq(0, 1, le = n.int))
     quan <- unique(round(quan, 8))
     n.int <- length(quan)
     int.s <- as.numeric(cut(s, quan, include.lowest = TRUE, right = FALSE))
     ## print(cbind(int.s, s))
 
     mad.mat <- matrix(0, n.int - 1, ncol(d.mat))
-    for (i in 1:(n.int - 1)) {
+    for (i in seq_len(n.int - 1)) {
         mad.mat[i, ] <- apply(d.mat[which(int.s == i), , drop = FALSE], 2, mad)
     }
 
     cv <- function(x) {
-        sd(x) / mean(x)
+        stats::sd(x) / mean(x)
     }
 
     vec.cv <- apply(mad.mat, 2, cv)
@@ -137,7 +150,7 @@ fudge2LRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s,
     }
 
     s.zero <- fudge.quan[which.min]
-    print(s.zero)
+    #print(s.zero)
     if (include.zero) {
         which.min <- which.min - 1
     }
@@ -155,8 +168,7 @@ fudge2LRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s,
 
 
 
-#' This function is xxxxxxx
-#'
+
 #' @title xxxxxx
 #' @param X an n.pep*n.prot indicator matrix.
 #' @param y1 n.pep*n.samples matrice giving the observed counts for
@@ -167,7 +179,10 @@ fudge2LRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s,
 #' @author Thomas Burger, Laurent Jacob
 #'
 #' @export
-#'
+#' 
+#' @examples
+#' NULL
+
 LH0 <- function(X, y1, y2) {
     n <- ncol(y1) + ncol(y2)
 
@@ -180,8 +195,7 @@ LH0 <- function(X, y1, y2) {
 
 
 
-#' This function is xxxxxxx
-#'
+
 #' @title xxxxxx
 #' @param X an n.pep*n.prot indicator matrix.
 #' @param y1 n.pep*n.samples matrice giving the observed counts for
@@ -194,6 +208,8 @@ LH0 <- function(X, y1, y2) {
 #' @author Thomas Burger, Laurent Jacob
 #'
 #' @export
+#' @examples 
+#' NULL
 #'
 LH1 <- function(X, y1, y2, j) {
     n1 <- ncol(y1)
@@ -202,7 +218,9 @@ LH1 <- function(X, y1, y2, j) {
     xj <- X[, j, drop = FALSE]
 
     
-    ss <- norm(y1, "F")^2 + norm(y2, "F")^2 - n * sum(rowMeans(cbind(y1, y2))^2) - (sum((xj / norm(xj, "F")) * (rowMeans(y1) - rowMeans(y2)))^2) * (n1 * n2 / n)
+    ss <- norm(y1, "F")^2 + norm(y2, "F")^2 - n * 
+        sum(rowMeans(cbind(y1, y2))^2) - (sum((xj / norm(xj, "F")) * 
+                (rowMeans(y1) - rowMeans(y2)))^2) * (n1 * n2 / n)
 
     return(list(ss = ss))
 }
@@ -211,8 +229,7 @@ LH1 <- function(X, y1, y2, j) {
 
 
 
-#' This function is xxxxxxx
-#'
+
 #' @title xxxxxx
 #' @param X an n.pep*n.prot indicator matrix.
 #' @param y1 n.pep*n.samples matrice giving the observed counts for
@@ -223,17 +240,24 @@ LH1 <- function(X, y1, y2, j) {
 #' @author Thomas Burger, Laurent Jacob
 #'
 #' @export
-#'
-#' @importFrom stats logLik lm
+#' 
+#' @examples 
+#' NULL
 #'
 LH0.lm <- function(X, y1, y2) {
+    
+    if (!requireNamespace("stats", quietly = TRUE)) {
+        stop("Please install stats: BiocManager::install('stats')")
+    }
+    
+    
     Ytilde <- matrix(c(as.vector(y1), as.vector(y2)), ncol = 1)
     p <- ncol(X)
     q <- nrow(X)
     n <- ncol(y1) + ncol(y2)
 
     Xcommon <- data.frame(do.call("rbind", rep(list(X), n)), 
-        row.names = as.character(1:(n * q)))
+        row.names = as.character(seq_len(n * q)))
 
     ## Remove proteins containing all peptides (already represented as
     ## the offset in the linear model)
@@ -247,13 +271,13 @@ LH0.lm <- function(X, y1, y2) {
             dataIn <- data.frame(
                 Y = Ytilde, 
                 Xpep = Xpep, 
-                row.names = as.character(1:(n * q))
+                row.names = as.character(seq_len(n * q))
                 )
             lmm.res <- lm(Y ~ 1 + Xpep, data = dataIn)
         } else {
             dataIn <- data.frame(
                 Y = Ytilde, 
-                row.names = as.character(1:(n * q)))
+                row.names = as.character(seq_len(n * q)))
             lmm.res <- lm(Y ~ 1, data = dataIn)
         }
     } else {
@@ -263,11 +287,11 @@ LH0.lm <- function(X, y1, y2) {
             Y = Ytilde, 
             Xcommon = Xcommon, 
             Xpep = Xpep, 
-            row.names = as.character(1:(n * q))
+            row.names = as.character(seq_len(n * q))
             )
         lmm.res <- lm(Y ~ ., data = dataIn)
     }
-    ll <- logLik(lmm.res)
+    ll <- stats::logLik(lmm.res)
 
     return(list(ll = ll, lmm.res = lmm.res))
 }
@@ -275,10 +299,6 @@ LH0.lm <- function(X, y1, y2) {
 
 
 
-
-
-#' This function is xxxxxxx
-#'
 #' @title xxxxxx
 #' @param X an n.pep*n.prot indicator matrix.
 #' @param y1 n.pep*n.samples matrix giving the observed counts for
@@ -292,9 +312,15 @@ LH0.lm <- function(X, y1, y2) {
 #'
 #' @export
 #'
-#' @importFrom stats logLik lm formula
+#' 
+#' @examples 
+#' NULL
 #'
 LH1.lm <- function(X, y1, y2, j) {
+    if (!requireNamespace("stats", quietly = TRUE)) {
+        stop("Please install stats: BiocManager::install('stats')")
+    }
+    
     n1 <- ncol(y1)
     n2 <- ncol(y2)
     n <- n1 + n2
@@ -305,7 +331,7 @@ LH1.lm <- function(X, y1, y2, j) {
     Xpep <- factor(rep(rownames(X), n))
 
     Xcommon <- data.frame(do.call("rbind", rep(list(X), n)), 
-        row.names = as.character(1:(n * q)))
+        row.names = as.character(seq_len(n * q)))
 
     ## Remove proteins containing all peptides (already represented as
     ## the offset in the linear model)
@@ -315,7 +341,7 @@ LH1.lm <- function(X, y1, y2, j) {
     Ytilde <- matrix(c(as.vector(y1), as.vector(y2)), ncol = 1)
 
     dataIn <- data.frame(Y = Ytilde, Xj = Xj, Xpep = Xpep, 
-        row.names = as.character(1:(n * q)))
+        row.names = as.character(seq_len(n * q)))
 
     lmm.form <- "Y ~"
     if (ncol(X) > 1 && sum(rem.mask) < p) {
@@ -330,13 +356,13 @@ LH1.lm <- function(X, y1, y2, j) {
         
         # Xpep effect
         lmm.form <- paste(lmm.form, " Xpep", sep = "+", collapse = "") 
-        lmm.form <- formula(lmm.form)
-        lmm.res <- lm(lmm.form, data = dataIn)
+        lmm.form <- stats::formula(lmm.form)
+        lmm.res <- stats::lm(lmm.form, data = dataIn)
     } else {
-        lmm.form <- formula(lmm.form)
-        lmm.res <- lm(lmm.form, data = dataIn)
+        lmm.form <- stats::formula(lmm.form)
+        lmm.res <- stats::lm(lmm.form, data = dataIn)
     }
-    ll <- logLik(lmm.res)
+    ll <- stats::logLik(lmm.res)
 
     return(list(ll = ll, lmm.res = lmm.res))
 }
@@ -344,15 +370,15 @@ LH1.lm <- function(X, y1, y2, j) {
 
 
 
-
+#' @title xxxxxx
+#' 
+#' @description 
 #' This function computes a regularized version of the likelihood ratio
 #' statistic. The regularization adds a user-input fudge factor s1 to
 #' the variance estimator. This is straightforward when using a fixed
 #' effect model (cases 'numeric' and 'lm') but requires some more care
 #' when using a mixed model.
-
-#'
-#' @title xxxxxx
+#' 
 #' @param lmm.res.h0 a vector of object containing the estimates (used to
 #' compute the statistic) under H0 for each connected component. If
 #' the fast version of the estimator was used (as implemented in this
@@ -385,10 +411,21 @@ LH1.lm <- function(X, y1, y2, j) {
 #' @author Thomas Burger, Laurent Jacob
 #'
 #' @export
-#'
-#' @importFrom stats residuals
+#' 
+#' @examples 
+#' NULL
 #'
 samLRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s1) {
+    
+    if (!requireNamespace("stats", quietly = TRUE)) {
+        stop("Please install stats: BiocManager::install('stats')")
+    }
+    
+    
+    if (!requireNamespace("lme4", quietly = TRUE)) {
+        stop("Please install lme4: BiocManager::install('lme4')")
+    }
+    
     s <- lh1.sam <- llr.sam <- rep(NA, p)
     lh0.sam <- rep(NA, length(cc))
     sample.sizes <- rep(NA, p)
@@ -398,40 +435,50 @@ samLRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s1) {
         ee <- as.numeric(ee)
         local.prot <- ee[ee <= p]
         local.pep <- ee[ee > p] - p
-        if (class(lmm.res.h0) == "numeric") {
+        if (is(lmm.res.h0 == "numeric")) {
             lh0.sam[ii] <- (lmm.res.h0[ii] + s1) * (length(local.pep) * n)
         } else {
-            if (class(lmm.res.h0[[ii]]) == "lm") {
-                lh0.sam[ii] <- (mean(residuals(lmm.res.h0[[ii]])^2) + s1) * (length(local.pep) * n)
+            if (is(lmm.res.h0[[ii]], "lm")) {
+                lh0.sam[ii] <- (
+                    mean(stats::residuals(lmm.res.h0[[ii]])^2) + s1) * 
+                    (length(local.pep) * n)
             } else {
                 devcomp <- lme4::getME(lmm.res.h0[[ii]], "devcomp")
                 sigmaML2 <- devcomp$cmp["pwrss"] / devcomp$dims["n"]
-                lh0.sam[ii] <- -(devcomp$cmp["ldL2"] + devcomp$dims["n"] * (1 + log(2 * pi * (sigmaML2 + s1)))) / 2
+                lh0.sam[ii] <- -(devcomp$cmp["ldL2"] + devcomp$dims["n"] * 
+                        (1 + log(2 * pi * (sigmaML2 + s1)))) / 2
             }
         }
         for (jj in local.prot) {
             sample.sizes[jj] <- (length(local.pep) * n)
-            if (class(lmm.res.h1) == "numeric") {
+            if (is(lmm.res.h1, "numeric")) {
                 lh1.sam[jj] <- (lmm.res.h1[jj] + s1) * (length(local.pep) * n)
-                llr.sam[jj] <- (length(local.pep) * n) * (log(lh0.sam[ii]) - log(lh1.sam[jj]))
+                llr.sam[jj] <- (length(local.pep) * n) * 
+                    (log(lh0.sam[ii]) - log(lh1.sam[jj]))
                 s[jj] <- lmm.res.h1[jj]
             } else {
-                if (class(lmm.res.h1[[jj]]) == "lm") {
-                    s[jj] <- mean(residuals(lmm.res.h1[[jj]])^2)
-                    lh1.sam[jj] <- (mean(residuals(lmm.res.h1[[jj]])^2) + s1) * (length(local.pep) * n)
-                    llr.sam[jj] <- (length(local.pep) * n) * (log(lh0.sam[ii]) - log(lh1.sam[jj]))
+                if (is(lmm.res.h1[[jj]], "lm")) {
+                    s[jj] <- mean(stats::residuals(lmm.res.h1[[jj]])^2)
+                    .op1 <- (mean(stats::residuals(lmm.res.h1[[jj]])^2) + s1)
+                    .op2 <- (length(local.pep) * n)
+                    lh1.sam[jj] <- .op1 * .op2
+                    .op1 <- (length(local.pep) * n)
+                    .op2 <- (log(lh0.sam[ii]) - log(lh1.sam[jj]))
+                    llr.sam[jj] <- .op1 * .op2
                 } else {
                     devcomp <- lme4::getME(lmm.res.h1[[jj]], "devcomp")
                     sigmaML2 <- devcomp$cmp["pwrss"] / devcomp$dims["n"]
                     s[jj] <- sigmaML2
-                    lh1.sam[jj] <- -(devcomp$cmp["ldL2"] + devcomp$dims["n"] * (1 + log(2 * pi * (sigmaML2 + s1)))) / 2
+                    lh1.sam[jj] <- -(devcomp$cmp["ldL2"] + devcomp$dims["n"] * 
+                            (1 + log(2 * pi * (sigmaML2 + s1)))) / 2
                     llr.sam[jj] <- 2 * (lh1.sam[jj] - lh0.sam[ii])
                 }
             }
         }
     }
     return(
-        list(llr.sam = llr.sam, 
+        list(
+            llr.sam = llr.sam, 
             s = s, 
             lh1.sam = lh1.sam, 
             lh0.sam = lh0.sam, 
@@ -445,8 +492,7 @@ samLRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s1) {
 
 
 
-#' This function is PEptide based Protein differential Abundance test
-#'
+
 #' @title PEptide based Protein differential Abundance test
 #' @param X Binary q x p design matrix for q peptides and p
 #' proteins. X_(ij)=1 if peptide i belongs to protein j, 0 otherwise.
@@ -478,9 +524,28 @@ samLRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s1) {
 #'
 #' @export
 #'
-#' @importFrom stats residuals pchisq lm
+#' 
+#' @examples 
+#' data(Exp1_R25_pept)
+#' protID <- "Protein_group_IDs"
+#' obj <- Exp1_R25_pept[seq_len(20)]
+#' X <- BuildAdjacencyMatrix(obj, protID, FALSE)
 #'
-pepa.test <- function(X, y, n1, n2, global = FALSE, use.lm = FALSE) {
+pepa.test <- function(X, 
+    y, 
+    n1, 
+    n2, 
+    global = FALSE, 
+    use.lm = FALSE
+    ) {
+    if (!requireNamespace("graph", quietly = TRUE)) {
+        stop("Please install graph: BiocManager::install('graph')")
+    }
+    
+    if (!requireNamespace("stats", quietly = TRUE)) {
+        stop("Please install stats: BiocManager::install('stats')")
+    }
+    
     n <- n1 + n2
 
     q <- nrow(X) # Number of peptides
@@ -491,16 +556,16 @@ pepa.test <- function(X, y, n1, n2, global = FALSE, use.lm = FALSE) {
             (one per peptide)")
     }
 
-    y1 <- y[, 1:n1]
-    y2 <- y[, -(1:n1)]
+    y1 <- y[, seq_len(n1)]
+    y2 <- y[, -(seq_len(n1))]
 
     if (global) {
         lik0 <- LH0(X, y1, y2)
         mse.h0 <- lik0$ss / (q * n)
         llr <- mse.h1 <- rep(NA, p)
-        for (jj in 1:p) {
-            print(paste0("[pepa.test] Computing H1 likelihood for protein ", 
-                jj))
+        for (jj in seq_len(p)) {
+            #print(paste0("[pepa.test] Computing H1 likelihood for protein ", 
+            #    jj))
             lik1 <- LH1(X, y1, y2, jj)
             mse.h1[jj] <- lik1$ss / (q * n)
             llr[jj] <- (q * n) * (log(lik0$ss) - log(lik1$ss))
@@ -510,14 +575,14 @@ pepa.test <- function(X, y, n1, n2, global = FALSE, use.lm = FALSE) {
         llr.map <- llr.map.pv <- s <- wchi2 <- NULL
     } else {
         ## Connected components: which peptides are connected to which proteins?
-        print("[pepa.test] Identifying connected components in the 
-            peptide-protein graph")
+        #print("[pepa.test] Identifying connected components in the 
+        #    peptide-protein graph")
         A <- matrix(0, nrow = p + q, ncol = p + q)
-        A[1:p, (p + 1):(p + q)] <- as.matrix(t(X))
-        A[(p + 1):(p + q), 1:p] <- as.matrix(X)
-        g <- graphAM(A, edgemode = "undirected", values = NA)
-        nodes(g) <- as.character(1:(p + q))
-        cc <- connComp(as(g, "graphNEL"))
+        A[seq_len(p), seq.int(from = (p + 1), to = (p + q))] <- as.matrix(t(X))
+        A[seq.int(from = (p + 1), to = (p + q)), seq_len(p)] <- as.matrix(X)
+        g <- graph::graphAM(A, edgemode = "undirected", values = NA)
+        nodes(g) <- as.character(seq_len(p + q))
+        cc <- graph::connComp(as(g, "graphNEL"))
 
         ## Test proteins in each connected component
         protein.cc <- sapply(cc, FUN = function(ee) {
@@ -532,8 +597,8 @@ pepa.test <- function(X, y, n1, n2, global = FALSE, use.lm = FALSE) {
         ii <- 0
         for (ee in cc) {
             ii <- ii + 1
-            print(paste0("[pepa.test] Computing H0 likelihood for 
-                connected component ", ii, "/", length(cc)))
+            #print(paste0("[pepa.test] Computing H0 likelihood for 
+            #    connected component ", ii, "/", length(cc)))
             ee <- as.numeric(ee)
             local.prot <- ee[ee <= p]
             if (length(local.prot) == 0) {
@@ -547,33 +612,53 @@ pepa.test <- function(X, y, n1, n2, global = FALSE, use.lm = FALSE) {
             equiv.X <- local.X[, !bc.dup, drop = FALSE]
 
             if (use.lm) {
-                lik0 <- LH0.lm(equiv.X, y1[local.pep, , drop = FALSE], y2[local.pep, , drop = FALSE])
-                mse.h0[ii] <- mean(residuals(lik0$lmm.res)^2)
+                lik0 <- LH0.lm(
+                    equiv.X, 
+                    y1[local.pep, , drop = FALSE], 
+                    y2[local.pep, , drop = FALSE]
+                    )
+                mse.h0[ii] <- mean(stats::residuals(lik0$lmm.res)^2)
             } else {
-                lik0 <- LH0(equiv.X, y1[local.pep, , drop = FALSE], y2[local.pep, , drop = FALSE])
+                lik0 <- LH0(
+                    equiv.X, 
+                    y1[local.pep, , drop = FALSE], 
+                    y2[local.pep, , drop = FALSE]
+                    )
                 mse.h0[ii] <- lik0$ss / (length(local.pep) * n)
             }
 
             for (jj in local.prot) {
-                print(paste0("[pepa.test] Computing H1 likelihood for 
-                    protein ", jj))
-                prot.equiv.idx <- match(names(prot.barcode[!bc.dup])[prot.barcode[!bc.dup] == prot.barcode[colnames(X)[jj]]], colnames(equiv.X))
+                #print(paste0("[pepa.test] Computing H1 likelihood for 
+                #    protein ", jj))
+                .ind <- prot.barcode[!bc.dup] == prot.barcode[colnames(X)[jj]]
+                prot.equiv.idx <- match(
+                    names(prot.barcode[!bc.dup])[.ind], 
+                    colnames(equiv.X)
+                    )
 
                 if (use.lm) {
-                    lik1 <- LH1.lm(equiv.X, y1[local.pep, , drop = FALSE], y2[local.pep, , drop = FALSE], prot.equiv.idx)
-                    mse.h1[jj] <- mean(residuals(lik1$lmm.res)^2)
+                    lik1 <- LH1.lm(equiv.X, 
+                        y1[local.pep, , drop = FALSE], 
+                        y2[local.pep, , drop = FALSE], 
+                        prot.equiv.idx)
+                    mse.h1[jj] <- mean(stats::residuals(lik1$lmm.res)^2)
                     llr[jj] <- 2 * (lik1$ll - lik0$ll)
                 } else {
-                    lik1 <- LH1(equiv.X, y1[local.pep, , drop = FALSE], y2[local.pep, , drop = FALSE], prot.equiv.idx)
+                    lik1 <- LH1(equiv.X, 
+                        y1[local.pep, , drop = FALSE], 
+                        y2[local.pep, , drop = FALSE], 
+                        prot.equiv.idx)
                     mse.h1[jj] <- lik1$ss / (length(local.pep) * n)
-                    llr[jj] <- (length(local.pep) * n) * (log(lik0$ss) - log(lik1$ss))
+                    .operand1 <- (length(local.pep) * n)
+                    .operand2 <- (log(lik0$ss) - log(lik1$ss))
+                    llr[jj] <- .operand1 * .operand2
                 }
             }
         }
         s <- mse.h1
         if (p < 500) { # Following SAM paper recommendations, we don't attempt 
             #to estimate s0 if p<500
-            s1 <- quantile(s, 0.05)
+            s1 <- stats::quantile(s, 0.05)
         } else {
             s1 <- fudge2LRT(mse.h0, mse.h1, cc, n, p, s)$s.zero
         }
@@ -581,17 +666,23 @@ pepa.test <- function(X, y, n1, n2, global = FALSE, use.lm = FALSE) {
         llr.map <- samLRT.res$llr.sam
         ## Reweight LLR-sam for calibration of its p-value
         s2.est <- mean(s)
-        wchi2 <- rep((s2.est + s1) / s2.est, length(de))
-        llr.map.pv <- 1 - pchisq(wchi2 * llr.map, 1)
+        wchi2 <- rep((s2.est + s1) / s2.est, length(llr.map))
+        llr.map.pv <- 1 - stats::pchisq(wchi2 * llr.map, 1)
     }
 
     ## Compute p-value for llr
-    llr.pv <- 1 - pchisq(llr, 1)
+    llr.pv <- 1 - stats::pchisq(llr, 1)
 
-    return(list(
-        llr = llr, llr.map = llr.map,
-        llr.pv = llr.pv, llr.map.pv = llr.map.pv,
-        mse.h0 = mse.h0, mse.h1 = mse.h1,
-        s = s, wchi2 = wchi2
-    ))
+    return(
+        list(
+            llr = llr, 
+            llr.map = llr.map,
+            llr.pv = llr.pv, 
+            llr.map.pv = llr.map.pv,
+            mse.h0 = mse.h0, 
+            mse.h1 = mse.h1,
+            s = s, 
+            wchi2 = wchi2
+            )
+        )
 }

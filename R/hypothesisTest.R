@@ -1,8 +1,11 @@
+
+#'
+#' @title Density plots of logFC values
+#' 
+#' @description 
 #' This function show the density plots of Fold Change (the same as calculated
 #' by limma) for a list of the comparisons of conditions in a differential
 #' analysis.
-#'
-#' @title Density plots of logFC values
 #'
 #' @param df_logFC A dataframe that contains the logFC values
 #'
@@ -16,9 +19,9 @@
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_prot, package = "DAPARdata")
-#' obj <- Exp1_R25_prot[1:1000]
-#' level <- obj@experimentData@other$typeOfData
+#' data(Exp1_R25_prot)
+#' obj <- Exp1_R25_prot[seq_len(100)]
+#' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
@@ -30,13 +33,23 @@
 #' hc_logFC_DensityPlot(res$logFC, threshold_LogFC = 1, pal = pal)
 #'
 #' @export
-#'
-#' @importFrom RColorBrewer brewer.pal
-#' @importFrom grDevices colorRampPalette
+#' 
+#' @import highcharter
 #'
 hc_logFC_DensityPlot <- function(df_logFC,
-                                 threshold_LogFC = 0,
-                                 pal = NULL) {
+    threshold_LogFC = 0,
+    pal = NULL) {
+    if (!requireNamespace("stats", quietly = TRUE)) {
+        stop("Please install stats: BiocManager::install('stats')")
+    }
+    if (!requireNamespace("RColorBrewer", quietly = TRUE)) {
+        stop("Please install RColorBrewer: 
+            BiocManager::install('RColorBrewer')")
+    }
+    if (!requireNamespace("grDevices", quietly = TRUE)) {
+        stop("Please install grDevices: BiocManager::install('grDevices')")
+    }
+    
     if (threshold_LogFC < 0) {
         warning("The parameter 'threshold_LogFC' must be positive or equal 
             to zero.")
@@ -111,13 +124,18 @@ hc_logFC_DensityPlot <- function(df_logFC,
     maxX <- NULL
 
 
-    for (i in 1:ncol(df_logFC)) {
-        tmp <- density(df_logFC[, i])
+    for (i in seq_len(ncol(df_logFC))) {
+        tmp <- stats::density(df_logFC[, i])
         ind <- tmp$y[which(tmp$x <= -threshold_LogFC)]
         maxY.inf <- max(maxY.inf, ifelse(length(ind) == 0, 0, ind))
-        maxY.inside <- max(maxY.inf, tmp$y[intersect(which(tmp$x > -threshold_LogFC), which(tmp$x < threshold_LogFC))])
+        .ind1 <- which(tmp$x > -threshold_LogFC)
+        .ind2 <- which(tmp$x < threshold_LogFC)
+        maxY.inside <- max(maxY.inf, tmp$y[intersect(.ind1, .ind2)])
         ind <- tmp$y[which(tmp$x > threshold_LogFC)]
-        maxY.sup <- max(maxY.sup, ifelse(length(ind) == 0, tmp$y[length(tmp$y)], ind))
+        maxY.sup <- max(
+            maxY.sup, 
+            ifelse(length(ind) == 0, tmp$y[length(tmp$y)], ind)
+            )
         minX <- min(minX, tmp$x)
         maxX <- max(maxX, tmp$x)
 

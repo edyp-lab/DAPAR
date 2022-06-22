@@ -15,8 +15,17 @@ GetNbPeptidesUsed(X, pepData)
 A data.frame
 }
 \description{
-Method to compute the number of quantified peptides used for aggregating 
+Method to compute the number of quantified peptides used for aggregating
 each protein
+}
+\examples{
+data(Exp1_R25_pept)
+protID <- "Protein_group_IDs"
+obj.pep <- Exp1_R25_pept[seq_len(10)]
+X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+pepData <- Biobase::exprs(obj.pep)
+GetNbPeptidesUsed(X, pepData)
+
 }
 \author{
 Samuel Wieczorek

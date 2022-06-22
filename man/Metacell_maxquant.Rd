@@ -23,23 +23,26 @@ Initial conversion rules for maxquant
 |------------|-----------------------|--------|
 | Quanti     |     Identification    |    Tag |
 |------------|-----------------------|--------|
-|  == 0			|       whatever 				|    2.0 |
-|  > 0				|       'By MS/MS'			|    1.1 |
-|  > 0				|      'By matching'		|    1.2 |
-|  > 0				|       unknown col			|    1.0 |
+|  == 0      |       whatever        |    2.0 |
+|  > 0       |       'By MS/MS'      |    1.1 |
+|  > 0       |      'By matching'    |    1.2 |
+|  > 0       |       unknown col     |    1.0 |
 |------------|-----------------------|--------|
 }
 \examples{
-file <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
-data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
-metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", 
-package="DAPARdata")
-metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, 
-stringsAsFactors = FALSE)
+file <- system.file("extdata", "Exp1_R25_pept.txt", package = "DAPARdata")
+data <- read.table(file, header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+metadataFile <- system.file("extdata", "samples_Exp1_R25.txt",
+    package = "DAPARdata"
+)
+metadata <- read.table(metadataFile,
+    header = TRUE, sep = "\t", as.is = TRUE,
+    stringsAsFactors = FALSE
+)
 conds <- metadata$Condition
-qdata <- data[1:10,56:61]
-df <- data[1:10 , 43:48]
-df2 <- Metacell_maxquant(qdata, conds, df, level='peptide')
+qdata <- data[seq_len(10), seq.int(from = 56, to = 61)]
+df <- data[seq_len(10), seq.int(from = 43, to = 48)]
+df2 <- Metacell_maxquant(qdata, conds, df, level = "peptide")
 
 }
 \author{

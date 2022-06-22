@@ -18,22 +18,25 @@ xxxxx
 }
 \description{
 In the quantitative columns, a missing value is identified by no value rather
-than a value equal to 0. 
+than a value equal to 0.
 Conversion rules
-Quanti			Tag		
-NA or 0		NA
+QuantiTag
+NA or 0 NA
 }
 \examples{
-file <- system.file("extdata", "Exp1_R25_pept.txt", package="DAPARdata")
-data <- read.table(file, header=TRUE, sep="\t",stringsAsFactors = FALSE)
-metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", 
-package="DAPARdata")
-metadata <- read.table(metadataFile, header=TRUE, sep="\t", as.is=TRUE, 
-stringsAsFactors = FALSE)
+file <- system.file("extdata", "Exp1_R25_pept.txt", package = "DAPARdata")
+data <- read.table(file, header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+metadataFile <- system.file("extdata", "samples_Exp1_R25.txt",
+    package = "DAPARdata"
+)
+metadata <- read.table(metadataFile,
+    header = TRUE, sep = "\t", as.is = TRUE,
+    stringsAsFactors = FALSE
+)
 conds <- metadata$Condition
-qdata <- data[1:100,56:61]
-df <- data[1:100 , 43:48]
-df <- Metacell_generic(qdata, conds, level='peptide')
+qdata <- data[seq_len(100), seq.int(from = 56, to = 61)]
+df <- data[seq_len(100), seq.int(from = 43, to = 48)]
+df <- Metacell_generic(qdata, conds, level = "peptide")
 
 }
 \author{

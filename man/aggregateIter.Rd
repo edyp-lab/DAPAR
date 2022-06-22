@@ -21,13 +21,13 @@ aggregateIter(obj.pep, X, init.method = "Sum", method = "Mean", n = NULL)
 A protein object of class \code{MSnset}
 }
 \description{
-Method to xxxxx
+xxxx
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
+data(Exp1_R25_pept)
 protID <- "Protein_group_IDs"
-X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:10], protID, FALSE)
-ll.agg <- aggregateIter(Exp1_R25_pept[1:10], X=X)
+X <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(10)], protID, FALSE)
+ll.agg <- aggregateIter(Exp1_R25_pept[seq_len(10)], X = X)
 
 }
 \author{

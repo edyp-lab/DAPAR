@@ -7,17 +7,18 @@
 check.design(sTab)
 }
 \arguments{
-\item{sTab}{The data.frame which correspond to the pData function of MSnbase}
+\item{sTab}{The data.frame which correspond to the `pData()` function 
+of package `MSnbase`.}
 }
 \value{
 A boolean
 }
 \description{
-This function check the validity of the experimental design
+Check if the design is valid
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-check.design(Biobase::pData(Exp1_R25_pept)[,1:3])
+data(Exp1_R25_pept)
+check.design(Biobase::pData(Exp1_R25_pept)[, seq_len(3)])
 
 }
 \author{

@@ -12,9 +12,9 @@
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
+#' data(Exp1_R25_pept)
 #' protID <- "Protein_group_IDs"
-#' obj <- Exp1_R25_pept[1:20]
+#' obj <- Exp1_R25_pept[seq_len(20)]
 #' MShared <- BuildAdjacencyMatrix(obj, protID, FALSE)
 #' getProteinsStats(matShared = MShared)
 #'
@@ -74,7 +74,8 @@ getProteinsStats <- function(matShared) {
             nbPeptides = length(ind.unique.Pep) + length(ind.shared.Pep),
             nbSpecificPeptides = length(ind.unique.Pep),
             nbSharedPeptides = length(ind.shared.Pep),
-            nbProt = length(protOnlyShared) + length(protOnlyUnique) + length(protMix),
+            nbProt = length(protOnlyShared) + length(protOnlyUnique) + 
+                length(protMix),
             protOnlyUniquePep = protOnlyUnique,
             protOnlySharedPep = protOnlyShared,
             protMixPep = protMix
@@ -107,13 +108,12 @@ getProteinsStats <- function(matShared) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' library(MSnbase)
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
+#' data(Exp1_R25_pept)
 #' protID <- "Protein_group_IDs"
-#' obj.pep <- Exp1_R25_pept[1:10]
+#' obj.pep <- Exp1_R25_pept[seq_len(10)]
 #' M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 #' data <- Biobase::fData(obj.pep)
-#' protData <- DAPAR::aggregateMean(obj.pep, M)
+#' protData <- aggregateMean(obj.pep, M)
 #' name <- "Protein_group_IDs"
 #' proteinNames <- rownames(Biobase::fData(protData$obj.prot))
 #' new.col <- BuildColumnToProteinDataset(data, M, name, proteinNames)
@@ -164,25 +164,25 @@ BuildColumnToProteinDataset <- function(peptideData,
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' \dontrun{
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
+#' data(Exp1_R25_pept)
 #' protID <- "Protein_group_IDs"
-#' obj.pep <- Exp1_R25_pept[1:10]
+#' obj.pep <- Exp1_R25_pept[seq_len(10)]
 #' M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 #' data <- Biobase::fData(obj.pep)
-#' protData <- DAPAR::aggregateSum(obj.pep, M)
+#' protData <- aggregateSum(obj.pep, M)
 #' name <- "Protein_group_IDs"
 #' proteinNames <- rownames(Biobase::fData(protData$obj.prot))
 #' BuildColumnToProteinDataset_par(data, M, name, proteinNames)
-#' }
 #'
 #' @export
 #'
 #'
-BuildColumnToProteinDataset_par <- function(peptideData,
-                                            matAdj,
-                                            columnName,
-                                            proteinNames) {
+BuildColumnToProteinDataset_par <- function(
+    peptideData,
+    matAdj,
+    columnName,
+    proteinNames
+    ) {
     if (!requireNamespace("doParallel", quietly = TRUE)) {
         stop("Please install doParallel: BiocManager::install('doParallel')")
     }
@@ -210,7 +210,8 @@ BuildColumnToProteinDataset_par <- function(peptideData,
     nbProt <- ncol(matAdj)
     newCol <- rep("", nbProt)
     i <- 1
-    newCol <- foreach(i = 1:length(proteinNames), .combine = rbind) %dopar% {
+    newCol <- foreach::foreach(i = seq_len(length(proteinNames)), 
+        .combine = rbind) %dopar% {
         listeIndicePeptides <- names(which(matAdj[, proteinNames[i]] == 1))
         listeData <- unique(
             as.character(
@@ -237,10 +238,9 @@ BuildColumnToProteinDataset_par <- function(peptideData,
 #' @author Alexia Dorffer
 #'
 #' @examples
-#' library(DAPARdata)
-#' utils::data(Exp1_R25_pept)
+#' data(Exp1_R25_pept)
 #' protID <- "Protein_group_IDs"
-#' M <- BuildAdjacencyMatrix(Exp1_R25_pept[1:10], protID, FALSE)
+#' M <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(10)], protID, FALSE)
 #' CountPep(M)
 #'
 #' @export
@@ -266,8 +266,17 @@ CountPep <- function(M) {
 #' @author Samuel Wieczorek
 #'
 #' @export
-#'
+#' 
+#' @examples 
+#' data(Exp1_R25_pept)
+#' protID <- "Protein_group_IDs"
+#' obj.pep <- Exp1_R25_pept[seq_len(10)]
+#' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+#' pepData <- Biobase::exprs(obj.pep)
+#' GetNbPeptidesUsed(X, pepData)
+#' 
 GetNbPeptidesUsed <- function(X, pepData) {
+    X <- as.matrix(X)
     pepData[!is.na(pepData)] <- 1
     pepData[is.na(pepData)] <- 0
     pep <- t(X) %*% pepData
@@ -276,11 +285,14 @@ GetNbPeptidesUsed <- function(X, pepData) {
 }
 
 
-#' Method to compute the detailed number of quantified peptides used for
-#' aggregating each protein
-#'
+
+
 #' @title Computes the detailed number of peptides used for aggregating
 #' each protein
+#' 
+#' @description 
+#' Method to compute the detailed number of quantified peptides used for
+#' aggregating each protein
 #'
 #' @param X An adjacency matrix
 #'
@@ -290,12 +302,16 @@ GetNbPeptidesUsed <- function(X, pepData) {
 #'
 #' @author Samuel Wieczorek
 #' library(MSnbase)
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' data(Exp1_R25_pept)
 #' protID <- "Protein_group_IDs"
-#' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:10], protID, FALSE)
-#' ll.n <- GetDetailedNbPeptidesUsed(X, Biobase::exprs(Exp1_R25_pept[1:10]))
+#' X <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(10)], protID, FALSE)
+#' ll.n <- GetDetailedNbPeptidesUsed(X, 
+#' Biobase::exprs(Exp1_R25_pept[seq_len(10)]))
 #'
 #' @export
+#' 
+#' @examples 
+#' NULL
 #'
 GetDetailedNbPeptidesUsed <- function(X, qdata.pep) {
     X <- as.matrix(X)
@@ -310,10 +326,13 @@ GetDetailedNbPeptidesUsed <- function(X, qdata.pep) {
 }
 
 
-#' Method to compute the detailed number of quantified peptides for each
-#' protein
+
 #'
 #' @title Computes the detailed number of peptides for each protein
+#' 
+#' @description
+#' Method to compute the detailed number of quantified peptides for each
+#' protein
 #'
 #' @param X An adjacency matrix
 #'
@@ -322,9 +341,8 @@ GetDetailedNbPeptidesUsed <- function(X, qdata.pep) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' library(MSnbase)
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' obj.pep <- Exp1_R25_pept[1:10]
+#' data(Exp1_R25_pept)
+#' obj.pep <- Exp1_R25_pept[seq_len(10)]
 #' protID <- "Protein_group_IDs"
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 #' n <- GetDetailedNbPeptides(X)
@@ -344,11 +362,13 @@ GetDetailedNbPeptides <- function(X) {
 
 
 
-#' Method to create a plot with proteins and peptides on
-#' a MSnSet object (peptides)
-#'
+
 #' @title Function to create a histogram that shows the repartition of
 #' peptides w.r.t. the proteins
+#' 
+#' @description
+#' Method to create a plot with proteins and peptides on
+#' a MSnSet object (peptides)
 #'
 #' @param mat An adjacency matrix.
 #'
@@ -357,13 +377,18 @@ GetDetailedNbPeptides <- function(X) {
 #' @author Alexia Dorffer, Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' mat <- BuildAdjacencyMatrix(Exp1_R25_pept[1:10], "Protein_group_IDs")
+#' data(Exp1_R25_pept)
+#' mat <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(10)], "Protein_group_IDs")
 #' GraphPepProt(mat)
 #'
 #' @export
 #'
 GraphPepProt <- function(mat) {
+    
+    if (!requireNamespace("graphics", quietly = TRUE)) {
+        stop("Please install graphics: BiocManager::install('graphics')")
+    }
+    
     if (is.null(mat)) {
         return(NULL)
     }
@@ -375,8 +400,7 @@ GraphPepProt <- function(mat) {
     position <- seq(1, length(tab), by = 3)
     conds <- names(tab)
 
-    # par(mar=c(6,4,4,8) + 0.1)#, mgp=c(3,0.5,0)
-    barplot(tab,
+    graphics::barplot(tab,
         xlim = c(1, length(tab)),
         xlab = "Nb of peptides",
         ylab = "Nb of proteins",
@@ -390,41 +414,49 @@ GraphPepProt <- function(mat) {
 
 
 
+
+
+#' @title Function matrix of appartenance group
+#' 
+#' @description
 #' Method to create a binary matrix with proteins in columns and peptides
 #' in lines on a \code{MSnSet} object (peptides)
-#'
-#' @title Function matrix of appartenance group
 #'
 #' @param obj.pep An object (peptides) of class \code{MSnSet}.
 #'
 #' @param protID The name of proteins ID column
 #'
 #' @param unique A boolean to indicate whether only the unique peptides must
-#' be considered (TRUE) or if the shared peptides have to
-#' be integrated (FALSE).
+#' be considered (TRUE) or if the shared peptides have to be integrated (FALSE).
 #'
 #' @return A binary matrix
 #'
 #' @author Florence Combes, Samuel Wieczorek, Alexia Dorffer
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' protId <- Exp1_R25_pept@experimentData@other$proteinId
-#' BuildAdjacencyMatrix(Exp1_R25_pept[1:10], protId, TRUE)
+#' data(Exp1_R25_pept)
+#' protId <- "Protein_group_IDs"
+#' BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(10)], protId, TRUE)
 #'
 #' @export
 #'
-#' @importFrom stringr str_trim
-#'
+
 BuildAdjacencyMatrix <- function(obj.pep, protID, unique = TRUE) {
     if (!requireNamespace("Biobase", quietly = TRUE)) {
         stop("Please install Biobase: BiocManager::install('Biobase')")
     }
+    
+    if (!requireNamespace("stringr", quietly = TRUE)) {
+        stop("Please install stringr: BiocManager::install('stringr')")
+    }
+    
+    if (!requireNamespace("Matrix", quietly = TRUE)) {
+        stop("Please install Matrix: BiocManager::install('Matrix')")
+    }
+    
     data <- Biobase::exprs(obj.pep)
     PG <- Biobase::fData(obj.pep)[, protID]
 
-    # PG.l <- strsplit(as.character(PG), split=";", fixed=TRUE)
-    # PG.l <- strsplit(as.character(PG), "[,;]+", fixed = FALSE)
     PG.l <- lapply(
         strsplit(as.character(PG), "[,;]+"),
         function(x) stringr::str_trim(x)
@@ -443,7 +475,7 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique = TRUE) {
     }
 
     X <- Matrix::Matrix(t,
-        sparse = T,
+        sparse = TRUE,
         dimnames = list(rownames(obj.pep), colnames(t))
     )
 
@@ -452,11 +484,13 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique = TRUE) {
 
 
 
-#' This function computes the intensity of proteins based on the sum of the
-#' intensities of their peptides.
-#'
+
 #' @title Compute the intensity of proteins with the sum of the intensities
 #' of their peptides.
+#' 
+#' @description 
+#' This function computes the intensity of proteins based on the sum of the
+#' intensities of their peptides.
 #'
 #' @param obj.pep A matrix of intensities of peptides
 #'
@@ -468,11 +502,10 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique = TRUE) {
 #' @author Alexia Dorffer
 #'
 #' @examples
-#' library(MSnbase)
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' obj.pep <- Exp1_R25_pept[1:20]
+#' data(Exp1_R25_pept)
+#' obj.pep <- Exp1_R25_pept[seq_len(20)]
 #' obj.pep.imp <- wrapper.impute.detQuant(obj.pep, na.type = "missing")
-#' protID <- obj.pep@experimentData@other$proteinId
+#' protID <- "Protein_group_IDs"
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 #' ll.agg <- DAPAR::aggregateSum(obj.pep.imp, X)
 #'
@@ -512,8 +545,6 @@ aggregateSum <- function(obj.pep, X) {
 
 
 
-#' Method to xxxxx
-#'
 #' @title xxxx
 #'
 #' @param obj.pep xxxxx
@@ -531,21 +562,21 @@ aggregateSum <- function(obj.pep, X) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' \dontrun{
-#' library(MSnbase)
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
+#' data(Exp1_R25_pept)
 #' protID <- "Protein_group_IDs"
-#' obj.pep <- Exp1_R25_pept[1:10]
+#' obj.pep <- Exp1_R25_pept[seq_len(10)]
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 #' obj.agg <- aggregateIterParallel(obj.pep, X)
-#' }
 #'
 #' @export
 #'
-aggregateIterParallel <- function(obj.pep, X, 
-    init.method = "Sum", 
-    method = "Mean", 
-    n = NULL) {
+aggregateIterParallel <- function(
+    obj.pep,
+    X,
+    init.method = "Sum",
+    method = "Mean",
+    n = NULL
+    ) {
     if (!requireNamespace("doParallel", quietly = TRUE)) {
         stop("Please install doParallel: BiocManager::install('doParallel')")
     }
@@ -553,8 +584,7 @@ aggregateIterParallel <- function(obj.pep, X,
     if (!requireNamespace("foreach", quietly = TRUE)) {
         stop("Please install foreach: BiocManager::install('foreach')")
     }
-    require(foreach)
-    require(doParallel)
+
     if (!requireNamespace("Biobase", quietly = TRUE)) {
         stop("Please install Biobase: BiocManager::install('Biobase')")
     }
@@ -576,7 +606,7 @@ aggregateIterParallel <- function(obj.pep, X,
         )
 
         protData <- foreach(
-            cond = 1:length(unique(Biobase::pData(obj.pep)$Condition)),
+            cond = seq_len(length(unique(Biobase::pData(obj.pep)$Condition))),
             .combine = cbind,
             .packages = "MSnbase"
         ) %dopar% {
@@ -621,21 +651,23 @@ aggregateIterParallel <- function(obj.pep, X,
 #'
 #' @return xxxxx
 #'
-#' @author Samuel Wieczorek
-#' library(MSnbase)
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
+#' @examples
+#' data(Exp1_R25_pept)
 #' obj <- Exp1_R25_pept
 #' protID <- "Protein_group_IDs"
-#' X <- BuildAdjacencyMatrix(obj[1:10], protID, FALSE)
-#' qdata.agg <- DAPAR::inner.aggregate.iter(Biobase::exprs(obj[1:10]), X)
+#' X <- BuildAdjacencyMatrix(obj[seq_len(10)], protID, FALSE)
+#' qdata.agg <- DAPAR::inner.aggregate.iter(Biobase::exprs(obj[seq_len(10)]), X)
 #'
 #' @export
 #'
-inner.aggregate.iter <- function(pepData,
-                                 X,
-                                 init.method = "Sum",
-                                 method = "Mean",
-                                 n = NULL) {
+inner.aggregate.iter <- function(
+    pepData,
+    X,
+    init.method = "Sum",
+    method = "Mean",
+    n = NULL
+    ) {
+    
     if (!(init.method %in% c("Sum", "Mean"))) {
         warning("Wrong parameter init.method")
         return(NULL)
@@ -667,7 +699,7 @@ inner.aggregate.iter <- function(pepData,
         X.new <- X.tmp / rowSums(as.matrix(X.tmp), na.rm = TRUE)
         X.new[is.na(X.new)] <- 0
 
-        # l'appel ? la fonction ci-dessous d?pend des param?tres choisis par
+        # l'appel a la fonction ci-dessous depend des parametres choisis par
         # l'utilisateur
         switch(method,
             Mean = yprot <- inner.mean(pepData, X.new),
@@ -684,8 +716,6 @@ inner.aggregate.iter <- function(pepData,
 
 
 
-#' Method to xxxxx
-#'
 #' @title xxxx
 #'
 #' @param obj.pep xxxxx
@@ -703,19 +733,21 @@ inner.aggregate.iter <- function(pepData,
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
+#' data(Exp1_R25_pept)
 #' protID <- "Protein_group_IDs"
-#' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:10], protID, FALSE)
-#' ll.agg <- aggregateIter(Exp1_R25_pept[1:10], X = X)
+#' X <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(10)], protID, FALSE)
+#' ll.agg <- aggregateIter(Exp1_R25_pept[seq_len(10)], X = X)
 #'
 #' @export
 #'
 #'
-aggregateIter <- function(obj.pep,
-                          X,
-                          init.method = "Sum",
-                          method = "Mean",
-                          n = NULL) {
+aggregateIter <- function(
+    obj.pep,
+    X,
+    init.method = "Sum",
+    method = "Mean",
+    n = NULL
+    ) {
     if (!requireNamespace("Biobase", quietly = TRUE)) {
         stop("Please install Biobase: BiocManager::install('Biobase')")
     }
@@ -753,11 +785,13 @@ aggregateIter <- function(obj.pep,
                 method,
                 n
             )
-            colnames(protData)[condsIndices] <- colnames(Biobase::exprs(obj.pep))[condsIndices]
+            .tmp <- Biobase::exprs(obj.pep)
+            colnames(protData)[condsIndices] <- colnames(.tmp)[condsIndices]
         }
 
         # Step 3: Build the protein dataset
-        obj.prot <- finalizeAggregation(obj.pep, 
+        obj.prot <- finalizeAggregation(
+            obj.pep, 
             qData.pep, 
             protData, 
             metacell$metacell, 
@@ -771,13 +805,12 @@ aggregateIter <- function(obj.pep,
 }
 
 
-
-
-#' This function computes the intensity of proteins as the mean of the
-#' intensities of their peptides.
-#'
 #' @title Compute the intensity of proteins as the mean of the intensities
 #' of their peptides.
+#' 
+#' @description 
+#' #' This function computes the intensity of proteins as the mean of the
+#' intensities of their peptides.
 #'
 #' @param obj.pep A peptide object of class \code{MSnset}
 #'
@@ -789,10 +822,10 @@ aggregateIter <- function(obj.pep,
 #' @author Alexia Dorffer
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' obj.pep <- Exp1_R25_pept[1:10]
+#' data(Exp1_R25_pept)
+#' obj.pep <- Exp1_R25_pept[seq_len(10)]
 #' obj.pep.imp <- wrapper.impute.detQuant(obj.pep, na.type = "missing")
-#' protID <- obj.pep@experimentData@other$proteinId
+#' protID <- "Protein_group_IDs"
 #' X <- BuildAdjacencyMatrix(obj.pep.imp, protID, FALSE)
 #' ll.agg <- aggregateMean(obj.pep.imp, X)
 #'
@@ -806,7 +839,7 @@ aggregateMean <- function(obj.pep, X) {
 
     obj.prot <- NULL
     # Agregation of metacell data
-    cat("Aggregate metacell data...\n")
+    #cat("Aggregate metacell data...\n")
     metacell <- AggregateMetacell(X = X, obj.pep = obj.pep)
     if (!is.null(metacell$issues)) {
         return(list(
@@ -815,12 +848,12 @@ aggregateMean <- function(obj.pep, X) {
         ))
     } else {
         # Step 2: Agregation of quantitative data
-        cat("Computing quantitative data for proteins ...\n")
+        #cat("Computing quantitative data for proteins ...\n")
         pepData <- 2^(Biobase::exprs(obj.pep))
         protData <- inner.mean(pepData, as.matrix(X))
 
         # Step 3: Build protein dataset
-        cat("Building the protein dataset...\n")
+        #cat("Building the protein dataset...\n")
         obj.prot <- finalizeAggregation(obj.pep, 
             pepData, 
             protData, 
@@ -835,19 +868,29 @@ aggregateMean <- function(obj.pep, X) {
 }
 
 
-#' Method to split an adjacency matrix into specific and shared
-#'
+
 #' @title splits an adjacency matrix into specific and shared
+#' 
+#' @description 
+#' Method to split an adjacency matrix into specific and shared
 #'
 #' @param X An adjacency matrix
 #'
 #' @return A list of two adjacency matrices
 #'
 #' @author Samuel Wieczorek
+#' 
+#' @examples 
+#' data(Exp1_R25_pept)
+#' obj.pep <- Exp1_R25_pept[seq_len(10)]
+#' protID <- "Protein_group_IDs"
+#' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
+#' ll <- splitAdjacencyMat(X)
 #'
 #' @export
 #'
 splitAdjacencyMat <- function(X) {
+    X <- as.matrix(X)
     hasShared <- length(which(rowSums(X) > 1)) > 0
     hasSpec <- length(which(rowSums(X) == 1)) > 0
 
@@ -884,7 +927,13 @@ splitAdjacencyMat <- function(X) {
 #' @return A matrix
 #'
 #' @author Samuel Wieczorek
-#'
+#' 
+#' @examples 
+#' data(Exp1_R25_pept)
+#' obj <- Exp1_R25_pept[seq_len(10)]
+#' protID <- "Protein_group_IDs"
+#' X <- BuildAdjacencyMatrix(obj, protID, FALSE)
+#' inner.sum(Biobase::exprs(obj), X)
 
 inner.sum <- function(pepData, X) {
     X <- as.matrix(X)
@@ -903,7 +952,14 @@ inner.sum <- function(pepData, X) {
 #' @return xxxxx
 #'
 #' @author Samuel Wieczorek
-#'
+#' 
+#' @examples 
+#' data(Exp1_R25_pept)
+#' obj <- Exp1_R25_pept[seq_len(10)]
+#' protID <- "Protein_group_IDs"
+#' X <- BuildAdjacencyMatrix(obj, protID, FALSE)
+#' inner.mean(Biobase::exprs(obj), X)
+#' 
 inner.mean <- function(pepData, X) {
     X <- as.matrix(X)
     Mp <- inner.sum(pepData, X)
@@ -929,12 +985,19 @@ inner.mean <- function(pepData, X) {
 #'
 #' @author Samuel Wieczorek
 #'
+#' @examples 
+#' data(Exp1_R25_pept)
+#' obj <- Exp1_R25_pept[seq_len(10)]
+#' protID <- "Protein_group_IDs"
+#' X <- BuildAdjacencyMatrix(obj, protID, FALSE)
+#' inner.aggregate.topn(Biobase::exprs(obj), X)
+#' 
 inner.aggregate.topn <- function(pepData, X, method = "Mean", n = 10) {
     X <- as.matrix(X)
     med <- apply(pepData, 1, median)
     xmed <- as(X * med, "dgCMatrix")
-    for (c in 1:ncol(X)) {
-        v <- order(xmed[, c], decreasing = TRUE)[1:n]
+    for (c in seq_len(ncol(X))) {
+        v <- order(xmed[, c], decreasing = TRUE)[seq_len(n)]
         l <- v[which((xmed[, c])[v] != 0)]
 
         if (length(l) > 0) {
@@ -974,22 +1037,19 @@ inner.aggregate.topn <- function(pepData, X, method = "Mean", n = 10) {
 #' @author Alexia Dorffer, Samuel Wieczorek
 #'
 #' @examples
-#' \dontrun{
-#' library(MSnbase)
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' obj.pep <- Exp1_R25_pept[1:10]
+#' data(Exp1_R25_pept)
+#' obj.pep <- Exp1_R25_pept[seq_len(10)]
 #' protID <- "Protein_group_IDs"
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 #' ll.agg <- DAPAR::aggregateTopn(obj.pep, X, n = 3)
-#' }
 #'
 #' @export
 #'
 #'
 aggregateTopn <- function(obj.pep,
-                          X,
-                          method = "Mean",
-                          n = 10) {
+    X,
+    method = "Mean",
+    n = 10) {
     if (!requireNamespace("Biobase", quietly = TRUE)) {
         stop("Please install Biobase: BiocManager::install('Biobase')")
     }
@@ -1048,10 +1108,17 @@ aggregateTopn <- function(obj.pep,
 #'
 #' @export
 #'
-#' @importFrom utils installed.packages
+#' @examples 
+#' NULL
 #'
 #'
 finalizeAggregation <- function(obj.pep, pepData, protData, protMetacell, X) {
+    
+    if (!requireNamespace("utils", quietly = TRUE)) {
+        stop("Please install utils: BiocManager::install('utils')")
+    }
+    
+    
     if (missing(obj.pep)) {
         stop("'obj.pep' is missing")
     }
@@ -1132,8 +1199,8 @@ finalizeAggregation <- function(obj.pep, pepData, protData, protMetacell, X) {
         {
             find.package("Prostar")
             find.package("DAPAR")
-            prostar.ver <-package.version("Prostar")
-            dapar.ver <-package.version("DAPAR")
+            prostar.ver <- Biobase::package.version("Prostar")
+            dapar.ver <- Biobase::package.version("DAPAR")
             
 
             obj.prot@experimentData@other$Prostar_Version <- prostar.ver
@@ -1158,7 +1225,7 @@ finalizeAggregation <- function(obj.pep, pepData, protData, protMetacell, X) {
 #' Agregation rules for the cells metadata of peptides.
 #' Please refer to the metacell vocabulary in `metacell.def()`
 #'
-#' # Basic agreagtion
+#' # Basic agregation
 #' Agregation of non imputed values (2.X) with quantitative values
 #' (1.0, 1.X, 3.0, 3.X)
 #' |----------------------------
@@ -1168,9 +1235,9 @@ finalizeAggregation <- function(obj.pep, pepData, protData, protMetacell, X) {
 #' Agregation of different types of missing values (among 2.1, 2.2)
 #' |----------------------------
 #' * Agregation of 2.1 peptides between each other gives a missing value
-#'   non imputed (2.0)
+#' non imputed (2.0)
 #' * Agreagtion of 2.2 peptides between each other givesa missing value
-#'   non imputed (2.0)
+#' non imputed (2.0)
 #' * Agregation of a mix of 2.1 and 2.2 gives a missing value non imputed (2.0)
 #' |----------------------------
 #'
@@ -1178,14 +1245,13 @@ finalizeAggregation <- function(obj.pep, pepData, protData, protMetacell, X) {
 #' Agregation of a mix of quantitative values (among 1.0, 1.1, 1.2, 3.0, 3.X)
 #' |----------------------------
 #' * if the type of all the peptides to agregate is 1.0, 1.1 or 1.2,
-#'   then the final metadata is set the this tag
+#' then the final metadata is set the this tag
 #' * if the set of metacell to agregate is a mix of 1.0, 1.1 or 1.2,
-#'   then the final metadata is set to 1.0
+#' then the final metadata is set to 1.0
 #' * if the set of metacell to agregate is a mix of 3.X and 3.0,
-#'   then the final metadata is set to 3.0
+#' then the final metadata is set to 3.0
 #' * if the set of metacell to agregate is a mix of 3.X and 3.0 and other (X.X),
-#'   then the final metadata is set to 4.0
-#' |----------------------------
+#' then the final metadata is set to 4.0
 #'
 #' # Post processing
 #' Update metacell with POV/MEC status for the categories 2.0 and 3.0
@@ -1196,15 +1262,15 @@ finalizeAggregation <- function(obj.pep, pepData, protData, protMetacell, X) {
 #' @param level xxx
 #'
 #' @examples
-#' \dontrun{
 #' ll <- metacell.def("peptide")$node
-#' for (i in 1:length(ll)) {
-#'     test <- lapply(
-#'         combn(ll, i, simplify = FALSE),
-#'         function(x) tag <- metacombine(x, "peptide")
-#'     )
+#' for (i in seq_len(length(ll))) {
+#' test <- lapply(
+#' combn(ll, i, simplify = FALSE),
+#' function(x) tag <- metacombine(x, "peptide")
+#' )
 #' }
-#' }
+#' 
+#' @return xxx
 #'
 metacombine <- function(met, level) {
     # browser()
@@ -1301,9 +1367,8 @@ metacombine <- function(met, level) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' library(MSnbase)
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' obj.pep <- Exp1_R25_pept[1:100]
+#' data(Exp1_R25_pept)
+#' obj.pep <- Exp1_R25_pept[seq_len(10)]
 #' protID <- "Protein_group_IDs"
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 #' agg.meta <- AggregateMetacell(X, obj.pep)
@@ -1311,14 +1376,18 @@ metacombine <- function(met, level) {
 #' @export
 #'
 AggregateMetacell <- function(X, obj.pep) {
+    
+    if (!requireNamespace("stats", quietly = TRUE)) {
+        stop("Please install stats: BiocManager::install('stats')")
+    }
     issues <- NULL
     meta <- GetMetacell(obj.pep)
     level <- obj.pep@experimentData@other$typeOfData
     rowcol <- function(meta.col, X.col) (meta.col)[X.col > 0]
 
     df <- data.frame(stringsAsFactors = TRUE)
-    for (j in 1:ncol(meta)) {
-        for (i in 1:ncol(X)) {
+    for (j in seq_len(ncol(meta))) {
+        for (i in seq_len(ncol(X))) {
             df[i, j] <- metacombine(rowcol(meta[, j], X[, i]), level)
         }
     }
@@ -1338,7 +1407,7 @@ AggregateMetacell <- function(X, obj.pep) {
     # Search for issues
     prot.ind <- unique(rownames(which(df == "STOP", arr.ind = TRUE)))
     if (!is.null(prot.ind)) {
-        issues <- setNames(
+        issues <- stats::setNames(
             lapply(
                 prot.ind,
                 function(x) {

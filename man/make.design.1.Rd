@@ -7,16 +7,17 @@
 make.design.1(sTab)
 }
 \arguments{
-\item{sTab}{The data.frame which correspond to the pData function of MSnbase}
+\item{sTab}{The data.frame which correspond to the `pData()` function 
+of package `MSnbase`.}
 }
 \value{
 A design matrix
 }
 \description{
-This function builds the design matrix for design of level 1
+Builds the design matrix for designs of level 1
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
+data(Exp1_R25_pept)
 make.design.1(Biobase::pData(Exp1_R25_pept))
 
 }

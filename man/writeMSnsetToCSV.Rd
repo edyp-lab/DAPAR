@@ -2,7 +2,7 @@
 % Please edit documentation in R/inOutFiles.R
 \name{writeMSnsetToCSV}
 \alias{writeMSnsetToCSV}
-\title{Exports a MSnset dataset into a zip archive containing three 
+\title{Exports a MSnset dataset into a zip archive containing three
 zipped CSV files.}
 \usage{
 writeMSnsetToCSV(obj, fname)
@@ -16,15 +16,13 @@ writeMSnsetToCSV(obj, fname)
 A compressed file
 }
 \description{
-Exports a MSnset dataset into a zip archive containing three 
+Exports a MSnset dataset into a zip archive containing three
 zipped CSV files.
 }
 \examples{
-\donttest{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-obj <- Exp1_R2_pept[1:1000]
+data(Exp1_R25_pept)
+obj <- Exp1_R2_pept[seq_len(10)]
 writeMSnsetToCSV(obj, "foo")
-}
 
 }
 \author{

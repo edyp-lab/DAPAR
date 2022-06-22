@@ -17,8 +17,8 @@ Returns the percentage of missing values in the quantitative
 data (\code{Biobase::exprs()} table of the dataset).
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-getPourcentageOfMV(Exp1_R25_pept[1:100,])
+data(Exp1_R25_pept)
+getPourcentageOfMV(Exp1_R25_pept[seq_len(100), ])
 
 }
 \author{

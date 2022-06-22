@@ -11,8 +11,8 @@
 #' @author Florence Combes, Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' getPourcentageOfMV(Exp1_R25_pept[1:100, ])
+#' data(Exp1_R25_pept)
+#' getPourcentageOfMV(Exp1_R25_pept[seq_len(100), ])
 #'
 #' @export
 #'
@@ -33,10 +33,11 @@ getPourcentageOfMV <- function(obj) {
 }
 
 
+#' @title Number of lines with prefix
+#' 
+#' @description 
 #' Returns the number of lines, in a given column, where content matches
 #' the prefix.
-#'
-#' @title Number of lines with prefix
 #'
 #' @param obj An object of class \code{MSnSet}.
 #'
@@ -49,8 +50,8 @@ getPourcentageOfMV <- function(obj) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' getNumberOf(Exp1_R25_pept[1:100], "Potential_contaminant", "+")
+#' data(Exp1_R25_pept)
+#' getNumberOf(Exp1_R25_pept[seq_len(100)], "Potential_contaminant", "+")
 #'
 #' @export
 #'
@@ -76,9 +77,11 @@ getNumberOf <- function(obj, name = NULL, prefix = NULL) {
 
 
 
-#' This function removes lines in the dataset based on numerical conditions.
-#'
+
 #' @title Removes lines in the dataset based on numerical conditions.
+#' 
+#' @description 
+#' This function removes lines in the dataset based on numerical conditions.
 #'
 #' @param obj An object of class \code{MSnSet}.
 #'
@@ -89,14 +92,15 @@ getNumberOf <- function(obj, name = NULL, prefix = NULL) {
 #' @param operator A string
 #'
 #' @return An list of 2 items :
-#' obj : an object of class \code{MSnSet} in which the lines have been deleted
-#' deleted : an object of class \code{MSnSet} which contains the deleted lines
+#' * obj : an object of class \code{MSnSet} in which the lines have been 
+#' deleted,
+#' * deleted : an object of class \code{MSnSet} which contains the deleted lines
 #'
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' NumericalFiltering(Exp1_R25_pept[1:100], "A_Count", "6", "==")
+#' data(Exp1_R25_pept)
+#' NumericalFiltering(Exp1_R25_pept[seq_len(100)], "A_Count", "6", "==")
 #'
 #' @export
 #'
@@ -126,16 +130,24 @@ NumericalFiltering <- function(
         )
     }
 
-    return(list(obj = obj, deleted = deleted))
+    return(
+        list(
+            obj = obj, 
+            deleted = deleted
+            )
+        )
 }
 
 
 
 
-#' This function returns the indice of the lines to delete, based on a
-#' prefix string
+
 #'
 #' @title Get the indices of the lines to delete, based on a prefix string
+#' 
+#' @description 
+#' This function returns the indices of the lines to delete, based on a
+#' prefix string
 #'
 #' @param obj An object of class \code{MSnSet}.
 #'
@@ -150,11 +162,9 @@ NumericalFiltering <- function(
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' NumericalgetIndicesOfLinesToRemove(Exp1_R25_pept[1:100], "A_Count",
-#'     value = "6",
-#'     operator = "=="
-#' )
+#' data(Exp1_R25_pept)
+#' NumericalgetIndicesOfLinesToRemove(Exp1_R25_pept[seq_len(100)], "A_Count",
+#' value = "6", operator = "==")
 #'
 #' @export
 #'
@@ -179,10 +189,13 @@ NumericalgetIndicesOfLinesToRemove <- function(
 
 
 
+
+#' @title Barplot of proportion of contaminants and reverse
+#' 
+#' @description 
 #' Plots a barplot of proportion of contaminants and reverse. Same as the
 #' function \code{proportionConRev} but uses the package \code{highcharter}
 #'
-#' @title Barplot of proportion of contaminants and reverse
 #'
 #' @param nBoth The number of both contaminants and reverse identified in
 #' the dataset.
@@ -246,8 +259,6 @@ proportionConRev_HC <- function(nBoth = 0, nCont = 0, nRev = 0, lDataset = 0) {
 
 
 
-#' This function removes lines in the dataset based on a prefix string.
-#'
 #' @title Removes lines in the dataset based on a prefix string.
 #'
 #' @param obj An object of class \code{MSnSet}.
@@ -261,9 +272,9 @@ proportionConRev_HC <- function(nBoth = 0, nCont = 0, nRev = 0, lDataset = 0) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' removeLines(Exp1_R25_pept[1:100], "Potential_contaminant")
-#' removeLines(Exp1_R25_pept[1:100], "Reverse")
+#' data(Exp1_R25_pept)
+#' removeLines(Exp1_R25_pept[seq_len(100)], "Potential_contaminant")
+#' removeLines(Exp1_R25_pept[seq_len(100)], "Reverse")
 #'
 #' @export
 #'
@@ -282,9 +293,7 @@ removeLines <- function(obj, idLine2Delete = NULL, prefix = NULL) {
 
 
 
-#' This function removes lines in the dataset based on prefix strings
-#' (contaminants, reverse or both).
-#'
+
 #' @title Removes lines in the dataset based on a prefix strings (contaminants,
 #' reverse or both).
 #'
@@ -303,28 +312,29 @@ removeLines <- function(obj, idLine2Delete = NULL, prefix = NULL) {
 #' find in the data
 #'
 #' @return An list of 4 items :
-#' obj : an object of class \code{MSnSet} in which the lines have been deleted
-#' deleted.both : an object of class \code{MSnSet} which contains the deleted
+#' * obj : an object of class \code{MSnSet} in which the lines have been deleted
+#' * deleted.both : an object of class \code{MSnSet} which contains the deleted
 #' lines corresponding to both contaminants and reverse,
-#' deleted.contaminants : n object of class \code{MSnSet} which contains the
+#' * deleted.contaminants : n object of class \code{MSnSet} which contains the
 #' deleted lines corresponding to contaminants,
-#' deleted.reverse : an object of class \code{MSnSet} which contains the
+#' * deleted.reverse : an object of class \code{MSnSet} which contains the
 #' deleted lines corresponding to reverse,
 #'
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
+#' data(Exp1_R25_pept)
 #' StringBasedFiltering(
-#'     Exp1_R25_pept[1:100], "Potential_contaminant", "+",
-#'     "Reverse", "+"
-#' )
+#' Exp1_R25_pept[seq_len(100)], "Potential_contaminant", "+", "Reverse", "+")
 #'
 #' @export
 #'
 StringBasedFiltering <- function(obj,
-                                 idCont2Delete = NULL, prefix_Cont = NULL,
-                                 idRev2Delete = NULL, prefix_Rev = NULL) {
+    idCont2Delete = NULL, 
+    prefix_Cont = NULL,
+    idRev2Delete = NULL, 
+    prefix_Rev = NULL
+    ) {
     deleted.both <- deleted.contaminants <- deleted.reverse <- NULL
 
     ##
@@ -410,11 +420,6 @@ StringBasedFiltering <- function(obj,
 
 
 
-
-
-
-#' This function removes lines in the dataset based on prefix strings.
-#'
 #' @title Removes lines in the dataset based on a prefix strings.
 #'
 #' @param obj An object of class \code{MSnSet}.
@@ -425,14 +430,14 @@ StringBasedFiltering <- function(obj,
 #' find in the data
 #'
 #' @return An list of 4 items :
-#' obj : an object of class \code{MSnSet} in which the lines have been deleted
-#' deleted : an object of class \code{MSnSet} which contains the deleted lines
+#' * obj : an object of class \code{MSnSet} in which the lines have been deleted
+#' * deleted : an object of class \code{MSnSet} which contains the deleted lines
 #'
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' obj.filter <- StringBasedFiltering2(Exp1_R25_pept[1:100], 
+#' data(Exp1_R25_pept)
+#' obj.filter <- StringBasedFiltering2(Exp1_R25_pept[seq_len(100)], 
 #' "Potential_contaminant", "+")
 #'
 #' @export
@@ -467,9 +472,7 @@ StringBasedFiltering2 <- function(obj, cname = NULL, tag = NULL) {
 
 
 
-#' This function returns the indice of the lines to delete, based on a
-#' prefix string
-#'
+
 #' @title Get the indices of the lines to delete, based on a prefix string
 #'
 #' @param obj An object of class \code{MSnSet}.
@@ -484,8 +487,8 @@ StringBasedFiltering2 <- function(obj, cname = NULL, tag = NULL) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' ind <- getIndicesOfLinesToRemove(Exp1_R25_pept[1:100], 
+#' data(Exp1_R25_pept)
+#' ind <- getIndicesOfLinesToRemove(Exp1_R25_pept[seq_len(100)], 
 #' "Potential_contaminant",
 #'     prefix = "+"
 #' )
@@ -510,7 +513,11 @@ getIndicesOfLinesToRemove <- function(
 
 
 
-#' Filters the lines of \code{Biobase::exprs()} table with conditions on the 
+
+#' @title Filter lines in the matrix of intensities w.r.t. some criteria
+#' 
+#' @description 
+#' #' Filters the lines of \code{Biobase::exprs()} table with conditions on the 
 #' number of missing values.
 #' The user chooses the minimum amount of intensities that is acceptable and
 #' the filter delete lines that do not respect this condition.
@@ -524,7 +531,6 @@ getIndicesOfLinesToRemove <- function(
 #' "AtLeastOneCond": given a threshold \code{th}, only the lines that contain
 #' at least \code{th} values, and for at least one condition, are kept.
 #'
-#' @title Filter lines in the matrix of intensities w.r.t. some criteria
 #'
 #' @param obj An object of class \code{MSnSet} containing
 #' quantitative data.
@@ -542,9 +548,9 @@ getIndicesOfLinesToRemove <- function(
 #' @author Florence Combes, Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' obj <- Exp1_R25_pept[1:1000]
-#' level <- obj@experimentData@other$typeOfData
+#' data(Exp1_R25_pept)
+#' obj <- Exp1_R25_pept[seq_len(100)]
+#' level <- 'peptide'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 #' indices <- GetIndices_WholeLine(metacell.mask)
 #' obj.filter <- MetaCellFiltering(obj, indices, "delete")
@@ -552,9 +558,9 @@ getIndicesOfLinesToRemove <- function(
 #' @export
 #'
 MetaCellFiltering <- function(obj,
-                              indices,
-                              cmd,
-                              processText = "") {
+    indices,
+    cmd,
+    processText = "") {
     if (missing(obj)) {
         stop("'obj' is required;")
     }
@@ -571,7 +577,7 @@ MetaCellFiltering <- function(obj,
 
     if (is.null(indices)) {
         warning("'indices' is NULL. No filtering will be process.")
-        deleted <- obj[-c(1:nrow(obj))]
+        deleted <- obj[-c(seq_len(nrow(obj)))]
         new <- obj
     } else if (cmd == "delete") {
         deleted <- obj[indices]
@@ -591,8 +597,7 @@ MetaCellFiltering <- function(obj,
 }
 
 
-#' Delete the lines of \code{Biobase::exprs()} table identified by their indice.
-#'
+
 #' @title Delete the lines in the matrix of intensities and the metadata table
 #' given their indice.
 #'
@@ -610,8 +615,8 @@ MetaCellFiltering <- function(obj,
 #' @author Florence Combes, Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' obj <- deleteLinesFromIndices(Exp1_R25_pept[1:100], c(1:10))
+#' data(Exp1_R25_pept)
+#' obj <- deleteLinesFromIndices(Exp1_R25_pept[seq_len(100)], c(seq_len(10)))
 #'
 #' @export
 #'
@@ -659,8 +664,8 @@ deleteLinesFromIndices <- function(obj, deleteThat = NULL, processText = "") {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' obj <- Exp1_R25_pept[1:10, ]
+#' data(Exp1_R25_pept)
+#' obj <- Exp1_R25_pept[seq_len(10), ]
 #' level <- GetTypeofData(obj)
 #' pattern <- "missing"
 #' type <- "AllCond"
@@ -752,6 +757,11 @@ GetIndices_MetacellFiltering <- function(
 #' Lists the metacell scopes for filtering
 #'
 #' @export
+#' 
+#' @return xxx
+#' 
+#' @examples 
+#' MetacellFilteringScope()
 #'
 MetacellFilteringScope <- function() {
     c("None", "WholeLine", "WholeMatrix", "AllCond", "AtLeastOneCond")
@@ -762,6 +772,11 @@ MetacellFilteringScope <- function() {
 #' @title xxx
 #'
 #' @export
+#' 
+#' @return A `character()`
+#' 
+#' @examples 
+#' SymFilteringOperators()
 #'
 SymFilteringOperators <- function() {
     c("<=", "<", ">=", ">", "==", "!=")
@@ -788,9 +803,9 @@ SymFilteringOperators <- function() {
 #'
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' obj <- Exp1_R25_pept[1:10]
-#' level <- obj@experimentData@other$typeOfData
+#' data(Exp1_R25_pept)
+#' obj <- Exp1_R25_pept[seq_len(10)]
+#' level <- 'peptide'
 #' pattern <- "missing"
 #' metacell.mask <- match.metacell(metadata = GetMetacell(obj), 
 #' pattern = pattern, level = level)
@@ -800,11 +815,13 @@ SymFilteringOperators <- function() {
 #' ind <- GetIndices_WholeMatrix(metacell.mask, op, percent, th)
 #'
 #' @export
+#' 
+#' @return xxx
 #'
 GetIndices_WholeMatrix <- function(metacell.mask,
-                                   op = "==",
-                                   percent = FALSE,
-                                   th = 0) {
+    op = "==",
+    percent = FALSE,
+    th = 0) {
 
     # Check parameters
     if (missing(metacell.mask)) {
@@ -819,11 +836,12 @@ GetIndices_WholeMatrix <- function(metacell.mask,
     } else {
         th.upbound <- ncol(metacell.mask)
         if (th > th.upbound) {
-            warning(paste0(
+            warn.txt <- paste0(
                 "Param `th` is not correct. It must be an integer greater 
                 than or equal to 0 and less or equal than ",
                 th.upbound
-            ))
+            )
+            warning(warn.txt)
             return(NULL)
         }
     }
@@ -860,15 +878,17 @@ GetIndices_WholeMatrix <- function(metacell.mask,
 #' @param metacell.mask xxx
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' obj <- Exp1_R25_pept[20:30]
-#' level <- obj@experimentData@other$typeOfData
+#' data(Exp1_R25_pept)
+#' obj <- Exp1_R25_pept[seq.int(from=20, to=30)]
+#' level <- 'peptide'
 #' pattern <- "missing POV"
 #' metacell.mask <- match.metacell(metadata = GetMetacell(obj), 
 #' pattern = pattern, level = level)
 #' ind <- GetIndices_WholeLine(metacell.mask)
 #'
 #' @export
+#' 
+#' @return xxx
 #'
 GetIndices_WholeLine <- function(metacell.mask) {
     if (missing(metacell.mask)) {
@@ -904,9 +924,9 @@ GetIndices_WholeLine <- function(metacell.mask) {
 #'
 #' @param th The theshold to apply
 #'
-#' #' @examples
-#' utils::data(Exp1_R25_pept, package='DAPARdata')
-#' obj <- Exp1_R25_pept[1:10]
+#' @examples
+#' data(Exp1_R25_pept)
+#' obj <- Exp1_R25_pept[seq_len(10)]
 #' level <- GetTypeofData(obj)
 #' pattern <- 'missing'
 #' metacell.mask <- match.metacell(metadata=GetMetacell(obj), 
@@ -919,14 +939,16 @@ GetIndices_WholeLine <- function(metacell.mask) {
 #' ind <- GetIndices_BasedOnConditions(metacell.mask, type, conds, 
 #' percent, op, th)
 #'
+#' @return xxx
+#'
 #' @export
 #'
 GetIndices_BasedOnConditions <- function(metacell.mask,
-                                         type,
-                                         conds,
-                                         percent,
-                                         op,
-                                         th) {
+    type,
+    conds,
+    percent,
+    op,
+    th) {
 
     # Check parameters
     if (missing(metacell.mask)) {
@@ -968,11 +990,12 @@ GetIndices_BasedOnConditions <- function(metacell.mask,
         th.upbound <- min(unlist(lapply(u_conds, 
             function(x) length(which(conds == x)))))
         if (th > th.upbound) {
-            warning(paste0(
+            warn.txt <- paste0(
                 "Param `th` is not correct. It must be an integer greater 
                 than or equal to 0 and less or equal than ",
                 th.upbound
-            ))
+            )
+            warning(warn.txt)
             return(NULL)
         }
     }
@@ -983,7 +1006,7 @@ GetIndices_BasedOnConditions <- function(metacell.mask,
         ncol = nbCond
     )
 
-    for (c in 1:nbCond) {
+    for (c in seq_len(nbCond)) {
         ind.cond <- which(conds == u_conds[c])
         inter <- rowSums(metacell.mask[, ind.cond])
         if (isTRUE(percent)) {

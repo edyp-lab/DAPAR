@@ -18,9 +18,9 @@ diffAnaVolcanoplot_rCharts(
 x : a vector of the log(fold change) values of the differential analysis,
 y : a vector of the p-value values returned by the differential analysis.
 index : a vector of the rowanmes of the data.
-This dataframe must has been built with the option stringsAsFactors set 
-to FALSE. There may be additional slots which will be used to show 
-informations in the tooltip. The name of these slots must begin with the 
+This dataframe must has been built with the option stringsAsFactors set
+to FALSE. There may be additional slots which will be used to show
+informations in the tooltip. The name of these slots must begin with the
 prefix "tooltip_". It will be automatically removed in the plot.}
 
 \item{threshold_pVal}{A floating number which represents the p-value that
@@ -32,8 +32,8 @@ Fold Change that separates differential and non-differential data.}
 \item{conditions}{A list of the names of condition 1 and 2 used for the
 differential analysis.}
 
-\item{clickFunction}{A string that contains a JavaScript function used to 
-show info from slots in df. The variable this.index refers to the slot 
+\item{clickFunction}{A string that contains a JavaScript function used to
+show info from slots in df. The variable this.index refers to the slot
 named index and allows to retrieve the right row to show in the tooltip.}
 
 \item{pal}{xxx}
@@ -42,42 +42,44 @@ named index and allows to retrieve the right row to show in the tooltip.}
 An interactive volcanoplot
 }
 \description{
-Plots an interactive volcanoplot after the differential analysis.
+#' Plots an interactive volcanoplot after the differential analysis.
 Typically, the log of Fold Change is represented on the X-axis and the
 log10 of the p-value is drawn on the Y-axis. When the \code{threshold_pVal}
 and the \code{threshold_logFC} are set, two lines are drawn respectively on
 the y-axis and the X-axis to visually distinguish between differential and
-non differential data. With the use of the package Highcharter, a 
-customizable tooltip appears when the user put the mouse's pointer over 
+non differential data. With the use of the package Highcharter, a
+customizable tooltip appears when the user put the mouse's pointer over
 a point of the scatter plot.
 }
 \examples{
-\dontrun{
-library(highcharter) 
-utils::data(Exp1_R25_prot, package='DAPARdata')
-obj <- Exp1_R25_prot[1:1000]
-level <- obj@experimentData@other$typeOfData
-metacell.mask <- match.metacell(GetMetacell(obj), 'missing', level)
-indices <- GetIndices_WholeMatrix(metacell.mask, op='>=', th=1)
-obj <- MetaCellFiltering(obj, indices, cmd='delete')
+library(highcharter)
+data(Exp1_R25_prot)
+obj <- Exp1_R25_prot[seq_len(100)]
+level <- 'protein'
+metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
+obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 qData <- Biobase::exprs(obj$new)
 sTab <- Biobase::pData(obj$new)
-data <- limmaCompleteTest(qData,sTab)
-df <- data.frame(x=data$logFC, y = -log10(data$P_Value),
-index = as.character(rownames(obj$new)))
+data <- limmaCompleteTest(qData, sTab)
+df <- data.frame(
+    x = data$logFC, y = -log10(data$P_Value),
+    index = as.character(rownames(obj$new))
+)
 colnames(df) <- c("x", "y", "index")
 tooltipSlot <- c("Sequence", "Score")
 df <- cbind(df, Biobase::fData(obj)[, tooltipSlot])
-colnames(df) <- gsub(".", "_", colnames(df), fixed=TRUE)
-if (ncol(df) > 3){
-    colnames(df)[4:ncol(df)] <- 
-    paste("tooltip_", colnames(df)[4:ncol(df)], sep="")}
+colnames(df) <- gsub(".", "_", colnames(df), fixed = TRUE)
+if (ncol(df) > 3) {
+    colnames(df)[seq.int(from = 4, to = ncol(df))] <-
+        paste("tooltip_", colnames(df)[seq.int(from = 4, to = ncol(df))],
+         sep = "")
+}
 hc_clickFunction <- JS("function(event) {
-Shiny.onInputChange('eventPointClicked', 
+Shiny.onInputChange('eventPointClicked',
 [this.index]+'_'+ [this.series.name]);}")
 cond <- c("25fmol", "10fmol")
-diffAnaVolcanoplot_rCharts(df, 2.5, 1, cond,hc_clickFunction) 
-}
+diffAnaVolcanoplot_rCharts(df, 2.5, 1, cond, hc_clickFunction)
 
 }
 \author{

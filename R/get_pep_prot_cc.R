@@ -1,5 +1,4 @@
-#' Method to build the list of connex composant of the adjacency matrix
-#'
+
 #' @title Build the list of connex composant of the adjacency matrix
 #'
 #' @param X An adjacency matrix
@@ -9,19 +8,26 @@
 #' @author Thomas Burger, Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' X <- BuildAdjacencyMatrix(Exp1_R25_pept, "Protein_group_IDs", FALSE)
+#' data(Exp1_R25_pept)
+#' obj <- Exp1_R25_pept[seq_len(10)]
+#' X <- BuildAdjacencyMatrix(obj, "Protein_group_IDs", FALSE)
 #' ll <- get.pep.prot.cc(X)
-#'
-#' @importFrom Matrix crossprod %&%
-# #' @importFrom graph graphAM connComp
 #'
 #' @export
 #'
 get.pep.prot.cc <- function(X) {
+    if (!requireNamespace("Matrix", quietly = TRUE)) {
+        stop("Please install Matrix: BiocManager::install('Matrix')")
+    }
+    
     if (!requireNamespace("igraph", quietly = TRUE)) {
         stop("Please install igraph: BiocManager::install('igraph')")
     }
+    
+    if (!requireNamespace("graph", quietly = TRUE)) {
+        stop("Please install graph: BiocManager::install('graph')")
+    }
+    
     if (is.null(X)) {
         warning("The adjacency matrix is empty")
         return()
@@ -36,11 +42,11 @@ get.pep.prot.cc <- function(X) {
     A <- B <- g <- NULL
     ### Adjacency matrix construction
     # boolean matrix product
-    print("Start computing boolean matrix product")
+    #print("Start computing boolean matrix product")
     A <- Matrix::crossprod(X, boolArith = TRUE)
     # A <- as.matrix(t(X) %*% X)
     # A <- as.matrix(t(X) %&% X)
-    print("End of computing boolean matrix product")
+    #print("End of computing boolean matrix product")
     # remove self-connecting edges
     diag(A) <- rep(0, p)
     # goes back to classical matrix format
@@ -56,7 +62,7 @@ get.pep.prot.cc <- function(X) {
         ### Peptides from single prot CCs
         singprot.cc <- as.list(names(SingleProt.CC.id))
         singprot.cc.pep <- list()
-        for (i in 1:length(singprot.cc)) {
+        for (i in seq_len(length(singprot.cc))) {
             peplist <- which(X[, singprot.cc[[i]]] != 0)
             singprot.cc.pep[[i]] <- names(peplist)
         }
@@ -107,7 +113,7 @@ get.pep.prot.cc <- function(X) {
     prot.cc <- c(multprot.cc, singprot.cc)
     pep.cc <- c(multprot.cc.pep, singprot.cc.pep)
     global.cc <- list()
-    for (i in 1:length(prot.cc)) {
+    for (i in seq_len(length(prot.cc))) {
         prot <- prot.cc[[i]]
         pep <- pep.cc[[i]]
         tmp <- list(prot, pep)
@@ -134,8 +140,6 @@ get.pep.prot.cc <- function(X) {
 
 
 
-#' Jitter plot of CC
-#'
 #' @title Jitter plot of CC
 #'
 #' @param list.of.cc List of cc such as returned by the function get.pep.prot.cc
@@ -145,37 +149,47 @@ get.pep.prot.cc <- function(X) {
 #' @author Thomas Burger
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", TRUE)
+#' data(Exp1_R25_pept)
+#' obj <- Exp1_R25_pept[seq_len(100)]
+#' X <- BuildAdjacencyMatrix(obj, "Protein_group_IDs", TRUE)
 #' ll <- get.pep.prot.cc(X)
 #' plotJitter(ll)
 #'
 #' @export
 #'
-plotJitter <- function(list.of.cc) {
+plotJitter <- function(list.of.cc = NULL) {
     if (is.null(list.of.cc)) {
         return()
     }
 
-    length(list.of.cc) # number of CCs
+    #x <- length(list.of.cc) # number of CCs
     cc.summary <- sapply(list.of.cc, function(x) {
         c(length(x[[1]]), length(x[[2]]))
     })
+    # cc.summary <- vapply(list.of.cc, 
+    #     function(x) {c(length(x[[1]]), length(x[[2]]))},
+    #     data.frame(2)
+    #     )
+
     rownames(cc.summary) <- c("Nb_proteins", "Nb_peptides")
     colSums(cc.summary) # total amount of pep and prot in each CC
-    colnames(cc.summary) <- 1:length(list.of.cc)
+    colnames(cc.summary) <- seq_len(length(list.of.cc))
     cc.summary
     rowSums(cc.summary) # c(number of prot, number of pep)
 
 
     cc.summary <- as.data.frame(t(jitter(cc.summary)))
-    plot(jitter(cc.summary[, 2]), jitter(cc.summary[, 1]), type = "p", 
-        xlab = "#peptides in CC", ylab = "#proteins in CC")
+    plot(
+        jitter(cc.summary[, 2]), 
+        jitter(cc.summary[, 1]), 
+        type = "p", 
+        xlab = "#peptides in CC", 
+        ylab = "#proteins in CC"
+        )
 }
 
 
-#' Display a CC
-#'
+
 #' @title Display a CC
 #'
 #' @param The.CC A cc (a list)
@@ -187,8 +201,9 @@ plotJitter <- function(list.of.cc) {
 #' @author Thomas Burger, Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
+#' data(Exp1_R25_pept)
+#' obj <- Exp1_R25_pept[seq_len(100)]
+#' X <- BuildAdjacencyMatrix(obj, "Protein_group_IDs", FALSE)
 #' ll <- get.pep.prot.cc(X)
 #' g <- buildGraph(ll[[1]], X)
 #'
@@ -208,10 +223,10 @@ buildGraph <- function(The.CC, X) {
 
 
     nodes <- data.frame(
-        id = 1:nb.total,
+        id = seq_len(nb.total),
         group = def.grp,
         label = c(rownames(subX), colnames(subX)),
-        title = paste0("<p>", 1:nb.total, "<br>Tooltip !</p>"),
+        title = paste0("<p>", seq_len(nb.total), "<br>Tooltip !</p>"),
         size = c(rep(10, nb.pep), rep(20, nb.prot)),
         stringsAsFactors = FALSE
     )
@@ -221,12 +236,15 @@ buildGraph <- function(The.CC, X) {
         stringsAsFactors = FALSE
     )
 
-    return(list(nodes = nodes, edges = edges))
+    return(
+        list(
+            nodes = nodes, 
+            edges = edges
+            )
+        )
 }
 
 
-#' Display a CC
-#'
 #' @title Display a CC
 #'
 #' @param g A cc (a list)
@@ -244,8 +262,9 @@ buildGraph <- function(The.CC, X) {
 #' @author Thomas Burger, Samuel Wieczorek
 #'
 #' @examples
-#' utils::data(Exp1_R25_pept, package = "DAPARdata")
-#' X <- BuildAdjacencyMatrix(Exp1_R25_pept[1:1000], "Protein_group_IDs", FALSE)
+#' data(Exp1_R25_pept)
+#' obj <- Exp1_R25_pept[seq_len(100)]
+#' X <- BuildAdjacencyMatrix(obj, "Protein_group_IDs", FALSE)
 #' ll <- get.pep.prot.cc(X)
 #' g <- buildGraph(ll[[1]], X)
 #' display.CC.visNet(g)
@@ -254,11 +273,13 @@ buildGraph <- function(The.CC, X) {
 #'
 #'
 #'
-display.CC.visNet <- function(g,
-                              layout = layout_nicely,
-                              obj = NULL,
-                              prot.tooltip = NULL,
-                              pept.tooltip = NULL) {
+display.CC.visNet <- function(
+    g,
+    layout = layout_nicely,
+    obj = NULL,
+    prot.tooltip = NULL,
+    pept.tooltip = NULL) {
+    
     if (!requireNamespace("visNetwork", quietly = TRUE)) {
         stop("Please install visNetwork: BiocManager::install('visNetwork')")
     }
@@ -287,8 +308,6 @@ display.CC.visNet <- function(g,
 
 
 
-#' Display a jitter plot for CC
-#'
 #' @title Display a a jitter plot for CC
 #'
 #' @param df xxxx
@@ -300,6 +319,13 @@ display.CC.visNet <- function(g,
 #' @author Thomas Burger, Samuel Wieczorek
 #'
 #' @export
+#' 
+#' @examples 
+#' data(Exp1_R25_pept)
+#' obj <- Exp1_R25_pept[seq_len(100)]
+#' X <- BuildAdjacencyMatrix(obj, "Protein_group_IDs", TRUE)
+#' ll <- get.pep.prot.cc(X)
+#' plotJitter_rCharts(ll)
 #'
 plotJitter_rCharts <- function(df, clickFunction = NULL) {
     xtitle <- "TO DO"
@@ -315,8 +341,13 @@ plotJitter_rCharts <- function(df, clickFunction = NULL) {
 
     i_tooltip <- which(startsWith(colnames(df), "tooltip"))
     txt_tooltip <- NULL
+    
+    if (length(i_tooltip) == 0){
+        stop("There is no tooltip in the object.")
+    }
+    
     for (i in i_tooltip) {
-        t <- txt_tooltip <- paste(txt_tooltip, "<b>", gsub("tooltip_", "",
+        txt_tooltip <- paste(txt_tooltip, "<b>", gsub("tooltip_", "",
             colnames(df)[i],
             fixed = TRUE
         ),

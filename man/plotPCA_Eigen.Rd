@@ -16,8 +16,8 @@ A histogram
 Plots the eigen values of PCA
 }
 \examples{
-utils::data(Exp1_R25_pept, package='DAPARdata')
-res.pca <- wrapper.pca(Exp1_R25_pept, ncp=6)
+data(Exp1_R25_pept)
+res.pca <- wrapper.pca(Exp1_R25_pept, ncp = 6)
 plotPCA_Eigen(res.pca)
 
 }
