@@ -131,7 +131,8 @@ fudge2LRT <- function(lmm.res.h0, lmm.res.h1, cc, n, p, s,
 
     mad.mat <- matrix(0, n.int - 1, ncol(d.mat))
     for (i in seq_len(n.int - 1)) {
-        mad.mat[i, ] <- apply(d.mat[which(int.s == i), , drop = FALSE], 2, mad)
+        mad.mat[i, ] <- apply(d.mat[which(int.s == i), , 
+            drop = FALSE], 2, stats::mad)
     }
 
     cv <- function(x) {
@@ -273,12 +274,12 @@ LH0.lm <- function(X, y1, y2) {
                 Xpep = Xpep, 
                 row.names = as.character(seq_len(n * q))
                 )
-            lmm.res <- lm(Y ~ 1 + Xpep, data = dataIn)
+            lmm.res <- stats::lm(Y ~ 1 + Xpep, data = dataIn)
         } else {
             dataIn <- data.frame(
                 Y = Ytilde, 
                 row.names = as.character(seq_len(n * q)))
-            lmm.res <- lm(Y ~ 1, data = dataIn)
+            lmm.res <- stats::lm(Y ~ 1, data = dataIn)
         }
     } else {
         Xpep <- factor(rep(rownames(X), n))
@@ -289,7 +290,7 @@ LH0.lm <- function(X, y1, y2) {
             Xpep = Xpep, 
             row.names = as.character(seq_len(n * q))
             )
-        lmm.res <- lm(Y ~ ., data = dataIn)
+        lmm.res <- stats::lm(Y ~ ., data = dataIn)
     }
     ll <- stats::logLik(lmm.res)
 

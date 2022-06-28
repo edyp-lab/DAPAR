@@ -993,8 +993,14 @@ inner.mean <- function(pepData, X) {
 #' inner.aggregate.topn(Biobase::exprs(obj), X)
 #' 
 inner.aggregate.topn <- function(pepData, X, method = "Mean", n = 10) {
+    
+    
+    if (!requireNamespace("stats", quietly = TRUE)) {
+        stop("Please install stats: BiocManager::install('stats')")
+    }
+    
     X <- as.matrix(X)
-    med <- apply(pepData, 1, median)
+    med <- apply(pepData, 1, stats::median)
     xmed <- as(X * med, "dgCMatrix")
     for (c in seq_len(ncol(X))) {
         v <- order(xmed[, c], decreasing = TRUE)[seq_len(n)]

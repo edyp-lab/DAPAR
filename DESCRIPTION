@@ -7,8 +7,8 @@ Description: The package DAPAR is a Bioconductor distributed R package which
     Contrarily to most other similar R packages, it is endowed with rich and 
     user-friendly graphical interfaces, so that no programming skill is 
     required (see `Prostar` package).
-Version: 1.28.2
-Date: 2022-06-17
+Version: 1.28.3
+Date: 2022-06-28
 Authors@R: c(person(given = "Samuel", family = "Wieczorek",
             email = "samuel.wieczorek@cea.fr",
     role = c("aut","cre")),
@@ -30,14 +30,14 @@ Authors@R: c(person(given = "Samuel", family = "Wieczorek",
 License: Artistic-2.0
 VignetteBuilder: knitr
 Depends: R (>= 4.2.0)
-Suggests: testthat, BiocStyle, AnnotationDbi, clusterProfiler,
+Suggests: testthat, BiocStyle, AnnotationDbi, clusterProfiler, graph,
           diptest, cluster, vioplot, visNetwork, vsn, igraph,  
           FactoMineR, factoextra, dendextend, foreach, parallel, doParallel, 
           Mfuzz, apcluster, forcats, readxl, openxlsx, multcomp, purrr, tibble,
            knitr, norm, scales, tidyverse, cp4p, imp4p (>= 1.1),lme4,
            dplyr, limma, preprocessCore, stringr, tidyr, impute, gplots,
            grDevices, reshape2, graphics, stats, methods, ggplot2, 
-           RColorBrewer, Matrix, DAPARdata
+           RColorBrewer, Matrix, DAPARdata (>= 1.26.3)
 Imports: Biobase, MSnbase, utils, highcharter 
 biocViews: Proteomics, Normalization, Preprocessing, MassSpectrometry,
         QualityControl, GO, DataImport

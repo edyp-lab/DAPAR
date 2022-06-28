@@ -381,7 +381,12 @@ wrapper.impute.detQuant <- function(obj, qval = 0.025, factor = 1, na.type) {
 #' @export
 #'
 getQuantile4Imp <- function(qdata, qval = 0.025, factor = 1) {
-    r1 <- apply(qdata, 2, quantile, qval, na.rm = TRUE)
+    
+    if (!requireNamespace("stats", quietly = TRUE)) {
+        stop("Please install stats: BiocManager::install('stats')")
+    }
+    
+    r1 <- apply(qdata, 2, stats::quantile, qval, na.rm = TRUE)
     r2 <- r1 * factor
     return(list(ImpVal = r1, shiftedImpVal = r2))
 }
