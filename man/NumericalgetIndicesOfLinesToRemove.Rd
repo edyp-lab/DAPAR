@@ -28,7 +28,7 @@ This function returns the indices of the lines to delete, based on a
 prefix string
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 NumericalgetIndicesOfLinesToRemove(Exp1_R25_pept[seq_len(100)], "A_Count",
 value = "6", operator = "==")
 

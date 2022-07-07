@@ -33,7 +33,7 @@ This method plots a bar plot which represents the distribution of the
 number of missing values (NA) per lines (ie proteins) and per conditions.
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept
 pal <- ExtendPalette(length(unique(Biobase::pData(obj)$Condition)), "Dark2")
 metacellPerLinesHistoPerCondition_HC(obj, "missing", pal = pal)

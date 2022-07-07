@@ -21,7 +21,7 @@ A colored correlation matrix
 Builds a correlation matrix based on a \code{MSnSet} object.
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 wrapper.corrMatrixD_HC(Exp1_R25_pept)
 
 

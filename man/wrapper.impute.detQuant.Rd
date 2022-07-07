@@ -26,7 +26,7 @@ This method is a wrapper of the function `impute.detQuant()` for objects
 of class \code{MSnSet}
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept[seq_len(10)]
 obj.imp.pov <- wrapper.impute.detQuant(obj, na.type = "missing POV")
 obj.imp.mec <- wrapper.impute.detQuant(obj, na.type = "missing MEC")

@@ -21,7 +21,7 @@ Returns the number of lines, in a given column, where content matches
 the prefix.
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 getNumberOf(Exp1_R25_pept[seq_len(100)], "Potential_contaminant", "+")
 
 }

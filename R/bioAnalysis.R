@@ -27,8 +27,12 @@
 #' @author Florence Combes
 #'
 #' @examples
-#' data(Exp1_R25_prot)
+#' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(10)]
+#' if (!requireNamespace("org.Sc.sgd.db", quietly = TRUE)) {
+#' stop("Please install org.Sc.sgd.db: 
+#'             BiocManager::install('org.Sc.sgd.db')")
+#' }
 #' ggo <- group_GO(
 #'     data = Biobase::fData(obj)$Protein.IDs, idFrom = "UNIPROT",
 #'     orgdb = "org.Sc.sgd.db", ont = "MF", level = 2
@@ -41,7 +45,7 @@ group_GO <- function(data, idFrom, orgdb, ont, level, readable = FALSE) {
         stop("Please install clusterProfiler: 
             BiocManager::install('clusterProfiler')")
     }
-    
+
     pkg.orgdb <- as.character(orgdb)
     if (!requireNamespace(as.character(orgdb), quietly = TRUE)) {
         .txt <- paste0("Please install ", orgdb, ": 
@@ -106,9 +110,15 @@ group_GO <- function(data, idFrom, orgdb, ont, level, readable = FALSE) {
 #' @author Florence Combes
 #'
 #' @examples
-#' data(Exp1_R25_prot)
+#' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(10)]
+#' if (!requireNamespace("org.Sc.sgd.db", quietly = TRUE)) {
+#' stop("Please install org.Sc.sgd.db: 
+#'             BiocManager::install('org.Sc.sgd.db')")
+#' }
+#' library(org.Sc.sgd.db)
 #' univ <- univ_AnnotDbPkg("org.Sc.sgd.db") # univ is the background
+
 #' ego <- enrich_GO(
 #'     data = Biobase::fData(obj)$Protein.IDs, idFrom = "UNIPROT",
 #'     orgdb = "org.Sc.sgd.db", ont = "MF", pval = 0.05, universe = univ
@@ -128,7 +138,6 @@ enrich_GO <- function(
         stop("Please install clusterProfiler: 
             BiocManager::install('clusterProfiler')")
     }
-
 
     tmp <- which(is.na(data))
     if (length(tmp) > 0) {
@@ -183,8 +192,11 @@ enrich_GO <- function(
 #' @export
 #' 
 #' @examples 
-#' orgdb <- "org.Sc.sgd.db"
-#' univ_AnnotDbPkg(orgdb)
+#' if (!requireNamespace("org.Sc.sgd.db", quietly = TRUE)) {
+#' stop("Please install org.Sc.sgd.db: 
+#'             BiocManager::install('org.Sc.sgd.db')")
+#' }
+#' univ_AnnotDbPkg("org.Sc.sgd.db")
 #'
 univ_AnnotDbPkg <- function(orgdb) {
     if (!requireNamespace("AnnotationDbi", quietly = TRUE)) {
@@ -310,14 +322,19 @@ GOAnalysisSave <- function(obj,
 #' @export
 #' 
 #' @examples 
-#' data(Exp1_R25_prot)
+#' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(10)]
+#' if (!requireNamespace("org.Sc.sgd.db", quietly = TRUE)) {
+#' stop("Please install org.Sc.sgd.db: 
+#'             BiocManager::install('org.Sc.sgd.db')")
+#' }
+#' library(org.Sc.sgd.db)
 #' univ <- univ_AnnotDbPkg("org.Sc.sgd.db")
 #' ggo <- group_GO(
 #'     data = Biobase::fData(obj)$Protein.IDs, idFrom = "UNIPROT",
 #'     orgdb = "org.Sc.sgd.db", ont = "MF", level = 2
 #' )
-#' barplotGroupGO_HC(ego)
+#' barplotGroupGO_HC(ggo)
 #'
 barplotGroupGO_HC <- function(ggo, maxRes = 5, title = "") {
     dat <- ggo@result
@@ -367,8 +384,13 @@ barplotGroupGO_HC <- function(ggo, maxRes = 5, title = "") {
 #' @export
 #' 
 #' @examples 
-#' data(Exp1_R25_prot)
+#' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(10)]
+#' if (!requireNamespace("org.Sc.sgd.db", quietly = TRUE)) {
+#' stop("Please install org.Sc.sgd.db: 
+#'             BiocManager::install('org.Sc.sgd.db')")
+#' }
+#' library(org.Sc.sgd.db)
 #' univ <- univ_AnnotDbPkg("org.Sc.sgd.db")
 #' ego <- enrich_GO(
 #'     data = Biobase::fData(obj)$Protein.IDs, idFrom = "UNIPROT",
@@ -468,8 +490,13 @@ barplotEnrichGO_HC <- function(ego, maxRes = 5, title = NULL) {
 #' @export
 #' 
 #' @examples
-#' data(Exp1_R25_prot)
-#' obj <- Exp1_R25_prot[seq_len(10)]
+#' data(Exp1_R25_prot, package="DAPARdata")
+#' obj <- Exp1_R25_prot
+#' if (!requireNamespace("org.Sc.sgd.db", quietly = TRUE)) {
+#' stop("Please install org.Sc.sgd.db: 
+#'             BiocManager::install('org.Sc.sgd.db')")
+#' }
+#' library(org.Sc.sgd.db)
 #' univ <- univ_AnnotDbPkg("org.Sc.sgd.db")
 #' ego <- enrich_GO(
 #'     data = Biobase::fData(obj)$Protein.IDs, idFrom = "UNIPROT",
@@ -478,6 +505,10 @@ barplotEnrichGO_HC <- function(ego, maxRes = 5, title = NULL) {
 #' scatterplotEnrichGO_HC(ego)
 
 scatterplotEnrichGO_HC <- function(ego, maxRes = 10, title = NULL) {
+    
+    
+    if (is.null(ego))
+        return(NULL)
     
     if (!requireNamespace("grDevices", quietly = TRUE)) {
         stop("Please install grDevices: BiocManager::install('grDevices')")

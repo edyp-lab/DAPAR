@@ -12,7 +12,7 @@
 #' @return A named vector containing all the different values of the aov model
 #'
 #' @examples
-#' data(Exp1_R25_prot)
+#' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(1000)]
 #' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
@@ -64,7 +64,7 @@ classic1wayAnova <- function(current_line, conditions) {
 #' corresponding p-values.
 #'
 #' @examples
-#' data(Exp1_R25_prot)
+#' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(1000)]
 #' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
@@ -159,7 +159,7 @@ wrapperClassic1wayAnova <- function(
 #' @author Hélène Borges
 #'
 #' @examples
-#' data(Exp1_R25_prot)
+#' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(1000)]
 #' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
@@ -258,7 +258,7 @@ formatPHResults <- function(post_hoc_models_summaries) {
 #' @author Hélène Borges
 #'
 #' @examples
-#' data(Exp1_R25_prot)
+#' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(1000)]
 #' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)

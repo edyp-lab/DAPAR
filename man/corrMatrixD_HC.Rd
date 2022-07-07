@@ -26,7 +26,7 @@ Displays a correlation matrix of the quantitative data of the
 \code{Biobase::exprs()} table.
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 qData <- Biobase::exprs(Exp1_R25_pept)
 samplesData <- Biobase::pData(Exp1_R25_pept)
 res <- cor(qData, use = "pairwise.complete.obs")

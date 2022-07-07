@@ -34,7 +34,7 @@ For the five other families, two type categories are available :
 by condition.
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 conds <- Biobase::pData(Exp1_R25_pept)$Condition
 obj <- wrapper.normalizeD(
     obj = Exp1_R25_pept, method = "QuantileCentering",

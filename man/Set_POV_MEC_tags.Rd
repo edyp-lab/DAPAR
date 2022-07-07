@@ -22,7 +22,7 @@ values (used to update an initial dataset) or imputed values (used when
 post processing protein metacell after aggregation)
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept[seq_len(10)]
 cols.for.ident <- c("metacell_Intensity_C_R1", "metacell_Intensity_C_R2",
 "metacell_Intensity_C_R3", "metacell_Intensity_D_R1",

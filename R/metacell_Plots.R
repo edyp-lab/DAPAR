@@ -16,7 +16,7 @@
 #' @return A bar plot
 #' @author Florence Combes, Samuel Wieczorek
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10), ]
 #' metacellPerLinesHisto_HC(obj, pattern = "missing")
 #'
@@ -132,7 +132,7 @@ metacellPerLinesHisto_HC <- function(obj,
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept
 #' pal <- ExtendPalette(length(unique(Biobase::pData(obj)$Condition)), "Dark2")
 #' metacellPerLinesHistoPerCondition_HC(obj, "missing", pal = pal)
@@ -271,7 +271,7 @@ metacellPerLinesHistoPerCondition_HC <- function(obj,
 #' @import highcharter
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept
 #' pattern <- "missing POV"
 #' pal <- ExtendPalette(2, "Dark2")
@@ -376,7 +376,7 @@ metacellHisto_HC <- function(obj,
 #' @return A heatmap
 #' @author Alexia Dorffer
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(1000)]
 #' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
@@ -433,7 +433,7 @@ wrapper.mvImage <- function(obj, pattern = "missing MEC") {
 #' @return A heatmap
 #' @author Samuel Wieczorek, Thomas Burger
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' qData <- Biobase::exprs(Exp1_R25_pept)
 #' conds <- Biobase::pData(Exp1_R25_pept)[, "Condition"]
 #' mvImage(qData, conds)
@@ -523,9 +523,8 @@ mvImage <- function(qData, conds) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(100)]
-#' hc_mvTypePlot2(obj, pattern = "missing MEC", title = "POV distribution")
 #' conds <- Biobase::pData(obj)$Condition
 #' pal <- ExtendPalette(length(unique(conds)), "Dark2")
 #' hc_mvTypePlot2(obj, pattern = "missing MEC", title = "POV distribution", 

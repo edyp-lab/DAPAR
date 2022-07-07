@@ -19,7 +19,7 @@
 #' @author Alexia Dorffer
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10)]
 #' level <- 'peptide'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
@@ -78,7 +78,7 @@ wrapper.heatmapD <- function(obj,
 #' @author Florence Combes, Samuel Wieczorek, Enor Fremy
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10), ]
 #' level <- 'peptide'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
@@ -175,9 +175,9 @@ heatmapD <- function(qData,
         margins = c(4, 12),
         cexRow = 1.5 + ncol(.data) * -0.011,
         keysize = 1.5,
-        lhei = c(1.5, 9),
-        lwid = c(1.5, 4),
-        lmat = rbind(4:3, 2:1),
+        # lhei = c(1.5, 9),
+        # lwid = c(1.5, 4),
+        # lmat = rbind(4:3, 2:1),
         colRow = col_labels
     )
 }
@@ -216,7 +216,7 @@ heatmapD <- function(qData,
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_prot)
+#' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(100)]
 #' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)

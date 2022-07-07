@@ -34,7 +34,7 @@ A normalized numeric matrix
 Normalisation MeanCentering
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 qData <- Biobase::exprs(Exp1_R25_pept)
 conds <- Biobase::pData(Exp1_R25_pept)$Condition
 normalized <- MeanCentering(qData, conds, type = "overall")

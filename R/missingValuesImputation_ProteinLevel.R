@@ -7,7 +7,7 @@
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(100)]
 #' lapala <- findMECBlock(obj)
 #'
@@ -50,7 +50,7 @@ findMECBlock <- function(obj) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(100)]
 #' lapala <- findMECBlock(obj)
 #' obj <- wrapper.impute.detQuant(obj, na.type = "missing")
@@ -92,7 +92,7 @@ reIntroduceMEC <- function(obj, MECIndex) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj.imp.pov <- wrapper.impute.KNN(
 #'     obj = Exp1_R25_pept[seq_len(10)], K = 3,
 #'     na.type = "missing POV"
@@ -164,7 +164,7 @@ wrapper.impute.KNN <- function(obj = NULL, K, na.type) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10), ]
 #' obj.imp.pov <- wrapper.impute.fixedValue(obj, 0.001, na.type = "missing POV")
 #' obj.imp.mec <- wrapper.impute.fixedValue(obj, 0.001, na.type = "missing MEC")
@@ -224,7 +224,7 @@ wrapper.impute.fixedValue <- function(obj, fixVal = 0, na.type) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_prot)
+#' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(10)]
 #' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
@@ -295,7 +295,7 @@ wrapper.impute.pa <- function(obj = NULL, q.min = 0.025, na.type) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10)]
 #' obj.imp.pov <- wrapper.impute.detQuant(obj, na.type = "missing POV")
 #' obj.imp.mec <- wrapper.impute.detQuant(obj, na.type = "missing MEC")
@@ -374,7 +374,7 @@ wrapper.impute.detQuant <- function(obj, qval = 0.025, factor = 1, na.type) {
 #' @author Thomas Burger
 #'
 #' @examples
-#' data(Exp1_R25_prot)
+#' data(Exp1_R25_prot, package="DAPARdata")
 #' qdata <- Biobase::exprs(Exp1_R25_prot)
 #' quant <- getQuantile4Imp(qdata)
 #'
@@ -412,7 +412,7 @@ getQuantile4Imp <- function(qdata, qval = 0.025, factor = 1) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(100)]
 #' obj.slsa.pov <- wrapper.impute.slsa(obj, na.type = "missing POV")
 #'

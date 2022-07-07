@@ -22,7 +22,7 @@ Similar to the function \code{is.na} but focused on the equality
 with the paramter 'type'.
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept[seq_len(10), ]
 metadata <- GetMetacell(obj)
 m <- match.metacell(metadata, pattern = "missing", level = "peptide")

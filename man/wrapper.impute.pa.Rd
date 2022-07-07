@@ -24,7 +24,7 @@ This method is a wrapper to the function \code{impute.pa} of the package
 \code{imp4p} adapted to an object of class \code{MSnSet}.
 }
 \examples{
-data(Exp1_R25_prot)
+data(Exp1_R25_prot, package="DAPARdata")
 obj <- Exp1_R25_prot[seq_len(10)]
 level <- 'protein'
 metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)

@@ -25,7 +25,7 @@ missing values which have been imputed.
 }
 \examples{
 Sys.setenv("R_ZIPCMD" = Sys.which("zip"))
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept[seq_len(10)]
 writeMSnsetToExcel(obj, "foo")
 

@@ -22,7 +22,7 @@ Method to create a binary matrix with proteins in columns and peptides
 in lines on a \code{MSnSet} object (peptides)
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 protId <- "Protein_group_IDs"
 BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(10)], protId, TRUE)
 

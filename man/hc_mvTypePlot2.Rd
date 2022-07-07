@@ -31,9 +31,8 @@ whereas the y-axis count the number of observed values for this entity
 and the considered condition.
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept[seq_len(100)]
-hc_mvTypePlot2(obj, pattern = "missing MEC", title = "POV distribution")
 conds <- Biobase::pData(obj)$Condition
 pal <- ExtendPalette(length(unique(conds)), "Dark2")
 hc_mvTypePlot2(obj, pattern = "missing MEC", title = "POV distribution", 

@@ -16,7 +16,7 @@ A list
 Check if the design is valid
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 check.conditions(Biobase::pData(Exp1_R25_pept)$Condition)
 
 }

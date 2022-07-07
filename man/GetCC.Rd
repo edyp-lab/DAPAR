@@ -18,7 +18,7 @@ Returns the contains of the slot processing  of an object of
 class \code{MSnSet}
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 Xshared <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(100)], 
 "Protein_group_IDs",  FALSE)
 Xunique <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(100)], 
@@ -27,7 +27,7 @@ ll.X <- list(matWithSharedPeptides = Xshared,
 matWithUniquePeptides = Xunique)
 Exp1_R25_pept <- SetMatAdj(Exp1_R25_pept, ll.X)
 ll1 <- get.pep.prot.cc(GetMatAdj(Exp1_R25_pept)$matWithSharedPeptides)
-ll2 <- DAPAR::get.pep.prot.cc(
+ll2 <- get.pep.prot.cc(
 GetMatAdj(Exp1_R25_pept)$matWithUniquePeptides)
 cc <- list(allPep = ll1, onlyUniquePep = ll2)
 Exp1_R25_pept <- SetCC(Exp1_R25_pept, cc)

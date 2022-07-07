@@ -16,7 +16,7 @@
 #' @author Helene Borges
 #'
 #' @examples
-#' data(Exp1_R25_prot)
+#' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(1000)]
 #' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
@@ -88,7 +88,7 @@ averageIntensities <- function(ESet_obj) {
 #' @author Helene Borges
 #'
 #' @examples
-#' data(Exp1_R25_prot)
+#' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(100)]
 #' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
@@ -102,7 +102,7 @@ averageIntensities <- function(ESet_obj) {
 #' centered_means <- dplyr::bind_cols(
 #' feature = dplyr::as_tibble(only_features),
 #' dplyr::as_tibble(centered))
-#' checkClust <- checkClusterability(centered_means, b = 100)
+#' ##checkClust <- checkClusterability(centered_means, b = 100)
 #'
 #' @export
 #'
@@ -174,7 +174,7 @@ checkClusterability <- function(standards, b = 500) {
 #'
 #' @examples
 #' library(dplyr)
-#' data(Exp1_R25_prot)
+#' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(1000)]
 #' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
@@ -389,7 +389,7 @@ visualizeClusters <- function(dat,
 #' 10.1126/science.1136800}
 #'
 #' @examples
-#' data(Exp1_R25_prot)
+#' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(1000)]
 #' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)

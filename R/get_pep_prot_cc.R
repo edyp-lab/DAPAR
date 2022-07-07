@@ -8,7 +8,7 @@
 #' @author Thomas Burger, Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10)]
 #' X <- BuildAdjacencyMatrix(obj, "Protein_group_IDs", FALSE)
 #' ll <- get.pep.prot.cc(X)
@@ -149,7 +149,7 @@ get.pep.prot.cc <- function(X) {
 #' @author Thomas Burger
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(100)]
 #' X <- BuildAdjacencyMatrix(obj, "Protein_group_IDs", TRUE)
 #' ll <- get.pep.prot.cc(X)
@@ -201,7 +201,7 @@ plotJitter <- function(list.of.cc = NULL) {
 #' @author Thomas Burger, Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(100)]
 #' X <- BuildAdjacencyMatrix(obj, "Protein_group_IDs", FALSE)
 #' ll <- get.pep.prot.cc(X)
@@ -210,9 +210,16 @@ plotJitter <- function(list.of.cc = NULL) {
 #' @export
 #'
 buildGraph <- function(The.CC, X) {
-    subX <- as.matrix(X[The.CC$peptides, The.CC$proteins])
     nb.prot <- length(The.CC$proteins)
     nb.pep <- length(The.CC$peptides)
+    subX <- Matrix::Matrix(
+        X[The.CC$peptides, The.CC$proteins],
+        nrow = nb.pep,
+        ncol = nb.prot,
+        dimnames = list(The.CC$peptides, The.CC$proteins)
+        )
+    colnames(subX) <- The.CC$proteins
+    subX <- as.matrix(subX)
     nb.pep.shared <- length(which(rowSums(subX) > 1))
     nb.pep.spec <- length(which(rowSums(subX) == 1))
     nb.total <- nb.prot + nb.pep
@@ -262,7 +269,7 @@ buildGraph <- function(The.CC, X) {
 #' @author Thomas Burger, Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(100)]
 #' X <- BuildAdjacencyMatrix(obj, "Protein_group_IDs", FALSE)
 #' ll <- get.pep.prot.cc(X)
@@ -321,11 +328,18 @@ display.CC.visNet <- function(
 #' @export
 #' 
 #' @examples 
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(100)]
 #' X <- BuildAdjacencyMatrix(obj, "Protein_group_IDs", TRUE)
-#' ll <- get.pep.prot.cc(X)
-#' plotJitter_rCharts(ll)
+#' ll <- get.pep.prot.cc(X)[1:4]
+#' n.prot <- unlist(lapply(ll, function(x) {length(x$proteins)}))
+#' n.pept <- unlist(lapply(ll, function(x) {length(x$peptides)}))
+#' df <- tibble::tibble(
+#' x = jitter(n.pept),
+#' y = jitter(n.prot),
+#' index = seq_len(length(ll))
+#' )
+#' plotJitter_rCharts(df)
 #'
 plotJitter_rCharts <- function(df, clickFunction = NULL) {
     xtitle <- "TO DO"
@@ -343,7 +357,7 @@ plotJitter_rCharts <- function(df, clickFunction = NULL) {
     txt_tooltip <- NULL
     
     if (length(i_tooltip) == 0){
-        stop("There is no tooltip in the object.")
+        warning("There is no tooltip in the object.")
     }
     
     for (i in i_tooltip) {

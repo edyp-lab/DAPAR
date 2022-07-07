@@ -33,7 +33,7 @@ quantitative data in the \code{Biobase::exprs()} table of an object of
 class \code{MSnSet}
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept[seq_len(10)]
 level <- 'peptide'
 metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)

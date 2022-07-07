@@ -31,14 +31,15 @@ Wrapper to the function that plot to compare the quantitative
 proteomics data before and after normalization.
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package='DAPARdata')
 obj <- Exp1_R25_pept
 conds <- Biobase::pData(obj)[, "Condition"]
 objAfter <- wrapper.normalizeD(
 obj = obj, method = "QuantileCentering",
 conds = conds, type = "within conditions"
 )
-wrapper.compareNormalizationD_HC(obj, objAfter, conds)
+wrapper.compareNormalizationD_HC(obj, objAfter, conds,
+pal = ExtendPalette(2))
 
 }
 \author{

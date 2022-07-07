@@ -15,7 +15,7 @@
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' l.params <- list(method = "Global quantile alignment", type = "overall")
 #' saveParameters(Exp1_R25_pept, "Filtered.peptide", "Imputation", l.params)
 #'
@@ -295,7 +295,7 @@ createMSnset <- function(file,
 #'
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' df <- Biobase::exprs(Exp1_R25_pept[seq_len(100)])
 #' tags <- GetMetacell(Exp1_R25_pept[seq_len(100)])
 #' colors <- list(
@@ -393,7 +393,7 @@ write.excel <- function(df,
 #'
 #' @examples
 #' Sys.setenv("R_ZIPCMD" = Sys.which("zip"))
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10)]
 #' writeMSnsetToExcel(obj, "foo")
 #' 
@@ -460,7 +460,7 @@ writeMSnsetToExcel <- function(obj, filename) {
     # Add colors for sample data sheet
     u_conds <- unique(Biobase::pData(obj)$Condition)
     colors <- stats::setNames(
-        DAPAR::ExtendPalette(length(u_conds)),
+        ExtendPalette(length(u_conds)),
         u_conds
     )
     colors[["blank"]] <- "white"
@@ -645,8 +645,8 @@ listSheets <- function(file) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
-#' obj <- Exp1_R2_pept[seq_len(10)]
+#' data(Exp1_R25_pept, package="DAPARdata")
+#' obj <- Exp1_R25_pept[seq_len(10)]
 #' writeMSnsetToCSV(obj, "foo")
 #'
 #' @export
@@ -683,7 +683,7 @@ writeMSnsetToCSV <- function(obj, fname) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' df1 <- Exp1_R25_pept[seq_len(100)]
 #' df2 <- Exp1_R25_pept[seq.int(from = 200, to = 250)]
 #' rbindMSnset(df1, df2)

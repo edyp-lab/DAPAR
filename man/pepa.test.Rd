@@ -45,7 +45,7 @@ wchi2: weight used to make llr.map chi2-distributed under H0.
 PEptide based Protein differential Abundance test
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 protID <- "Protein_group_IDs"
 obj <- Exp1_R25_pept[seq_len(20)]
 X <- BuildAdjacencyMatrix(obj, protID, FALSE)

@@ -34,11 +34,10 @@ A boxplot
 Builds a boxplot from a dataframe using the package \code{highcharter}
 }
 \examples{
-data(Exp1_R25_prot)
+data(Exp1_R25_prot, package="DAPARdata")
 obj <- Exp1_R25_prot
 conds <- legend <- Biobase::pData(obj)$Condition
 key <- "Protein_IDs"
-boxPlotD_HC(obj, conds, key, legend, NULL, seq_len(10))
 pal <- ExtendPalette(length(unique(conds)))
 boxPlotD_HC(obj, conds, key, legend, pal, seq_len(10))
 }

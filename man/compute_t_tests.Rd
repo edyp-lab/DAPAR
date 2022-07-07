@@ -29,7 +29,7 @@ dataframes are identical and correspond to the description of the comparison.
 xxxxxx
 }
 \examples{
-data(Exp1_R25_prot)
+data(Exp1_R25_prot, package="DAPARdata")
 obj <- Exp1_R25_prot[seq_len(1000)]
 level <- 'protein'
 metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)

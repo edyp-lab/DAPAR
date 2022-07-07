@@ -35,8 +35,13 @@ This function is a wrappper to the function enrichGO from the package
 enrichResult instance.
 }
 \examples{
-data(Exp1_R25_prot)
+data(Exp1_R25_prot, package="DAPARdata")
 obj <- Exp1_R25_prot[seq_len(10)]
+if (!requireNamespace("org.Sc.sgd.db", quietly = TRUE)) {
+stop("Please install org.Sc.sgd.db: 
+            BiocManager::install('org.Sc.sgd.db')")
+}
+library(org.Sc.sgd.db)
 univ <- univ_AnnotDbPkg("org.Sc.sgd.db") # univ is the background
 ego <- enrich_GO(
     data = Biobase::fData(obj)$Protein.IDs, idFrom = "UNIPROT",

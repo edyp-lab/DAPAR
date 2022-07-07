@@ -34,7 +34,7 @@ A normalized numeric matrix
 Normalisation QuantileCentering
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept
 conds <- Biobase::pData(Exp1_R25_pept)$Condition
 normalized <- QuantileCentering(Biobase::exprs(obj), conds,

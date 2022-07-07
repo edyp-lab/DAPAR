@@ -14,7 +14,7 @@
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' wrapper.corrMatrixD_HC(Exp1_R25_pept)
 #'
 #'
@@ -61,7 +61,7 @@ wrapper.corrMatrixD_HC <- function(obj, rate = 0.5, showValues = TRUE) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' qData <- Biobase::exprs(Exp1_R25_pept)
 #' samplesData <- Biobase::pData(Exp1_R25_pept)
 #' res <- cor(qData, use = "pairwise.complete.obs")
@@ -105,7 +105,7 @@ corrMatrixD_HC <- function(object,
 
     x <- y <- names(df)
 
-    df <- dplyr::tbl_df(cbind(x = y, df)) %>%
+    df <- tibble::as_tibble(cbind(x = y, df)) %>%
         tidyr::gather(y, dist, -x) %>%
         dplyr::mutate(
             x = as.character(x),

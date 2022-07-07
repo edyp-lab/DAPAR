@@ -23,7 +23,7 @@ in the dataset (see the slot \code{'Condition'} in the
 \code{Biobase::pData()} table)
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 conds <- Biobase::pData(Exp1_R25_pept)[, "Condition"]
 CVDistD_HC(Biobase::exprs(Exp1_R25_pept), conds)
 pal <- ExtendPalette(2, "Dark2")

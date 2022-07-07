@@ -26,7 +26,7 @@ NULL
 \author{
 Samuel Wieczorek
 library(MSnbase)
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 protID <- "Protein_group_IDs"
 X <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(10)], protID, FALSE)
 ll.n <- GetDetailedNbPeptidesUsed(X, 

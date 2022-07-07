@@ -11,7 +11,7 @@
 #' @author Florence Combes, Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' getPourcentageOfMV(Exp1_R25_pept[seq_len(100), ])
 #'
 #' @export
@@ -50,7 +50,7 @@ getPourcentageOfMV <- function(obj) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' getNumberOf(Exp1_R25_pept[seq_len(100)], "Potential_contaminant", "+")
 #'
 #' @export
@@ -99,7 +99,7 @@ getNumberOf <- function(obj, name = NULL, prefix = NULL) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' NumericalFiltering(Exp1_R25_pept[seq_len(100)], "A_Count", "6", "==")
 #'
 #' @export
@@ -162,7 +162,7 @@ NumericalFiltering <- function(
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' NumericalgetIndicesOfLinesToRemove(Exp1_R25_pept[seq_len(100)], "A_Count",
 #' value = "6", operator = "==")
 #'
@@ -272,7 +272,7 @@ proportionConRev_HC <- function(nBoth = 0, nCont = 0, nRev = 0, lDataset = 0) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' removeLines(Exp1_R25_pept[seq_len(100)], "Potential_contaminant")
 #' removeLines(Exp1_R25_pept[seq_len(100)], "Reverse")
 #'
@@ -323,7 +323,7 @@ removeLines <- function(obj, idLine2Delete = NULL, prefix = NULL) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' StringBasedFiltering(
 #' Exp1_R25_pept[seq_len(100)], "Potential_contaminant", "+", "Reverse", "+")
 #'
@@ -436,7 +436,7 @@ StringBasedFiltering <- function(obj,
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj.filter <- StringBasedFiltering2(Exp1_R25_pept[seq_len(100)], 
 #' "Potential_contaminant", "+")
 #'
@@ -487,7 +487,7 @@ StringBasedFiltering2 <- function(obj, cname = NULL, tag = NULL) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' ind <- getIndicesOfLinesToRemove(Exp1_R25_pept[seq_len(100)], 
 #' "Potential_contaminant",
 #'     prefix = "+"
@@ -548,7 +548,7 @@ getIndicesOfLinesToRemove <- function(
 #' @author Florence Combes, Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(100)]
 #' level <- 'peptide'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
@@ -615,7 +615,7 @@ MetaCellFiltering <- function(obj,
 #' @author Florence Combes, Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- deleteLinesFromIndices(Exp1_R25_pept[seq_len(100)], c(seq_len(10)))
 #'
 #' @export
@@ -664,7 +664,7 @@ deleteLinesFromIndices <- function(obj, deleteThat = NULL, processText = "") {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10), ]
 #' level <- GetTypeofData(obj)
 #' pattern <- "missing"
@@ -710,7 +710,7 @@ GetIndices_MetacellFiltering <- function(
 
     indices <- NULL
 
-    if (!(pattern %in% DAPAR::metacell.def(level)$node && 
+    if (!(pattern %in% metacell.def(level)$node && 
             type != "None" && !is.null(type))) {
         warning("Either 'pattern' nor 'type' are equal to 'None'")
         return(NULL)
@@ -803,7 +803,7 @@ SymFilteringOperators <- function() {
 #'
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10)]
 #' level <- 'peptide'
 #' pattern <- "missing"
@@ -878,7 +878,7 @@ GetIndices_WholeMatrix <- function(metacell.mask,
 #' @param metacell.mask xxx
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq.int(from=20, to=30)]
 #' level <- 'peptide'
 #' pattern <- "missing POV"
@@ -925,7 +925,7 @@ GetIndices_WholeLine <- function(metacell.mask) {
 #' @param th The theshold to apply
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10)]
 #' level <- GetTypeofData(obj)
 #' pattern <- 'missing'
