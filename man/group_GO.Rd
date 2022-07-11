@@ -38,6 +38,7 @@ if (!requireNamespace("org.Sc.sgd.db", quietly = TRUE)) {
 stop("Please install org.Sc.sgd.db: 
             BiocManager::install('org.Sc.sgd.db')")
 }
+library(org.Sc.sgd.db)
 ggo <- group_GO(
     data = Biobase::fData(obj)$Protein.IDs, idFrom = "UNIPROT",
     orgdb = "org.Sc.sgd.db", ont = "MF", level = 2

@@ -33,6 +33,7 @@
 #' stop("Please install org.Sc.sgd.db: 
 #'             BiocManager::install('org.Sc.sgd.db')")
 #' }
+#' library(org.Sc.sgd.db)
 #' ggo <- group_GO(
 #'     data = Biobase::fData(obj)$Protein.IDs, idFrom = "UNIPROT",
 #'     orgdb = "org.Sc.sgd.db", ont = "MF", level = 2
@@ -191,11 +192,12 @@ enrich_GO <- function(
 #'
 #' @export
 #' 
-#' @examples 
+#' @examples
 #' if (!requireNamespace("org.Sc.sgd.db", quietly = TRUE)) {
 #' stop("Please install org.Sc.sgd.db: 
 #'             BiocManager::install('org.Sc.sgd.db')")
 #' }
+#' library(org.Sc.sgd.db)
 #' univ_AnnotDbPkg("org.Sc.sgd.db")
 #'
 univ_AnnotDbPkg <- function(orgdb) {
@@ -321,7 +323,7 @@ GOAnalysisSave <- function(obj,
 #'
 #' @export
 #' 
-#' @examples 
+#' @examples
 #' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(10)]
 #' if (!requireNamespace("org.Sc.sgd.db", quietly = TRUE)) {
@@ -383,7 +385,7 @@ barplotGroupGO_HC <- function(ggo, maxRes = 5, title = "") {
 #'
 #' @export
 #' 
-#' @examples 
+#' @examples
 #' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(10)]
 #' if (!requireNamespace("org.Sc.sgd.db", quietly = TRUE)) {
