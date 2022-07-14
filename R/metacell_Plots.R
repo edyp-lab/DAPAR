@@ -376,7 +376,7 @@ metacellHisto_HC <- function(obj,
 #' @return A heatmap
 #' @author Alexia Dorffer
 #' @examples
-#' data(Exp1_R25_pept, package="DAPARdata")
+#' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(1000)]
 #' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
