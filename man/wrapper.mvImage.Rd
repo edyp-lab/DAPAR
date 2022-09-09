@@ -23,7 +23,7 @@ The lines have been sorted in order to vizualize easily the different
 number of missing values. A white square is plotted for missing values.
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_prot, package="DAPARdata")
 obj <- Exp1_R25_prot[seq_len(1000)]
 level <- 'protein'
 metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)

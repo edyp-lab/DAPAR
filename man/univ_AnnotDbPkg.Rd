@@ -20,8 +20,12 @@ Returns all the ID of the OrgDb annotation package for the corresponding
 organism.
 }
 \examples{
-orgdb <- "org.Sc.sgd.db"
-univ_AnnotDbPkg(orgdb)
+if (!requireNamespace("org.Sc.sgd.db", quietly = TRUE)) {
+stop("Please install org.Sc.sgd.db: 
+            BiocManager::install('org.Sc.sgd.db')")
+}
+library(org.Sc.sgd.db)
+univ_AnnotDbPkg("org.Sc.sgd.db")
 
 }
 \author{

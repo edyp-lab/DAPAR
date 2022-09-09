@@ -16,7 +16,7 @@ A list of two items
 Check if xxxxxx
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 test.design(Biobase::pData(Exp1_R25_pept)[, seq_len(3)])
 
 }

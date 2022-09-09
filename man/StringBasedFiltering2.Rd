@@ -23,7 +23,7 @@ An list of 4 items :
 Removes lines in the dataset based on a prefix strings.
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 obj.filter <- StringBasedFiltering2(Exp1_R25_pept[seq_len(100)], 
 "Potential_contaminant", "+")
 

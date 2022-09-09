@@ -23,7 +23,7 @@ objects of class \code{MSnSet} and imputes missing values with a fixed value.
 This function imputes the missing values condition by condition.
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 obj.imp.pov <- wrapper.impute.KNN(
     obj = Exp1_R25_pept[seq_len(10)], K = 3,
     na.type = "missing POV"

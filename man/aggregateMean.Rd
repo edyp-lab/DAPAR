@@ -21,7 +21,7 @@ A matrix of intensities of proteins
 intensities of their peptides.
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 obj.pep <- Exp1_R25_pept[seq_len(10)]
 obj.pep.imp <- wrapper.impute.detQuant(obj.pep, na.type = "missing")
 protID <- "Protein_group_IDs"

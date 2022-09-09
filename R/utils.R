@@ -8,7 +8,7 @@
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' getProcessingInfo(Exp1_R25_pept)
 #'
 #' @export
@@ -28,7 +28,7 @@ getProcessingInfo <- function(obj) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' Xshared <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(100)], 
 #' "Protein_group_IDs", FALSE)
 #' Xunique <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(100)], 
@@ -60,7 +60,7 @@ GetMatAdj <- function(obj) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' Xshared <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(100)], 
 #' "Protein_group_IDs", FALSE)
 #' Xunique <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(100)], 
@@ -90,7 +90,7 @@ SetMatAdj <- function(obj, X) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' Xshared <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(100)], 
 #' "Protein_group_IDs",  FALSE)
 #' Xunique <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(100)], 
@@ -99,7 +99,7 @@ SetMatAdj <- function(obj, X) {
 #' matWithUniquePeptides = Xunique)
 #' Exp1_R25_pept <- SetMatAdj(Exp1_R25_pept, ll.X)
 #' ll1 <- get.pep.prot.cc(GetMatAdj(Exp1_R25_pept)$matWithSharedPeptides)
-#' ll2 <- DAPAR::get.pep.prot.cc(
+#' ll2 <- get.pep.prot.cc(
 #' GetMatAdj(Exp1_R25_pept)$matWithUniquePeptides)
 #' cc <- list(allPep = ll1, onlyUniquePep = ll2)
 #' Exp1_R25_pept <- SetCC(Exp1_R25_pept, cc)
@@ -124,7 +124,7 @@ GetCC <- function(obj) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package='DAPARdata')
 #' Xshared <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(100)], 
 #' "Protein_group_IDs", FALSE)
 #' Xunique <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(100)], 
@@ -133,7 +133,7 @@ GetCC <- function(obj) {
 #' matWithUniquePeptides = Xunique)
 #' Exp1_R25_pept <- SetMatAdj(Exp1_R25_pept, ll.X)
 #' ll1 <- get.pep.prot.cc(GetMatAdj(Exp1_R25_pept)$matWithSharedPeptides)
-#' ll2 <- DAPAR::get.pep.prot.cc(
+#' ll2 <- get.pep.prot.cc(
 #' GetMatAdj(Exp1_R25_pept)$matWithUniquePeptides)
 #' cc <- list(allPep = ll1, onlyUniquePep = ll2)
 #' Exp1_R25_pept <- SetCC(Exp1_R25_pept, cc)
@@ -163,7 +163,7 @@ SetCC <- function(obj, cc) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' qData <- Biobase::exprs(Exp1_R25_pept)
 #' getNumberOfEmptyLines(qData)
 #'
@@ -186,7 +186,7 @@ getNumberOfEmptyLines <- function(qData) {
 #' @export
 #' 
 #' @examples 
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' GetTypeofData(Exp1_R25_pept)
 #' 
 #' @return xxx
@@ -210,7 +210,7 @@ GetTypeofData <- function(obj) {
 #' @export
 #' 
 #' @examples 
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' GetKeyId(Exp1_R25_pept)
 #' 
 #' @return xxx
@@ -235,7 +235,7 @@ GetKeyId <- function(obj) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' getListNbValuesInLines(Exp1_R25_pept, "WholeMatrix")
 #'
 #' @export
@@ -296,7 +296,7 @@ getListNbValuesInLines <- function(obj, type) {
 #' @author Florence Combes, Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' conds <- Biobase::pData(Exp1_R25_pept)[, "Condition"]
 #' getIndicesConditions(conds, "25fmol", "10fmol")
 #'

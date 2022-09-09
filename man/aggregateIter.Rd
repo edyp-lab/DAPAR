@@ -24,7 +24,7 @@ A protein object of class \code{MSnset}
 xxxx
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 protID <- "Protein_group_IDs"
 X <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(10)], protID, FALSE)
 ll.agg <- aggregateIter(Exp1_R25_pept[seq_len(10)], X = X)

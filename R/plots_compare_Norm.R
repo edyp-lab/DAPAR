@@ -20,14 +20,15 @@
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package='DAPARdata')
 #' obj <- Exp1_R25_pept
 #' conds <- Biobase::pData(obj)[, "Condition"]
 #' objAfter <- wrapper.normalizeD(
 #' obj = obj, method = "QuantileCentering",
 #' conds = conds, type = "within conditions"
 #' )
-#' wrapper.compareNormalizationD_HC(obj, objAfter, conds)
+#' wrapper.compareNormalizationD_HC(obj, objAfter, conds,
+#' pal = ExtendPalette(2))
 #'
 #' @export
 #'
@@ -39,7 +40,10 @@ wrapper.compareNormalizationD_HC <- function(objBefore,
     qDataBefore <- Biobase::exprs(objBefore)
     qDataAfter <- Biobase::exprs(objAfter)
 
-    compareNormalizationD_HC(qDataBefore, qDataAfter, condsForLegend, ...)
+    compareNormalizationD_HC(qDataBefore, 
+        qDataAfter, 
+        conds = condsForLegend, 
+        ...)
 }
 
 
@@ -79,28 +83,25 @@ wrapper.compareNormalizationD_HC <- function(objBefore,
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_prot)
+#' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot
 #' qDataBefore <- Biobase::exprs(obj)
 #' conds <- Biobase::pData(obj)[, "Condition"]
-#' id <- Biobase::fData(obj)[, 'protein']
+#' id <- Biobase::fData(obj)[, 'Protein_IDs']
 #' pal <- ExtendPalette(2)
 #' objAfter <- wrapper.normalizeD(obj,
 #' method = "QuantileCentering",
 #' conds = conds, type = "within conditions"
 #' )
-#' compareNormalizationD_HC(
-#' qDataBefore = qDataBefore,
-#' qDataAfter = Biobase::exprs(objAfter), keyId = id, 
-#' conds = conds, n = 1000
-#' )
 #'
 #' compareNormalizationD_HC(
 #' qDataBefore = qDataBefore,
-#' qDataAfter = Biobase::exprs(objAfter), keyId = id, pal = pal, 
+#' qDataAfter = Biobase::exprs(objAfter), 
+#' keyId = id, 
+#' pal = pal, 
+#' n = 4,
 #' subset.view = seq_len(4),
-#' conds = conds, n = 100
-#' )
+#' conds = conds)
 #'
 #' @import highcharter
 #' @importFrom utils str
@@ -113,7 +114,7 @@ compareNormalizationD_HC <- function(qDataBefore,
     conds = NULL,
     pal = NULL,
     subset.view = NULL,
-    n = 100,
+    n = NULL,
     type = "scatter") {
     
     if (!requireNamespace("RColorBrewer", quietly = TRUE)) {

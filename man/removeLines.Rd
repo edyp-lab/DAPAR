@@ -21,7 +21,7 @@ An object of class \code{MSnSet}.
 Removes lines in the dataset based on a prefix string.
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 removeLines(Exp1_R25_pept[seq_len(100)], "Potential_contaminant")
 removeLines(Exp1_R25_pept[seq_len(100)], "Reverse")
 

@@ -21,7 +21,7 @@ calculated for each condition present in the dataset (see the slot
 \code{'Condition'} in the \code{Biobase::pData()} table).
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 wrapper.CVDistD_HC(Exp1_R25_pept)
 
 }

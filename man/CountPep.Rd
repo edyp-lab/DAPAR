@@ -18,7 +18,7 @@ but with NA values if they exist in the intensity matrix.
 This function computes the number of peptides used to aggregate proteins.
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 protID <- "Protein_group_IDs"
 M <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(10)], protID, FALSE)
 CountPep(M)

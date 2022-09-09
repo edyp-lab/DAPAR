@@ -17,7 +17,7 @@ Method to compute the detailed number of quantified peptides for each
 protein
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 obj.pep <- Exp1_R25_pept[seq_len(10)]
 protID <- "Protein_group_IDs"
 X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)

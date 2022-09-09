@@ -12,7 +12,7 @@
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' protID <- "Protein_group_IDs"
 #' obj <- Exp1_R25_pept[seq_len(20)]
 #' MShared <- BuildAdjacencyMatrix(obj, protID, FALSE)
@@ -108,7 +108,7 @@ getProteinsStats <- function(matShared) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' protID <- "Protein_group_IDs"
 #' obj.pep <- Exp1_R25_pept[seq_len(10)]
 #' M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
@@ -164,7 +164,7 @@ BuildColumnToProteinDataset <- function(peptideData,
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' protID <- "Protein_group_IDs"
 #' obj.pep <- Exp1_R25_pept[seq_len(10)]
 #' M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
@@ -176,7 +176,7 @@ BuildColumnToProteinDataset <- function(peptideData,
 #'
 #' @export
 #'
-#'
+#' @import foreach
 BuildColumnToProteinDataset_par <- function(
     peptideData,
     matAdj,
@@ -238,7 +238,7 @@ BuildColumnToProteinDataset_par <- function(
 #' @author Alexia Dorffer
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' protID <- "Protein_group_IDs"
 #' M <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(10)], protID, FALSE)
 #' CountPep(M)
@@ -268,7 +268,7 @@ CountPep <- function(M) {
 #' @export
 #' 
 #' @examples 
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' protID <- "Protein_group_IDs"
 #' obj.pep <- Exp1_R25_pept[seq_len(10)]
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
@@ -302,7 +302,7 @@ GetNbPeptidesUsed <- function(X, pepData) {
 #'
 #' @author Samuel Wieczorek
 #' library(MSnbase)
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' protID <- "Protein_group_IDs"
 #' X <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(10)], protID, FALSE)
 #' ll.n <- GetDetailedNbPeptidesUsed(X, 
@@ -341,7 +341,7 @@ GetDetailedNbPeptidesUsed <- function(X, qdata.pep) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj.pep <- Exp1_R25_pept[seq_len(10)]
 #' protID <- "Protein_group_IDs"
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
@@ -377,7 +377,7 @@ GetDetailedNbPeptides <- function(X) {
 #' @author Alexia Dorffer, Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' mat <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(10)], "Protein_group_IDs")
 #' GraphPepProt(mat)
 #'
@@ -434,7 +434,7 @@ GraphPepProt <- function(mat) {
 #' @author Florence Combes, Samuel Wieczorek, Alexia Dorffer
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' protId <- "Protein_group_IDs"
 #' BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(10)], protId, TRUE)
 #'
@@ -502,12 +502,12 @@ BuildAdjacencyMatrix <- function(obj.pep, protID, unique = TRUE) {
 #' @author Alexia Dorffer
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj.pep <- Exp1_R25_pept[seq_len(20)]
 #' obj.pep.imp <- wrapper.impute.detQuant(obj.pep, na.type = "missing")
 #' protID <- "Protein_group_IDs"
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-#' ll.agg <- DAPAR::aggregateSum(obj.pep.imp, X)
+#' ll.agg <- aggregateSum(obj.pep.imp, X)
 #'
 #' @export
 #'
@@ -562,13 +562,15 @@ aggregateSum <- function(obj.pep, X) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' protID <- "Protein_group_IDs"
 #' obj.pep <- Exp1_R25_pept[seq_len(10)]
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 #' obj.agg <- aggregateIterParallel(obj.pep, X)
 #'
 #' @export
+#' 
+#' @import foreach
 #'
 aggregateIterParallel <- function(
     obj.pep,
@@ -577,6 +579,12 @@ aggregateIterParallel <- function(
     method = "Mean",
     n = NULL
     ) {
+    
+    
+    
+    if (!requireNamespace("parallel", quietly = TRUE)) {
+        stop("Please install parallel: BiocManager::install('parallel')")
+    }
     if (!requireNamespace("doParallel", quietly = TRUE)) {
         stop("Please install doParallel: BiocManager::install('doParallel')")
     }
@@ -605,7 +613,7 @@ aggregateIterParallel <- function(
             dimnames = list(colnames(X), rep("cond", ncol(obj.pep)))
         )
 
-        protData <- foreach(
+        protData <- foreach::foreach(
             cond = seq_len(length(unique(Biobase::pData(obj.pep)$Condition))),
             .combine = cbind,
             .packages = "MSnbase"
@@ -613,14 +621,14 @@ aggregateIterParallel <- function(
             .conds <- Biobase::pData(obj.pep)$Condition
             condsIndices <- which(.conds == unique(.conds)[cond])
             qData <- qData.pep[, condsIndices]
-            DAPAR::inner.aggregate.iter(qData, X, init.method, method, n)
+            inner.aggregate.iter(qData, X, init.method, method, n)
         }
 
         protData <- protData[, colnames(Biobase::exprs(obj.pep))]
         colnames(protData) <- colnames(Biobase::exprs(obj.pep))
 
         # Step 3 : Build the protein dataset
-        obj.prot <- DAPAR::finalizeAggregation(obj.pep, 
+        obj.prot <- finalizeAggregation(obj.pep, 
             qData.pep, 
             protData, 
             metacell$metacell, 
@@ -652,11 +660,11 @@ aggregateIterParallel <- function(
 #' @return xxxxx
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept
 #' protID <- "Protein_group_IDs"
 #' X <- BuildAdjacencyMatrix(obj[seq_len(10)], protID, FALSE)
-#' qdata.agg <- DAPAR::inner.aggregate.iter(Biobase::exprs(obj[seq_len(10)]), X)
+#' qdata.agg <- inner.aggregate.iter(Biobase::exprs(obj[seq_len(10)]), X)
 #'
 #' @export
 #'
@@ -733,7 +741,7 @@ inner.aggregate.iter <- function(
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' protID <- "Protein_group_IDs"
 #' X <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(10)], protID, FALSE)
 #' ll.agg <- aggregateIter(Exp1_R25_pept[seq_len(10)], X = X)
@@ -822,7 +830,7 @@ aggregateIter <- function(
 #' @author Alexia Dorffer
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj.pep <- Exp1_R25_pept[seq_len(10)]
 #' obj.pep.imp <- wrapper.impute.detQuant(obj.pep, na.type = "missing")
 #' protID <- "Protein_group_IDs"
@@ -881,7 +889,7 @@ aggregateMean <- function(obj.pep, X) {
 #' @author Samuel Wieczorek
 #' 
 #' @examples 
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj.pep <- Exp1_R25_pept[seq_len(10)]
 #' protID <- "Protein_group_IDs"
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
@@ -928,8 +936,10 @@ splitAdjacencyMat <- function(X) {
 #'
 #' @author Samuel Wieczorek
 #' 
+#' @export
+#' 
 #' @examples 
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10)]
 #' protID <- "Protein_group_IDs"
 #' X <- BuildAdjacencyMatrix(obj, protID, FALSE)
@@ -953,8 +963,10 @@ inner.sum <- function(pepData, X) {
 #'
 #' @author Samuel Wieczorek
 #' 
+#' @export
+#' 
 #' @examples 
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10)]
 #' protID <- "Protein_group_IDs"
 #' X <- BuildAdjacencyMatrix(obj, protID, FALSE)
@@ -984,17 +996,25 @@ inner.mean <- function(pepData, X) {
 #' @return xxxxx
 #'
 #' @author Samuel Wieczorek
+#' 
+#' @export
 #'
 #' @examples 
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10)]
 #' protID <- "Protein_group_IDs"
 #' X <- BuildAdjacencyMatrix(obj, protID, FALSE)
 #' inner.aggregate.topn(Biobase::exprs(obj), X)
 #' 
 inner.aggregate.topn <- function(pepData, X, method = "Mean", n = 10) {
+    
+    
+    if (!requireNamespace("stats", quietly = TRUE)) {
+        stop("Please install stats: BiocManager::install('stats')")
+    }
+    
     X <- as.matrix(X)
-    med <- apply(pepData, 1, median)
+    med <- apply(pepData, 1, stats::median)
     xmed <- as(X * med, "dgCMatrix")
     for (c in seq_len(ncol(X))) {
         v <- order(xmed[, c], decreasing = TRUE)[seq_len(n)]
@@ -1037,11 +1057,11 @@ inner.aggregate.topn <- function(pepData, X, method = "Mean", n = 10) {
 #' @author Alexia Dorffer, Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj.pep <- Exp1_R25_pept[seq_len(10)]
 #' protID <- "Protein_group_IDs"
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-#' ll.agg <- DAPAR::aggregateTopn(obj.pep, X, n = 3)
+#' ll.agg <- aggregateTopn(obj.pep, X, n = 3)
 #'
 #' @export
 #'
@@ -1271,6 +1291,8 @@ finalizeAggregation <- function(obj.pep, pepData, protData, protMetacell, X) {
 #' }
 #' 
 #' @return xxx
+#' 
+#' @export
 #'
 metacombine <- function(met, level) {
     # browser()
@@ -1367,7 +1389,7 @@ metacombine <- function(met, level) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj.pep <- Exp1_R25_pept[seq_len(10)]
 #' protID <- "Protein_group_IDs"
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)

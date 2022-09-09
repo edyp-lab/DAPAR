@@ -19,7 +19,7 @@ This function computes the number of proteins that are only defined by
 specific peptides, shared peptides or a mixture of two.
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 protID <- "Protein_group_IDs"
 obj <- Exp1_R25_pept[seq_len(20)]
 MShared <- BuildAdjacencyMatrix(obj, protID, FALSE)

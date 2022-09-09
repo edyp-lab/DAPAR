@@ -25,7 +25,7 @@ are identical and correspond to the description of the comparison.
 Computes a hierarchical differential analysis
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept
 qData <- Biobase::exprs(obj)
 sTab <- Biobase::pData(obj)

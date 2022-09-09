@@ -30,10 +30,10 @@ xxxxx
 Method to xxxxx
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept
 protID <- "Protein_group_IDs"
 X <- BuildAdjacencyMatrix(obj[seq_len(10)], protID, FALSE)
-qdata.agg <- DAPAR::inner.aggregate.iter(Biobase::exprs(obj[seq_len(10)]), X)
+qdata.agg <- inner.aggregate.iter(Biobase::exprs(obj[seq_len(10)]), X)
 
 }

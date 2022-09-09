@@ -25,7 +25,7 @@ deleted,
 This function removes lines in the dataset based on numerical conditions.
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 NumericalFiltering(Exp1_R25_pept[seq_len(100)], "A_Count", "6", "==")
 
 }

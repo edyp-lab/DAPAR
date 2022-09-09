@@ -25,7 +25,7 @@ A normalized numeric matrix
 Normalisation SumByColumns
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 qData <- Biobase::exprs(Exp1_R25_pept)
 conds <- Biobase::pData(Exp1_R25_pept)$Condition
 normalized <- SumByColumns(qData, conds,

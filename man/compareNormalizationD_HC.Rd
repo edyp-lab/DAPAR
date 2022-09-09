@@ -12,7 +12,7 @@ compareNormalizationD_HC(
   conds = NULL,
   pal = NULL,
   subset.view = NULL,
-  n = 100,
+  n = NULL,
   type = "scatter"
 )
 }
@@ -46,28 +46,25 @@ Plot to compare the quantitative proteomics data before and after
 normalization using the package \code{highcharter}
 }
 \examples{
-data(Exp1_R25_prot)
+data(Exp1_R25_prot, package="DAPARdata")
 obj <- Exp1_R25_prot
 qDataBefore <- Biobase::exprs(obj)
 conds <- Biobase::pData(obj)[, "Condition"]
-id <- Biobase::fData(obj)[, 'protein']
+id <- Biobase::fData(obj)[, 'Protein_IDs']
 pal <- ExtendPalette(2)
 objAfter <- wrapper.normalizeD(obj,
 method = "QuantileCentering",
 conds = conds, type = "within conditions"
 )
-compareNormalizationD_HC(
-qDataBefore = qDataBefore,
-qDataAfter = Biobase::exprs(objAfter), keyId = id, 
-conds = conds, n = 1000
-)
 
 compareNormalizationD_HC(
 qDataBefore = qDataBefore,
-qDataAfter = Biobase::exprs(objAfter), keyId = id, pal = pal, 
+qDataAfter = Biobase::exprs(objAfter), 
+keyId = id, 
+pal = pal, 
+n = 4,
 subset.view = seq_len(4),
-conds = conds, n = 100
-)
+conds = conds)
 
 }
 \author{

@@ -21,7 +21,7 @@ A density plot
 Densityplot of quantitative proteomics data over samples.
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 densityPlotD_HC(Exp1_R25_pept)
 conds <- Biobase::pData(Exp1_R25_pept)$Condition
 pal <- ExtendPalette(2, "Dark2")

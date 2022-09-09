@@ -1,9 +1,9 @@
 ---
-title: "Prostar_UserManual"
+title: "Prostar user manual"
 author: 
 - name: Samuel Wieczorek
 - name: Thomas Burger
-package: Prostar
+package: DAPAR
 abstract: >
     The package Prostar (Proteomics statistical analysis with R)
     is a Bioconductor distributed R package which provides all the  necessary 

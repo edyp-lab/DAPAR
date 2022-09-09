@@ -7,7 +7,7 @@
 #' @author Thomas Burger, Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' test.design(Biobase::pData(Exp1_R25_pept)[, seq_len(3)])
 #'
 #' @export
@@ -105,7 +105,7 @@ test.design <- function(tab) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' check.conditions(Biobase::pData(Exp1_R25_pept)$Condition)
 #'
 #' @export
@@ -152,7 +152,7 @@ check.conditions <- function(conds) {
 #' @author Thomas Burger, Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' check.design(Biobase::pData(Exp1_R25_pept)[, seq_len(3)])
 #'
 #' @export
@@ -231,7 +231,7 @@ check.design <- function(sTab) {
 #' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' make.design(Biobase::pData(Exp1_R25_pept))
 #'
 #' @export
@@ -267,7 +267,7 @@ make.design <- function(sTab) {
 #' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' make.design.1(Biobase::pData(Exp1_R25_pept))
 #'
 #' @export
@@ -311,7 +311,7 @@ make.design.1 <- function(sTab) {
 #' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package='DAPARdata')
 #' make.design.2(Biobase::pData(Exp1_R25_pept))
 #'
 #'
@@ -369,7 +369,7 @@ make.design.2 <- function(sTab) {
 #' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' sTab <- cbind(Biobase::pData(Exp1_R25_pept), Tech.Rep = 1:6)
 #' make.design.3(sTab)
 #'
@@ -441,7 +441,7 @@ make.design.3 <- function(sTab) {
 #' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package='DAPARdata')
 #' design <- make.design(Biobase::pData(Exp1_R25_pept))
 #' conds <- Biobase::pData(Exp1_R25_pept)$Condition
 #' make.contrast(design, conds)
@@ -452,7 +452,7 @@ make.contrast <- function(design, condition, contrast = 1) {
 
 
     aggreg.column.design <- function(design, Condition) {
-        nb.cond <- length(levels(Condition))
+        nb.cond <- length(unique(Condition))
         name.col <- colnames(design)
         name.cond <- NULL
         nb.col <- NULL
@@ -480,7 +480,7 @@ make.contrast <- function(design, condition, contrast = 1) {
 
 
 
-    nb.cond <- length(levels(condition))
+    nb.cond <- length(unique(condition))
     r <- aggreg.column.design(design, condition)
     label.agg <- r[[1]]
     nb.agg <- r[[2]]
@@ -534,7 +534,7 @@ make.contrast <- function(design, condition, contrast = 1) {
 #' @author Hélène Borges, Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept
 #' qData <- Biobase::exprs(obj)
 #' sTab <- Biobase::pData(obj)
@@ -644,7 +644,7 @@ limmaCompleteTest <- function(qData, sTab, comp.type = "OnevsOne") {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_prot)
+#' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(100)]
 #' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)

@@ -24,7 +24,7 @@ A Excel file (.xlsx)
 This function exports a data.frame to a Excel file.
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 df <- Biobase::exprs(Exp1_R25_pept[seq_len(100)])
 tags <- GetMetacell(Exp1_R25_pept[seq_len(100)])
 colors <- list(

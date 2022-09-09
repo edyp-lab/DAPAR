@@ -20,7 +20,7 @@ Similar to the function \code{rbind} but applies on two subsets of
 the same \code{MSnSet} object.
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 df1 <- Exp1_R25_pept[seq_len(100)]
 df2 <- Exp1_R25_pept[seq.int(from = 200, to = 250)]
 rbindMSnset(df1, df2)

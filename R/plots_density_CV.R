@@ -15,7 +15,7 @@
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' wrapper.CVDistD_HC(Exp1_R25_pept)
 #'
 #' @export
@@ -52,7 +52,7 @@ wrapper.CVDistD_HC <- function(obj, ...) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' conds <- Biobase::pData(Exp1_R25_pept)[, "Condition"]
 #' CVDistD_HC(Biobase::exprs(Exp1_R25_pept), conds)
 #' pal <- ExtendPalette(2, "Dark2")

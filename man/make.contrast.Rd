@@ -25,7 +25,7 @@ A constrat matrix
 Builds the contrast matrix
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package='DAPARdata')
 design <- make.design(Biobase::pData(Exp1_R25_pept))
 conds <- Biobase::pData(Exp1_R25_pept)$Condition
 make.contrast(design, conds)

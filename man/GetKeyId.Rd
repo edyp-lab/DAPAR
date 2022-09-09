@@ -16,7 +16,7 @@ xxx
 xxxx
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 GetKeyId(Exp1_R25_pept)
 
 }

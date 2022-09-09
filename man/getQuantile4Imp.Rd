@@ -23,7 +23,7 @@ This method returns the q-th quantile of each column of an expression set,
  up to a scaling factor
 }
 \examples{
-data(Exp1_R25_prot)
+data(Exp1_R25_prot, package="DAPARdata")
 qdata <- Biobase::exprs(Exp1_R25_prot)
 quant <- getQuantile4Imp(qdata)
 

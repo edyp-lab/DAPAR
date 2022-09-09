@@ -18,11 +18,18 @@ A plot
 Display a a jitter plot for CC
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept[seq_len(100)]
 X <- BuildAdjacencyMatrix(obj, "Protein_group_IDs", TRUE)
-ll <- get.pep.prot.cc(X)
-plotJitter_rCharts(ll)
+ll <- get.pep.prot.cc(X)[1:4]
+n.prot <- unlist(lapply(ll, function(x) {length(x$proteins)}))
+n.pept <- unlist(lapply(ll, function(x) {length(x$peptides)}))
+df <- tibble::tibble(
+x = jitter(n.pept),
+y = jitter(n.prot),
+index = seq_len(length(ll))
+)
+plotJitter_rCharts(df)
 
 }
 \author{

@@ -16,7 +16,7 @@ A normalized numeric matrix
 Normalisation GlobalQuantileAlignement
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 qData <- Biobase::exprs(Exp1_R25_pept)
 normalized <- GlobalQuantileAlignment(qData)
 

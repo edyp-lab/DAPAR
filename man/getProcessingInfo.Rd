@@ -18,7 +18,7 @@ Returns the contains of the slot processing  of an object of
 class \code{MSnSet}
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 getProcessingInfo(Exp1_R25_pept)
 
 }

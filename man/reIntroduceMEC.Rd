@@ -18,7 +18,7 @@ The object \code{obj} where LAPALA have been reintroduced
 Put back LAPALA into  a \code{MSnSet} object
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept[seq_len(100)]
 lapala <- findMECBlock(obj)
 obj <- wrapper.impute.detQuant(obj, na.type = "missing")

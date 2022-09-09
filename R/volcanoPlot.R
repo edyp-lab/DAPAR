@@ -24,7 +24,7 @@
 #' @return A volcanoplot
 #' @author Florence Combes, Samuel Wieczorek
 #' @examples
-#' data(Exp1_R25_prot)
+#' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(100)]
 #' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
@@ -141,21 +141,21 @@ diffAnaVolcanoplot <- function(logFC = NULL,
 #' @author Samuel Wieczorek
 #' @examples
 #' library(highcharter)
-#' data(Exp1_R25_prot)
+#' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(100)]
 #' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
-#' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
-#' qData <- Biobase::exprs(obj$new)
-#' sTab <- Biobase::pData(obj$new)
+#' obj <- MetaCellFiltering(obj, indices, cmd = "delete")$new
+#' qData <- Biobase::exprs(obj)
+#' sTab <- Biobase::pData(obj)
 #' data <- limmaCompleteTest(qData, sTab)
 #' df <- data.frame(
 #'     x = data$logFC, y = -log10(data$P_Value),
-#'     index = as.character(rownames(obj$new))
+#'     index = as.character(rownames(obj))
 #' )
 #' colnames(df) <- c("x", "y", "index")
-#' tooltipSlot <- c("Sequence", "Score")
+#' tooltipSlot <- c("Fasta_headers", "Sequence_length")
 #' df <- cbind(df, Biobase::fData(obj)[, tooltipSlot])
 #' colnames(df) <- gsub(".", "_", colnames(df), fixed = TRUE)
 #' if (ncol(df) > 3) {

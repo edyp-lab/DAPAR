@@ -19,7 +19,7 @@
 #' @author Alexia Dorffer
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10)]
 #' level <- 'peptide'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
@@ -78,7 +78,7 @@ wrapper.heatmapD <- function(obj,
 #' @author Florence Combes, Samuel Wieczorek, Enor Fremy
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10), ]
 #' level <- 'peptide'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
@@ -175,9 +175,9 @@ heatmapD <- function(qData,
         margins = c(4, 12),
         cexRow = 1.5 + ncol(.data) * -0.011,
         keysize = 1.5,
-        lhei = c(1.5, 9),
-        lwid = c(1.5, 4),
-        lmat = rbind(4:3, 2:1),
+        # lhei = c(1.5, 9),
+        # lwid = c(1.5, 4),
+        # lmat = rbind(4:3, 2:1),
         colRow = col_labels
     )
 }
@@ -216,7 +216,7 @@ heatmapD <- function(qData,
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_prot)
+#' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(100)]
 #' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
@@ -334,37 +334,55 @@ heatmapForMissingValues <- function(x,
                 tick = 0
             )
             graphics::text(
-                x = xpos, y = par("usr")[3] - (1 + offsetCol) *
-                    graphics::strheight("M"), label = labCol, adj = adjCol,
-                cex = cexCol, srt = srtCol, col = colCol
+                x = xpos, 
+                y = graphics::par("usr")[3] - (1 + offsetCol) *
+                    graphics::strheight("M"), 
+                label = labCol, 
+                adj = adjCol,
+                cex = cexCol, 
+                srt = srtCol, 
+                col = colCol
             )
             graphics::par(xpd = xpd.orig)
         }
 
 
         if (!is.null(labRow)) {
-            graphics::axis(4, iy,
-                label = labRow, las = 5, line = -0.5 + offsetRow,
-                tick = 0, cex.axis = cexRow, hadj = 0, padj = NA
+            graphics::axis(4, 
+                iy,
+                label = labRow, 
+                las = 5, 
+                line = -0.5 + offsetRow,
+                tick = 0, 
+                cex.axis = cexRow, 
+                hadj = 0, 
+                padj = NA
             )
         } else {
             xpd.orig <- graphics::par("xpd")
             graphics::par(xpd = NA)
-            ypos <- graphics::axis(4, iy,
-                label = rep("", nr), las = 2,
-                line = -0.5, tick = 0
+            ypos <- graphics::axis(4, 
+                iy,
+                label = rep("", nr), 
+                las = 2,
+                line = -0.5, 
+                tick = 0
             )
             
             .strw <- graphics::strwidth("M")
             graphics::text(
                 x = graphics::par("usr")[2] + (1 + offsetRow) * .strw,
-                y = ypos, label = labRow, adj = c(0, NA), cex = cexRow,
-                srt = srtRow, col = colRow
+                y = ypos, 
+                label = labRow, 
+                adj = c(0, NA), 
+                cex = cexRow,
+                srt = srtRow, 
+                col = colRow
             )
             graphics::par(xpd = xpd.orig)
         }
 
-        par(mar = c(margins[1], 0, 0, 0))
+        graphics::par(mar = c(margins[1], 0, 0, 0))
         graphics::plot.new()
         graphics::par(mar = c(0, 0, if (!is.null(main)) 5 else 0, margins[2]))
 
@@ -400,7 +418,10 @@ heatmapForMissingValues <- function(x,
             key.xlab <- "Intensity value"
 
             graphics::mtext(
-                side = 1, key.xlab, line = par("mgp")[1], padj = 0.5,
+                side = 1, 
+                key.xlab, 
+                line = graphics::par("mgp")[1], 
+                padj = 0.5,
                 cex = graphics::par("cex") * graphics::par("cex.lab")
             )
 

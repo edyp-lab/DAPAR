@@ -20,7 +20,7 @@ This function is a wrapper to the calibration.plot method of the
 \code{cp4p} package for use with \code{MSnSet} objects.
 }
 \examples{
-data(Exp1_R25_prot)
+data(Exp1_R25_prot, package="DAPARdata")
 obj <- Exp1_R25_prot[seq_len(100)]
 level <- 'protein'
 metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)

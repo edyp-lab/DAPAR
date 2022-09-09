@@ -20,7 +20,7 @@ Record the adjacency matrices in a slot of the
 dataset  of class \code{MSnSet}
 }
 \examples{
-data(Exp1_R25_pept)
+data(Exp1_R25_pept, package="DAPARdata")
 Xshared <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(100)], 
 "Protein_group_IDs", FALSE)
 Xunique <- BuildAdjacencyMatrix(Exp1_R25_pept[seq_len(100)], 

@@ -56,7 +56,7 @@ normalizeMethods.dapar <- function(withTracking = FALSE) {
 #' @author Samuel Wieczorek, Thomas Burger, Helene Borges
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' conds <- Biobase::pData(Exp1_R25_pept)$Condition
 #' obj <- wrapper.normalizeD(
 #'     obj = Exp1_R25_pept, method = "QuantileCentering",
@@ -114,7 +114,7 @@ wrapper.normalizeD <- function(obj, method, withTracking = FALSE, ...) {
 #' Enora Fremy
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' qData <- Biobase::exprs(Exp1_R25_pept)
 #' normalized <- GlobalQuantileAlignment(qData)
 #'
@@ -151,7 +151,7 @@ GlobalQuantileAlignment <- function(qData) {
 #' Enora Fremy
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' qData <- Biobase::exprs(Exp1_R25_pept)
 #' conds <- Biobase::pData(Exp1_R25_pept)$Condition
 #' normalized <- SumByColumns(qData, conds,
@@ -246,7 +246,7 @@ SumByColumns <- function(qData,
 #' Enora Fremy
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept
 #' conds <- Biobase::pData(Exp1_R25_pept)$Condition
 #' normalized <- QuantileCentering(Biobase::exprs(obj), conds,
@@ -335,7 +335,7 @@ QuantileCentering <- function(qData,
 #' Enora Fremy
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' qData <- Biobase::exprs(Exp1_R25_pept)
 #' conds <- Biobase::pData(Exp1_R25_pept)$Condition
 #' normalized <- MeanCentering(qData, conds, type = "overall")
@@ -403,7 +403,7 @@ MeanCentering <- function(qData,
 #' @author Thomas Burger, Helene Borges, Anais Courtier, Enora Fremy
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' qData <- Biobase::exprs(Exp1_R25_pept)
 #' conds <- Biobase::pData(Exp1_R25_pept)$Condition
 #' normalized <- vsn(qData, conds, type = "overall")
@@ -451,7 +451,7 @@ vsn <- function(qData, conds, type = NULL) {
 #' @author Thomas Burger, Helene Borges, Anais Courtier, Enora Fremy
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' qData <- Biobase::exprs(Exp1_R25_pept)
 #' conds <- Biobase::pData(Exp1_R25_pept)$Condition
 #' normalized <- LOESS(qData, conds, type = "overall")

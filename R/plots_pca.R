@@ -13,7 +13,7 @@
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_prot)
+#' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(100)]
 #' level <- 'protein'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
@@ -82,7 +82,7 @@ wrapper.pca <- function(obj, var.scaling = TRUE, ncp = NULL) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' res.pca <- wrapper.pca(Exp1_R25_pept)
 #' plotPCA_Var(res.pca)
 #'
@@ -121,7 +121,7 @@ plotPCA_Var <- function(res.pca, chosen.axes = c(1, 2)) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' res.pca <- wrapper.pca(Exp1_R25_pept)
 #' plotPCA_Ind(res.pca)
 #'
@@ -155,7 +155,7 @@ plotPCA_Ind <- function(res.pca, chosen.axes = c(1, 2)) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package="DAPARdata")
 #' res.pca <- wrapper.pca(Exp1_R25_pept, ncp = 6)
 #' plotPCA_Eigen(res.pca)
 #'
@@ -200,7 +200,7 @@ plotPCA_Eigen <- function(res.pca) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#'data(Exp1_R25_pept)
+#' data(Exp1_R25_pept, package='DAPARdata')
 #' res.pca <- wrapper.pca(Exp1_R25_pept, ncp = 6)
 #' plotPCA_Eigen_hc(res.pca)
 #'
