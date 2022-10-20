@@ -2,7 +2,7 @@
 % Please edit documentation in R/metacell.R
 \name{Metacell_proline}
 \alias{Metacell_proline}
-\title{Sets the metacell dataframe}
+\title{Sets the metacell dataframe for datasets which are from Proline software}
 \usage{
 Metacell_proline(qdata, conds, df, level = NULL)
 }
@@ -21,8 +21,11 @@ xxxxx
 \description{
 In the quantitative columns, a missing value is identified by no value rather
 than a value equal to 0.
+
+In these datasets, the metacell info is computed from the 'PSM count' columns.
+
 Conversion rules
-Initial conversion rules for maxquant
+Initial conversion rules for proline
 |--------------|-----------------|-----|
 | Quanti       |    PSM count    | Tag |
 |--------------|-----------------|-----|

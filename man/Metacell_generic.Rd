@@ -2,7 +2,8 @@
 % Please edit documentation in R/metacell.R
 \name{Metacell_generic}
 \alias{Metacell_generic}
-\title{Sets the metacell dataframe}
+\title{Sets the metacell dataframe for dataset without information about the
+origin of identification}
 \usage{
 Metacell_generic(qdata, conds, level)
 }
@@ -22,6 +23,8 @@ than a value equal to 0.
 Conversion rules
 QuantiTag
 NA or 0 NA
+The only information detected with this function are about missing values (
+MEC and POV).
 }
 \examples{
 file <- system.file("extdata", "Exp1_R25_pept.txt", package = "DAPARdata")

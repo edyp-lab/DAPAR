@@ -16,6 +16,7 @@ xxx
 \description{
 This function gives the vocabulary used for the metadata of each entity in
 each condition.
+
 Peptide-level vocabulary
 
 |-- 1.0 Quantitative Value
@@ -58,7 +59,7 @@ Protein-level vocabulary:
 |    |
 |    |-- 3.2 Imputed MEC (color 2)
 |
-|-- 4.0 Combined value (color 3bis, light-lightgrey)
+|-- 4.0 Combined value (color 3bis, lightgrey)
 }
 \examples{
 metacell.def('protein')

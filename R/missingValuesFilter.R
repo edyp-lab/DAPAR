@@ -575,7 +575,7 @@ MetaCellFiltering <- function(obj,
 
 
 
-    if (is.null(indices)) {
+    if (is.null(indices) || length(indices)==0) {
         warning("'indices' is NULL. No filtering will be process.")
         deleted <- obj[-c(seq_len(nrow(obj)))]
         new <- obj

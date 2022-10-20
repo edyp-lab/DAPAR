@@ -2,12 +2,13 @@
 % Please edit documentation in R/metacell.R
 \name{BuildMetaCell}
 \alias{BuildMetaCell}
-\title{xxxx}
+\title{Builds cells metadata}
 \usage{
 BuildMetaCell(from, level, qdata = NULL, conds = NULL, df = NULL)
 }
 \arguments{
-\item{from}{xxx}
+\item{from}{A string which is the name of the software from which the data
+are. Available values are 'maxquant' and 'proline'}
 
 \item{level}{xxx}
 
@@ -21,7 +22,11 @@ BuildMetaCell(from, level, qdata = NULL, conds = NULL, df = NULL)
 xxxxx
 }
 \description{
-xxxxxx
+This function the cells metadata info base on the origin of identification
+for entities.
+There are actually two different type of origin which are managed by DAPAR:
+- "Maxquant-like" info which is represented by strings/tags,
+- Proline-like where the info which is used is an integer
 }
 \examples{
 file <- system.file("extdata", "Exp1_R25_pept.txt", package = "DAPARdata")

@@ -4,6 +4,7 @@
 #' @description
 #' This function gives the vocabulary used for the metadata of each entity in
 #' each condition.
+#' 
 #' Peptide-level vocabulary
 #'
 #' |-- 1.0 Quantitative Value
@@ -46,7 +47,7 @@
 #' |    |
 #' |    |-- 3.2 Imputed MEC (color 2)
 #' |
-#' |-- 4.0 Combined value (color 3bis, light-lightgrey)
+#' |-- 4.0 Combined value (color 3bis, lightgrey)
 #'
 #'
 #' @param level A string designing the type of entity/pipeline.
@@ -67,6 +68,8 @@ metacell.def <- function(level) {
     if (missing(level)) {
         stop("'level' is required.")
     }
+    
+
 
     def <- switch(level,
         peptide = {
@@ -160,6 +163,110 @@ metacell.def <- function(level) {
 
 
 
+Parent <- function(level, node=NULL){
+    tags <- metacell.def(level)
+    return(tags$parent[which(tags$node==node) ])
+}
+
+
+Children <- function(level, parent = NULL){
+    tags <- metacell.def(level)
+    return(tags$node[which(tags$parent==parent) ])
+    
+}
+
+
+GetUniqueTags <- function(obj){
+    df <- Biobase::fData(obj)[, obj@experimentData@other$names_metacell]
+    tmp <- sapply(colnames(df), function(x) unique(df[,x]))
+    ll <- unique(as.vector(tmp))
+    return(ll)
+}
+
+#' @title List of metacell tags
+#'
+#' @description
+#' This function gives the list of metacell tags available in DAPAR.
+#' 
+#' - onlyPresent: In this case, the function gives the tags found in a dataset.
+#' In addition, and w.r.t to the hierarchy of tags, if all leaves of a node are
+#' present, then the tag corresponding to this node is added.
+#'
+#' @param level xxx
+#'
+#' @param obj An object of class \code{MSnSet}
+#'
+#' @param onlyPresent A boolean that indicates if one wants a list with only the tags
+#' present in the dataset.
+#' 
+#' @param all A boolean that indicates if one wants the whole list
+#'
+#' @return A vector of tags..
+#'
+#' @author Samuel Wieczorek
+#'
+#' @examples
+#' data(Exp1_R25_pept, package="DAPARdata")
+#' obj <- Exp1_R25_pept
+#' GetMetacellTags(level="peptide")
+#' GetMetacellTags(level="peptide", obj, onlyPresent=TRUE)
+#'
+#' @export
+#'
+#'
+GetMetacellTags <- function(level=NULL, obj=NULL, onlyPresent = FALSE, all=FALSE) {
+    
+    if (!onlyPresent && !all){
+        if (!is.null(level) && is.null(obj))
+            all <- TRUE
+        if (is.null(level) && !is.null(obj))
+            onlyPresent <- TRUE
+        if ((!is.null(level) && !is.null(obj)) || (is.null(level) && is.null(obj)))
+                stop("At least, one of level or obj must be defined")
+    }
+       
+    if (onlyPresent && all)
+        stop("Only of 'onlyPresent' or 'all' must be TRUE")
+    
+    if (is.null(level) && all)
+        stop("level must be defined")
+    if (is.null(level) && !all)
+            all <- TRUE
+    
+    if (is.null(obj) && onlyPresent)
+        stop("`obj` must be defined")
+    
+    
+    ll <- NULL
+    if(onlyPresent) {
+        ll <- GetUniqueTags(obj)
+        # Check if parent must be added
+        test <- match (Children(level, 'quanti'), ll)
+        if (length(test) == length(Children(level, 'quanti')) && !all(is.na(test)))
+                ll <- c(ll, 'quanti')
+        test <- match (Children(level, 'missing'), ll)
+        if (length(test) == length(Children(level, 'missing')) && !all(is.na(test)))
+            ll <- c(ll, 'missing')
+        test <- match (Children(level, 'imputed'), ll)
+        if (length(test) == length(Children(level, 'imputed')) && !all(is.na(test)))
+            ll <- c(ll, 'imputed')
+        test <- match (Children(level, 'combined'), ll)
+        if (length(test) == length(Children(level, 'combined')) && !all(is.na(test)))
+            ll <- c(ll, 'combined')
+        test <- match (Children(level, 'all'), ll)
+        if (length(test) == length(Children(level, 'all')) && !all(is.na(test)))
+            ll <- c(ll, 'all')
+        
+        
+    } else if (all) {
+        ll <- metacell.def(level)
+    }
+    
+    return(ll)
+    
+}
+    
+
 #' @title Sets the MEC tag in the metacell
 #'
 #' @description
@@ -219,12 +326,17 @@ Set_POV_MEC_tags <- function(conds, df, level) {
 }
 
 
-#' @title xxxx
+#' @title Builds cells metadata
 #'
 #' @description
-#' xxxxxx
+#' This function the cells metadata info base on the origin of identification
+#' for entities.
+#' There are actually two different type of origin which are managed by DAPAR:
+#' - "Maxquant-like" info which is represented by strings/tags,
+#' - Proline-like where the info which is used is an integer
 #'
-#' @param from xxx
+#' @param from A string which is the name of the software from which the data
+#' are. Available values are 'maxquant' and 'proline'
 #'
 #' @param level xxx
 #'
@@ -298,7 +410,8 @@ BuildMetaCell <- function(from,
 
 
 
-#' @title Sets the metacell dataframe
+#' @title Sets the metacell dataframe for dataset without information about the
+#' origin of identification
 #'
 #' @description
 #' In the quantitative columns, a missing value is identified by no value rather
@@ -306,7 +419,8 @@ BuildMetaCell <- function(from,
 #' Conversion rules
 #' QuantiTag
 #' NA or 0 NA
-#'
+#' The only information detected with this function are about missing values (
+#' MEC and POV).
 #'
 #' @param qdata An object of class \code{MSnSet}
 #'
@@ -347,12 +461,13 @@ Metacell_generic <- function(qdata, conds, level) {
         stop("'level' is required.")
     }
 
-    df <- data.frame(matrix(rep("quanti", nrow(qdata) * ncol(qdata)),
-        nrow = nrow(qdata),
-        ncol = ncol(qdata)
-    ),
-    stringsAsFactors = FALSE
-    )
+    df <- data.frame(
+        matrix(rep("quanti", nrow(qdata) * ncol(qdata)),
+            nrow = nrow(qdata),
+            ncol = ncol(qdata)
+            ),
+        stringsAsFactors = FALSE
+        )
 
     # Rule 1
     qdata[qdata == 0] <- NA
@@ -369,13 +484,16 @@ Metacell_generic <- function(qdata, conds, level) {
 
 
 
-#' @title Sets the metacell dataframe
+#' @title Sets the metacell dataframe for datasets which are from Proline software
 #'
 #' @description
 #' In the quantitative columns, a missing value is identified by no value rather
 #' than a value equal to 0.
+#' 
+#' In these datasets, the metacell info is computed from the 'PSM count' columns.
+#' 
 #' Conversion rules
-#' Initial conversion rules for maxquant
+#' Initial conversion rules for proline
 #' |--------------|-----------------|-----|
 #' | Quanti       |    PSM count    | Tag |
 #' |--------------|-----------------|-----|
@@ -452,6 +570,9 @@ Metacell_proline <- function(qdata, conds, df, level = NULL) {
 
     return(df)
 }
+
+
+
 
 #' @title Sets the metacell dataframe
 #'
