@@ -25,9 +25,9 @@ package \code{imp4p} adapted to an object of class \code{MSnSet}.
 utils::data(Exp1_R25_pept, package = "DAPARdata")
 obj <- Exp1_R25_pept[seq_len(10), ]
 level <- 'peptide'
-metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
 indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
-obj.imp.na <- wrapper.impute.mle(obj, na.type = "missing")
+obj.imp.na <- wrapper.impute.mle(obj, na.type = "Missing")
 
 }
 \author{

@@ -35,7 +35,7 @@ data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept[seq_len(100)]
 conds <- Biobase::pData(obj)$Condition
 pal <- ExtendPalette(length(unique(conds)), "Dark2")
-hc_mvTypePlot2(obj, pattern = "missing MEC", title = "POV distribution", 
+hc_mvTypePlot2(obj, pattern = "Missing MEC", title = "POV distribution", 
 pal = pal)
 
 }

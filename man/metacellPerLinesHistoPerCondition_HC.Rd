@@ -36,8 +36,8 @@ number of missing values (NA) per lines (ie proteins) and per conditions.
 data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept
 pal <- ExtendPalette(length(unique(Biobase::pData(obj)$Condition)), "Dark2")
-metacellPerLinesHistoPerCondition_HC(obj, "missing", pal = pal)
-metacellPerLinesHistoPerCondition_HC(obj, "quanti")
+metacellPerLinesHistoPerCondition_HC(obj, "Missing", pal = pal)
+metacellPerLinesHistoPerCondition_HC(obj, "Quantified")
 
 }
 \author{

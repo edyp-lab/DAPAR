@@ -19,7 +19,7 @@ This function looks for the lines where each element respect the query.
 data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept[seq.int(from=20, to=30)]
 level <- 'peptide'
-pattern <- "missing POV"
+pattern <- "Missing POV"
 metacell.mask <- match.metacell(metadata = GetMetacell(obj), 
 pattern = pattern, level = level)
 ind <- GetIndices_WholeLine(metacell.mask)

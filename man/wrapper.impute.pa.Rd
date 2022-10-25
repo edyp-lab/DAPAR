@@ -27,9 +27,9 @@ This method is a wrapper to the function \code{impute.pa} of the package
 data(Exp1_R25_prot, package="DAPARdata")
 obj <- Exp1_R25_prot[seq_len(10)]
 level <- 'protein'
-metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
 indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
-obj.imp.pov <- wrapper.impute.pa(obj, na.type = "missing POV")
+obj.imp.pov <- wrapper.impute.pa(obj, na.type = "Missing POV")
 
 }
 \author{

@@ -36,7 +36,7 @@ given their indice.
 data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept[seq_len(10), ]
 level <- GetTypeofData(obj)
-pattern <- "missing"
+pattern <- "Missing"
 type <- "AllCond"
 percent <- FALSE
 op <- "=="

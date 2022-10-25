@@ -53,7 +53,7 @@ findMECBlock <- function(obj) {
 #' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(100)]
 #' lapala <- findMECBlock(obj)
-#' obj <- wrapper.impute.detQuant(obj, na.type = "missing")
+#' obj <- wrapper.impute.detQuant(obj, na.type = "Missing")
 #' obj <- reIntroduceMEC(obj, lapala)
 #'
 #' @export
@@ -85,7 +85,7 @@ reIntroduceMEC <- function(obj, MECIndex) {
 #' @param K the number of neighbors.
 #'
 #' @param na.type A string which indicates the type of missing values to impute.
-#' Available values are: `missing POV`.
+#' Available values are: `Missing POV`.
 #'
 #' @return The object \code{obj} which has been imputed
 #'
@@ -95,7 +95,7 @@ reIntroduceMEC <- function(obj, MECIndex) {
 #' data(Exp1_R25_pept, package="DAPARdata")
 #' obj.imp.pov <- wrapper.impute.KNN(
 #'     obj = Exp1_R25_pept[seq_len(10)], K = 3,
-#'     na.type = "missing POV"
+#'     na.type = "Missing POV"
 #' )
 #'
 #' @export
@@ -113,9 +113,9 @@ wrapper.impute.KNN <- function(obj = NULL, K, na.type) {
         stop("'obj' is NULL")
     }
     if (missing(na.type)) {
-        stop("'na.type' is required. Available values are: 'missing POV'.")
-    } else if (na.type != "missing POV") {
-        stop("Available value for na.type is: 'missing POV'")
+        stop("'na.type' is required. Available values are: 'Missing POV'.")
+    } else if (na.type != "Missing POV") {
+        stop("Available value for na.type is: 'Missing POV'")
     }
 
     data <- Biobase::exprs(obj)
@@ -166,9 +166,9 @@ wrapper.impute.KNN <- function(obj = NULL, K, na.type) {
 #' @examples
 #' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10), ]
-#' obj.imp.pov <- wrapper.impute.fixedValue(obj, 0.001, na.type = "missing POV")
-#' obj.imp.mec <- wrapper.impute.fixedValue(obj, 0.001, na.type = "missing MEC")
-#' obj.imp.na <- wrapper.impute.fixedValue(obj, 0.001, na.type = "missing")
+#' obj.imp.pov <- wrapper.impute.fixedValue(obj, 0.001, na.type = "Missing POV")
+#' obj.imp.mec <- wrapper.impute.fixedValue(obj, 0.001, na.type = "Missing MEC")
+#' obj.imp.na <- wrapper.impute.fixedValue(obj, 0.001, na.type = "Missing")
 #'
 #' @export
 #'
@@ -227,9 +227,9 @@ wrapper.impute.fixedValue <- function(obj, fixVal = 0, na.type) {
 #' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(10)]
 #' level <- 'protein'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
-#' obj.imp.pov <- wrapper.impute.pa(obj, na.type = "missing POV")
+#' obj.imp.pov <- wrapper.impute.pa(obj, na.type = "Missing POV")
 #'
 #' @export
 #'
@@ -297,9 +297,9 @@ wrapper.impute.pa <- function(obj = NULL, q.min = 0.025, na.type) {
 #' @examples
 #' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10)]
-#' obj.imp.pov <- wrapper.impute.detQuant(obj, na.type = "missing POV")
-#' obj.imp.mec <- wrapper.impute.detQuant(obj, na.type = "missing MEC")
-#' obj.imp.na <- wrapper.impute.detQuant(obj, na.type = "missing")
+#' obj.imp.pov <- wrapper.impute.detQuant(obj, na.type = "Missing POV")
+#' obj.imp.mec <- wrapper.impute.detQuant(obj, na.type = "Missing MEC")
+#' obj.imp.na <- wrapper.impute.detQuant(obj, na.type = "Missing")
 #'
 #' @export
 #'
@@ -414,7 +414,7 @@ getQuantile4Imp <- function(qdata, qval = 0.025, factor = 1) {
 #' @examples
 #' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(100)]
-#' obj.slsa.pov <- wrapper.impute.slsa(obj, na.type = "missing POV")
+#' obj.slsa.pov <- wrapper.impute.slsa(obj, na.type = "Missing POV")
 #'
 #' @export
 #'
@@ -430,9 +430,9 @@ wrapper.impute.slsa <- function(obj = NULL, na.type = NULL) {
         stop("'obj' is required.")
     }
     if (is.null(na.type)) {
-        stop("'na.type' is required. Available values are: 'missing POV'.")
-    } else if (!(na.type %in% c("missing POV"))) {
-        stop("Available values for na.type are: 'missing POV'.")
+        stop("'na.type' is required. Available values are: 'Missing POV'.")
+    } else if (!(na.type %in% c("Missing POV"))) {
+        stop("Available values for na.type are: 'Missing POV'.")
     }
 
 

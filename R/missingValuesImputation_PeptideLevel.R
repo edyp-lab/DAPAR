@@ -23,9 +23,9 @@
 #' utils::data(Exp1_R25_pept, package = "DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10), ]
 #' level <- 'peptide'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
-#' obj.imp.na <- wrapper.impute.mle(obj, na.type = "missing")
+#' obj.imp.na <- wrapper.impute.mle(obj, na.type = "Missing")
 #'
 #' @export
 #'
@@ -40,9 +40,9 @@ wrapper.impute.mle <- function(obj, na.type) {
         stop("'obj' is required.")
     }
     if (missing(na.type)) {
-        stop("'na.type' is required. Available value is 'missing'")
-    } else if (!(na.type %in% c("missing"))) {
-        stop("Available value for na.type ais: 'missing'.")
+        stop("'na.type' is required. Available value is 'Missing'")
+    } else if (!(na.type %in% c("Missing"))) {
+        stop("Available value for na.type is: 'Missing'.")
     }
 
 
@@ -125,7 +125,7 @@ wrapper.impute.mle <- function(obj, na.type) {
 #' utils::data(Exp1_R25_pept, package = "DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(100)]
 #' level <- 'peptide'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj.imp.na <- wrapper.dapar.impute.mi(obj, nb.iter = 1, lapala = TRUE)
 #' obj.imp.pov <- wrapper.dapar.impute.mi(obj, nb.iter = 1, lapala = FALSE)
@@ -227,9 +227,9 @@ wrapper.dapar.impute.mi <- function(obj,
     obj@processingData@processing <- c(obj@processingData@processing, msg)
 
     obj@experimentData@other$imputation.method <- "imp4p"
-    na.type <- "missing POV"
+    na.type <- "Missing POV"
     if (isTRUE(lapala)) {
-        na.type <- "missing"
+        na.type <- "Missing"
     }
 
     obj <- UpdateMetacell(obj, "mi", na.type)
@@ -345,7 +345,7 @@ wrapper.impute.pa2 <- function(obj,
     tab_imp <- tab_imp[, sample.names.old]
 
     Biobase::exprs(obj) <- tab_imp
-    obj <- UpdateMetacell(obj, "pa2", "missing")
+    obj <- UpdateMetacell(obj, "pa2", "Missing")
 
     return(obj)
 }

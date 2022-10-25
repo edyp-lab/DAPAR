@@ -19,7 +19,7 @@
 #' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(1000)]
 #' level <- 'protein'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 #' averageIntensities(obj$new)
@@ -91,7 +91,7 @@ averageIntensities <- function(ESet_obj) {
 #' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(100)]
 #' level <- 'protein'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 #' averaged_means <- averageIntensities(obj$new)
@@ -177,7 +177,7 @@ checkClusterability <- function(standards, b = 500) {
 #' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(1000)]
 #' level <- 'protein'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 #' expR25_ttest <- compute_t_tests(obj$new)
@@ -392,7 +392,7 @@ visualizeClusters <- function(dat,
 #' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(1000)]
 #' level <- 'protein'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 #' expR25_ttest <- compute_t_tests(obj$new)

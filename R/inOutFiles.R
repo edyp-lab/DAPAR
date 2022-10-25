@@ -299,11 +299,11 @@ createMSnset <- function(file,
 #' df <- Biobase::exprs(Exp1_R25_pept[seq_len(100)])
 #' tags <- GetMetacell(Exp1_R25_pept[seq_len(100)])
 #' colors <- list(
-#'     "missing POV" = "lightblue",
-#'     "missing MEC" = "orange",
-#'     "recovered" = "lightgrey",
-#'     "identified" = "white",
-#'     "combined" = "red"
+#'     "Missing POV" = "lightblue",
+#'     "Missing MEC" = "orange",
+#'     "Quant. by recovery" = "lightgrey",
+#'     "Quant. by direct id" = "white",
+#'     "Combined tags" = "red"
 #' )
 #' write.excel(df, tags, colors, filename = "toto")
 #' 
@@ -424,7 +424,7 @@ writeMSnsetToExcel <- function(obj, filename) {
     mc <- metacell.def(GetTypeofData(obj))
     colors <- as.list(stats::setNames(mc$color, mc$node))
     tags <- cbind(
-        keyId = rep("identified", nrow(obj)),
+        keyId = rep("Quant. by direct id", nrow(obj)),
         GetMetacell(obj)
     )
 
@@ -509,13 +509,13 @@ writeMSnsetToExcel <- function(obj, filename) {
 
     colors <- as.list(stats::setNames(mc$color, mc$node))
     tags <- cbind(
-        keyId = rep("identified", nrow(obj)),
+        keyId = rep("Quant. by direct id", nrow(obj)),
         Biobase::fData(obj)
     )
 
     .ind <- colnames(Biobase::fData(obj))
     .ind <- which(.ind %in% obj@experimentData@other$names_metacell)
-    tags[, ] <- "identified"
+    tags[, ] <- "Quant. by direct id"
     tags[, 1 + .ind] <- GetMetacell(obj)
 
     unique.tags <- NULL

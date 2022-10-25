@@ -551,7 +551,7 @@ getIndicesOfLinesToRemove <- function(
 #' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(100)]
 #' level <- 'peptide'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
 #' indices <- GetIndices_WholeLine(metacell.mask)
 #' obj.filter <- MetaCellFiltering(obj, indices, "delete")
 #'
@@ -667,7 +667,7 @@ deleteLinesFromIndices <- function(obj, deleteThat = NULL, processText = "") {
 #' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10), ]
 #' level <- GetTypeofData(obj)
-#' pattern <- "missing"
+#' pattern <- "Missing"
 #' type <- "AllCond"
 #' percent <- FALSE
 #' op <- "=="
@@ -806,7 +806,7 @@ SymFilteringOperators <- function() {
 #' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10)]
 #' level <- 'peptide'
-#' pattern <- "missing"
+#' pattern <- "Missing"
 #' metacell.mask <- match.metacell(metadata = GetMetacell(obj), 
 #' pattern = pattern, level = level)
 #' percent <- FALSE
@@ -881,7 +881,7 @@ GetIndices_WholeMatrix <- function(metacell.mask,
 #' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq.int(from=20, to=30)]
 #' level <- 'peptide'
-#' pattern <- "missing POV"
+#' pattern <- "Missing POV"
 #' metacell.mask <- match.metacell(metadata = GetMetacell(obj), 
 #' pattern = pattern, level = level)
 #' ind <- GetIndices_WholeLine(metacell.mask)
@@ -928,7 +928,7 @@ GetIndices_WholeLine <- function(metacell.mask) {
 #' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10)]
 #' level <- GetTypeofData(obj)
-#' pattern <- 'missing'
+#' pattern <- 'Missing'
 #' metacell.mask <- match.metacell(metadata=GetMetacell(obj), 
 #' pattern=pattern, level=level)
 #' type <- 'AllCond'

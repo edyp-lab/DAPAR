@@ -12,7 +12,7 @@ wrapper.impute.KNN(obj = NULL, K, na.type)
 \item{K}{the number of neighbors.}
 
 \item{na.type}{A string which indicates the type of missing values to impute.
-Available values are: `missing POV`.}
+Available values are: `Missing POV`.}
 }
 \value{
 The object \code{obj} which has been imputed
@@ -26,7 +26,7 @@ This function imputes the missing values condition by condition.
 data(Exp1_R25_pept, package="DAPARdata")
 obj.imp.pov <- wrapper.impute.KNN(
     obj = Exp1_R25_pept[seq_len(10)], K = 3,
-    na.type = "missing POV"
+    na.type = "Missing POV"
 )
 
 }

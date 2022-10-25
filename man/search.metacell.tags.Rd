@@ -21,8 +21,8 @@ Gives all the tags of the metadata vocabulary containing the pattern
 (parent and all its children).
 }
 \examples{
-search.metacell.tags("missing POV", "peptide")
-search.metacell.tags("quanti", "peptide")
+search.metacell.tags("Missing POV", "peptide")
+search.metacell.tags("Quantified", "peptide")
 
 }
 \author{

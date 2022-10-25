@@ -35,7 +35,7 @@ A histogram
 \examples{
 data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept
-pattern <- "missing POV"
+pattern <- "Missing POV"
 pal <- ExtendPalette(2, "Dark2")
 metacellHisto_HC(obj, pattern, showValues = TRUE, pal = pal)
 

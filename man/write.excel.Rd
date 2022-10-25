@@ -28,11 +28,11 @@ data(Exp1_R25_pept, package="DAPARdata")
 df <- Biobase::exprs(Exp1_R25_pept[seq_len(100)])
 tags <- GetMetacell(Exp1_R25_pept[seq_len(100)])
 colors <- list(
-    "missing POV" = "lightblue",
-    "missing MEC" = "orange",
-    "recovered" = "lightgrey",
-    "identified" = "white",
-    "combined" = "red"
+    "Missing POV" = "lightblue",
+    "Missing MEC" = "orange",
+    "Quant. by recovery" = "lightgrey",
+    "Quant. by direct id" = "white",
+    "Combined tags" = "red"
 )
 write.excel(df, tags, colors, filename = "toto")
 

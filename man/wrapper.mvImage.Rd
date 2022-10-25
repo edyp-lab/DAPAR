@@ -4,7 +4,7 @@
 \alias{wrapper.mvImage}
 \title{Heatmap of missing values from a \code{MSnSet} object}
 \usage{
-wrapper.mvImage(obj, pattern = "missing MEC")
+wrapper.mvImage(obj, pattern = "Missing MEC")
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
@@ -26,7 +26,7 @@ number of missing values. A white square is plotted for missing values.
 data(Exp1_R25_prot, package="DAPARdata")
 obj <- Exp1_R25_prot[seq_len(1000)]
 level <- 'protein'
-metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
 indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 wrapper.mvImage(obj$new)

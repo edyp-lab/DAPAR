@@ -50,7 +50,7 @@ of the heatmap.2 function.
 data(Exp1_R25_prot, package="DAPARdata")
 obj <- Exp1_R25_prot[seq_len(100)]
 level <- 'protein'
-metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
 indices <- GetIndices_WholeLine(metacell.mask)
 obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 qData <- Biobase::exprs(obj$new)

@@ -28,9 +28,9 @@ of class \code{MSnSet}
 \examples{
 data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept[seq_len(10)]
-obj.imp.pov <- wrapper.impute.detQuant(obj, na.type = "missing POV")
-obj.imp.mec <- wrapper.impute.detQuant(obj, na.type = "missing MEC")
-obj.imp.na <- wrapper.impute.detQuant(obj, na.type = "missing")
+obj.imp.pov <- wrapper.impute.detQuant(obj, na.type = "Missing POV")
+obj.imp.mec <- wrapper.impute.detQuant(obj, na.type = "Missing MEC")
+obj.imp.na <- wrapper.impute.detQuant(obj, na.type = "Missing")
 
 }
 \author{

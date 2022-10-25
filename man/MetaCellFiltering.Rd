@@ -40,7 +40,7 @@ at least \code{th} values, and for at least one condition, are kept.
 data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept[seq_len(100)]
 level <- 'peptide'
-metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
 indices <- GetIndices_WholeLine(metacell.mask)
 obj.filter <- MetaCellFiltering(obj, indices, "delete")
 

@@ -23,7 +23,7 @@ This method is a wrapper to the function \code{impute.slsa()} of the package
 \examples{
 data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept[seq_len(100)]
-obj.slsa.pov <- wrapper.impute.slsa(obj, na.type = "missing POV")
+obj.slsa.pov <- wrapper.impute.slsa(obj, na.type = "Missing POV")
 
 }
 \author{

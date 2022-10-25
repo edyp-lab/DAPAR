@@ -74,28 +74,28 @@ metacell.def <- function(level) {
     def <- switch(level,
         peptide = {
             node <- c(
-                "all",
-                "quanti",
-                "identified",
-                "recovered",
-                "missing",
-                "missing POV",
-                "missing MEC",
-                "imputed",
-                "imputed POV",
-                "imputed MEC"
+                "Any",
+                "Quantified",
+                "Quant. by direct id",
+                "Quant. by recovery",
+                "Missing",
+                "Missing POV",
+                "Missing MEC",
+                "Imputed",
+                "Imputed POV",
+                "Imputed MEC"
             )
             parent <- c(
                 "",
-                "all",
-                "quanti",
-                "quanti",
-                "all",
-                "missing",
-                "missing",
-                "all",
-                "imputed",
-                "imputed"
+                "Any",
+                "Quantified",
+                "Quantified",
+                "Any",
+                "Missing",
+                "Missing",
+                "Any",
+                "Imputed",
+                "Imputed"
             )
             data.frame(
                 node = node,
@@ -104,30 +104,30 @@ metacell.def <- function(level) {
         },
         protein = {
             node <- c(
-                "all",
-                "quanti",
-                "identified",
-                "recovered",
-                "missing",
-                "missing POV",
-                "missing MEC",
-                "imputed",
-                "imputed POV",
-                "imputed MEC",
-                "combined"
+                "Any",
+                "Quantified",
+                "Quant. by direct id",
+                "Quant. by recovery",
+                "Missing",
+                "Missing POV",
+                "Missing MEC",
+                "Imputed",
+                "Imputed POV",
+                "Imputed MEC",
+                "Combined tags"
             )
             parent <- c(
                 "",
-                "all",
-                "quanti",
-                "quanti",
-                "all",
-                "missing",
-                "missing",
-                "all",
-                "imputed",
-                "imputed",
-                "all"
+                "Any",
+                "Quantified",
+                "Quantified",
+                "Any",
+                "Missing",
+                "Missing",
+                "Any",
+                "Imputed",
+                "Imputed",
+                "Any"
             )
 
             data.frame(
@@ -139,17 +139,17 @@ metacell.def <- function(level) {
 
 
     colors <- list(
-        "all" = "white",
-        "missing" = "white",
-        "missing POV" = "lightblue",
-        "missing MEC" = "orange",
-        "quanti" = "white",
-        "recovered" = "lightgrey",
-        "identified" = "white",
-        "combined" = "red",
-        "imputed" = "white",
-        "imputed POV" = "#0040FF",
-        "imputed MEC" = "#DF7401"
+        "Any" = "white",
+        "Missing" = "white",
+        "Missing POV" = "lightblue",
+        "Missing MEC" = "orange",
+        "Quantified" = "white",
+        "Quant. by recovery" = "lightgrey",
+        "Quant. by direct id" = "white",
+        "Combined tags" = "red",
+        "Imputed" = "white",
+        "Imputed POV" = "#0040FF",
+        "Imputed MEC" = "#DF7401"
     )
 
     def <- cbind(def, color = rep("white", nrow(def)))
@@ -214,7 +214,10 @@ GetUniqueTags <- function(obj){
 #' @export
 #'
 #'
-GetMetacellTags <- function(level=NULL, obj=NULL, onlyPresent = FALSE, all=FALSE) {
+GetMetacellTags <- function(level = NULL, 
+    obj = NULL, 
+    onlyPresent = FALSE, 
+    all = FALSE) {
     
     if (!onlyPresent && !all){
         if (!is.null(level) && is.null(obj))
@@ -241,21 +244,26 @@ GetMetacellTags <- function(level=NULL, obj=NULL, onlyPresent = FALSE, all=FALSE
     if(onlyPresent) {
         ll <- GetUniqueTags(obj)
         # Check if parent must be added
-        test <- match (Children(level, 'quanti'), ll)
-        if (length(test) == length(Children(level, 'quanti')) && !all(is.na(test)))
-                ll <- c(ll, 'quanti')
-        test <- match (Children(level, 'missing'), ll)
-        if (length(test) == length(Children(level, 'missing')) && !all(is.na(test)))
-            ll <- c(ll, 'missing')
-        test <- match (Children(level, 'imputed'), ll)
-        if (length(test) == length(Children(level, 'imputed')) && !all(is.na(test)))
-            ll <- c(ll, 'imputed')
-        test <- match (Children(level, 'combined'), ll)
-        if (length(test) == length(Children(level, 'combined')) && !all(is.na(test)))
-            ll <- c(ll, 'combined')
-        test <- match (Children(level, 'all'), ll)
-        if (length(test) == length(Children(level, 'all')) && !all(is.na(test)))
-            ll <- c(ll, 'all')
+        test <- match (Children(level, 'Any'), ll)
+        if (length(test) == length(Children(level, 'Any')) && !all(is.na(test)))
+            ll <- c(ll, 'Any')
+        
+        test <- match (Children(level, 'Quantified'), ll)
+        if (length(test) == length(Children(level, 'Quantified')) && !all(is.na(test)))
+                ll <- c(ll, 'Quantified')
+        
+        test <- match (Children(level, 'Missing'), ll)
+        if (length(test) == length(Children(level, 'Missing')) && !all(is.na(test)))
+            ll <- c(ll, 'Missing')
+        
+        test <- match (Children(level, 'Imputed'), ll)
+        if (length(test) == length(Children(level, 'Imputed')) && !all(is.na(test)))
+            ll <- c(ll, 'Imputed')
+        
+        test <- match (Children(level, 'Combined tags'), ll)
+        if (length(test) == length(Children(level, 'Combined tags')) && !all(is.na(test)))
+            ll <- c(ll, 'Combined tags')
+        
         
         
     } else if (all) {
@@ -303,8 +311,8 @@ Set_POV_MEC_tags <- function(conds, df, level) {
     for (i in seq_len(length(u_conds))) {
         ind.samples <- which(conds == u_conds[i])
 
-        ind.imputed <- match.metacell(df[, ind.samples], "imputed", level)
-        ind.missing <- match.metacell(df[, ind.samples], "missing", level)
+        ind.imputed <- match.metacell(df[, ind.samples], "Imputed", level)
+        ind.missing <- match.metacell(df[, ind.samples], "Missing", level)
         ind.missing.pov <- ind.missing & 
             rowSums(ind.missing) < length(ind.samples) & 
             rowSums(ind.missing) > 0
@@ -317,10 +325,10 @@ Set_POV_MEC_tags <- function(conds, df, level) {
         ind.imputed.mec <- ind.imputed & 
             rowSums(ind.imputed) == length(ind.samples)
 
-        df[, ind.samples][ind.imputed.mec] <- "imputed MEC"
-        df[, ind.samples][ind.missing.mec] <- "missing MEC"
-        df[, ind.samples][ind.imputed.pov] <- "imputed POV"
-        df[, ind.samples][ind.missing.pov] <- "missing POV"
+        df[, ind.samples][ind.imputed.mec] <- "Imputed MEC"
+        df[, ind.samples][ind.missing.mec] <- "Missing MEC"
+        df[, ind.samples][ind.imputed.pov] <- "Imputed POV"
+        df[, ind.samples][ind.missing.pov] <- "Missing POV"
     }
     return(df)
 }
@@ -336,7 +344,7 @@ Set_POV_MEC_tags <- function(conds, df, level) {
 #' - Proline-like where the info which is used is an integer
 #'
 #' @param from A string which is the name of the software from which the data
-#' are. Available values are 'maxquant' and 'proline'
+#' are. Available values are 'maxquant', 'proline' and 'DIA-NN'
 #'
 #' @param level xxx
 #'
@@ -383,6 +391,8 @@ BuildMetaCell <- function(from,
     if (missing(from)) {
         stop("'from' is required.")
     }
+    if (!(from %in% c('maxquant', 'proline', 'DIA-NN')))
+        stop("'from' must be one of the following")
     if (missing(level)) {
         stop("'level' is required.")
     }
@@ -399,7 +409,8 @@ BuildMetaCell <- function(from,
     } else {
         switch(from,
             maxquant = df <- Metacell_maxquant(qdata, conds, df, level),
-            proline = df <- Metacell_proline(qdata, conds, df, level)
+            proline = df <- Metacell_proline(qdata, conds, df, level),
+          'DIA-NN' = df <- Metacell_proline(qdata, conds, df, level)
         )
     }
 
@@ -462,7 +473,7 @@ Metacell_generic <- function(qdata, conds, level) {
     }
 
     df <- data.frame(
-        matrix(rep("quanti", nrow(qdata) * ncol(qdata)),
+        matrix(rep("Quantified", nrow(qdata) * ncol(qdata)),
             nrow = nrow(qdata),
             ncol = ncol(qdata)
             ),
@@ -471,7 +482,7 @@ Metacell_generic <- function(qdata, conds, level) {
 
     # Rule 1
     qdata[qdata == 0] <- NA
-    df[is.na(qdata)] <- "missing"
+    df[is.na(qdata)] <- "Missing"
     df <- Set_POV_MEC_tags(conds, df, level)
 
     colnames(df) <- paste0("metacell_", colnames(qdata))
@@ -479,6 +490,64 @@ Metacell_generic <- function(qdata, conds, level) {
 
     return(df)
 }
+
+
+
+
+
+
+
+#' @title Sets the metacell dataframe for datasets which are from Dia-NN software
+#'
+#' @description
+#' Actually, this function uses the generic function to generate metacell info
+#' 
+#' @param qdata An object of class \code{MSnSet}
+#'
+#' @param conds xxx
+#'
+#' @param df A list of integer xxxxxxx
+#'
+#' @param level xxx
+#'
+#' @return xxxxx
+#'
+#' @author Samuel Wieczorek
+#'
+#' @examples
+#' file <- system.file("extdata", "Exp1_R25_pept.txt", package = "DAPARdata")
+#' data <- read.table(file, header = TRUE, sep = "\t", stringsAsFactors = FALSE)
+#' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt",
+#'     package = "DAPARdata"
+#' )
+#' metadata <- read.table(metadataFile,
+#'     header = TRUE, sep = "\t", as.is = TRUE,
+#'     stringsAsFactors = FALSE
+#' )
+#' conds <- metadata$Condition
+#' qdata <- data[seq_len(100), seq.int(from = 56, to = 61)]
+#' df <- data[seq_len(100), seq.int(from = 43, to = 48)]
+#' df <- Metacell_DIA_NN(qdata, conds, df, level = "peptide")
+#' 
+#'
+#' @export
+#'
+#'
+Metacell_DIA_NN <- function(qdata, conds, df, level = NULL) {
+    if (missing(qdata)) {
+        stop("'qdata' is required")
+    }
+    if (missing(conds)) {
+        stop("'conds' is required.")
+    }
+    if (missing(level)) {
+        stop("'level' is required.")
+    }
+    
+    
+    return(df)
+}
+
 
 
 
@@ -547,7 +616,7 @@ Metacell_proline <- function(qdata, conds, df, level = NULL) {
 
 
     if (is.null(df)) {
-        df <- data.frame(matrix(rep("quanti", nrow(qdata) * ncol(qdata)),
+        df <- data.frame(matrix(rep("Quantified", nrow(qdata) * ncol(qdata)),
             nrow = nrow(qdata),
             ncol = ncol(qdata)
         ),
@@ -556,14 +625,14 @@ Metacell_proline <- function(qdata, conds, df, level = NULL) {
     }
 
     # Rule 1
-    df[is.na(qdata)] <- "missing"
+    df[is.na(qdata)] <- "Missing"
     df <- Set_POV_MEC_tags(conds, df, level)
 
     # Rule 2
-    df[df > 0 & qdata > 0] <- "identified"
+    df[df > 0 & qdata > 0] <- "Quant. by direct id"
 
     # Rule 3
-    df[df == 0 & qdata > 0] <- "recovered"
+    df[df == 0 & qdata > 0] <- "Quant. by recovery"
 
     colnames(df) <- paste0("metacell_", colnames(qdata))
     colnames(df) <- gsub(".", "_", colnames(df), fixed = TRUE)
@@ -631,7 +700,7 @@ Metacell_maxquant <- function(qdata, conds, df, level = NULL) {
 
     if (is.null(df)) {
         df <- data.frame(matrix(rep(
-            "quanti",
+            "Quantified",
             nrow(qdata) * ncol(qdata)
         ),
         nrow = nrow(qdata),
@@ -646,13 +715,13 @@ Metacell_maxquant <- function(qdata, conds, df, level = NULL) {
     qdata[qdata == 0] <- NA
 
     # Rule 2
-    df[df == "byms/ms"] <- "identified"
+    df[df == "byms/ms"] <- "Quant. by direct id"
 
     # Rule 3
-    df[df == "bymatching"] <- "recovered"
+    df[df == "bymatching"] <- "Quant. by recovery"
 
     # Add details for NA values
-    df[is.na(qdata)] <- "missing"
+    df[is.na(qdata)] <- "Missing"
     df <- Set_POV_MEC_tags(conds, df, level)
 
     colnames(df) <- paste0("metacell_", colnames(qdata))
@@ -679,7 +748,7 @@ Metacell_maxquant <- function(qdata, conds, df, level = NULL) {
 #' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10), ]
 #' metadata <- GetMetacell(obj)
-#' m <- match.metacell(metadata, pattern = "missing", level = "peptide")
+#' m <- match.metacell(metadata, pattern = "Missing", level = "peptide")
 #'
 #' @export
 #'
@@ -773,7 +842,7 @@ UpdateMetacell <- function(obj, method = "", na.type) {
     }
     if (missing(na.type)) {
         values <- unname(search.metacell.tags(
-            "missing",
+            "Missing",
             obj@experimentData@other$typeOfData
         ))
         stop(
@@ -791,8 +860,8 @@ UpdateMetacell <- function(obj, method = "", na.type) {
     ) & !is.na(Biobase::exprs(obj))
 
     Biobase::fData(obj)[, .meta][ind] <- 
-        gsub("missing",
-        "imputed",
+        gsub("Missing",
+        "Imputed",
         Biobase::fData(obj)[, .meta][ind],
         fixed = TRUE
     )
@@ -816,8 +885,8 @@ UpdateMetacell <- function(obj, method = "", na.type) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' search.metacell.tags("missing POV", "peptide")
-#' search.metacell.tags("quanti", "peptide")
+#' search.metacell.tags("Missing POV", "peptide")
+#' search.metacell.tags("Quantified", "peptide")
 #'
 #' @export
 #' 

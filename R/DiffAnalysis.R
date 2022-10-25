@@ -32,7 +32,7 @@
 #' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(1000)]
 #' level <- 'protein'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 #' qData <- Biobase::exprs(obj$new)
@@ -82,7 +82,7 @@ diffAnaComputeFDR <- function(logFC,
 #' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(1000)]
 #' level <- GetTypeofData(obj)
-#' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 #' qData <- Biobase::exprs(obj$new)
@@ -151,7 +151,7 @@ Get_AllComparisons <- function(obj) {
 #' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(100)]
 #' level <- 'protein'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 #' qData <- Biobase::exprs(obj$new)
@@ -239,7 +239,7 @@ diffAnaSave <- function(obj,
 #' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(100)]
 #' level <- 'protein'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 #' qData <- Biobase::exprs(obj$new)
@@ -288,7 +288,7 @@ diffAnaGetSignificant <- function(obj) {
 #' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(100)]
 #' level <- 'protein'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 #' qData <- Biobase::exprs(obj$new)
@@ -330,7 +330,7 @@ wrapperCalibrationPlot <- function(vPVal, pi0Method = "pounds") {
 #' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(100)]
 #' level <- 'protein'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 #' qData <- Biobase::exprs(obj$new)

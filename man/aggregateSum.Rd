@@ -23,7 +23,7 @@ intensities of their peptides.
 \examples{
 data(Exp1_R25_pept, package="DAPARdata")
 obj.pep <- Exp1_R25_pept[seq_len(20)]
-obj.pep.imp <- wrapper.impute.detQuant(obj.pep, na.type = "missing")
+obj.pep.imp <- wrapper.impute.detQuant(obj.pep, na.type = "Missing")
 protID <- "Protein_group_IDs"
 X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 ll.agg <- aggregateSum(obj.pep.imp, X)

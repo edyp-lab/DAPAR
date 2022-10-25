@@ -18,7 +18,7 @@
 #' @examples
 #' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10), ]
-#' metacellPerLinesHisto_HC(obj, pattern = "missing")
+#' metacellPerLinesHisto_HC(obj, pattern = "Missing")
 #'
 #' @export
 #'
@@ -135,8 +135,8 @@ metacellPerLinesHisto_HC <- function(obj,
 #' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept
 #' pal <- ExtendPalette(length(unique(Biobase::pData(obj)$Condition)), "Dark2")
-#' metacellPerLinesHistoPerCondition_HC(obj, "missing", pal = pal)
-#' metacellPerLinesHistoPerCondition_HC(obj, "quanti")
+#' metacellPerLinesHistoPerCondition_HC(obj, "Missing", pal = pal)
+#' metacellPerLinesHistoPerCondition_HC(obj, "Quantified")
 #'
 #' @export
 #'
@@ -273,7 +273,7 @@ metacellPerLinesHistoPerCondition_HC <- function(obj,
 #' @examples
 #' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept
-#' pattern <- "missing POV"
+#' pattern <- "Missing POV"
 #' pal <- ExtendPalette(2, "Dark2")
 #' metacellHisto_HC(obj, pattern, showValues = TRUE, pal = pal)
 #'
@@ -379,7 +379,7 @@ metacellHisto_HC <- function(obj,
 #' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(1000)]
 #' level <- 'protein'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "missing", level)
+#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 #' wrapper.mvImage(obj$new)
@@ -387,7 +387,7 @@ metacellHisto_HC <- function(obj,
 #' @export
 #'
 #'
-wrapper.mvImage <- function(obj, pattern = "missing MEC") {
+wrapper.mvImage <- function(obj, pattern = "Missing MEC") {
     if (missing(obj)) {
         stop("'obj' is required.")
     } else if (is.null(obj)) {
@@ -527,7 +527,7 @@ mvImage <- function(qData, conds) {
 #' obj <- Exp1_R25_pept[seq_len(100)]
 #' conds <- Biobase::pData(obj)$Condition
 #' pal <- ExtendPalette(length(unique(conds)), "Dark2")
-#' hc_mvTypePlot2(obj, pattern = "missing MEC", title = "POV distribution", 
+#' hc_mvTypePlot2(obj, pattern = "Missing MEC", title = "POV distribution", 
 #' pal = pal)
 #'
 #' @import highcharter

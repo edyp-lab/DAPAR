@@ -21,7 +21,7 @@ Put back LAPALA into  a \code{MSnSet} object
 data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept[seq_len(100)]
 lapala <- findMECBlock(obj)
-obj <- wrapper.impute.detQuant(obj, na.type = "missing")
+obj <- wrapper.impute.detQuant(obj, na.type = "Missing")
 obj <- reIntroduceMEC(obj, lapala)
 
 }

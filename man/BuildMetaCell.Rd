@@ -8,7 +8,7 @@ BuildMetaCell(from, level, qdata = NULL, conds = NULL, df = NULL)
 }
 \arguments{
 \item{from}{A string which is the name of the software from which the data
-are. Available values are 'maxquant' and 'proline'}
+are. Available values are 'maxquant', 'proline' and 'DIA-NN'}
 
 \item{level}{xxx}
 
