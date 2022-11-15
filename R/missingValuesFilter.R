@@ -695,7 +695,7 @@ GetIndices_MetacellFiltering <- function(
         stop("'pattern' is required.")
     }
     if (missing(type)) {
-        tsop("'type' is required.")
+        stop("'type' is required.")
     }
     if (missing(percent)) {
         stop("'percent' is required.")
