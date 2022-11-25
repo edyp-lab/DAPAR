@@ -335,10 +335,17 @@ Set_POV_MEC_tags <- function(conds, df, level) {
 
 
 
-
+#' @title The set of softwares available
+#' 
+#' @examples 
+#' GetSoftAvailables()
 #' @export
 
 GetSoftAvailables <- function(){
+    
+    
+    library(DAPAR)
+    
     funcs <- ls('package:DAPAR')
     funcs <- funcs[grep('Metacell_', funcs)]
     funcs <- strsplit(funcs, 'Metacell_')

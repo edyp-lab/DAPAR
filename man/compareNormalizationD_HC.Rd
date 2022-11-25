@@ -12,7 +12,7 @@ compareNormalizationD_HC(
   conds = NULL,
   pal = NULL,
   subset.view = NULL,
-  n = NULL,
+  n = 1,
   type = "scatter"
 )
 }
@@ -57,13 +57,14 @@ method = "QuantileCentering",
 conds = conds, type = "within conditions"
 )
 
+n <- 1
 compareNormalizationD_HC(
 qDataBefore = qDataBefore,
 qDataAfter = Biobase::exprs(objAfter), 
 keyId = id, 
 pal = pal, 
-n = 4,
-subset.view = seq_len(4),
+n = n,
+subset.view = seq_len(n),
 conds = conds)
 
 }

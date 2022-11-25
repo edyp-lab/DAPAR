@@ -84,13 +84,15 @@ violinPlotD <- function(obj,
 
     myColors <- NULL
     if (is.null(pal)) {
-        myColors <- GetColorsForConditions(conds, 
+        warning("Color palette set to default.")
+        myColors <- GetColorsForConditions(conds,
             ExtendPalette(length(unique(conds))))
     } else {
         if (length(pal) != length(unique(conds))) {
-            warning("The color palette has not the same dimension as the 
-                number of samples")
-            return(NULL)
+            warning("The color palette has not the same dimension as
+                the number of samples")
+            myColors <- GetColorsForConditions(conds,
+                ExtendPalette(length(unique(conds))))
         } else {
             myColors <- GetColorsForConditions(conds, pal)
         }
