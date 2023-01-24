@@ -33,128 +33,113 @@
 #' @export
 #'
 compute_t_tests <- function(obj, contrast = "OnevsOne", type = "Student") {
+  
+  if (!requireNamespace("stats", quietly = TRUE)) {
+    stop("Please install stats: BiocManager::install('stats')")
+  }
+  
+  
+  switch(type,
+         Student = .type <- TRUE,
+         Welch = .type <- FALSE
+  )
+  
+  
+  qData <- Biobase::exprs(obj)
+  sTab <- Biobase::pData(obj)
+  res <- list()
+  logFC <- list()
+  P_Value <- list()
+  
+  nbComp <- NULL
+  
+  #sTab.old <- sTab
+  Conditions.f <- factor(sTab$Condition, levels = unique(sTab$Condition))
+  #sTab <- sTab[unlist(lapply(split(sTab, Conditions.f), function(x) {x["Sample.name"]})), ]
+  #qData <- qData[, unlist(lapply(split(sTab.old, Conditions.f), function(x) { x["Sample.name"]}))]
+  Conditions <- sTab$Condition
+  
+  
+  # Cond<-levels(Conditions.f)
+  Cond.Nb <- length(levels(Conditions.f))
+  
+  
+  if (contrast == "OnevsOne") {
+    res.tmp <- NULL
+    nbComp <- Cond.Nb * (Cond.Nb - 1) / 2
     
-    if (!requireNamespace("stats", quietly = TRUE)) {
-        stop("Please install stats: BiocManager::install('stats')")
+    for (i in seq_len(Cond.Nb - 1)) {
+      for (j in seq.int(from = (i + 1), to = Cond.Nb)) {
+        
+        c1Indice <- which(Conditions == levels(Conditions.f)[i])
+        c2Indice <- which(Conditions == levels(Conditions.f)[j])
+        
+        res.tmp <- apply(
+          qData[, c(c1Indice, c2Indice)], 1,
+          function(x) {
+            stats::t.test(x ~ Conditions[c(c1Indice, c2Indice)], var.equal = .type)
+          }
+        )
+        p.tmp <- unlist(lapply(res.tmp, function(x) x$p.value))
+        m1.tmp <- unlist(lapply(res.tmp, function(x) as.numeric(x$estimate[1])))
+        m2.tmp <- unlist(lapply(res.tmp, function(x) as.numeric(x$estimate[2])))
+        m1.name <- names(unlist(lapply(res.tmp, function(x) x$estimate[1])))[1]
+        m2.name <- names(unlist(lapply(res.tmp, function(x) x$estimate[2])))[1]
+        logFC.tmp <- m1.tmp - m2.tmp
+        
+        #if (grepl(levels(Conditions.f)[i], m2.name)) {
+        #     logFC.tmp <- -logFC.tmp
+        # }
+        
+        txt <- paste(levels(Conditions.f)[i], "_vs_", 
+                     levels(Conditions.f)[j], sep = "")
+        
+        logFC[[paste(txt, "logFC", sep = "_")]] <- logFC.tmp
+        P_Value[[paste(txt, "pval", sep = "_")]] <- p.tmp
+      }
     }
+  } ## end Contrast==1
+  
+  if (contrast == "OnevsAll") {
+    nbComp <- Cond.Nb
     
-    
-    switch(type,
-        Student = .type <- TRUE,
-        Welch = .type <- FALSE
-    )
-
-
-    qData <- Biobase::exprs(obj)
-    sTab <- Biobase::pData(obj)
-    res <- list()
-    logFC <- list()
-    P_Value <- list()
-
-    nbComp <- NULL
-
-    sTab.old <- sTab
-    Conditions.f <- factor(sTab$Condition, levels = unique(sTab$Condition))
-    sTab <- sTab[unlist(lapply(split(sTab, Conditions.f), function(x) {
-        x["Sample.name"]
-    })), ]
-    qData <- qData[, unlist(lapply(split(sTab.old, Conditions.f), function(x) {
-        x["Sample.name"]
-    }))]
-    Conditions <- sTab$Condition
-
-
-    # Cond<-levels(Conditions.f)
-    Cond.Nb <- length(levels(Conditions.f))
-
-
-    if (contrast == "OnevsOne") {
-        nbComp <- Cond.Nb * (Cond.Nb - 1) / 2
-
-        for (i in seq_len(Cond.Nb - 1)) {
-            for (j in seq.int(from = (i + 1), to = Cond.Nb)) {
-                c1Indice <- which(Conditions == levels(Conditions.f)[i])
-                c2Indice <- which(Conditions == levels(Conditions.f)[j])
-
-                res.tmp <- apply(
-                    qData[, c(c1Indice, c2Indice)], 1,
-                    function(x) {
-                        stats::t.test(x ~ Conditions[c(c1Indice, c2Indice)], 
-                            var.equal = .type)
-                    }
-                )
-                p.tmp <- unlist(lapply(res.tmp, 
-                    function(x) x$p.value))
-                m1.tmp <- unlist(lapply(res.tmp, 
-                    function(x) as.numeric(x$estimate[1])))
-                m2.tmp <- unlist(lapply(res.tmp, 
-                    function(x) as.numeric(x$estimate[2])))
-                m1.name <- names(unlist(lapply(res.tmp, 
-                    function(x) x$estimate[1])))[1]
-                m2.name <- names(unlist(lapply(res.tmp, 
-                    function(x) x$estimate[2])))[1]
-                logFC.tmp <- m1.tmp - m2.tmp
-
-                if (grepl(levels(Conditions.f)[i], m2.name)) {
-                    logFC.tmp <- -logFC.tmp
-                }
-
-                txt <- paste(levels(Conditions.f)[i], "_vs_", 
-                    levels(Conditions.f)[j], sep = "")
-
-                logFC[[paste(txt, "logFC", sep = "_")]] <- logFC.tmp
-                P_Value[[paste(txt, "pval", sep = "_")]] <- p.tmp
-            }
-        }
-    } ## end Contrast==1
-
-    if (contrast == "OnevsAll") {
-        nbComp <- Cond.Nb
-
-        for (i in seq_len(nbComp)) {
-            c1 <- which(Conditions == levels(Conditions.f)[i])
-
-            Cond.t.all <- seq_len(length(Conditions))
-            Cond.t.all[c1] <- levels(Conditions.f)[i]
-            Cond.t.all[-c1] <- "all"
-
-            res.tmp <- apply(
-                qData, 1,
-                function(x) {
-                    stats::t.test(x ~ Cond.t.all, var.equal = .type)
-                }
-            )
-
-            p.tmp <- unlist(lapply(res.tmp, 
-                function(x) x$p.value))
-            m1.tmp <- unlist(lapply(res.tmp, 
-                function(x) as.numeric(x$estimate[1])))
-            m2.tmp <- unlist(lapply(res.tmp, 
-                function(x) as.numeric(x$estimate[2])))
-            m1.name <- names(unlist(lapply(res.tmp, 
-                function(x) x$estimate[1])))[1]
-            m2.name <- names(unlist(lapply(res.tmp, 
-                function(x) x$estimate[2])))[1]
-            logFC.tmp <- m1.tmp - m2.tmp
-            if (grepl(levels(Conditions.f)[i], m2.name)) {
-                logFC.tmp <- -logFC.tmp
-            }
-
-            txt <- paste(levels(Conditions.f)[i], "_vs_(all-", 
-                levels(Conditions.f)[i], ")", sep = "")
-
-            logFC[[paste(txt, "logFC", sep = "_")]] <- logFC.tmp
-            P_Value[[paste(txt, "pval", sep = "_")]] <- p.tmp
-        }
-    } # End Contrast=2
-
-
-    res.l <- list(
-        logFC = as.data.frame(logFC),
-        P_Value = as.data.frame(P_Value)
-    )
-    colnames(res.l$logFC) <- names(logFC)
-    colnames(res.l$P_Value) <- names(P_Value)
-
-    return(res.l)
+    for (i in seq_len(nbComp)) {
+      c1 <- which(Conditions == levels(Conditions.f)[i])
+      
+      Cond.t.all <- seq_len(length(Conditions))
+      Cond.t.all[c1] <- levels(Conditions.f)[i]
+      Cond.t.all[-c1] <- "all"
+      
+      res.tmp <- apply(qData, 1,function(x) {
+        stats::t.test(x ~ Cond.t.all, var.equal = .type)
+      }
+      )
+      
+      p.tmp <- unlist(lapply(res.tmp, function(x) x$p.value))
+      m1.tmp <- unlist(lapply(res.tmp, function(x) as.numeric(x$estimate[1])))
+      m2.tmp <- unlist(lapply(res.tmp, function(x) as.numeric(x$estimate[2])))
+      m1.name <- names(unlist(lapply(res.tmp, function(x) x$estimate[1])))[1]
+      m2.name <- names(unlist(lapply(res.tmp, function(x) x$estimate[2])))[1]
+      logFC.tmp <- m1.tmp - m2.tmp
+      #if (grepl(levels(Conditions.f)[i], m2.name)) {
+      #    logFC.tmp <- -logFC.tmp
+      #}
+      
+      txt <- paste(levels(Conditions.f)[i], "_vs_(all-", 
+                   levels(Conditions.f)[i], ")", sep = "")
+      
+      logFC[[paste(txt, "logFC", sep = "_")]] <- logFC.tmp
+      P_Value[[paste(txt, "pval", sep = "_")]] <- p.tmp
+    }
+  } # End Contrast=2
+  
+  
+  res.l <- list(
+    logFC = as.data.frame(logFC),
+    P_Value = as.data.frame(P_Value)
+  )
+  colnames(res.l$logFC) <- names(logFC)
+  colnames(res.l$P_Value) <- names(P_Value)
+  
+  return(res.l)
 }
