@@ -7,26 +7,20 @@ Description: The package DAPAR is a Bioconductor distributed R package which
     Contrarily to most other similar R packages, it is endowed with rich and 
     user-friendly graphical interfaces, so that no programming skill is 
     required (see `Prostar` package).
-Version: 1.30.2
-Date: 2022-11-25
+Version: 1.30.3
+Date: 2023-01-24
 Authors@R: c(person(given = "Samuel", family = "Wieczorek",
-            email = "samuel.wieczorek@cea.fr",
-    role = c("aut","cre")),
+            email = "samuel.wieczorek@cea.fr", role = c("aut","cre")),
             person(given = "Florence", family ="Combes",
-            email = "florence.combes@cea.fr",
-    role = "aut"),
+            email = "florence.combes@cea.fr", role = "aut"),
             person(given = "Thomas", family ="Burger",
-            email = "thomas.burger@cea.fr",
-    role = "aut"),
+            email = "thomas.burger@cea.fr", role = "aut"),
             person(given = "Vasile-Cosmin", family ="Lazar",
-            email = "vcosminlazar@gmail.com",
-    role = "ctb"),
+            email = "vcosminlazar@gmail.com", role = "ctb"),
 		person(given = "Enora", family ="Fremy",
-            email = "enora.fremy@cea.fr",
-    role = "ctb"),
+            email = "enora.fremy@cea.fr", role = "ctb"),
     	person(given = "Helene", family ="Borges",
-            email = "helene.borges@cea.fr",
-    role = "ctb"))
+            email = "helene.borges@cea.fr", role = "ctb"))
 License: Artistic-2.0
 VignetteBuilder: knitr
 Depends: R (>= 4.2.0)
