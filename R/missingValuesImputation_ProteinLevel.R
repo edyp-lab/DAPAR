@@ -125,18 +125,20 @@ wrapper.impute.KNN <- function(obj = NULL, K, na.type) {
 
     for (cond in seq_len(nbCond)) {
         ind <- which(Biobase::pData(obj)$Condition == conditions[cond])
-        resKNN <- impute::impute.knn(
-            Biobase::exprs(obj)[, ind], 
-            k = K, 
-            rowmax = 0.99, 
-            colmax = 0.99, 
-            maxp = 1500, 
-            rng.seed = sample(seq_len(1000), 1)
-            )
+        resKNN <- impute::impute.knn(Biobase::exprs(obj)[, ind],
+                                     k = K, 
+                                     rowmax = 0.99, 
+                                     colmax = 0.99, 
+                                     maxp = 1500,
+                                     rng.seed = sample(seq_len(1000), 1)
+                                     )
         Biobase::exprs(obj)[, ind] <- resKNN[[1]]
     }
 
     Biobase::exprs(obj)[Biobase::exprs(obj) == 0] <- NA
+    Biobase::exprs(obj)[Biobase::fData(obj)[,obj@experimentData@other$names_metacell] == 'Missing MEC'] <- NA
+    
+    # Transform all previously tagged 'na.type' as 'Imputed'
     obj <- UpdateMetacell(obj, "knn", na.type)
 
     return(obj)
