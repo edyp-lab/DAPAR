@@ -18,8 +18,9 @@ of missing
 values.
 }
 \description{
-#' This method is a wrapper to the function \code{impute.mle()} of the 
+This method is a wrapper to the function \code{impute.mle()} of the 
 package \code{imp4p} adapted to an object of class \code{MSnSet}.
+It does not impute MEC missing values.
 }
 \examples{
 utils::data(Exp1_R25_pept, package = "DAPARdata")

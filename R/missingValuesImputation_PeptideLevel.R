@@ -4,8 +4,9 @@
 #' @title Imputation of peptides having no values in a biological condition.
 #' 
 #' @description 
-#' #' This method is a wrapper to the function \code{impute.mle()} of the 
+#' This method is a wrapper to the function \code{impute.mle()} of the 
 #' package \code{imp4p} adapted to an object of class \code{MSnSet}.
+#' It does not impute MEC missing values.
 #'
 #'
 #' @param obj An object of class \code{MSnSet}.
