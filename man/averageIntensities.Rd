@@ -29,8 +29,7 @@ level <- 'protein'
 metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
 indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 obj <- MetaCellFiltering(obj, indices, cmd = "delete")
-avgInt <- averageIntensities(obj$new)
-
+averageIntensities(obj$new)
 }
 \author{
 Helene Borges

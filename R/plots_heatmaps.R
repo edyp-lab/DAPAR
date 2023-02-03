@@ -96,29 +96,8 @@ heatmapD <- function(qData,
     cluster = "complete",
     dendro = FALSE) {
     
-    if (!requireNamespace("stats", quietly = TRUE)) {
-        stop("Please install stats: BiocManager::install('stats')")
-    }
+    pkgs.require(c('stats', 'dendextend', "gplots", 'grDevices', 'RColorBrewer'))
     
-    
-    if (!requireNamespace("dendextend", quietly = TRUE)) {
-        stop("Please install dendextend: BiocManager::install('dendextend')")
-    }
-
-    if (!requireNamespace("gplots", quietly = TRUE)) {
-        stop("Please install gplots: BiocManager::install('gplots')")
-    }
-    
-    if (!requireNamespace("grDevices", quietly = TRUE)) {
-        stop("Please install grDevices: BiocManager::install('grDevices')")
-    }
-    
-    
-    
-    if (!requireNamespace("RColorBrewer", quietly = TRUE)) {
-        stop("Please install RColorBrewer: 
-            BiocManager::install('RColorBrewer')")
-    }
     
     .data <- matrix(qData,
         ncol = ncol(qData),
@@ -237,14 +216,8 @@ heatmapForMissingValues <- function(x,
     main = NULL,
     ylab = NULL) {
         
-        if (!requireNamespace("grDevices", quietly = TRUE)) {
-            stop("Please install grDevices: BiocManager::install('grDevices')")
-        }
-        if (!requireNamespace("graphics", quietly = TRUE)) {
-            stop("Please install graphics: BiocManager::install('graphics')")
-        }
-        
-        
+    pkgs.require(c('grDevices', 'graphics'))
+
         if (is.null(col))
             col <- grDevices::heat.colors(100)
         

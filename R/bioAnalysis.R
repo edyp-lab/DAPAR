@@ -42,17 +42,10 @@
 #' @export
 #'
 group_GO <- function(data, idFrom, orgdb, ont, level, readable = FALSE) {
-    if (!requireNamespace("clusterProfiler", quietly = TRUE)) {
-        stop("Please install clusterProfiler: 
-            BiocManager::install('clusterProfiler')")
-    }
-
+    
     pkg.orgdb <- as.character(orgdb)
-    if (!requireNamespace(as.character(orgdb), quietly = TRUE)) {
-        .txt <- paste0("Please install ", orgdb, ": 
-            BiocManager::install('", orgdb, "')")
-        stop(.txt)
-    }
+
+    pkgs.require(c('clusterProfiler', as.character(orgdb)))
     
     if (idFrom == "UNIPROT") {
         gene <- clusterProfiler::bitr(
@@ -135,10 +128,8 @@ enrich_GO <- function(
     readable = FALSE, 
     pval, 
     universe) {
-    if (!requireNamespace("clusterProfiler", quietly = TRUE)) {
-        stop("Please install clusterProfiler: 
-            BiocManager::install('clusterProfiler')")
-    }
+    
+    pkgs.require('clusterProfiler')
 
     tmp <- which(is.na(data))
     if (length(tmp) > 0) {
@@ -201,16 +192,9 @@ enrich_GO <- function(
 #' univ_AnnotDbPkg("org.Sc.sgd.db")
 #'
 univ_AnnotDbPkg <- function(orgdb) {
-    if (!requireNamespace("AnnotationDbi", quietly = TRUE)) {
-        stop("Please install AnnotationDbi: 
-            BiocManager::install('AnnotationDbi')")
-    }
     
-    if (!requireNamespace(as.character(orgdb), quietly = TRUE)) {
-        .txt <- paste0("Please install ", orgdb, ": 
-            BiocManager::install('", orgdb, "')")
-        stop(.txt)
-    }
+    pkgs.require(c('AnnotationDbi', as.character(orgdb)))
+    
     
     univ <- AnnotationDbi::keys(get(orgdb), keytype = "ENTREZID")
     # different syntax for 'org.Pf.plasmo.db' package
@@ -402,10 +386,7 @@ barplotGroupGO_HC <- function(ggo, maxRes = 5, title = "") {
 #'
 barplotEnrichGO_HC <- function(ego, maxRes = 5, title = NULL) {
     
-    if (!requireNamespace("dplyr", quietly = TRUE)) {
-        stop("Please install dplyr: BiocManager::install('dplyr')")
-    }
-    
+    pkgs.require('dplyr')
     
     if (is.null(ego)) {
         return(NULL)
@@ -512,9 +493,7 @@ scatterplotEnrichGO_HC <- function(ego, maxRes = 10, title = NULL) {
     if (is.null(ego))
         return(NULL)
     
-    if (!requireNamespace("grDevices", quietly = TRUE)) {
-        stop("Please install grDevices: BiocManager::install('grDevices')")
-    }
+    pkgs.require('grDevices')
     
     dat <- ego@result
     nRes <- min(maxRes, nrow(dat))

@@ -318,9 +318,8 @@ make.design.1 <- function(sTab) {
 #' @export
 #'
 make.design.2 <- function(sTab) {
-    if (!requireNamespace("stats", quietly = TRUE)) {
-        stop("Please install stats: BiocManager::install('stats')")
-    }
+    pkgs.require('stats')
+    
     
     Condition <- factor(sTab$Condition, levels = unique(sTab$Condition))
     RepBio <- factor(sTab$Bio.Rep, levels = unique(sTab$Bio.Rep))
@@ -378,9 +377,7 @@ make.design.2 <- function(sTab) {
 #'
 make.design.3 <- function(sTab) {
     
-    if (!requireNamespace("stats", quietly = TRUE)) {
-        stop("Please install stats: BiocManager::install('stats')")
-    }
+    pkgs.require('stats')
     
     Condition <- factor(sTab$Condition, levels = unique(sTab$Condition))
     RepBio <- factor(sTab$Bio.Rep, levels = unique(sTab$Bio.Rep))
@@ -545,17 +542,7 @@ make.contrast <- function(design, condition, contrast = 1) {
 #'
 limmaCompleteTest <- function(qData, sTab, comp.type = "OnevsOne") {
 
-    if (!requireNamespace("dplyr", quietly = TRUE)) {
-        stop("Please install dplyr: BiocManager::install('dplyr')")
-    }
-    
-    if (!requireNamespace("limma", quietly = TRUE)) {
-        stop("Please install limma: BiocManager::install('limma')")
-    }
-    
-    if (!requireNamespace("tidyr", quietly = TRUE)) {
-        stop("Please install tidyr: BiocManager::install('tidyr')")
-    }
+    pkgs.require(c('dplyr', 'limma', 'tidyr'))
     
     switch(comp.type,
         OnevsOne = contrast <- 1,
@@ -651,9 +638,8 @@ limmaCompleteTest <- function(qData, sTab, comp.type = "OnevsOne") {
 #' limma <- limmaCompleteTest(qData, sTab)
 #'
 formatLimmaResult <- function(fit, conds, contrast) {
-    if (!requireNamespace("stringr", quietly = TRUE)) {
-        stop("Please install stringr: BiocManager::install('stringr')")
-    }
+    pkgs.require('stringr')
+    
     
     res <- cbind(fit$coefficients, fit$p.value)
 

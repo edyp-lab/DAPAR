@@ -103,9 +103,8 @@ reIntroduceMEC <- function(obj, MECIndex) {
 #'
 wrapper.impute.KNN <- function(obj = NULL, K, na.type) {
 
-    if (!requireNamespace("impute", quietly = TRUE)) {
-        stop("Please install impute: BiocManager::install('impute')")
-    }
+    pkgs.require('impute')
+    
     
     if (missing(obj)) {
         stop("'obj' is required.")
@@ -238,9 +237,8 @@ wrapper.impute.fixedValue <- function(obj, fixVal = 0, na.type) {
 #'
 wrapper.impute.pa <- function(obj = NULL, q.min = 0.025, na.type) {
     
-    if (!requireNamespace("imp4p", quietly = TRUE)) {
-        stop("Please install imp4p: BiocManager::install('imp4p')")
-    }
+    pkgs.require('imp4p')
+    
     
     
     if (is.null(obj)) {
@@ -384,9 +382,7 @@ wrapper.impute.detQuant <- function(obj, qval = 0.025, factor = 1, na.type) {
 #'
 getQuantile4Imp <- function(qdata, qval = 0.025, factor = 1) {
     
-    if (!requireNamespace("stats", quietly = TRUE)) {
-        stop("Please install stats: BiocManager::install('stats')")
-    }
+    pkgs.require('stats')
     
     r1 <- apply(qdata, 2, stats::quantile, qval, na.rm = TRUE)
     r2 <- r1 * factor
@@ -423,9 +419,8 @@ getQuantile4Imp <- function(qdata, qval = 0.025, factor = 1) {
 #'
 wrapper.impute.slsa <- function(obj = NULL, na.type = NULL) {
     
-    if (!requireNamespace("imp4p", quietly = TRUE)) {
-        stop("Please install imp4p: BiocManager::install('imp4p')")
-    }
+    pkgs.require('imp4p')
+    
     
     
     if (is.null(obj)) {

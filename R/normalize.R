@@ -123,10 +123,8 @@ wrapper.normalizeD <- function(obj, method, withTracking = FALSE, ...) {
 #'
 GlobalQuantileAlignment <- function(qData) {
     
-    if (!requireNamespace("preprocessCore", quietly = TRUE)) {
-        stop("Please install preprocessCore: 
-            BiocManager::install('preprocessCore')")
-    }
+    pkgs.require('preprocessCore')
+    
     e <- preprocessCore::normalize.quantiles(as.matrix(qData))
     return(e)
 }
@@ -166,9 +164,7 @@ SumByColumns <- function(qData,
     type = NULL,
     subset.norm = NULL) {
     
-    if (!requireNamespace("stats", quietly = TRUE)) {
-        stop("Please install stats: BiocManager::install('stats')")
-    }
+    pkgs.require('stats')
     
     
     if (missing(conds)) {
@@ -261,9 +257,8 @@ QuantileCentering <- function(qData,
     subset.norm = NULL,
     quantile = 0.15) {
     
-    if (!requireNamespace("stats", quietly = TRUE)) {
-        stop("Please install stats: BiocManager::install('stats')")
-    }
+    pkgs.require('stats')
+    
     if (missing(conds)) {
         stop("'conds' is required")
     }
@@ -412,9 +407,8 @@ MeanCentering <- function(qData,
 #'
 #'
 vsn <- function(qData, conds, type = NULL) {
-    if (!requireNamespace("vsn", quietly = TRUE)) {
-        stop("Please install vsn: BiocManager::install('vsn')")
-    }
+    pkgs.require('vsn')
+    
 
     if (missing(conds)) {
         stop("'conds' is required")
@@ -460,9 +454,8 @@ vsn <- function(qData, conds, type = NULL) {
 #'
 LOESS <- function(qData, conds, type = "overall", span = 0.7) {
     
-    if (!requireNamespace("limma", quietly = TRUE)) {
-        stop("Please install limma: BiocManager::install('limma')")
-    }
+    pkgs.require('limma')
+    
     
     if (missing(conds)) {
         stop("'conds' is required")

@@ -25,18 +25,8 @@ boxPlotD_HC <- function(
     legend = NULL,
     pal = NULL,
     subset.view = NULL) {
-    if (!requireNamespace("stats", quietly = TRUE)) {
-        stop("Please install stats: BiocManager::install('stats')")
-    }
+    pkgs.require(c('stats', "grDevices", "RColorBrewer"))
     
-    if (!requireNamespace("grDevices", quietly = TRUE)) {
-        stop("Please install grDevices: BiocManager::install('grDevices')")
-    }
-
-    if (!requireNamespace("RColorBrewer", quietly = TRUE)) {
-        stop("Please install RColorBrewer: 
-            BiocManager::install('RColorBrewer')")
-    }
 
     if (is.null(obj)) {
         warning("The dataset is NULL and cannot be shown")
@@ -49,10 +39,7 @@ boxPlotD_HC <- function(
     }
 
 
-    if (!requireNamespace("highcharter", quietly = TRUE)) {
-        stop("Please install highcharter: BiocManager::install('highcharter')")
-    }
-
+    pkgs.require('highcharter')
 
     if (missing(conds)) {
         stop("'conds' is missing.")

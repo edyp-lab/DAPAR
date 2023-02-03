@@ -51,7 +51,6 @@ anova_tests <- t(apply(Biobase::exprs(obj$new), 1, classic1wayAnova,
 ))
 names(anova_tests) <- rownames(Biobase::exprs(obj$new))
 pht <- postHocTest(aov_fits = anova_tests)
-
 }
 \author{
 Hélène Borges

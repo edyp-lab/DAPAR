@@ -45,10 +45,7 @@ diffAnaVolcanoplot <- function(logFC = NULL,
     conditions = NULL,
     colors = NULL) {
     
-    if (!requireNamespace("graphics", quietly = TRUE)) {
-        stop("Please install graphics: BiocManager::install('graphics')")
-    }
-    
+   pkgs.require('graphics')
     
     xtitle <- paste("log2 ( mean(", conditions[2], ") / mean(", 
         conditions[1], ") )",

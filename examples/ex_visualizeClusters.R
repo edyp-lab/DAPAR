@@ -1,0 +1,25 @@
+library(dplyr)
+data(Exp1_R25_prot, package="DAPARdata")
+obj <- Exp1_R25_prot[seq_len(1000)]
+level <- 'protein'
+metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
+indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
+obj <- MetaCellFiltering(obj, indices, cmd = "delete")
+expR25_ttest <- compute_t_tests(obj$new)
+averaged_means <- averageIntensities(obj$new)
+only_means <- dplyr::select_if(averaged_means, is.numeric)
+only_features <- dplyr::select_if(averaged_means, is.character)
+means <- purrr::map(purrr::array_branch(as.matrix(only_means), 1), mean)
+centered <- only_means - unlist(means)
+centered_means <- dplyr::bind_cols(
+feature = dplyr::as_tibble(only_features),
+dplyr::as_tibble(centered))
+difference <- only_means[, 1] - only_means[, 2]
+clusters <- as.data.frame(difference) %>%
+dplyr::mutate(cluster = dplyr::if_else(difference > 0, 1, 2))
+vizu <- visualizeClusters(
+dat = centered_means,
+clust_model = as.factor(clusters$cluster),
+adjusted_pValues = expR25_ttest$P_Value$`25fmol_vs_10fmol_pval`,
+FDR_th = c(0.001, 0.005, 0.01, 0.05),
+ttl = "Clustering of protein profiles")

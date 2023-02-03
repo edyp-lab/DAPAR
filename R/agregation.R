@@ -183,17 +183,8 @@ BuildColumnToProteinDataset_par <- function(
     columnName,
     proteinNames
     ) {
-    if (!requireNamespace("doParallel", quietly = TRUE)) {
-        stop("Please install doParallel: BiocManager::install('doParallel')")
-    }
-    if (!requireNamespace("parallel", quietly = TRUE)) {
-        stop("Please install parallel: BiocManager::install('parallel')")
-    }
-    if (!requireNamespace("foreach", quietly = TRUE)) {
-        stop("Please install foreach: BiocManager::install('foreach')")
-    }
-
-
+    pkgs.require(c("doParallel", "parallel", "foreach"))
+    
     chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
 
     # https://cran.r-project.org/web/packages/policies.html
@@ -385,9 +376,8 @@ GetDetailedNbPeptides <- function(X) {
 #'
 GraphPepProt <- function(mat) {
     
-    if (!requireNamespace("graphics", quietly = TRUE)) {
-        stop("Please install graphics: BiocManager::install('graphics')")
-    }
+    pkgs.require('graphics')
+    
     
     if (is.null(mat)) {
         return(NULL)
@@ -442,17 +432,8 @@ GraphPepProt <- function(mat) {
 #'
 
 BuildAdjacencyMatrix <- function(obj.pep, protID, unique = TRUE) {
-    if (!requireNamespace("Biobase", quietly = TRUE)) {
-        stop("Please install Biobase: BiocManager::install('Biobase')")
-    }
+    pkgs.require(c("Biobase", "stringr", "Matrix"))
     
-    if (!requireNamespace("stringr", quietly = TRUE)) {
-        stop("Please install stringr: BiocManager::install('stringr')")
-    }
-    
-    if (!requireNamespace("Matrix", quietly = TRUE)) {
-        stop("Please install Matrix: BiocManager::install('Matrix')")
-    }
     
     data <- Biobase::exprs(obj.pep)
     PG <- Biobase::fData(obj.pep)[, protID]
@@ -581,21 +562,8 @@ aggregateIterParallel <- function(
     ) {
     
     
+    pkgs.require(c("parallel", "doParallel", "foreach", "Biobase"))
     
-    if (!requireNamespace("parallel", quietly = TRUE)) {
-        stop("Please install parallel: BiocManager::install('parallel')")
-    }
-    if (!requireNamespace("doParallel", quietly = TRUE)) {
-        stop("Please install doParallel: BiocManager::install('doParallel')")
-    }
-
-    if (!requireNamespace("foreach", quietly = TRUE)) {
-        stop("Please install foreach: BiocManager::install('foreach')")
-    }
-
-    if (!requireNamespace("Biobase", quietly = TRUE)) {
-        stop("Please install Biobase: BiocManager::install('Biobase')")
-    }
     doParallel::registerDoParallel()
     obj.prot <- NULL
 
@@ -1398,9 +1366,8 @@ metacombine <- function(met, level) {
 #'
 AggregateMetacell <- function(X, obj.pep) {
     
-    if (!requireNamespace("stats", quietly = TRUE)) {
-        stop("Please install stats: BiocManager::install('stats')")
-    }
+    pkgs.require('stats')
+    
     issues <- NULL
     meta <- GetMetacell(obj.pep)
     level <- obj.pep@experimentData@other$typeOfData

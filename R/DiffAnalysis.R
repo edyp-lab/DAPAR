@@ -46,9 +46,8 @@ diffAnaComputeFDR <- function(logFC,
     pval, threshold_PVal = 0,
     threshold_LogFC = 0,
     pi0Method = 1) {
-    if (!requireNamespace("cp4p", quietly = TRUE)) {
-        stop("Please install cp4p: BiocManager::install('cp4p')")
-    }
+    pkgs.require('cp4p')
+    
     if (is.null(logFC) || is.null(pval)) {
         return()
     }
@@ -96,9 +95,7 @@ diffAnaComputeFDR <- function(logFC,
 #'
 Get_AllComparisons <- function(obj) {
     
-    if (!requireNamespace("dplyr", quietly = TRUE)) {
-        stop("Please install dplyr: BiocManager::install('dplyr')")
-    }
+    pkgs.require('dplyr')
     
     
     logFC_KEY <- "_logFC"
@@ -302,9 +299,7 @@ wrapperCalibrationPlot <- function(vPVal, pi0Method = "pounds") {
     if (is.null(vPVal)) {
         return(NULL)
     }
-    if (!requireNamespace("cp4p", quietly = TRUE)) {
-        stop("Please install cp4p: BiocManager::install('cp4p')")
-    }
+    pkgs.require('cp4p')
     
     p <- cp4p::calibration.plot(vPVal, pi0.method = pi0Method)
 
@@ -342,9 +337,8 @@ wrapperCalibrationPlot <- function(vPVal, pi0Method = "pounds") {
 #' @import highcharter
 #'
 histPValue_HC <- function(pval_ll, bins = 80, pi0 = 1) {
-    if (!requireNamespace("graphics", quietly = TRUE)) {
-        stop("Please install graphics: BiocManager::install('graphics')")
-    }
+    pkgs.require('graphics')
+    
     h <- graphics::hist(sort(unlist(pval_ll)), freq = FALSE, breaks = bins)
 
     # serieInf <- sapply(h$density, function(x) min(pi0, x))

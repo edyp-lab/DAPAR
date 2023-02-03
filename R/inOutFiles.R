@@ -312,14 +312,8 @@ write.excel <- function(df,
     colors = NULL,
     tabname = "foo",
     filename = NULL) {
-    if (!requireNamespace("openxlsx", quietly = TRUE)) {
-        stop("Please install openxlsx: BiocManager::install('openxlsx')")
-    }
+    pkgs.require(c('openxlsx', 'tools'))
     
-    if (!requireNamespace("tools", quietly = TRUE)) {
-        stop("Please install tools: BiocManager::install('tools')")
-    }
-
     if (is.null(filename)) {
         filename <- paste("data-", Sys.Date(), ".xlxs", sep = "")
     } else if (tools::file_ext(filename) != "") {
@@ -402,13 +396,7 @@ write.excel <- function(df,
 #'
 #'
 writeMSnsetToExcel <- function(obj, filename) {
-    if (!requireNamespace("openxlsx", quietly = TRUE)) {
-        stop("Please install openxlsx: BiocManager::install('openxlsx')")
-    }
-    
-    if (!requireNamespace("stats", quietly = TRUE)) {
-        stop("Please install stats: BiocManager::install('stats')")
-    }
+    pkgs.require(c('stats', 'openxlsx'))
 
     name <- paste(filename, ".xlsx", sep = "")
     wb <- openxlsx::createWorkbook(name)
@@ -593,9 +581,7 @@ writeMSnsetToExcel <- function(obj, filename) {
 #'
 #'
 readExcel <- function(file, extension, sheet) {
-    if (!requireNamespace("readxl", quietly = TRUE)) {
-        stop("Please install readxl: BiocManager::install('readxl')")
-    }
+    pkgs.require('readxl')
 
     data <- NULL
     data <- readxl::read_excel(file, sheet)
@@ -626,9 +612,7 @@ readExcel <- function(file, extension, sheet) {
 #'
 #'
 listSheets <- function(file) {
-    if (!requireNamespace("openxlsx", quietly = TRUE)) {
-        stop("Please install openxlsx: BiocManager::install('openxlsx')")
-    }
+    pkgs.require('openxlsx')
     return(openxlsx::getSheetNames(file))
 }
 
