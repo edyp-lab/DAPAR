@@ -334,6 +334,27 @@ Set_POV_MEC_tags <- function(conds, df, level) {
 }
 
 
+
+#' @title The set of softwares available
+#' 
+#' @examples 
+#' GetSoftAvailables()
+#' @export
+
+GetSoftAvailables <- function(){
+    
+    
+    library(DAPAR)
+    
+    funcs <- ls('package:DAPAR')
+    funcs <- funcs[grep('Metacell_', funcs)]
+    funcs <- strsplit(funcs, 'Metacell_')
+    funcs <- unlist(lapply(funcs, function(x) x[[2]]))
+    funcs <- funcs[-which(funcs=='generic')]
+    
+    return(funcs)
+}
+
 #' @title Builds cells metadata
 #'
 #' @description
@@ -391,7 +412,7 @@ BuildMetaCell <- function(from,
     if (missing(from)) {
         stop("'from' is required.")
     }
-    if (!(from %in% c('maxquant', 'proline', 'DIA-NN')))
+    if (!(from %in% GetSoftAvailables()))
         stop("'from' must be one of the following")
     if (missing(level)) {
         stop("'level' is required.")

@@ -94,13 +94,14 @@ wrapper.compareNormalizationD_HC <- function(objBefore,
 #' conds = conds, type = "within conditions"
 #' )
 #'
+#' n <- 1
 #' compareNormalizationD_HC(
 #' qDataBefore = qDataBefore,
 #' qDataAfter = Biobase::exprs(objAfter), 
 #' keyId = id, 
 #' pal = pal, 
-#' n = 4,
-#' subset.view = seq_len(4),
+#' n = n,
+#' subset.view = seq_len(n),
 #' conds = conds)
 #'
 #' @import highcharter
@@ -114,7 +115,7 @@ compareNormalizationD_HC <- function(qDataBefore,
     conds = NULL,
     pal = NULL,
     subset.view = NULL,
-    n = NULL,
+    n = 1,
     type = "scatter") {
     
     if (!requireNamespace("RColorBrewer", quietly = TRUE)) {
@@ -125,6 +126,11 @@ compareNormalizationD_HC <- function(qDataBefore,
         warning("'conds' is null.")
         return(NULL)
     }
+    if ( n <0 || n >1){
+        warning("'n' must be in the range [0, 1]. Set to 0.2")
+        n <- 0.2
+    }
+
     if (is.null(keyId)) {
         keyId <- seq_len(length(qDataBefore))
     }
@@ -139,6 +145,7 @@ compareNormalizationD_HC <- function(qDataBefore,
                 qDataBefore <- qDataBefore[subset.view, ]
                 qDataAfter <- qDataAfter[subset.view, ]
             }
+            n <- 1
         }
     }
 
@@ -147,27 +154,27 @@ compareNormalizationD_HC <- function(qDataBefore,
         return(NULL)
     }
 
-    if (is.null(n)) {
-        n <- seq_len(nrow(qDataBefore))
-    } else {
-        if (n > nrow(qDataBefore)) {
-            warning("'n' is higher than the number of rows of datasets. 
-            Set to number of rows.")
-            n <- nrow(qDataBefore)
-        }
-
-        ind <- sample(seq_len(nrow(qDataBefore)), n)
-        keyId <- keyId[ind]
-        if (nrow(qDataBefore) > 1) {
-            if (length(ind) == 1) {
-                qDataBefore <- t(qDataBefore[ind, ])
-                qDataAfter <- t(qDataAfter[ind, ])
-            } else {
-                qDataBefore <- qDataBefore[ind, ]
-                qDataAfter <- qDataAfter[ind, ]
-            }
+    # if (is.null(n)) {
+    #     n <- seq_len(nrow(qDataBefore))
+    # } else {
+        # if (n > nrow(qDataBefore)) {
+        #     warning("'n' is higher than the number of rows of datasets. 
+        #     Set to number of rows.")
+        #     n <- nrow(qDataBefore)
+        # }
+    # Truncate dataset
+    ind <- sample(seq_len(nrow(qDataBefore)), n*nrow(qDataBefore))
+    keyId <- keyId[ind]
+    if (nrow(qDataBefore) > 1) {
+        if (length(ind) == 1) {
+            qDataBefore <- t(qDataBefore[ind, ])
+            qDataAfter <- t(qDataAfter[ind, ])
+        } else {
+            qDataBefore <- qDataBefore[ind, ]
+            qDataAfter <- qDataAfter[ind, ]
         }
     }
+    #}
 
     myColors <- NULL
     if (is.null(pal)) {
