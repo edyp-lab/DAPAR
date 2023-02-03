@@ -15,30 +15,13 @@
 #'
 #' @author Helene Borges
 #'
-#' @examples
-#' data(Exp1_R25_prot, package="DAPARdata")
-#' obj <- Exp1_R25_prot[seq_len(1000)]
-#' level <- 'protein'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
-#' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
-#' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
-#' averageIntensities(obj$new)
+#' @example examples/ex_averageIntensities.R
 #'
 #' @export
 #'
 #'
 averageIntensities <- function(ESet_obj) {
-    if (!requireNamespace("Mfuzz", quietly = TRUE)) {
-        stop("Please install Mfuzz: BiocManager::install('Mfuzz')")
-    }
-    
-    if (!requireNamespace("tidyr", quietly = TRUE)) {
-        stop("Please install tidyr: BiocManager::install('tidyr')")
-    }
-    
-    if (!requireNamespace("dplyr", quietly = TRUE)) {
-        stop("Please install dplyr: BiocManager::install('dplyr')")
-    }
+    pkgs.require(c('Mfuzz', 'tidyr', "dplyr"))
     
     intensities <- Biobase::exprs(ESet_obj)
     sTab <- Biobase::pData(ESet_obj)
@@ -55,7 +38,7 @@ averageIntensities <- function(ESet_obj) {
             values_to = "intensity")
     mean_intensities <- longer_intensities %>%
         dplyr::group_by(condition, feature) %>%
-        dplyr::summarise(mean = mean(intensities))
+        dplyr::summarise(mean = mean(intensity))
     mean_intensities_wide <- tidyr::pivot_wider(mean_intensities,
         names_from = condition,
         values_from = mean
@@ -87,37 +70,14 @@ averageIntensities <- function(ESet_obj) {
 #'
 #' @author Helene Borges
 #'
-#' @examples
-#' data(Exp1_R25_prot, package="DAPARdata")
-#' obj <- Exp1_R25_prot[seq_len(100)]
-#' level <- 'protein'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
-#' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
-#' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
-#' averaged_means <- averageIntensities(obj$new)
-#' only_means <- dplyr::select_if(averaged_means, is.numeric)
-#' only_features <- dplyr::select_if(averaged_means, is.character)
-#' means <- purrr::map(purrr::array_branch(as.matrix(only_means), 1), mean)
-#' centered <- only_means - unlist(means)
-#' centered_means <- dplyr::bind_cols(
-#' feature = dplyr::as_tibble(only_features),
-#' dplyr::as_tibble(centered))
-#' ##checkClust <- checkClusterability(centered_means, b = 100)
+#' @example examples/ex_checkClusterability.R
 #'
 #' @export
 #'
 #'
 checkClusterability <- function(standards, b = 500) {
-    if (!requireNamespace("diptest", quietly = TRUE)) {
-        stop("Please install diptest: BiocManager::install('diptest')")
-    }
-
-    if (!requireNamespace("cluster", quietly = TRUE)) {
-        stop("Please install cluster: BiocManager::install('cluster')")
-    }
-    if (!requireNamespace("methods", quietly = TRUE)) {
-        stop("Please install methods: BiocManager::install('methods')")
-    }
+    pkgs.require(c("diptest", 'cluster', "methods"))
+    
 
     if (methods::is(standards, "data.frame")) {
         # if there are columns with something other than numeric values
@@ -172,60 +132,19 @@ checkClusterability <- function(standards, b = 500) {
 #'
 #' @author Helene Borges
 #'
-#' @examples
-#' library(dplyr)
-#' data(Exp1_R25_prot, package="DAPARdata")
-#' obj <- Exp1_R25_prot[seq_len(1000)]
-#' level <- 'protein'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
-#' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
-#' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
-#' expR25_ttest <- compute_t_tests(obj$new)
-#' averaged_means <- averageIntensities(obj$new)
-#' only_means <- dplyr::select_if(averaged_means, is.numeric)
-#' only_features <- dplyr::select_if(averaged_means, is.character)
-#' means <- purrr::map(purrr::array_branch(as.matrix(only_means), 1), mean)
-#' centered <- only_means - unlist(means)
-#' centered_means <- dplyr::bind_cols(
-#' feature = dplyr::as_tibble(only_features),
-#' dplyr::as_tibble(centered))
-#' difference <- only_means[, 1] - only_means[, 2]
-#' clusters <- as.data.frame(difference) %>%
-#' dplyr::mutate(cluster = dplyr::if_else(difference > 0, 1, 2))
-#' vizu <- visualizeClusters(
-#' dat = centered_means,
-#' clust_model = as.factor(clusters$cluster),
-#' adjusted_pValues = expR25_ttest$P_Value$`25fmol_vs_10fmol_pval`,
-#' FDR_th = c(0.001, 0.005, 0.01, 0.05),
-#' ttl = "Clustering of protein profiles")
-#'
+#' @example examples/ex_visualizeClusters.R
 #' @export
 #'
 visualizeClusters <- function(dat,
-    clust_model,
-    adjusted_pValues,
-    FDR_th = NULL,
-    ttl = "",
-    subttl = "") {
+                              clust_model,
+                              adjusted_pValues,
+                              FDR_th = NULL,
+                              ttl = "",
+                              subttl = "") {
 
-    if (!requireNamespace("ggplot2", quietly = TRUE)) {
-        stop("Please install ggplot2: BiocManager::install('ggplot2')")
-    }
-    if (!requireNamespace("stringr", quietly = TRUE)) {
-        stop("Please install stringr: BiocManager::install('stringr')")
-    }
-
-    if (!requireNamespace("methods", quietly = TRUE)) {
-        stop("Please install methods: BiocManager::install('methods')")
-    }
-
-    if (!requireNamespace("dplyr", quietly = TRUE)) {
-        stop("Please install dplyr: BiocManager::install('dplyr')")
-    }
-
-    if (!requireNamespace("reshape2", quietly = TRUE)) {
-        stop("Please install reshape2: BiocManager::install('reshape2')")
-    }
+    
+    pkgs.require(c("ggplot2", 'stringr', "methods", "dplyr", "reshape2"))
+    
 
     if (is.null(FDR_th)) {
         FDR_th <- c(0.001, 0.005, 0.01, 0.05)
@@ -388,19 +307,7 @@ visualizeClusters <- function(dat,
 #' DOI: \href{https://science.sciencemag.org/content/315/5814/972}{
 #' 10.1126/science.1136800}
 #'
-#' @examples
-#' data(Exp1_R25_prot, package="DAPARdata")
-#' obj <- Exp1_R25_prot[seq_len(1000)]
-#' level <- 'protein'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
-#' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
-#' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
-#' expR25_ttest <- compute_t_tests(obj$new)
-#' wrapperRunClustering(
-#'     obj = obj$new,
-#'     adjusted_pvals = expR25_ttest$P_Value$`25fmol_vs_10fmol_pval`
-#' )
-#'
+#' @example examples/ex_wrapperRunClustering.R
 #' @export
 #'
 #'
@@ -414,38 +321,11 @@ wrapperRunClustering <- function(
     subttl = "",
     FDR_thresholds = NULL
     ) {
-
-    if (!requireNamespace("stats", quietly = TRUE)) {
-        stop("Please install stats: BiocManager::install('stats')")
-    }
-
-    if (!requireNamespace("cluster", quietly = TRUE)) {
-        stop("Please install cluster: BiocManager::install('cluster')")
-    }
-
-    if (!requireNamespace("purrr", quietly = TRUE)) {
-        stop("Please install purrr: BiocManager::install('purrr')")
-    }
-
-    if (!requireNamespace("apcluster", quietly = TRUE)) {
-        stop("Please install apcluster: BiocManager::install('apcluster')")
-    }
-
-    if (!requireNamespace("forcats", quietly = TRUE)) {
-        stop("Please install forcats: BiocManager::install('forcats')")
-    }
-
-    if (!requireNamespace("Mfuzz", quietly = TRUE)) {
-        stop("Please install Mfuzz: BiocManager::install('Mfuzz')")
-    }
-
-    if (!requireNamespace("dplyr", quietly = TRUE)) {
-        stop("Please install dplyr: BiocManager::install('dplyr')")
-    }
-
-    if (!requireNamespace("stringr", quietly = TRUE)) {
-        stop("Please install stringr: BiocManager::install('stringr')")
-    }
+    
+    pkgs.require(c("stats", 'cluster', "purrr", "apcluster", 
+                   "forcats", 'Mfuzz', 'dplyr', 'stringr'))
+    
+   
 
     res <- list("model" = NULL, "ggplot" = NULL)
     # reorder conditions if requested

@@ -118,10 +118,8 @@ compareNormalizationD_HC <- function(qDataBefore,
     n = 1,
     type = "scatter") {
     
-    if (!requireNamespace("RColorBrewer", quietly = TRUE)) {
-        stop("Please install RColorBrewer: 
-            BiocManager::install('RColorBrewer')")
-    }
+    pkgs.require('RColorBrewer')
+    
     if (is.null(conds)) {
         warning("'conds' is null.")
         return(NULL)

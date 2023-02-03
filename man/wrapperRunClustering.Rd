@@ -94,10 +94,9 @@ indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 expR25_ttest <- compute_t_tests(obj$new)
 wrapperRunClustering(
-    obj = obj$new,
+  obj = obj$new,
     adjusted_pvals = expR25_ttest$P_Value$`25fmol_vs_10fmol_pval`
 )
-
 }
 \references{
 Tibshirani, R., Walther, G. and Hastie, T. (2001). Estimating the number of

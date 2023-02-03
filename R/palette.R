@@ -26,16 +26,7 @@
 #'
 ExtendPalette <- function(n = NULL, base = "Set1") {
     
-    if (!requireNamespace("grDevices", quietly = TRUE)) {
-        stop("Please install grDevices: BiocManager::install('grDevices')")
-    }
-    if (!requireNamespace("RColorBrewer", quietly = TRUE)) {
-        stop("Please install RColorBrewer: 
-            BiocManager::install('RColorBrewer')")
-    }
-    if (!requireNamespace("utils", quietly = TRUE)) {
-        stop("Please install utils: BiocManager::install('utils')")
-    }
+    pkgs.require(c('grDevices', 'RColorBrewer', "utils"))
     
     pal <- NULL
     nMaxColors <- RColorBrewer::brewer.pal.info[base, "maxcolors"]
@@ -89,10 +80,7 @@ ExtendPalette <- function(n = NULL, base = "Set1") {
 #'
 GetColorsForConditions <- function(conds, pal = NULL) {
     
-    if (!requireNamespace("RColorBrewer", quietly = TRUE)) {
-        stop("Please install RColorBrewer: 
-            BiocManager::install('RColorBrewer')")
-    }
+    pkgs.require('RColorBrewer')
     
     
     if (missing(conds)) {

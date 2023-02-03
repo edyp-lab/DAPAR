@@ -33,17 +33,8 @@ violinPlotD <- function(obj,
                         legend = NULL,
                         pal = NULL,
                         subset.view = NULL) {
-    if (!requireNamespace("stats", quietly = TRUE)) {
-        stop("Please install stats: BiocManager::install('stats')")
-    }
+    pkgs.require(c('stats', 'vioplot', 'graphics'))
     
-    if (!requireNamespace("vioplot", quietly = TRUE)) {
-        stop("Please install vioplot: BiocManager::install('vioplot')")
-    }
-
-    if (!requireNamespace("graphics", quietly = TRUE)) {
-        stop("Please install graphics: BiocManager::install('graphics')")
-    }
     graphics::plot.new()
 
     if (is.null(obj)) {

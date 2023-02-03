@@ -34,9 +34,7 @@
 #'
 compute_t_tests <- function(obj, contrast = "OnevsOne", type = "Student") {
   
-  if (!requireNamespace("stats", quietly = TRUE)) {
-    stop("Please install stats: BiocManager::install('stats')")
-  }
+  pkgs.require('stats')
   
   
   switch(type,

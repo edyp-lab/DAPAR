@@ -33,9 +33,7 @@
 #'
 wrapper.impute.mle <- function(obj, na.type) {
     
-    if (!requireNamespace("imp4p", quietly = TRUE)) {
-        stop("Please install imp4p: BiocManager::install('imp4p')")
-    }
+    pkgs.require('imp4p')
     
     if (missing(obj)) {
         stop("'obj' is required.")
@@ -154,9 +152,7 @@ wrapper.dapar.impute.mi <- function(obj,
     lapala = TRUE,
     distribution = "unif") {
 
-    if (!requireNamespace("imp4p", quietly = TRUE)) {
-        stop("Please install imp4p: BiocManager::install('imp4p')")
-    }
+    pkgs.require('imp4p')
 
     if (missing(obj)) {
         stop("'obj' is required.")
@@ -264,9 +260,7 @@ wrapper.dapar.impute.mi <- function(obj,
 #'
 #'
 translatedRandomBeta <- function(n, min, max, param1 = 3, param2 = 1) {
-    if (!requireNamespace("stats", quietly = TRUE)) {
-        stop("Please install stats: BiocManager::install('stats')")
-    }
+    pkgs.require('stats')
 
     scale <- max - min
     simu <- stats::rbeta(n, param1, param2)
@@ -404,9 +398,7 @@ impute.pa2 <- function(
     distribution = "unif"
     ) {
 
-    if (!requireNamespace("stats", quietly = TRUE)) {
-        stop("Please install stats: BiocManager::install('stats')")
-    }
+    pkgs.require('stats')
 
     tab_imp <- tab
     qu <- apply(tab_imp, 2, stats::quantile, na.rm = TRUE, q.min)

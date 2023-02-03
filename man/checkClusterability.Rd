@@ -40,8 +40,7 @@ centered <- only_means - unlist(means)
 centered_means <- dplyr::bind_cols(
 feature = dplyr::as_tibble(only_features),
 dplyr::as_tibble(centered))
-##checkClust <- checkClusterability(centered_means, b = 100)
-
+checkClust <- checkClusterability(centered_means, b = 100)
 }
 \author{
 Helene Borges

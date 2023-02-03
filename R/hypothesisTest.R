@@ -36,18 +36,10 @@
 #' @import highcharter
 #'
 hc_logFC_DensityPlot <- function(df_logFC,
-    threshold_LogFC = 0,
-    pal = NULL) {
-    if (!requireNamespace("stats", quietly = TRUE)) {
-        stop("Please install stats: BiocManager::install('stats')")
-    }
-    if (!requireNamespace("RColorBrewer", quietly = TRUE)) {
-        stop("Please install RColorBrewer: 
-            BiocManager::install('RColorBrewer')")
-    }
-    if (!requireNamespace("grDevices", quietly = TRUE)) {
-        stop("Please install grDevices: BiocManager::install('grDevices')")
-    }
+                                 threshold_LogFC = 0,
+                                 pal = NULL) {
+    
+    pkgs.require(c("stats", "RColorBrewer", "grDevices"))
     
     if (threshold_LogFC < 0) {
         warning("The parameter 'threshold_LogFC' must be positive or equal 

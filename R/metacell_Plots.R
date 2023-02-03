@@ -443,13 +443,7 @@ wrapper.mvImage <- function(obj, pattern = "Missing MEC") {
 #'
 mvImage <- function(qData, conds) {
 
-    if (!requireNamespace("stats", quietly = TRUE)) {
-        stop("Please install stats: BiocManager::install('stats')")
-    }
-    
-    if (!requireNamespace("grDevices", quietly = TRUE)) {
-        stop("Please install grDevices: BiocManager::install('grDevices')")
-    }
+    pkgs.require(c('grDevices', 'stats'))
     
     ### build indices of conditions
     indCond <- list()
@@ -539,9 +533,7 @@ hc_mvTypePlot2 <- function(obj,
     pattern,
     typeofMV = NULL,
     title = NULL) {
-    if (!requireNamespace("stats", quietly = TRUE)) {
-        stop("Please install stats: BiocManager::install('stats')")
-    }
+    pkgs.require('stats')
     
     conds <- Biobase::pData(obj)[, "Condition"]
     qData <- Biobase::exprs(obj)

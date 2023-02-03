@@ -11,29 +11,18 @@
 #'
 #' @return A named vector containing all the different values of the aov model
 #'
-#' @examples
-#' data(Exp1_R25_prot, package="DAPARdata")
-#' obj <- Exp1_R25_prot[seq_len(1000)]
-#' level <- 'protein'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
-#' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
-#' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
-#' anova_tests <- t(apply(Biobase::exprs(obj$new), 1, classic1wayAnova,
-#'     conditions = as.factor(Biobase::pData(obj$new)$Condition)
-#' ))
+#' @example examples/ex_classic1wayAnova.R
 #'
 #' @export
 #'
 classic1wayAnova <- function(current_line, conditions) {
     
-    if (!requireNamespace("stats", quietly = TRUE)) {
-        stop("Please install stats: BiocManager::install('stats')")
-    }
-    
+    pkgs.require('stats')
+   
     
     # vector containing the protein/peptide intensities
     intensities <- unname(unlist(current_line))
-    # anova sur ces deux vecteurs
+    # anova on these two vectors
     aov_test <- stats::aov(formula = intensities ~ conditions, data = NULL)
     return(aov_test)
 }
@@ -63,14 +52,7 @@ classic1wayAnova <- function(current_line, conditions) {
 #' which NAs are returned.); The second one named "P_Value" contains the
 #' corresponding p-values.
 #'
-#' @examples
-#' data(Exp1_R25_prot, package="DAPARdata")
-#' obj <- Exp1_R25_prot[seq_len(1000)]
-#' level <- 'protein'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
-#' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
-#' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
-#' anovatest <- wrapperClassic1wayAnova(obj$new)
+#' @example examples/ex_wrapperClassic1wayAnova.R
 #'
 #' @seealso [postHocTest()]
 #'
@@ -81,9 +63,8 @@ wrapperClassic1wayAnova <- function(
     with_post_hoc = "No", 
     post_hoc_test = "No") {
     
-    if (!requireNamespace("dplyr", quietly = TRUE)) {
-        stop("Please install dplyr: BiocManager::install('dplyr')")
-    }
+    pkgs.require('dplyr')
+    
     
     
     qData <- Biobase::exprs(obj)
@@ -158,35 +139,13 @@ wrapperClassic1wayAnova <- function(
 #'
 #' @author Hélène Borges
 #'
-#' @examples
-#' data(Exp1_R25_prot, package="DAPARdata")
-#' obj <- Exp1_R25_prot[seq_len(1000)]
-#' level <- 'protein'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
-#' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
-#' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
-#' anova_tests <- t(apply(Biobase::exprs(obj$new), 1, classic1wayAnova,
-#'     conditions = as.factor(Biobase::pData(obj$new)$Condition)
-#' ))
-#' names(anova_tests) <- rownames(Biobase::exprs(obj$new))
-#' tms <- lapply(
-#'     anova_tests,
-#'     function(x) {
-#'         summary(multcomp::glht(x,
-#'             linfct = multcomp::mcp(conditions = "Tukey")
-#'         ),
-#'         test = multcomp::adjusted("none")
-#'         )
-#'     }
-#' )
-#' res <- formatPHResults(tms)
+#' @example examples/ex_formatPHResults.R
 #'
 #' @export
 #'
 formatPHResults <- function(post_hoc_models_summaries) {
-    if (!requireNamespace("purrr", quietly = TRUE)) {
-        stop("Please install purrr: BiocManager::install('purrr')")
-    }
+    pkgs.require('purrr')
+    
 
     # récupérer les différences entre les moyennes
     res_coeffs <- lapply(post_hoc_models_summaries, 
@@ -257,26 +216,14 @@ formatPHResults <- function(post_hoc_models_summaries) {
 #'
 #' @author Hélène Borges
 #'
-#' @examples
-#' data(Exp1_R25_prot, package="DAPARdata")
-#' obj <- Exp1_R25_prot[seq_len(1000)]
-#' level <- 'protein'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
-#' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
-#' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
-#' anova_tests <- t(apply(Biobase::exprs(obj$new), 1, classic1wayAnova,
-#'     conditions = as.factor(Biobase::pData(obj$new)$Condition)
-#' ))
-#' names(anova_tests) <- rownames(Biobase::exprs(obj$new))
-#' pht <- postHocTest(aov_fits = anova_tests)
+#' @example examples/ex_postHocTest.R
 #'
 #' @export
 #'
 #'
 postHocTest <- function(aov_fits, post_hoc_test = "TukeyHSD") {
-    if (!requireNamespace("multcomp", quietly = TRUE)) {
-        stop("Please install multcomp: BiocManager::install('multcomp')")
-    }
+    pkgs.require('multcomp')
+    
 
     if (post_hoc_test == "TukeyHSD") {
         # use of adjusted("none") to obtain raw p-values (and not adjusted ones)

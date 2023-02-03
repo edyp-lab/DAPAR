@@ -33,9 +33,7 @@ densityPlotD_HC <- function(obj,
                             legend = NULL,
                             pal = NULL) {
     
-    if (!requireNamespace("stats", quietly = TRUE)) {
-        stop("Please install stats: BiocManager::install('stats')")
-    }
+    pkgs.require('stats')
     
     
     if (is.null(obj)) {

@@ -24,9 +24,8 @@
 #' @export
 #'
 wrapper.pca <- function(obj, var.scaling = TRUE, ncp = NULL) {
-    if (!requireNamespace("FactoMineR", quietly = TRUE)) {
-        stop("Please install FactoMineR: BiocManager::install('FactoMineR')")
-    }
+    
+    pkgs.require('FactoMineR')
 
     # require(FactoMineR)
     if (missing(obj)) {
@@ -89,9 +88,8 @@ wrapper.pca <- function(obj, var.scaling = TRUE, ncp = NULL) {
 #' @export
 #'
 plotPCA_Var <- function(res.pca, chosen.axes = c(1, 2)) {
-    if (!requireNamespace("factoextra", quietly = TRUE)) {
-        stop("Please install factoextra: BiocManager::install('factoextra')")
-    }
+    pkgs.require('factoextra')
+    
     # plot.PCA(res.pca, choix="var", axes = chosen.axes, 
     # title="Sample factor map (PCA)")
     # require(factoextra)
@@ -128,9 +126,7 @@ plotPCA_Var <- function(res.pca, chosen.axes = c(1, 2)) {
 #' @export
 #'
 plotPCA_Ind <- function(res.pca, chosen.axes = c(1, 2)) {
-    if (!requireNamespace("factoextra", quietly = TRUE)) {
-        stop("Please install factoextra: BiocManager::install('factoextra')")
-    }
+    pkgs.require('factoextra')
 
     if (is.null(res.pca)) {
         return(NULL)
@@ -163,9 +159,7 @@ plotPCA_Ind <- function(res.pca, chosen.axes = c(1, 2)) {
 #'
 plotPCA_Eigen <- function(res.pca) {
     
-    if (!requireNamespace("graphics", quietly = TRUE)) {
-        stop("Please install graphics: BiocManager::install('graphics')")
-    }
+    pkgs.require('graphics')
     
     if (is.null(res.pca)) {
         return(NULL)

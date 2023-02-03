@@ -22,9 +22,8 @@
 #'
 wrapper.corrMatrixD_HC <- function(obj, rate = 0.5, showValues = TRUE) {
     
-    if (!requireNamespace("stats", quietly = TRUE)) {
-        stop("Please install stats: BiocManager::install('stats')")
-    }
+    pkgs.require('stats')
+    
     
     if (is.null(obj)) {
         warning("The dataset is NULL and cannot be shown")
@@ -75,21 +74,9 @@ corrMatrixD_HC <- function(object,
     samplesData = NULL, 
     rate = 0.5, 
     showValues = TRUE) {
-    if (!requireNamespace("stats", quietly = TRUE)) {
-        stop("Please install stats: BiocManager::install('stats')")
-    }
     
-    if (!requireNamespace("dplyr", quietly = TRUE)) {
-        stop("Please install dplyr: BiocManager::install('dplyr')")
-    }
+    pkgs.require(c('stats', "dplyr", "tidyr", "tibble"))
     
-    if (!requireNamespace("tidyr", quietly = TRUE)) {
-        stop("Please install tidyr: BiocManager::install('tidyr')")
-    }
-    
-    if (!requireNamespace("tibble", quietly = TRUE)) {
-        stop("Please install tibble: BiocManager::install('tibble')")
-    }
     df <- as.data.frame(object)
     .sData <- samplesData
     if (!is.null(.sData)) {

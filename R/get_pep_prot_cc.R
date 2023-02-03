@@ -16,17 +16,7 @@
 #' @export
 #'
 get.pep.prot.cc <- function(X) {
-    if (!requireNamespace("Matrix", quietly = TRUE)) {
-        stop("Please install Matrix: BiocManager::install('Matrix')")
-    }
-    
-    if (!requireNamespace("igraph", quietly = TRUE)) {
-        stop("Please install igraph: BiocManager::install('igraph')")
-    }
-    
-    if (!requireNamespace("graph", quietly = TRUE)) {
-        stop("Please install graph: BiocManager::install('graph')")
-    }
+    pkgs.require(c('Matrix', 'igraph', 'graph'))
     
     if (is.null(X)) {
         warning("The adjacency matrix is empty")
@@ -287,9 +277,7 @@ display.CC.visNet <- function(
     prot.tooltip = NULL,
     pept.tooltip = NULL) {
     
-    if (!requireNamespace("visNetwork", quietly = TRUE)) {
-        stop("Please install visNetwork: BiocManager::install('visNetwork')")
-    }
+    pkgs.require('visNetwork')
 
     col.prot <- "#ECB57C"
     col.spec <- "#5CA3F7"

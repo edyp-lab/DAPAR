@@ -63,7 +63,6 @@ clust_model = as.factor(clusters$cluster),
 adjusted_pValues = expR25_ttest$P_Value$`25fmol_vs_10fmol_pval`,
 FDR_th = c(0.001, 0.005, 0.01, 0.05),
 ttl = "Clustering of protein profiles")
-
 }
 \author{
 Helene Borges
