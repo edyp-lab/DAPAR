@@ -242,7 +242,7 @@ GetMetacellTags <- function(level = NULL,
     
     ll <- NULL
     if(onlyPresent) {
-        ll <- GetUniqueTags(obj)
+        ll <- unique(unlist(GetUniqueTags(obj)))
         # Check if parent must be added
         test <- match (Children(level, 'Any'), ll)
         if (length(test) == length(Children(level, 'Any')) && !all(is.na(test)))
