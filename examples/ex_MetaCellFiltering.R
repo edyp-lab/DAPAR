@@ -9,8 +9,7 @@ indices <- GetIndices_WholeLine(metacell.mask)
 obj.filter <- MetaCellFiltering(obj, indices, "delete")
 
 
-obj <- readRDS('../../../Desktop/Sabine/toto.msnset')
-#obj <- obj[1:10]
+obj <- obj[1:10]
 
 pattern <- "Quantified"
 type <- "AtLeastOneCond"
