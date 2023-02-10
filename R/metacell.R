@@ -175,7 +175,7 @@ Children <- function(level, parent = NULL){
     
 }
 
-
+#' @export
 GetUniqueTags <- function(obj){
     df <- Biobase::fData(obj)[, obj@experimentData@other$names_metacell]
     tmp <- sapply(colnames(df), function(x) unique(df[,x]))
@@ -214,10 +214,10 @@ GetUniqueTags <- function(obj){
 #' @export
 #'
 #'
-GetMetacellTags <- function(level = NULL, 
-    obj = NULL, 
-    onlyPresent = FALSE, 
-    all = FALSE) {
+GetMetacellTags <- function(level = NULL,
+                            obj = NULL,
+                            onlyPresent = FALSE, 
+                            all = FALSE) {
     
     if (!onlyPresent && !all){
         if (!is.null(level) && is.null(obj))
@@ -239,10 +239,10 @@ GetMetacellTags <- function(level = NULL,
     if (is.null(obj) && onlyPresent)
         stop("`obj` must be defined")
     
-    
+    #browser()
     ll <- NULL
     if(onlyPresent) {
-        ll <- GetUniqueTags(obj)
+        ll <- unique(unlist(GetUniqueTags(obj)))
         # Check if parent must be added
         test <- match (Children(level, 'Any'), ll)
         if (length(test) == length(Children(level, 'Any')) && !all(is.na(test)))
@@ -267,7 +267,8 @@ GetMetacellTags <- function(level = NULL,
         
         
     } else if (all) {
-        ll <- metacell.def(level)
+      ll <- metacell.def(level)$node[-which(metacell.def(level)$node =='Any')]
+      #  ll <- metacell.def(level)
     }
     
     return(ll)
@@ -405,10 +406,10 @@ GetSoftAvailables <- function(){
 #'
 #'
 BuildMetaCell <- function(from,
-    level,
-    qdata = NULL,
-    conds = NULL,
-    df = NULL) {
+                          level,
+                          qdata = NULL,
+                          conds = NULL,
+                          df = NULL) {
     if (missing(from)) {
         stop("'from' is required.")
     }

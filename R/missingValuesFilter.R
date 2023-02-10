@@ -547,20 +547,14 @@ getIndicesOfLinesToRemove <- function(
 #'
 #' @author Florence Combes, Samuel Wieczorek
 #'
-#' @examples
-#' data(Exp1_R25_pept, package="DAPARdata")
-#' obj <- Exp1_R25_pept[seq_len(100)]
-#' level <- 'peptide'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
-#' indices <- GetIndices_WholeLine(metacell.mask)
-#' obj.filter <- MetaCellFiltering(obj, indices, "delete")
+#' @example examples/ex_MetacellFiltering.R
 #'
 #' @export
 #'
 MetaCellFiltering <- function(obj,
-    indices,
-    cmd,
-    processText = "") {
+                              indices,
+                              cmd,
+                              processText = "") {
     if (missing(obj)) {
         stop("'obj' is required;")
     }
@@ -591,7 +585,7 @@ MetaCellFiltering <- function(obj,
         c(new@processingData@processing, processText)
 
     return(list(
-        new = new,
+      new = new,
         deleted = deleted
     ))
 }
@@ -663,17 +657,8 @@ deleteLinesFromIndices <- function(obj, deleteThat = NULL, processText = "") {
 #'
 #' @author Samuel Wieczorek
 #'
-#' @examples
-#' data(Exp1_R25_pept, package="DAPARdata")
-#' obj <- Exp1_R25_pept[seq_len(10), ]
-#' level <- GetTypeofData(obj)
-#' pattern <- "Missing"
-#' type <- "AllCond"
-#' percent <- FALSE
-#' op <- "=="
-#' th <- 2
-#' indices <- GetIndices_MetacellFiltering(obj, level, pattern, type, 
-#' percent, op, th)
+#' @example examples/ex_GetIndices_MetacellFiltering.R
+
 #'
 #' @export
 #'

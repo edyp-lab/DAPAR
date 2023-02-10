@@ -34,9 +34,16 @@ number of missing values (NA) per lines (ie proteins).
 }
 \examples{
 data(Exp1_R25_pept, package="DAPARdata")
-obj <- Exp1_R25_pept[seq_len(10), ]
+obj <- Exp1_R25_pept
+
+obj <- obj[1:10]
+
 metacellPerLinesHisto_HC(obj, pattern = "Missing")
 
+
+metacellPerLinesHisto_HC(obj, pattern = "Quantified")
+metacellPerLinesHisto_HC(obj, pattern = "Quant. by direct id")
+metacellPerLinesHisto_HC(obj, pattern = "Quant. by recovery")
 }
 \author{
 Florence Combes, Samuel Wieczorek

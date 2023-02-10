@@ -15,18 +15,16 @@
 #' drawn above the bars.
 #' @return A bar plot
 #' @author Florence Combes, Samuel Wieczorek
-#' @examples
-#' data(Exp1_R25_pept, package="DAPARdata")
-#' obj <- Exp1_R25_pept[seq_len(10), ]
-#' metacellPerLinesHisto_HC(obj, pattern = "Missing")
+#' @example examples/ex_metacellPerLinesHisto_HC.R
+
 #'
 #' @export
 #'
 metacellPerLinesHisto_HC <- function(obj,
-    pattern,
-    detailed = FALSE,
-    indLegend = "auto",
-    showValues = FALSE) {
+                                     pattern,
+                                     detailed = FALSE,
+                                     indLegend = "auto",
+                                     showValues = FALSE) {
     if (missing(obj)) {
         stop("'obj' is missing.")
     } else if (is.null(obj)) {
@@ -57,9 +55,10 @@ metacellPerLinesHisto_HC <- function(obj,
 
 
     mask <- match.metacell(GetMetacell(obj),
-        pattern = pattern,
-        level = obj@experimentData@other$typeOfData
-    )
+                           pattern = pattern,
+                           level = obj@experimentData@other$typeOfData
+                           )
+    
     NbNAPerRow <- rowSums(mask)
 
     nb.col <- dim(qData)[2]
