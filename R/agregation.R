@@ -107,16 +107,7 @@ getProteinsStats <- function(matShared) {
 #'
 #' @author Samuel Wieczorek
 #'
-#' @examples
-#' data(Exp1_R25_pept, package="DAPARdata")
-#' protID <- "Protein_group_IDs"
-#' obj.pep <- Exp1_R25_pept[seq_len(10)]
-#' M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-#' data <- Biobase::fData(obj.pep)
-#' protData <- aggregateMean(obj.pep, M)
-#' name <- "Protein_group_IDs"
-#' proteinNames <- rownames(Biobase::fData(protData$obj.prot))
-#' new.col <- BuildColumnToProteinDataset(data, M, name, proteinNames)
+#' @example examples/ex_BuildColumnToProteinDataset.R
 #'
 #' @export
 #'
@@ -138,80 +129,6 @@ BuildColumnToProteinDataset <- function(peptideData,
         i <- i + 1
     }
     return(newCol)
-}
-
-
-#' This function creates a column for the protein dataset after agregation
-#' by using the previous peptide dataset. It is a parallel version of
-#' the function \code{BuildColumnToProteinDataset}
-#'
-#' @title creates a column for the protein dataset after agregation by
-#'  using the previous peptide dataset.
-#'
-#' @param peptideData A data.frame of meta data of peptides. It is the fData
-#' of the MSnset object.
-#'
-#' @param matAdj The adjacency matrix used to agregate the peptides data.
-#'
-#' @param columnName The name of the column in Biobase::fData(peptides_MSnset)
-#' that the user wants to keep in the new protein data.frame.
-#'
-#' @param proteinNames The names of the protein in the new dataset
-#' (i.e. rownames)
-#'
-#' @return A vector
-#'
-#' @author Samuel Wieczorek
-#'
-#' @examples
-#' data(Exp1_R25_pept, package="DAPARdata")
-#' protID <- "Protein_group_IDs"
-#' obj.pep <- Exp1_R25_pept[seq_len(10)]
-#' M <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
-#' data <- Biobase::fData(obj.pep)
-#' protData <- aggregateSum(obj.pep, M)
-#' name <- "Protein_group_IDs"
-#' proteinNames <- rownames(Biobase::fData(protData$obj.prot))
-#' BuildColumnToProteinDataset_par(data, M, name, proteinNames)
-#'
-#' @export
-#'
-#' @import foreach
-BuildColumnToProteinDataset_par <- function(
-    peptideData,
-    matAdj,
-    columnName,
-    proteinNames
-    ) {
-    pkgs.require(c("doParallel", "parallel", "foreach"))
-    
-    chk <- Sys.getenv("_R_CHECK_LIMIT_CORES_", "")
-
-    # https://cran.r-project.org/web/packages/policies.html
-    if (nzchar(chk) && chk == "TRUE") {
-        # use 2 cores
-        num_workers <- 2L
-    } else {
-        # use all cores in devtools::test()
-        num_workers <- parallel::detectCores()
-    }
-
-    doParallel::registerDoParallel(cores = num_workers)
-
-    nbProt <- ncol(matAdj)
-    newCol <- rep("", nbProt)
-    i <- 1
-    newCol <- foreach::foreach(i = seq_len(length(proteinNames)), 
-        .combine = rbind) %dopar% {
-        listeIndicePeptides <- names(which(matAdj[, proteinNames[i]] == 1))
-        listeData <- unique(
-            as.character(
-                peptideData[listeIndicePeptides, columnName], ";"
-            )
-        )
-        paste0(listeData, collapse = ", ")
-    }
-    return(as.vector(newCol))
 }
 
 
@@ -543,27 +460,40 @@ aggregateSum <- function(obj.pep, X) {
 #' @author Samuel Wieczorek
 #'
 #' @examples
+#' \dontrun{
 #' data(Exp1_R25_pept, package="DAPARdata")
 #' protID <- "Protein_group_IDs"
 #' obj.pep <- Exp1_R25_pept[seq_len(10)]
 #' X <- BuildAdjacencyMatrix(obj.pep, protID, FALSE)
 #' obj.agg <- aggregateIterParallel(obj.pep, X)
+#' }
 #'
 #' @export
 #' 
 #' @import foreach
 #'
-aggregateIterParallel <- function(
-    obj.pep,
-    X,
-    init.method = "Sum",
-    method = "Mean",
-    n = NULL
-    ) {
+aggregateIterParallel <- function(obj.pep,
+                                  X,
+                                  init.method = "Sum",
+                                  method = "Mean",
+                                  n = NULL
+                                  ) {
     
     
-    pkgs.require(c("parallel", "doParallel", "foreach", "Biobase"))
-    
+   # pkgs.require(c("parallel", "doParallel", "foreach", "Biobase"))
+  if (!requireNamespace("parallel", quietly = TRUE)) {
+    stop(paste0("Please install ", "parallel", ": BiocManager::install('", "parallel", "')"))
+  }
+  if (!requireNamespace("doParallel", quietly = TRUE)) {
+    stop(paste0("Please install ", "doParallel", ": BiocManager::install('", "doParallel", "')"))
+  }
+  if (!requireNamespace("foreach", quietly = TRUE)) {
+    stop(paste0("Please install ", "foreach", ": BiocManager::install('", "foreach", "')"))
+  }
+  if (!requireNamespace("Biobase", quietly = TRUE)) {
+    stop(paste0("Please install ", "Biobase", ": BiocManager::install('", "Biobase", "')"))
+  }
+  
     doParallel::registerDoParallel()
     obj.prot <- NULL
 
@@ -589,7 +519,7 @@ aggregateIterParallel <- function(
             .conds <- Biobase::pData(obj.pep)$Condition
             condsIndices <- which(.conds == unique(.conds)[cond])
             qData <- qData.pep[, condsIndices]
-            inner.aggregate.iter(qData, X, init.method, method, n)
+            DAPAR::inner.aggregate.iter(qData, X, init.method, method, n)
         }
 
         protData <- protData[, colnames(Biobase::exprs(obj.pep))]
@@ -597,11 +527,11 @@ aggregateIterParallel <- function(
 
         # Step 3 : Build the protein dataset
         obj.prot <- finalizeAggregation(obj.pep, 
-            qData.pep, 
-            protData, 
-            metacell$metacell, 
-            X
-            )
+                                        qData.pep, 
+                                        protData, 
+                                        metacell$metacell,
+                                        X
+                                        )
         
         return(list(
             obj.prot = obj.prot,
@@ -1210,35 +1140,33 @@ finalizeAggregation <- function(obj.pep, pepData, protData, protMetacell, X) {
 #' Combine peptide metadata to build protein metadata
 #'
 #' @description
-#' Agregation rules for the cells metadata of peptides.
+#' Aggregation rules for the cells metadata of peptides.
 #' Please refer to the metacell vocabulary in `metacell.def()`
 #'
-#' # Basic agregation
-#' Agregation of non imputed values (2.X) with quantitative values
-#' (1.0, 1.X, 3.0, 3.X)
+#' # Basic aggregation
+#' (RULE 1) Aggregation of a mix of missing values (2.X) with quantitative 
+#' and/or imputed values (1.X, 3.X)
 #' |----------------------------
-#' Not possible
+#'  Not possible (tag : 'STOP')
 #' |----------------------------
 #'
-#' Agregation of different types of missing values (among 2.1, 2.2)
+#' Aggregation of different types of missing values (among 2.1, 2.2)
 #' |----------------------------
-#' * Agregation of 2.1 peptides between each other gives a missing value
-#' non imputed (2.0)
-#' * Agreagtion of 2.2 peptides between each other givesa missing value
-#' non imputed (2.0)
-#' * Agregation of a mix of 2.1 and 2.2 gives a missing value non imputed (2.0)
+#' * (RULE 2) Aggregation of 2.1 peptides between each other gives a missing value (2.0)
+#' * (RULE 3) Aggregation of 2.2 peptides between each other gives a missing value (2.0)
+#' * (RULE 4) Aggregation of a mix of 2.1 and 2.2 gives a missing value (2.0)
 #' |----------------------------
 #'
 #'
-#' Agregation of a mix of quantitative values (among 1.0, 1.1, 1.2, 3.0, 3.X)
+#' Aggregation of a mix of quantitative and/or imputed values (among 1.x and 3.X)
 #' |----------------------------
-#' * if the type of all the peptides to agregate is 1.0, 1.1 or 1.2,
-#' then the final metadata is set the this tag
-#' * if the set of metacell to agregate is a mix of 1.0, 1.1 or 1.2,
-#' then the final metadata is set to 1.0
-#' * if the set of metacell to agregate is a mix of 3.X and 3.0,
-#' then the final metadata is set to 3.0
-#' * if the set of metacell to agregate is a mix of 3.X and 3.0 and other (X.X),
+#' * (RULE 5) if the type of all the peptides to agregate is either 1.0, 1.1 or 1.2,
+#' then the final metadata is set to the corresponding tag
+#' * (RULE 5bis) if the type of all the peptides to agregate is either 3.0, 3.1 or 3.2,
+#' then the final metadata is set to the corresponding tag
+#' * (RULE 6) if the set of metacell to agregate is a mix of 1.x, then the final metadata is set to 1.0
+#' * (RULE 7) if the set of metacell to agregate is a mix of 3.x, then the final metadata is set to 3.0
+#' * (RULE 8) if the set of metacell to agregate is a mix of 3.X and 1.X,
 #' then the final metadata is set to 4.0
 #'
 #' # Post processing
@@ -1249,14 +1177,8 @@ finalizeAggregation <- function(obj.pep, pepData, protData, protMetacell, X) {
 #'
 #' @param level xxx
 #'
-#' @examples
-#' ll <- metacell.def("peptide")$node
-#' for (i in seq_len(length(ll))) {
-#' test <- lapply(
-#' combn(ll, i, simplify = FALSE),
-#' function(x) tag <- metacombine(x, "peptide")
-#' )
-#' }
+#' @example examples/ex_metacombine.R
+
 #' 
 #' @return xxx
 #' 
@@ -1270,72 +1192,87 @@ metacombine <- function(met, level) {
 
     u_met <- unique(met)
 
-    ComputeNbTags <- function(tag) {
-        sum(
-            unlist(
-                lapply(search.metacell.tags(tag, level),
-                    function(x) length(grep(x, u_met)))))
-    }
+    # ComputeNbTags <- function(tag) {
+    #     sum(
+    #         unlist(
+    #             lapply(search.metacell.tags(tag, level),
+    #                 function(x) length(grep(x, u_met)))))
+    # }
+    # 
+    # 
+    # nb.tags <- lapply(metacell.def(level)$node, 
+    #     function(x) as.numeric(x %in% u_met))
+    # n.imputed <- ComputeNbTags("Imputed")
+    # n.missing <- ComputeNbTags("Missing")
+    # n.quanti <- ComputeNbTags("Quantified")
 
+    .missing_exists <- sum(c('Missing', 'Missing POV', 'Missing MEC') %in% u_met) > 0
+    .quanti_exists <- sum(c('Quantified', 'Quant. by direct id', 'Quant. by recovery') %in% u_met) > 0
+    .imputed_exists <- sum(c('Imputed', 'Imputed POV', 'Imputed MEC') %in% u_met) > 0
+    
+    ###
+    ### RULE 1
+    ###
+    #if (n.missing > 0 && (n.imputed > 0 || n.quanti > 0)) tag <- "STOP"
+    if ( .missing_exists && (.quanti_exists ||.imputed_exists ))
+      tag <- "STOP"
+    
+    
+    ###
+    ### RULE 2
+    ###
+    if (setequal(u_met,'Missing POV')) tag <- 'Missing'
+    
+    ###
+    ### RULE 3
+    ###
+    if(setequal(u_met, 'Missing MEC')) tag <- 'Missing'
+    
+    ###
+    ### RULE 4
+    ###
+    if(setequal(u_met, c('Missing POV', 'Missing MEC'))) tag <- 'Missing'
 
-    nb.tags <- lapply(metacell.def(level)$node, 
-        function(x) as.numeric(x %in% u_met))
-    n.imputed <- ComputeNbTags("Imputed")
-    n.missing <- ComputeNbTags("Missing")
-    n.quanti <- ComputeNbTags("Quantified")
-
-
-    if (n.missing > 0 && (n.imputed > 0 || n.quanti > 0)) tag <- "STOP"
-    # stop("You try to combine missing values (2.X) with quantitative values 
-    # (1.X or 3.X).")
-
-    # sw : Agregation of a mix of 2.X gives a missing value non imputed (2.0)
-    if (n.missing > 0 && n.quanti == 0 && n.imputed == 0) tag <- "Missing"
-
-
-    # # Agregation of a mix of 2.1 and 2.2 gives a missing value non imputed 
-    # (2.0)
-    # if (length(u_met)== length(grep('missing_', u_met))) tag <- 'Missing'
-    #
-    # # Agreagtion of 2.2 peptides between each other gives a missing value non 
-    # imputed (2.0)
-    # if (length(u_met)==1 && 'missing_MEC' == u_met) tag <- 'Missing'
-    #
-    # # Agreagtion of 2.2 peptides between each other gives a missing value 
-    # non imputed (2.0)
-    # if (length(u_met)==1 && 'missing_POV' == u_met) tag <- 'Missing'
-    #
-    # # Agregation of 2.1 peptides between each other gives a missing value 
-    # non imputed (2.0)
-    # if (length(u_met)==1 && 'missing_MEC' == u_met) tag <- 'Missing'
-
+    
+    # --- RULE 5 ---
     # if the type of all the peptides to agregate is 1.0, 1.1 or 1.2, then 
-    # the final
-    # metadata is set the this tag
-    if (length(u_met) == 1 && u_met == "Quantified") tag <- "Quantified"
-    if (length(u_met) == 1 && u_met == "Quant. by direct id") tag <- "Quant. by direct id"
-    if (length(u_met) == 1 && u_met == "Quant. by recovery") tag <- "Quant. by recovery"
+    # the final metadata is set the this tag
+    if (length(u_met) == 1 && 
+        (u_met %in%  c('Quantified', "Quant. by direct id", "Quant. by recovery")))
+      tag <- u_met
+    
 
-
+    # --- RULE 5 bis---
+    # if the type of all the peptides to agregate is 3.0, 3.1 or 3.2, then 
+    # the final metadata is set the this tag
+    if (length(u_met) == 1 &&
+        (u_met %in%  c('Imputed', "Imputed POV", "Imputed MEC")))
+      tag <- u_met
+    
+    
+    # --- RULE 6 ---
     # if the set of metacell to agregate is a mix of 1.0, 1.1 or 1.2, then 
-    # the final
-    # metadata is set to 1.0
-    if (n.quanti > 1 && n.imputed == 0 && n.missing == 0) tag <- "Quantified"
-
-
-    # If the set of metacell to agregate is a mix of 3.X and 3.0, then the 
-    # final
-    # metadata is set to 3.0
-    if (n.quanti == 0 && n.imputed > 0 && n.missing == 0) tag <- "Imputed"
-
-    # If the set of metacell to agregate is a mix of 3.X and 3.0 and other 
-    # (X.X),
-    # then the final metadata is set to 4.0
-    if (n.quanti > 0 && n.imputed > 0 && n.missing == 0) {
+    # the final metadata is set to 1.0
+    inter <- intersect(u_met, c('Quantified', "Quant. by direct id", "Quant. by recovery"))
+    if ((length(inter) >=2 ) && length(u_met)==length(inter) && sum(u_met == inter)== length(u_met) )
+      tag <- 'Quantified'
+    
+    
+    # --- RULE 7 ---
+    # if the set of metacell to agregate is a mix of 3.0, 3.1 or 3.2, then 
+    # the final metadata is set to 3.0
+    inter <- intersect(u_met, c('Imputed', "Imputed POV", "Imputed MEC"))
+    if ((length(inter) >= 2) &&  length(u_met)==length(inter) && sum(u_met == inter)== length(u_met) )
+      tag <- 'Imputed'
+    
+    
+    
+    # If the set of metacell to agregate is a mix of 3.X and 3.0 and quantitative values 
+    # (1.X), then the final metadata is set to 4.0
+    if (length(u_met) > 1 && !.missing_exists && .quanti_exists && .imputed_exists) 
         tag <- "Combined tags"
-    }
 
-    # print(paste0(paste0(u_met, collapse=' '), ' ---> ', tag))
+    
     return(tag)
 }
 

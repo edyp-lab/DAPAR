@@ -3,7 +3,6 @@
 export(AggregateMetacell)
 export(BuildAdjacencyMatrix)
 export(BuildColumnToProteinDataset)
-export(BuildColumnToProteinDataset_par)
 export(BuildMetaCell)
 export(CVDistD_HC)
 export(CountPep)
