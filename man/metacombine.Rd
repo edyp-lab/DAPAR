@@ -15,35 +15,33 @@ metacombine(met, level)
 xxx
 }
 \description{
-Agregation rules for the cells metadata of peptides.
+Aggregation rules for the cells metadata of peptides.
 Please refer to the metacell vocabulary in `metacell.def()`
 
-# Basic agregation
-Agregation of non imputed values (2.X) with quantitative values
-(1.0, 1.X, 3.0, 3.X)
+# Basic aggregation
+(RULE 1) Aggregation of a mix of missing values (2.X) with quantitative 
+and/or imputed values (1.X, 3.X)
 |----------------------------
-Not possible
+ Not possible (tag : 'STOP')
 |----------------------------
 
-Agregation of different types of missing values (among 2.1, 2.2)
+Aggregation of different types of missing values (among 2.1, 2.2)
 |----------------------------
-* Agregation of 2.1 peptides between each other gives a missing value
-non imputed (2.0)
-* Agreagtion of 2.2 peptides between each other givesa missing value
-non imputed (2.0)
-* Agregation of a mix of 2.1 and 2.2 gives a missing value non imputed (2.0)
+* (RULE 2) Aggregation of 2.1 peptides between each other gives a missing value (2.0)
+* (RULE 3) Aggregation of 2.2 peptides between each other gives a missing value (2.0)
+* (RULE 4) Aggregation of a mix of 2.1 and 2.2 gives a missing value (2.0)
 |----------------------------
 
 
-Agregation of a mix of quantitative values (among 1.0, 1.1, 1.2, 3.0, 3.X)
+Aggregation of a mix of quantitative and/or imputed values (among 1.x and 3.X)
 |----------------------------
-* if the type of all the peptides to agregate is 1.0, 1.1 or 1.2,
-then the final metadata is set the this tag
-* if the set of metacell to agregate is a mix of 1.0, 1.1 or 1.2,
-then the final metadata is set to 1.0
-* if the set of metacell to agregate is a mix of 3.X and 3.0,
-then the final metadata is set to 3.0
-* if the set of metacell to agregate is a mix of 3.X and 3.0 and other (X.X),
+* (RULE 5) if the type of all the peptides to agregate is either 1.0, 1.1 or 1.2,
+then the final metadata is set to the corresponding tag
+* (RULE 5bis) if the type of all the peptides to agregate is either 3.0, 3.1 or 3.2,
+then the final metadata is set to the corresponding tag
+* (RULE 6) if the set of metacell to agregate is a mix of 1.x, then the final metadata is set to 1.0
+* (RULE 7) if the set of metacell to agregate is a mix of 3.x, then the final metadata is set to 3.0
+* (RULE 8) if the set of metacell to agregate is a mix of 3.X and 1.X,
 then the final metadata is set to 4.0
 
 # Post processing
@@ -53,10 +51,11 @@ TODO
 \examples{
 ll <- metacell.def("peptide")$node
 for (i in seq_len(length(ll))) {
-test <- lapply(
-combn(ll, i, simplify = FALSE),
-function(x) tag <- metacombine(x, "peptide")
-)
+  test <- lapply(
+    combn(ll, i, simplify = FALSE),
+    function(x) tag <- metacombine(x, "peptide")
+  )
 }
 
+metacombine(c('Quant. by direct id', 'Missing POV'), 'peptide')
 }

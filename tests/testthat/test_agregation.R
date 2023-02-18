@@ -1,6 +1,80 @@
 context("Agregation peptides to proteins")
 
 require(DAPARdata)
+
+library(testthat)
+
+test_that("metacombine()", {
+  met <- c('Quant. by direct id', 'Missing POV')
+  tag <- metacombine(met, 'peptide')
+  expect_equal(tag, 'STOP')
+  
+  
+  met <- c('Quant. by direct id')
+  tag <- metacombine(met, 'peptide')
+  expect_equal(tag, 'Quant. by direct id')
+  
+  met <- c('Quant. by recovery')
+  tag <- metacombine(met, 'peptide')
+  expect_equal(tag, 'Quant. by recovery')
+  
+  met <- c('Quant. by recovery', 'Quant. by direct id')
+  tag <- metacombine(met, 'peptide')
+  expect_equal(tag, 'Quantified')
+  
+  met <- c('Quant. by recovery', 'Imputed POV')
+  tag <- metacombine(met, 'peptide')
+  expect_equal(tag, 'Combined tags')
+  
+  met <- c('Quant. by recovery', 'Imputed MEC')
+  tag <- metacombine(met, 'peptide')
+  expect_equal(tag, 'Combined tags')
+  
+  
+  met <- c('Quant. by direct id', 'Imputed MEC')
+  tag <- metacombine(met, 'peptide')
+  expect_equal(tag, 'Combined tags')
+  
+  
+  met <- c('Quant. by direct id', 'Imputed POV')
+  tag <- metacombine(met, 'peptide')
+  expect_equal(tag, 'Combined tags')
+  
+  
+  met <- c('Quant. by recovery', 'Quant. by direct id', 'Imputed POV')
+  tag <- metacombine(met, 'peptide')
+  expect_equal(tag, 'Combined tags')
+  
+  
+  met <- c('Quant. by recovery', 'Quant. by direct id', 'Imputed MEC')
+  tag <- metacombine(met, 'peptide')
+  expect_equal(tag, 'Combined tags')
+  
+  
+  met <- c('Quant. by recovery', 'Quant. by direct id', 'Imputed POV', 'Imputed MEC')
+  tag <- metacombine(met, 'peptide')
+  expect_equal(tag, 'Combined tags')
+  
+  
+  
+  
+  met <- c('Imputed POV')
+  tag <- metacombine(met, 'peptide')
+  expect_equal(tag, 'Imputed POV')
+  
+  
+  met <- c('Imputed MEC')
+  tag <- metacombine(met, 'peptide')
+  expect_equal(tag, "Imputed MEC")
+  
+  
+  met <- c('Imputed POV', 'Imputed MEC')
+  tag <- metacombine(met, 'peptide')
+  expect_equal(tag, "Imputed")
+  
+})
+
+
 #
 # #########################################################
 # test_that("Build Adjacency Matrix with sparse Matrix", {

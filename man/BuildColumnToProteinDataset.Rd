@@ -36,7 +36,6 @@ protData <- aggregateMean(obj.pep, M)
 name <- "Protein_group_IDs"
 proteinNames <- rownames(Biobase::fData(protData$obj.prot))
 new.col <- BuildColumnToProteinDataset(data, M, name, proteinNames)
-
 }
 \author{
 Samuel Wieczorek
