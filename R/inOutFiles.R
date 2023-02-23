@@ -231,7 +231,7 @@ createMSnset <- function(file,
     tryCatch(
         {
             find.package("Prostar")
-            .version <- Biobase::package.version("Prostar")
+            .version <- installed.packages(lib.loc = Prostar.loc)["Prostar", "Version"]
             obj@experimentData@other$Prostar_Version <- .version
         },
         error = function(e) obj@experimentData@other$Prostar_Version <- NA
@@ -241,8 +241,8 @@ createMSnset <- function(file,
     tryCatch(
         {
             find.package("DAPAR")
-            .version <- Biobase::package.version("DAPAR")
-            obj@experimentData@other$Prostar_Version <- .version
+            .version <- installed.packages(lib.loc = Prostar.loc)["DAPAR", "Version"]
+            obj@experimentData@other$DAPAR_Version <- .version
         },
         error = function(e) obj@experimentData@other$DAPAR_Version <- NA
     )
