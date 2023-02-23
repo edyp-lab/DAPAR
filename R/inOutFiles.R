@@ -229,22 +229,22 @@ createMSnset <- function(file,
 
     obj@experimentData@other$Prostar_Version <- NA
     tryCatch(
-        {
-            find.package("Prostar")
-            .version <- Biobase::package.version("Prostar")
-            obj@experimentData@other$Prostar_Version <- .version
-        },
-        error = function(e) obj@experimentData@other$Prostar_Version <- NA
+      {
+        find.package("Prostar")
+        .version <- installed.packages(lib.loc = Prostar.loc)["Prostar", "Version"]
+        obj@experimentData@other$Prostar_Version <- .version
+      },
+      error = function(e) obj@experimentData@other$Prostar_Version <- NA
     )
-
+    
     obj@experimentData@other$DAPAR_Version <- NA
     tryCatch(
-        {
-            find.package("DAPAR")
-            .version <- Biobase::package.version("DAPAR")
-            obj@experimentData@other$Prostar_Version <- .version
-        },
-        error = function(e) obj@experimentData@other$DAPAR_Version <- NA
+      {
+        find.package("DAPAR")
+        .version <- installed.packages(lib.loc = Prostar.loc)["DAPAR", "Version"]
+        obj@experimentData@other$DAPAR_Version <- .version
+      },
+      error = function(e) obj@experimentData@other$DAPAR_Version <- NA
     )
 
     obj@experimentData@other$proteinId <- proteinId
