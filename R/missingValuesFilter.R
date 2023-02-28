@@ -662,50 +662,47 @@ deleteLinesFromIndices <- function(obj, deleteThat = NULL, processText = "") {
 #'
 #' @export
 #'
-GetIndices_MetacellFiltering <- function(
-        obj, 
-    level, 
-    pattern, 
-    type, 
-    percent, 
-    op, 
-    th) {
-    if (missing(obj)) {
+GetIndices_MetacellFiltering <- function(obj,
+                                         level, 
+                                         pattern,
+                                         type,
+                                         percent, 
+                                         op, 
+                                         th) {
+    if (missing(obj))
         stop("'obj' is required.")
-    }
-    if (missing(level)) {
+    
+    if (missing(level))
         stop("'level' is required.")
-    }
-    if (missing(pattern)) {
+
+    if (missing(pattern))
         stop("'pattern' is required.")
-    }
-    if (missing(type)) {
+
+    if (missing(type))
         stop("'type' is required.")
-    }
-    if (missing(percent)) {
+
+    if (missing(percent))
         stop("'percent' is required.")
-    }
-    if (missing(op)) {
+
+    if (missing(op))
         stop("'op' is required.")
-    }
-    if (missing(th)) {
+
+    if (missing(th))
         stop("'th' is required.")
-    }
+
 
 
     indices <- NULL
-
-    if (!(pattern %in% metacell.def(level)$node && 
-            type != "None" && !is.null(type))) {
+    is.subset <- sum(pattern == intersect(pattern,  metacell.def(level)$node))==length(pattern)
+    if (!is.subset &&  type != "None" && !is.null(type)) {
         warning("Either 'pattern' nor 'type' are equal to 'None'")
         return(NULL)
     }
 
-    mask <- match.metacell(
-        metadata = GetMetacell(obj),
-        pattern = pattern,
-        level = level
-    )
+    mask <- match.metacell(metadata = GetMetacell(obj),
+                           pattern = pattern,
+                           level = level
+                           )
 
     indices <- switch(type,
         WholeLine = GetIndices_WholeLine(metacell.mask = mask),

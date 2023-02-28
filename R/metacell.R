@@ -143,16 +143,16 @@ metacell.def <- function(level) {
 
     colors <- list(
         "Any" = "white",
-        "Missing" = "white",
-        "Missing POV" = "lightblue",
-        "Missing MEC" = "orange",
-        "Quantified" = "white",
-        "Quant. by recovery" = "lightgrey",
-        "Quant. by direct id" = "white",
-        "Combined tags" = "red",
-        "Imputed" = "white",
-        "Imputed POV" = "#0040FF",
-        "Imputed MEC" = "#DF7401"
+        "Missing" = "#CF8205",
+        "Missing POV" = "#E5A947",
+        "Missing MEC" = "#F1CA8A",
+        "Quantified" = "#0A31D0",
+        "Quant. by recovery" = "#B9C4F2",
+        "Quant. by direct id" = "#6178D9",
+        "Combined tags" = "#1E8E05",
+        "Imputed" = "#A40C0C",
+        "Imputed POV" = "#E34343",
+        "Imputed MEC" = "#F59898"
     )
 
     def <- cbind(def, color = rep("white", nrow(def)))
@@ -165,16 +165,26 @@ metacell.def <- function(level) {
 }
 
 
-
+#' @title Parent name of a node
+#' @description xxx
+#' @param level xxx
+#' @param node xxx
+#' @export
 Parent <- function(level, node=NULL){
     tags <- metacell.def(level)
     return(tags$parent[which(tags$node==node) ])
 }
 
-
+#' @title Names of all chidren of a node
+#' @description xxx
+#' @param level xxx
+#' @param node xxx
+#' @export
 Children <- function(level, parent = NULL){
     tags <- metacell.def(level)
-    return(tags$node[which(tags$parent==parent) ])
+    if (!is.null(parent) && length(parent) > 0)
+      childrens <- tags$node[which(tags$parent==parent) ]
+    return(childrens)
     
 }
 
@@ -781,30 +791,25 @@ Metacell_maxquant <- function(qdata, conds, df, level = NULL) {
 #' @export
 #'
 match.metacell <- function(metadata, pattern, level) {
-    if (missing(metadata)) {
+    if (missing(metadata))
         stop("'metadata' is required")
-    }
-    if (missing(pattern)) {
+
+    if (missing(pattern))
         stop("'pattern' is required.")
-    }
-    if (missing(level)) {
+
+    if (missing(level))
         stop("'level' is required.")
-    }
 
 
-    if (!(pattern %in% metacell.def(level)$node)) {
+    #is.subset <- pattern == intersect(pattern,  metacell.def(level)$node)
+    if (sum(pattern == intersect(pattern,  metacell.def(level)$node)) !=  length(pattern)) {
         stop(paste0(
             "'pattern' is not correct. Available values are: ",
             paste0(metacell.def(level)$node, collapse = " ")
         ))
     }
 
-    ll.res <- lapply(
-        search.metacell.tags(pattern = pattern, level),
-        function(x) {
-            metadata == x
-        }
-    )
+    ll.res <- lapply(pattern, function(x) {metadata == x})
 
     res <- NULL
     for (i in seq_len(length(ll.res))) {
@@ -914,7 +919,7 @@ UpdateMetacell <- function(obj, method = "", na.type) {
 #'
 #' @examples
 #' search.metacell.tags("Missing POV", "peptide")
-#' search.metacell.tags("Quantified", "peptide")
+#' search.metacell.tags("Quantified", "peptide", depth = "0")
 #'
 #' @export
 #' 

@@ -21,7 +21,7 @@
 #' @export
 #'
 metacellPerLinesHisto_HC <- function(obj,
-                                     pattern,
+                                     pattern = NULL,
                                      detailed = FALSE,
                                      indLegend = "auto",
                                      showValues = FALSE) {
@@ -32,10 +32,7 @@ metacellPerLinesHisto_HC <- function(obj,
     }
     if (missing(pattern)) {
         stop("'pattern' is missing.")
-    } else if (pattern %in% c("", "None")) {
-        warning("'pattern' is empty.")
-        return(NULL)
-    }
+    } 
 
     qData <- Biobase::exprs(obj)
     samplesData <- Biobase::pData(obj)
@@ -79,7 +76,7 @@ metacellPerLinesHisto_HC <- function(obj,
     myColors <- rep("lightgrey", nrow(df))
 
     h1 <- highchart() %>%
-        hc_title(text = paste0("Nb of lines with x '", pattern, "' tags")) %>%
+        hc_title(text = paste0("Nb of lines with x (", paste0(pattern, collapse=', '), ") tags")) %>%
         hc_add_series(data = df, type = "column", colorByPoint = TRUE) %>%
         hc_colors(myColors) %>%
         hc_plotOptions(
@@ -89,7 +86,7 @@ metacellPerLinesHisto_HC <- function(obj,
         hc_legend(enabled = FALSE) %>%
         hc_xAxis(categories = row.names(df), 
             title = list(
-                text = paste0("Nb of '", pattern, "' tags in a line")
+                text = paste0("Nb of (", paste0(pattern, collapse=', '), ") tags in a line")
                 )
             ) %>%
         my_hc_ExportMenu(filename = "missingValuesPlot1") %>%
@@ -151,10 +148,7 @@ metacellPerLinesHistoPerCondition_HC <- function(obj,
     }
     if (missing(pattern)) {
         stop("'pattern' is missing.")
-    } else if (pattern %in% c("", "None")) {
-        warning("'pattern' is empty.")
-        return(NULL)
-    }
+    } 
 
     qData <- Biobase::exprs(obj)
     samplesData <- Biobase::pData(obj)
@@ -222,8 +216,8 @@ metacellPerLinesHistoPerCondition_HC <- function(obj,
     }
 
     h1 <- highchart() %>%
-        hc_title(text = paste0("Nb of lines containing x '", 
-            pattern, "' tags (condition-wise)")) %>%
+        hc_title(text = paste0("Nb of lines containing x (", 
+                               paste0(pattern, collapse=', '), ") tags (condition-wise)")) %>%
         my_hc_chart(chartType = "column") %>%
         hc_plotOptions(
             column = list(stacking = ""),
@@ -233,8 +227,8 @@ metacellPerLinesHistoPerCondition_HC <- function(obj,
         hc_colors(unique(myColors)) %>%
         hc_legend(enabled = FALSE) %>%
         hc_xAxis(categories = seq.int(from=0, to=ncolMatrix), 
-            title = list(text = paste0("Nb of '", pattern, 
-                "' tags in each line (condition-wise)"))) %>%
+            title = list(text = paste0("Nb of (", paste0(pattern, collapse=', '), 
+                ") tags in each line (condition-wise)"))) %>%
         my_hc_ExportMenu(filename = "missingValuesPlot_2") %>%
         hc_tooltip(
             headerFormat = "",
@@ -279,10 +273,10 @@ metacellPerLinesHistoPerCondition_HC <- function(obj,
 #' @export
 #'
 metacellHisto_HC <- function(obj,
-    pattern,
-    indLegend = "auto",
-    showValues = FALSE,
-    pal = NULL) {
+                             pattern,
+                             indLegend = "auto",
+                             showValues = FALSE,
+                             pal = NULL) {
     if (missing(obj)) {
         stop("'obj' is missing.")
     } else if (is.null(obj)) {
@@ -290,9 +284,6 @@ metacellHisto_HC <- function(obj,
     }
     if (missing(pattern)) {
         stop("'pattern' is missing.")
-    } else if (pattern %in% c("", "None")) {
-        warning("'pattern' is empty.")
-        return(NULL)
     }
 
     qData <- Biobase::exprs(obj)
@@ -322,9 +313,9 @@ metacellHisto_HC <- function(obj,
 
 
     mask <- match.metacell(GetMetacell(obj),
-        pattern = pattern,
-        level = obj@experimentData@other$typeOfData
-    )
+                           pattern = pattern,
+                           level = obj@experimentData@other$typeOfData
+                           )
 
     NbNAPerCol <- colSums(mask)
 
@@ -337,7 +328,7 @@ metacellHisto_HC <- function(obj,
 
     h1 <- highchart() %>%
         my_hc_chart(chartType = "column") %>%
-        hc_title(text = paste0("Nb of '", pattern, "' tags by replicate")) %>%
+        hc_title(text = paste0("Nb of (", paste0(pattern, collapse=', '), ") tags by replicate")) %>%
         hc_add_series(df, type = "column", colorByPoint = TRUE) %>%
         hc_colors(myColors) %>%
         hc_plotOptions(
