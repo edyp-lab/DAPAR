@@ -884,11 +884,11 @@ UpdateMetacell <- function(obj, method = "", na.type) {
     # }
 
     # level <- obj@experimentData@other$typeOfData
-    # .meta <- obj@experimentData@other$names_metacell
+     .meta <- obj@experimentData@other$names_metacell
     # ind <- match.metacell(metadata = Biobase::fData(obj)[, .meta],
     #                       pattern = na.type,
     #                       level = level) & !is.na(Biobase::exprs(obj))
-ind <- !is.na(Biobase::exprs(obj))
+    ind <- !is.na(Biobase::exprs(obj))
     Biobase::fData(obj)[, .meta][ind] <- gsub("Missing",
                                               "Imputed",
                                               Biobase::fData(obj)[, .meta][ind],
