@@ -849,7 +849,7 @@ GetMetacell <- function(obj) {
 }
 
 #' @title
-#' Update metacell after imputation
+#' Update the cells metadata tags after imputation
 #'
 #' @description
 #' Update the metacell information of missing values that were imputed
@@ -867,37 +867,33 @@ GetMetacell <- function(obj) {
 #' @return xxx
 #' 
 #' @examples 
-#' NULL
+#' data(Exp1_R25_pept, package="DAPARdata")
+#' obj <- Exp1_R25_pept[seq_len(10)]
+#' obj.imp.pov <- wrapper.impute.KNN(obj, K = 3, na.type = "Missing POV")
 #'
 UpdateMetacell <- function(obj, method = "", na.type) {
     if (missing(obj)) {
         stop("'obj' is required.")
     }
-    if (missing(na.type)) {
-        values <- unname(search.metacell.tags(
-            "Missing",
-            obj@experimentData@other$typeOfData
-        ))
-        stop(
-            "'na.type' is required. Available values are: ",
-            paste0(values, collapse = " ")
-        )
-    }
+    # if (missing(na.type)) {
+    #     values <- unname(search.metacell.tags("Missing", obj@experimentData@other$typeOfData))
+    #     stop(
+    #         "'na.type' is required. Available values are: ",
+    #         paste0(values, collapse = " ")
+    #     )
+    # }
 
-    level <- obj@experimentData@other$typeOfData
-    .meta <- obj@experimentData@other$names_metacell
-    ind <- match.metacell(
-        metadata = Biobase::fData(obj)[, .meta],
-        pattern = na.type,
-        level = level
-    ) & !is.na(Biobase::exprs(obj))
-
-    Biobase::fData(obj)[, .meta][ind] <- 
-        gsub("Missing",
-        "Imputed",
-        Biobase::fData(obj)[, .meta][ind],
-        fixed = TRUE
-    )
+    # level <- obj@experimentData@other$typeOfData
+    # .meta <- obj@experimentData@other$names_metacell
+    # ind <- match.metacell(metadata = Biobase::fData(obj)[, .meta],
+    #                       pattern = na.type,
+    #                       level = level) & !is.na(Biobase::exprs(obj))
+ind <- !is.na(Biobase::exprs(obj))
+    Biobase::fData(obj)[, .meta][ind] <- gsub("Missing",
+                                              "Imputed",
+                                              Biobase::fData(obj)[, .meta][ind],
+                                              fixed = TRUE
+                                              )
     return(obj)
 }
 
