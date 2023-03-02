@@ -50,7 +50,7 @@ wrapper.impute.mle <- function(obj, na.type) {
     res <- imp4p::impute.mle(Biobase::exprs(obj), conditions = cond)
 
     Biobase::exprs(obj) <- res
-    obj <- UpdateMetacell(obj, "mle", na.type)
+    obj <- UpdateMetacellAfterImputation(obj, "mle", na.type)
 
     return(obj)
 }
@@ -229,7 +229,7 @@ wrapper.dapar.impute.mi <- function(obj,
         na.type <- "Missing"
     }
 
-    obj <- UpdateMetacell(obj, "mi", na.type)
+    obj <- UpdateMetacellAfterImputation(obj, "mi", na.type)
 
     return(obj)
 }
@@ -340,7 +340,7 @@ wrapper.impute.pa2 <- function(obj,
     tab_imp <- tab_imp[, sample.names.old]
 
     Biobase::exprs(obj) <- tab_imp
-    obj <- UpdateMetacell(obj, "pa2", "Missing")
+    obj <- UpdateMetacellAfterImputation(obj, "pa2", "Missing")
 
     return(obj)
 }

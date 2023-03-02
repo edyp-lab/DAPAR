@@ -856,10 +856,6 @@ GetMetacell <- function(obj) {
 #'
 #' @param obj xxx
 #'
-#' @param method xxx
-#'
-#' @param na.type xxx
-#'
 #' @author Samuel Wieczorek
 #'
 #' @export
@@ -871,27 +867,18 @@ GetMetacell <- function(obj) {
 #' obj <- Exp1_R25_pept[seq_len(10)]
 #' obj.imp.pov <- wrapper.impute.KNN(obj, K = 3, na.type = "Missing POV")
 #'
-UpdateMetacell <- function(obj, method = "", na.type) {
-    if (missing(obj)) {
+UpdateMetacellAfterImputation <- function(obj) {
+    if (missing(obj))
         stop("'obj' is required.")
-    }
-    # if (missing(na.type)) {
-    #     values <- unname(search.metacell.tags("Missing", obj@experimentData@other$typeOfData))
-    #     stop(
-    #         "'na.type' is required. Available values are: ",
-    #         paste0(values, collapse = " ")
-    #     )
-    # }
 
-    # level <- obj@experimentData@other$typeOfData
-     .meta <- obj@experimentData@other$names_metacell
-    # ind <- match.metacell(metadata = Biobase::fData(obj)[, .meta],
-    #                       pattern = na.type,
-    #                       level = level) & !is.na(Biobase::exprs(obj))
-    ind <- !is.na(Biobase::exprs(obj))
-    Biobase::fData(obj)[, .meta][ind] <- gsub("Missing",
-                                              "Imputed",
-                                              Biobase::fData(obj)[, .meta][ind],
+    
+  ind <- match.metacell(metadata = GetMetacell(obj),
+                        pattern = c('Missing', 'Missing POV', 'Missing MEC'),
+                        level = GetTypeofData(obj)) & !is.na(Biobase::exprs(obj))
+  
+  names.meta <- colnames(GetMetacell(obj))
+  Biobase::fData(obj)[, names.meta][ind] <- gsub("Missing", "Imputed",
+                                              Biobase::fData(obj)[, names.meta][ind],
                                               fixed = TRUE
                                               )
     return(obj)

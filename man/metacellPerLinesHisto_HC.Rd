@@ -6,7 +6,7 @@
 \usage{
 metacellPerLinesHisto_HC(
   obj,
-  pattern,
+  pattern = NULL,
   detailed = FALSE,
   indLegend = "auto",
   showValues = FALSE

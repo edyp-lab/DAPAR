@@ -22,7 +22,7 @@ Gives all the tags of the metadata vocabulary containing the pattern
 }
 \examples{
 search.metacell.tags("Missing POV", "peptide")
-search.metacell.tags("Quantified", "peptide")
+search.metacell.tags("Quantified", "peptide", depth = "0")
 
 }
 \author{

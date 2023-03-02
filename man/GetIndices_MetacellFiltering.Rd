@@ -36,11 +36,11 @@ given their indice.
 data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept[seq_len(10)]
 level <- GetTypeofData(obj)
-pattern <- "Missing"
-type <- "AllCond"
+pattern <- c("Missing", "Missing POV")
+type <- "AtLeastOneCond"
 percent <- FALSE
-op <- "=="
-th <- 2
+op <- ">="
+th <- 1
 indices <- GetIndices_MetacellFiltering(obj, level, pattern, type, percent, op, th)
 
 
