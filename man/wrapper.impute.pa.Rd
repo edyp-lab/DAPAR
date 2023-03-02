@@ -4,16 +4,13 @@
 \alias{wrapper.impute.pa}
 \title{Imputation of peptides having no values in a biological condition.}
 \usage{
-wrapper.impute.pa(obj = NULL, q.min = 0.025, na.type)
+wrapper.impute.pa(obj = NULL, q.min = 0.025)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
 
 \item{q.min}{Same as the function \code{impute.pa()} in the package
 \code{imp4p}}
-
-\item{na.type}{A string which indicates the type of missing values to impute.
-Available values are: `NA` (for both POV and MEC).}
 }
 \value{
 The \code{Biobase::exprs(obj)} matrix with imputed values instead of
@@ -26,9 +23,6 @@ This method is a wrapper to the function \code{impute.pa} of the package
 \examples{
 data(Exp1_R25_prot, package="DAPARdata")
 obj <- Exp1_R25_prot[seq_len(10)]
-level <- 'protein'
-metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
-indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 obj.imp.pov <- wrapper.impute.pa(obj, na.type = "Missing POV")
 
 }

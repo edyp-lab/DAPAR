@@ -4,7 +4,7 @@
 \alias{wrapper.impute.slsa}
 \title{Imputation of peptides having no values in a biological condition.}
 \usage{
-wrapper.impute.slsa(obj = NULL, na.type = NULL)
+wrapper.impute.slsa(obj = NULL)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
@@ -23,7 +23,7 @@ This method is a wrapper to the function \code{impute.slsa()} of the package
 \examples{
 data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept[seq_len(100)]
-obj.slsa.pov <- wrapper.impute.slsa(obj, na.type = "Missing POV")
+obj.slsa.pov <- wrapper.impute.slsa(obj)
 
 }
 \author{

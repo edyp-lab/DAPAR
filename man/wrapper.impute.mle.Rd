@@ -4,7 +4,7 @@
 \alias{wrapper.impute.mle}
 \title{Imputation of peptides having no values in a biological condition.}
 \usage{
-wrapper.impute.mle(obj, na.type)
+wrapper.impute.mle(obj)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
@@ -28,7 +28,7 @@ obj <- Exp1_R25_pept[seq_len(10), ]
 level <- 'peptide'
 metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
 indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
-obj.imp.na <- wrapper.impute.mle(obj, na.type = "Missing")
+obj.imp.na <- wrapper.impute.mle(obj)
 
 }
 \author{

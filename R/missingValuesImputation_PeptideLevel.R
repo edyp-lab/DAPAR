@@ -26,31 +26,24 @@
 #' level <- 'peptide'
 #' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
-#' obj.imp.na <- wrapper.impute.mle(obj, na.type = "Missing")
+#' obj.imp.na <- wrapper.impute.mle(obj)
 #'
 #' @export
 #'
 #'
-wrapper.impute.mle <- function(obj, na.type) {
+wrapper.impute.mle <- function(obj) {
     
     pkgs.require('imp4p')
     
-    if (missing(obj)) {
+    if (missing(obj))
         stop("'obj' is required.")
-    }
-    if (missing(na.type)) {
-        stop("'na.type' is required. Available value is 'Missing'")
-    } else if (!(na.type %in% c("Missing"))) {
-        stop("Available value for na.type is: 'Missing'.")
-    }
 
-
-    cond <- factor(Biobase::pData(obj)$Condition, 
-        levels = unique(Biobase::pData(obj)$Condition))
+    tmp_cond <- Biobase::pData(obj)$Condition
+    cond <- factor(tmp_cond, levels = unique(tmp_cond))
     res <- imp4p::impute.mle(Biobase::exprs(obj), conditions = cond)
 
     Biobase::exprs(obj) <- res
-    obj <- UpdateMetacellAfterImputation(obj, "mle", na.type)
+    obj <- UpdateMetacellAfterImputation(obj)
 
     return(obj)
 }
@@ -133,35 +126,36 @@ wrapper.impute.mle <- function(obj, na.type) {
 #'
 #'
 wrapper.dapar.impute.mi <- function(obj,
-    nb.iter = 3,
-    nknn = 15,
-    selec = 600,
-    siz = 500, weight = 1,
-    ind.comp = 1,
-    progress.bar = FALSE,
-    x.step.mod = 300,
-    x.step.pi = 300,
-    nb.rei = 100,
-    method = 4,
-    gridsize = 300,
-    q = 0.95,
-    q.min = 0,
-    q.norm = 3,
-    eps = 0,
-    methodi = "slsa",
-    lapala = TRUE,
-    distribution = "unif") {
+                                    nb.iter = 3,
+                                    nknn = 15,
+                                    selec = 600,
+                                    siz = 500, 
+                                    weight = 1,
+                                    ind.comp = 1,
+                                    progress.bar = FALSE,
+                                    x.step.mod = 300,
+                                    x.step.pi = 300,
+                                    nb.rei = 100,
+                                    method = 4,
+                                    gridsize = 300,
+                                    q = 0.95,
+                                    q.min = 0,
+                                    q.norm = 3,
+                                    eps = 0,
+                                    methodi = "slsa",
+                                    lapala = TRUE,
+                                    distribution = "unif") {
 
     pkgs.require('imp4p')
 
-    if (missing(obj)) {
+    if (missing(obj))
         stop("'obj' is required.")
-    }
+
 
 
     ## order exp and pData table before using imp4p functions
-    conds <- factor(Biobase::pData(obj)$Condition, 
-        levels = unique(Biobase::pData(obj)$Condition))
+    tmp <- Biobase::pData(obj)$Condition
+    conds <- factor(tmp, levels = unique(tmp))
     sample.names.old <- Biobase::pData(obj)$Sample.name
     sTab <- Biobase::pData(obj)
     qData <- Biobase::exprs(obj)
@@ -179,39 +173,36 @@ wrapper.dapar.impute.mi <- function(obj,
     dat.slsa <- imp4p::impute.rand(tab = qData, conditions = conditions)
 
 
-    res <- imp4p::estim.mix(
-        tab = qData,
-        tab.imp = dat.slsa,
-        conditions = conditions
-    )
+    res <- imp4p::estim.mix(tab = qData,
+                            tab.imp = dat.slsa,
+                            conditions = conditions
+                            )
 
 
     born <- imp4p::estim.bound(tab = qData, conditions = conditions)
     proba <- imp4p::prob.mcar.tab(born$tab.upper, res)
 
 
-    data.mi <- imp4p::mi.mix(
-        tab = qData,
-        tab.imp = dat.slsa,
-        prob.MCAR = proba,
-        conditions = conditions,
-        repbio = repbio,
-        reptech = reptech,
-        nb.iter = nb.iter
-    )
+    data.mi <- imp4p::mi.mix(tab = qData,
+                             tab.imp = dat.slsa,
+                             prob.MCAR = proba,
+                             conditions = conditions,
+                             repbio = repbio,
+                             reptech = reptech,
+                             nb.iter = nb.iter
+                             )
 
     if (lapala == TRUE) {
-        data.final <- impute.pa2(
-            tab = data.mi,
-            conditions = conditions,
-            q.min = q.min,
-            q.norm = q.norm,
-            eps = eps,
-            distribution = distribution
-        )
-    } else {
-        data.final <- data.mi
-    }
+        data.final <- impute.pa2(tab = data.mi,
+                                 conditions = conditions,
+                                 q.min = q.min,
+                                 q.norm = q.norm,
+                                 eps = eps,
+                                 distribution = distribution
+                                 )
+        } else {
+          data.final <- data.mi
+          }
 
 
     # restore previous order
@@ -224,12 +215,12 @@ wrapper.dapar.impute.mi <- function(obj,
     obj@processingData@processing <- c(obj@processingData@processing, msg)
 
     obj@experimentData@other$imputation.method <- "imp4p"
-    na.type <- "Missing POV"
-    if (isTRUE(lapala)) {
-        na.type <- "Missing"
-    }
+    # na.type <- "Missing POV"
+    # if (isTRUE(lapala)) {
+    #     na.type <- "Missing"
+    # }
 
-    obj <- UpdateMetacellAfterImputation(obj, "mi", na.type)
+    obj <- UpdateMetacellAfterImputation(obj)
 
     return(obj)
 }
@@ -310,18 +301,18 @@ translatedRandomBeta <- function(n, min, max, param1 = 3, param2 = 1) {
 #'
 #'
 wrapper.impute.pa2 <- function(obj,
-    q.min = 0,
-    q.norm = 3,
-    eps = 0,
-    distribution = "unif") {
+                               q.min = 0,
+                               q.norm = 3,
+                               eps = 0,
+                               distribution = "unif") {
 
-    if (missing(obj)) {
+    if (missing(obj))
         stop("'obj' is required.")
-    }
+
 
     ## order exp and pData table before using imp4p functions
-    conds <- factor(Biobase::pData(obj)$Condition, 
-        levels = unique(Biobase::pData(obj)$Condition))
+    tmp <- Biobase::pData(obj)$Condition
+    conds <- factor(tmp, levels = unique(tmp))
     sample.names.old <- Biobase::pData(obj)$Sample.name
     sTab <- Biobase::pData(obj)
     new.order <- unlist(lapply(split(sTab, conds), function(x) {
@@ -340,7 +331,7 @@ wrapper.impute.pa2 <- function(obj,
     tab_imp <- tab_imp[, sample.names.old]
 
     Biobase::exprs(obj) <- tab_imp
-    obj <- UpdateMetacellAfterImputation(obj, "pa2", "Missing")
+    obj <- UpdateMetacellAfterImputation(obj)
 
     return(obj)
 }
@@ -389,14 +380,13 @@ wrapper.impute.pa2 <- function(obj,
 #'
 #' @export
 #'
-impute.pa2 <- function(
-    tab, 
-    conditions, 
-    q.min = 0, 
-    q.norm = 3, 
-    eps = 0, 
-    distribution = "unif"
-    ) {
+impute.pa2 <- function(tab,
+                       conditions, 
+                       q.min = 0, 
+                       q.norm = 3, 
+                       eps = 0, 
+                       distribution = "unif"
+                       ) {
 
     pkgs.require('stats')
 
@@ -425,8 +415,7 @@ impute.pa2 <- function(
             } else if (distribution == "beta") {
                 tab_imp[which(is.na(tab_imp[, j])), j] <- translatedRandomBeta(
                     n = sum(is.na(tab_imp[, j])),
-                    min = qu[j] - eps - q.norm * stats::median(sde, 
-                        na.rm = TRUE),
+                    min = qu[j] - eps - q.norm * stats::median(sde, na.rm = TRUE),
                     max = qu[j] - eps,
                     param1 = 3,
                     param2 = 1

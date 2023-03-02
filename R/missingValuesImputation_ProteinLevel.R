@@ -165,12 +165,12 @@ wrapper.impute.KNN <- function(obj = NULL, K) {
 #'
 #'
 wrapper.impute.fixedValue <- function(obj, fixVal = 0, na.type) {
-    if (missing(obj)) {
+    if (missing(obj))
         stop("'obj' is required.")
-    }
-    if (fixVal == 0) {
+
+    if (fixVal == 0)
         warning("Be aware that fixVal = 0. No imputation will be realize.")
-    }
+
     level <- GetTypeofData(obj)
 
     if (missing(na.type)) {
@@ -206,9 +206,6 @@ wrapper.impute.fixedValue <- function(obj, fixVal = 0, na.type) {
 #' @param q.min Same as the function \code{impute.pa()} in the package
 #' \code{imp4p}
 #'
-#' @param na.type A string which indicates the type of missing values to impute.
-#' Available values are: `NA` (for both POV and MEC).
-#'
 #' @return The \code{Biobase::exprs(obj)} matrix with imputed values instead of
 #' missing values.
 #'
@@ -217,43 +214,27 @@ wrapper.impute.fixedValue <- function(obj, fixVal = 0, na.type) {
 #' @examples
 #' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(10)]
-#' level <- 'protein'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
-#' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj.imp.pov <- wrapper.impute.pa(obj, na.type = "Missing POV")
 #'
 #' @export
 #'
-#'
-wrapper.impute.pa <- function(obj = NULL, q.min = 0.025, na.type) {
+wrapper.impute.pa <- function(obj = NULL, q.min = 0.025) {
     
     pkgs.require('imp4p')
-    
-    
-    
-    if (is.null(obj)) {
+
+    if (is.null(obj)) 
         stop("'obj' is required.")
-    }
-    level <- obj@experimentData@other$typeOfData
-    if (missing(na.type)) {
-        stop(paste0("'na.type' is required. Available values are: ", 
-            paste0(metacell.def(level)$node, collapse = " ")))
-    } else if (!(na.type %in% metacell.def(level)$node)) {
-        stop(paste0("Available values for na.type are: ", 
-            paste0(metacell.def(level)$node, collapse = " ")))
-    }
 
     cond <- as.factor(Biobase::pData(obj)$Condition)
-    res <- imp4p::impute.pa(
-        Biobase::exprs(obj), 
-        conditions = cond, 
-        q.min = q.min, 
-        q.norm = 3, 
-        eps = 0
-        )
+    res <- imp4p::impute.pa(Biobase::exprs(obj), 
+                            conditions = as.factor(Biobase::pData(obj)$Condition), 
+                            q.min = q.min,
+                            q.norm = 3,
+                            eps = 0)
+    
     Biobase::exprs(obj) <- res[["tab.imp"]]
 
-    obj <- UpdateMetacellAfterImputation(obj, "impute_pa", na.type)
+    obj <- UpdateMetacellAfterImputation(obj)
 
     return(obj)
 }
@@ -289,7 +270,6 @@ wrapper.impute.pa <- function(obj = NULL, q.min = 0.025, na.type) {
 #' obj <- Exp1_R25_pept[seq_len(10)]
 #' obj.imp.pov <- wrapper.impute.detQuant(obj, na.type = "Missing POV")
 #' obj.imp.mec <- wrapper.impute.detQuant(obj, na.type = "Missing MEC")
-#' obj.imp.na <- wrapper.impute.detQuant(obj, na.type = "Missing")
 #'
 #' @export
 #'
@@ -300,21 +280,11 @@ wrapper.impute.detQuant <- function(obj, qval = 0.025, factor = 1, na.type) {
     }
     availablePatterns <- unname(search.metacell.tags(
         pattern = na.type,
-        level = obj@experimentData@other$typeOfData
+        level = GetTypeofData(obj)
     ))
-    if (missing(na.type)) {
-        stop(paste0(
-            "'na.type' is required. Available values are:.",
-            paste0(availablePatterns, collapse = " ")
-        ))
-    } else if (!(na.type %in% search.metacell.tags(
-        pattern = na.type,
-        level = obj@experimentData@other$typeOfData
-    ))) {
-        stop(paste0(
-            "Available values for na.type are: ",
-            paste0(availablePatterns, collapse = " ")
-        ))
+    
+    if (missing(na.type) || !(na.type %in% c('Missing POV', 'Missing MEC'))) {
+        stop("'na.type' is required. Available values are:.'Missing POV', 'Missing MEC'")
     }
 
 
@@ -322,11 +292,11 @@ wrapper.impute.detQuant <- function(obj, qval = 0.025, factor = 1, na.type) {
     values <- getQuantile4Imp(qdata, qval, factor)
     for (i in seq_len(ncol(qdata))) {
         col <- qdata[, i]
-        .names <- obj@experimentData@other$names_metacell
+        .names <- colnames(GetMetacell(obj))
         ind.na.type <- match.metacell(Biobase::fData(obj)[, .names[i]],
-            pattern = na.type,
-            level = obj@experimentData@other$typeOfData
-        )
+                                      pattern = na.type,
+                                      level = GetTypeofData(obj)
+                                      )
 
         col[ind.na.type] <- values$shiftedImpVal[i]
         qdata[, i] <- col
@@ -337,8 +307,7 @@ wrapper.impute.detQuant <- function(obj, qval = 0.025, factor = 1, na.type) {
     obj@processingData@processing <- c(obj@processingData@processing, msg)
 
     obj@experimentData@other$imputation.method <- "detQuantile"
-    # browser()
-    obj <- UpdateMetacellAfterImputation(obj = obj, method = "detQuant", na.type = na.type)
+    obj <- UpdateMetacellAfterImputation(obj)
 
     return(obj)
 }
