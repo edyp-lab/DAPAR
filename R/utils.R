@@ -1,3 +1,23 @@
+#' @title xxx
+#' @description xxx
+#' @param set1 xxx
+#' @param set2 xxx
+#' 
+#' @return xxx
+#' 
+#' @examples
+#' is.subset('a', letters)
+#' is.subset(c('a', 'c', 't'), letters)
+#' is.subset(c('a', 3, 't'), letters)
+#' is.subset(3, letters)
+#' 
+is.subset <- function(set1, set2)
+  length(intersect(set1, set2)) > 0 && length(set1) == length(intersect(set1, set2))
+
+
+
+
+
 #' @title Loads packages
 #' 
 #' @description Checks if a package is available to load it

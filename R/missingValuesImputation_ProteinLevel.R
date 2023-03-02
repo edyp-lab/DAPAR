@@ -159,7 +159,7 @@ wrapper.impute.KNN <- function(obj = NULL, K) {
 #' obj <- Exp1_R25_pept[seq_len(10), ]
 #' obj.imp.pov <- wrapper.impute.fixedValue(obj, 0.001, na.type = "Missing POV")
 #' obj.imp.mec <- wrapper.impute.fixedValue(obj, 0.001, na.type = "Missing MEC")
-#' obj.imp.na <- wrapper.impute.fixedValue(obj, 0.001, na.type = "Missing")
+#' obj.imp.na <- wrapper.impute.fixedValue(obj, 0.001, na.type = c("Missing MEC", "Missing POV"))
 #'
 #' @export
 #'
@@ -176,12 +176,12 @@ wrapper.impute.fixedValue <- function(obj, fixVal = 0, na.type) {
     if (missing(na.type)) {
         stop(paste0("'na.type' is required. Available values are: ", 
             paste0(metacell.def(level)$node, collapse = " ")))
-    } else if (!(na.type %in% metacell.def(level)$node)) {
+    } else if (!is.subset(na.type, metacell.def(level)$node)) {
         stop(paste0("Available values for na.type are: ", 
             paste0(metacell.def(level)$node, collapse = " ")))
     }
 
-    .names <- obj@experimentData@other$names_metacell
+    .names <- colnames(GetMetacell(obj))
     ind.na.type <- match.metacell(Biobase::fData(obj)[, .names],
                                   na.type,
                                   level = level
@@ -275,18 +275,15 @@ wrapper.impute.pa <- function(obj = NULL, q.min = 0.025) {
 #'
 #'
 wrapper.impute.detQuant <- function(obj, qval = 0.025, factor = 1, na.type) {
-    if (missing(obj)) {
+    if (missing(obj))
         stop("'obj' is required.")
-    }
-    availablePatterns <- unname(search.metacell.tags(
-        pattern = na.type,
-        level = GetTypeofData(obj)
-    ))
     
-    if (missing(na.type) || !(na.type %in% c('Missing POV', 'Missing MEC'))) {
+    if (!is.subset(na.type, c('Missing POV', 'Missing MEC'))) {
         stop("'na.type' is required. Available values are:.'Missing POV', 'Missing MEC'")
     }
 
+    if (missing(na.type))
+      na.type <- c('Missing POV', 'Missing MEC')
 
     qdata <- Biobase::exprs(obj)
     values <- getQuantile4Imp(qdata, qval, factor)
