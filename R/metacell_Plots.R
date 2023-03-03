@@ -511,18 +511,17 @@ mvImage <- function(qData, conds) {
 #' obj <- Exp1_R25_pept[seq_len(100)]
 #' conds <- Biobase::pData(obj)$Condition
 #' pal <- ExtendPalette(length(unique(conds)), "Dark2")
-#' hc_mvTypePlot2(obj, pattern = "Missing MEC", title = "POV distribution", 
-#' pal = pal)
+#' hc_mvTypePlot2(obj, pattern = "Missing MEC", title = "POV distribution", pal = pal)
 #'
 #' @import highcharter
 #'
 #' @export
 #'
 hc_mvTypePlot2 <- function(obj,
-    pal = NULL,
-    pattern,
-    typeofMV = NULL,
-    title = NULL) {
+                           pal = NULL,
+                           pattern,
+                           typeofMV = NULL,
+                           title = NULL) {
     pkgs.require('stats')
     
     conds <- Biobase::pData(obj)[, "Condition"]
@@ -541,27 +540,26 @@ hc_mvTypePlot2 <- function(obj,
 
     conditions <- conds
     mTemp <- nbNA <- nbValues <- matrix(
-        rep(0, nrow(qData) * length(unique(conditions))
-            ),
+        rep(0, nrow(qData) * length(unique(conditions))),
         nrow = nrow(qData),
         dimnames = list(NULL, unique(conditions))
-    )
+        )
     dataCond <- data.frame()
     ymax <- 0
     series <- list()
     myColors <- NULL
     j <- 1
 
-    level <- obj@experimentData@other$typeOfData
+    level <- GetTypeofData(obj)
 
     for (iCond in unique(conditions)) {
         if (length(which(conditions == iCond)) == 1) {
             mTemp[, iCond] <- qData[, which(conditions == iCond)]
             nbNA[, iCond] <- as.integer(
                 match.metacell(GetMetacell(obj)[, which(conditions == iCond)],
-                pattern = pattern,
-                level = level
-            ))
+                               pattern = pattern,
+                               level = level)
+                )
             
             .op1 <- length(which(conditions == iCond))
             .op2 <- nbNA[, iCond]
@@ -571,9 +569,10 @@ hc_mvTypePlot2 <- function(obj,
             mTemp[, iCond] <- apply(qData[, .qcond], 1, mean, na.rm = TRUE)
             nbNA[, iCond] <- rowSums(
                 match.metacell(GetMetacell(obj)[, .qcond],
-                    pattern = pattern,
-                    level = level
-            ))
+                               pattern = pattern,
+                               level = level)
+                )
+            
             nbValues[, iCond] <- length(.qcond) - nbNA[, iCond]
         }
 
@@ -582,8 +581,7 @@ hc_mvTypePlot2 <- function(obj,
             data <- mTemp[which(nbValues[, iCond] == i), iCond]
             tmp <- NULL
             if (length(data) >= 2) {
-                tmp <- stats::density(mTemp[which(nbValues[, iCond] == i), 
-                    iCond])
+                tmp <- stats::density(mTemp[which(nbValues[, iCond] == i), iCond])
                 tmp$y <- tmp$y + i
                 if (max(tmp$y) > ymax) {
                     ymax <- max(tmp$y)
@@ -599,15 +597,11 @@ hc_mvTypePlot2 <- function(obj,
     hc <- highchart(type = "chart") %>%
         hc_title(text = title) %>%
         my_hc_chart(chartType = "spline", zoomType = "xy") %>%
-        hc_legend(
-            align = "left", verticalAlign = "top",
-            layout = "vertical"
+        hc_legend(align = "left", verticalAlign = "top", layout = "vertical"
         ) %>%
         hc_xAxis(title = list(text = "Mean of intensities")) %>%
-        hc_yAxis(
-            title = list(text = "Number of quantity values per condition"),
-            tickInterval = 0.5
-        ) %>%
+        hc_yAxis(title = list(text = "Number of quantity values per condition"),
+                 tickInterval = 0.5) %>%
         hc_tooltip(
             headerFormat = "",
             pointFormat = "<b> {series.name} </b>: {point.y} ",
@@ -617,13 +611,9 @@ hc_mvTypePlot2 <- function(obj,
         hc_plotOptions(
             series = list(
                 showInLegend = TRUE,
-                animation = list(
-                    duration = 100
-                ),
+                animation = list(duration = 100),
                 connectNulls = TRUE,
-                marker = list(
-                    enabled = FALSE
-                )
+                marker = list(enabled = FALSE)
             )
         )
 

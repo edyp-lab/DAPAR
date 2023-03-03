@@ -790,12 +790,14 @@ Metacell_maxquant <- function(qdata, conds, df, level = NULL) {
 #'
 #' @export
 #'
-match.metacell <- function(metadata, pattern, level) {
+match.metacell <- function(metadata, pattern = NULL, level) {
     if (missing(metadata))
         stop("'metadata' is required")
 
     if (missing(pattern))
         stop("'pattern' is required.")
+  else if (is.null(pattern))
+    return(NULL)
 
     if (missing(level))
         stop("'level' is required.")
