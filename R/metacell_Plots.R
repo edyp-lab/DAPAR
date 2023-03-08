@@ -30,9 +30,8 @@ metacellPerLinesHisto_HC <- function(obj,
     } else if (is.null(obj)) {
         stop("'obj' is NULL. Abort...")
     }
-    if (missing(pattern)) {
-        stop("'pattern' is missing.")
-    } 
+    if(missing(pattern) || is.null(pattern))
+      return(NULL)
 
     qData <- Biobase::exprs(obj)
     samplesData <- Biobase::pData(obj)
@@ -137,10 +136,10 @@ metacellPerLinesHisto_HC <- function(obj,
 #' @export
 #'
 metacellPerLinesHistoPerCondition_HC <- function(obj,
-    pattern,
-    indLegend = "auto",
-    showValues = FALSE,
-    pal = NULL) {
+                                                 pattern = NULL,
+                                                 indLegend = "auto",
+                                                 showValues = FALSE,
+                                                 pal = NULL) {
     if (missing(obj)) {
         stop("'obj' is missing.")
     } else if (is.null(obj)) {
@@ -148,7 +147,8 @@ metacellPerLinesHistoPerCondition_HC <- function(obj,
     }
     if (missing(pattern)) {
         stop("'pattern' is missing.")
-    } 
+    } else if(is.null(pattern))
+      return(NULL)
 
     qData <- Biobase::exprs(obj)
     samplesData <- Biobase::pData(obj)
@@ -186,9 +186,10 @@ metacellPerLinesHistoPerCondition_HC <- function(obj,
 
 
     mask <- match.metacell(GetMetacell(obj),
-        pattern = pattern,
-        level = obj@experimentData@other$typeOfData
-    )
+                           pattern = pattern,
+                           level = GetTypeofData(obj)
+                           )
+    
     ll.df <- list()
     for (i in u_conds)
     {
@@ -273,7 +274,7 @@ metacellPerLinesHistoPerCondition_HC <- function(obj,
 #' @export
 #'
 metacellHisto_HC <- function(obj,
-                             pattern,
+                             pattern = NULL,
                              indLegend = "auto",
                              showValues = FALSE,
                              pal = NULL) {
@@ -284,7 +285,8 @@ metacellHisto_HC <- function(obj,
     }
     if (missing(pattern)) {
         stop("'pattern' is missing.")
-    }
+    } else if(is.null(pattern))
+      return(NULL)
 
     qData <- Biobase::exprs(obj)
     samplesData <- Biobase::pData(obj)

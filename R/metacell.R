@@ -179,14 +179,25 @@ Parent <- function(level, node=NULL){
 #' @description xxx
 #' @param level xxx
 #' @param node xxx
+#' 
+#' @examples 
+#' Children('protein', 'Missing')
+#' Children('protein', 'Missing POV')
+#' Children('protein', c('Missing POV', 'Missing MEC'))
 #' @export
 Children <- function(level, parent = NULL){
-    tags <- metacell.def(level)
-    if (!is.null(parent) && length(parent) > 0)
-      childrens <- tags$node[which(tags$parent==parent) ]
+  childrens <- NULL
+  tags <- metacell.def(level)
+  if (!is.null(parent) && length(parent) > 0){
+    for (p in parent){
+      ind <- grep(p, tags$parent)
+        if (length(ind) > 0)
+          childrens <- tags$node[ind]
+    }
+  }
     return(childrens)
     
-}
+  }
 
 #' @title xxxx
 #' @description xxx

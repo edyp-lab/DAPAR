@@ -664,8 +664,8 @@ deleteLinesFromIndices <- function(obj, deleteThat = NULL, processText = "") {
 #'
 GetIndices_MetacellFiltering <- function(obj,
                                          level, 
-                                         pattern,
-                                         type,
+                                         pattern = NULL,
+                                         type = NULL,
                                          percent, 
                                          op, 
                                          th) {
@@ -694,8 +694,8 @@ GetIndices_MetacellFiltering <- function(obj,
 
     indices <- NULL
     is.subset <- sum(pattern == intersect(pattern,  metacell.def(level)$node))==length(pattern)
-    if (!is.subset &&  type != "None" && !is.null(type)) {
-        warning("Either 'pattern' nor 'type' are equal to 'None'")
+    if (!is.subset) {
+        warning("Available values for pattern are: ", paste0(metacell.def(level)$node, collapse=', ' ))
         return(NULL)
     }
 
