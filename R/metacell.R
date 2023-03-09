@@ -798,7 +798,8 @@ Metacell_maxquant <- function(qdata, conds, df, level = NULL) {
 #' obj <- Exp1_R25_pept[seq_len(10), ]
 #' metadata <- GetMetacell(obj)
 #' m <- match.metacell(metadata, pattern = "Missing", level = "peptide")
-#'
+#' m <- match.metacell(metadata, pattern = NULL, level = "peptide")
+#' m <- match.metacell(metadata, pattern = c('Missing', 'Missing POV'), level = "peptide")
 #' @export
 #'
 match.metacell <- function(metadata, pattern = NULL, level) {

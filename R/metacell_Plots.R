@@ -145,10 +145,8 @@ metacellPerLinesHistoPerCondition_HC <- function(obj,
     } else if (is.null(obj)) {
         stop("'obj' is NULL. Abort...")
     }
-    if (missing(pattern)) {
-        stop("'pattern' is missing.")
-    } else if(is.null(pattern))
-      return(NULL)
+  if(missing(pattern) || is.null(pattern))
+    return(NULL)
 
     qData <- Biobase::exprs(obj)
     samplesData <- Biobase::pData(obj)
@@ -283,10 +281,8 @@ metacellHisto_HC <- function(obj,
     } else if (is.null(obj)) {
         stop("'obj' is NULL. Abort...")
     }
-    if (missing(pattern)) {
-        stop("'pattern' is missing.")
-    } else if(is.null(pattern))
-      return(NULL)
+  if(missing(pattern) || is.null(pattern))
+    return(NULL)
 
     qData <- Biobase::exprs(obj)
     samplesData <- Biobase::pData(obj)
