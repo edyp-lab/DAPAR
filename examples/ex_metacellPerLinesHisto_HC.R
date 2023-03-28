@@ -3,7 +3,7 @@ obj <- Exp1_R25_pept
 
 obj <- obj[1:10]
 
-metacellPerLinesHisto_HC(obj, pattern = "Missing")
+metacellPerLinesHisto_HC(obj, pattern = "Missing POV")
 
 metacellPerLinesHisto_HC(obj)
 metacellPerLinesHisto_HC(obj, pattern = "Quantified")

@@ -75,7 +75,7 @@ metacellPerLinesHisto_HC <- function(obj,
     myColors <- rep("lightgrey", nrow(df))
 
     h1 <- highchart() %>%
-        hc_title(text = paste0("Nb of lines with x (", paste0(pattern, collapse=', '), ") tags")) %>%
+        hc_title(text = paste0("Nb of lines with (", paste0(pattern, collapse=', '), ") tags")) %>%
         hc_add_series(data = df, type = "column", colorByPoint = TRUE) %>%
         hc_colors(myColors) %>%
         hc_plotOptions(
@@ -215,7 +215,7 @@ metacellPerLinesHistoPerCondition_HC <- function(obj,
     }
 
     h1 <- highchart() %>%
-        hc_title(text = paste0("Nb of lines containing x (", 
+        hc_title(text = paste0("Nb of lines containing (", 
                                paste0(pattern, collapse=', '), ") tags (condition-wise)")) %>%
         my_hc_chart(chartType = "column") %>%
         hc_plotOptions(
@@ -295,8 +295,7 @@ metacellHisto_HC <- function(obj,
             ExtendPalette(length(unique(conds))))
     } else {
         if (length(pal) != length(unique(conds))) {
-            warning("The color palette has not the same dimension as the 
-                number of samples")
+            warning("The color palette has not the same dimension as the number of samples")
             myColors <- GetColorsForConditions(conds, 
                 ExtendPalette(length(unique(conds))))
         } else {
