@@ -8,9 +8,6 @@ wrapper.impute.slsa(obj = NULL)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet}.}
-
-\item{na.type}{A string which indicates the type of missing values to impute.
-Available values are: `NA` (for both POV and MEC), `POV`, `MEC`.}
 }
 \value{
 The \code{Biobase::exprs(obj)} matrix with imputed values 

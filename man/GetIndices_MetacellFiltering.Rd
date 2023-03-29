@@ -5,7 +5,15 @@
 \title{Delete the lines in the matrix of intensities and the metadata table
 given their indice.}
 \usage{
-GetIndices_MetacellFiltering(obj, level, pattern, type, percent, op, th)
+GetIndices_MetacellFiltering(
+  obj,
+  level,
+  pattern = NULL,
+  type = NULL,
+  percent,
+  op,
+  th
+)
 }
 \arguments{
 \item{obj}{An object of class \code{MSnSet} containing

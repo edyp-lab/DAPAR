@@ -26,7 +26,7 @@ data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept[seq_len(10), ]
 obj.imp.pov <- wrapper.impute.fixedValue(obj, 0.001, na.type = "Missing POV")
 obj.imp.mec <- wrapper.impute.fixedValue(obj, 0.001, na.type = "Missing MEC")
-obj.imp.na <- wrapper.impute.fixedValue(obj, 0.001, na.type = "Missing")
+obj.imp.na <- wrapper.impute.fixedValue(obj, 0.001, na.type = c("Missing MEC", "Missing POV"))
 
 }
 \author{

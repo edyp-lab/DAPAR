@@ -23,7 +23,7 @@ intensities of their peptides.
 \examples{
 data(Exp1_R25_pept, package="DAPARdata")
 obj.pep <- Exp1_R25_pept[seq_len(10)]
-obj.pep.imp <- wrapper.impute.detQuant(obj.pep, na.type = "Missing")
+obj.pep.imp <- wrapper.impute.detQuant(obj.pep, na.type = c("Missing POV", "Missing MEC"))
 protID <- "Protein_group_IDs"
 X <- BuildAdjacencyMatrix(obj.pep.imp, protID, FALSE)
 ll.agg <- aggregateMean(obj.pep.imp, X)

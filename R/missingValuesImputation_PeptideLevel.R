@@ -11,9 +11,6 @@
 #'
 #' @param obj An object of class \code{MSnSet}.
 #'
-#' @param na.type A string which indicates the type of missing values to impute.
-#' Available values are: `NA` (for both POV and MEC).
-#'
 #' @return The \code{Biobase::exprs(obj)} matrix with imputed values instead 
 #' of missing
 #' values.

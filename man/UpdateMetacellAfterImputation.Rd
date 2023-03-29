@@ -18,7 +18,7 @@ Update the metacell information of missing values that were imputed
 \examples{
 data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept[seq_len(10)]
-obj.imp.pov <- wrapper.impute.KNN(obj, K = 3, na.type = "Missing POV")
+obj.imp.pov <- wrapper.impute.KNN(obj, K = 3)
 
 }
 \author{

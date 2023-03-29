@@ -9,8 +9,13 @@ Children(level, parent = NULL)
 \arguments{
 \item{level}{xxx}
 
-\item{node}{xxx}
+\item{parent}{xxx}
 }
 \description{
 xxx
+}
+\examples{
+Children('protein', 'Missing')
+Children('protein', 'Missing POV')
+Children('protein', c('Missing POV', 'Missing MEC'))
 }

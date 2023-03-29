@@ -178,7 +178,7 @@ Parent <- function(level, node=NULL){
 #' @title Names of all chidren of a node
 #' @description xxx
 #' @param level xxx
-#' @param node xxx
+#' @param parent xxx
 #' 
 #' @examples 
 #' Children('protein', 'Missing')
@@ -879,7 +879,7 @@ GetMetacell <- function(obj) {
 #' @examples 
 #' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10)]
-#' obj.imp.pov <- wrapper.impute.KNN(obj, K = 3, na.type = "Missing POV")
+#' obj.imp.pov <- wrapper.impute.KNN(obj, K = 3)
 #'
 UpdateMetacellAfterImputation <- function(obj) {
     if (missing(obj))

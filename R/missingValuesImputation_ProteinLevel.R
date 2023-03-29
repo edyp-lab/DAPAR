@@ -53,7 +53,7 @@ findMECBlock <- function(obj) {
 #' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(100)]
 #' lapala <- findMECBlock(obj)
-#' obj <- wrapper.impute.detQuant(obj, na.type = "Missing")
+#' obj <- wrapper.impute.detQuant(obj, na.type = c("Missing POV", "Missing MEC"))
 #' obj <- reIntroduceMEC(obj, lapala)
 #'
 #' @export
@@ -356,9 +356,6 @@ getQuantile4Imp <- function(qdata, qval = 0.025, factor = 1) {
 #'
 #'
 #' @param obj An object of class \code{MSnSet}.
-#'
-#' @param na.type A string which indicates the type of missing values to impute.
-#' Available values are: `NA` (for both POV and MEC), `POV`, `MEC`.
 #'
 #' @return The \code{Biobase::exprs(obj)} matrix with imputed values 
 #' instead of missing values.

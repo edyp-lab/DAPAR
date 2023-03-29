@@ -5,7 +5,7 @@
 \title{Similar to the function \code{is.na} but focused on the equality
 with the paramter 'type'.}
 \usage{
-match.metacell(metadata, pattern, level)
+match.metacell(metadata, pattern = NULL, level)
 }
 \arguments{
 \item{metadata}{A data.frame}
@@ -26,7 +26,8 @@ data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept[seq_len(10), ]
 metadata <- GetMetacell(obj)
 m <- match.metacell(metadata, pattern = "Missing", level = "peptide")
-
+m <- match.metacell(metadata, pattern = NULL, level = "peptide")
+m <- match.metacell(metadata, pattern = c('Missing', 'Missing POV'), level = "peptide")
 }
 \author{
 Samuel Wieczorek
