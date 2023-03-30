@@ -21,7 +21,7 @@
 #' utils::data(Exp1_R25_pept, package = "DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10), ]
 #' level <- 'peptide'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
+#' metacell.mask <- match.metacell(GetMetacell(obj), c("Missing POV", "Missing MEC"), level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj.imp.na <- wrapper.impute.mle(obj)
 #'
@@ -114,7 +114,7 @@ wrapper.impute.mle <- function(obj) {
 #' utils::data(Exp1_R25_pept, package = "DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(100)]
 #' level <- 'peptide'
-#' metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
+#' metacell.mask <- match.metacell(GetMetacell(obj), c("Missing POV", "Missing MEC"), level)
 #' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 #' obj.imp.na <- wrapper.dapar.impute.mi(obj, nb.iter = 1, lapala = TRUE)
 #' obj.imp.pov <- wrapper.dapar.impute.mi(obj, nb.iter = 1, lapala = FALSE)

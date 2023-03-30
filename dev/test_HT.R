@@ -1,7 +1,7 @@
 
 testHT <- function(obj){
   level <- 'protein'
-  metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
+  metacell.mask <- match.metacell(GetMetacell(obj), c("Missing POV", "Missing MEC"), level)
   indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
   obj <- MetaCellFiltering(obj, indices, cmd = "delete")$new
   

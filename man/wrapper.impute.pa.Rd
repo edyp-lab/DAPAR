@@ -23,7 +23,7 @@ This method is a wrapper to the function \code{impute.pa} of the package
 \examples{
 data(Exp1_R25_prot, package="DAPARdata")
 obj <- Exp1_R25_prot[seq_len(10)]
-obj.imp.pov <- wrapper.impute.pa(obj, na.type = "Missing POV")
+obj.imp.pov <- wrapper.impute.pa(obj)
 
 }
 \author{

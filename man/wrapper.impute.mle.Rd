@@ -23,7 +23,7 @@ It does not impute MEC missing values.
 utils::data(Exp1_R25_pept, package = "DAPARdata")
 obj <- Exp1_R25_pept[seq_len(10), ]
 level <- 'peptide'
-metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
+metacell.mask <- match.metacell(GetMetacell(obj), c("Missing POV", "Missing MEC"), level)
 indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
 obj.imp.na <- wrapper.impute.mle(obj)
 

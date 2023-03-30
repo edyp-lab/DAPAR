@@ -214,7 +214,7 @@ wrapper.impute.fixedValue <- function(obj, fixVal = 0, na.type) {
 #' @examples
 #' data(Exp1_R25_prot, package="DAPARdata")
 #' obj <- Exp1_R25_prot[seq_len(10)]
-#' obj.imp.pov <- wrapper.impute.pa(obj, na.type = "Missing POV")
+#' obj.imp.pov <- wrapper.impute.pa(obj)
 #'
 #' @export
 #'

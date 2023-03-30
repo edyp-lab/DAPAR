@@ -4,7 +4,7 @@ level <- 'peptide'
 
 #' 
 #' Delete lines which are entirely filled with any missing values ('Missing MEC' and 'Missing POV')
-metacell.mask <- match.metacell(GetMetacell(obj), "Missing", level)
+metacell.mask <- match.metacell(GetMetacell(obj), c("Missing POV", "Missing MEC"), level)
 indices <- GetIndices_WholeLine(metacell.mask)
 obj.filter <- MetaCellFiltering(obj, indices, "delete")
 

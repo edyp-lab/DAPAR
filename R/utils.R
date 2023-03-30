@@ -11,6 +11,8 @@
 #' is.subset(c('a', 3, 't'), letters)
 #' is.subset(3, letters)
 #' 
+#' @export
+#' 
 is.subset <- function(set1, set2)
   length(intersect(set1, set2)) > 0 && length(set1) == length(intersect(set1, set2))
 
