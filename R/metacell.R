@@ -169,10 +169,29 @@ metacell.def <- function(level) {
 #' @description xxx
 #' @param level xxx
 #' @param node xxx
+#' 
+#' #' @examples 
+#' Parent('protein', 'Missing')
+#' Parent('protein', 'Missing POV')
+#' Parent('protein', c('Missing POV', 'Missing MEC'))
+#' Parent('protein', c('Missing', 'Missing POV', 'Missing MEC'))
+#' 
+#' 
 #' @export
 Parent <- function(level, node=NULL){
+    parents <- NULL
     tags <- metacell.def(level)
-    return(tags$parent[which(tags$node==node) ])
+    
+    if (!is.null(node) && length(node) > 0){
+      for (p in node){
+        ind <- match(p, tags$node)
+        if (length(ind) > 0)
+          parents <- unique(c(parents, tags$parent[ind]))
+      }
+    }
+    
+    
+    return(parents)
 }
 
 #' @title Names of all chidren of a node
@@ -184,20 +203,20 @@ Parent <- function(level, node=NULL){
 #' Children('protein', 'Missing')
 #' Children('protein', 'Missing POV')
 #' Children('protein', c('Missing POV', 'Missing MEC'))
+#' Children('protein', c('Missing', 'Missing POV', 'Missing MEC'))
 #' @export
 Children <- function(level, parent = NULL){
   childrens <- NULL
   tags <- metacell.def(level)
   if (!is.null(parent) && length(parent) > 0){
     for (p in parent){
-      ind <- grep(p, tags$parent)
+      ind <- grepl(p, tags$parent)
         if (length(ind) > 0)
-          childrens <- tags$node[ind]
+          childrens <- unique(c(childrens, tags$node[ind]))
     }
   }
-    return(childrens)
-    
-  }
+  return(childrens)
+}
 
 #' @title xxxx
 #' @description xxx
