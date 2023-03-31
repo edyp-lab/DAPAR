@@ -190,14 +190,13 @@ Children <- function(level, parent = NULL){
   tags <- metacell.def(level)
   if (!is.null(parent) && length(parent) > 0){
     for (p in parent){
-      ind <- grep(p, tags$parent)
-        if (length(ind) > 0)
-          childrens <- tags$node[ind]
+      ind <- grepl(p, tags$parent)
+      if (length(ind) > 0)
+        childrens <- unique(c(childrens, tags$node[ind]))
     }
   }
-    return(childrens)
-    
-  }
+  return(childrens)
+}
 
 #' @title xxxx
 #' @description xxx
