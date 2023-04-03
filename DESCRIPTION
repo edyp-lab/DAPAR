@@ -8,7 +8,7 @@ Description: The package DAPAR is a Bioconductor distributed R package which
     user-friendly graphical interfaces, so that no programming skill is 
     required (see `Prostar` package).
 Version: 1.31.6
-Date: 2023-03-28
+Date: 2023-04-03
 Authors@R: c(person(given = "Samuel", family = "Wieczorek",
             email = "samuel.wieczorek@cea.fr",
     role = c("aut","cre")),
