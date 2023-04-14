@@ -18,4 +18,5 @@ xxx
 Children('protein', 'Missing')
 Children('protein', 'Missing POV')
 Children('protein', c('Missing POV', 'Missing MEC'))
+Children('protein', c('Missing', 'Missing POV', 'Missing MEC'))
 }

@@ -17,27 +17,8 @@ each comparison.
 Extract logFC and raw pvalues from multiple post-hoc models summaries
 }
 \examples{
-data(Exp1_R25_prot, package="DAPARdata")
-obj <- Exp1_R25_prot[seq_len(1000)]
-level <- 'protein'
-metacell.mask <- match.metacell(GetMetacell(obj), c("Missing POV", "Missing MEC"), level)
-indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
-obj <- MetaCellFiltering(obj, indices, cmd = "delete")
-anova_tests <- t(apply(Biobase::exprs(obj$new), 1, classic1wayAnova,
-    conditions = as.factor(Biobase::pData(obj$new)$Condition)
-))
-names(anova_tests) <- rownames(Biobase::exprs(obj$new))
-tms <- lapply(
-    anova_tests,
-    function(x) {
-        summary(multcomp::glht(x,
-            linfct = multcomp::mcp(conditions = "Tukey")
-        ),
-        test = multcomp::adjusted("none")
-        )
-    }
-)
-res <- formatPHResults(tms)
+\dontrun{examples/ex_formatPHResults.R}
+
 }
 \author{
 Hélène Borges
