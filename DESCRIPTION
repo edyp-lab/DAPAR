@@ -29,7 +29,7 @@ Authors@R: c(person(given = "Samuel", family = "Wieczorek",
     role = "ctb"))
 License: Artistic-2.0
 VignetteBuilder: knitr
-Depends: R (>= 4.2.0)
+Depends: R (>= 4.3.0)
 Suggests: testthat, BiocStyle, AnnotationDbi, clusterProfiler, graph,
         diptest, cluster, vioplot, visNetwork, vsn, igraph,  
         FactoMineR, factoextra, dendextend, parallel, doParallel, 

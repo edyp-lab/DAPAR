@@ -54,9 +54,9 @@ applyAnovasOnProteins <- function(obj){
 #' @export
 #' 
 testAnovaModels <- function(aov_fits, test = "Omnibus"){  
-  if (! requireNamespace("multcomp", quietly = TRUE)) {
-    stop("Please install multcomp: BiocManager::install('multcomp')")
-  }
+  
+  pkgs.require('multcomp')
+  
   switch(test,
          Omnibus={
            omnibus_tests_summaries <- t(sapply(aov_fits,
@@ -123,9 +123,8 @@ testAnovaModels <- function(aov_fits, test = "Omnibus"){
 #' @export
 #' 
 formatHSDResults <- function(post_hoc_models_summaries){
-  if (! requireNamespace("purrr", quietly = TRUE)) {
-    stop("Please install purrr: BiocManager::install('purrr')")
-  }
+  pkgs.require('purrr')
+  
   # get the fold-changes
   res_coeffs <- lapply(post_hoc_models_summaries, function(x) x[,1])
   logFC <- data.frame(purrr::map_dfr(res_coeffs, cbind),
@@ -160,9 +159,8 @@ formatHSDResults <- function(post_hoc_models_summaries){
 #' @export
 #' 
 formatPHTResults <- function(post_hoc_models_summaries){
-  if (! requireNamespace("purrr", quietly = TRUE)) {
-    stop("Please install purrr: BiocManager::install('purrr')")
-  }
+  pkgs.require('purrr')
+  
   # récupérer les différences entre les moyennes
   res_coeffs <- lapply(post_hoc_models_summaries, function(x) x$test$coefficients)
   logFC <- data.frame(purrr::map_dfr(res_coeffs, cbind),
