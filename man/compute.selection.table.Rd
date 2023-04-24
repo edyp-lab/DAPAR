@@ -2,23 +2,27 @@
 % Please edit documentation in R/anova_analysis.R
 \name{compute.selection.table}
 \alias{compute.selection.table}
-\title{xxx}
+\title{Applies an FDR threshold on a table of adjusted p-values and summarizes the results}
 \usage{
 compute.selection.table(x, fdr.threshold)
 }
 \arguments{
-\item{x}{xxx}
+\item{x}{a table of adjusted p-values}
 
-\item{fdr.threshold}{xxx}
+\item{fdr.threshold}{an FDR threshold}
 }
 \value{
-xxx
+a summary of the number of significantly differentially abundant proteins, overall and per contrast
 }
 \description{
-xxx
+Applies an FDR threshold on a table of adjusted p-values and summarizes the results
 }
 \examples{
-NULL
+data(Exp1_R25_prot, package='DAPARdata')
+exdata <- Exp1_R25_prot[1:5,]
+adjpvaltab <- globalAdjPval(testAnovaModels(applyAnovasOnProteins(exdata), "TukeyHSD")$P_Value)
+seltab <- compute.selection.table(adjpvaltab, 0.2)
+seltab
 
 }
 \author{

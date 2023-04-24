@@ -2,25 +2,30 @@
 % Please edit documentation in R/anova_analysis.R
 \name{separateAdjPval}
 \alias{separateAdjPval}
-\title{xxx}
+\title{Computes the adjusted p-values separately on contrast using CP4P}
 \usage{
 separateAdjPval(x, pval.threshold = 1.05, method = 1)
 }
 \arguments{
-\item{x}{xxx}
+\item{x}{a proteins x contrasts dataframe of (raw) p-values}
 
-\item{pval.threshold}{xxx}
+\item{pval.threshold}{all the p-values above the threshold are not considered. 
+Default is 1.05 (which is equivalent to have no threshold).
+Applying a threshold nearby 1 can be instrumental to improve the uniformity under the null, notably
+in case of upstream mutliple contrat correction (for experienced users only)}
 
-\item{method}{xxx}
+\item{method}{a method to estimate pi_0, see CP4P}
 }
 \value{
-xxx
+a proteins x contrasts table of adjusted p-values
 }
 \description{
-xxx
+Computes the adjusted p-values separately on contrast using CP4P
 }
 \examples{
-NULL
+data(Exp1_R25_prot, package='DAPARdata')
+exdata <- Exp1_R25_prot[1:5,]
+separateAdjPval(testAnovaModels(applyAnovasOnProteins(exdata), "TukeyHSD")$P_Value)
 
 }
 \author{

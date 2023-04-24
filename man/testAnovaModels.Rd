@@ -2,23 +2,31 @@
 % Please edit documentation in R/anova_analysis.R
 \name{testAnovaModels}
 \alias{testAnovaModels}
-\title{xxx}
+\title{Applies a statistical test on each element of a list of linear models}
 \usage{
 testAnovaModels(aov_fits, test = "Omnibus")
 }
 \arguments{
-\item{aov_fits}{xxx}
+\item{aov_fits}{a list of linear models, such as those outputted by applyAnovasOnProteins}
 
-\item{test}{xxx}
+\item{test}{a character string among "Omnibus", "TukeyHSD", "TukeySinglestep", 
+"TukeyStepwise", "TukeyNoMTC", "DunnettSinglestep", "DunnettStepwise" and "DunnettNoMTC".
+"Omnibus" tests the all-mean equality, the Tukey tests compares all pairs of means and 
+the Dunnet tests compare all the means to the first one. For multiple tests (Dunnet's or Tukey's)
+it is possible to correct for multiplicity (either with single-step or step-wise FWER) or not.
+All the Tukey's and Dunnet's tests use the multcomp package expect for "TukeyHSD" which 
+relies on the stats package.  "TukeyHSD" and "TukeyStepwise" gives similar results.}
 }
 \value{
-xxx
+a list of 2 tables (p-values and fold-changes, respecively)
 }
 \description{
-xxx
+Applies a statistical test on each element of a list of linear models
 }
 \examples{
-NULL
+data(Exp1_R25_prot, package='DAPARdata')
+exdata <- Exp1_R25_prot[1:5,]
+testAnovaModels(applyAnovasOnProteins(exdata))
 
 }
 \author{

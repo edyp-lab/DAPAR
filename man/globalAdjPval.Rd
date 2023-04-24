@@ -2,27 +2,32 @@
 % Please edit documentation in R/anova_analysis.R
 \name{globalAdjPval}
 \alias{globalAdjPval}
-\title{xxx}
+\title{Computes the adjusted p-values on all the stacked contrasts using CP4P}
 \usage{
 globalAdjPval(x, pval.threshold = 1.05, method = 1, display = T)
 }
 \arguments{
-\item{x}{xxx}
+\item{x}{a proteins x contrasts dataframe of (raw) p-values}
 
-\item{pval.threshold}{xxx}
+\item{pval.threshold}{all the p-values above the threshold are not considered. 
+Default is 1.05 (which is equivalent to have no threshold).
+Applying a threshold nearby 1 can be instrumental to improve the uniformity under the null, notably
+in case of upstream mutliple contrat correction (for experienced users only)}
 
-\item{method}{xxx}
+\item{method}{method a method to estimate pi_0, see CP4P}
 
-\item{display}{xxx}
+\item{display}{if T, a calibration plot is diplayed using CP4P}
 }
 \value{
-xxx
+a proteins x contrasts table of adjusted p-values
 }
 \description{
-xxx
+Computes the adjusted p-values on all the stacked contrasts using CP4P
 }
 \examples{
-NULL
+data(Exp1_R25_prot, package='DAPARdata')
+exdata <- Exp1_R25_prot[1:5,]
+globalAdjPval(testAnovaModels(applyAnovasOnProteins(exdata), "TukeyHSD")$P_Value)
 
 }
 \author{

@@ -2,23 +2,25 @@
 % Please edit documentation in R/anova_analysis.R
 \name{OWAnova}
 \alias{OWAnova}
-\title{xxx}
+\title{Applies aov() on a vector of protein abundances using the design derived from the sample names (simple aov wrapper)}
 \usage{
 OWAnova(current_protein, conditions)
 }
 \arguments{
-\item{current_protein}{xxx}
+\item{current_protein}{a real vector}
 
-\item{conditions}{xxx}
+\item{conditions}{the list of groups the protein belongs to}
 }
 \value{
-xxx
+see aov()
 }
 \description{
-xxx
+Applies aov() on a vector of protein abundances using the design derived from the sample names (simple aov wrapper)
 }
 \examples{
-NULL
+protein_abundance <- rep(rnorm(3, mean= 18, sd=2), each=3) + rnorm(9)
+groups <- c(rep("group1",3),rep("group2",3),rep("group3",3))
+OWAnova(protein_abundance,groups)
 
 }
 \author{

@@ -1,33 +1,37 @@
-#' @title xxx
+#' @title Applies aov() on a vector of protein abundances using the design derived from the sample names (simple aov wrapper)
 #'
 #' @author Thomas Burger
 #'
-#' @param current_protein xxx
-#' @param conditions xxx
+#' @param current_protein a real vector
+#' @param conditions the list of groups the protein belongs to
 #'
-#' @return xxx
+#' @return see aov()
 #'
 #' @examples
-#' NULL
+#' protein_abundance <- rep(rnorm(3, mean= 18, sd=2), each=3) + rnorm(9)
+#' groups <- c(rep("group1",3),rep("group2",3),rep("group3",3))
+#' OWAnova(protein_abundance,groups)
 #'
 #' @export
-#' 
+#'  
 OWAnova <- function(current_protein, conditions){
   intensities <- unname(unlist(current_protein))
   aov_model <- aov(formula = intensities ~ conditions, data = NULL)
   return(aov_model)
 }
 
-#' @title xxx
+#' @title iteratively applies OWAnova() on the features of an MSnSet object
 #'
 #' @author Thomas Burger
 #'
-#' @param obj xxx
+#' @param obj an MSnSet object
 #' '
-#' @return xxx
+#' @return a list of linear models
 #'
 #' @examples
-#' NULL
+#' data(Exp1_R25_prot, package='DAPARdata')
+#' exdata <- Exp1_R25_prot[1:5,]
+#' applyAnovasOnProteins(exdata)
 #'
 #' @export
 #' 
@@ -39,19 +43,28 @@ applyAnovasOnProteins <- function(obj){
   return(anova_models)
 }
 
-#' @title xxx
+#' @title Applies a statistical test on each element of a list of linear models
 #'
 #' @author Thomas Burger
 #'
-#' @param aov_fits xxx
-#' @param test xxx
+#' @param aov_fits a list of linear models, such as those outputted by applyAnovasOnProteins
+#' @param test a character string among "Omnibus", "TukeyHSD", "TukeySinglestep", 
+#' "TukeyStepwise", "TukeyNoMTC", "DunnettSinglestep", "DunnettStepwise" and "DunnettNoMTC".
+#' "Omnibus" tests the all-mean equality, the Tukey tests compares all pairs of means and 
+#' the Dunnet tests compare all the means to the first one. For multiple tests (Dunnet's or Tukey's)
+#' it is possible to correct for multiplicity (either with single-step or step-wise FWER) or not.
+#' All the Tukey's and Dunnet's tests use the multcomp package expect for "TukeyHSD" which 
+#' relies on the stats package.  "TukeyHSD" and "TukeyStepwise" gives similar results.
 #'
-#' @return xxx
+#' @return a list of 2 tables (p-values and fold-changes, respecively)
 #'
 #' @examples
-#' NULL
+#' data(Exp1_R25_prot, package='DAPARdata')
+#' exdata <- Exp1_R25_prot[1:5,]
+#' testAnovaModels(applyAnovasOnProteins(exdata))
 #'
 #' @export
+#' 
 #' 
 testAnovaModels <- function(aov_fits, test = "Omnibus"){  
   
@@ -119,8 +132,6 @@ testAnovaModels <- function(aov_fits, test = "Omnibus"){
 #'
 #' @examples
 #' NULL
-#'
-#' @export
 #' 
 formatHSDResults <- function(post_hoc_models_summaries){
   pkgs.require('purrr')
@@ -155,8 +166,6 @@ formatHSDResults <- function(post_hoc_models_summaries){
 #'
 #' @examples
 #' NULL
-#'
-#' @export
 #' 
 formatPHTResults <- function(post_hoc_models_summaries){
   pkgs.require('purrr')
@@ -193,55 +202,63 @@ formatPHTResults <- function(post_hoc_models_summaries){
 #'
 #' @examples
 #' NULL
-#'
-#' @export
 #' 
 thresholdpval4fdr <- function(x, pval.T, M){
   index <- which(x< pval.T)
   R <- length(index)/length(x)
   print(R)
   res <- rep(1, length(x))
-  res[index] <- (adjust.p(x[index], pi0.method = M)$adjp$adjusted.p)
+  res[index] <- (cp4p::adjust.p(x[index], pi0.method = M)$adjp$adjusted.p)
   return(res)
 }
 
-#' @title xxx
+#' @title Computes the adjusted p-values separately on contrast using CP4P
 #'
 #' @author Thomas Burger
 #'
-#' @param x xxx
-#' @param pval.threshold xxx
-#' @param method xxx
+#' @param x a proteins x contrasts dataframe of (raw) p-values
+#' @param pval.threshold all the p-values above the threshold are not considered. 
+#' Default is 1.05 (which is equivalent to have no threshold).
+#' Applying a threshold nearby 1 can be instrumental to improve the uniformity under the null, notably
+#' in case of upstream mutliple contrat correction (for experienced users only)
+#' @param method a method to estimate pi_0, see CP4P
 #'
-#' @return xxx
+#' @return a proteins x contrasts table of adjusted p-values
 #'
 #' @examples
-#' NULL
+#' data(Exp1_R25_prot, package='DAPARdata')
+#' exdata <- Exp1_R25_prot[1:5,]
+#' separateAdjPval(testAnovaModels(applyAnovasOnProteins(exdata), "TukeyHSD")$P_Value)
 #'
 #' @export
 #' 
 separateAdjPval <- function(x, pval.threshold=1.05, method=1){
   if(pval.threshold > 1){
-    res <- apply(x, 2, function(x)adjust.p(x, pi0.method = method)$adjp$adjusted.p)
+    res <- apply(x, 2, function(x) cp4p::adjust.p(x, pi0.method = method)$adjp$adjusted.p)
   } else{
     res <- as.data.frame(apply(x, 2, function(x)thresholdpval4fdr(x, pval.T = pval.threshold,  M=method)))
   }
   return(res)
 }
 
-#' @title xxx
+#' @title Computes the adjusted p-values on all the stacked contrasts using CP4P
 #'
 #' @author Thomas Burger
 #'
-#' @param x xxx
-#' @param pval.threshold xxx
-#' @param method xxx
-#' @param display xxx
+#' @param x a proteins x contrasts dataframe of (raw) p-values
+#' @param pval.threshold all the p-values above the threshold are not considered. 
+#' Default is 1.05 (which is equivalent to have no threshold).
+#' Applying a threshold nearby 1 can be instrumental to improve the uniformity under the null, notably
+#' in case of upstream mutliple contrat correction (for experienced users only)
+#' @param method method a method to estimate pi_0, see CP4P
+#' @param display if T, a calibration plot is diplayed using CP4P
 #'
-#' @return xxx
+#' @return a proteins x contrasts table of adjusted p-values
 #'
 #' @examples
-#' NULL
+#' data(Exp1_R25_prot, package='DAPARdata')
+#' exdata <- Exp1_R25_prot[1:5,]
+#' globalAdjPval(testAnovaModels(applyAnovasOnProteins(exdata), "TukeyHSD")$P_Value)
 #'
 #' @export
 #' 
@@ -249,26 +266,30 @@ globalAdjPval <- function(x, pval.threshold=1.05, method=1, display = T){
   res <- x
   vec <- stack(x)$values
   index <- which(vec< pval.threshold)
-  if(display)calibration.plot(vec[index], pi0.method="ALL")
-  vec[index] <- adjust.p(vec[index], pi0.method = method)$adjp$adjusted.p
+  if(display)
+    cp4p::calibration.plot(vec[index], pi0.method="ALL")
+  vec[index] <- cp4p::adjust.p(vec[index], pi0.method = method)$adjp$adjusted.p
   vec[-index] <- 1
   res[,] <- vec
   return(res)
 }
 
-#' @title xxx
+#' @title Applies an FDR threshold on a table of adjusted p-values and summarizes the results
 #'
 #' @author Thomas Burger
 #'
-#' @param x xxx
+#' @param x a table of adjusted p-values
+#' @param fdr.threshold an FDR threshold
 #'
-#' @param fdr.threshold xxx
-#'
-#' @return xxx
+#' @return a summary of the number of significantly differentially abundant proteins, overall and per contrast
 #'
 #' @examples
-#' NULL
-#'
+#' data(Exp1_R25_prot, package='DAPARdata')
+#' exdata <- Exp1_R25_prot[1:5,]
+#' adjpvaltab <- globalAdjPval(testAnovaModels(applyAnovasOnProteins(exdata), "TukeyHSD")$P_Value)
+#' seltab <- compute.selection.table(adjpvaltab, 0.2)
+#' seltab
+#' 
 #' @export
 #' 
 compute.selection.table <- function(x, fdr.threshold){

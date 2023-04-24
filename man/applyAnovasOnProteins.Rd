@@ -2,22 +2,24 @@
 % Please edit documentation in R/anova_analysis.R
 \name{applyAnovasOnProteins}
 \alias{applyAnovasOnProteins}
-\title{xxx}
+\title{iteratively applies OWAnova() on the features of an MSnSet object}
 \usage{
 applyAnovasOnProteins(obj)
 }
 \arguments{
-\item{obj}{xxx
+\item{obj}{an MSnSet object
 '}
 }
 \value{
-xxx
+a list of linear models
 }
 \description{
-xxx
+iteratively applies OWAnova() on the features of an MSnSet object
 }
 \examples{
-NULL
+data(Exp1_R25_prot, package='DAPARdata')
+exdata <- Exp1_R25_prot[1:5,]
+applyAnovasOnProteins(exdata)
 
 }
 \author{
