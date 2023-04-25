@@ -134,7 +134,7 @@ testAnovaModels <- function(aov_fits, test = "Omnibus"){
 #' NULL
 #' 
 formatHSDResults <- function(post_hoc_models_summaries){
-  pkgs.require('purrr')
+  pkgs.require(c('purrr', 'stringr'))
   
   # get the fold-changes
   res_coeffs <- lapply(post_hoc_models_summaries, function(x) x[,1])
@@ -168,7 +168,7 @@ formatHSDResults <- function(post_hoc_models_summaries){
 #' NULL
 #' 
 formatPHTResults <- function(post_hoc_models_summaries){
-  pkgs.require('purrr')
+  pkgs.require(c('purrr', 'stringr'))
   
   # récupérer les différences entre les moyennes
   res_coeffs <- lapply(post_hoc_models_summaries, function(x) x$test$coefficients)
@@ -204,6 +204,7 @@ formatPHTResults <- function(post_hoc_models_summaries){
 #' NULL
 #' 
 thresholdpval4fdr <- function(x, pval.T, M){
+  pkgs.require('cp4p')
   index <- which(x< pval.T)
   R <- length(index)/length(x)
   print(R)
@@ -233,6 +234,7 @@ thresholdpval4fdr <- function(x, pval.T, M){
 #' @export
 #' 
 separateAdjPval <- function(x, pval.threshold=1.05, method=1){
+  pkgs.require('cp4p')
   if(pval.threshold > 1){
     res <- apply(x, 2, function(x) cp4p::adjust.p(x, pi0.method = method)$adjp$adjusted.p)
   } else{
@@ -263,6 +265,7 @@ separateAdjPval <- function(x, pval.threshold=1.05, method=1){
 #' @export
 #' 
 globalAdjPval <- function(x, pval.threshold=1.05, method=1, display = T){
+  pkgs.require('cp4p')
   res <- x
   vec <- stack(x)$values
   index <- which(vec< pval.threshold)
@@ -457,7 +460,7 @@ wrapperClassic1wayAnova <- function(obj,
 #'
 formatPHResults <- function(post_hoc_models_summaries) {
   .Deprecated("formatPHTResults")
-  pkgs.require('purrr')
+  pkgs.require(c('purrr', 'stringr'))
   
   
   # récupérer les différences entre les moyennes
