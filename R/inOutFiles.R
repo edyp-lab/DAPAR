@@ -386,7 +386,6 @@ write.excel <- function(df,
 #' @author Samuel Wieczorek
 #'
 #' @examples
-#' Sys.setenv("R_ZIPCMD" = Sys.which("zip"))
 #' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10)]
 #' writeMSnsetToExcel(obj, "foo")
@@ -400,12 +399,46 @@ writeMSnsetToExcel <- function(obj, filename) {
 
     name <- paste(filename, ".xlsx", sep = "")
     wb <- openxlsx::createWorkbook(name)
+    
+    
     n <- 1
+    
+    
+    # Add versions
+    openxlsx::addWorksheet(wb, "Versions")
+    tryCatch(
+      {
+        find.package("Prostar")
+        Prostar_Version <- installed.packages()["Prostar", "Version"]
+      },
+      error = function(e) Prostar_Version <- NA
+    )
+    
+    tryCatch(
+      {
+        find.package("DAPAR")
+        DAPAR_Version <- installed.packages()["DAPAR", "Version"]
+      },
+      error = function(e) DAPAR_Version <- NA
+    )
+    
+    openxlsx::writeData(wb, 
+                        sheet = n, 
+                        cbind(Prostar_Version = Prostar_Version,
+                              DAPAR_Version = DAPAR_Version),
+                        rowNames = FALSE)
+    
+    
+    
+    # Add quantitative data
+    
+    n <- n + 1
     openxlsx::addWorksheet(wb, "Quantitative Data")
-    openxlsx::writeData(wb, sheet = n, cbind(
-        ID = rownames(Biobase::exprs(obj)),
-        Biobase::exprs(obj)
-    ), rowNames = FALSE)
+    openxlsx::writeData(wb, 
+                        sheet = n, 
+                        cbind(ID = rownames(Biobase::exprs(obj)),
+                              Biobase::exprs(obj)),
+                        rowNames = FALSE)
 
 
     # Add colors to quantitative table
@@ -430,7 +463,7 @@ writeMSnsetToExcel <- function(obj, filename) {
             lapply(seq_len(length(colors)), function(x) {
                 list.tags <- which(names(colors)[x] == tags, arr.ind = TRUE)
                 openxlsx::addStyle(wb,
-                    sheet = 1,
+                    sheet = n,
                     cols = list.tags[, "col"],
                     rows = list.tags[, "row"] + 1,
                     style = openxlsx::createStyle(fgFill = colors[x])
@@ -440,7 +473,7 @@ writeMSnsetToExcel <- function(obj, filename) {
     }
 
 
-    n <- 2
+    n <- n +1
     openxlsx::addWorksheet(wb, "Samples Meta Data")
     openxlsx::writeData(wb, sheet = n, Biobase::pData(obj), rowNames = FALSE)
 
@@ -483,7 +516,7 @@ writeMSnsetToExcel <- function(obj, filename) {
 
     ## Add feature Data sheet
 
-    n <- 3
+    n <- n +1
     if (dim(Biobase::fData(obj))[2] != 0) {
         openxlsx::addWorksheet(wb, "Feature Meta Data")
         openxlsx::writeData(wb,

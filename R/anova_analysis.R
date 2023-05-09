@@ -79,7 +79,7 @@ testAnovaModels <- function(aov_fits, test = "Omnibus"){
                        "P_Value" = data.frame("anova_1way_pval" = omnibus_tests_summaries[,9], row.names = names(aov_fits)))
          }, TukeyHSD={
            tukeyHSD_tests_summaries <- lapply(aov_fits, 
-                                              function(x) TukeyHSD(x, which = "conditions")$conditions)
+                                              function(x) stats::TukeyHSD(x, which = "conditions")$conditions)
            res <- formatHSDResults(tukeyHSD_tests_summaries)
          }, TukeySinglestep={
            tukeySS_tests_summaries <- lapply(aov_fits, 
