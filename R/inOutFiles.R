@@ -645,8 +645,11 @@ readExcel <- function(file, extension, sheet) {
 #'
 #'
 listSheets <- function(file) {
-    pkgs.require('openxlsx')
-    return(openxlsx::getSheetNames(file))
+  #  pkgs.require('openxlsx')
+  pkgs.require('readxl')
+  
+  return(readxl::excel_sheets(file))
+  #  return(openxlsx::getSheetNames(file))
 }
 
 
