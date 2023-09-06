@@ -197,7 +197,7 @@ createMSnset <- function(file,
 
     ## Integrity tests
     if (identical(rownames(Intensity), rownames(fd)) == FALSE) {
-        stop("Problem consistency betweenrow names expression data and 
+        stop("Problem consistency between row names of expression data and 
             featureData")
     }
 
@@ -263,9 +263,9 @@ createMSnset <- function(file,
     colnames(metacell) <- gsub(".", "_", colnames(metacell), fixed = TRUE)
 
     Biobase::fData(obj) <- cbind(Biobase::fData(obj),
-        metacell,
-        deparse.level = 0
-    )
+                                 metacell,
+                                 deparse.level = 0)
+    
     obj@experimentData@other$names_metacell <- colnames(metacell)
 
 
