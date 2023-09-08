@@ -402,7 +402,7 @@ writeMSnsetToExcel <- function(obj, filename) {
     
     
     n <- 1
-    
+    Prostar_Version <- DAPAR_Version <- NULL
     
     # Add versions
     openxlsx::addWorksheet(wb, "Versions")
