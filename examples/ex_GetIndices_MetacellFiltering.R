@@ -13,8 +13,8 @@ indices <- GetIndices_MetacellFiltering(obj, level, pattern, type, percent, op, 
 pattern <- "Quantified"
 type <- "AtLeastOneCond"
 percent <- FALSE
-op <- ">="
-th <- 4
+op <- "=="
+th <- 3
 indices2.1 <- GetIndices_MetacellFiltering(obj, level, pattern, type, percent, op, th)
 
 pattern <- "Quant. by direct id"

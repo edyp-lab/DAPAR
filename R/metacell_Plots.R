@@ -54,6 +54,8 @@ metacellPerLinesHisto_HC <- function(obj,
                            pattern = pattern,
                            level = obj@experimentData@other$typeOfData
                            )
+    if (length(mask) == 0)
+      return(NULL)
     
     NbNAPerRow <- rowSums(mask)
 
@@ -187,6 +189,8 @@ metacellPerLinesHistoPerCondition_HC <- function(obj,
                            pattern = pattern,
                            level = GetTypeofData(obj)
                            )
+    if (length(mask) == 0)
+      return(NULL)
     
     ll.df <- list()
     for (i in u_conds)
@@ -313,7 +317,9 @@ metacellHisto_HC <- function(obj,
                            pattern = pattern,
                            level = obj@experimentData@other$typeOfData
                            )
-
+    if (length(mask) == 0)
+      return(NULL)
+    
     NbNAPerCol <- colSums(mask)
 
     df <- data.frame(
