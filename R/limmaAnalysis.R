@@ -244,7 +244,7 @@ make.design <- function(sTab) {
     }
 
     n <- ncol(sTab)
-    if (n == 1 || n == 2) {
+    if (n < 3) {
         stop.txt <- paste0("Error in design matrix dimensions which must ", 
             "have at least 3 columns.")
         stop(stop.txt)
@@ -284,12 +284,11 @@ make.design.1 <- function(sTab) {
 
     design <- matrix(0, nb_samples, nb_cond)
     n0 <- 1
-    coln <- NULL
+    coln <- c()
     for (j in seq_len(nb_cond)) {
-        coln <- c(coln, paste("Condition", j, collapse = NULL, sep = ""))
-        design[seq.int(from=n0, to=(n0 + nb_Rep[j] - 1)), j] <- rep(1, 
-            length(seq.int(from=n0, to = (n0 + nb_Rep[j] - 1)))
-            )
+        coln <- c(coln, paste("Condition", LETTERS[j], collapse = NULL, sep = ""))
+        seq <- seq.int(from=n0, to=(n0 + nb_Rep[j] - 1))
+        design[seq, j] <- rep(1, length(seq))
         n0 <- n0 + nb_Rep[j]
     }
     colnames(design) <- coln
@@ -455,9 +454,9 @@ make.contrast <- function(design, condition, contrast = 1) {
         nb.col <- NULL
         for (i in seq_len(nb.cond)) {
             col.select <- NULL
-            col.name.begin <- paste("Condition", i, sep = "")
+            col.name.begin <- paste("Condition", LETTERS[i], sep = "")
             nc <- nchar(col.name.begin)
-            for (j in seq_len(length(design[1, ]))) {
+            for (j in seq_len(nb.cond)) {
                 if (substr(name.col[j], 1, nc) == col.name.begin) {
                     col.select <- c(col.select, j)
                 }
@@ -528,7 +527,7 @@ make.contrast <- function(design, condition, contrast = 1) {
 #' one comparison). The names of the columns for those two dataframes
 #' are identical and correspond to the description of the comparison.
 #'
-#' @author Hélène Borges, Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
+#' @author Helene Borges, Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
 #'
 #' @examples
 #' data(Exp1_R25_pept, package="DAPARdata")
@@ -562,9 +561,9 @@ limmaCompleteTest <- function(qData, sTab, comp.type = "OnevsOne") {
         if (comp.type == "OnevsOne" || comp.type == "OnevsAll") {
             contra <- make.contrast(design.matrix, condition = conds, contrast)
             cmtx <- limma::makeContrasts(
-                contrasts = contra,
-                levels = make.names(colnames(design.matrix))
-            )
+              contrasts = contra,
+              levels = make.names(colnames(design.matrix))
+              )
             fit <- limma::eBayes(
                 limma::contrasts.fit(limma::lmFit(qData, design.matrix), cmtx))
             res.l <- formatLimmaResult(fit, conds, contrast)
@@ -588,11 +587,10 @@ limmaCompleteTest <- function(qData, sTab, comp.type = "OnevsOne") {
                     limma::lmFit(qData, design.matrix), 
                     contrasts_limma_format)
                 )
-            fit_table <- limma::topTable(
-                ebayes_fit, 
-                sort.by = "none", 
-                number = nrow(qData)
-                )
+            fit_table <- limma::topTable(ebayes_fit, 
+                                         sort.by = "none", 
+                                         number = nrow(qData)
+                                         )
             fit_pvalue <- dplyr::select(fit_table, "anova_1way_pval" = P.Value)
             res.l <- list(
                 "logFC" = data.frame(
@@ -651,23 +649,25 @@ formatLimmaResult <- function(fit, conds, contrast) {
 
         # not the same syntax to pars if Contast=1 or Contrast=2
         if (contrast == 1) {
+            # One vs One
             compa <- stringr::str_match_all(
                 colnames(fit$p.value)[i], 
-                "[[:space:]]Condition([[:digit:]]+)")[[1]]
-            cn[i] <- paste(
-                unique(conds)[as.numeric(compa[1, 2])], 
-                "_vs_", 
-                unique(conds)[as.numeric(compa[2, 2])], 
-                sep = ""
-                )
+                "[[:space:]]Condition([[:letter:]]+)")[[1]]
+            
+            tmp <- unique(conds)[which(LETTERS == compa[1, 2])]
+            
+            cn[i] <- paste(tmp, "_vs_", tmp, sep = "")
         }
+      
+      
         if (contrast == 2) {
-            # hier and non hier
+            # One vs all
             compa <- stringr::str_match_all(colnames(fit$p.value)[i], 
-                "[[:space:]]Condition([[:digit:]]+)")[[1]]
-            cn[i] <- paste(unique(conds)[as.numeric(compa[1, 2])], 
-                "_vs_(all-", unique(conds)[as.numeric(compa[1, 2])], ")", 
-                sep = "")
+                "[[:space:]]Condition([[:letter:]]+)")[[1]]
+            
+            # Get the first condition in the comparison
+            tmp <- unique(conds)[which(LETTERS == compa[1, 2])]
+            cn[i] <- paste(tmp, "_vs_(all-", tmp, ")", sep = "")
         }
     }
 
