@@ -30,7 +30,9 @@ Authors@R: c(person(given = "Samuel", family = "Wieczorek",
 License: Artistic-2.0
 VignetteBuilder: knitr
 Depends: R (>= 4.3.0)
-Suggests: testthat, BiocStyle, AnnotationDbi, clusterProfiler, graph,
+Suggests: testthat, BiocStyle
+Imports: Biobase, MSnbase, DAPARdata (>= 1.27.3), utils, highcharter, foreach,
+        AnnotationDbi, clusterProfiler, graph,
         diptest, cluster, vioplot, visNetwork, vsn, igraph,  
         FactoMineR, factoextra, dendextend, parallel, doParallel, 
         Mfuzz, apcluster, forcats, readxl, openxlsx, multcomp, purrr, tibble,
@@ -38,7 +40,6 @@ Suggests: testthat, BiocStyle, AnnotationDbi, clusterProfiler, graph,
         dplyr, limma, preprocessCore, stringr, tidyr, impute, gplots,
         grDevices, reshape2, graphics, stats, methods, ggplot2, 
         RColorBrewer, Matrix, org.Sc.sgd.db
-Imports: Biobase, MSnbase, DAPARdata (>= 1.27.3), utils, highcharter, foreach
 biocViews: Proteomics, Normalization, Preprocessing, MassSpectrometry,
         QualityControl, GO, DataImport
 NeedsCompilation: no

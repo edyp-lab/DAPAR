@@ -457,6 +457,7 @@ getDesignLevel <- function(sTab){
 #' (Contrast=1; for example H0:"C1=C2" vs H1:"C1!=C2", etc.)
 #' or each condition versus all others (Contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
 #'  H1:"C1!=(C2+C3)/2", etc. if there are three conditions).
+#' @param design.level xxx
 #'
 #' @return A contrast matrix
 #'
@@ -601,7 +602,7 @@ make.contrast <- function(design,
 #'
 limmaCompleteTest <- function(qData, 
                               sTab, 
-                              comp.type = c("OnevsOne", 'OnevsAll', 'anova1way')) {
+                              comp.type = 'OnevsOne') {
 
     pkgs.require(c('dplyr', 'limma', 'tidyr'))
     

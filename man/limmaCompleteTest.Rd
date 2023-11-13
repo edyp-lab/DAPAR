@@ -4,11 +4,7 @@
 \alias{limmaCompleteTest}
 \title{Computes a hierarchical differential analysis}
 \usage{
-limmaCompleteTest(
-  qData,
-  sTab,
-  comp.type = c("OnevsOne", "OnevsAll", "anova1way")
-)
+limmaCompleteTest(qData, sTab, comp.type = "OnevsOne")
 }
 \arguments{
 \item{qData}{A matrix of quantitative data, without any missing values.}
