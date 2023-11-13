@@ -19,7 +19,7 @@ or each condition versus all others (Contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
  H1:"C1!=(C2+C3)/2", etc. if there are three conditions).}
 }
 \value{
-A constrat matrix
+A contrast matrix
 }
 \description{
 Builds the contrast matrix

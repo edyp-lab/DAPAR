@@ -86,6 +86,7 @@ test.design <- function(tab) {
         }
     }
 
+
     # verification si niveau non informatif
     return(list(
         valid = valid,
@@ -161,7 +162,7 @@ check.design <- function(sTab) {
     res <- list(valid = FALSE, warn = NULL)
 
     names <- colnames(sTab)
-    level.design <- ncol(sTab) - 2
+    level.design <- ncol(sTab)-2
 
 
     res <- check.conditions(sTab$Condition)
@@ -285,12 +286,21 @@ make.design.1 <- function(sTab) {
     design <- matrix(0, nb_samples, nb_cond)
     n0 <- 1
     coln <- c()
+    
+    if (getDesignLevel(sTab)==1)
     for (j in seq_len(nb_cond)) {
         coln <- c(coln, paste("Condition", LETTERS[j], collapse = NULL, sep = ""))
         seq <- seq.int(from=n0, to=(n0 + nb_Rep[j] - 1))
         design[seq, j] <- rep(1, length(seq))
         n0 <- n0 + nb_Rep[j]
     }
+    else
+      for (j in seq_len(nb_cond)) {
+        coln <- c(coln, paste("Condition", j, collapse = NULL, sep = ""))
+        seq <- seq.int(from=n0, to=(n0 + nb_Rep[j] - 1))
+        design[seq, j] <- rep(1, length(seq))
+        n0 <- n0 + nb_Rep[j]
+      }
     colnames(design) <- coln
 
     return(design)
@@ -323,7 +333,7 @@ make.design.2 <- function(sTab) {
     Condition <- factor(sTab$Condition, levels = unique(sTab$Condition))
     RepBio <- factor(sTab$Bio.Rep, levels = unique(sTab$Bio.Rep))
 
-    # Renome the levels of factor
+    # Rename the levels of factor
     levels(Condition) <- seq_len(length(levels(Condition)))
     levels(RepBio) <- seq_len(length(levels(RepBio)))
 
@@ -337,9 +347,7 @@ make.design.2 <- function(sTab) {
     # Remove identical columns in the design matrix
     coldel <- -1
     for (i in seq_len(length(design[1, ]) - 1)) {
-        d2 <- as.matrix(
-            design[, seq.int(from=(i + 1), to = length(design[1, ]))]
-            )
+        d2 <- as.matrix(design[, seq.int(from=(i + 1), to = length(design[1, ]))])
         for (j in seq_len(length(d2[1, ]))) {
             d2[, j] <- d2[, j] - design[, i]
         }
@@ -400,8 +408,7 @@ make.design.3 <- function(sTab) {
     # Remove identical columns in the design matrix
     coldel <- -1
     for (i in seq_len(length(design[1, ]) - 1)) {
-        d2 <- as.matrix(design[, seq.int(from = (i + 1), 
-            to = length(design[1, ]))])
+        d2 <- as.matrix(design[, seq.int(from = (i + 1), to = length(design[1, ]))])
         for (j in seq_len(length(d2[1, ]))) {
             d2[, j] <- d2[, j] - design[, i]
         }
@@ -416,7 +423,26 @@ make.design.3 <- function(sTab) {
 }
 
 
-
+#' @title xxx
+#' @description xxx
+#' 
+#' @param sTab xxx
+#' 
+#' @examples
+#' data(Exp1_R25_pept, package="DAPARdata")
+#' sTab <- Biobase::pData(Exp1_R25_pept)
+#' getDesignLevel(sTab)
+#'
+#' @export
+#' 
+getDesignLevel <- function(sTab){
+  
+  level <- NULL
+  if (isTRUE(check.design(sTab)$valid))
+    level <- ncol(sTab) - 2
+  
+  return (level)
+}
 
 
 #' @title Builds the contrast matrix
@@ -432,7 +458,7 @@ make.design.3 <- function(sTab) {
 #' or each condition versus all others (Contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
 #'  H1:"C1!=(C2+C3)/2", etc. if there are three conditions).
 #'
-#' @return A constrat matrix
+#' @return A contrast matrix
 #'
 #' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
 #'
@@ -444,17 +470,20 @@ make.design.3 <- function(sTab) {
 #'
 #' @export
 #'
-make.contrast <- function(design, condition, contrast = 1) {
+make.contrast <- function(design, 
+                          condition, 
+                          contrast = 1,
+                          design.level = 1) {
 
 
-    aggreg.column.design <- function(design, Condition) {
-        nb.cond <- length(unique(Condition))
+    aggreg.column.design <- function(design, condition) {
+        nb.cond <- length(unique(condition))
         name.col <- colnames(design)
         name.cond <- NULL
         nb.col <- NULL
         for (i in seq_len(nb.cond)) {
             col.select <- NULL
-            col.name.begin <- paste("Condition", LETTERS[i], sep = "")
+            col.name.begin <- paste("Condition", i, sep = "")
             nc <- nchar(col.name.begin)
             for (j in seq_len(nb.cond)) {
                 if (substr(name.col[j], 1, nc) == col.name.begin) {
@@ -475,9 +504,40 @@ make.contrast <- function(design, condition, contrast = 1) {
     }
 
 
+    aggreg.column.design.1 <- function(design, condition) {
+      nb.cond <- length(unique(condition))
+      name.col <- colnames(design)
+      name.cond <- NULL
+      nb.col <- NULL
+      for (i in seq_len(nb.cond)) {
+        col.select <- NULL
+        col.name.begin <- paste("Condition", LETTERS[i], sep = "")
+        nc <- nchar(col.name.begin)
+        for (j in seq_len(nb.cond)) {
+          if (substr(name.col[j], 1, nc) == col.name.begin) {
+            col.select <- c(col.select, j)
+          }
+        }
+        name.aggreg <- NULL
+        for (j in seq_len(length(col.select))) {
+          name.aggreg <- paste(name.aggreg, 
+                               name.col[col.select[j]], 
+                               sep = "+")
+        }
+        name.aggreg <- substr(name.aggreg, 2, nchar(name.aggreg))
+        name.cond <- c(name.cond, name.aggreg)
+        nb.col <- c(nb.col, length(col.select))
+      }
+      return(list(name.cond, nb.col))
+    }
 
     nb.cond <- length(unique(condition))
-    r <- aggreg.column.design(design, condition)
+    r <- NULL
+    if (design.level == 1)
+      r <- aggreg.column.design.1(design, condition)
+    else
+      r <- aggreg.column.design(design, condition)
+    #browser()
     label.agg <- r[[1]]
     nb.agg <- r[[2]]
     k <- 1
@@ -534,19 +594,21 @@ make.contrast <- function(design, condition, contrast = 1) {
 #' obj <- Exp1_R25_pept
 #' qData <- Biobase::exprs(obj)
 #' sTab <- Biobase::pData(obj)
-#' limma <- limmaCompleteTest(qData, sTab, comp.type = "anova1way")
+#' limma <- limmaCompleteTest(qData, sTab, comp.type = "OnevsAll")
 #'
 #' @export
 #'
 #'
-limmaCompleteTest <- function(qData, sTab, comp.type = "OnevsOne") {
+limmaCompleteTest <- function(qData, 
+                              sTab, 
+                              comp.type = c("OnevsOne", 'OnevsAll', 'anova1way')) {
 
     pkgs.require(c('dplyr', 'limma', 'tidyr'))
     
     switch(comp.type,
         OnevsOne = contrast <- 1,
         OnevsAll = contrast <- 2
-    )
+        )
     #sTab.old <- sTab
     conds <- factor(sTab$Condition, levels = unique(sTab$Condition))
     #sTab <- sTab[unlist(lapply(split(sTab, conds), function(x) {x["Sample.name"]})), ]
@@ -559,7 +621,10 @@ limmaCompleteTest <- function(qData, sTab, comp.type = "OnevsOne") {
 
     if (!is.null(design.matrix)) {
         if (comp.type == "OnevsOne" || comp.type == "OnevsAll") {
-            contra <- make.contrast(design.matrix, condition = conds, contrast)
+            contra <- make.contrast(design.matrix, 
+                                    condition = conds, 
+                                    contrast,
+                                    design.level = getDesignLevel(sTab))
             cmtx <- limma::makeContrasts(
               contrasts = contra,
               levels = make.names(colnames(design.matrix))

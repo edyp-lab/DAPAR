@@ -4,7 +4,11 @@
 \alias{limmaCompleteTest}
 \title{Computes a hierarchical differential analysis}
 \usage{
-limmaCompleteTest(qData, sTab, comp.type = "OnevsOne")
+limmaCompleteTest(
+  qData,
+  sTab,
+  comp.type = c("OnevsOne", "OnevsAll", "anova1way")
+)
 }
 \arguments{
 \item{qData}{A matrix of quantitative data, without any missing values.}
@@ -29,9 +33,9 @@ data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept
 qData <- Biobase::exprs(obj)
 sTab <- Biobase::pData(obj)
-limma <- limmaCompleteTest(qData, sTab, comp.type = "anova1way")
+limma <- limmaCompleteTest(qData, sTab, comp.type = "OnevsAll")
 
 }
 \author{
-Hélène Borges, Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
+Helene Borges, Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
 }
