@@ -8,11 +8,24 @@
 #'
 #' @examples
 #' data(Exp1_R25_pept, package="DAPARdata")
-#' test.design(Biobase::pData(Exp1_R25_pept)[, seq_len(3)])
+#' test.design.hierarchy(Biobase::pData(Exp1_R25_pept)[, seq_len(3)])
 #'
 #' @export
 #'
-test.design <- function(tab) {
+test.design.hierarchy <- function(sTab) {
+  
+  level.design <- ncol(sTab) - 2
+  tab <- NULL
+  # Check if the hierarchy of the design is correct
+  if (level.design == 1)
+    tab <- sTab[, c("Condition", "Bio.Rep")]
+  else if (level.design == 2)
+    tab <- sTab[, c("Condition", "Bio.Rep", "Tech.Rep")]
+  else if (level.design == 3)
+    tab <- sTab[, c("Condition", "Bio.Rep", "Tech.Rep", "Analyt.Rep")]
+
+  
+  
     valid <- TRUE
     txt <- NULL
     level <- NULL
@@ -116,7 +129,7 @@ check.conditions <- function(conds) {
 
     if (("" %in% conds) || (NA %in% conds)) {
         res <- list(valid = FALSE, 
-            warn = "The conditions are note full filled.")
+            warn = "The conditions are not full filled.")
         return(res)
     }
 
@@ -143,6 +156,25 @@ check.conditions <- function(conds) {
 
 
 
+check.replicates.fullfilled <- function(sTab){
+  res <- list(valid = TRUE, warn = NULL)
+  
+  # Check if all the column are fullfilled
+  names <- colnames(sTab)[-(1:2)]
+  
+  lapply(names, 
+         function(x){
+           if (sum(c("", NA) %in% x) > 0) {
+             res <- list(valid = FALSE, 
+                         warn = paste0("The ", x, "colmumn are not full filled.")
+             )
+           }
+  })
+
+
+  return(res)
+}
+
 #' @title Check if the design is valid
 #'
 #' @param sTab The data.frame which correspond to the `pData()` function 
@@ -154,66 +186,23 @@ check.conditions <- function(conds) {
 #'
 #' @examples
 #' data(Exp1_R25_pept, package="DAPARdata")
-#' check.design(Biobase::pData(Exp1_R25_pept)[, seq_len(3)])
+#' sTab <- Biobase::pData(Exp1_R25_pept)
+#' check.design(sTab)
 #'
 #' @export
 #'
 check.design <- function(sTab) {
     res <- list(valid = FALSE, warn = NULL)
 
-    names <- colnames(sTab)
-    level.design <- ncol(sTab)-2
-
+    
 
     res <- check.conditions(sTab$Condition)
-    if (!res$valid) {
-        return(res)
-    }
-    # Check if all the column are fullfilled
-
-    if (level.design == 1) {
-        if (("" %in% sTab$Bio.Rep) || (NA %in% sTab$Bio.Rep)) {
-            res <- list(valid = FALSE, 
-                warn = "The Bio.Rep colmumn are not full filled.")
-            return(res)
-        }
-    } else if (level.design == 2) {
-        if (("" %in% sTab$Bio.Rep) || (NA %in% sTab$Bio.Rep)) {
-            res <- list(valid = FALSE, 
-                warn = "The Bio.Rep colmumn are not full filled.")
-            return(res)
-        } else if (("" %in% sTab$Tech.Rep) || (NA %in% sTab$Tech.Rep)) {
-            res <- list(valid = FALSE, 
-                warn = "The Tech.Rep colmumn are not full filled.")
-            return(res)
-        }
-    } else if (level.design == 3) {
-        if (("" %in% sTab$Bio.Rep) || (NA %in% sTab$Bio.Rep)) {
-            res <- list(valid = FALSE, 
-                warn = "The Bio.Rep colmumn are not full filled.")
-            return(res)
-        } else if (("" %in% sTab$Tech.Rep) || (NA %in% sTab$Tech.Rep)) {
-            res <- list(valid = FALSE, 
-                warn = "The Tech.Rep colmumn are not full filled.")
-            return(res)
-        } else if (("" %in% sTab$Analyt.Rep) || (NA %in% sTab$Analyt.Rep)) {
-            res <- list(valid = FALSE, 
-                warn = "The Analyt.Rep colmumn are not full filled.")
-            return(res)
-        }
-    }
-
-    # Check if the hierarchy of the design is correct
-    if (level.design == 1) {
-        res <- test.design(sTab[, c("Condition", "Bio.Rep")])
-    } else if (level.design == 2) {
-        res <- test.design(sTab[, c("Condition", "Bio.Rep", "Tech.Rep")])
-    } else if (level.design == 3) {
-        res <- test.design(sTab[, c("Condition", "Bio.Rep", "Tech.Rep")])
-        if (res$valid) {
-            res <- test.design(sTab[, c("Bio.Rep", "Tech.Rep", "Analyt.Rep")])
-        }
-    }
+    if (res$valid)
+      res <- check.replicates.fullfilled(sTab)
+    
+    if (res$valid)
+      res <- test.design.hierarchy(sTab)
+    
 
     return(res)
 }
