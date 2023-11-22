@@ -8,103 +8,90 @@
 #'
 #' @examples
 #' data(Exp1_R25_pept, package="DAPARdata")
-#' test.design.hierarchy(Biobase::pData(Exp1_R25_pept)[, seq_len(3)])
+#' sTab <- Biobase::pData(Exp1_R25_pept)
+#' test.design.hierarchy(sTab)
 #'
 #' @export
 #'
 test.design.hierarchy <- function(sTab) {
   
-  level.design <- ncol(sTab) - 2
+  level <- getDesignLevel(sTab)
   tab <- NULL
+  res <- list(valid = TRUE, 
+              txt = NULL,
+              level = getDesignLevel(sTab)
+              )
   # Check if the hierarchy of the design is correct
-  if (level.design == 1)
-    tab <- sTab[, c("Condition", "Bio.Rep")]
-  else if (level.design == 2)
-    tab <- sTab[, c("Condition", "Bio.Rep", "Tech.Rep")]
-  else if (level.design == 3)
-    tab <- sTab[, c("Condition", "Bio.Rep", "Tech.Rep", "Analyt.Rep")]
-
   
   
-    valid <- TRUE
-    txt <- NULL
-    level <- NULL
-
-    level.a <- factor(tab[, 1], ordered = TRUE)
-    level.b <- factor(tab[, 2], ordered = TRUE)
-    name.level.a <- colnames(tab)[1]
-    name.level.b <- colnames(tab)[2]
-
-    level.c <- NULL
-    if (ncol(tab) == 3) {
-        level.c <- factor(tab[, 3], ordered = TRUE)
-        name.level.c <- colnames(tab)[3]
-    }
-
+  
+  check.wellFormed.groups <- function(res, tab){
     # verification intersection sur B
-    # verification de la non redondance'intersection
-    # vide entre les groupes
-    uniqueA <- unique(level.a)
-    ll <- lapply(
-        uniqueA,
-        function(x) {
-            as.character(level.b)[which(level.a == x)]
-        }
-    )
+    # verification de la non redondance
+    # et intersection vide entre les groupes
+    uniqueA <- unique(tab[, 1])
+    ll <- lapply(uniqueA,  function(x) {as.character(tab[, 2])[which(tab[, 1] == x)]})
+    names(ll) <- uniqueA
     n <- NULL
     for (i in seq_len(length(uniqueA) - 1)) {
-        for (j in seq.int(from=(i + 1), to = length(uniqueA))) {
-            n <- c(n, intersect(ll[[i]], ll[[j]]))
-        }
+      for (j in seq.int(from=(i + 1), to = length(uniqueA))) {
+        n <- c(n, intersect(ll[[i]], ll[[j]]))
+      }
     }
-
+    
     if (length(n) > 0) {
-        valid <- FALSE
-        txt <- c(txt, paste0(
-            "The value ",
-            n,
-            " in column '",
-            colnames(tab)[2],
-            "' is not correctly set.\n"
-        ))
+      res$valid <- FALSE
+      res$txt <- c(rv$txt, paste0(
+        "The value ", n, " in column '", colnames(tab)[2],  "' is not correctly set.\n"
+      ))
     }
-
-
+    
+    return(res)
+  }
+  
+  
+  check.informative.column <- function(res, tab){
+    
     # verification si niveau hierarchique inf
-    if (length(levels(level.a)) == length(levels(level.b))) {
-        ## c'est un design de niveau n-1 en fait
-        valid <- FALSE
-        txt <- c(
-            txt,
-            paste0(
-                "The column ",
-                name.level.b,
-                " is not informative. ",
-                "Thus, the design is not of level (n-1).\n"
-            )
-        )
-    } else if (!is.null(level.c)) {
-        if (length(levels(level.b)) == length(levels(level.c))) {
-            ## c'est un design de niveau n-1 en fait
-            valid <- FALSE
-            txt <- c(
-                txt,
-                paste0(
-                    "The column ",
-                    name.level.c,
-                    " is not informative. ",
-                    "Thus, the design is of level (n-1).\n"
-                )
-            )
-        }
+    if (length(unique(tab[,1])) == length(unique(tab[,2]))) {
+      ## c'est un design de niveau n-1 en fait
+      res$valid <- FALSE
+      res$txt <- c(res$txt,
+                   paste0("The column ",
+                          colnames(tab)[2],
+                          " is not informative. ",
+                          "Thus, the design is not of level ", res$level, " but of level ", res$level-1, ".\n"
+                   )
+      )
+      res$level <- res$level - 1
     }
-
+    
+    return(res)
+  }
+  
+  
+  
+  
+  if (level == 1){
+    res <- check.wellFormed.groups(res, sTab[, c("Condition", "Bio.Rep")])
+    res <- check.informative.column(res, sTab[, c("Condition", "Bio.Rep")])
+  } else if (level == 2) {
+    res <- check.wellFormed.groups(res, sTab[, c("Condition", "Bio.Rep")])
+    res <- check.informative.column(res, sTab[, c("Condition", "Bio.Rep")])
+    res <- check.wellFormed.groups(res, sTab[, c("Bio.Rep", "Tech.Rep")])
+    res <- check.informative.column(res, sTab[, c("Bio.Rep", "Tech.Rep")])
+    
+  } else if (level == 3) {
+    res <- check.wellFormed.groups(res, sTab[, c("Condition", "Bio.Rep")])
+    res <- check.informative.column(res, sTab[, c("Condition", "Bio.Rep")])
+    res <- check.wellFormed.groups(res, sTab[, c("Bio.Rep", "Tech.Rep")])
+    res <- check.informative.column(res, sTab[, c("Bio.Rep", "Tech.Rep")])
+    res <- check.wellFormed.groups(res, sTab[, c("Tech.Rep", 'Analyt.Rep')])
+    res <- check.informative.column(res, sTab[, c("Tech.Rep", 'Analyt.Rep')])
+  }
 
     # verification si niveau non informatif
-    return(list(
-        valid = valid,
-        warn = txt
-    ))
+    return(res)
 }
 
 
@@ -437,9 +424,7 @@ make.design.3 <- function(sTab) {
 #' 
 getDesignLevel <- function(sTab){
   
-  level <- NULL
-  if (isTRUE(check.design(sTab)$valid))
-    level <- ncol(sTab) - 2
+  level <- ncol(sTab) - 2
   
   return (level)
 }
