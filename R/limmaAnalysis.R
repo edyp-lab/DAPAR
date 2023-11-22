@@ -156,6 +156,23 @@ check.conditions <- function(conds) {
 
 
 
+
+
+#' @title Check if the design is valid
+#'
+#' @param conds A vector
+#'
+#' @return A list
+#'
+#' @author Samuel Wieczorek
+#'
+#' @examples
+#' data(Exp1_R25_pept, package="DAPARdata")
+#' sTab <- Biobase::pData(Exp1_R25_pept)
+#' check.replicates.fullfilled(sTab)
+#'
+#' @export
+#'
 check.replicates.fullfilled <- function(sTab){
   res <- list(valid = TRUE, warn = NULL)
   
@@ -170,7 +187,6 @@ check.replicates.fullfilled <- function(sTab){
              )
            }
   })
-
 
   return(res)
 }
@@ -192,10 +208,6 @@ check.replicates.fullfilled <- function(sTab){
 #' @export
 #'
 check.design <- function(sTab) {
-    res <- list(valid = FALSE, warn = NULL)
-
-    
-
     res <- check.conditions(sTab$Condition)
     if (res$valid)
       res <- check.replicates.fullfilled(sTab)
@@ -203,7 +215,6 @@ check.design <- function(sTab) {
     if (res$valid)
       res <- test.design.hierarchy(sTab)
     
-
     return(res)
 }
 
