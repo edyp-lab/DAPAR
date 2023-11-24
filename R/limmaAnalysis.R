@@ -1,6 +1,7 @@
 #' @title Check if xxxxxx
 #'
-#' @param tab A data.frame which correspond to xxxxxx
+#' @param res A list xxx
+#' @param sTab A data.frame which correspond to xxxxxx
 #'
 #' @return A list of two items
 #'
@@ -13,14 +14,10 @@
 #'
 #' @export
 #'
-test.design.hierarchy <- function(sTab) {
+test.design.hierarchy <- function(res, sTab) {
   
   level <- getDesignLevel(sTab)
   tab <- NULL
-  res <- list(valid = TRUE, 
-              txt = NULL,
-              level = getDesignLevel(sTab)
-              )
   # Check if the hierarchy of the design is correct
   
   
@@ -41,7 +38,7 @@ test.design.hierarchy <- function(sTab) {
     
     if (length(n) > 0) {
       res$valid <- FALSE
-      res$txt <- c(rv$txt, paste0(
+      res$txt <- c(res$txt, paste0(
         "The value ", n, " in column '", colnames(tab)[2],  "' is not correctly set.\n"
       ))
     }
@@ -70,26 +67,69 @@ test.design.hierarchy <- function(sTab) {
   }
   
   
+  check.last.column <- function(res, tab){
+    
+    # verification si niveau hierarchique inf
+    if (nrow(tab) != length(unique(tab[ ,ncol(tab)]))) {
+      ## c'est un design de niveau n-1 en fait
+      res$valid <- FALSE
+      res$txt <- c(res$txt,
+                   paste0("The column ",
+                          colnames(tab)[ncol(tab)],
+                          " cannot be the last column ",
+                          "Thus, the design is not of level ", res$level, " but of level ", res$level+1, ".\n"
+                   )
+      )
+      res$level <- res$level + 1
+    }
+    
+    return(res)
+  }
+  
+  
+  design.analyze <- function(res, df){
+    ll <- lapply(df, function(x)
+      length(unique(x))
+    )
+    res$analysis <- ll
+    
+    return(res)
+  }
   
   
   if (level == 1){
-    res <- check.wellFormed.groups(res, sTab[, c("Condition", "Bio.Rep")])
-    res <- check.informative.column(res, sTab[, c("Condition", "Bio.Rep")])
+    tab <- sTab[, c("Condition", "Bio.Rep")]
+    res <- check.wellFormed.groups(res, tab)
+    res <- check.informative.column(res, tab)
+
   } else if (level == 2) {
-    res <- check.wellFormed.groups(res, sTab[, c("Condition", "Bio.Rep")])
-    res <- check.informative.column(res, sTab[, c("Condition", "Bio.Rep")])
-    res <- check.wellFormed.groups(res, sTab[, c("Bio.Rep", "Tech.Rep")])
-    res <- check.informative.column(res, sTab[, c("Bio.Rep", "Tech.Rep")])
+    tab <- sTab[, c("Condition", "Bio.Rep")]
+    res <- check.wellFormed.groups(res, tab)
+    res <- check.informative.column(res, tab)
     
+    tab <- sTab[, c("Bio.Rep", "Tech.Rep")]
+    res <- check.wellFormed.groups(res, tab)
+    res <- check.informative.column(res, tab)
+
   } else if (level == 3) {
-    res <- check.wellFormed.groups(res, sTab[, c("Condition", "Bio.Rep")])
-    res <- check.informative.column(res, sTab[, c("Condition", "Bio.Rep")])
-    res <- check.wellFormed.groups(res, sTab[, c("Bio.Rep", "Tech.Rep")])
-    res <- check.informative.column(res, sTab[, c("Bio.Rep", "Tech.Rep")])
-    res <- check.wellFormed.groups(res, sTab[, c("Tech.Rep", 'Analyt.Rep')])
-    res <- check.informative.column(res, sTab[, c("Tech.Rep", 'Analyt.Rep')])
+    tab <- sTab[, c("Condition", "Bio.Rep")]
+    res <- check.wellFormed.groups(res, tab)
+    res <- check.informative.column(res, tab)
+    
+    tab <- sTab[, c("Bio.Rep", "Tech.Rep")]
+    res <- check.wellFormed.groups(res, tab)
+    res <- check.informative.column(res, tab)
+    
+    tab <- sTab[, c("Tech.Rep", 'Analyt.Rep')]
+    res <- check.wellFormed.groups(res, tab)
+    res <- check.informative.column(res, tab)
   }
 
+  tab <- sTab[, -which(colnames(sTab) == 'Sample.name')]
+  res <- design.analyze(res, tab)
+  res <- check.last.column(res, sTab)
+  
+  
     # verification si niveau non informatif
     return(res)
 }
@@ -100,6 +140,7 @@ test.design.hierarchy <- function(sTab) {
 #' @title Check if the design is valid
 #'
 #' @param conds A vector
+#' @param res A list
 #'
 #' @return A list
 #'
@@ -111,31 +152,21 @@ test.design.hierarchy <- function(sTab) {
 #'
 #' @export
 #'
-check.conditions <- function(conds) {
-    res <- list(valid = TRUE, warn = NULL)
-
-    if (("" %in% conds) || (NA %in% conds)) {
-        res <- list(valid = FALSE, 
-            warn = "The conditions are not full filled.")
-        return(res)
-    }
-
+check.conditions <- function(res, conds) {
     # Check if there is at least two conditions
     if (length(unique(conds)) < 2) {
-        res <- list(valid = FALSE, 
-            warn = "The design must contain at least two conditions.")
-        return(res)
+        res$valid <- FALSE
+        res$txt <- c(res$txt, "The design must contain at least two conditions.")
     }
 
 
-    # check if each condition has at least two values
+    # check if each condition has at least two different values
     nValPerCond <- unlist(lapply(unique(conds), function(x) {
-        length(conds[which(conds == x)])
-    }))
+        length(conds[which(conds == x)])}))
     if (all(nValPerCond < 2)) {
-        res <- list(valid = FALSE, 
-            warn = "The design must contain at least two values per condition.")
-        return(res)
+        res$valid <- FALSE
+        res$txt <- c(res$txt, 
+                     "The design must contain at least two values per condition.")
     }
 
     return(res)
@@ -147,7 +178,8 @@ check.conditions <- function(conds) {
 
 #' @title Check if the design is valid
 #'
-#' @param conds A vector
+#' @param res A list
+#' @param sTab a data.frame xxxx
 #'
 #' @return A list
 #'
@@ -160,23 +192,22 @@ check.conditions <- function(conds) {
 #'
 #' @export
 #'
-check.replicates.fullfilled <- function(sTab){
-  res <- list(valid = TRUE, warn = NULL)
-  
-  # Check if all the column are fullfilled
-  names <- colnames(sTab)[-(1:2)]
-  
-  lapply(names, 
+check.replicates.fullfilled <- function(res, sTab){
+    # Check if all the column are fullfilled
+   
+  lapply(colnames(sTab), 
          function(x){
            if (sum(c("", NA) %in% x) > 0) {
-             res <- list(valid = FALSE, 
-                         warn = paste0("The ", x, "colmumn are not full filled.")
-             )
+             res$valid <- FALSE
+             res$txt <- c(res$txt, paste0("The ", x, "colmumn is not full filled."))
            }
   })
 
   return(res)
 }
+
+
+
 
 #' @title Check if the design is valid
 #'
@@ -195,13 +226,15 @@ check.replicates.fullfilled <- function(sTab){
 #' @export
 #'
 check.design <- function(sTab) {
-    res <- check.conditions(sTab$Condition)
-    if (res$valid)
-      res <- check.replicates.fullfilled(sTab)
+    res <- list(valid = TRUE,
+                txt = NULL,
+                level = getDesignLevel(sTab),
+                analyze = NULL)
     
-    if (res$valid)
-      res <- test.design.hierarchy(sTab)
-    
+    res <- check.conditions(res, sTab$Condition)
+    res <- check.replicates.fullfilled(res, sTab)
+    res <- test.design.hierarchy(res, sTab)
+
     return(res)
 }
 
