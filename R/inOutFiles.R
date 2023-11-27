@@ -566,8 +566,6 @@ writeMSnsetToExcel <- function(obj, filename) {
 #'
 #' @param file The name of the Excel file.
 #'
-#' @param extension The extension of the file
-#'
 #' @param sheet The name of the sheet
 #'
 #' @return A data.frame
@@ -580,11 +578,16 @@ writeMSnsetToExcel <- function(obj, filename) {
 #' NULL
 #'
 #'
-readExcel <- function(file, extension, sheet) {
+readExcel <- function(file, sheet=NULL) {
     pkgs.require('readxl')
 
+  if(is.null(sheet))
+    return(NULL)
+  
     data <- NULL
-    data <- readxl::read_excel(file, sheet)
+    data <- readxl::read_excel(file, 
+                               sheet,
+                               col_types = 'guess')
 
     return(
         as.data.frame(
