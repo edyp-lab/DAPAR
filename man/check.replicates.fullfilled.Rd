@@ -4,10 +4,12 @@
 \alias{check.replicates.fullfilled}
 \title{Check if the design is valid}
 \usage{
-check.replicates.fullfilled(sTab)
+check.replicates.fullfilled(res, sTab)
 }
 \arguments{
-\item{conds}{A vector}
+\item{res}{A list}
+
+\item{sTab}{a data.frame xxxx}
 }
 \value{
 A list

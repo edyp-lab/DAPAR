@@ -165,6 +165,19 @@ metacell.def <- function(level) {
 }
 
 
+#' @export
+#' 
+GetNbTags <- function(obj){
+  df <- Biobase::fData(obj)[, obj@experimentData@other$names_metacell]
+  level <- GetTypeofData(obj)
+  nodes <- metacell.def(level)$node
+  
+  nb <- sapply(nodes, function(x) length(which(df == x)))
+  return(nb)
+}
+
+
+
 #' @title Parent name of a node
 #' @description xxx
 #' @param level xxx

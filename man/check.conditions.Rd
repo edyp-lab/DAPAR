@@ -4,9 +4,11 @@
 \alias{check.conditions}
 \title{Check if the design is valid}
 \usage{
-check.conditions(conds)
+check.conditions(res, conds)
 }
 \arguments{
+\item{res}{A list}
+
 \item{conds}{A vector}
 }
 \value{

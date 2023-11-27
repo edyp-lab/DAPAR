@@ -4,10 +4,12 @@
 \alias{test.design.hierarchy}
 \title{Check if xxxxxx}
 \usage{
-test.design.hierarchy(sTab)
+test.design.hierarchy(res, sTab)
 }
 \arguments{
-\item{tab}{A data.frame which correspond to xxxxxx}
+\item{res}{A list xxx}
+
+\item{sTab}{A data.frame which correspond to xxxxxx}
 }
 \value{
 A list of two items
