@@ -42,22 +42,64 @@
 #'
 #' @export
 #'
-diffAnaComputeFDR <- function(logFC,
-    pval, threshold_PVal = 0,
-    threshold_LogFC = 0,
-    pi0Method = 1) {
-    pkgs.require('cp4p')
-    
-    if (is.null(logFC) || is.null(pval)) {
-        return()
-    }
-
-    upItems <- which(abs(logFC) >= threshold_LogFC)
-    selectedItems <- pval[upItems]
-    padj <- cp4p::adjust.p(selectedItems, pi0Method)
-    items <- which(-log10(padj$adjp[, 1]) >= threshold_PVal)
-    BH.fdr <- max(padj$adjp[items, 2])
+diffAnaComputeFDR <- function(adj.pvals) {
+  BH.fdr <- max(adj.pvals)
     return(BH.fdr)
+}
+
+
+
+
+#' @title Computes the adjusted p-values
+#' 
+#' @description 
+#' This function is a wrapper to the function adjust.p from the `cp4p` package.
+#'  It returns the FDR corresponding to the p-values of the differential 
+#' analysis. The FDR is computed with the function \code{p.adjust}\{stats\}.
+#'
+#' @param df A data.frame with three slots:
+#' * id: xxx
+#' * logFCThe result (logFC values) of the differential analysis processed
+#' by \code{\link{limmaCompleteTest}}
+#'
+#' @param pval The result (p-values) of the differential analysis processed
+#' by \code{\link{limmaCompleteTest}}
+#'
+#' @param threshold_PVal The threshold on p-pvalue to distinguish between 
+#' differential and non-differential data
+#'
+#' @param threshold_LogFC The threshold on log(Fold Change) to distinguish 
+#' between differential and non-differential data
+#'
+#' @param pi0Method The parameter pi0.method of the method adjust.p in the 
+#' package \code{cp4p}
+#'
+#' @return The computed adjusted p-values
+#'
+#' @author Samuel Wieczorek
+#'
+#' @examples
+#' data(Exp1_R25_prot, package="DAPARdata")
+#' obj <- Exp1_R25_prot[seq_len(1000)]
+#' level <- 'protein'
+#' metacell.mask <- match.metacell(GetMetacell(obj), c("Missing POV", "Missing MEC"), level)
+#' indices <- GetIndices_WholeMatrix(metacell.mask, op = ">=", th = 1)
+#' obj <- MetaCellFiltering(obj, indices, cmd = "delete")
+#' qData <- Biobase::exprs(obj$new)
+#' sTab <- Biobase::pData(obj$new)
+#' limma <- limmaCompleteTest(qData, sTab)
+#' df <- data.frame(id = rownames(limma$logFC), logFC = limma$logFC[, 1], pval = limma$P_Value[, 1])
+#' 
+#' diffAnaComputeAdjustedPValues(limma$logFC[, 1], limma$P_Value[, 1])
+#'
+#' @export
+#'
+diffAnaComputeAdjustedPValues <- function(pval, 
+                                          pi0Method = 1) {
+  pkgs.require('cp4p')
+  
+  padj <- cp4p::adjust.p(pval, pi0Method)
+  return(padj$adjp[, 2])
 }
 
 
