@@ -65,6 +65,8 @@ Collate:
     missingValuesImputation_ProteinLevel.R
     normalize.R
     pepa.R
+    pirat.R
+    dataset_Validity.R
     plots_boxplot.R
     plots_compare_Norm.R
     plots_corr_matrix.R
