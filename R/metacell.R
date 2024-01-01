@@ -840,7 +840,7 @@ match.metacell <- function(metadata, pattern = NULL, level) {
 
     if (missing(pattern))
         stop("'pattern' is required.")
-  else if (is.null(pattern))
+  else if (is.null(pattern) || (length(pattern)==1 && pattern==''))
     return(NULL)
 
     if (missing(level))

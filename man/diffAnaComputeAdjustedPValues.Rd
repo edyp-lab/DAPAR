@@ -2,22 +2,20 @@
 % Please edit documentation in R/DiffAnalysis.R
 \name{diffAnaComputeAdjustedPValues}
 \alias{diffAnaComputeAdjustedPValues}
-\title{Computes the FDR corresponding to the p-values of the
-differential analysis using}
+\title{Computes the adjusted p-values}
 \usage{
-diffAnaComputeAdjustedPValues(
-  logFC,
-  pval,
-  threshold_PVal = 0,
-  threshold_LogFC = 0,
-  pi0Method = 1
-)
+diffAnaComputeAdjustedPValues(pval, pi0Method = 1)
 }
 \arguments{
-\item{logFC}{The result (logFC values) of the differential analysis processed
+\item{pval}{The result (p-values) of the differential analysis processed
 by \code{\link{limmaCompleteTest}}}
 
-\item{pval}{The result (p-values) of the differential analysis processed
+\item{pi0Method}{The parameter pi0.method of the method adjust.p in the 
+package \code{cp4p}}
+
+\item{df}{A data.frame with three slots:
+* id: xxx
+* logFCThe result (logFC values) of the differential analysis processed
 by \code{\link{limmaCompleteTest}}}
 
 \item{threshold_PVal}{The threshold on p-pvalue to distinguish between 
@@ -25,9 +23,6 @@ differential and non-differential data}
 
 \item{threshold_LogFC}{The threshold on log(Fold Change) to distinguish 
 between differential and non-differential data}
-
-\item{pi0Method}{The parameter pi0.method of the method adjust.p in the 
-package \code{cp4p}}
 }
 \value{
 The computed adjusted p-values
@@ -47,6 +42,8 @@ obj <- MetaCellFiltering(obj, indices, cmd = "delete")
 qData <- Biobase::exprs(obj$new)
 sTab <- Biobase::pData(obj$new)
 limma <- limmaCompleteTest(qData, sTab)
+df <- data.frame(id = rownames(limma$logFC), logFC = limma$logFC[, 1], pval = limma$P_Value[, 1])
+
 diffAnaComputeAdjustedPValues(limma$logFC[, 1], limma$P_Value[, 1])
 
 }
