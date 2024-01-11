@@ -4,7 +4,7 @@
 \alias{check.conditions}
 \title{Check if the design is valid}
 \usage{
-check.conditions(res, conds)
+check.conditions(res = NULL, conds)
 }
 \arguments{
 \item{res}{A list}
@@ -19,7 +19,7 @@ Check if the design is valid
 }
 \examples{
 data(Exp1_R25_pept, package="DAPARdata")
-check.conditions(Biobase::pData(Exp1_R25_pept)$Condition)
+check.conditions(conds = Biobase::pData(Exp1_R25_pept)$Condition)
 
 }
 \author{

@@ -10,11 +10,18 @@
 #' @examples
 #' data(Exp1_R25_pept, package="DAPARdata")
 #' sTab <- Biobase::pData(Exp1_R25_pept)
-#' test.design.hierarchy(sTab)
+#' test.design.hierarchy(sTab = sTab)
 #'
 #' @export
 #'
-test.design.hierarchy <- function(res, sTab) {
+test.design.hierarchy <- function(res = NULL, sTab) {
+  
+  if(is.null(res))
+    res <- list(valid = TRUE,
+                txt = NULL,
+                level = '',
+                analyze = NULL)
+  
   
   level <- getDesignLevel(sTab)
   tab <- NULL
@@ -101,7 +108,6 @@ test.design.hierarchy <- function(res, sTab) {
     tab <- sTab[, c("Condition", "Bio.Rep")]
     res <- check.wellFormed.groups(res, tab)
     res <- check.informative.column(res, tab)
-
   } else if (level == 2) {
     tab <- sTab[, c("Condition", "Bio.Rep")]
     res <- check.wellFormed.groups(res, tab)
@@ -148,12 +154,19 @@ test.design.hierarchy <- function(res, sTab) {
 #'
 #' @examples
 #' data(Exp1_R25_pept, package="DAPARdata")
-#' check.conditions(Biobase::pData(Exp1_R25_pept)$Condition)
+#' check.conditions(conds = Biobase::pData(Exp1_R25_pept)$Condition)
 #'
 #' @export
 #'
-check.conditions <- function(res, conds) {
-    # Check if there is at least two conditions
+check.conditions <- function(res = NULL,
+                             conds) {
+  if(is.null(res))
+    res <- list(valid = TRUE,
+                txt = NULL,
+                level = '',
+                analyze = NULL)
+  
+  # Check if there is at least two conditions
     if (length(unique(conds)) < 2) {
         res$valid <- FALSE
         res$txt <- c(res$txt, "The design must contain at least two conditions.")
@@ -188,13 +201,18 @@ check.conditions <- function(res, conds) {
 #' @examples
 #' data(Exp1_R25_pept, package="DAPARdata")
 #' sTab <- Biobase::pData(Exp1_R25_pept)
-#' check.replicates.fullfilled(sTab)
+#' check.replicates.fullfilled(sTab = sTab)
 #'
 #' @export
 #'
-check.replicates.fullfilled <- function(res, sTab){
+check.replicates.fullfilled <- function(res = NULL, sTab){
     # Check if all the column are fullfilled
-   
+  if(is.null(res))
+    res <- list(valid = TRUE,
+                txt = NULL,
+                level = '',
+                analyze = NULL)
+  
   lapply(colnames(sTab), 
          function(x){
            if (sum(c("", NA) %in% x) > 0) {
@@ -644,10 +662,9 @@ limmaCompleteTest <- function(qData,
                                     condition = conds, 
                                     contrast,
                                     design.level = getDesignLevel(sTab))
-            cmtx <- limma::makeContrasts(
-              contrasts = contra,
-              levels = make.names(colnames(design.matrix))
-              )
+            cmtx <- limma::makeContrasts(contrasts = contra,
+                                         levels = make.names(colnames(design.matrix))
+                                         )
             fit <- limma::eBayes(
                 limma::contrasts.fit(limma::lmFit(qData, design.matrix), cmtx))
             res.l <- formatLimmaResult(fit, conds, contrast)
@@ -738,9 +755,10 @@ formatLimmaResult <- function(fit, conds, contrast) {
                 colnames(fit$p.value)[i], 
                 "[[:space:]]Condition([[:letter:]]+)")[[1]]
             
-            tmp <- unique(conds)[which(LETTERS == compa[1, 2])]
+            tmp1 <- unique(conds)[which(LETTERS == compa[1, 2])]
+            tmp2 <- unique(conds)[which(LETTERS == compa[2, 2])]
             
-            cn[i] <- paste(tmp, "_vs_", tmp, sep = "")
+            cn[i] <- paste(tmp1, "_vs_", tmp2, sep = "")
         }
       
       
@@ -750,7 +768,8 @@ formatLimmaResult <- function(fit, conds, contrast) {
                 "[[:space:]]Condition([[:letter:]]+)")[[1]]
             
             # Get the first condition in the comparison
-            tmp <- unique(conds)[which(LETTERS == compa[1, 2])]
+            tmp1 <- unique(conds)[which(LETTERS == compa[1, 2])]
+            #tmp2 <- unique(conds)[which(LETTERS == compa[1, 2])]
             cn[i] <- paste(tmp, "_vs_(all-", tmp, ")", sep = "")
         }
     }

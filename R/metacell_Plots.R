@@ -30,7 +30,7 @@ metacellPerLinesHisto_HC <- function(obj,
     } else if (is.null(obj)) {
         stop("'obj' is NULL. Abort...")
     }
-    if(missing(pattern) || is.null(pattern) || (length(pattern)==1 && pattern==''))
+    if(missing(pattern) || length(pattern) == 0 || is.null(pattern) || (length(pattern)==1 && pattern==''))
       return(NULL)
 
     qData <- Biobase::exprs(obj)
@@ -145,7 +145,7 @@ metacellPerLinesHistoPerCondition_HC <- function(obj,
     } else if (is.null(obj)) {
         stop("'obj' is NULL. Abort...")
     }
-  if(missing(pattern) || is.null(pattern) || (length(pattern)==1 && pattern==''))
+  if(missing(pattern) || length(pattern) == 0 || is.null(pattern) || (length(pattern)==1 && pattern==''))
     return(NULL)
 
     qData <- Biobase::exprs(obj)
@@ -281,7 +281,7 @@ metacellHisto_HC <- function(obj,
     } else if (is.null(obj)) {
         stop("'obj' is NULL. Abort...")
     }
-  if(missing(pattern) || is.null(pattern) || (length(pattern)==1 && pattern==''))
+  if(missing(pattern) || length(pattern) == 0 || is.null(pattern) || (length(pattern)==1 && pattern==''))
     return(NULL)
 
     qData <- Biobase::exprs(obj)

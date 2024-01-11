@@ -4,10 +4,10 @@
 \alias{Check_NbValues_In_Columns}
 \title{xxx}
 \usage{
-Check_NbValues_In_Columns(obj)
+Check_NbValues_In_Columns(qdata)
 }
 \arguments{
-\item{obj}{xxx}
+\item{qdata}{xxx}
 }
 \description{
 xxx

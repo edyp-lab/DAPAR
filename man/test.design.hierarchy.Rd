@@ -4,7 +4,7 @@
 \alias{test.design.hierarchy}
 \title{Check if xxxxxx}
 \usage{
-test.design.hierarchy(res, sTab)
+test.design.hierarchy(res = NULL, sTab)
 }
 \arguments{
 \item{res}{A list xxx}
@@ -20,7 +20,7 @@ Check if xxxxxx
 \examples{
 data(Exp1_R25_pept, package="DAPARdata")
 sTab <- Biobase::pData(Exp1_R25_pept)
-test.design.hierarchy(sTab)
+test.design.hierarchy(sTab = sTab)
 
 }
 \author{

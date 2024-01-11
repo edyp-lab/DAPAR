@@ -4,7 +4,7 @@
 \alias{check.replicates.fullfilled}
 \title{Check if the design is valid}
 \usage{
-check.replicates.fullfilled(res, sTab)
+check.replicates.fullfilled(res = NULL, sTab)
 }
 \arguments{
 \item{res}{A list}
@@ -20,7 +20,7 @@ Check if the design is valid
 \examples{
 data(Exp1_R25_pept, package="DAPARdata")
 sTab <- Biobase::pData(Exp1_R25_pept)
-check.replicates.fullfilled(sTab)
+check.replicates.fullfilled(sTab = sTab)
 
 }
 \author{
