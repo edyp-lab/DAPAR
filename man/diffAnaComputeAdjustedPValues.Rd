@@ -12,17 +12,6 @@ by \code{\link{limmaCompleteTest}}}
 
 \item{pi0Method}{The parameter pi0.method of the method adjust.p in the 
 package \code{cp4p}}
-
-\item{df}{A data.frame with three slots:
-* id: xxx
-* logFCThe result (logFC values) of the differential analysis processed
-by \code{\link{limmaCompleteTest}}}
-
-\item{threshold_PVal}{The threshold on p-pvalue to distinguish between 
-differential and non-differential data}
-
-\item{threshold_LogFC}{The threshold on log(Fold Change) to distinguish 
-between differential and non-differential data}
 }
 \value{
 The computed adjusted p-values
@@ -44,7 +33,7 @@ sTab <- Biobase::pData(obj$new)
 limma <- limmaCompleteTest(qData, sTab)
 df <- data.frame(id = rownames(limma$logFC), logFC = limma$logFC[, 1], pval = limma$P_Value[, 1])
 
-diffAnaComputeAdjustedPValues(limma$logFC[, 1], limma$P_Value[, 1])
+diffAnaComputeAdjustedPValues(pval = limma$P_Value[, 1])
 
 }
 \author{

@@ -696,8 +696,7 @@ limmaCompleteTest <- function(qData,
             res.l <- list(
                 "logFC" = data.frame(
                     "anova_1way_logFC" = matrix(NA, nrow = nrow(fit_pvalue)),
-                    row.names = rownames(fit_pvalue)
-                ),
+                    row.names = rownames(fit_pvalue)),
                 "P_Value" = fit_pvalue
             )
         }
@@ -768,7 +767,7 @@ formatLimmaResult <- function(fit, conds, contrast) {
                 "[[:space:]]Condition([[:letter:]]+)")[[1]]
             
             # Get the first condition in the comparison
-            tmp1 <- unique(conds)[which(LETTERS == compa[1, 2])]
+            tmp <- unique(conds)[which(LETTERS == compa[1, 2])]
             #tmp2 <- unique(conds)[which(LETTERS == compa[1, 2])]
             cn[i] <- paste(tmp, "_vs_(all-", tmp, ")", sep = "")
         }

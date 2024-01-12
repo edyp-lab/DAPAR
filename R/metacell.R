@@ -165,6 +165,10 @@ metacell.def <- function(level) {
 }
 
 
+#' @title Number of each metacell tags
+#' @param obj A instance of the class 'MSnset'
+#' @examples
+#' NULL
 #' @export
 #' 
 GetNbTags <- function(obj){
