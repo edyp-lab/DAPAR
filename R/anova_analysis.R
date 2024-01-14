@@ -79,7 +79,7 @@ testAnovaModels <- function(aov_fits, test = "Omnibus"){
                        "P_Value" = data.frame("anova_1way_pval" = omnibus_tests_summaries[,9], row.names = names(aov_fits)))
          }, TukeyHSD={
            tukeyHSD_tests_summaries <- lapply(aov_fits, 
-                                              function(x) stats::TukeyHSD(x, which = "conditions")$conditions)
+                                              function(x) TukeyHSD(x, which = "conditions")$conditions)
            res <- formatHSDResults(tukeyHSD_tests_summaries)
          }, TukeySinglestep={
            tukeySS_tests_summaries <- lapply(aov_fits, 
@@ -209,7 +209,7 @@ thresholdpval4fdr <- function(x, pval.T, M){
   R <- length(index)/length(x)
   print(R)
   res <- rep(1, length(x))
-  res[index] <- (cp4p::adjust.p(x[index], pi0.method = M)$adjp$adjusted.p)
+  res[index] <- cp4p::adjust.p(x[index], pi0.method = M)$adjp$adjusted.p
   return(res)
 }
 
@@ -233,7 +233,9 @@ thresholdpval4fdr <- function(x, pval.T, M){
 #'
 #' @export
 #' 
-separateAdjPval <- function(x, pval.threshold=1.05, method=1){
+separateAdjPval <- function(x, 
+                            pval.threshold = 1.05, 
+                            method = 1){
   pkgs.require('cp4p')
   if(pval.threshold > 1){
     res <- apply(x, 2, function(x) cp4p::adjust.p(x, pi0.method = method)$adjp$adjusted.p)

@@ -706,28 +706,28 @@ GetIndices_MetacellFiltering <- function(obj,
 
     indices <- switch(type,
         WholeLine = GetIndices_WholeLine(metacell.mask = mask),
-        
         WholeMatrix = GetIndices_WholeMatrix(
             metacell.mask = mask,
             op = op,
             percent = percent,
-            th = th),
-        
+            th = th
+        ),
         AllCond = GetIndices_BasedOnConditions(
             metacell.mask = mask,
             type = type,
             conds = Biobase::pData(obj)$Condition,
             percent = percent,
             op = op,
-            th = th),
-        
+            th = th
+        ),
         AtLeastOneCond = GetIndices_BasedOnConditions(
             metacell.mask = mask,
             type = type,
             conds = Biobase::pData(obj)$Condition,
             percent = percent,
             op = op,
-            th = th)
+            th = th
+        )
     )
 
     return(indices)

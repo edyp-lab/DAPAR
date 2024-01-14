@@ -32,23 +32,19 @@ There are actually two different type of origin which are managed by DAPAR:
 file <- system.file("extdata", "Exp1_R25_pept.txt", package = "DAPARdata")
 data <- read.table(file, header = TRUE, sep = "\t", stringsAsFactors = FALSE)
 metadataFile <- system.file("extdata", "samples_Exp1_R25.txt",
-    package = "DAPARdata"
-)
+    package = "DAPARdata")
 metadata <- read.table(metadataFile,
     header = TRUE, sep = "\t", as.is = TRUE,
-    stringsAsFactors = FALSE
-)
+    stringsAsFactors = FALSE)
 conds <- metadata$Condition
 qdata <- data[, seq.int(from = 56, to = 61)]
 df <- data[, seq.int(from = 43, to = 48)]
 df <- BuildMetaCell(
     from = "maxquant", level = "peptide", qdata = qdata,
-    conds = conds, df = df
-)
+    conds = conds, df = df)
 df <- BuildMetaCell(
     from = "proline", level = "peptide", qdata = qdata,
-    conds = conds, df = df
-)
+    conds = conds, df = df)
 
 }
 \author{

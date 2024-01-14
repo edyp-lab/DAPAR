@@ -9,7 +9,7 @@ Description: The package DAPAR is a Bioconductor distributed R package which
     required (see `Prostar` package).
 Version: 1.35.0
 Date: 2023-04-24
-Authors@R: c(person(given = "Samuel", family = "Wieczorek",
+Author: c(person(given = "Samuel", family = "Wieczorek",
             email = "samuel.wieczorek@cea.fr", role = c("aut","cre")),
             person(given = "Florence", family ="Combes",
             email = "florence.combes@cea.fr", role = "aut"),
@@ -17,13 +17,14 @@ Authors@R: c(person(given = "Samuel", family = "Wieczorek",
             email = "thomas.burger@cea.fr", role = "aut"),
             person(given = "Vasile-Cosmin", family ="Lazar",
             email = "vcosminlazar@gmail.com", role = "ctb"),
-		person(given = "Enora", family ="Fremy",
+		        person(given = "Enora", family ="Fremy",
             email = "enora.fremy@cea.fr", role = "ctb"),
-    	person(given = "Helene", family ="Borges",
+    	      person(given = "Helene", family ="Borges",
             email = "helene.borges@cea.fr", role = "ctb"))
+Maintainer: Samuel Wieczorek <samuel.wieczorek@cea.fr>
 License: Artistic-2.0
 VignetteBuilder: knitr
-Depends: R (>= 4.3.0)
+Depends: R (>= 4.4.0)
 Suggests: testthat, BiocStyle, AnnotationDbi, clusterProfiler, graph,
         diptest, cluster, vioplot, visNetwork, vsn, igraph,  
         FactoMineR, factoextra, dendextend, parallel, doParallel, 

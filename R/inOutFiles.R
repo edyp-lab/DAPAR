@@ -197,7 +197,7 @@ createMSnset <- function(file,
 
     ## Integrity tests
     if (identical(rownames(Intensity), rownames(fd)) == FALSE) {
-        stop("Problem consistency between row names of expression data and 
+        stop("Problem consistency betweenrow names expression data and 
             featureData")
     }
 
@@ -263,9 +263,9 @@ createMSnset <- function(file,
     colnames(metacell) <- gsub(".", "_", colnames(metacell), fixed = TRUE)
 
     Biobase::fData(obj) <- cbind(Biobase::fData(obj),
-                                 metacell,
-                                 deparse.level = 0)
-    
+        metacell,
+        deparse.level = 0
+    )
     obj@experimentData@other$names_metacell <- colnames(metacell)
 
 
@@ -386,6 +386,7 @@ write.excel <- function(df,
 #' @author Samuel Wieczorek
 #'
 #' @examples
+#' Sys.setenv("R_ZIPCMD" = Sys.which("zip"))
 #' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept[seq_len(10)]
 #' writeMSnsetToExcel(obj, "foo")
@@ -399,46 +400,12 @@ writeMSnsetToExcel <- function(obj, filename) {
 
     name <- paste(filename, ".xlsx", sep = "")
     wb <- openxlsx::createWorkbook(name)
-    
-    
     n <- 1
-    Prostar_Version <- DAPAR_Version <- NULL
-    
-    # Add versions
-    openxlsx::addWorksheet(wb, "Versions")
-    tryCatch(
-      {
-        find.package("Prostar")
-        Prostar_Version <- installed.packages()["Prostar", "Version"]
-      },
-      error = function(e) Prostar_Version <- NA
-    )
-    
-    tryCatch(
-      {
-        find.package("DAPAR")
-        DAPAR_Version <- installed.packages()["DAPAR", "Version"]
-      },
-      error = function(e) DAPAR_Version <- NA
-    )
-    
-    openxlsx::writeData(wb, 
-                        sheet = n, 
-                        cbind(Prostar_Version = Prostar_Version,
-                              DAPAR_Version = DAPAR_Version),
-                        rowNames = FALSE)
-    
-    
-    
-    # Add quantitative data
-    
-    n <- n + 1
     openxlsx::addWorksheet(wb, "Quantitative Data")
-    openxlsx::writeData(wb, 
-                        sheet = n, 
-                        cbind(ID = rownames(Biobase::exprs(obj)),
-                              Biobase::exprs(obj)),
-                        rowNames = FALSE)
+    openxlsx::writeData(wb, sheet = n, cbind(
+        ID = rownames(Biobase::exprs(obj)),
+        Biobase::exprs(obj)
+    ), rowNames = FALSE)
 
 
     # Add colors to quantitative table
@@ -463,7 +430,7 @@ writeMSnsetToExcel <- function(obj, filename) {
             lapply(seq_len(length(colors)), function(x) {
                 list.tags <- which(names(colors)[x] == tags, arr.ind = TRUE)
                 openxlsx::addStyle(wb,
-                    sheet = n,
+                    sheet = 1,
                     cols = list.tags[, "col"],
                     rows = list.tags[, "row"] + 1,
                     style = openxlsx::createStyle(fgFill = colors[x])
@@ -473,7 +440,7 @@ writeMSnsetToExcel <- function(obj, filename) {
     }
 
 
-    n <- n +1
+    n <- 2
     openxlsx::addWorksheet(wb, "Samples Meta Data")
     openxlsx::writeData(wb, sheet = n, Biobase::pData(obj), rowNames = FALSE)
 
@@ -516,7 +483,7 @@ writeMSnsetToExcel <- function(obj, filename) {
 
     ## Add feature Data sheet
 
-    n <- n +1
+    n <- 3
     if (dim(Biobase::fData(obj))[2] != 0) {
         openxlsx::addWorksheet(wb, "Feature Meta Data")
         openxlsx::writeData(wb,
@@ -599,8 +566,6 @@ writeMSnsetToExcel <- function(obj, filename) {
 #'
 #' @param file The name of the Excel file.
 #'
-#' @param extension The extension of the file
-#'
 #' @param sheet The name of the sheet
 #'
 #' @return A data.frame
@@ -613,11 +578,16 @@ writeMSnsetToExcel <- function(obj, filename) {
 #' NULL
 #'
 #'
-readExcel <- function(file, extension, sheet) {
+readExcel <- function(file, sheet=NULL) {
     pkgs.require('readxl')
 
+  if(is.null(sheet))
+    return(NULL)
+  
     data <- NULL
-    data <- readxl::read_excel(file, sheet)
+    data <- readxl::read_excel(file, 
+                               sheet,
+                               col_types = 'guess')
 
     return(
         as.data.frame(
@@ -645,11 +615,8 @@ readExcel <- function(file, extension, sheet) {
 #'
 #'
 listSheets <- function(file) {
-  #  pkgs.require('openxlsx')
-  pkgs.require('readxl')
-  
-  return(readxl::excel_sheets(file))
-  #  return(openxlsx::getSheetNames(file))
+    pkgs.require('openxlsx')
+    return(openxlsx::getSheetNames(file))
 }
 
 

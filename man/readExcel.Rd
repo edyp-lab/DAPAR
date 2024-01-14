@@ -5,12 +5,10 @@
 \title{This function reads a sheet of an Excel file and put the data
 into a data.frame.}
 \usage{
-readExcel(file, extension, sheet)
+readExcel(file, sheet = NULL)
 }
 \arguments{
 \item{file}{The name of the Excel file.}
-
-\item{extension}{The extension of the file}
 
 \item{sheet}{The name of the sheet}
 }
