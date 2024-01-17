@@ -104,11 +104,10 @@ getNumberOf <- function(obj, name = NULL, prefix = NULL) {
 #'
 #' @export
 #'
-NumericalFiltering <- function(
-        obj, 
-    name = NULL, 
-    value = NULL, 
-    operator = NULL) {
+NumericalFiltering <- function(obj,
+                               name = NULL,
+                               value = NULL,
+                               operator = NULL) {
     if ((is.null(name) || (name == ""))) {
         return(NULL)
     }

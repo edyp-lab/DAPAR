@@ -275,6 +275,239 @@ createMSnset <- function(file,
 
 
 
+
+
+
+#' @title Creates an object of class \code{MSnSet} from text file
+#' 
+#' @description 
+#' Builds an object of class \code{MSnSet} from a single tabulated-like file 
+#' for quantitative and meta-data and a dataframe for the samples description. 
+#' It differs from the original \code{MSnSet} builder which requires three 
+#' separated files tabulated-like quantitative proteomic data into a 
+#' \code{MSnSet} object, including metadata.
+#'
+#' @param file The name of a tab-separated file that contains the data.
+#'
+#' @param metadata A dataframe describing the samples (in lines).
+#'
+#' @param qdataNames A vector of string where each element is the name
+#' of a column in designTable that have to be integrated in
+#' the \code{Biobase::fData()} table of the \code{MSnSet} object.
+#'
+#' @param colnameForID The name of the column containing the ID of entities
+#' (peptides or proteins)
+#'
+#' @param metacellNames xxxxxxxxxxx
+#'
+#' @param logData A boolean value to indicate if the data have to be
+#' log-transformed (Default is FALSE)
+#'
+#' @param replaceZeros A boolean value to indicate if the 0 and NaN values of
+#' intensity have to be replaced by NA (Default is FALSE)
+#'
+#' @param pep_prot_data A string that indicates whether the dataset is about
+#'
+#' @param proteinId xxxx
+#'
+#' @param software xxx
+#'
+#' @return An instance of class \code{MSnSet}.
+#'
+#' @author Florence Combes, Samuel Wieczorek
+#'
+#' @examples
+#' require(Matrix)
+#' exprsFile <- system.file("extdata", "Exp1_R25_pept.txt", 
+#' package = "DAPARdata")
+#' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt",
+#'     package = "DAPARdata"
+#' )
+#' metadata <- read.table(metadataFile, header = TRUE, sep = "\t", 
+#' as.is = TRUE)
+#' indExpData <- seq.int(from=56, to=61)
+#' colnameForID <- "id"
+#' obj <- createMSnset(exprsFile, metadata, indExpData, colnameForID,
+#'     indexForMetacell = seq.int(from=43, to=48), pep_prot_data = "peptide", 
+#'     software = "maxquant"
+#' )
+#'
+#'
+#' exprsFile <- system.file("extdata", "Exp1_R25_pept.txt", 
+#' package = "DAPARdata")
+#' metadataFile <- system.file("extdata", "samples_Exp1_R25.txt", 
+#' package = "DAPARdata")
+#' metadata <- read.table(metadataFile, header = TRUE, sep = "\t", 
+#' as.is = TRUE)
+#' indExpData <- seq.int(from = 56, to = 61)
+#' colnameForID <- "AutoID"
+#' obj <- createMSnset(exprsFile, metadata, indExpData, colnameForID,
+#' indexForMetacell = seq.int(from = 43, to = 48), 
+#' pep_prot_data = "peptide", software = "maxquant"
+#' )
+#'
+#' @export
+#'
+#' @importFrom MSnbase MSnSet
+#' @importFrom utils read.table
+#'
+createMSnset2 <- function(file,
+                          metadata = NULL,
+                          qdataNames,
+                          colnameForID = NULL,
+                          metacellNames = NULL,
+                          logData = FALSE,
+                          replaceZeros = FALSE,
+                          pep_prot_data = NULL,
+                          proteinId = NULL,
+                          software = NULL) {
+  if (!is.data.frame(file)) { # the variable is a path to a text file
+    data <- read.table(file, 
+                       header = TRUE,
+                       sep = "\t", 
+                       stringsAsFactors = FALSE)
+    } else {
+    data <- file
+    }
+  
+  colnames(data) <- gsub(".", "_", colnames(data), fixed = TRUE)
+  colnameForID <- gsub(".", "_", colnameForID, fixed = TRUE)
+  proteinId <- gsub(".", "_", proteinId, fixed = TRUE)
+  colnames(data) <- gsub(" ", "_", colnames(data), fixed = TRUE)
+  colnameForID <- gsub(" ", "_", colnameForID, fixed = TRUE)
+  proteinId <- gsub(" ", "_", proteinId, fixed = TRUE)
+  
+  ## building exprs Data of MSnSet file
+  Intensity <- matrix(
+    as.numeric(gsub(",", ".", as.matrix(data[, qdataNames]))),
+    ncol = length(qdataNames),
+    byrow = FALSE
+  )
+  
+  colnames(Intensity) <- gsub(".", "_", qdataNames, fixed = TRUE)
+  rownames(Intensity) <- rownames(data)
+  
+  # Get the metacell info
+  metacell <- NULL
+  if (!is.null(metacellNames)) {
+    metacell <- data[, metacellNames]
+    metacell <- apply(metacell, 2, tolower)
+    metacell <- as.data.frame(apply(metacell, 2, 
+                                    function(x) gsub(" ", "", x)),
+                              stringsAsFactors = FALSE
+    )
+    colnames(metacell) <- gsub(".", "_", colnames(metacell), fixed = TRUE)
+  }
+  
+  
+  ## building fData of MSnSet file
+  if (is.null(colnameForID)) {
+    colnameForID <- "AutoID"
+  }
+  
+  if (colnameForID == "AutoID") {
+    fd <- data.frame(data,
+                     AutoID = rep(
+                       paste(pep_prot_data, "_", seq_len(nrow(data)), sep = "")),
+                     stringsAsFactors = FALSE
+    )
+    rownames(fd) <- paste(pep_prot_data, "_", seq_len(nrow(fd)), sep = "")
+    rownames(Intensity) <- paste(pep_prot_data, "_",
+                                 seq_len(nrow(Intensity)), sep = "")
+  } else {
+    fd <- data
+    rownames(fd) <- data[, colnameForID]
+    rownames(Intensity) <- data[, colnameForID]
+  }
+  
+  colnames(fd) <- gsub(".", "_", colnames(fd), fixed = TRUE)
+  
+  pd <- as.data.frame(metadata, stringsAsFactors = FALSE)
+  rownames(pd) <- gsub(".", "_", pd$Sample.name, fixed = TRUE)
+  pd$Sample.name <- gsub(".", "_", pd$Sample.name, fixed = TRUE)
+  
+  ## Integrity tests
+  if (identical(rownames(Intensity), rownames(fd)) == FALSE) {
+    stop("Problem consistency betweenrow names expression data and 
+            featureData")
+  }
+  
+  if (identical(colnames(Intensity), rownames(pd)) == FALSE) {
+    stop("Problem consistency between column names
+            in expression data and row names in phenoData")
+  }
+  
+  obj <- MSnSet(exprs = Intensity, fData = fd, pData = pd)
+  
+  
+  
+  if (replaceZeros) {
+    Biobase::exprs(obj)[Biobase::exprs(obj) == 0] <- NA
+    Biobase::exprs(obj)[is.nan(Biobase::exprs(obj))] <- NA
+    Biobase::exprs(obj)[is.infinite(Biobase::exprs(obj))] <- NA
+    obj@processingData@processing <- c(obj@processingData@processing, 
+                                       "All zeros were replaced by NA")
+  }
+  if (logData) {
+    Biobase::exprs(obj) <- log2(Biobase::exprs(obj))
+    obj@processingData@processing <-
+      c(obj@processingData@processing, "Data has been Log2 tranformed")
+  }
+  
+  if (!is.null(pep_prot_data)) {
+    obj@experimentData@other$typeOfData <- pep_prot_data
+  }
+  
+  obj@experimentData@other$Prostar_Version <- NA
+  tryCatch(
+    {
+      find.package("Prostar")
+      .version <- installed.packages(lib.loc = Prostar.loc)["Prostar", "Version"]
+      obj@experimentData@other$Prostar_Version <- .version
+    },
+    error = function(e) obj@experimentData@other$Prostar_Version <- NA
+  )
+  
+  obj@experimentData@other$DAPAR_Version <- NA
+  tryCatch(
+    {
+      find.package("DAPAR")
+      .version <- installed.packages(lib.loc = Prostar.loc)["DAPAR", "Version"]
+      obj@experimentData@other$DAPAR_Version <- .version
+    },
+    error = function(e) obj@experimentData@other$DAPAR_Version <- NA
+  )
+  
+  obj@experimentData@other$proteinId <- proteinId
+  obj@experimentData@other$keyId <- colnameForID
+  
+  obj@experimentData@other$RawPValues <- FALSE
+  
+  
+  metacell <- BuildMetaCell(from = software,
+                            level = pep_prot_data,
+                            qdata = Biobase::exprs(obj),
+                            conds = Biobase::pData(obj)$Condition,
+                            df = metacell
+                            )
+  
+  colnames(metacell) <- gsub(".", "_", colnames(metacell), fixed = TRUE)
+  
+  Biobase::fData(obj) <- cbind(Biobase::fData(obj),
+                               metacell,
+                               deparse.level = 0
+  )
+  obj@experimentData@other$names_metacell <- colnames(metacell)
+  
+  
+  return(obj)
+}
+
+
+
+
+
+
 #' @title This function exports a data.frame to a Excel file.
 #'
 #' @param df An data.frame

@@ -7,8 +7,8 @@ Description: The package DAPAR is a Bioconductor distributed R package which
     Contrarily to most other similar R packages, it is endowed with rich and 
     user-friendly graphical interfaces, so that no programming skill is 
     required (see `Prostar` package).
-Version: 1.35.0
-Date: 2023-04-24
+Version: 1.35.1
+Date: 2024-01-17
 Author: c(person(given = "Samuel", family = "Wieczorek",
             email = "samuel.wieczorek@cea.fr", role = c("aut","cre")),
             person(given = "Florence", family ="Combes",
@@ -24,7 +24,7 @@ Author: c(person(given = "Samuel", family = "Wieczorek",
 Maintainer: Samuel Wieczorek <samuel.wieczorek@cea.fr>
 License: Artistic-2.0
 VignetteBuilder: knitr
-Depends: R (>= 4.4.0)
+Depends: R (>= 4.3.0)
 Suggests: testthat, BiocStyle, AnnotationDbi, clusterProfiler, graph,
         diptest, cluster, vioplot, visNetwork, vsn, igraph,  
         FactoMineR, factoextra, dendextend, parallel, doParallel, 
@@ -37,7 +37,7 @@ Imports: Biobase, MSnbase, DAPARdata (>= 1.30.0), utils, highcharter, foreach
 biocViews: Proteomics, Normalization, Preprocessing, MassSpectrometry,
         QualityControl, GO, DataImport
 NeedsCompilation: no
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.0
 Packaged: 2017-10-13 11:13:04 UTC; sw175264
 Encoding: UTF-8
 URL: http://www.prostar-proteomics.org/
@@ -47,6 +47,8 @@ Collate:
     anova_analysis.R
     bioAnalysis.R
     clustering.R
+    dataset_Validity.R
+    pirat.R
     compute.t.tests.R
     DiffAnalysis.R
     get_pep_prot_cc.R
