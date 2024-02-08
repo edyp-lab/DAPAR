@@ -286,29 +286,29 @@ make.design.1 <- function(sTab) {
   n0 <- 1
   coln <- NULL
   
-  for (j in seq_len(nb_cond)) {
-    # When design == 1, one uses letters to have up to 26 possible conditions
-    if (getDesignLevel(sTab)==1)
-      id <- LETTERS[j]
-    else
-      id <- j
-    
-    coln <- c(coln, paste("Condition", id, collapse = NULL, sep = ""))
-    seq <- seq.int(from=n0, to=(n0 + nb_Rep[j] - 1))
-    design[seq, j] <- rep(1, length(seq))
-    n0 <- n0 + nb_Rep[j]
-  }
-  
+    for (j in seq_len(nb_cond)) {
+      # When design == 1, one uses letters to have up to 26 possible conditions
+      if (getDesignLevel(sTab)==1)
+        id <- LETTERS[j]
+      else
+        id <- j
+      
+      coln <- c(coln, paste("Condition", id, collapse = NULL, sep = ""))
+      seq <- seq.int(from=n0, to=(n0 + nb_Rep[j] - 1))
+      design[seq, j] <- rep(1, length(seq))
+      n0 <- n0 + nb_Rep[j]
+    }
+
   
   
   
   #for (j in seq_len(nb_cond)) {
   #  coln <- c(coln, paste("Condition", j, collapse = NULL, sep = ""))
   #  design[seq.int(from=n0, to=(n0 + nb_Rep[j] - 1)), j] <- rep(1, 
-  #                                                             length(seq.int(from=n0, to = (n0 + nb_Rep[j] - 1)))
-  # )
+   #                                                             length(seq.int(from=n0, to = (n0 + nb_Rep[j] - 1)))
+   # )
   #  n0 <- n0 + nb_Rep[j]
-  # }
+ # }
   colnames(design) <- coln
   
   return(design)
@@ -598,7 +598,7 @@ limmaCompleteTest <- function(qData, sTab, comp.type = "OnevsOne") {
             in a 2-level and 3-level designs')
     return(NULL)
   }
-  
+
   switch(comp.type,
          OnevsOne = contrast <- 1,
          OnevsAll = contrast <- 2
@@ -720,7 +720,7 @@ formatLimmaResult <- function(fit, conds, contrast, design.level) {
         tmp1 <- unique(conds)[which(LETTERS == compa[1, 2])]
         tmp2 <- unique(conds)[which(LETTERS == compa[2, 2])]
         cn[i] <- paste(tmp1, "_vs_", tmp2, sep = "")
-        
+
       } else {
         compa <- stringr::str_match_all(
           colnames(fit$p.value)[i], 
