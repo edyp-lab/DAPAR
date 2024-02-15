@@ -1,7 +1,6 @@
 #' @title Check if xxxxxx
 #'
-#' @param res A list xxx
-#' @param sTab A data.frame which correspond to xxxxxx
+#' @param tab A data.frame which correspond to xxxxxx
 #'
 #' @return A list of two items
 #'
@@ -9,135 +8,89 @@
 #'
 #' @examples
 #' data(Exp1_R25_pept, package="DAPARdata")
-#' sTab <- Biobase::pData(Exp1_R25_pept)
-#' test.design.hierarchy(sTab = sTab)
+#' test.design(Biobase::pData(Exp1_R25_pept)[, seq_len(3)])
 #'
 #' @export
 #'
-test.design.hierarchy <- function(res = NULL, sTab) {
+test.design <- function(tab) {
+  valid <- TRUE
+  txt <- NULL
+  level <- NULL
   
-  if(is.null(res))
-    res <- list(valid = TRUE,
-                txt = NULL,
-                level = '',
-                analyze = NULL)
+  level.a <- factor(tab[, 1], ordered = TRUE)
+  level.b <- factor(tab[, 2], ordered = TRUE)
+  name.level.a <- colnames(tab)[1]
+  name.level.b <- colnames(tab)[2]
   
+  level.c <- NULL
+  if (ncol(tab) == 3) {
+    level.c <- factor(tab[, 3], ordered = TRUE)
+    name.level.c <- colnames(tab)[3]
+  }
   
-  level <- getDesignLevel(sTab)
-  tab <- NULL
-  # Check if the hierarchy of the design is correct
-  
-  
-  
-  check.wellFormed.groups <- function(res, tab){
-    # verification intersection sur B
-    # verification de la non redondance
-    # et intersection vide entre les groupes
-    uniqueA <- unique(tab[, 1])
-    ll <- lapply(uniqueA,  function(x) {as.character(tab[, 2])[which(tab[, 1] == x)]})
-    names(ll) <- uniqueA
-    n <- NULL
-    for (i in seq_len(length(uniqueA) - 1)) {
-      for (j in seq.int(from=(i + 1), to = length(uniqueA))) {
-        n <- c(n, intersect(ll[[i]], ll[[j]]))
-      }
+  # verification intersection sur B
+  # verification de la non redondance'intersection
+  # vide entre les groupes
+  uniqueA <- unique(level.a)
+  ll <- lapply(
+    uniqueA,
+    function(x) {
+      as.character(level.b)[which(level.a == x)]
     }
-    
-    if (length(n) > 0) {
-      res$valid <- FALSE
-      res$txt <- c(res$txt, paste0(
-        "The value ", n, " in column '", colnames(tab)[2],  "' is not correctly set.\n"
-      ))
+  )
+  n <- NULL
+  for (i in seq_len(length(uniqueA) - 1)) {
+    for (j in seq.int(from=(i + 1), to = length(uniqueA))) {
+      n <- c(n, intersect(ll[[i]], ll[[j]]))
     }
-    
-    return(res)
+  }
+  
+  if (length(n) > 0) {
+    valid <- FALSE
+    txt <- c(txt, paste0(
+      "The value ",
+      n,
+      " in column '",
+      colnames(tab)[2],
+      "' is not correctly set.\n"
+    ))
   }
   
   
-  check.informative.column <- function(res, tab){
-    
-    # verification si niveau hierarchique inf
-    if (length(unique(tab[,1])) == length(unique(tab[,2]))) {
-      ## c'est un design de niveau n-1 en fait
-      res$valid <- FALSE
-      res$txt <- c(res$txt,
-                   paste0("The column ",
-                          colnames(tab)[2],
-                          " is not informative. ",
-                          "Thus, the design is not of level ", res$level, " but of level ", res$level-1, ".\n"
-                   )
+  # verification si niveau hierarchique inf
+  if (length(levels(level.a)) == length(levels(level.b))) {
+    ## c'est un design de niveau n-1 en fait
+    valid <- FALSE
+    txt <- c(
+      txt,
+      paste0(
+        "The column ",
+        name.level.b,
+        " is not informative. ",
+        "Thus, the design is not of level (n-1).\n"
       )
-      res$level <- res$level - 1
-    }
-    
-    return(res)
-  }
-  
-  
-  check.last.column <- function(res, tab){
-    
-    # verification si niveau hierarchique inf
-    if (nrow(tab) != length(unique(tab[ ,ncol(tab)]))) {
-      ## c'est un design de niveau n-1 en fait
-      res$valid <- FALSE
-      res$txt <- c(res$txt,
-                   paste0("The column ",
-                          colnames(tab)[ncol(tab)],
-                          " cannot be the last column ",
-                          "Thus, the design is not of level ", res$level, " but of level ", res$level+1, ".\n"
-                   )
-      )
-      res$level <- res$level + 1
-    }
-    
-    return(res)
-  }
-  
-  
-  design.analyze <- function(res, df){
-    ll <- lapply(df, function(x)
-      length(unique(x))
     )
-    res$analysis <- ll
-    
-    return(res)
+  } else if (!is.null(level.c)) {
+    if (length(levels(level.b)) == length(levels(level.c))) {
+      ## c'est un design de niveau n-1 en fait
+      valid <- FALSE
+      txt <- c(
+        txt,
+        paste0(
+          "The column ",
+          name.level.c,
+          " is not informative. ",
+          "Thus, the design is of level (n-1).\n"
+        )
+      )
+    }
   }
   
-  
-  if (level == 1){
-    tab <- sTab[, c("Condition", "Bio.Rep")]
-    res <- check.wellFormed.groups(res, tab)
-    res <- check.informative.column(res, tab)
-  } else if (level == 2) {
-    tab <- sTab[, c("Condition", "Bio.Rep")]
-    res <- check.wellFormed.groups(res, tab)
-    res <- check.informative.column(res, tab)
-    
-    tab <- sTab[, c("Bio.Rep", "Tech.Rep")]
-    res <- check.wellFormed.groups(res, tab)
-    res <- check.informative.column(res, tab)
-
-  } else if (level == 3) {
-    tab <- sTab[, c("Condition", "Bio.Rep")]
-    res <- check.wellFormed.groups(res, tab)
-    res <- check.informative.column(res, tab)
-    
-    tab <- sTab[, c("Bio.Rep", "Tech.Rep")]
-    res <- check.wellFormed.groups(res, tab)
-    res <- check.informative.column(res, tab)
-    
-    tab <- sTab[, c("Tech.Rep", 'Analyt.Rep')]
-    res <- check.wellFormed.groups(res, tab)
-    res <- check.informative.column(res, tab)
-  }
-
-  tab <- sTab[, -which(colnames(sTab) == 'Sample.name')]
-  res <- design.analyze(res, tab)
-  res <- check.last.column(res, sTab)
-  
-  
-    # verification si niveau non informatif
-    return(res)
+  # verification si niveau non informatif
+  return(list(
+    valid = valid,
+    warn = txt
+  ))
 }
 
 
@@ -146,7 +99,6 @@ test.design.hierarchy <- function(res = NULL, sTab) {
 #' @title Check if the design is valid
 #'
 #' @param conds A vector
-#' @param res A list
 #'
 #' @return A list
 #'
@@ -154,76 +106,39 @@ test.design.hierarchy <- function(res = NULL, sTab) {
 #'
 #' @examples
 #' data(Exp1_R25_pept, package="DAPARdata")
-#' check.conditions(conds = Biobase::pData(Exp1_R25_pept)$Condition)
+#' check.conditions(Biobase::pData(Exp1_R25_pept)$Condition)
 #'
 #' @export
 #'
-check.conditions <- function(res = NULL,
-                             conds) {
-  if(is.null(res))
-    res <- list(valid = TRUE,
-                txt = NULL,
-                level = '',
-                analyze = NULL)
+check.conditions <- function(conds) {
+  res <- list(valid = TRUE, warn = NULL)
+  
+  if (("" %in% conds) || (NA %in% conds)) {
+    res <- list(valid = FALSE, 
+                warn = "The conditions are note full filled.")
+    return(res)
+  }
   
   # Check if there is at least two conditions
-    if (length(unique(conds)) < 2) {
-        res$valid <- FALSE
-        res$txt <- c(res$txt, "The design must contain at least two conditions.")
-    }
-
-
-    # check if each condition has at least two different values
-    nValPerCond <- unlist(lapply(unique(conds), function(x) {
-        length(conds[which(conds == x)])}))
-    if (all(nValPerCond < 2)) {
-        res$valid <- FALSE
-        res$txt <- c(res$txt, 
-                     "The design must contain at least two values per condition.")
-    }
-
+  if (length(unique(conds)) < 2) {
+    res <- list(valid = FALSE, 
+                warn = "The design must contain at least two conditions.")
     return(res)
-}
-
-
-
-
-
-#' @title Check if the design is valid
-#'
-#' @param res A list
-#' @param sTab a data.frame xxxx
-#'
-#' @return A list
-#'
-#' @author Samuel Wieczorek
-#'
-#' @examples
-#' data(Exp1_R25_pept, package="DAPARdata")
-#' sTab <- Biobase::pData(Exp1_R25_pept)
-#' check.replicates.fullfilled(sTab = sTab)
-#'
-#' @export
-#'
-check.replicates.fullfilled <- function(res = NULL, sTab){
-    # Check if all the column are fullfilled
-  if(is.null(res))
-    res <- list(valid = TRUE,
-                txt = NULL,
-                level = '',
-                analyze = NULL)
+  }
   
-  lapply(colnames(sTab), 
-         function(x){
-           if (sum(c("", NA) %in% x) > 0) {
-             res$valid <- FALSE
-             res$txt <- c(res$txt, paste0("The ", x, "colmumn is not full filled."))
-           }
-  })
-
+  
+  # check if each condition has at least two values
+  nValPerCond <- unlist(lapply(unique(conds), function(x) {
+    length(conds[which(conds == x)])
+  }))
+  if (all(nValPerCond < 2)) {
+    res <- list(valid = FALSE, 
+                warn = "The design must contain at least two values per condition.")
+    return(res)
+  }
+  
   return(res)
 }
-
 
 
 
@@ -238,22 +153,68 @@ check.replicates.fullfilled <- function(res = NULL, sTab){
 #'
 #' @examples
 #' data(Exp1_R25_pept, package="DAPARdata")
-#' sTab <- Biobase::pData(Exp1_R25_pept)
-#' check.design(sTab)
+#' check.design(Biobase::pData(Exp1_R25_pept)[, seq_len(3)])
 #'
 #' @export
 #'
 check.design <- function(sTab) {
-    res <- list(valid = TRUE,
-                txt = NULL,
-                level = getDesignLevel(sTab),
-                analyze = NULL)
-    
-    res <- check.conditions(res, sTab$Condition)
-    res <- check.replicates.fullfilled(res, sTab)
-    res <- test.design.hierarchy(res, sTab)
-
+  res <- list(valid = FALSE, warn = NULL)
+  
+  names <- colnames(sTab)
+  level.design <- ncol(sTab) - 2
+  
+  
+  res <- check.conditions(sTab$Condition)
+  if (!res$valid) {
     return(res)
+  }
+  # Check if all the column are fullfilled
+  
+  if (level.design == 1) {
+    if (("" %in% sTab$Bio.Rep) || (NA %in% sTab$Bio.Rep)) {
+      res <- list(valid = FALSE, 
+                  warn = "The Bio.Rep colmumn are not full filled.")
+      return(res)
+    }
+  } else if (level.design == 2) {
+    if (("" %in% sTab$Bio.Rep) || (NA %in% sTab$Bio.Rep)) {
+      res <- list(valid = FALSE, 
+                  warn = "The Bio.Rep colmumn are not full filled.")
+      return(res)
+    } else if (("" %in% sTab$Tech.Rep) || (NA %in% sTab$Tech.Rep)) {
+      res <- list(valid = FALSE, 
+                  warn = "The Tech.Rep colmumn are not full filled.")
+      return(res)
+    }
+  } else if (level.design == 3) {
+    if (("" %in% sTab$Bio.Rep) || (NA %in% sTab$Bio.Rep)) {
+      res <- list(valid = FALSE, 
+                  warn = "The Bio.Rep colmumn are not full filled.")
+      return(res)
+    } else if (("" %in% sTab$Tech.Rep) || (NA %in% sTab$Tech.Rep)) {
+      res <- list(valid = FALSE, 
+                  warn = "The Tech.Rep colmumn are not full filled.")
+      return(res)
+    } else if (("" %in% sTab$Analyt.Rep) || (NA %in% sTab$Analyt.Rep)) {
+      res <- list(valid = FALSE, 
+                  warn = "The Analyt.Rep colmumn are not full filled.")
+      return(res)
+    }
+  }
+  
+  # Check if the hierarchy of the design is correct
+  if (level.design == 1) {
+    res <- test.design(sTab[, c("Condition", "Bio.Rep")])
+  } else if (level.design == 2) {
+    res <- test.design(sTab[, c("Condition", "Bio.Rep", "Tech.Rep")])
+  } else if (level.design == 3) {
+    res <- test.design(sTab[, c("Condition", "Bio.Rep", "Tech.Rep")])
+    if (res$valid) {
+      res <- test.design(sTab[, c("Bio.Rep", "Tech.Rep", "Analyt.Rep")])
+    }
+  }
+  
+  return(res)
 }
 
 
@@ -276,22 +237,22 @@ check.design <- function(sTab) {
 #' @export
 #' 
 make.design <- function(sTab) {
-    if (!check.design(sTab)$valid) {
-        warning("The design matrix is not correct.")
-        warning(check.design(sTab)$warn)
-        return(NULL)
-    }
-
-    n <- ncol(sTab)
-    if (n < 3) {
-        stop.txt <- paste0("Error in design matrix dimensions which must ", 
-            "have at least 3 columns.")
-        stop(stop.txt)
-    }
-
-    res <- do.call(paste0("make.design.", (n - 2)), list(sTab))
-
-    return(res)
+  if (!check.design(sTab)$valid) {
+    warning("The design matrix is not correct.")
+    warning(check.design(sTab)$warn)
+    return(NULL)
+  }
+  
+  n <- ncol(sTab)
+  if (n == 1 || n == 2) {
+    stop.txt <- paste0("Error in design matrix dimensions which must ", 
+                       "have at least 3 columns.")
+    stop(stop.txt)
+  }
+  
+  res <- do.call(paste0("make.design.", (n - 2)), list(sTab))
+  
+  return(res)
 }
 
 
@@ -311,37 +272,46 @@ make.design <- function(sTab) {
 #'
 #' @export
 make.design.1 <- function(sTab) {
-    Conditions <- factor(sTab$Condition, ordered = TRUE)
-    nb_cond <- length(unique(Conditions))
-    nb_samples <- nrow(sTab)
-
-    # CGet the number of replicates per condition
-    nb_Rep <- rep(0, nb_cond)
-    for (i in seq_len(nb_cond)) {
-        nb_Rep[i] <- sum((Conditions == unique(Conditions)[i]))
-    }
-
-    design <- matrix(0, nb_samples, nb_cond)
-    n0 <- 1
-    coln <- c()
-    
+  Conditions <- factor(sTab$Condition, ordered = TRUE)
+  nb_cond <- length(unique(Conditions))
+  nb_samples <- nrow(sTab)
+  
+  # CGet the number of replicates per condition
+  nb_Rep <- rep(0, nb_cond)
+  for (i in seq_len(nb_cond)) {
+    nb_Rep[i] <- sum((Conditions == unique(Conditions)[i]))
+  }
+  
+  design <- matrix(0, nb_samples, nb_cond)
+  n0 <- 1
+  coln <- NULL
+  
+  for (j in seq_len(nb_cond)) {
+    # When design == 1, one uses letters to have up to 26 possible conditions
     if (getDesignLevel(sTab)==1)
-    for (j in seq_len(nb_cond)) {
-        coln <- c(coln, paste("Condition", LETTERS[j], collapse = NULL, sep = ""))
-        seq <- seq.int(from=n0, to=(n0 + nb_Rep[j] - 1))
-        design[seq, j] <- rep(1, length(seq))
-        n0 <- n0 + nb_Rep[j]
-    }
+      id <- LETTERS[j]
     else
-      for (j in seq_len(nb_cond)) {
-        coln <- c(coln, paste("Condition", j, collapse = NULL, sep = ""))
-        seq <- seq.int(from=n0, to=(n0 + nb_Rep[j] - 1))
-        design[seq, j] <- rep(1, length(seq))
-        n0 <- n0 + nb_Rep[j]
-      }
-    colnames(design) <- coln
-
-    return(design)
+      id <- j
+    
+    coln <- c(coln, paste("Condition", id, collapse = NULL, sep = ""))
+    seq <- seq.int(from=n0, to=(n0 + nb_Rep[j] - 1))
+    design[seq, j] <- rep(1, length(seq))
+    n0 <- n0 + nb_Rep[j]
+  }
+  
+  
+  
+  
+  #for (j in seq_len(nb_cond)) {
+  #  coln <- c(coln, paste("Condition", j, collapse = NULL, sep = ""))
+  #  design[seq.int(from=n0, to=(n0 + nb_Rep[j] - 1)), j] <- rep(1, 
+  #                                                             length(seq.int(from=n0, to = (n0 + nb_Rep[j] - 1)))
+  # )
+  #  n0 <- n0 + nb_Rep[j]
+  # }
+  colnames(design) <- coln
+  
+  return(design)
 }
 
 
@@ -365,38 +335,40 @@ make.design.1 <- function(sTab) {
 #' @export
 #'
 make.design.2 <- function(sTab) {
-    pkgs.require('stats')
-    
-    
-    Condition <- factor(sTab$Condition, levels = unique(sTab$Condition))
-    RepBio <- factor(sTab$Bio.Rep, levels = unique(sTab$Bio.Rep))
-
-    # Rename the levels of factor
-    levels(Condition) <- seq_len(length(levels(Condition)))
-    levels(RepBio) <- seq_len(length(levels(RepBio)))
-
-    # Initial design matrix
-    df <- rep(0, nrow(sTab))
-    names(df) <- rownames(sTab)
-    design <- stats::model.matrix(df ~ 0 + Condition:RepBio)
-
-    # Remove empty columns in the design matrix
-    design <- design[, (apply(design, 2, sum) > 0)]
-    # Remove identical columns in the design matrix
-    coldel <- -1
-    for (i in seq_len(length(design[1, ]) - 1)) {
-        d2 <- as.matrix(design[, seq.int(from=(i + 1), to = length(design[1, ]))])
-        for (j in seq_len(length(d2[1, ]))) {
-            d2[, j] <- d2[, j] - design[, i]
-        }
-        e <- as.matrix(stats::rnorm(length(design[, 1]), 10, 1))
-        sd2 <- t(e) %*% d2
-        liste <- which(sd2 == 0)
-        coldel <- c(coldel, liste + i)
+  pkgs.require('stats')
+  
+  
+  Condition <- factor(sTab$Condition, levels = unique(sTab$Condition))
+  RepBio <- factor(sTab$Bio.Rep, levels = unique(sTab$Bio.Rep))
+  
+  # Renome the levels of factor
+  levels(Condition) <- seq_len(length(levels(Condition)))
+  levels(RepBio) <- seq_len(length(levels(RepBio)))
+  
+  # Initial design matrix
+  df <- rep(0, nrow(sTab))
+  names(df) <- rownames(sTab)
+  design <- stats::model.matrix(df ~ 0 + Condition:RepBio)
+  
+  # Remove empty columns in the design matrix
+  design <- design[, (apply(design, 2, sum) > 0)]
+  # Remove identical columns in the design matrix
+  coldel <- -1
+  for (i in seq_len(length(design[1, ]) - 1)) {
+    d2 <- as.matrix(
+      design[, seq.int(from=(i + 1), to = length(design[1, ]))]
+    )
+    for (j in seq_len(length(d2[1, ]))) {
+      d2[, j] <- d2[, j] - design[, i]
     }
-    design <- design[, (seq_len(length(design[1, ]))) != coldel]
-    colnames(design) <- make.names(colnames(design))
-    return(design)
+    e <- as.matrix(stats::rnorm(length(design[, 1]), 10, 1))
+    sd2 <- t(e) %*% d2
+    liste <- which(sd2 == 0)
+    coldel <- c(coldel, liste + i)
+  }
+  design <- design[, (seq_len(length(design[1, ]))) != coldel]
+  colnames(design) <- make.names(colnames(design))
+  return(design)
 }
 
 
@@ -421,43 +393,44 @@ make.design.2 <- function(sTab) {
 #' @export
 #'
 make.design.3 <- function(sTab) {
-    
-    pkgs.require('stats')
-    
-    Condition <- factor(sTab$Condition, levels = unique(sTab$Condition))
-    RepBio <- factor(sTab$Bio.Rep, levels = unique(sTab$Bio.Rep))
-    RepTech <- factor(sTab$Tech.Rep, levels = unique(sTab$Tech.Rep))
-
-
-    # Rename the levels of factor
-    levels(Condition) <- seq_len(length(levels(Condition)))
-    levels(RepBio) <- seq_len(length(levels(RepBio)))
-    levels(RepTech) <- seq_len(length(levels(RepTech)))
-
-
-    # Initial design matrix
-    df <- rep(0, nrow(sTab))
-    names(df) <- rownames(sTab)
-    design <- stats::model.matrix(df ~ 0 + Condition:RepBio:RepTech)
-
-    # Remove empty columns in the design matrix
-    design <- design[, (apply(design, 2, sum) > 0)]
-
-    # Remove identical columns in the design matrix
-    coldel <- -1
-    for (i in seq_len(length(design[1, ]) - 1)) {
-        d2 <- as.matrix(design[, seq.int(from = (i + 1), to = length(design[1, ]))])
-        for (j in seq_len(length(d2[1, ]))) {
-            d2[, j] <- d2[, j] - design[, i]
-        }
-        e <- as.matrix(stats::rnorm(length(design[, 1]), 10, 1))
-        sd2 <- t(e) %*% d2
-        liste <- which(sd2 == 0)
-        coldel <- c(coldel, liste + i)
+  
+  pkgs.require('stats')
+  
+  Condition <- factor(sTab$Condition, levels = unique(sTab$Condition))
+  RepBio <- factor(sTab$Bio.Rep, levels = unique(sTab$Bio.Rep))
+  RepTech <- factor(sTab$Tech.Rep, levels = unique(sTab$Tech.Rep))
+  
+  
+  # Rename the levels of factor
+  levels(Condition) <- seq_len(length(levels(Condition)))
+  levels(RepBio) <- seq_len(length(levels(RepBio)))
+  levels(RepTech) <- seq_len(length(levels(RepTech)))
+  
+  
+  # Initial design matrix
+  df <- rep(0, nrow(sTab))
+  names(df) <- rownames(sTab)
+  design <- stats::model.matrix(df ~ 0 + Condition:RepBio:RepTech)
+  
+  # Remove empty columns in the design matrix
+  design <- design[, (apply(design, 2, sum) > 0)]
+  
+  # Remove identical columns in the design matrix
+  coldel <- -1
+  for (i in seq_len(length(design[1, ]) - 1)) {
+    d2 <- as.matrix(design[, seq.int(from = (i + 1), 
+                                     to = length(design[1, ]))])
+    for (j in seq_len(length(d2[1, ]))) {
+      d2[, j] <- d2[, j] - design[, i]
     }
-    design <- design[, seq_len(length(design[1, ])) != coldel]
-    colnames(design) <- make.names(colnames(design))
-    return(design)
+    e <- as.matrix(stats::rnorm(length(design[, 1]), 10, 1))
+    sd2 <- t(e) %*% d2
+    liste <- which(sd2 == 0)
+    coldel <- c(coldel, liste + i)
+  }
+  design <- design[, seq_len(length(design[1, ])) != coldel]
+  colnames(design) <- make.names(colnames(design))
+  return(design)
 }
 
 
@@ -481,6 +454,8 @@ getDesignLevel <- function(sTab){
 }
 
 
+
+
 #' @title Builds the contrast matrix
 #'
 #' @param design The data.frame which correspond to the `pData()` function 
@@ -495,7 +470,7 @@ getDesignLevel <- function(sTab){
 #'  H1:"C1!=(C2+C3)/2", etc. if there are three conditions).
 #' @param design.level xxx
 #'
-#' @return A contrast matrix
+#' @return A constrat matrix
 #'
 #' @author Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
 #'
@@ -511,101 +486,74 @@ make.contrast <- function(design,
                           condition, 
                           contrast = 1,
                           design.level = 1) {
-
-
-    aggreg.column.design <- function(design, condition) {
-        nb.cond <- length(unique(condition))
-        name.col <- colnames(design)
-        name.cond <- NULL
-        nb.col <- NULL
-        for (i in seq_len(nb.cond)) {
-            col.select <- NULL
-            col.name.begin <- paste("Condition", i, sep = "")
-            nc <- nchar(col.name.begin)
-            for (j in seq_len(nb.cond)) {
-                if (substr(name.col[j], 1, nc) == col.name.begin) {
-                    col.select <- c(col.select, j)
-                }
-            }
-            name.aggreg <- NULL
-            for (j in seq_len(length(col.select))) {
-                name.aggreg <- paste(name.aggreg, 
-                    name.col[col.select[j]], 
-                    sep = "+")
-            }
-            name.aggreg <- substr(name.aggreg, 2, nchar(name.aggreg))
-            name.cond <- c(name.cond, name.aggreg)
-            nb.col <- c(nb.col, length(col.select))
+  
+  
+  aggreg.column.design <- function(design, 
+                                   Condition,
+                                   design.level) {
+    nb.cond <- length(unique(Condition))
+    name.col <- colnames(design)
+    name.cond <- NULL
+    nb.col <- NULL
+    for (i in seq_len(nb.cond)) {
+      col.select <- NULL
+      id <- if (design.level == 1) LETTERS[i] else i
+      
+      col.name.begin <- paste("Condition", id, sep = "")
+      nc <- nchar(col.name.begin)
+      for (j in seq_len(length(design[1, ]))) {
+        if (substr(name.col[j], 1, nc) == col.name.begin) {
+          col.select <- c(col.select, j)
         }
-        return(list(name.cond, nb.col))
-    }
-
-
-    aggreg.column.design.1 <- function(design, condition) {
-      nb.cond <- length(unique(condition))
-      name.col <- colnames(design)
-      name.cond <- NULL
-      nb.col <- NULL
-      for (i in seq_len(nb.cond)) {
-        col.select <- NULL
-        col.name.begin <- paste("Condition", LETTERS[i], sep = "")
-        nc <- nchar(col.name.begin)
-        for (j in seq_len(nb.cond)) {
-          if (substr(name.col[j], 1, nc) == col.name.begin) {
-            col.select <- c(col.select, j)
-          }
-        }
-        name.aggreg <- NULL
-        for (j in seq_len(length(col.select))) {
-          name.aggreg <- paste(name.aggreg, 
-                               name.col[col.select[j]], 
-                               sep = "+")
-        }
-        name.aggreg <- substr(name.aggreg, 2, nchar(name.aggreg))
-        name.cond <- c(name.cond, name.aggreg)
-        nb.col <- c(nb.col, length(col.select))
       }
-      return(list(name.cond, nb.col))
+      name.aggreg <- NULL
+      for (j in seq_len(length(col.select))) {
+        name.aggreg <- paste(name.aggreg, 
+                             name.col[col.select[j]], 
+                             sep = "+")
+      }
+      name.aggreg <- substr(name.aggreg, 2, nchar(name.aggreg))
+      name.cond <- c(name.cond, name.aggreg)
+      nb.col <- c(nb.col, length(col.select))
     }
-
-    nb.cond <- length(unique(condition))
-    r <- NULL
-    if (design.level == 1)
-      r <- aggreg.column.design.1(design, condition)
-    else
-      r <- aggreg.column.design(design, condition)
-    #browser()
-    label.agg <- r[[1]]
-    nb.agg <- r[[2]]
-    k <- 1
-
-    if (contrast == 1) {
-        ## Contrast for One vs One
-        contra <- rep(0, sum(seq_len((nb.cond - 1))))
-        for (i in seq_len(nb.cond - 1)) {
-            for (j in seq.int(from = (i + 1), to = nb.cond)) {
-                contra[k] <- c(paste(
-                    "(", label.agg[i], ")/",
-                    nb.agg[i], "-(", label.agg[j], ")/",
-                    nb.agg[j]
-                ))
-                k <- k + 1
-            }
-        }
-    } else if (contrast == 2) {
-        ## Contrast for One vs All
-        contra <- rep(0, nb.cond)
-        for (i in seq_len(nb.cond)) {
-            contra[k] <- c(paste("(", label.agg[i], ")/", nb.agg[i]))
-            nb <- sum(nb.agg[seq_len(nb.cond)[seq_len(nb.cond) != i]])
-            for (j in seq_len(nb.cond)[seq_len(nb.cond) != i]) {
-                contra[k] <- c(paste(contra[k], "-(", label.agg[j], ")/", nb))
-            }
-            k <- k + 1
-        }
+    return(list(name.cond, nb.col))
+  }
+  
+  
+  
+  nb.cond <- length(unique(condition))
+  r <- aggreg.column.design(design, condition, design.level)
+  label.agg <- r[[1]]
+  nb.agg <- r[[2]]
+  k <- 1
+  
+  if (contrast == 1) {
+    ## Contrast for One vs One
+    contra <- rep(0, sum(seq_len((nb.cond - 1))))
+    for (i in seq_len(nb.cond - 1)) {
+      for (j in seq.int(from = (i + 1), to = nb.cond)) {
+        contra[k] <- c(paste(
+          "(", label.agg[i], ")/",
+          nb.agg[i], "-(", label.agg[j], ")/",
+          nb.agg[j]
+        ))
+        k <- k + 1
+      }
     }
-
-    return(contra)
+  } else if (contrast == 2) {
+    ## Contrast for One vs All
+    contra <- rep(0, nb.cond)
+    for (i in seq_len(nb.cond)) {
+      contra[k] <- c(paste("(", label.agg[i], ")/", nb.agg[i]))
+      nb <- sum(nb.agg[seq_len(nb.cond)[seq_len(nb.cond) != i]])
+      for (j in seq_len(nb.cond)[seq_len(nb.cond) != i]) {
+        contra[k] <- c(paste(contra[k], "-(", label.agg[j], ")/", nb))
+      }
+      k <- k + 1
+    }
+  }
+  
+  return(contra)
 }
 
 
@@ -624,84 +572,100 @@ make.contrast <- function(design,
 #' one comparison). The names of the columns for those two dataframes
 #' are identical and correspond to the description of the comparison.
 #'
-#' @author Helene Borges, Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
+#' @author Hélène Borges, Thomas Burger, Quentin Giai-Gianetto, Samuel Wieczorek
 #'
 #' @examples
 #' data(Exp1_R25_pept, package="DAPARdata")
 #' obj <- Exp1_R25_pept
 #' qData <- Biobase::exprs(obj)
 #' sTab <- Biobase::pData(obj)
-#' limma <- limmaCompleteTest(qData, sTab, comp.type = "OnevsAll")
+#' limma <- limmaCompleteTest(qData, sTab, comp.type = "anova1way")
 #'
 #' @export
 #'
 #'
-limmaCompleteTest <- function(qData, 
-                              sTab, 
-                              comp.type = 'OnevsOne') {
-
-    pkgs.require(c('dplyr', 'limma', 'tidyr'))
-    
-    switch(comp.type,
-        OnevsOne = contrast <- 1,
-        OnevsAll = contrast <- 2
-        )
-    #sTab.old <- sTab
-    conds <- factor(sTab$Condition, levels = unique(sTab$Condition))
-    #sTab <- sTab[unlist(lapply(split(sTab, conds), function(x) {x["Sample.name"]})), ]
-    #qData <- qData[, unlist(lapply(split(sTab.old, conds), function(x) {x["Sample.name"]}))]
-    #conds <- conds[order(conds)]
-
-    res.l <- NULL
-
-    design.matrix <- make.design(sTab)
-
-    if (!is.null(design.matrix)) {
-        if (comp.type == "OnevsOne" || comp.type == "OnevsAll") {
-            contra <- make.contrast(design.matrix, 
-                                    condition = conds, 
-                                    contrast,
-                                    design.level = getDesignLevel(sTab))
-            cmtx <- limma::makeContrasts(contrasts = contra,
-                                         levels = make.names(colnames(design.matrix))
-                                         )
-            fit <- limma::eBayes(
-                limma::contrasts.fit(limma::lmFit(qData, design.matrix), cmtx))
-            res.l <- formatLimmaResult(fit, conds, contrast)
-        } else if (comp.type == "anova1way") {
-            # make the orthogonal contrasts
-            contrasts <- tidyr::crossing(
-                A = colnames(design.matrix), 
-                B = colnames(design.matrix), 
-                .name_repair = "minimal") %>%
-                dplyr::filter(A != B)
-            orthogonal_contrasts <- dplyr::filter(
-                contrasts, !duplicated(paste0(pmax(A, B), pmin(A, B)))) %>%
-                dplyr::mutate(contrasts = stringr::str_glue("{A}-{B}"))
-            # make the contrasts in a format adapted for limma functions
-            contrasts_limma_format <- limma::makeContrasts(
-                contrasts = orthogonal_contrasts$contrasts,
-                levels = colnames(design.matrix)
-            )
-            ebayes_fit <- limma::eBayes(
-                limma::contrasts.fit(
-                    limma::lmFit(qData, design.matrix), 
-                    contrasts_limma_format)
-                )
-            fit_table <- limma::topTable(ebayes_fit, 
-                                         sort.by = "none", 
-                                         number = nrow(qData)
-                                         )
-            fit_pvalue <- dplyr::select(fit_table, "anova_1way_pval" = P.Value)
-            res.l <- list(
-                "logFC" = data.frame(
-                    "anova_1way_logFC" = matrix(NA, nrow = nrow(fit_pvalue)),
-                    row.names = rownames(fit_pvalue)),
-                "P_Value" = fit_pvalue
-            )
-        }
+limmaCompleteTest <- function(qData, sTab, comp.type = "OnevsOne") {
+  
+  pkgs.require(c('dplyr', 'limma', 'tidyr'))
+  
+  
+  level <- getDesignLevel(sTab)
+  if (level == 1 && length(unique(sTab$Condition)) > 26){
+    message('DAPAR with Limma does not handle datasets with more 26 conditions 
+            in a 1-level design')
+    return(NULL)
+  } else if ((level == 2 || level == 3) && length(unique(sTab$Condition)) >= 10){
+    message('DAPAR with Limma does not handle datasets with more 9 conditions 
+            in a 2-level and 3-level designs')
+    return(NULL)
+  }
+  
+  switch(comp.type,
+         OnevsOne = contrast <- 1,
+         OnevsAll = contrast <- 2
+  )
+  #sTab.old <- sTab
+  conds <- factor(sTab$Condition, levels = unique(sTab$Condition))
+  #sTab <- sTab[unlist(lapply(split(sTab, conds), function(x) {x["Sample.name"]})), ]
+  #qData <- qData[, unlist(lapply(split(sTab.old, conds), function(x) {x["Sample.name"]}))]
+  #conds <- conds[order(conds)]
+  
+  res.l <- NULL
+  
+  design.matrix <- make.design(sTab)
+  
+  if (!is.null(design.matrix)) {
+    if (comp.type == "OnevsOne" || comp.type == "OnevsAll") {
+      contra <- make.contrast(design.matrix, 
+                              condition = conds, 
+                              contrast,
+                              design.level = getDesignLevel(sTab))
+      cmtx <- limma::makeContrasts(
+        contrasts = contra,
+        levels = make.names(colnames(design.matrix))
+      )
+      fit <- limma::eBayes(
+        limma::contrasts.fit(limma::lmFit(qData, design.matrix), cmtx))
+      res.l <- formatLimmaResult(fit, 
+                                 conds, 
+                                 contrast,
+                                 design.level = getDesignLevel(sTab))
+    } else if (comp.type == "anova1way") {
+      # make the orthogonal contrasts
+      contrasts <- tidyr::crossing(
+        A = colnames(design.matrix), 
+        B = colnames(design.matrix), 
+        .name_repair = "minimal") %>%
+        dplyr::filter(A != B)
+      orthogonal_contrasts <- dplyr::filter(
+        contrasts, !duplicated(paste0(pmax(A, B), pmin(A, B)))) %>%
+        dplyr::mutate(contrasts = stringr::str_glue("{A}-{B}"))
+      # make the contrasts in a format adapted for limma functions
+      contrasts_limma_format <- limma::makeContrasts(
+        contrasts = orthogonal_contrasts$contrasts,
+        levels = colnames(design.matrix)
+      )
+      ebayes_fit <- limma::eBayes(
+        limma::contrasts.fit(
+          limma::lmFit(qData, design.matrix), 
+          contrasts_limma_format)
+      )
+      fit_table <- limma::topTable(
+        ebayes_fit, 
+        sort.by = "none", 
+        number = nrow(qData)
+      )
+      fit_pvalue <- dplyr::select(fit_table, "anova_1way_pval" = P.Value)
+      res.l <- list(
+        "logFC" = data.frame(
+          "anova_1way_logFC" = matrix(NA, nrow = nrow(fit_pvalue)),
+          row.names = rownames(fit_pvalue)
+        ),
+        "P_Value" = fit_pvalue
+      )
     }
-    return(res.l)
+  }
+  return(res.l)
 }
 
 
@@ -715,6 +679,7 @@ limmaCompleteTest <- function(qData,
 #' @param conds xxxx
 #'
 #' @param contrast xxxx
+#' @param design.level xxx
 #'
 #' @return A list of two dataframes : logFC and P_Value. The first one contains
 #' the logFC values of all the comparisons (one column for one comparison),
@@ -735,52 +700,71 @@ limmaCompleteTest <- function(qData,
 #' sTab <- Biobase::pData(obj$new)
 #' limma <- limmaCompleteTest(qData, sTab)
 #'
-formatLimmaResult <- function(fit, conds, contrast) {
-    pkgs.require('stringr')
+formatLimmaResult <- function(fit, conds, contrast, design.level) {
+  pkgs.require('stringr')
+  
+  
+  res <- cbind(fit$coefficients, fit$p.value)
+  
+  # how many comparisons have been done (and thus how many columns of pval)
+  Compa.Nb <- dim(fit$p.value)[2]
+  # empty colnames vector
+  cn <- c()
+  for (i in seq_len(Compa.Nb)) {
     
-    
-    res <- cbind(fit$coefficients, fit$p.value)
-
-    # how many comparisons have been done (and thus how many columns of pval)
-    Compa.Nb <- dim(fit$p.value)[2]
-    # empty colnames vector
-    cn <- c()
-    for (i in seq_len(Compa.Nb)) {
-
-        # not the same syntax to pars if Contast=1 or Contrast=2
-        if (contrast == 1) {
-            # One vs One
-            compa <- stringr::str_match_all(
-                colnames(fit$p.value)[i], 
-                "[[:space:]]Condition([[:letter:]]+)")[[1]]
-            
-            tmp1 <- unique(conds)[which(LETTERS == compa[1, 2])]
-            tmp2 <- unique(conds)[which(LETTERS == compa[2, 2])]
-            
-            cn[i] <- paste(tmp1, "_vs_", tmp2, sep = "")
-        }
-      
-      
-        if (contrast == 2) {
-            # One vs all
-            compa <- stringr::str_match_all(colnames(fit$p.value)[i], 
-                "[[:space:]]Condition([[:letter:]]+)")[[1]]
-            
-            # Get the first condition in the comparison
-            tmp <- unique(conds)[which(LETTERS == compa[1, 2])]
-            #tmp2 <- unique(conds)[which(LETTERS == compa[1, 2])]
-            cn[i] <- paste(tmp, "_vs_(all-", tmp, ")", sep = "")
-        }
+    # not the same syntax to pars if Contast=1 or Contrast=2
+    if (contrast == 1) {
+      if(design.level == 1) {
+        compa <- stringr::str_match_all(
+          colnames(fit$p.value)[i], 
+          "[[:space:]]Condition([[:letter:]]+)")[[1]]
+        
+        tmp1 <- unique(conds)[which(LETTERS == compa[1, 2])]
+        tmp2 <- unique(conds)[which(LETTERS == compa[2, 2])]
+        cn[i] <- paste(tmp1, "_vs_", tmp2, sep = "")
+        
+      } else {
+        compa <- stringr::str_match_all(
+          colnames(fit$p.value)[i], 
+          "[[:space:]]Condition([[:digit:]]+)")[[1]]
+        
+        tmp1 <- unique(conds)[as.numeric(compa[1, 2])]
+        tmp2 <- unique(conds)[as.numeric(compa[2, 2])]
+        cn[i] <- paste(tmp1, "_vs_", tmp2, sep = "")
+      }
     }
-
-
-    res.l <- list(
-        logFC = as.data.frame(res[, seq_len(Compa.Nb)]),
-        P_Value = as.data.frame(res[, -(seq_len(Compa.Nb))])
-    )
-
-    colnames(res.l$logFC) <- gsub("[ ]", "", paste(cn, "logFC", sep = "_"))
-    colnames(res.l$P_Value) <- gsub("[ ]", "", paste(cn, "pval", sep = "_"))
-
-    return(res.l)
+    if (contrast == 2) {
+      
+      if(design.level == 1) {
+        compa <- stringr::str_match_all(
+          colnames(fit$p.value)[i], 
+          "[[:space:]]Condition([[:letter:]]+)")[[1]]
+        
+        tmp <- unique(conds)[which(LETTERS == compa[1, 2])]
+        cn[i] <- paste(tmp, "_vs_(all-", tmp, ")", sep = "")
+        
+      } else {
+        compa <- stringr::str_match_all(
+          colnames(fit$p.value)[i], 
+          "[[:space:]]Condition([[:digit:]]+)")[[1]]
+        
+        tmp <- unique(conds)[as.numeric(compa[1, 2])]
+        cn[i] <- paste(tmp, "_vs_(all-", tmp, ")", sep = "")
+      }
+      
+      
+      
+    }
+  }
+  
+  
+  res.l <- list(
+    logFC = as.data.frame(res[, seq_len(Compa.Nb)]),
+    P_Value = as.data.frame(res[, -(seq_len(Compa.Nb))])
+  )
+  
+  colnames(res.l$logFC) <- gsub("[ ]", "", paste(cn, "logFC", sep = "_"))
+  colnames(res.l$P_Value) <- gsub("[ ]", "", paste(cn, "pval", sep = "_"))
+  
+  return(res.l)
 }

@@ -4,7 +4,7 @@
 \alias{formatLimmaResult}
 \title{xxxx}
 \usage{
-formatLimmaResult(fit, conds, contrast)
+formatLimmaResult(fit, conds, contrast, design.level)
 }
 \arguments{
 \item{fit}{xxxx}
@@ -12,6 +12,8 @@ formatLimmaResult(fit, conds, contrast)
 \item{conds}{xxxx}
 
 \item{contrast}{xxxx}
+
+\item{design.level}{xxx}
 }
 \value{
 A list of two dataframes : logFC and P_Value. The first one contains

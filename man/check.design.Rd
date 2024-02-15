@@ -18,8 +18,7 @@ Check if the design is valid
 }
 \examples{
 data(Exp1_R25_pept, package="DAPARdata")
-sTab <- Biobase::pData(Exp1_R25_pept)
-check.design(sTab)
+check.design(Biobase::pData(Exp1_R25_pept)[, seq_len(3)])
 
 }
 \author{
