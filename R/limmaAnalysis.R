@@ -468,6 +468,7 @@ getDesignLevel <- function(sTab){
 #' (Contrast=1; for example H0:"C1=C2" vs H1:"C1!=C2", etc.)
 #' or each condition versus all others (Contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
 #'  H1:"C1!=(C2+C3)/2", etc. if there are three conditions).
+#' @param design.level xxx
 #'
 #' @return A constrat matrix
 #'
@@ -678,6 +679,7 @@ limmaCompleteTest <- function(qData, sTab, comp.type = "OnevsOne") {
 #' @param conds xxxx
 #'
 #' @param contrast xxxx
+#' @param design.level xxx
 #'
 #' @return A list of two dataframes : logFC and P_Value. The first one contains
 #' the logFC values of all the comparisons (one column for one comparison),
