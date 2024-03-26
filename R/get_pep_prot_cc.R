@@ -200,6 +200,8 @@ plotJitter <- function(list.of.cc = NULL) {
 #' @export
 #'
 buildGraph <- function(The.CC, X) {
+  
+  
     nb.prot <- length(The.CC$proteins)
     nb.pep <- length(The.CC$peptides)
     subX <- Matrix::Matrix(
@@ -208,11 +210,16 @@ buildGraph <- function(The.CC, X) {
         ncol = nb.prot,
         dimnames = list(The.CC$peptides, The.CC$proteins)
         )
+    
+    
     colnames(subX) <- The.CC$proteins
     subX <- as.matrix(subX)
+    
+    
     nb.pep.shared <- length(which(rowSums(subX) > 1))
     nb.pep.spec <- length(which(rowSums(subX) == 1))
     nb.total <- nb.prot + nb.pep
+    
     edge.list <- as.data.frame(which(subX == 1, arr.ind = TRUE))
 
     def.grp <- c(rep("shared.peptide", nb.pep), rep("protein", nb.prot))

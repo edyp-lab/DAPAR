@@ -21,7 +21,7 @@ or each condition versus all others (Contrast=2; e.g.  H0:"C1=(C2+C3)/2" vs
 \item{design.level}{xxx}
 }
 \value{
-A contrast matrix
+A constrat matrix
 }
 \description{
 Builds the contrast matrix
