@@ -711,7 +711,7 @@ formatLimmaResult <- function(fit, conds, contrast, design.level) {
   # empty colnames vector
   cn <- c()
   for (i in seq_len(Compa.Nb)) {
-    
+
     # not the same syntax to pars if Contast=1 or Contrast=2
     if (contrast == 1) {
       if(design.level == 1) {
@@ -762,9 +762,11 @@ formatLimmaResult <- function(fit, conds, contrast, design.level) {
     logFC = as.data.frame(res[, seq_len(Compa.Nb)]),
     P_Value = as.data.frame(res[, -(seq_len(Compa.Nb))])
   )
-  
-  colnames(res.l$logFC) <- gsub("[ ]", "", paste(cn, "logFC", sep = "_"))
-  colnames(res.l$P_Value) <- gsub("[ ]", "", paste(cn, "pval", sep = "_"))
+
+  #colnames(res.l$logFC) <- gsub("[ ]", "", paste(cn, "logFC", sep = "_"))
+  #colnames(res.l$P_Value) <- gsub("[ ]", "", paste(cn, "pval", sep = "_"))
+  colnames(res.l$logFC) <- paste(cn, "logFC", sep = "_")
+  colnames(res.l$P_Value) <- paste(cn, "pval", sep = "_")
   
   return(res.l)
 }

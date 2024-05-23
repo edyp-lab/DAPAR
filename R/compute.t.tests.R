@@ -71,9 +71,8 @@ compute_t_tests <- function(obj, contrast = "OnevsOne", type = "Student") {
         
         c1Indice <- which(Conditions == levels(Conditions.f)[i])
         c2Indice <- which(Conditions == levels(Conditions.f)[j])
-        
-        res.tmp <- apply(
-          qData[, c(c1Indice, c2Indice)], 1,
+      
+        res.tmp <- apply(qData[, c(c1Indice, c2Indice)], 1,
           function(x) {
             stats::t.test(x ~ Conditions.f[c(c1Indice, c2Indice)], var.equal = .type)
           }

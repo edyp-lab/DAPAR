@@ -999,7 +999,7 @@ GetIndices_BasedOnConditions <- function(metacell.mask,
 
     indices <- switch(type,
         AllCond = which(rowSums(s) == nbCond),
-        AtLeastOneCond = which(rowSums(s) >= 1)
+        AtLeastOneCond = which(rowSums(s) >= 1) 
     )
 
     return(indices)
