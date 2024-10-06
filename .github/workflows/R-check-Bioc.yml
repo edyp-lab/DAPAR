@@ -274,7 +274,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: samwieczorek/magellan
+          repository: edyp-lab/DAPAR
           tag_with_ref: true
           tag_with_sha: true
           tags: latest
