@@ -41,7 +41,7 @@ RoxygenNote: 7.3.1
 Packaged: 2017-10-13 11:13:04 UTC; sw175264
 Encoding: UTF-8
 URL: http://www.prostar-proteomics.org/
-BugReports: https://github.com/prostarproteomics/DAPAR/issues
+BugReports: https://github.com/edyp-lab/DAPAR/issues
 Collate:
     agregation.R
     anova_analysis.R
