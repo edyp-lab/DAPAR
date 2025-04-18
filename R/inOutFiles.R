@@ -373,9 +373,15 @@ createMSnset2 <- function(file,
   colnames(data) <- gsub(".", "_", colnames(data), fixed = TRUE)
   colnameForID <- gsub(".", "_", colnameForID, fixed = TRUE)
   proteinId <- gsub(".", "_", proteinId, fixed = TRUE)
+  
   colnames(data) <- gsub(" ", "_", colnames(data), fixed = TRUE)
   colnameForID <- gsub(" ", "_", colnameForID, fixed = TRUE)
   proteinId <- gsub(" ", "_", proteinId, fixed = TRUE)
+  
+  colnames(data) <- gsub("-", "_", colnames(data), fixed = TRUE)
+  colnameForID <- gsub("-", "_", colnameForID, fixed = TRUE)
+  proteinId <- gsub("-", "_", proteinId, fixed = TRUE)
+  
   
   ## building exprs Data of MSnSet file
   Intensity <- matrix(
@@ -385,6 +391,7 @@ createMSnset2 <- function(file,
   )
   
   colnames(Intensity) <- gsub(".", "_", qdataNames, fixed = TRUE)
+  colnames(data) <- gsub("-", "_", colnames(data), fixed = TRUE)
   rownames(Intensity) <- rownames(data)
   
   # Get the metacell info
@@ -421,10 +428,13 @@ createMSnset2 <- function(file,
   }
   
   colnames(fd) <- gsub(".", "_", colnames(fd), fixed = TRUE)
+  colnames(fd) <- gsub("-", "_", colnames(fd), fixed = TRUE)
   
   pd <- as.data.frame(metadata, stringsAsFactors = FALSE)
   rownames(pd) <- gsub(".", "_", pd$Sample.name, fixed = TRUE)
   pd$Sample.name <- gsub(".", "_", pd$Sample.name, fixed = TRUE)
+  rownames(pd) <- gsub("-", "_", pd$Sample.name, fixed = TRUE)
+  pd$Sample.name <- gsub("-", "_", pd$Sample.name, fixed = TRUE)
   
   ## Integrity tests
   if (identical(rownames(Intensity), rownames(fd)) == FALSE) {
@@ -492,6 +502,7 @@ createMSnset2 <- function(file,
                             )
   
   colnames(metacell) <- gsub(".", "_", colnames(metacell), fixed = TRUE)
+  colnames(metacell) <- gsub("-", "_", colnames(metacell), fixed = TRUE)
   
   Biobase::fData(obj) <- cbind(Biobase::fData(obj),
                                metacell,

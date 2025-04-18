@@ -11,7 +11,7 @@ Check_Dataset_Validity <- function(obj){
   
   is.valid <- TRUE
   
-  test <- Check_NbValues_In_Columns(exprs(obj))
+  test <- Check_NbValues_In_Columns(Biobase::exprs(obj))
   is.valid <- length(which(test == 0)) == 0
   is.valid <- length(which(test == 1)) == 0
   return(is.valid)

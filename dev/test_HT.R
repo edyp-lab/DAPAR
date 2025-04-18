@@ -10,7 +10,7 @@ testHT <- function(obj){
   
   design <- 'OnevsOne'
   
-  test.limma <- limmaCompleteTest(exprs(obj), pData(obj), design)
+  test.limma <- limmaCompleteTest(Biobase::exprs(obj), Biobase::pData(obj), design)
   
   cat('compute_t_tests(obj)\n')
   print(head(test.ttest$logFC))

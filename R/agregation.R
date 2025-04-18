@@ -1314,7 +1314,7 @@ AggregateMetacell <- function(X, obj.pep) {
 
     # Post processing of metacell to discover 'Imputed POV', 'Imputed MEC'
     conds <- Biobase::pData(obj.pep)$Condition
-    df <- Set_POV_MEC_tags(conds, df, level)
+    df <- Set_POV_MEC_tags(meta, conds, level)
 
 
     # Search for issues
