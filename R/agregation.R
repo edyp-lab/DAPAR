@@ -745,7 +745,7 @@ aggregateMean <- function(obj.pep, X) {
         #cat("Computing quantitative data for proteins ...\n")
         pepData <- 2^(Biobase::exprs(obj.pep))
         protData <- inner.mean(pepData, as.matrix(X))
-
+        
         # Step 3: Build protein dataset
         #cat("Building the protein dataset...\n")
         obj.prot <- finalizeAggregation(obj.pep, 
@@ -1077,6 +1077,7 @@ finalizeAggregation <- function(obj.pep, pepData, protData, protMetacell, X) {
         nPepShared = n$nShared,
         nPepSpec = n$nSpec
     )
+    
     fd <- cbind(fd,
         pepSpecUsed,
         pepSharedUsed,
@@ -1304,7 +1305,7 @@ AggregateMetacell <- function(X, obj.pep) {
             df[i, j] <- metacombine(rowcol(meta[, j], X[, i]), level)
         }
     }
-
+    
     df[df == "NA"] <- NA
     colnames(df) <- obj.pep@experimentData@other$names_metacell
     rownames(df) <- colnames(X)
@@ -1314,7 +1315,7 @@ AggregateMetacell <- function(X, obj.pep) {
 
     # Post processing of metacell to discover 'Imputed POV', 'Imputed MEC'
     conds <- Biobase::pData(obj.pep)$Condition
-    df <- Set_POV_MEC_tags(conds, df, level)
+    df <- Set_POV_MEC_tags(df, conds, level)
 
 
     # Search for issues

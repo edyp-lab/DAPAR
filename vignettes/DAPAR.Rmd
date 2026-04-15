@@ -1,0 +1,58 @@
+---
+title: "DAPAR user manual"
+author: 
+- name: Samuel Wieczorek
+- name: Thomas Burger
+package: DAPAR
+abstract: >
+    The package DAPAR is a Bioconductor distributed R package which 
+    provides all the necessary functions to analyze quantitative data from 
+    label-free proteomics experiments. 
+    Contrarily to most other similar R packages, it is endowed with rich and 
+    user-friendly graphical interfaces, so that no programming skill is 
+    required (see `Prostar` package).
+date: "`r Sys.Date()`"
+output:
+    BiocStyle::html_document:
+        highlight: tango
+vignette: >
+    %\VignetteIndexEntry{Prostar User Manual}
+    %\VignetteEngine{knitr::rmarkdown}
+    %%\VignetteKeywords{Mass Spectrometry, Quantitative}
+    %\VignetteEncoding{UTF-8}
+---
+
+\newcommand{\shellcmd}[1]{\\\indent\indent\texttt{\footnotesize\# #1}}
+
+\newcommand{\Rcmd}[1]{\\\indent\indent\texttt{\footnotesize\# #1}}
+
+\newcommand{\bordurefigure}[1]{\fbox{\includegraphics{#1}}}
+
+```{r init, echo=FALSE}
+BiocStyle::markdown()
+```
+
+# Introduction
+
+The `DAPAR` and `Prostar` packages are a series of software dedicated to 
+the processing of proteomics data. More precisely, they are devoted to the 
+analysis of quantitative datasets produced by bottom-up discovery proteomics 
+experiments with a LC-MS/MS pipeline (Liquid Chromatography and Tandem Mass 
+spectrometry).
+`DAPAR` (Differential Analysis of Protein Abundance with R) is an R 
+package that contains all the necessary functions to process the data in 
+command lines. It can be used on its own; or as a complement to the numerous 
+Bioconductor packages (\url{https://www.bioconductor.org/}) it is compliant 
+with; or through the `Prostar` interface.
+`Prostar` (Proteomics statistical analysis with R) is a 
+web interface based on Shiny technology (\url{http://shiny.rstudio.com/}) that 
+provides GUI (Graphical User Interfaces) to all the `DAPAR` functionalities, 
+so as to guide any practitioner that is not comfortable with R programming 
+through the complete quantitative analysis process.
+The experiment package `DAPARdata` contains many datasets that can be used as 
+ examples.
+
+
+```{r sessioninfo}
+sessionInfo()
+```

@@ -1,6 +1,6 @@
 
 
-#' @title Bar plot of missing values per lines using highcharter
+#' @title Bar plot of missing values per lines using plotly
 #' 
 #' @description 
 #' This method plots a bar plot which represents the distribution of the
@@ -74,29 +74,25 @@ metacellPerLinesHisto_HC <- function(obj,
 
     myColors <- rep("lightgrey", nrow(df))
 
-    h1 <- highchart() %>%
-        hc_title(text = paste0("Nb of lines with (", paste0(pattern, collapse=', '), ") tags")) %>%
-        hc_add_series(data = df, type = "column", colorByPoint = TRUE) %>%
-        hc_colors(myColors) %>%
-        hc_plotOptions(
-            column = list(stacking = "normal"),
-            animation = list(duration = 100)
-        ) %>%
-        hc_legend(enabled = FALSE) %>%
-        hc_xAxis(categories = row.names(df), 
-            title = list(
-                text = paste0("Nb of (", paste0(pattern, collapse=', '), ") tags in a line")
-                )
-            ) %>%
-        my_hc_ExportMenu(filename = "missingValuesPlot1") %>%
-        hc_tooltip(
-            enabled = TRUE,
-            headerFormat = "",
-            pointFormat = paste0("{point.y} lines<br>
-                ({point.y_percent}% of all lines)")
-        )
-
-    return(h1)
+    p <- plot_ly(
+      x = row.names(df),
+      y = df[[1]],
+      type = 'bar',
+      marker = list(color = myColors),
+      text = paste0(df[[1]], " lines<br>(",
+                    round(df[[1]] / sum(df[[1]]) * 100, 1), "% of all lines)"),
+      textposition = 'none',
+      hoverinfo = 'text'
+    ) |>
+      plotly::layout(
+        margin = list(t = 60, b = 60),
+        title = paste0("Nb of lines with (", paste0(pattern, collapse=', '), ") tags"),
+        xaxis = list(title = paste0("Nb of (", paste0(pattern, collapse=', '), ") tags in a line")),
+        yaxis = list(title = "Count"),
+        showlegend = FALSE
+      )
+    
+    return(p)
 }
 
 
@@ -188,18 +184,10 @@ metacellPerLinesHistoPerCondition_HC <- function(obj,
                            level = GetTypeofData(obj)
                            )
     
-    ll.df <- list()
-    for (i in u_conds)
-    {
-        df <- as.data.frame(matrix(rep(0, 2 * (1 + nbConditions)),
-            nrow = 1 + nbConditions,
-            dimnames = list(
-                seq(seq.int(from=0, to=(nbConditions))),
-                c("y", "y_percent")
-            )
-        ))
-        rownames(df) <- seq.int(from = 0, to = (nrow(df) - 1))
-        ll.df[[i]] <- df
+    ncolMatrix <- max(sapply(u_conds, function(x) sum(conds == x)))
+    
+    df_all <- data.frame()
+    for (i in u_conds){
         nSample <- length(which(conds == i))
         t <- NULL
         if (nSample == 1) {
@@ -207,38 +195,42 @@ metacellPerLinesHistoPerCondition_HC <- function(obj,
         } else {
             t <- table(rowSums(mask[, which(conds == i)]))
         }
-
-        df[as.integer(names(t)) + 1, "y"] <- t
-        df[as.integer(names(t)) + 1, "y_percent"] <- round(100 * t / nrow(obj),
-            digits = 2)
-        ll.df[[i]] <- df
-    }
-
-    h1 <- highchart() %>%
-        hc_title(text = paste0("Nb of lines containing (", 
-                               paste0(pattern, collapse=', '), ") tags (condition-wise)")) %>%
-        my_hc_chart(chartType = "column") %>%
-        hc_plotOptions(
-            column = list(stacking = ""),
-            dataLabels = list(enabled = FALSE),
-            animation = list(duration = 100)
-        ) %>%
-        hc_colors(unique(myColors)) %>%
-        hc_legend(enabled = FALSE) %>%
-        hc_xAxis(categories = seq.int(from=0, to=ncolMatrix), 
-            title = list(text = paste0("Nb of (", paste0(pattern, collapse=', '), 
-                ") tags in each line (condition-wise)"))) %>%
-        my_hc_ExportMenu(filename = "missingValuesPlot_2") %>%
-        hc_tooltip(
-            headerFormat = "",
-            pointFormat = "{point.y} lines<br>({point.y_percent}% of all lines)"
+        
+        x_vals <- 0:ncolMatrix
+        y_vals <- rep(0, length(x_vals))
+        y_vals[as.integer(names(t)) + 1] <- t
+        y_percent <- round(100 * t / nrow(obj), digits = 2)
+        
+        df_cond <- data.frame(
+          x = x_vals,
+          y = y_vals,
+          y_percent = y_percent,
+          condition = i
         )
-
-    for (i in seq_len(nbConditions)) {
-        h1 <- h1 %>% hc_add_series(data = ll.df[[u_conds[i]]])
+        
+        df_all <- rbind(df_all, df_cond)
     }
+    df_all$condition <- factor(df_all$condition, levels = u_conds)
 
-    return(h1)
+    p <- plot_ly(df_all, 
+                 x = ~x, 
+                 y = ~y, 
+                 color = ~condition, 
+                 colors = myColors,
+                 type = 'bar', 
+                 text = if (showValues) ~y else ~paste0(condition, " : ", y, " lines (", y_percent, "%)"),
+                 textposition = 'none', 
+                 hoverinfo = 'text') |>
+      plotly::layout(
+        barmode = 'group', 
+        title = paste0("Nb of lines containing (", paste0(pattern, collapse=', '), ") tags (condition-wise)"),
+        xaxis = list(title = paste0("Nb of (", paste0(pattern, collapse=', '), ") tags in each line")),
+        yaxis = list(title = ""),
+        margin = list(t = 60, b = 60),
+        showlegend = FALSE
+      )
+    
+    return(p)
 }
 
 
@@ -248,7 +240,7 @@ metacellPerLinesHistoPerCondition_HC <- function(obj,
 #' @title Histogram of missing values
 #' @description 
 #' #' This method plots a histogram of missing values. Same as the function
-#' \code{mvHisto} but uses the package \code{highcharter}
+#' \code{mvHisto} but uses the package \code{plotly}
 #' 
 #' @param obj xxx
 #' @param pattern xxx
@@ -260,7 +252,7 @@ metacellPerLinesHistoPerCondition_HC <- function(obj,
 #' @return A histogram
 #' @author Florence Combes, Samuel Wieczorek
 #'
-#' @import highcharter
+#' @import plotly
 #'
 #' @examples
 #' data(Exp1_R25_pept, package="DAPARdata")
@@ -276,74 +268,82 @@ metacellHisto_HC <- function(obj,
                              indLegend = "auto",
                              showValues = FALSE,
                              pal = NULL) {
-    if (missing(obj)) {
-        stop("'obj' is missing.")
-    } else if (is.null(obj)) {
-        stop("'obj' is NULL. Abort...")
-    }
+  if (missing(obj)) {
+    stop("'obj' is missing.")
+  } else if (is.null(obj)) {
+    stop("'obj' is NULL. Abort...")
+  }
   if(missing(pattern) || length(pattern) == 0 || is.null(pattern) || (length(pattern)==1 && pattern==''))
     return(NULL)
-
-    qData <- Biobase::exprs(obj)
-    samplesData <- Biobase::pData(obj)
-    conds <- samplesData[, "Condition"]
-
-    myColors <- NULL
-    if (is.null(pal)) {
-        warning("Color palette set to default.")
-        myColors <- GetColorsForConditions(conds, 
-            ExtendPalette(length(unique(conds))))
+  
+  qData <- Biobase::exprs(obj)
+  samplesData <- Biobase::pData(obj)
+  conds <- samplesData[, "Condition"]
+  u_conds <- unique(conds)
+  
+  myColors <- NULL
+  if (is.null(pal)) {
+    warning("Color palette set to default.")
+    myColors <- GetColorsForConditions(conds, 
+                                       ExtendPalette(length(unique(conds))))
+  } else {
+    if (length(pal) != length(unique(conds))) {
+      warning("The color palette has not the same dimension as the number of samples")
+      myColors <- GetColorsForConditions(conds, 
+                                         ExtendPalette(length(unique(conds))))
     } else {
-        if (length(pal) != length(unique(conds))) {
-            warning("The color palette has not the same dimension as the number of samples")
-            myColors <- GetColorsForConditions(conds, 
-                ExtendPalette(length(unique(conds))))
-        } else {
-            myColors <- GetColorsForConditions(conds, pal)
-        }
+      myColors <- GetColorsForConditions(conds, pal)
     }
-
-    if (identical(indLegend, "auto")) {
-        indLegend <- seq.int(from=2, to = length(colnames(samplesData)))
-    }
-
-
-
-    mask <- match.metacell(GetMetacell(obj),
-                           pattern = pattern,
-                           level = obj@experimentData@other$typeOfData
-                           )
-
-    NbNAPerCol <- colSums(mask)
-
-    df <- data.frame(
-        y = NbNAPerCol,
-        y_percent = round(100 * NbNAPerCol / nrow(mask), digits = 2)
+  }
+  
+  if (identical(indLegend, "auto")) {
+    indLegend <- seq.int(from=2, to = length(colnames(samplesData)))
+  }
+  
+  
+  
+  mask <- match.metacell(GetMetacell(obj),
+                         pattern = pattern,
+                         level = obj@experimentData@other$typeOfData
+  )
+  
+  NbNAPerCol <- colSums(mask)
+  
+  df <- data.frame(
+    y = NbNAPerCol,
+    y_percent = round(100 * NbNAPerCol / nrow(mask), digits = 2)
+  )
+  
+  df$sample <- rownames(df)
+  df$group <- factor(conds, levels = u_conds)
+  
+  p <- plotly::plot_ly(
+    data = df,
+    x = ~sample,
+    y = ~y,
+    type = "bar",
+    color = ~group,
+    colors = myColors,
+    text = if (showValues) ~y else ~paste0(group, " : ", y, " lines (", y_percent, "%)"),
+    textposition = 'none', 
+    hoverinfo = 'text'
+  ) |>
+    plotly::layout(
+      title = paste0("Nb of (", paste0(pattern, collapse=', '), ") tags by replicate"),
+      xaxis = list(
+        title = "Replicates",
+        tickmode = "array",
+        tickvals = df$sample, 
+        ticktext = df$group 
+      ),
+      yaxis = list(title = ""),
+      bargap = 0.2,
+      margin = list(t = 60, b = 60),
+      showlegend = FALSE
     )
-
-
-
-    h1 <- highchart() %>%
-        my_hc_chart(chartType = "column") %>%
-        hc_title(text = paste0("Nb of (", paste0(pattern, collapse=', '), ") tags by replicate")) %>%
-        hc_add_series(df, type = "column", colorByPoint = TRUE) %>%
-        hc_colors(myColors) %>%
-        hc_plotOptions(
-            column = list(stacking = "normal"),
-            animation = list(duration = 100)
-        ) %>%
-        hc_legend(enabled = FALSE) %>%
-        hc_xAxis(categories = conds, title = list(text = "Replicates")) %>%
-        my_hc_ExportMenu(filename = "missingValuesPlot_3") %>%
-        hc_tooltip(
-            headerFormat = "",
-            pointFormat = "{point.y} lines<br>({point.y_percent}% of all lines)"
-        )
-
-    return(h1)
+  
+  return(p)
 }
-
-
 
 
 
@@ -501,7 +501,7 @@ mvImage <- function(qData, conds) {
 #'
 #' @param title The title of the plot
 #'
-#' @import highcharter
+#' @import plotly
 #'
 #' @return Density plots
 #'
@@ -514,7 +514,7 @@ mvImage <- function(qData, conds) {
 #' pal <- ExtendPalette(length(unique(conds)), "Dark2")
 #' hc_mvTypePlot2(obj, pattern = "Missing MEC", title = "POV distribution", pal = pal)
 #'
-#' @import highcharter
+#' @import plotly
 #'
 #' @export
 #'
@@ -594,54 +594,62 @@ hc_mvTypePlot2 <- function(obj,
         }
     }
 
-
-    hc <- highchart(type = "chart") %>%
-        hc_title(text = title) %>%
-        my_hc_chart(chartType = "spline", zoomType = "xy") %>%
-        hc_legend(align = "left", verticalAlign = "top", layout = "vertical"
-        ) %>%
-        hc_xAxis(title = list(text = "Mean of intensities")) %>%
-        hc_yAxis(title = list(text = "Number of quantity values per condition"),
-                 tickInterval = 0.5) %>%
-        hc_tooltip(
-            headerFormat = "",
-            pointFormat = "<b> {series.name} </b>: {point.y} ",
-            valueDecimals = 2
-        ) %>%
-        my_hc_ExportMenu(filename = paste0(pattern, "_distribution")) %>%
-        hc_plotOptions(
-            series = list(
-                showInLegend = TRUE,
-                animation = list(duration = 100),
-                connectNulls = TRUE,
-                marker = list(enabled = FALSE)
-            )
-        )
-
+    p <- plot_ly() |> 
+      plotly::layout(
+        title = list(text = title),
+        xaxis = list(title = "Mean of intensities"),
+        yaxis = list(title = "Number of quantity values per condition",
+                     tickmode = "linear",
+                     dtick = 0.5),
+        legend = list(orientation = "v", x = 0, y = 1),
+        hoverlabel = list(namelength = -1)
+      )
+    
     for (i in seq_len(length(series))) {
-        hc <- hc_add_series(hc,
-            data = list_parse(data.frame(cbind(
-                x = series[[i]]$x,
-                y = series[[i]]$y
-            ))),
-            showInLegend = FALSE,
-            color = myColors[i],
-            name = conds[i]
+      if (!is.null(series[[i]])){
+        df <- data.frame(
+          x = series[[i]]$x,
+          y = series[[i]]$y
         )
-    }
-
-    # add three empty series for the legend entries. Change color and marker 
-    # symbol
-    for (c in seq_len(length(unique(conds)))) {
-        hc <- hc_add_series(hc,
-            data = data.frame(),
-            name = unique(conds)[c],
-            color = pal[c],
-            marker = list(symbol = "circle"),
-            type = "line"
+        
+        p <- p |> plotly::add_trace(
+          data = df,
+          x = ~x, y = ~y,
+          type = "scatter",
+          mode = "lines",
+          line = list(shape = "spline", color = myColors[i]),
+          showlegend = FALSE,
+          name = conditions[i],
+          hovertemplate = paste("<b>", conditions[i], "</b>: %{y:.2f}<extra></extra>")
         )
+      }
     }
-
-    hc
-    return(hc)
+    
+    unique_groups <- unique(conditions)
+    
+    for (c in seq_along(unique_groups)) {
+      p <- p |> add_trace(
+        x = 0, y = 0,
+        type = "scatter",
+        mode = "lines+markers",
+        marker = list(symbol = "circle",
+                      size = 8, 
+                      color = pal[c]),
+        line = list(color = pal[c]),
+        name = unique_groups[c],
+        showlegend = TRUE,
+        visible = "legendonly",
+        hoverinfo = "none"
+      )
+    }
+    
+    p <- p |> plotly::layout(legend = list(itemclick = FALSE, 
+                                           itemdoubleclick = FALSE,
+                                           orientation = "h", 
+                                           x = 0, 
+                                           y = -0.15, 
+                                           xanchor = "left",
+                                           yanchor = "top"))
+    
+    return(p)
 }

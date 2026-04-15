@@ -9,6 +9,9 @@ Check_NbValues_In_Columns(qdata)
 \arguments{
 \item{qdata}{xxx}
 }
+\value{
+xxx
+}
 \description{
 xxx
 }

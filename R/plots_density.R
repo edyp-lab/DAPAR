@@ -25,7 +25,7 @@
 #' pal <- ExtendPalette(2, "Dark2")
 #' densityPlotD_HC(Exp1_R25_pept, pal = pal)
 #'
-#' @import highcharter
+#' @import plotly
 #'
 #' @export
 #'
@@ -66,43 +66,40 @@ densityPlotD_HC <- function(obj,
         }
     }
 
-    h1 <- highchart() %>%
-        hc_title(text = "Density plot") %>%
-        my_hc_chart(chartType = "spline", zoomType = "x") %>%
-        hc_colors(myColors) %>%
-        hc_legend(enabled = TRUE) %>%
-        hc_xAxis(title = list(text = "log(Intensity)")) %>%
-        hc_yAxis(title = list(text = "Density")) %>%
-        hc_tooltip(
-            headerFormat = "",
-            pointFormat = "<b> {series.name} </b>: {point.y} ",
-            valueDecimals = 2
-        ) %>%
-        my_hc_ExportMenu(filename = "densityplot") %>%
-        hc_plotOptions(
-            series = list(
-                animation = list(
-                    duration = 100
-                ),
-                connectNulls = TRUE,
-                marker = list(
-                    enabled = FALSE
-                )
-            )
-        )
-
-    if (is.null(legend)) {
-        legend <- paste0("series", seq_len(ncol(qData)))
-    }
-
+    p <- plotly::plot_ly()
+    
     for (i in seq_len(ncol(qData))) {
-        tmp <- data.frame(
-            x = stats::density(qData[, i], na.rm = TRUE)$x,
-            y = stats::density(qData[, i], na.rm = TRUE)$y
+      
+      dens <- stats::density(qData[, i], na.rm = TRUE)
+      
+      p <- p |>
+        plotly::add_trace(
+          x = dens$x,
+          y = dens$y,
+          type = "scatter",
+          mode = "lines",
+          name = legend[i],
+          line = list(color = myColors[i]),
+          hovertemplate = paste0(
+            "<b>", legend[i], "</b>: %{y:.2f}<extra></extra>"
+          )
         )
-
-        h1 <- h1 %>% hc_add_series(data = list_parse(tmp), name = legend[i])
     }
-
-    return(h1)
+    
+    p <- p |>
+      plotly::layout(
+        title = "Density plot",
+        xaxis = list(title = "log(Intensity)"),
+        yaxis = list(title = "Density"),
+        margin = list(t = 60, b = 60),
+        legend = list(
+          orientation = "h",
+          x = 0,
+          y = -0.15,
+          xanchor = "left",
+          yanchor = "top"
+        )
+      )
+    
+    return(p)
 }

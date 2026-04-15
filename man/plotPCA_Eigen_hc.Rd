@@ -2,7 +2,7 @@
 % Please edit documentation in R/plots_pca.R
 \name{plotPCA_Eigen_hc}
 \alias{plotPCA_Eigen_hc}
-\title{Plots the eigen values of PCA with the highcharts library}
+\title{Plots the eigen values of PCA with the plotly library}
 \usage{
 plotPCA_Eigen_hc(res.pca)
 }
@@ -13,7 +13,7 @@ plotPCA_Eigen_hc(res.pca)
 A histogram
 }
 \description{
-Plots the eigen values of PCA with the highcharts library
+Plots the eigen values of PCA with the plotly library
 }
 \examples{
 data(Exp1_R25_pept, package='DAPARdata')

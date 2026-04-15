@@ -25,7 +25,7 @@ OWAnova <- function(current_protein, conditions){
 #' @author Thomas Burger
 #'
 #' @param obj an MSnSet object
-#' '
+#' 
 #' @return a list of linear models
 #'
 #' @examples
@@ -266,7 +266,7 @@ separateAdjPval <- function(x,
 #'
 #' @export
 #' 
-globalAdjPval <- function(x, pval.threshold=1.05, method=1, display = T){
+globalAdjPval <- function(x, pval.threshold=1.05, method=1, display = TRUE){
   pkgs.require('cp4p')
   res <- x
   vec <- stack(x)$values
@@ -332,7 +332,7 @@ compute.selection.table <- function(x, fdr.threshold){
 #' @export
 #'
 classic1wayAnova <- function(current_line, conditions) {
-  .Deprecated("OWAnova")
+  #.Deprecated("OWAnova")
   pkgs.require('stats')
   
   
@@ -379,7 +379,7 @@ wrapperClassic1wayAnova <- function(obj,
                                     with_post_hoc = "No", 
                                     post_hoc_test = "No") {
   
-  .Deprecated("testAnovaModels")
+  #.Deprecated("testAnovaModels")
   pkgs.require('dplyr')
   
   
@@ -461,7 +461,7 @@ wrapperClassic1wayAnova <- function(obj,
 #' @export
 #'
 formatPHResults <- function(post_hoc_models_summaries) {
-  .Deprecated("formatPHTResults")
+  #.Deprecated("formatPHTResults")
   pkgs.require(c('purrr', 'stringr'))
   
   
@@ -541,7 +541,7 @@ formatPHResults <- function(post_hoc_models_summaries) {
 #'
 #'
 postHocTest <- function(aov_fits, post_hoc_test = "TukeyHSD") {
-  .Deprecated("The other functions present in the file anova_analysis.R")
+  #.Deprecated("The other functions present in the file anova_analysis.R")
   pkgs.require('multcomp')
   
   

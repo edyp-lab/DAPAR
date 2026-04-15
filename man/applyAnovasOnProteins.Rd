@@ -7,8 +7,7 @@
 applyAnovasOnProteins(obj)
 }
 \arguments{
-\item{obj}{an MSnSet object
-'}
+\item{obj}{an MSnSet object}
 }
 \value{
 a list of linear models

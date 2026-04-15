@@ -193,7 +193,7 @@ NumericalgetIndicesOfLinesToRemove <- function(
 #' 
 #' @description 
 #' Plots a barplot of proportion of contaminants and reverse. Same as the
-#' function \code{proportionConRev} but uses the package \code{highcharter}
+#' function \code{proportionConRev} but uses the package \code{plotly}
 #'
 #'
 #' @param nBoth The number of both contaminants and reverse identified in
@@ -233,26 +233,32 @@ proportionConRev_HC <- function(nBoth = 0, nCont = 0, nRev = 0, lDataset = 0) {
     # pct <- c(pctGood, pctContaminants, pctReverse  ,pctBoth)
     lbls <- paste(lbls, " (", counts, " lines)", sep = "")
 
-    mydata <- data.frame(
-        test = c(pctGood, pctContaminants, pctReverse, pctBoth)
-        )
-
-    highchart() %>%
-        my_hc_chart(chartType = "bar") %>%
-        hc_yAxis(title = list(text = "Pourcentage")) %>%
-        hc_xAxis(categories = lbls) %>%
-        hc_legend(enabled = FALSE) %>%
-        hc_plotOptions(column = list(
-            dataLabels = list(enabled = TRUE),
-            stacking = "normal",
-            enableMouseTracking = FALSE
-        )) %>%
-        hc_add_series(
-            data = mydata$test,
-            dataLabels = list(enabled = TRUE, format = "{point.y}%"),
-            colorByPoint = TRUE
-        ) %>%
-        my_hc_ExportMenu(filename = "contaminants")
+    df <- data.frame(
+      category = lbls,
+      percentage = slices
+    )
+    
+    colors <- c("#4DAF4A", "#4D4D4D", "#7ED36F", "#F4A259")
+    
+    plotly::plot_ly(
+      df,
+      x = ~percentage,
+      y = ~factor(category, levels = rev(category)),
+      type = "bar",
+      orientation = "h",
+      text = ~paste0(round(percentage, 2), "%"),
+      textposition = "outside",
+      marker = list(color = colors)
+    ) |>
+      plotly::layout(
+        xaxis = list(
+          title = "Pourcentage",
+          range = c(0, 100)
+        ),
+        yaxis = list(title = ""),
+        showlegend = FALSE,
+        margin = list(l = 200)  # important for long labels
+      )
 }
 
 

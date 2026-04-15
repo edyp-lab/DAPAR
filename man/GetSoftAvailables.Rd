@@ -6,9 +6,13 @@
 \usage{
 GetSoftAvailables()
 }
+\value{
+xxx
+}
 \description{
 The set of softwares available
 }
 \examples{
 GetSoftAvailables()
+
 }

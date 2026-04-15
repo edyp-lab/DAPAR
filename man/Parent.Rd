@@ -9,14 +9,18 @@ Parent(level, node = NULL)
 \arguments{
 \item{level}{xxx}
 
-\item{node}{xxx
-
-#' @examples 
-Parent('protein', 'Missing')
-Parent('protein', 'Missing POV')
-Parent('protein', c('Missing POV', 'Missing MEC'))
-Parent('protein', c('Missing', 'Missing POV', 'Missing MEC'))}
+\item{node}{xxx}
+}
+\value{
+xxx
 }
 \description{
 xxx
+}
+\examples{
+Parent('protein', 'Missing')
+Parent('protein', 'Missing POV')
+Parent('protein', c('Missing POV', 'Missing MEC'))
+Parent('protein', c('Missing', 'Missing POV', 'Missing MEC'))
+
 }

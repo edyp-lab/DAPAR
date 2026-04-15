@@ -15,7 +15,7 @@ distinguish between differential and non-differential data}
 \item{pal}{xxx}
 }
 \value{
-A highcharts density plot
+A plotly density plot
 }
 \description{
 This function show the density plots of Fold Change (the same as calculated

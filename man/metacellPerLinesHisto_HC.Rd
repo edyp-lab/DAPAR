@@ -2,7 +2,7 @@
 % Please edit documentation in R/metacell_Plots.R
 \name{metacellPerLinesHisto_HC}
 \alias{metacellPerLinesHisto_HC}
-\title{Bar plot of missing values per lines using highcharter}
+\title{Bar plot of missing values per lines using plotly}
 \usage{
 metacellPerLinesHisto_HC(
   obj,

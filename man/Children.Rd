@@ -11,6 +11,9 @@ Children(level, parent = NULL)
 
 \item{parent}{xxx}
 }
+\value{
+xxx
+}
 \description{
 xxx
 }

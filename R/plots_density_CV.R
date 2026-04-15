@@ -58,7 +58,7 @@ wrapper.CVDistD_HC <- function(obj, ...) {
 #' pal <- ExtendPalette(2, "Dark2")
 #' CVDistD_HC(Biobase::exprs(Exp1_R25_pept), conds, pal)
 #'
-#' @import highcharter
+#' @import plotly
 #'
 #' @export
 #'
@@ -87,63 +87,72 @@ CVDistD_HC <- function(qData,
             pal <- ExtendPalette(n)
         }
     }
+    
+    p <- plotly::plot_ly()
 
-
-    h1 <- highchart() %>%
-        my_hc_chart(chartType = "spline", zoomType = "x") %>%
-        hc_colors(pal) %>%
-        hc_legend(enabled = TRUE) %>%
-        hc_xAxis(title = list(text = "CV(log(Intensity))")) %>%
-        hc_yAxis(title = list(text = "Density")) %>%
-        hc_tooltip(
-            headerFormat = "",
-            pointFormat = "<b>{series.name}</b>: {point.y} ",
-            valueDecimals = 2
-        ) %>%
-        my_hc_ExportMenu(filename = "logIntensity") %>%
-        hc_plotOptions(
-            series = list(
-                connectNulls = TRUE,
-                marker = list(
-                    enabled = FALSE
-                )
-            )
-        )
-
-    minX <- maxX <- 0
-    maxY <- 0
+    minX <- Inf
+    maxX <- -Inf
+    
     for (i in seq_len(n)) {
-        if (length(which(conds == conditions[i])) > 1) {
-            t <- apply(
-                qData[, which(conds == conditions[i])], 1,
-                function(x) 
-                    100 * stats::var(x, na.rm = TRUE) / mean(x, na.rm = TRUE)
-            )
-            tmp <- data.frame(
-                x = stats::density(t, na.rm = TRUE)$x,
-                y = stats::density(t, na.rm = TRUE)$y
-            )
-
-            ymaxY <- max(maxY, tmp$y)
-            xmaxY <- tmp$x[which(tmp$y == max(tmp$y))]
-            minX <- min(minX, tmp$x)
-            maxX <- max(maxX, 10 * (xmaxY - minX))
-
-
-            h1 <- h1 %>% 
-                hc_add_series(data = tmp, name = conditions[i])
-        }
-    }
-
-    h1 <- h1 %>%
-        hc_chart(
-            events = list(
-                load = JS(paste0("function(){
-                var chart = this;
-                this.xAxis[0].setExtremes(", minX, ",", maxX, ");
-                    this.showResetZoom();}"))
-            )
+      
+      idx <- which(conds == conditions[i])
+      
+      if (length(idx) > 1) {
+        t <- apply(
+          qData[, idx, drop = FALSE], 1,
+          function(x) {
+            m <- mean(x, na.rm = TRUE)
+            if (is.na(m) || m == 0) return(NA)
+            100 * stats::var(x, na.rm = TRUE) / m
+          }
         )
+        
+        t <- t[!is.na(t)]
+        
+        if (length(t) > 1) {
+          dens <- stats::density(t)
+          
+          minX <- min(minX, dens$x)
+          xmaxY <- dens$x[which.max(dens$y)]
+          maxX <- max(maxX, 10 * (xmaxY - minX))
+          
+          p <- p |>
+            plotly::add_trace(
+              x = dens$x,
+              y = dens$y,
+              type = "scatter",
+              mode = "lines",
+              name = conditions[i],
+              line = list(color = pal[i]),
+              hovertemplate = paste0(
+                "<b>", conditions[i], "</b>: %{y:.2f}<extra></extra>"
+              )
+            )
+        }
+      }
+    }
+    
+    if (!is.finite(minX) || !is.finite(maxX)) {
+      minX <- NULL
+      maxX <- NULL
+    }
+    
+    p <- p |>
+      plotly::layout(
+        xaxis = list(
+          title = "CV(log(Intensity))",
+          range = if (!is.null(minX)) c(minX, maxX) else NULL, 
+          zeroline = FALSE
+        ),
+        yaxis = list(title = "Density"),
+        legend = list(
+          orientation = "h",
+          x = 0,
+          y = -0.15,
+          xanchor = "left",
+          yanchor = "top"
+        )
+      )
 
-    return(h1)
+    return(p)
 }

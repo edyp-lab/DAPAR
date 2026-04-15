@@ -51,11 +51,11 @@ wrapper.compareNormalizationD_HC <- function(objBefore,
 
 
 #' @title Builds a plot from a dataframe. Same as compareNormalizationD but
-#' uses the library \code{highcharter}
+#' uses the library \code{plotly}
 #' 
 #' @description 
 #' Plot to compare the quantitative proteomics data before and after
-#' normalization using the package \code{highcharter}
+#' normalization using the package \code{plotly}
 #'
 #'
 #' @param qDataBefore A dataframe that contains quantitative data before
@@ -105,7 +105,7 @@ wrapper.compareNormalizationD_HC <- function(objBefore,
 #' subset.view = seq_len(n),
 #' conds = conds)
 #'
-#' @import highcharter
+#' @import plotly
 #' @importFrom utils str
 #'
 #' @export
@@ -121,101 +121,107 @@ compareNormalizationD_HC <- function(qDataBefore,
     
     pkgs.require('RColorBrewer')
     
-    if (is.null(conds)) {
-        warning("'conds' is null.")
-        return(NULL)
-    }
-    if ( n <0 || n >1){
-        warning("'n' must be in the range [0, 1]. Set to 0.2")
-        n <- 0.2
-    }
-
-    if (is.null(keyId)) {
-        keyId <- seq_len(length(qDataBefore))
-    }
-
-    if (!is.null(subset.view) && length(subset.view) > 0) {
-        keyId <- keyId[subset.view]
-        if (nrow(qDataBefore) > 1) {
-            if (length(subset.view) == 1) {
-                qDataBefore <- t(qDataBefore[subset.view, ])
-                qDataAfter <- t(qDataAfter[subset.view, ])
-            } else {
-                qDataBefore <- qDataBefore[subset.view, ]
-                qDataAfter <- qDataAfter[subset.view, ]
-            }
-            n <- 1
-        }
-    }
-
-    if (!match(type, c("scatter", "line"))) {
-        warning("'type' must be equal to 'scatter' or 'line'.")
-        return(NULL)
-    }
-
-    # if (is.null(n)) {
-    #     n <- seq_len(nrow(qDataBefore))
-    # } else {
-        # if (n > nrow(qDataBefore)) {
-        #     warning("'n' is higher than the number of rows of datasets. 
-        #     Set to number of rows.")
-        #     n <- nrow(qDataBefore)
-        # }
-    # Truncate dataset
-    ind <- sample(seq_len(nrow(qDataBefore)), n*nrow(qDataBefore))
-    keyId <- keyId[ind]
+  if (is.null(conds)) {
+    warning("'conds' is null.")
+    return(NULL)
+  }
+  if (n < 0 || n > nrow(qDataBefore)){
+    warning("'n' must be a positive integer not null and less than the total number
+      of entities. Set to default value: 0.2")
+    n <- ceiling(0.2 * nrow(qDataBefore))
+  }
+  
+  if (is.null(keyId)) {
+    keyId <- seq_len(length(qDataBefore))
+  }
+  
+  if (!is.null(subset.view) && length(subset.view) > 0) {
+    keyId <- keyId[subset.view]
     if (nrow(qDataBefore) > 1) {
-        if (length(ind) == 1) {
-            qDataBefore <- t(qDataBefore[ind, ])
-            qDataAfter <- t(qDataAfter[ind, ])
-        } else {
-            qDataBefore <- qDataBefore[ind, ]
-            qDataAfter <- qDataAfter[ind, ]
-        }
+      if (length(subset.view) == 1) {
+        qDataBefore <- t(qDataBefore[subset.view, ])
+        qDataAfter <- t(qDataAfter[subset.view, ])
+      } else {
+        qDataBefore <- qDataBefore[subset.view, ]
+        qDataAfter <- qDataAfter[subset.view, ]
+      }
+      n <- 100
     }
-    #}
-
-    myColors <- NULL
-    if (is.null(pal)) {
-        warning("Color palette set to default.")
-        myColors <- GetColorsForConditions(conds, 
-            ExtendPalette(length(unique(conds))))
+  } else {
+    subset.view <- seq_len(n)
+  }
+  
+  if (!match(type, c("scatter", "line"))) {
+    warning("'type' must be equal to 'scatter' or 'line'.")
+    return(NULL)
+  }
+  
+  # Truncate dataset
+  ind <- sample(seq_len(nrow(qDataBefore)), min(n, length(subset.view)))
+  keyId <- keyId[ind]
+  if (nrow(qDataBefore) > 1) {
+    if (length(ind) == 1) {
+      qDataBefore <- t(qDataBefore[ind, ])
+      qDataAfter <- t(qDataAfter[ind, ])
     } else {
-        if (length(pal) != length(unique(conds))) {
-            warning("The color palette has not the same dimension as 
-                the number of samples")
-            myColors <- GetColorsForConditions(conds, 
-                ExtendPalette(length(unique(conds))))
-        } else {
-            myColors <- GetColorsForConditions(conds, pal)
-        }
+      qDataBefore <- qDataBefore[ind, ]
+      qDataAfter <- qDataAfter[ind, ]
     }
-
-    x <- qDataBefore
-    y <- qDataAfter / qDataBefore
-
-    ## Colors definition
-    legendColor <- unique(myColors)
-    txtLegend <- unique(conds)
-
-
-    series <- list()
-    for (i in seq_len(length(conds))) {
-        series[[i]] <- list(
-            name = colnames(x)[i],
-            data = list_parse(data.frame(
-                x = x[, i],
-                y = y[, i],
-                name = keyId
-            ))
-        )
-    }
-
-    h1 <- highchart() %>%
-        dapar_hc_chart(chartType = type) %>%
-        hc_add_series_list(series) %>%
-        hc_colors(myColors) %>%
-        hc_tooltip(headerFormat = "", pointFormat = "Id: {point.name}") %>%
-        dapar_hc_ExportMenu(filename = "compareNormalization")
-    h1
+  }
+  
+  myColors <- NULL
+  if (is.null(pal)) {
+    warning("Color palette set to default.")
+    myColors <- GetColorsForConditions(conds, 
+                                       ExtendPalette(length(unique(conds))))
+  } else if (length(pal) != length(unique(conds))) {
+    warning("The color palette has not the same dimension as 
+              the number of samples")
+    myColors <- GetColorsForConditions(conds, 
+                                       ExtendPalette(length(unique(conds))))
+  } else {
+    myColors <- GetColorsForConditions(conds, pal)
+  }
+  
+  x <- qDataBefore
+  y <- qDataAfter / qDataBefore
+  
+  ## Colors definition
+  legendColor <- unique(myColors)
+  txtLegend <- unique(conds)
+  
+  shapes <- c(
+    "circle", "square", "diamond",
+    "triangle-up", "triangle-down",
+    "cross", "x"
+  )
+  
+  p <- plot_ly()
+  
+  for (i in seq_along(conds)) {
+    p <- p |> add_markers(
+      x = x[, i],
+      y = y[, i],
+      name = colnames(x)[i],
+      text = paste0("Id: ", keyId),
+      hoverinfo = "text",
+      marker = list(
+        color = myColors[i],
+        symbol = shapes[(i - 1) %% length(shapes) + 1],
+        size = 8
+      )
+    )
+  }
+  
+  p <- p |> layout(
+    legend = list(
+      orientation = "h", 
+      x = 0, 
+      y = -0.15, 
+      xanchor = "left",
+      yanchor = "top"
+    )
+  )
+  
+  p
 }

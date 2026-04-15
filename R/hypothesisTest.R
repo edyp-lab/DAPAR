@@ -14,7 +14,7 @@
 #'
 #' @param pal xxx
 #'
-#' @return A highcharts density plot
+#' @return A plotly density plot
 #'
 #' @author Samuel Wieczorek
 #'
@@ -33,7 +33,7 @@
 #'
 #' @export
 #' 
-#' @import highcharter
+#' @import plotly
 #'
 hc_logFC_DensityPlot <- function(df_logFC,
                                  threshold_LogFC = 0,
@@ -41,194 +41,123 @@ hc_logFC_DensityPlot <- function(df_logFC,
     
     pkgs.require(c("stats", "RColorBrewer", "grDevices"))
     
-    if (threshold_LogFC < 0) {
-        warning("The parameter 'threshold_LogFC' must be positive or equal 
-            to zero.")
-        return(NULL)
-    }
-
-
-    hc <- highcharter::highchart() %>%
-        hc_title(text = "log(FC) repartition") %>%
-        my_hc_chart(chartType = "spline", zoomType = "x") %>%
-        hc_legend(enabled = TRUE) %>%
-        hc_xAxis(
-            title = list(text = "log(FC)"),
-            plotBands = list(
-                list(
-                    from = -threshold_LogFC, 
-                    to = threshold_LogFC, 
-                    color = "lightgrey")
-                ),
-            plotLines = list(
-                list(
-                    color = "grey", 
-                    width = 2, 
-                    value = 0, 
-                    zIndex = 5
-                    )
-                )
-        ) %>%
-        hc_yAxis(title = list(text = "Density")) %>%
-        hc_tooltip(
-            headerFormat = "",
-            pointFormat = "<b> {series.name} </b>: {point.y} ",
-            valueDecimals = 2
-        ) %>%
-        my_hc_ExportMenu(filename = "densityplot") %>%
-        hc_plotOptions(
-            series = list(
-                animation = list(duration = 100),
-                connectNulls = TRUE,
-                marker = list(enabled = FALSE)
-            )
-        )
-
-    if (is.null(df_logFC) || ncol(df_logFC) == 0) {
-        return(hc)
-    }
-
-    myColors <- NULL
-    if (is.null(pal)) {
-        warning("Color palette set to default.")
-        myColors <- ExtendPalette(ncol(df_logFC), "Paired")
-    } else {
-        if (length(pal) != ncol(df_logFC)) {
-            warning("The color palette has not the same dimension as the 
-                number of samples")
-            myColors <- ExtendPalette(pal, "Paired")
-        }
-        myColors <- pal
-    }
-
-    nValues <- nrow(df_logFC) * ncol(df_logFC)
-    nInf <- length(which(df_logFC <= -threshold_LogFC))
-    nSup <- length(which(df_logFC >= threshold_LogFC))
-    nInside <- length(which(abs(df_logFC) < threshold_LogFC))
-    hc <- hc %>%
-        hc_colors(myColors)
-
-    maxY.inf <- NULL
-    maxY.inside <- NULL
-    maxY.sup <- NULL
-    minX <- NULL
-    maxX <- NULL
-
-
-    for (i in seq_len(ncol(df_logFC))) {
-        tmp <- stats::density(df_logFC[, i])
-        ind <- tmp$y[which(tmp$x <= -threshold_LogFC)]
-        maxY.inf <- max(maxY.inf, ifelse(length(ind) == 0, 0, ind))
-        .ind1 <- which(tmp$x > -threshold_LogFC)
-        .ind2 <- which(tmp$x < threshold_LogFC)
-        maxY.inside <- max(maxY.inf, tmp$y[intersect(.ind1, .ind2)])
-        ind <- tmp$y[which(tmp$x > threshold_LogFC)]
-        maxY.sup <- max(
-            maxY.sup, 
-            ifelse(length(ind) == 0, tmp$y[length(tmp$y)], ind)
-            )
-        minX <- min(minX, tmp$x)
-        maxX <- max(maxX, tmp$x)
-
-
-        hc <- hc_add_series(hc,
-            data.frame(x = tmp$x, y = tmp$y),
-            name = colnames(df_logFC)[i]
-        )
-    }
-
-    ## add annotations
-    if (threshold_LogFC > 0) {
-        hc <- hc %>% hc_add_annotation(
-            labelOptions = list(
-                shape = "connector",
-                backgroundColor = "lightgrey",
-                # verticalAlign = 'bottom',
-                align = "left",
-                # distance=0,
-                style = list(
-                    fontSize = "1.5em",
-                    textOutline = "1px white"
-                ),
-                borderWidth = 0,
-                x = 20
-            ),
-            labels = list(
-                list(
-                    point = list(
-                        xAxis = 0,
-                        yAxis = 0,
-                        x = 0,
-                        y = maxY.inside
-                    ),
-                    text = paste0("n Filtered out = ", 
-                        nInside, "<br>(", 
-                        round(100 * nInside / nValues, digits = 2), "%)")
-                )
-            )
-        )
-    }
-    if (threshold_LogFC >= minX) {
-        hc <- hc %>%
-            hc_add_annotation(
-                labelOptions = list(
-                    shape = "connector",
-                    backgroundColor = "rgba(255,255,255,0.5)",
-                    verticalAlign = "top",
-                    borderWidth = 0,
-                    crop = TRUE,
-                    style = list(
-                        color = "blue",
-                        fontSize = "1.5em",
-                        textOutline = "1px white"
-                    ),
-                    y = -10
-                ),
-                labels = list(
-                    list(
-                        point = list(
-                            xAxis = 0,
-                            yAxis = 0,
-                            x = mean(c(minX, -threshold_LogFC)),
-                            y = maxY.inf
-                        ),
-                        text = paste0("nInf = ", nInf, "<br>(", 
-                            round(100 * nInf / nValues, digits = 2), ")%")
-                    )
-                )
-            )
-    }
-
-    if (threshold_LogFC <= maxX) {
-        hc <- hc %>% hc_add_annotation(
-            labelOptions = list(
-                shape = "connector",
-                backgroundColor = "blue",
-                verticalAlign = "top",
-                borderWidth = 0,
-                style = list(
-                    color = "blue",
-                    fontSize = "1.5em",
-                    textOutline = "1px white"
-                ),
-                y = -5
-            ),
-            labels = list(
-                list(
-                    point = list(
-                        xAxis = 0,
-                        yAxis = 0,
-                        x = mean(c(maxX, threshold_LogFC)),
-                        y = maxY.sup
-                    ),
-                    text = paste0("nSup = ", nSup, "<br>(", 
-                        round(100 * nSup / nValues, digits = 2), ")%")
-                )
-            )
-        )
-    }
-
-
-
-    return(hc)
+  if (threshold_LogFC < 0) {
+    warning("The parameter 'threshold_LogFC' must be positive or equal to zero.")
+    return(NULL)
+  }
+  
+  if (is.null(df_logFC) || ncol(df_logFC) == 0) {
+    return(NULL)
+  }
+  
+  if (is.null(pal)) {
+    warning("Color palette set to default.")
+    pal <- ExtendPalette(ncol(df_logFC), "Paired")
+  } else if (length(pal) != ncol(df_logFC)) {
+    warning("The color palette has not the same dimension as the 
+              number of samples")
+    pal <- ExtendPalette(ncol(df_logFC), "Paired")
+  }
+  
+  nValues <- nrow(df_logFC) * ncol(df_logFC)
+  nInf <- sum(df_logFC <= -threshold_LogFC)
+  nSup <- sum(df_logFC >=  threshold_LogFC)
+  nInside <- sum(abs(df_logFC) < threshold_LogFC)
+  
+  
+  p <- plot_ly()
+  
+  maxY.inf <- 0
+  maxY.inside <- 0
+  maxY.sup <- 0
+  minX <- Inf
+  maxX <- -Inf
+  
+  
+  for (i in seq_len(ncol(df_logFC))) {
+    
+    tmp <- stats::density(df_logFC[, i], na.rm = TRUE)
+    
+    minX <- min(minX, tmp$x)
+    maxX <- max(maxX, tmp$x)
+    
+    maxY.inf <- max(maxY.inf, max(tmp$y[tmp$x <= -threshold_LogFC], 0))
+    maxY.inside <- max(maxY.inside, max(tmp$y[tmp$x > -threshold_LogFC & tmp$x < threshold_LogFC], 0))
+    maxY.sup <- max(maxY.sup, max(tmp$y[tmp$x >=  threshold_LogFC], 0))
+    
+    p <- p |> add_lines(
+      x = tmp$x,
+      y = tmp$y,
+      name = colnames(df_logFC)[i],
+      line = list(color = pal[i]),
+      hovertemplate = paste0("<b>", colnames(df_logFC)[i], "</b><br>",
+                             "y: %{y:.2f}<extra></extra>"),
+      showlegend = TRUE
+    )
+  }
+  
+  p <- p |> plotly::layout(
+    title = "log(FC) repartition",
+    margin = list(t = 60, b = 60),
+    xaxis = list(title = "log(FC)"),
+    yaxis = list(title = "Density"),
+    legend = list(
+      orientation = "h", 
+      x = 0, 
+      y = -0.15, 
+      xanchor = "left",
+      yanchor = "top"
+    ),
+    shapes = list(
+      list(
+        type = "rect",
+        x0 = -threshold_LogFC,
+        x1 = threshold_LogFC,
+        y0 = 0,
+        y1 = 1,
+        xref = "x",
+        yref = "paper",
+        fillcolor = "lightgrey",
+        opacity = 0.5,
+        line = list(width = 0)
+      )
+    )
+  )
+  
+  if (threshold_LogFC > 0) {
+    p <- p |> add_annotations(
+      x = 10,
+      y = maxY.inside-0.1,
+      text = sprintf("n Filtered out = %d<br>(%.2f%%)", nInside, 100*nInside/nValues),
+      showarrow = FALSE,
+      arrowhead = 2,
+      ax = 40,
+      ay = -40,
+      font = list(size = 18)
+    )
+  }
+  
+  if (threshold_LogFC >= minX) {
+    p <- p |> add_annotations(
+      x = mean(c(minX, -threshold_LogFC)),
+      y = maxY.inf+0.1,
+      text = sprintf("nInf = %d<br>(%.2f%%)", nInf, 100*nInf/nValues),
+      showarrow = FALSE,
+      font = list(color = "blue",
+                  size = 18)
+    )
+  }
+  
+  if (threshold_LogFC <= maxX) {
+    p <- p |> add_annotations(
+      x = mean(c(maxX, threshold_LogFC)),
+      y = maxY.sup+0.1,
+      text = sprintf("nSup = %d<br>(%.2f%%)", nSup, 100*nSup/nValues),
+      showarrow = FALSE,
+      font = list(color = "blue",
+                  size = 18)
+    )
+  }
+  
+  return(p)
 }

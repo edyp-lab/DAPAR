@@ -4,12 +4,10 @@
 \alias{plotJitter_rCharts}
 \title{Display a a jitter plot for CC}
 \usage{
-plotJitter_rCharts(df, clickFunction = NULL)
+plotJitter_rCharts(df)
 }
 \arguments{
 \item{df}{xxxx}
-
-\item{clickFunction}{xxxx}
 }
 \value{
 A plot

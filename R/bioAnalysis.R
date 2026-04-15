@@ -290,7 +290,7 @@ GOAnalysisSave <- function(obj,
 
 
 #' @title A barplot which shows the result of a GO classification, using the
-#' package \code{highcharter}
+#' package \code{plotly}
 #'
 #' @param ggo The result of the GO classification, provides either by the
 #' function \code{group_GO} in the package \code{DAPAR} or the function
@@ -326,34 +326,34 @@ barplotGroupGO_HC <- function(ggo, maxRes = 5, title = "") {
     dat <- ggo@result
     nRes <- min(maxRes, nrow(dat))
 
-    n <- which(dat[, "Count"] == 0)
-    if (length(n) > 0) {
-        dat <- dat[-which(dat[, "Count"] == 0), ]
-    }
+    dat <- dat[dat[, "Count"] != 0, ]
     dat <- dat[order(dat[, "Count"], decreasing = TRUE), ]
-    dat <- dat[seq(seq_len(nRes)), ]
+    dat <- dat[seq_len(min(nRes, nrow(dat))), ]
 
-
-    h1 <- highchart() %>%
-        my_hc_chart(chartType = "bar") %>%
-        hc_title(text = title) %>%
-        hc_add_series(dat[, "Count"]) %>%
-        hc_legend(enabled = FALSE) %>%
-        # hc_colors(myColors) %>%
-        hc_tooltip(enabled = FALSE) %>%
-        hc_xAxis(categories = dat[, "Description"], title = list(text = "")) %>%
-        my_hc_ExportMenu(filename = "GOGroup_barplot")
-
-
-    return(h1)
+    dat$Description <- factor(dat$Description, levels = rev(dat$Description))
+    
+    p <- plotly::plot_ly(
+      data = dat,
+      x = ~Count,
+      y = ~Description,
+      type = "bar",
+      orientation = "h"
+    ) |>
+      plotly::layout(
+        title = title,
+        xaxis = list(title = ""),
+        yaxis = list(title = ""),
+        showlegend = FALSE
+      )
+    
+    return(p)
 }
-
 
 
 #' A barplot of GO enrichment analysis
 #'
 #' @title A barplot that shows the result of a GO enrichment, using the
-#' package \code{highcharter}
+#' package \code{plotly}
 #'
 #' @param ego The result of the GO enrichment, provides either by the function
 #' \code{enrichGO} in the package \code{DAPAR} or the function \code{enrichGO}
@@ -394,12 +394,9 @@ barplotEnrichGO_HC <- function(ego, maxRes = 5, title = NULL) {
     dat <- ego@result
     nRes <- min(maxRes, nrow(dat))
 
-    n <- which(dat[, "Count"] == 0)
-    if (length(n) > 0) {
-        dat <- dat[-which(dat[, "Count"] == 0), ]
-    }
+    dat <- dat[dat$Count != 0, ]
     dat <- dat[order(dat[, "pvalue"], decreasing = FALSE), ]
-    dat <- dat[seq(seq_len(nRes)), ]
+    dat <- dat[seq_len(min(nRes, nrow(dat))), ]
 
 
     colfunc <- grDevices::colorRampPalette(c("red", "royalblue"))
@@ -411,52 +408,39 @@ barplotEnrichGO_HC <- function(ego, maxRes = 5, title = NULL) {
     myColorsIndex <- unlist(lapply(t, function(x) {
         dplyr::last(which(x > base))
     }))
-    myColorsIndex[which(is.na(myColorsIndex))] <- 1
+    myColorsIndex[is.na(myColorsIndex)] <- 1
     myColors <- pal[myColorsIndex]
 
-    dat[, "pvalue"] <- format(dat[, "pvalue"], digits = 2)
-
-    df <- data.frame(
-        y = dat[, "Count"],
-        pvalue = format(dat$pvalue, digits = 2),
-        name = dat[, "Description"]
+    hover_text <- paste0(
+      "<b>Description:</b> ", dat$Description, "<br>",
+      "<b>Count:</b> ", dat$Count, "<br>",
+      "<b>pvalue:</b> ", format(dat$pvalue, digits = 2)
     )
-
-    txt_tooltip <- paste("<b> pvalue </b>: {point.pvalue} <br> ",
-        "<b> Count </b>: {point.y} <br> ",
-        sep = ""
-    )
-
-
-    h1 <- highchart() %>%
-        hc_title(title = title) %>%
-        hc_yAxis(title = list(text = "Count")) %>%
-        hc_xAxis(categories = dat[, "Description"]) %>%
-        hc_add_series(
-            data = df, type = "bar",
-            dataLabels = list(enabled = FALSE),
-            colorByPoint = TRUE
-        ) %>%
-        hc_colors(myColors) %>%
-        hc_tooltip(
-            headerFormat = "",
-            pointFormat = txt_tooltip
-        ) %>%
-        my_hc_ExportMenu(filename = "GOEnrich_barplot") %>%
-        hc_legend(enabled = FALSE) %>%
-        hc_plotOptions(bar = list(
-            pointWidth = 60,
-            dataLabels = list(enabled = TRUE)
-        ))
-
-    return(h1)
+    
+    p <- plotly::plot_ly(
+      data = dat,
+      x = ~reorder(Description, Count),
+      y = ~Count,
+      type = "bar",
+      marker = list(color = myColors),
+      text = hover_text,
+      hoverinfo = "text"
+    ) |>
+      layout(
+        title = title,
+        xaxis = list(title = ""),
+        yaxis = list(title = "Count")
+      ) |>
+      plotly::config(displayModeBar = TRUE)
+    
+    return(p)
 }
 
 
 #' A scatter plot of GO enrichment analysis
 #'
 #' @title A dotplot that shows the result of a GO enrichment, using the
-#' package \code{highcharter}
+#' package \code{plotly}
 #'
 #' @param ego The result of the GO enrichment, provides either by the function
 #' enrichGO in \code{DAPAR} or the function \code{enrichGO} of the packaage
@@ -488,77 +472,75 @@ barplotEnrichGO_HC <- function(ego, maxRes = 5, title = NULL) {
 #' scatterplotEnrichGO_HC(ego)
 
 scatterplotEnrichGO_HC <- function(ego, maxRes = 10, title = NULL) {
-    
-    
-    if (is.null(ego))
-        return(NULL)
-    
-    pkgs.require('grDevices')
-    
-    dat <- ego@result
-    nRes <- min(maxRes, nrow(dat))
-    dat$GeneRatio <- unlist(lapply(dat$GeneRatio, 
-        function(x) {
-            .str <- unlist(strsplit(x, "/"))
-        as.numeric(.str[1]) / as.numeric(.str[2])
-    }))
-
-
-    n <- which(dat$GeneRatio == 0)
-    if (length(n) > 0) {
-        dat <- dat[-which(dat$GeneRatio == 0), ]
+  
+  if (is.null(ego))
+    return(NULL)
+  
+  pkgs.require('grDevices')
+  
+  dat <- ego@result
+  nRes <- min(maxRes, nrow(dat))
+  
+  dat$GeneRatio <- vapply(dat$GeneRatio, function(x) {
+    parts <- strsplit(x, "/")[[1]]
+    as.numeric(parts[1]) / as.numeric(parts[2])
+  }, numeric(1))
+  
+  dat <- dat[dat$GeneRatio != 0, ]
+  
+  dat <- dat[order(dat$GeneRatio, decreasing = TRUE), ]
+  dat <- dat[seq_len(min(nRes, nrow(dat))), ]
+  
+  colfunc <- grDevices::colorRampPalette(c("red", "royalblue"))
+  nbColors <- 5
+  pal <- colfunc(nbColors)
+  
+  t <- log(dat$p.adjust)
+  d <- (max(t) - min(t)) / nbColors
+  base <- seq(min(t), max(t), by = d)
+  
+  myColorsIndex <- vapply(t, function(x) {
+    if (x == min(t)) {
+      1
+    } else {
+      which(x > base)[length(which(x > base))]
     }
-    dat <- dat[order(dat$GeneRatio, decreasing = TRUE), ]
-    dat <- dat[seq(seq_len(nRes)), ]
-
-
-    colfunc <- grDevices::colorRampPalette(c("red", "royalblue"))
-    nbColors <- 5
-
-    pal <- colfunc(nbColors)
-    t <- log(dat$p.adjust)
-    d <- (max(t) - min(t)) / nbColors
-    base <- seq(from = min(t), to = max(t), by = d)
-    tmpList <- lapply(t, function(x) {
-        if (x == min(t)) {
-            ind <- 1
-        } else {
-            ind <- which(x > base)[length(which(x > base))]
-        }
-    })
-
-    myColorsIndex <- unlist(tmpList)
-
-    df <- data.frame(
-        x = seq.int(from = 0, to = (nRes - 1)),
-        y = dat$GeneRatio,
-        z = dat$Count,
-        color = pal[myColorsIndex],
-        colorSegment = pal[myColorsIndex],
-        pAdjust = format(dat$p.adjust, digits = 2),
-        name = dat[, "Description"]
+  }, numeric(1))
+  
+  colors <- pal[myColorsIndex]
+  
+  df <- data.frame(
+    name = dat$Description,
+    GeneRatio = dat$GeneRatio,
+    Count = dat$Count,
+    pAdjust = dat$p.adjust,
+    color = colors,
+    stringsAsFactors = FALSE
+  )
+  
+  p <- plotly::plot_ly(
+    data = df,
+    x = ~name,
+    y = ~GeneRatio,
+    type = "scatter",
+    mode = "markers",
+    marker = list(
+      color = ~color,
+      size = ~Count * 2,
+      opacity = 0.8
+    ),
+    text = ~paste0(
+      "<b>", name, "</b><br>",
+      "p.adjust: ", format(pAdjust, digits = 2), "<br>",
+      "Count: ", Count
+    ),
+    hoverinfo = "text"
+  ) |>
+    plotly::layout(
+      title = title,
+      xaxis = list(title = ""),
+      yaxis = list(title = "Gene Ratio")
     )
-
-
-    txt_tooltip <- paste("<b> p.adjust </b>: {point.pAdjust} <br> ",
-        "<b> Count </b>: {point.z} <br> ",
-        sep = ""
-    )
-
-    h1 <- highchart() %>%
-        hc_title(title = title) %>%
-        my_hc_chart(chartType = "bubble") %>%
-        hc_add_series(df) %>%
-        hc_legend(enabled = FALSE) %>%
-        hc_xAxis(type = "category", categories = df$name) %>%
-        hc_yAxis(title = list(text = "Gene Ratio")) %>%
-        hc_tooltip(
-            headerFormat = "",
-            pointFormat = txt_tooltip
-        ) %>%
-        my_hc_ExportMenu(filename = "GOEnrich_dotplot")
-
-
-
-    return(h1)
+  
+  return(p)
 }

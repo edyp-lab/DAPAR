@@ -3,7 +3,7 @@
 \name{barplotGroupGO_HC}
 \alias{barplotGroupGO_HC}
 \title{A barplot which shows the result of a GO classification, using the
-package \code{highcharter}}
+package \code{plotly}}
 \usage{
 barplotGroupGO_HC(ggo, maxRes = 5, title = "")
 }
@@ -22,7 +22,7 @@ A barplot
 }
 \description{
 A barplot which shows the result of a GO classification, using the
-package \code{highcharter}
+package \code{plotly}
 }
 \examples{
 data(Exp1_R25_prot, package="DAPARdata")

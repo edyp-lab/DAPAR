@@ -24,10 +24,10 @@ with the paramter 'type'.
 \examples{
 data(Exp1_R25_pept, package="DAPARdata")
 obj <- Exp1_R25_pept[seq_len(10), ]
-metadata <- GetMetacell(obj)
-m <- match.metacell(metadata, pattern = "Missing", level = "peptide")
-m <- match.metacell(metadata, pattern = NULL, level = "peptide")
-m <- match.metacell(metadata, pattern = c('Missing', 'Missing POV'), level = "peptide")
+.meta <- GetMetacell(obj)
+m <- match.metacell(.meta, pattern = "Missing", level = "peptide")
+m <- match.metacell(.meta, pattern = NULL, level = "peptide")
+m <- match.metacell(.meta, pattern = c('Missing', 'Missing POV'), level = "peptide")
 }
 \author{
 Samuel Wieczorek

@@ -3,7 +3,7 @@
 \name{scatterplotEnrichGO_HC}
 \alias{scatterplotEnrichGO_HC}
 \title{A dotplot that shows the result of a GO enrichment, using the
-package \code{highcharter}}
+package \code{plotly}}
 \usage{
 scatterplotEnrichGO_HC(ego, maxRes = 10, title = NULL)
 }

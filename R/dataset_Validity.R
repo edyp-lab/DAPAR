@@ -4,6 +4,7 @@
 #' @title xxx
 #' @description xxx
 #' @param obj xxx
+#' @return xxx
 #' @export
 Check_Dataset_Validity <- function(obj){
   if (is.null(obj))
@@ -22,6 +23,7 @@ Check_Dataset_Validity <- function(obj){
 #' @title xxx
 #' @description xxx
 #' @param qdata xxx
+#' @return xxx
 #' @export
 Check_NbValues_In_Columns <- function(qdata){
   

@@ -9,7 +9,6 @@ diffAnaVolcanoplot_rCharts(
   threshold_pVal = 1e-60,
   threshold_logFC = 0,
   conditions = NULL,
-  clickFunction = NULL,
   pal = NULL
 )
 }
@@ -32,10 +31,6 @@ Fold Change that separates differential and non-differential data.}
 \item{conditions}{A list of the names of condition 1 and 2 used for the
 differential analysis.}
 
-\item{clickFunction}{A string that contains a JavaScript function used to
-show info from slots in df. The variable this.index refers to the slot
-named index and allows to retrieve the right row to show in the tooltip.}
-
 \item{pal}{xxx}
 }
 \value{
@@ -47,12 +42,12 @@ Typically, the log of Fold Change is represented on the X-axis and the
 log10 of the p-value is drawn on the Y-axis. When the \code{threshold_pVal}
 and the \code{threshold_logFC} are set, two lines are drawn respectively on
 the y-axis and the X-axis to visually distinguish between differential and
-non differential data. With the use of the package Highcharter, a
+non differential data. With the use of the package Plotly, a
 customizable tooltip appears when the user put the mouse's pointer over
 a point of the scatter plot.
 }
 \examples{
-library(highcharter)
+library(plotly)
 data(Exp1_R25_prot, package="DAPARdata")
 obj <- Exp1_R25_prot[seq_len(100)]
 level <- 'protein'
@@ -75,11 +70,8 @@ if (ncol(df) > 3) {
         paste("tooltip_", colnames(df)[seq.int(from = 4, to = ncol(df))],
          sep = "")
 }
-hc_clickFunction <- JS("function(event) {
-Shiny.onInputChange('eventPointClicked',
-[this.index]+'_'+ [this.series.name]);}")
 cond <- c("25fmol", "10fmol")
-diffAnaVolcanoplot_rCharts(df, 2.5, 1, cond, hc_clickFunction)
+diffAnaVolcanoplot_rCharts(df, 2.5, 1, cond)
 
 }
 \author{

@@ -185,7 +185,7 @@ plotPCA_Eigen <- function(res.pca) {
 
 
 
-#' @title Plots the eigen values of PCA with the highcharts library
+#' @title Plots the eigen values of PCA with the plotly library
 #'
 #' @param res.pca xxx
 #'
@@ -198,7 +198,7 @@ plotPCA_Eigen <- function(res.pca) {
 #' res.pca <- wrapper.pca(Exp1_R25_pept, ncp = 6)
 #' plotPCA_Eigen_hc(res.pca)
 #'
-#' @import highcharter
+#' @import plotly
 #'
 #' @export
 #'
@@ -206,36 +206,41 @@ plotPCA_Eigen_hc <- function(res.pca) {
     if (is.null(res.pca)) {
         return(NULL)
     }
-    hc <- highchart() %>%
-        hc_yAxis_multiples(
-            list(
-                title = list(text = "% of variances"), 
-                lineWidth = 0, 
-                labels = list(format = "{value}%"), max = 100),
-            list(
-                title = list(text = "Cumulative % of variances"), 
-                opposite = FALSE, 
-                max = 100),
-            list(title = list(text = "Eigen values"), 
-                opposite = TRUE, 
-                labels = list(format = "{value}%")
-                )
-        ) %>%
-        hc_xAxis(
-            title = "Principal Components", 
-            categories = rownames(res.pca$eig)) %>%
-        hc_add_series(
-            data.frame(y = res.pca$eig[, 2]), 
-            type = "column", 
-            name = "% of variances", 
-            yAxis = 0) %>%
-        hc_add_series(
-            data.frame(y = res.pca$eig[, 3]), 
-            type = "line", 
-            color = "darkblue", 
-            name = "Cumulative % of variances", 
-            marker = "diamond", 
-            color = "#FF7900", 
-            yAxis = 0) %>%
-        hc_legend(enabled = TRUE)
+  eig <- res.pca$eig
+  pcs <- rownames(eig)
+  
+  var_pct <- eig[, 2]
+  cum_var <- eig[, 3]
+  eigenvalues <- eig[, 1]
+  
+  plotly::plot_ly() |>
+    plotly::add_trace(
+      x = pcs,
+      y = var_pct,
+      type = "bar",
+      name = "% of variances",
+      yaxis = "y1"
+    ) |>
+    plotly::add_trace(
+      x = pcs,
+      y = cum_var,
+      type = "scatter",
+      mode = "lines+markers",
+      name = "Cumulative % of variances",
+      line = list(color = "#FF7900"),
+      marker = list(symbol = "diamond"),
+      yaxis = "y1"
+    ) |>
+    plotly::layout(
+      xaxis = list(title = "Principal Components"),
+      yaxis = list(
+        title = "% of variances",
+        range = c(0, 100),
+        ticksuffix = "%"),
+      yaxis2 = list(
+        title = "Eigen values",
+        overlaying = "y",
+        side = "right"),
+      legend = list(orientation = "h")
+    )
 }

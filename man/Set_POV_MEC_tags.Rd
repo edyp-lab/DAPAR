@@ -4,12 +4,12 @@
 \alias{Set_POV_MEC_tags}
 \title{Sets the MEC tag in the metacell}
 \usage{
-Set_POV_MEC_tags(conds, df, level)
+Set_POV_MEC_tags(qmeta, conds, level)
 }
 \arguments{
-\item{conds}{xxx}
+\item{qmeta}{An object of class \code{MSnSet}}
 
-\item{df}{An object of class \code{MSnSet}}
+\item{conds}{xxx}
 
 \item{level}{Type of entity/pipeline}
 }
@@ -28,8 +28,9 @@ cols.for.ident <- c("metacell_Intensity_C_R1", "metacell_Intensity_C_R2",
 "metacell_Intensity_C_R3", "metacell_Intensity_D_R1",
 "metacell_Intensity_D_R2", "metacell_Intensity_D_R3")
 conds <- Biobase::pData(obj)$Condition
-df <- Biobase::fData(obj)[, cols.for.ident]
-df <- Set_POV_MEC_tags(conds, df, level = "peptide")
+qmeta <- Biobase::fData(obj)[, cols.for.ident]
+level <- GetTypeofData(obj)
+df <- Set_POV_MEC_tags(qmeta, conds, level)
 
 }
 \author{

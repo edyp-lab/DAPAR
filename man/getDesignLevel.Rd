@@ -9,6 +9,9 @@ getDesignLevel(sTab)
 \arguments{
 \item{sTab}{xxx}
 }
+\value{
+xxx
+}
 \description{
 xxx
 }

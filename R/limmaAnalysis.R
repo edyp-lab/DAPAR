@@ -439,6 +439,8 @@ make.design.3 <- function(sTab) {
 #' 
 #' @param sTab xxx
 #' 
+#' @return xxx
+#' 
 #' @examples
 #' data(Exp1_R25_pept, package="DAPARdata")
 #' sTab <- Biobase::pData(Exp1_R25_pept)

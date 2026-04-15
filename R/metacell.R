@@ -167,6 +167,7 @@ metacell.def <- function(level) {
 
 #' @title Number of each metacell tags
 #' @param obj A instance of the class 'MSnset'
+#' @return xxx
 #' @examples
 #' NULL
 #' @export
@@ -187,12 +188,13 @@ GetNbTags <- function(obj){
 #' @param level xxx
 #' @param node xxx
 #' 
-#' #' @examples 
+#' @examples 
 #' Parent('protein', 'Missing')
 #' Parent('protein', 'Missing POV')
 #' Parent('protein', c('Missing POV', 'Missing MEC'))
 #' Parent('protein', c('Missing', 'Missing POV', 'Missing MEC'))
 #' 
+#' @return xxx
 #' 
 #' @export
 Parent <- function(level, node=NULL){
@@ -215,7 +217,7 @@ Parent <- function(level, node=NULL){
 #' @description xxx
 #' @param level xxx
 #' @param parent xxx
-#' 
+#' @return xxx
 #' @examples 
 #' Children('protein', 'Missing')
 #' Children('protein', 'Missing POV')
@@ -238,6 +240,7 @@ Children <- function(level, parent = NULL){
 #' @title xxxx
 #' @description xxx
 #' @param obj xxx
+#' @return xxx
 #' @export
 GetUniqueTags <- function(obj){
     df <- Biobase::fData(obj)[, obj@experimentData@other$names_metacell]
@@ -348,7 +351,7 @@ GetMetacellTags <- function(level = NULL,
 #'
 #' @param conds xxx
 #'
-#' @param df An object of class \code{MSnSet}
+#' @param qmeta An object of class \code{MSnSet}
 #'
 #' @param level Type of entity/pipeline
 #'
@@ -369,14 +372,14 @@ GetMetacellTags <- function(level = NULL,
 #' @export
 #'
 #'
-Set_POV_MEC_tags <- function(conds, df, level) {
+Set_POV_MEC_tags <- function(qmeta, conds, level) {
     u_conds <- unique(conds)
 
     for (i in seq_len(length(u_conds))) {
         ind.samples <- which(conds == u_conds[i])
 
-        ind.imputed <- match.metacell(df[, ind.samples], "Imputed", level)
-        ind.missing <- match.metacell(df[, ind.samples], "Missing", level)
+        ind.imputed <- match.metacell(qmeta[, ind.samples], "Imputed", level)
+        ind.missing <- match.metacell(qmeta[, ind.samples], "Missing", level)
         ind.missing.pov <- ind.missing & 
             rowSums(ind.missing) < length(ind.samples) & 
             rowSums(ind.missing) > 0
@@ -403,12 +406,12 @@ Set_POV_MEC_tags <- function(conds, df, level) {
 #' 
 #' @examples 
 #' GetSoftAvailables()
+#' 
+#' @return xxx
+#' 
 #' @export
 
 GetSoftAvailables <- function(){
-    
-    
-    library(DAPAR)
     
     funcs <- ls('package:DAPAR')
     funcs <- funcs[grep('Metacell_', funcs)]

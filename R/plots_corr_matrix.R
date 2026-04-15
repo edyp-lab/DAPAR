@@ -66,7 +66,7 @@ wrapper.corrMatrixD_HC <- function(obj, rate = 0.5, showValues = TRUE) {
 #' res <- cor(qData, use = "pairwise.complete.obs")
 #' corrMatrixD_HC(res, samplesData)
 #'
-#' @import highcharter
+#' @import plotly
 #'
 #' @export
 #'
@@ -88,60 +88,36 @@ corrMatrixD_HC <- function(object,
     }
     is.num <- vapply(df, is.numeric, FUN.VALUE = NA)
     df[is.num] <- lapply(df[is.num], round, 2)
-    dist <- NULL
-
-    x <- y <- names(df)
-
-    df <- tibble::as_tibble(cbind(x = y, df)) %>%
-        tidyr::gather(y, dist, -x) %>%
-        dplyr::mutate(
-            x = as.character(x),
-            y = as.character(y)
-        ) %>%
-        dplyr::left_join(
-            tibble::tibble(
-                x = y,
-                xid = seq(length(y)) - 1
-                ), 
-            by = "x") %>%
-        dplyr::left_join(
-            tibble::tibble(
-                y = y,
-                yid = seq(length(y)) - 1
-                ), 
-            by = "y")
-
-    ds <- df %>%
-        dplyr::select("xid", "yid", "dist") %>%
-        list_parse2()
-
-    fntltp <- JS("function(){
-    return this.series.xAxis.categories[this.point.x] + ' ~ ' +
-    this.series.yAxis.categories[this.point.y] + ': <b>' +
-    Highcharts.numberFormat(this.point.value, 2)+'</b>';
-        ; }")
-    cor_colr <- list(
+    mat <- as.matrix(df)
+    labels <- colnames(mat)
+    
+    text_mat <- if (showValues) {
+      matrix(sprintf("%.2f", mat), nrow = nrow(mat))
+    } else {
+      NULL
+    }
+    
+    plotly::plot_ly(
+      x = labels,
+      y = labels,
+      z = mat,
+      type = "heatmap",
+      colorscale = list(
         list(0, "#FF5733"),
         list(0.5, "#F8F5F5"),
         list(1, "#2E86C1")
-    )
-    highchart() %>%
-        my_hc_chart(chartType = "heatmap") %>%
-        hc_xAxis(categories = y, title = NULL) %>%
-        hc_yAxis(categories = y, title = NULL) %>%
-        hc_add_series(data = ds) %>%
-        hc_plotOptions(
-            series = list(
-                boderWidth = 0,
-                dataConditions = list(enabled = TRUE),
-                dataLabels = list(enabled = showValues)
-            )
-        ) %>%
-        hc_tooltip(formatter = fntltp) %>%
-        hc_legend(
-            align = "right", layout = "vertical",
-            verticalAlign = "middle"
-        ) %>%
-        hc_colorAxis(stops = cor_colr, min = rate, max = 1) %>%
-        my_hc_ExportMenu(filename = "corrMatrix")
+      ),
+      zmin = rate,
+      zmax = 1,
+      text = text_mat,
+      texttemplate = if (showValues) "%{text}" else NULL,
+      hovertemplate = paste(
+        "%{y} ~ %{x}: <b>%{z:.2f}</b><extra></extra>"
+      )
+    ) |>
+      plotly::layout(
+        xaxis = list(title = "", side = "top"),
+        yaxis = list(title = ""),
+        margin = list(l = 100, r = 100)
+      )
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plots_boxplot.R
 \name{boxPlotD_HC}
 \alias{boxPlotD_HC}
-\title{Builds a boxplot from a dataframe using the package \code{highcharter}}
+\title{Builds a boxplot from a dataframe using the package \code{plotly}}
 \usage{
 boxPlotD_HC(
   obj,
@@ -31,7 +31,7 @@ to the number of unique conditions in the dataset.}
 A boxplot
 }
 \description{
-Builds a boxplot from a dataframe using the package \code{highcharter}
+Builds a boxplot from a dataframe using the package \code{plotly}
 }
 \examples{
 data(Exp1_R25_prot, package="DAPARdata")

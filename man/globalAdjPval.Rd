@@ -4,7 +4,7 @@
 \alias{globalAdjPval}
 \title{Computes the adjusted p-values on all the stacked contrasts using CP4P}
 \usage{
-globalAdjPval(x, pval.threshold = 1.05, method = 1, display = T)
+globalAdjPval(x, pval.threshold = 1.05, method = 1, display = TRUE)
 }
 \arguments{
 \item{x}{a proteins x contrasts dataframe of (raw) p-values}

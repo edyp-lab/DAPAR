@@ -40,7 +40,7 @@
 #                                 conditions = cond,
 #                                 clickFunction=hc_clickFunction)
 #
-#     expect_is(t, "highchart")
+#     expect_is(t, "htmlwidget")
 #     expect_is(t$x, "list")
 #     expect_is(t$jsHooks, "list")
 #     #dev.off()

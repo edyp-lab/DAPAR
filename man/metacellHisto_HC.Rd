@@ -30,7 +30,7 @@ A histogram
 }
 \description{
 #' This method plots a histogram of missing values. Same as the function
-\code{mvHisto} but uses the package \code{highcharter}
+\code{mvHisto} but uses the package \code{plotly}
 }
 \examples{
 data(Exp1_R25_pept, package="DAPARdata")

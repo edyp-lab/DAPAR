@@ -9,6 +9,9 @@ GetNbTags(obj)
 \arguments{
 \item{obj}{A instance of the class 'MSnset'}
 }
+\value{
+xxx
+}
 \description{
 Number of each metacell tags
 }

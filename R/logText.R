@@ -17,8 +17,7 @@ getTextForNewDataset <- function(l.params) {
         return(NULL)
     }
 
-    txt <- tags$ul(as.character(tags$li(paste("Open dataset: ", 
-        l.params$filename))))
+    txt <- as.character(paste("Open dataset: ", l.params$filename))
     return(txt)
 }
 

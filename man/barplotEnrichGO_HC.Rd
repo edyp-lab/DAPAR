@@ -3,7 +3,7 @@
 \name{barplotEnrichGO_HC}
 \alias{barplotEnrichGO_HC}
 \title{A barplot that shows the result of a GO enrichment, using the
-package \code{highcharter}}
+package \code{plotly}}
 \usage{
 barplotEnrichGO_HC(ego, maxRes = 5, title = NULL)
 }

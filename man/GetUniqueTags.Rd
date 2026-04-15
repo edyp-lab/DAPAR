@@ -9,6 +9,9 @@ GetUniqueTags(obj)
 \arguments{
 \item{obj}{xxx}
 }
+\value{
+xxx
+}
 \description{
 xxx
 }
