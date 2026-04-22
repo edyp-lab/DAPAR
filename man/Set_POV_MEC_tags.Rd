@@ -28,9 +28,8 @@ cols.for.ident <- c("metacell_Intensity_C_R1", "metacell_Intensity_C_R2",
 "metacell_Intensity_C_R3", "metacell_Intensity_D_R1",
 "metacell_Intensity_D_R2", "metacell_Intensity_D_R3")
 conds <- Biobase::pData(obj)$Condition
-qmeta <- Biobase::fData(obj)[, cols.for.ident]
-level <- GetTypeofData(obj)
-df <- Set_POV_MEC_tags(qmeta, conds, level)
+df <- Biobase::fData(obj)[, cols.for.ident]
+df <- Set_POV_MEC_tags(df, conds, level = "peptide")
 
 }
 \author{

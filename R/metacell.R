@@ -367,7 +367,7 @@ GetMetacellTags <- function(level = NULL,
 #' "metacell_Intensity_D_R2", "metacell_Intensity_D_R3")
 #' conds <- Biobase::pData(obj)$Condition
 #' df <- Biobase::fData(obj)[, cols.for.ident]
-#' df <- Set_POV_MEC_tags(conds, df, level = "peptide")
+#' df <- Set_POV_MEC_tags(df, conds, level = "peptide")
 #'
 #' @export
 #'
@@ -375,9 +375,9 @@ GetMetacellTags <- function(level = NULL,
 Set_POV_MEC_tags <- function(qmeta, conds, level) {
     u_conds <- unique(conds)
 
-    for (i in seq_len(length(u_conds))) {
+    for (i in seq_along(u_conds)) {
         ind.samples <- which(conds == u_conds[i])
-
+        
         ind.imputed <- match.metacell(qmeta[, ind.samples], "Imputed", level)
         ind.missing <- match.metacell(qmeta[, ind.samples], "Missing", level)
         ind.missing.pov <- ind.missing & 
@@ -385,19 +385,19 @@ Set_POV_MEC_tags <- function(qmeta, conds, level) {
             rowSums(ind.missing) > 0
         ind.missing.mec <- ind.missing & 
             rowSums(ind.missing) == length(ind.samples)
-
+        
         ind.imputed.pov <- ind.imputed & 
             rowSums(ind.imputed) < length(ind.samples) & 
             rowSums(ind.imputed) > 0
         ind.imputed.mec <- ind.imputed & 
             rowSums(ind.imputed) == length(ind.samples)
-
-        df[, ind.samples][ind.imputed.mec] <- "Imputed MEC"
-        df[, ind.samples][ind.missing.mec] <- "Missing MEC"
-        df[, ind.samples][ind.imputed.pov] <- "Imputed POV"
-        df[, ind.samples][ind.missing.pov] <- "Missing POV"
+        
+        qmeta[, ind.samples][ind.imputed.mec] <- "Imputed MEC"
+        qmeta[, ind.samples][ind.missing.mec] <- "Missing MEC"
+        qmeta[, ind.samples][ind.imputed.pov] <- "Imputed POV"
+        qmeta[, ind.samples][ind.missing.pov] <- "Missing POV"
     }
-    return(df)
+    return(qmeta)
 }
 
 
@@ -567,7 +567,7 @@ Metacell_generic <- function(qdata, conds, level) {
     # Rule 1
     qdata[qdata == 0] <- NA
     df[is.na(qdata)] <- "Missing"
-    df <- Set_POV_MEC_tags(conds, df, level)
+    df <- Set_POV_MEC_tags(df, conds, level)
 
     colnames(df) <- paste0("metacell_", colnames(qdata))
     colnames(df) <- gsub(".", "_", colnames(df), fixed = TRUE)
@@ -705,7 +705,7 @@ Metacell_proline <- function(qdata, conds, df, level = NULL) {
 
     # Rule 1
     df[is.na(qdata)] <- "Missing"
-    df <- Set_POV_MEC_tags(conds, df, level)
+    df <- Set_POV_MEC_tags(df, conds, level)
 
     # Rule 2
     df[df > 0 & qdata > 0] <- "Quant. by direct id"
@@ -801,7 +801,7 @@ Metacell_maxquant <- function(qdata, conds, df, level = NULL) {
 
     # Add details for NA values
     df[is.na(qdata)] <- "Missing"
-    df <- Set_POV_MEC_tags(conds, df, level)
+    df <- Set_POV_MEC_tags(df, conds, level)
 
     colnames(df) <- paste0("metacell_", colnames(qdata))
     colnames(df) <- gsub(".", "_", colnames(df), fixed = TRUE)
